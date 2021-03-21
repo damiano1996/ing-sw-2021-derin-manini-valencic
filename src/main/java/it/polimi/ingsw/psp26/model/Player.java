@@ -7,8 +7,8 @@ public class Player {
     private final String nickname;
     private final String sessionToken;
     private final PersonalBoard personalBoard;
-    private boolean inkwell;
 
+    private boolean inkwell;
     private List<LeaderCard> leaderCards;
 
     public Player(String nickname, String sessionToken) {
@@ -47,7 +47,6 @@ public class Player {
     }
 
     public boolean isLeaderActionPlayable() {
-        boolean isLeaderNotActive = leaderCards.stream().anyMatch(x -> !x.isActive());
-        return leaderCards.size() > 1 || isLeaderNotActive;
+        return leaderCards.stream().anyMatch(x -> !x.isActive());
     }
 }

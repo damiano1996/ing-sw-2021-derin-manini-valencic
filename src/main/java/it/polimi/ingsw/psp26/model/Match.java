@@ -34,7 +34,7 @@ public class Match extends Observable {
     private void initializeLeaderDeck() {
         // Temporary solution
         for (int i = 0; i < 16; i++)
-            leaderDeck.add(new LeaderCard());
+            leaderDeck.add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new SpecialAbility()));
     }
 
     public int getId() {

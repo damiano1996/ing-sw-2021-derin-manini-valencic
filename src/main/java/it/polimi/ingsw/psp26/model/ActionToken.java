@@ -1,4 +1,7 @@
 package it.polimi.ingsw.psp26.model;
 
-public class ActionToken {
+interface ActionToken {
+
+    void execute();
+
 }

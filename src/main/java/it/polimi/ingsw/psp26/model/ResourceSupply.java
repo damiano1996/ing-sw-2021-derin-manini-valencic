@@ -14,7 +14,7 @@ public class ResourceSupply {
     /**
      * Attention to add method
      */
-    public List<Resource> grabResource(int indexSlot, int amountOfResources) {
+    public List<Resource> grabResources(int indexSlot, int amountOfResources) {
         List<Resource> resources = new ArrayList<>();
 
         for (int i = 0; i < amountOfResources; i++) {

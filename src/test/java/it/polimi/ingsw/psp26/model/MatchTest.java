@@ -1,7 +1,8 @@
 package it.polimi.ingsw.psp26.model;
 
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfCardsToDrawException;
+import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToDrawException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
+import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -88,31 +89,48 @@ public class MatchTest {
         assertNotNull(match.getMarketTray());
     }
 
-    @Test(expected = NegativeNumberOfCardsToDrawException.class)
-    public void testDrawLeaders_NegativeNumberOfCardsToDrawException() throws NegativeNumberOfCardsToDrawException {
+    @Test(expected = NegativeNumberOfElementsToDrawException.class)
+    public void testDrawLeaders_NegativeNumberOfElementsToDrawException() throws NegativeNumberOfElementsToDrawException {
         int numberOfCardsToDraw = -1;
         match = new Match(id, multiPlayersList);
         List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testDrawLeaders_IndexOutOfBoundsException() throws NegativeNumberOfCardsToDrawException, IndexOutOfBoundsException {
+    public void testDrawLeaders_IndexOutOfBoundsException() throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
         int numberOfCardsToDraw = 1000;
         match = new Match(id, multiPlayersList);
         List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
     }
 
     @Test
-    public void testDrawLeaders_StandardCase() throws NegativeNumberOfCardsToDrawException {
+    public void testDrawLeaders_StandardCase() throws NegativeNumberOfElementsToDrawException {
         int numberOfCardsToDraw = 4;
         match = new Match(id, multiPlayersList);
         List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
         assertEquals(drawnCards.size(), numberOfCardsToDraw);
     }
 
-    @Test
-    public void testGetActionTokenStack() {
+    @Test(expected = NegativeNumberOfElementsToDrawException.class)
+    public void testDrawActionTokens_NegativeNumberOfElementsToDrawException() throws NegativeNumberOfElementsToDrawException {
+        int numberOfTokensToDraw = -1;
         match = new Match(id, multiPlayersList);
-        assertNotNull(match.getActionTokenStack());
+        List<ActionToken> drawnTokens = match.drawActionTokens(numberOfTokensToDraw);
     }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testDrawActionTokens_IndexOutOfBoundsException() throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
+        int numberOfTokensToDraw = 1000;
+        match = new Match(id, multiPlayersList);
+        List<ActionToken> drawnTokens = match.drawActionTokens(numberOfTokensToDraw);
+    }
+
+    @Test
+    public void testDrawActionTokens_StandardCase() throws NegativeNumberOfElementsToDrawException {
+        int numberOfTokensToDraw = 1;
+        match = new Match(id, multiPlayersList);
+        List<ActionToken> drawnTokens = match.drawActionTokens(numberOfTokensToDraw);
+        assertEquals(drawnTokens.size(), numberOfTokensToDraw);
+    }
+
 }

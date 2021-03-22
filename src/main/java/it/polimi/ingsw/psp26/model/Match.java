@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfCardsToDrawException;
+import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToDrawException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.actiontokens.DiscardActionToken;
@@ -82,21 +82,25 @@ public class Match extends Observable {
         return marketTray;
     }
 
-    public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfCardsToDrawException, IndexOutOfBoundsException {
-        if (numberOfCards < 0) throw new NegativeNumberOfCardsToDrawException();
+    private static List<?> drawElements(List<?> list, int numberOfElements) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
+        if (numberOfElements < 0) throw new NegativeNumberOfElementsToDrawException();
 
-        List<LeaderCard> drawnLeaderCards = new ArrayList<>(leaderDeck.subList(0, numberOfCards));
+        List<?> drawnElements = new ArrayList<>(list.subList(0, numberOfElements));
 
-        leaderDeck.removeAll(drawnLeaderCards);
-        return drawnLeaderCards;
+        list.removeAll(drawnElements);
+        return drawnElements;
+    }
+
+    public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
+        return (List<LeaderCard>) drawElements(leaderDeck, numberOfCards);
+    }
+
+    public List<ActionToken> drawActionTokens(int numberOfTokens) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
+        return (List<ActionToken>) drawElements(actionTokenStack, numberOfTokens);
     }
 
     private void shuffleLeaderDeck() {
         Collections.shuffle(leaderDeck);
-    }
-
-    public List<ActionToken> getActionTokenStack() {
-        return actionTokenStack;
     }
 
     private void shuffleActionTokenStack() {

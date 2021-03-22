@@ -82,21 +82,21 @@ public class Match extends Observable {
         return marketTray;
     }
 
-    private static List<?> drawElements(List<?> list, int numberOfElements) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
+    private <T> List<T> drawElements(List<T> list, int numberOfElements) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
         if (numberOfElements < 0) throw new NegativeNumberOfElementsToDrawException();
 
-        List<?> drawnElements = new ArrayList<>(list.subList(0, numberOfElements));
+        List<T> drawnElements = new ArrayList<>(list.subList(0, numberOfElements));
 
         list.removeAll(drawnElements);
         return drawnElements;
     }
 
     public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
-        return (List<LeaderCard>) drawElements(leaderDeck, numberOfCards);
+        return drawElements(leaderDeck, numberOfCards);
     }
 
     public List<ActionToken> drawActionTokens(int numberOfTokens) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
-        return (List<ActionToken>) drawElements(actionTokenStack, numberOfTokens);
+        return drawElements(actionTokenStack, numberOfTokens);
     }
 
     private void shuffleLeaderDeck() {

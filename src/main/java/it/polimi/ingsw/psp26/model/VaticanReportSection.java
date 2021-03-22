@@ -3,8 +3,9 @@ package it.polimi.ingsw.psp26.model;
 public class VaticanReportSection {
 
     private boolean popesFavorTileStatus;
-    private int startSection;
-    private int endSection;
+
+    private final int startSection;
+    private final int endSection;
 
 
     public VaticanReportSection(int startSection, int endSection) {
@@ -23,6 +24,14 @@ public class VaticanReportSection {
 
     public boolean isinVaticanReportSection(int markerPosition) {
         return (startSection <= markerPosition && markerPosition <= endSection);
+    }
+
+    public int getStartSection() {
+        return startSection;
+    }
+
+    public int getEndSection() {
+        return endSection;
     }
 
 }

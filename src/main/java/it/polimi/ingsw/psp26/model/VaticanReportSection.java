@@ -21,10 +21,6 @@ public class VaticanReportSection {
         popesFavorTileStatus = true;
     }
 
-    public void deactivatePopesFavorTile() {
-        popesFavorTileStatus = false;
-    }
-
     public boolean isinVaticanReportSection(int markerPosition) {
         return (startSection <= markerPosition && markerPosition <= endSection);
     }

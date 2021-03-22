@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.model.specialleaderabilities.SpecialAbility;
+
 import java.util.List;
 
 public class LeaderCard {
@@ -16,6 +18,7 @@ public class LeaderCard {
         this.developmentCardRequirements = developmentCardRequirements;
         this.victoryPoints = victoryPoints;
         this.specialAbility = specialAbility;
+        active = false;
     }
 
     public boolean isActive() {
@@ -26,10 +29,6 @@ public class LeaderCard {
         active = true;
     }
 
-    public void deactivate() {
-        active = false;
-    }
-
     public List<Resource> getResourcesRequirements() {
         return resourcesRequirements;
     }
@@ -37,7 +36,6 @@ public class LeaderCard {
     public List<DevelopmentCard> getDevelopmentCardRequirements() {
         return developmentCardRequirements;
     }
-
 
     public SpecialAbility getSpecialAbility() {
         return specialAbility;

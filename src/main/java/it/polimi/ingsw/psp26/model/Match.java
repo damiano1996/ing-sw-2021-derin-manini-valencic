@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfCardsToDrawException;
 import it.polimi.ingsw.psp26.exceptions.NotEnoughCardsToDrawException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
+import it.polimi.ingsw.psp26.model.specialleaderabilities.ProductionAbility;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +35,7 @@ public class Match extends Observable {
     private void initializeLeaderDeck() {
         // Temporary solution
         for (int i = 0; i < 16; i++)
-            leaderDeck.add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new SpecialAbility()));
+            leaderDeck.add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
     }
 
     public int getId() {
@@ -67,10 +68,6 @@ public class Match extends Observable {
 
     public MarketTray getMarketTray() {
         return marketTray;
-    }
-
-    public List<LeaderCard> getLeaderDeck() {
-        return leaderDeck;
     }
 
     public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfCardsToDrawException, NotEnoughCardsToDrawException {

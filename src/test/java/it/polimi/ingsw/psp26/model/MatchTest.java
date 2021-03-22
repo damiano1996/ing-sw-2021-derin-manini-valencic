@@ -89,40 +89,15 @@ public class MatchTest {
         assertNotNull(match.getMarketTray());
     }
 
-    @Test
-    public void testGetLeaderDeck() {
-        match = new Match(id, multiPlayersList);
-        assertNotNull(match.getLeaderDeck());
-    }
+    @Test//(expected = NegativeNumberOfCardsToDrawException.class)
+    public void testDrawLeaders() //throws NegativeNumberOfCardsToDrawException, NotEnoughCardsToDrawException
+    {
 
-    @Test(expected = NegativeNumberOfCardsToDrawException.class)
-    public void testDrawLeaders() throws NegativeNumberOfCardsToDrawException, NotEnoughCardsToDrawException {
-        int[] numbersOfCards = {-1, 0, 4, 1000};
-
-        for (int numberOfCards : numbersOfCards) {
-            match = new Match(id, multiPlayersList);
-            int initialNumberOfLeaderCards = match.getLeaderDeck().size();
-
-            List<LeaderCard> drawnLeaderCards = match.drawLeaders(numberOfCards);
-
-            int finalNumberOfLeaderCards = match.getLeaderDeck().size();
-            assertEquals(initialNumberOfLeaderCards, finalNumberOfLeaderCards + numberOfCards);
-            assertNotNull(drawnLeaderCards);
-            assertEquals(drawnLeaderCards.size(), numberOfCards);
-        }
     }
 
     @Test
     public void testShuffleLeaderDeck() {
-        match = new Match(id, multiPlayersList);
-        int initialNumberOfLeaderCardSize = match.getLeaderDeck().size();
 
-        // Shuffle LeaderDeck
-        match.shuffleLeaderDeck();
-
-        int finalNumberOfLeaderCardsSize = match.getLeaderDeck().size();
-        assertEquals(initialNumberOfLeaderCardSize, finalNumberOfLeaderCardsSize);
-        assertNotNull(match.getLeaderDeck());
     }
 
     @Test

@@ -1,26 +1,28 @@
 package it.polimi.ingsw.psp26.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResourceSupply {
 
-    private ResourceSlot[] slots;
-
+    private final Resource[] slots;
 
     public ResourceSupply() {
-        slots = new ResourceSlot[4];
-        //fill slots
+        slots = new Resource[] {Resource.COIN, Resource.STONE, Resource.SERVANT, Resource.SHIELD};
     }
 
-    public void addResource(int indexSlot) {
+    /**
+     *Attention to add method
+     */
+    public List<Resource> grabResource(int indexSlot, int amountOfResources) {
+        List<Resource> resources = new ArrayList<>();
 
+        for (int i = 0; i < amountOfResources; i++) {
+            resources.add(slots[indexSlot]);
+        }
+
+        return resources;
     }
-
-    public void addResource(Resource resource){
-
-    }
-
-    //public Resource removeResource(int indexSlot) {}
-
-    //public Resource removeResource(Resource resource) {}
 
 
 }

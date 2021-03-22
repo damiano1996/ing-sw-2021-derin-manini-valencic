@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.model.specialleaderabilities.ProductionAbility;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,8 +40,8 @@ public class PlayerTest {
     @Test
     public void getLeaderCards() {
         List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new SpecialAbility()));
-            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new SpecialAbility()));
+            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
+            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
         }};
 
         player.setLeaderCards(leaderCards);
@@ -68,7 +69,7 @@ public class PlayerTest {
     @Test
     public void isLeaderActionPlayable() {
         List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new SpecialAbility()));
+            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
         }};
 
         // First case: playable leader

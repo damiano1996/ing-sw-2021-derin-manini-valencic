@@ -2,16 +2,19 @@ package it.polimi.ingsw.psp26.model;
 
 public class MarketTray {
 
-    private Resource[][] marketMarbles;
+    private final Resource[][] marketMarbles;
     private Resource marbleOnSlide;
 
 
     public MarketTray() {
-
+        marketMarbles = new Resource[3][4];
     }
 
 
-    public void shuffle() {
+    /**
+     * Used in constructor
+     */
+    private void shuffle() {
 
 
     }

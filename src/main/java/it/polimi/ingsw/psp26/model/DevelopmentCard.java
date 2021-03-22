@@ -4,15 +4,15 @@ import java.util.HashMap;
 
 public class DevelopmentCard {
 
-    private final HashMap<Integer, Resource> cost;
+    private final HashMap<Resource, Integer> cost;
     private final Color color;
     private final Level level;
-    private final HashMap<Integer, Resource> productionCost;
-    private final HashMap<Integer, Resource> productionReturn;
+    private final HashMap<Resource, Integer> productionCost;
+    private final HashMap<Resource, Integer> productionReturn;
     private final int victoryPoints;
 
 
-    public DevelopmentCard(HashMap<Integer, Resource> cost, Color color, Level level, HashMap<Integer, Resource> productionCost, HashMap<Integer, Resource> productionReturn, int victoryPoints) {
+    public DevelopmentCard(HashMap<Resource, Integer> cost, Color color, Level level, HashMap<Resource, Integer> productionCost, HashMap<Resource, Integer> productionReturn, int victoryPoints) {
         this.cost = cost;
         this.color = color;
         this.level = level;
@@ -21,7 +21,7 @@ public class DevelopmentCard {
         this.victoryPoints = victoryPoints;
     }
 
-    public HashMap<Integer, Resource> getCost() {
+    public HashMap<Resource, Integer> getCost() {
         return cost;
     }
 
@@ -33,11 +33,11 @@ public class DevelopmentCard {
         return level;
     }
 
-    public HashMap<Integer, Resource> getProductionCost() {
+    public HashMap<Resource, Integer> getProductionCost() {
         return productionCost;
     }
 
-    public HashMap<Integer, Resource> getProductionReturn() {
+    public HashMap<Resource, Integer> getProductionReturn() {
         return productionReturn;
     }
 

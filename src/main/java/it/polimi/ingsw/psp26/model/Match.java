@@ -2,8 +2,9 @@ package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfCardsToDrawException;
-import it.polimi.ingsw.psp26.exceptions.NotEnoughCardsToDrawException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
+import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
+import it.polimi.ingsw.psp26.model.actiontokens.DiscardActionToken;
 import it.polimi.ingsw.psp26.model.specialleaderabilities.ProductionAbility;
 
 import java.util.ArrayList;
@@ -27,15 +28,27 @@ public class Match extends Observable {
         developmentGrid = new DevelopmentGrid();
         marketTray = new MarketTray();
         leaderDeck = new ArrayList<>();
-        actionTokenStack = new ArrayList<>(); // To be initialized
+        actionTokenStack = new ArrayList<>();
 
         initializeLeaderDeck();
+        initializeActionTokenStack();
     }
 
     private void initializeLeaderDeck() {
         // Temporary solution
         for (int i = 0; i < 16; i++)
             leaderDeck.add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
+
+        shuffleLeaderDeck();
+    }
+
+    private void initializeActionTokenStack() {
+        // Temporary solution
+        for (int i = 0; i < 7; i++) {
+            actionTokenStack.add(new DiscardActionToken());
+        }
+
+        shuffleActionTokenStack();
     }
 
     public int getId() {
@@ -57,7 +70,6 @@ public class Match extends Observable {
                 .orElseThrow(PlayerDoesNotExistException::new);
     }
 
-
     public ResourceSupply getResourceSupply() {
         return resourceSupply;
     }
@@ -70,17 +82,16 @@ public class Match extends Observable {
         return marketTray;
     }
 
-    public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfCardsToDrawException, NotEnoughCardsToDrawException {
+    public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfCardsToDrawException, IndexOutOfBoundsException {
         if (numberOfCards < 0) throw new NegativeNumberOfCardsToDrawException();
 
-        List<LeaderCard> drawnLeaderCards = leaderDeck.subList(0, numberOfCards);
-        if (drawnLeaderCards.size() < numberOfCards) throw new NotEnoughCardsToDrawException();
+        List<LeaderCard> drawnLeaderCards = new ArrayList<>(leaderDeck.subList(0, numberOfCards));
 
         leaderDeck.removeAll(drawnLeaderCards);
         return drawnLeaderCards;
     }
 
-    public void shuffleLeaderDeck() {
+    private void shuffleLeaderDeck() {
         Collections.shuffle(leaderDeck);
     }
 
@@ -88,7 +99,7 @@ public class Match extends Observable {
         return actionTokenStack;
     }
 
-    public void shuffleActionTokenStack() {
+    private void shuffleActionTokenStack() {
         Collections.shuffle(actionTokenStack);
     }
 }

@@ -3,8 +3,6 @@ package it.polimi.ingsw.psp26.model;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class LeaderCardTest {
 
     @Before

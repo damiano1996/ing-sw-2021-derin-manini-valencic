@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfCardsToDrawException;
-import it.polimi.ingsw.psp26.exceptions.NotEnoughCardsToDrawException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,33 +88,31 @@ public class MatchTest {
         assertNotNull(match.getMarketTray());
     }
 
-    @Test//(expected = NegativeNumberOfCardsToDrawException.class)
-    public void testDrawLeaders() //throws NegativeNumberOfCardsToDrawException, NotEnoughCardsToDrawException
-    {
+    @Test(expected = NegativeNumberOfCardsToDrawException.class)
+    public void testDrawLeaders_NegativeNumberOfCardsToDrawException() throws NegativeNumberOfCardsToDrawException {
+        int numberOfCardsToDraw = -1;
+        match = new Match(id, multiPlayersList);
+        List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
+    }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testDrawLeaders_IndexOutOfBoundsException() throws NegativeNumberOfCardsToDrawException, IndexOutOfBoundsException {
+        int numberOfCardsToDraw = 1000;
+        match = new Match(id, multiPlayersList);
+        List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
     }
 
     @Test
-    public void testShuffleLeaderDeck() {
-
+    public void testDrawLeaders_StandardCase() throws NegativeNumberOfCardsToDrawException {
+        int numberOfCardsToDraw = 4;
+        match = new Match(id, multiPlayersList);
+        List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
+        assertEquals(drawnCards.size(), numberOfCardsToDraw);
     }
 
     @Test
     public void testGetActionTokenStack() {
         match = new Match(id, multiPlayersList);
-        assertNotNull(match.getActionTokenStack());
-    }
-
-    @Test
-    public void testShuffleActionTokenStack() {
-        match = new Match(id, multiPlayersList);
-        int initialActionTokenStackSize = match.getActionTokenStack().size();
-
-        // Shuffle the tokens
-        match.shuffleActionTokenStack();
-
-        int finalActionTokenStackSize = match.getActionTokenStack().size();
-        assertEquals(initialActionTokenStackSize, finalActionTokenStackSize);
         assertNotNull(match.getActionTokenStack());
     }
 }

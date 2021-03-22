@@ -8,11 +8,11 @@ public class ResourceSupply {
     private final Resource[] slots;
 
     public ResourceSupply() {
-        slots = new Resource[] {Resource.COIN, Resource.STONE, Resource.SERVANT, Resource.SHIELD};
+        slots = new Resource[]{Resource.COIN, Resource.STONE, Resource.SERVANT, Resource.SHIELD};
     }
 
     /**
-     *Attention to add method
+     * Attention to add method
      */
     public List<Resource> grabResource(int indexSlot, int amountOfResources) {
         List<Resource> resources = new ArrayList<>();

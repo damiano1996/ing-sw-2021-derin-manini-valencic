@@ -49,12 +49,6 @@ public class PlayerTest {
     }
 
     @Test
-    public void setLeaderCards() {
-        getLeaderCards();
-        assertNotNull(player.getLeaderCards());
-    }
-
-    @Test
     public void giveInkwell() {
         assertFalse(player.isInkwell());
         player.giveInkwell();

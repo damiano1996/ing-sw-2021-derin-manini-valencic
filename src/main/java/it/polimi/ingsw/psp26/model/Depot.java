@@ -25,6 +25,7 @@ public class Depot {
     }
 
     public void addResource(Resource resource) throws CanNotAddResourceToDepotException {
+        if (resources.size() == maxNumberOfResources) throw new CanNotAddResourceToDepotException();
         if (isAdmissible(resource)) resources.add(resource);
         else throw new CanNotAddResourceToDepotException();
     }
@@ -37,5 +38,14 @@ public class Depot {
      */
     private boolean isAdmissible(Resource resource) {
         return (resources.size() == 0 || resources.contains(resource));
+    }
+
+
+    public boolean equals(Depot depot) {
+        if (this.maxNumberOfResources != depot.getMaxNumberOfResources()) return false;
+        for (int i = 0; i < this.resources.size(); i++) {
+            if (this.resources.get(i) != depot.getResources().get(i)) return false;
+        }
+        return true;
     }
 }

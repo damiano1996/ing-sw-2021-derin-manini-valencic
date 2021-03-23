@@ -1,6 +1,8 @@
 package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
+import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
+import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +18,11 @@ public class PersonalBoard {
     public PersonalBoard() {
         faithTrack = new FaithTrack();
         developmentCardsSlots = new ArrayList<>(3);
-        for (int i = 0; i < 3; i++) developmentCardsSlots.add(new ArrayList<>());
-        warehouseDepots = new ArrayList<>();
+        warehouseDepots = new ArrayList<>(3);
+        for (int i = 0; i < 3; i++) {
+            developmentCardsSlots.add(new ArrayList<>());
+            warehouseDepots.add(new Depot(i + 1));
+        }
         strongbox = new ArrayList<>();
     }
 
@@ -29,14 +34,15 @@ public class PersonalBoard {
         return developmentCardsSlots;
     }
 
-    public List<DevelopmentCard> getDevelopmentCardsSlot(int index) {
-        return developmentCardsSlots.get(index);
+    public List<DevelopmentCard> getDevelopmentCardsSlot(int index) throws DevelopmentCardSlotOutOfBoundsException {
+        if (index >= developmentCardsSlots.size()) throw new DevelopmentCardSlotOutOfBoundsException();
+        else return developmentCardsSlots.get(index);
     }
 
     public List<DevelopmentCard> getVisibleDevelopmentCards() {
         List<DevelopmentCard> visibleCards = new ArrayList<>();
         for (List<DevelopmentCard> developmentCardsSlot : developmentCardsSlots) {
-            visibleCards.add(developmentCardsSlot.get(developmentCardsSlot.size() - 1));
+            if (developmentCardsSlot.size() > 0) visibleCards.add(developmentCardsSlot.get(developmentCardsSlot.size() - 1));
         }
         return visibleCards;
     }
@@ -45,16 +51,18 @@ public class PersonalBoard {
         return warehouseDepots;
     }
 
-    public Depot getWarehouseDepot(int index) {
-        return warehouseDepots.get(index);
+    public Depot getWarehouseDepot(int index) throws DepotOutOfBoundException {
+        if (index >= warehouseDepots.size()) throw new DepotOutOfBoundException();
+        else return warehouseDepots.get(index);
     }
 
     public List<Resource> getStrongbox() {
         return strongbox;
     }
 
-    public void addDevelopmentCard(int indexSlot, DevelopmentCard developmentCard) throws CanNotAddDevelopmentCardToSlotException {
-        if (canPlaceCard(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
+    public void addDevelopmentCard(int indexSlot, DevelopmentCard developmentCard) throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
+        if (indexSlot > developmentCardsSlots.size()) throw  new DevelopmentCardSlotOutOfBoundsException();
+        if (isCardPleaceable(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
         else throw new CanNotAddDevelopmentCardToSlotException();
     }
 
@@ -65,12 +73,13 @@ public class PersonalBoard {
      * @param developmentCard the card to place
      * @return true if the card can be places, false if not
      */
-    public boolean canPlaceCard(int indexSlot, DevelopmentCard developmentCard) {
+    private boolean isCardPleaceable(int indexSlot, DevelopmentCard developmentCard) {
         return (developmentCardsSlots.get(indexSlot).size() == 0 || developmentCardsSlots.get(indexSlot).get(developmentCardsSlots.get(indexSlot).size() - 1).getLevel().getLevelNumber() < developmentCard.getLevel().getLevelNumber());
     }
 
     public void addResourceToStrongbox(List<Resource> resource) {
         strongbox.addAll(resource);
     }
+
 
 }

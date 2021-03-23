@@ -1,14 +1,14 @@
 package it.polimi.ingsw.psp26.model;
 
 
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import org.junit.Before;
 import org.junit.Test;
-import it.polimi.ingsw.psp26.exceptions.CantAddResourceToDepotException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DepotTest {
 
@@ -16,7 +16,7 @@ public class DepotTest {
     private Depot depotWithResources;
 
     @Before
-    public void setUp() throws CantAddResourceToDepotException {
+    public void setUp() throws CanNotAddResourceToDepotException {
         depotWithResources = new Depot(3);
         depotWithResources.addResource(Resource.STONE);
         depotWithResources.addResource(Resource.STONE);
@@ -36,8 +36,8 @@ public class DepotTest {
         assertEquals(resourceList, depotWithResources.getResources());
     }
 
-    @Test(expected = CantAddResourceToDepotException.class)
-    public void testAddResource_ExceptionCase() throws CantAddResourceToDepotException {
+    @Test(expected = CanNotAddResourceToDepotException.class)
+    public void testAddResource_ExceptionCase() throws CanNotAddResourceToDepotException {
         depotWithResources.addResource(Resource.SERVANT);
     }
 }

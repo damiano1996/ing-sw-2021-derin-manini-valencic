@@ -1,8 +1,9 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
+
 import java.util.ArrayList;
 import java.util.List;
-import it.polimi.ingsw.psp26.exceptions.CantAddResourceToDepotException;
 
 public class Depot {
 
@@ -23,13 +24,14 @@ public class Depot {
         return resources;
     }
 
-    public void addResource(Resource resource) throws CantAddResourceToDepotException {
+    public void addResource(Resource resource) throws CanNotAddResourceToDepotException {
         if (isAdmissible(resource)) resources.add(resource);
-        else throw new CantAddResourceToDepotException();
+        else throw new CanNotAddResourceToDepotException();
     }
 
     /**
      * checks if a resource could be added to a specified depot
+     *
      * @param resource resource to be added to the depot
      * @return true if the resource can be added, false in the other case
      */

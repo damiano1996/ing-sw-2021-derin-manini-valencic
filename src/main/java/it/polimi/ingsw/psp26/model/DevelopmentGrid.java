@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class DevelopmentGrid {
 
-    private static Color[] colors = new Color[]{Color.GREEN, Color.BLUE, Color.YELLOW, Color.PURPLE};
+    private static final Color[] COLORS = new Color[]{Color.GREEN, Color.BLUE, Color.YELLOW, Color.PURPLE};
 
     private final DevelopmentGridCell[][] grid;
     private final int initialQuantity;
@@ -27,10 +27,10 @@ public class DevelopmentGrid {
         Resource[] productionCosts = new Resource[]{Resource.SERVANT, Resource.STONE, Resource.SHIELD, Resource.COIN};
         Resource[] productionReturns = new Resource[]{Resource.COIN, Resource.SHIELD, Resource.SERVANT, Resource.STONE};
 
-        for (int col = 0; col < colors.length; col++) {
+        for (int col = 0; col < COLORS.length; col++) {
             int finalCol = col;
             grid[0][col] = new DevelopmentGridCell(
-                    colors[col], Level.THIRD,
+                    COLORS[col], Level.THIRD,
                     initialQuantity,
                     new HashMap<>() {{
                         put(costs[finalCol], 7);
@@ -50,10 +50,10 @@ public class DevelopmentGrid {
         Resource[] costs = new Resource[]{Resource.SHIELD, Resource.COIN, Resource.STONE, Resource.SERVANT};
         Resource[] productionCosts = new Resource[]{Resource.STONE, Resource.SERVANT, Resource.SHIELD, Resource.COIN};
 
-        for (int col = 0; col < colors.length; col++) {
+        for (int col = 0; col < COLORS.length; col++) {
             int finalCol = col;
             grid[1][col] = new DevelopmentGridCell(
-                    colors[col], Level.THIRD,
+                    COLORS[col], Level.THIRD,
                     initialQuantity,
                     new HashMap<>() {{
                         put(costs[finalCol], 4);
@@ -72,10 +72,10 @@ public class DevelopmentGrid {
         Resource[] costs = new Resource[]{Resource.SHIELD, Resource.COIN, Resource.STONE, Resource.SERVANT};
         Resource[] productionCosts = new Resource[]{Resource.COIN, Resource.SHIELD, Resource.SERVANT, Resource.STONE};
 
-        for (int col = 0; col < colors.length; col++) {
+        for (int col = 0; col < COLORS.length; col++) {
             int finalCol = col;
             grid[2][col] = new DevelopmentGridCell(
-                    colors[col], Level.THIRD,
+                    COLORS[col], Level.THIRD,
                     initialQuantity,
                     new HashMap<>() {{
                         put(costs[finalCol], 2);

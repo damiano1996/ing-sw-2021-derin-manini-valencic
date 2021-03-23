@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.model;
 
-import it.polimi.ingsw.psp26.exceptions.CantAddDevelopmentCardToSlotException;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,14 +53,15 @@ public class PersonalBoard {
         return strongbox;
     }
 
-    public void addDevelopmentCard(int indexSlot, DevelopmentCard developmentCard) throws CantAddDevelopmentCardToSlotException {
+    public void addDevelopmentCard(int indexSlot, DevelopmentCard developmentCard) throws CanNotAddDevelopmentCardToSlotException {
         if (canPlaceCard(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
-        else throw new CantAddDevelopmentCardToSlotException();
+        else throw new CanNotAddDevelopmentCardToSlotException();
     }
 
     /**
      * tells if a card can be placed in a developmentCardSlot
-     * @param indexSlot where to place the card
+     *
+     * @param indexSlot       where to place the card
      * @param developmentCard the card to place
      * @return true if the card can be places, false if not
      */

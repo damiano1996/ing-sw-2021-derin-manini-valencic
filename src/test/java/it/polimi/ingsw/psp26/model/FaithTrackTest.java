@@ -20,9 +20,12 @@ public class FaithTrackTest {
     @Test
     public void testGetVaticanReportSections() {
         faithTrack = new FaithTrack();
-        for (int i = 0; i < 3; i++) assertEquals(vaticanReportSections[i].isPopesFavorTileActive(), faithTrack.getVaticanReportSections()[i].isPopesFavorTileActive());
-        for (int i = 0; i < 3; i++) assertEquals(vaticanReportSections[i].getStartSection(), faithTrack.getVaticanReportSections()[i].getStartSection());
-        for (int i = 0; i < 3; i++) assertEquals(vaticanReportSections[i].getEndSection(), faithTrack.getVaticanReportSections()[i].getEndSection());
+        for (int i = 0; i < 3; i++)
+            assertEquals(vaticanReportSections[i].isPopesFavorTileActive(), faithTrack.getVaticanReportSections()[i].isPopesFavorTileActive());
+        for (int i = 0; i < 3; i++)
+            assertEquals(vaticanReportSections[i].getStartSection(), faithTrack.getVaticanReportSections()[i].getStartSection());
+        for (int i = 0; i < 3; i++)
+            assertEquals(vaticanReportSections[i].getEndSection(), faithTrack.getVaticanReportSections()[i].getEndSection());
     }
 
     @Test

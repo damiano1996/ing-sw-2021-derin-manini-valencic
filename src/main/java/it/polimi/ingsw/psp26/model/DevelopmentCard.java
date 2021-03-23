@@ -44,4 +44,13 @@ public class DevelopmentCard {
     public int getVictoryPoints() {
         return victoryPoints;
     }
+
+    public boolean equals(DevelopmentCard developmentCard) {
+        return developmentCard.cost.equals(cost) &&
+                developmentCard.color.equals(color) &&
+                developmentCard.level.equals(level) &&
+                developmentCard.productionCost.equals(productionCost) &&
+                developmentCard.productionReturn.equals(productionReturn) &&
+                developmentCard.victoryPoints == victoryPoints;
+    }
 }

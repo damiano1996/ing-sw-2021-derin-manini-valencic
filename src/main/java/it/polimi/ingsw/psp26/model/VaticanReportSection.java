@@ -2,10 +2,9 @@ package it.polimi.ingsw.psp26.model;
 
 public class VaticanReportSection {
 
-    private boolean popesFavorTileStatus;
-
     private final int startSection;
     private final int endSection;
+    private boolean popesFavorTileStatus;
 
 
     public VaticanReportSection(int startSection, int endSection) {

@@ -71,4 +71,21 @@ public class FaithTrackTest {
         faithTrack.moveMarkerPosition(3);
         assertEquals(3, faithTrack.getFaithPoints());
     }
+
+    @Test
+    public void testEquals_TrueCase() {
+        faithTrack = new FaithTrack();
+        FaithTrack faithTrack1 = new FaithTrack();
+        assertTrue(faithTrack.equals(faithTrack1));
+    }
+
+    @Test
+    public void testEquals_FalseCase() {
+        faithTrack = new FaithTrack();
+        FaithTrack faithTrack1 = new FaithTrack();
+        faithTrack.addFaithPoints(5);
+        faithTrack.moveBlackCrossPosition(7);
+        assertFalse(faithTrack.equals(faithTrack1));
+
+    }
 }

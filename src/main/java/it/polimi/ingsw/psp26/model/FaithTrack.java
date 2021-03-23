@@ -51,4 +51,20 @@ public class FaithTrack {
     public void moveBlackCrossPosition(int numberOfSteps) {
         this.blackCrossPosition = this.blackCrossPosition + numberOfSteps;
     }
+
+    public boolean equals(FaithTrack faithTrack) {
+        if (this.length != faithTrack.length) return false;
+        if (this.markerPosition != faithTrack.markerPosition) return false;
+        if (this.blackCrossPosition != faithTrack.blackCrossPosition) return false;
+        if (this.faithPoints != faithTrack.faithPoints) return false;
+        for (int i = 0; i < 3; i++) {
+            if (this.vaticanReportSections[i].isPopesFavorTileActive() != faithTrack.vaticanReportSections[i].isPopesFavorTileActive())
+                return false;
+            if (this.vaticanReportSections[i].getStartSection() != faithTrack.vaticanReportSections[i].getStartSection())
+                return false;
+            if (this.vaticanReportSections[i].getEndSection() != faithTrack.vaticanReportSections[i].getEndSection())
+                return false;
+        }
+        return true;
+    }
 }

@@ -12,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 
 public class DepotTest {
 
-    private Depot emptyDepot;
     private Depot depotWithResources;
 
     @Before
@@ -20,7 +19,6 @@ public class DepotTest {
         depotWithResources = new Depot(3);
         depotWithResources.addResource(Resource.STONE);
         depotWithResources.addResource(Resource.STONE);
-        emptyDepot = new Depot(1);
     }
 
     @Test
@@ -37,7 +35,13 @@ public class DepotTest {
     }
 
     @Test(expected = CanNotAddResourceToDepotException.class)
-    public void testAddResource_ExceptionCase() throws CanNotAddResourceToDepotException {
+    public void testAddResource_CanNotAddResourceToDepotException_WrongResourceType() throws CanNotAddResourceToDepotException {
         depotWithResources.addResource(Resource.SERVANT);
+    }
+
+    @Test(expected = CanNotAddResourceToDepotException.class)
+    public void testAddResource_CanNotAddResourceToDepotException_TooMuchResources() throws CanNotAddResourceToDepotException {
+        depotWithResources.addResource(Resource.STONE);
+        depotWithResources.addResource(Resource.STONE);
     }
 }

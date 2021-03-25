@@ -16,6 +16,11 @@ import static org.junit.Assert.assertTrue;
 
 public class PersonalBoardTest {
 
+    DevelopmentCard developmentCard1;
+    DevelopmentCard developmentCard2;
+    DevelopmentCard developmentCard3;
+    PersonalBoard personalBoard;
+    List<List<DevelopmentCard>> cardSlots;
     private HashMap<Resource, Integer> cost;
     private Color color;
     private Level level;
@@ -23,19 +28,16 @@ public class PersonalBoardTest {
     private HashMap<Resource, Integer> productionReturn;
     private int victoryPoints;
 
-    DevelopmentCard developmentCard1;
-    DevelopmentCard developmentCard2;
-    DevelopmentCard developmentCard3;
-
-    PersonalBoard personalBoard;
-    List<List<DevelopmentCard>> cardSlots;
-
     @Before
     public void setUp() {
-        cost = new HashMap<>() {{put(Resource.SHIELD, 7);}};
+        cost = new HashMap<>() {{
+            put(Resource.SHIELD, 7);
+        }};
         color = Color.GREEN;
         level = Level.FIRST;
-        productionCost = new HashMap<>() {{put(Resource.SERVANT, 1);}};
+        productionCost = new HashMap<>() {{
+            put(Resource.SERVANT, 1);
+        }};
         productionReturn = new HashMap<>() {{
             put(Resource.COIN, 1);
             put(Resource.FAITH_MARKERS, 3);
@@ -43,10 +45,14 @@ public class PersonalBoardTest {
         victoryPoints = 11;
 
         developmentCard1 = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);
-        cost = new HashMap<>() {{put(Resource.COIN, 3);}};
+        cost = new HashMap<>() {{
+            put(Resource.COIN, 3);
+        }};
         color = Color.GREEN;
         level = Level.SECOND;
-        productionCost = new HashMap<>() {{put(Resource.SERVANT, 5);}};
+        productionCost = new HashMap<>() {{
+            put(Resource.SERVANT, 5);
+        }};
         productionReturn = new HashMap<>() {{
             put(Resource.COIN, 1);
             put(Resource.FAITH_MARKERS, 1);
@@ -54,10 +60,14 @@ public class PersonalBoardTest {
         victoryPoints = 1;
         developmentCard2 = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);
 
-        cost = new HashMap<>() {{put(Resource.SERVANT, 2);}};
+        cost = new HashMap<>() {{
+            put(Resource.SERVANT, 2);
+        }};
         color = Color.GREEN;
         level = Level.THIRD;
-        productionCost = new HashMap<>() {{put(Resource.SHIELD, 1);}};
+        productionCost = new HashMap<>() {{
+            put(Resource.SHIELD, 1);
+        }};
         productionReturn = new HashMap<>() {{
             put(Resource.COIN, 5);
             put(Resource.FAITH_MARKERS, 3);
@@ -87,7 +97,7 @@ public class PersonalBoardTest {
         personalBoard.addDevelopmentCard(0, developmentCard2);
         personalBoard.addDevelopmentCard(2, developmentCard3);
 
-        for (int i = 0; i < cardSlots.size()-1; i++) {
+        for (int i = 0; i < cardSlots.size() - 1; i++) {
             for (int j = 0; j < cardSlots.get(i).size() - 1; i++) {
                 assertTrue(cardSlots.get(i).get(j).equals(personalBoard.getDevelopmentCardsSlots().get(i).get(j)));
             }
@@ -101,7 +111,7 @@ public class PersonalBoardTest {
         personalBoard.addDevelopmentCard(0, developmentCard1);
         personalBoard.addDevelopmentCard(2, developmentCard2);
 
-        for (int i = 0; i < cardSlots.size()-1; i++) {
+        for (int i = 0; i < cardSlots.size() - 1; i++) {
             for (int j = 0; j < cardSlots.get(i).size() - 1; i++) {
                 assertTrue(cardSlots.get(i).get(j).equals(personalBoard.getDevelopmentCardsSlots().get(i).get(j)));
             }
@@ -174,7 +184,7 @@ public class PersonalBoardTest {
         depots.get(2).addResource(Resource.SHIELD);
         depots.get(2).addResource(Resource.SHIELD);
 
-        for(int i = 0; i < depots.size(); i++) {
+        for (int i = 0; i < depots.size(); i++) {
             assertTrue(depots.get(i).equals(personalBoard.getWarehouseDepots().get(i)));
         }
     }
@@ -194,7 +204,7 @@ public class PersonalBoardTest {
         depots.get(1).addResource(Resource.COIN);
         depots.get(1).addResource(Resource.COIN);
 
-        for(int i = 0; i < depots.size(); i++) {
+        for (int i = 0; i < depots.size(); i++) {
             assertTrue(depots.get(i).equals(personalBoard.getWarehouseDepots().get(i)));
         }
     }
@@ -215,7 +225,7 @@ public class PersonalBoardTest {
         depots.get(1).addResource(Resource.COIN);
         depots.get(1).addResource(Resource.COIN);
 
-        for(int i = 0; i < depots.size(); i++) {
+        for (int i = 0; i < depots.size(); i++) {
             assertTrue(depots.get(i).equals(personalBoard.getWarehouseDepots().get(i)));
         }
     }

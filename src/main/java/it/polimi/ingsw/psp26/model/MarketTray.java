@@ -12,22 +12,22 @@ public class MarketTray {
     private Resource marbleOnSlide;
 
     public MarketTray() {
-    List<Resource> MarblesList = new ArrayList<Resource>(Arrays.asList(Resource.EMPTY,Resource.EMPTY,Resource.EMPTY,Resource.EMPTY,
-            Resource.COIN, Resource.COIN,Resource.SERVANT,Resource.SERVANT,Resource.SHIELD, Resource.SHIELD, Resource.STONE,
-            Resource.STONE, Resource.FAITH_MARKERS));
-    Collections.shuffle(MarblesList);
+        List<Resource> MarblesList = new ArrayList<Resource>(Arrays.asList(Resource.EMPTY, Resource.EMPTY, Resource.EMPTY, Resource.EMPTY,
+                Resource.COIN, Resource.COIN, Resource.SERVANT, Resource.SERVANT, Resource.SHIELD, Resource.SHIELD, Resource.STONE,
+                Resource.STONE, Resource.FAITH_MARKERS));
+        Collections.shuffle(MarblesList);
 
-    marketMarbles = new Resource[3][4];
-    marbleOnSlide = MarblesList.get(MarblesList.size() - 1);
-    for(int i = 0; i <  marketMarbles[0].length; i++){
-        for(int j = 0; j < marketMarbles.length; j++){
-            marketMarbles[j][i] = MarblesList.get(j + i * marketMarbles.length);
+        marketMarbles = new Resource[3][4];
+        marbleOnSlide = MarblesList.get(MarblesList.size() - 1);
+        for (int i = 0; i < marketMarbles[0].length; i++) {
+            for (int j = 0; j < marketMarbles.length; j++) {
+                marketMarbles[j][i] = MarblesList.get(j + i * marketMarbles.length);
+            }
         }
     }
-    }
 
 
-    public Resource[] getMarblesOnRow(int row){
+    public Resource[] getMarblesOnRow(int row) {
         return marketMarbles[row];
     }
 
@@ -41,14 +41,16 @@ public class MarketTray {
     }
 
 
-    public Resource getMarbleOnSlide() { return marbleOnSlide; }
+    public Resource getMarbleOnSlide() {
+        return marbleOnSlide;
+    }
 
 
     public void pushMarbleFromSlideToRow(int row) {
 
         Resource marbleTemp = marbleOnSlide;
         marbleOnSlide = marketMarbles[row][marketMarbles[0].length - 1];
-        for(int i = 0; i < marketMarbles[0].length - 1; i++){
+        for (int i = 0; i < marketMarbles[0].length - 1; i++) {
             marketMarbles[row][marketMarbles[0].length - i - 1] = marketMarbles[row][marketMarbles[0].length - i - 2];
         }
         marketMarbles[row][0] = marbleTemp;
@@ -58,7 +60,8 @@ public class MarketTray {
     public void pushMarbleFromSlideToColumn(int column) {
         Resource marbleTemp = marbleOnSlide;
         marbleOnSlide = marketMarbles[marketMarbles.length - 1][column];
-        for(int i = 0; i < marketMarbles.length - 1; i++) marketMarbles[marketMarbles.length - i - 1][column] = marketMarbles[ marketMarbles.length - i - 2][column];
+        for (int i = 0; i < marketMarbles.length - 1; i++)
+            marketMarbles[marketMarbles.length - i - 1][column] = marketMarbles[marketMarbles.length - i - 2][column];
         marketMarbles[0][column] = marbleTemp;
     }
 }

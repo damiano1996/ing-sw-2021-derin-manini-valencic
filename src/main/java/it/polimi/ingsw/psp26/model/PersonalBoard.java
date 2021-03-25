@@ -42,7 +42,8 @@ public class PersonalBoard {
     public List<DevelopmentCard> getVisibleDevelopmentCards() {
         List<DevelopmentCard> visibleCards = new ArrayList<>();
         for (List<DevelopmentCard> developmentCardsSlot : developmentCardsSlots) {
-            if (developmentCardsSlot.size() > 0) visibleCards.add(developmentCardsSlot.get(developmentCardsSlot.size() - 1));
+            if (developmentCardsSlot.size() > 0)
+                visibleCards.add(developmentCardsSlot.get(developmentCardsSlot.size() - 1));
         }
         return visibleCards;
     }
@@ -61,7 +62,7 @@ public class PersonalBoard {
     }
 
     public void addDevelopmentCard(int indexSlot, DevelopmentCard developmentCard) throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-        if (indexSlot > developmentCardsSlots.size()) throw  new DevelopmentCardSlotOutOfBoundsException();
+        if (indexSlot > developmentCardsSlots.size()) throw new DevelopmentCardSlotOutOfBoundsException();
         if (isCardPleaceable(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
         else throw new CanNotAddDevelopmentCardToSlotException();
     }

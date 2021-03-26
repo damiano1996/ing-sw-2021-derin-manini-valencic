@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;

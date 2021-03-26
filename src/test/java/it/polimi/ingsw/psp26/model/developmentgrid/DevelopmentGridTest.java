@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.developmentgrid;
 
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;

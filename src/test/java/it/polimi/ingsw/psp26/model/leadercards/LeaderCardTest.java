@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.leadercards;
 
 import org.junit.Before;
 import org.junit.Test;

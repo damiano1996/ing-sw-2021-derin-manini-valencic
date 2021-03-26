@@ -1,18 +1,20 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
 import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PersonalBoard {
 
-    private FaithTrack faithTrack;
-    private List<List<DevelopmentCard>> developmentCardsSlots;
-    private List<Depot> warehouseDepots;
-    private List<Resource> strongbox;
+    private final FaithTrack faithTrack;
+    private final List<List<DevelopmentCard>> developmentCardsSlots;
+    private final List<Depot> warehouseDepots;
+    private final List<Resource> strongbox;
 
 
     public PersonalBoard() {

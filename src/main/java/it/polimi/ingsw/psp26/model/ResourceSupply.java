@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.exceptions.ResourceSupplySlotOutOfBoundsException;
+import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
 import java.util.List;

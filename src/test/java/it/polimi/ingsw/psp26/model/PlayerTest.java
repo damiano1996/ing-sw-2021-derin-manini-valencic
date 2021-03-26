@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.model;
 
-import it.polimi.ingsw.psp26.model.specialleaderabilities.ProductionAbility;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
+import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.ProductionAbility;
 import org.junit.Before;
 import org.junit.Test;
 

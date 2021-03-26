@@ -1,6 +1,6 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.enums;
 
-enum Level {
+public enum Level {
     FIRST(1),
     SECOND(2),
     THIRD(3);

@@ -1,6 +1,9 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.developmentgrid;
 
 import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
+import it.polimi.ingsw.psp26.model.enums.Color;
+import it.polimi.ingsw.psp26.model.enums.Level;
+import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
 import java.util.HashMap;

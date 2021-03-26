@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.model;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToDrawException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import org.junit.Before;
 import org.junit.Test;
 

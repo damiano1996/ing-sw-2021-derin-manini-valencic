@@ -1,11 +1,11 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.model.enums.Resource;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class MarketTrayTest {
 
@@ -14,19 +14,19 @@ public class MarketTrayTest {
     @Test
     public void testGetMarblesOnRow() {
         Market = new MarketTray();
-        Market.getMarblesOnRow(0);
+        assertNotNull(Market.getMarblesOnRow(0));
     }
 
     @Test
     public void testGetMarbleOnColumn() {
         Market = new MarketTray();
-        Market.getMarbleOnColumn(0);
+        assertNotNull(Market.getMarbleOnColumn(0));
     }
 
     @Test
     public void testGetMarbleOnSlide() {
         Market = new MarketTray();
-        Market.getMarbleOnSlide();
+        assertNotNull(Market.getMarbleOnSlide());
     }
 
     @Test

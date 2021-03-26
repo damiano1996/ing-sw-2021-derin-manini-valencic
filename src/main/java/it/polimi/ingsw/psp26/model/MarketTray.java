@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.model.enums.Resource;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,7 +14,7 @@ public class MarketTray {
     private Resource marbleOnSlide;
 
     public MarketTray() {
-        List<Resource> MarblesList = new ArrayList<Resource>(Arrays.asList(Resource.EMPTY, Resource.EMPTY, Resource.EMPTY, Resource.EMPTY,
+        List<Resource> MarblesList = new ArrayList<>(Arrays.asList(Resource.EMPTY, Resource.EMPTY, Resource.EMPTY, Resource.EMPTY,
                 Resource.COIN, Resource.COIN, Resource.SERVANT, Resource.SERVANT, Resource.SHIELD, Resource.SHIELD, Resource.STONE,
                 Resource.STONE, Resource.FAITH_MARKERS));
         Collections.shuffle(MarblesList);

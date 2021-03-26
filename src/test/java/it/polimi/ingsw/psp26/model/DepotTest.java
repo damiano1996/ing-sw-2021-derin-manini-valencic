@@ -2,6 +2,8 @@ package it.polimi.ingsw.psp26.model;
 
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
+import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import org.junit.Before;
 import org.junit.Test;
 

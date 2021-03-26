@@ -1,5 +1,8 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
+import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
+
 import java.util.List;
 
 public class Player {

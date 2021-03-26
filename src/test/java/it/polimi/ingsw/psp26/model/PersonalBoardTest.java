@@ -4,6 +4,13 @@ import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.enums.Color;
+import it.polimi.ingsw.psp26.model.enums.Level;
+import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.personalboard.Depot;
+import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
+import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import org.junit.Before;
 import org.junit.Test;
 

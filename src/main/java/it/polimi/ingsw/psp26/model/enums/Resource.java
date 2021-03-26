@@ -1,6 +1,6 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.enums;
 
-enum Resource {
+public enum Resource {
     COIN("Coin", Color.YELLOW),
     STONE("Stone", Color.GREY),
     SERVANT("Servant", Color.PURPLE),

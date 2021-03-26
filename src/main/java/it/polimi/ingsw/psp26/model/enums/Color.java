@@ -1,6 +1,6 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.enums;
 
-enum Color {
+public enum Color {
     GREY,
     RED,
     WHITE,

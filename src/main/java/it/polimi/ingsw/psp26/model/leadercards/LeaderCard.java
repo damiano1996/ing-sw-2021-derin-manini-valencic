@@ -1,6 +1,8 @@
-package it.polimi.ingsw.psp26.model;
+package it.polimi.ingsw.psp26.model.leadercards;
 
-import it.polimi.ingsw.psp26.model.specialleaderabilities.SpecialAbility;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
 
 import java.util.List;
 

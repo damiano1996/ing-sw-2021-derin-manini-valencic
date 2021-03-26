@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

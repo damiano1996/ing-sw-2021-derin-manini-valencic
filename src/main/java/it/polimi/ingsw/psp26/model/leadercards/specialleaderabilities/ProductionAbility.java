@@ -1,10 +1,10 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
-public class ProductionAbility implements SpecialAbility {
+import it.polimi.ingsw.psp26.model.enums.Resource;
 
+public class ProductionAbility extends SpecialAbility {
 
-    @Override
-    public void execute() {
-
+    public ProductionAbility(Resource resource) {
+        super(resource);
     }
 }

@@ -1,7 +1,8 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.ProductionAbility;
+import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialDepotAbility;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,8 +43,8 @@ public class PlayerTest {
     @Test
     public void getLeaderCards() {
         List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new HashMap<>(), new ArrayList<>(), 0, new ProductionAbility()));
-            add(new LeaderCard(new HashMap<>(), new ArrayList<>(), 0, new ProductionAbility()));
+            add(new LeaderCard(new HashMap<>(), new HashMap<>(), 0, new SpecialDepotAbility(Resource.COIN)));
+            add(new LeaderCard(new HashMap<>(), new HashMap<>(), 0, new SpecialDepotAbility(Resource.SERVANT)));
         }};
 
         player.setLeaderCards(leaderCards);
@@ -65,7 +66,7 @@ public class PlayerTest {
     @Test
     public void isLeaderActionPlayable() {
         List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new HashMap<>(), new ArrayList<>(), 0, new ProductionAbility()));
+            add(new LeaderCard(new HashMap<>(), new HashMap<>(), 0, new SpecialDepotAbility(Resource.COIN)));
         }};
 
         // First case: playable leader

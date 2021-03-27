@@ -10,11 +10,10 @@ import it.polimi.ingsw.psp26.model.actiontokens.DiscardActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.ProductionAbility;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 public class Match extends Observable {
@@ -41,10 +40,8 @@ public class Match extends Observable {
     }
 
     private void initializeLeaderDeck() {
-        // Temporary solution
-        for (int i = 0; i < 16; i++)
-            leaderDeck.add(new LeaderCard(new HashMap<>(), new ArrayList<>(), 0, new ProductionAbility()));
-
+        LeaderCardsInitializer initializer = LeaderCardsInitializer.getInstance();
+        leaderDeck.addAll(initializer.getLeaderCards());
         shuffleLeaderDeck();
     }
 

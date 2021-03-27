@@ -14,7 +14,7 @@ public class DevelopmentGrid {
     private final DevelopmentGridCell[][] grid;
 
     public DevelopmentGrid() {
-        grid = new DevelopmentGridCell[3][4];
+        grid = new DevelopmentGridCell[LEVELS.length][COLORS.length];
 
         initializeGrid();
     }
@@ -22,21 +22,21 @@ public class DevelopmentGrid {
     private void initializeGrid() {
         for (int row = 0; row < LEVELS.length; row++) {
             for (int col = 0; col < COLORS.length; col++) {
-                grid[row][col] = new DevelopmentGridCell(COLORS[col], LEVELS[row]);
+                grid[row][col] = new DevelopmentGridCell(new DevelopmentCardType(COLORS[col], LEVELS[row]));
             }
         }
     }
 
     private int getRow(Level level) throws LevelDoesNotExistException {
         for (int row = 0; row < grid.length; row++)
-            if (grid[row][0].getLevel().equals(level))
+            if (grid[row][0].getDevelopmentCardType().getLevel().equals(level))
                 return row;
         throw new LevelDoesNotExistException();
     }
 
     private int getColumn(Color color) throws ColorDoesNotExistException {
         for (int col = 0; col < grid[0].length; col++)
-            if (grid[0][col].getColor().equals(color))
+            if (grid[0][col].getDevelopmentCardType().getColor().equals(color))
                 return col;
         throw new ColorDoesNotExistException();
     }

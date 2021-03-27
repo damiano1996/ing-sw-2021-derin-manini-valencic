@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -26,8 +27,7 @@ public class PersonalBoardTest {
     PersonalBoard personalBoard;
     List<List<DevelopmentCard>> cardSlots;
     private HashMap<Resource, Integer> cost;
-    private Color color;
-    private Level level;
+    private DevelopmentCardType developmentCardType;
     private HashMap<Resource, Integer> productionCost;
     private HashMap<Resource, Integer> productionReturn;
     private int victoryPoints;
@@ -37,8 +37,7 @@ public class PersonalBoardTest {
         cost = new HashMap<>() {{
             put(Resource.SHIELD, 7);
         }};
-        color = Color.GREEN;
-        level = Level.FIRST;
+        developmentCardType = new DevelopmentCardType(Color.GREEN, Level.FIRST);
         productionCost = new HashMap<>() {{
             put(Resource.SERVANT, 1);
         }};
@@ -48,12 +47,11 @@ public class PersonalBoardTest {
         }};
         victoryPoints = 11;
 
-        developmentCard1 = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);
+        developmentCard1 = new DevelopmentCard(cost, developmentCardType, productionCost, productionReturn, victoryPoints);
         cost = new HashMap<>() {{
             put(Resource.COIN, 3);
         }};
-        color = Color.GREEN;
-        level = Level.SECOND;
+        developmentCardType = new DevelopmentCardType(Color.GREEN, Level.SECOND);
         productionCost = new HashMap<>() {{
             put(Resource.SERVANT, 5);
         }};
@@ -62,13 +60,12 @@ public class PersonalBoardTest {
             put(Resource.FAITH_MARKER, 1);
         }};
         victoryPoints = 1;
-        developmentCard2 = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);
+        developmentCard2 = new DevelopmentCard(cost, developmentCardType, productionCost, productionReturn, victoryPoints);
 
         cost = new HashMap<>() {{
             put(Resource.SERVANT, 2);
         }};
-        color = Color.GREEN;
-        level = Level.THIRD;
+        developmentCardType = new DevelopmentCardType(Color.GREEN, Level.THIRD);
         productionCost = new HashMap<>() {{
             put(Resource.SHIELD, 1);
         }};
@@ -77,7 +74,7 @@ public class PersonalBoardTest {
             put(Resource.FAITH_MARKER, 3);
         }};
         victoryPoints = 13;
-        developmentCard3 = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);
+        developmentCard3 = new DevelopmentCard(cost, developmentCardType, productionCost, productionReturn, victoryPoints);
 
         cardSlots = new ArrayList<>();
         for (int i = 0; i < 3; i++) cardSlots.add(new ArrayList<>());
@@ -103,7 +100,7 @@ public class PersonalBoardTest {
 
         for (int i = 0; i < cardSlots.size() - 1; i++) {
             for (int j = 0; j < cardSlots.get(i).size() - 1; i++) {
-                assertTrue(cardSlots.get(i).get(j).equals(personalBoard.getDevelopmentCardsSlots().get(i).get(j)));
+                assertEquals(cardSlots.get(i).get(j), personalBoard.getDevelopmentCardsSlots().get(i).get(j));
             }
         }
     }
@@ -117,7 +114,7 @@ public class PersonalBoardTest {
 
         for (int i = 0; i < cardSlots.size() - 1; i++) {
             for (int j = 0; j < cardSlots.get(i).size() - 1; i++) {
-                assertTrue(cardSlots.get(i).get(j).equals(personalBoard.getDevelopmentCardsSlots().get(i).get(j)));
+                assertEquals(cardSlots.get(i).get(j), personalBoard.getDevelopmentCardsSlots().get(i).get(j));
             }
         }
     }
@@ -131,7 +128,7 @@ public class PersonalBoardTest {
         personalBoard.addDevelopmentCard(2, developmentCard3);
 
         for (int i = 0; i < cardSlots.get(indexSlot).size() - 1; i++) {
-            assertTrue(cardSlots.get(indexSlot).get(i).equals(personalBoard.getDevelopmentCardsSlot(indexSlot).get(i)));
+            assertEquals(cardSlots.get(indexSlot).get(i), personalBoard.getDevelopmentCardsSlot(indexSlot).get(i));
         }
     }
 
@@ -147,7 +144,7 @@ public class PersonalBoardTest {
         cardSlots.get(3).add(developmentCard3);
 
         for (int i = 0; i <= cardSlots.get(indexSlot).size() - 1; i++) {
-            assertTrue(cardSlots.get(indexSlot).get(i).equals(personalBoard.getDevelopmentCardsSlot(indexSlot).get(i)));
+            assertEquals(cardSlots.get(indexSlot).get(i), personalBoard.getDevelopmentCardsSlot(indexSlot).get(i));
         }
     }
 
@@ -163,7 +160,7 @@ public class PersonalBoardTest {
         developmentCards.add(developmentCard3);
 
         for (int i = 0; i < developmentCards.size(); i++) {
-            assertTrue(developmentCards.get(i).equals(personalBoard.getVisibleDevelopmentCards().get(i)));
+            assertEquals(developmentCards.get(i), personalBoard.getVisibleDevelopmentCards().get(i));
         }
     }
 

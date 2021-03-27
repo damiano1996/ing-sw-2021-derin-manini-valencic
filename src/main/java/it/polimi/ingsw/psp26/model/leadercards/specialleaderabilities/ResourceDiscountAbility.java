@@ -1,10 +1,10 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
-public class ResourceDiscountAbility implements SpecialAbility {
+import it.polimi.ingsw.psp26.model.enums.Resource;
 
+public class ResourceDiscountAbility extends SpecialAbility {
 
-    @Override
-    public void execute() {
-
+    public ResourceDiscountAbility(Resource resource) {
+        super(resource);
     }
 }

@@ -1,6 +1,19 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
-public interface SpecialAbility {
+import it.polimi.ingsw.psp26.model.enums.Resource;
 
-    void execute();
+public abstract class SpecialAbility {
+
+    private final Resource resource;
+
+    protected SpecialAbility(Resource resource) {
+        this.resource = resource;
+    }
+
+    public void execute() {
+    }
+
+    public Resource getResource() {
+        return resource;
+    }
 }

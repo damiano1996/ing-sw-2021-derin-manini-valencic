@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.model.developmentgrid;
 
-import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
@@ -16,10 +15,10 @@ public class DevelopmentCardsInitializer {
 
     private static DevelopmentCardsInitializer instance;
 
-    private final List<DevelopmentCard> cards;
+    private final List<DevelopmentCard> developmentCards;
 
     private DevelopmentCardsInitializer() {
-        cards = createDevelopmentCards();
+        developmentCards = createDevelopmentCards();
     }
 
     public static DevelopmentCardsInitializer getInstance() {
@@ -29,10 +28,10 @@ public class DevelopmentCardsInitializer {
         return instance;
     }
 
-    public List<DevelopmentCard> getByColorAndLevel(Color color, Level level) {
-        return cards
+    public List<DevelopmentCard> getByDevelopmentCardType(DevelopmentCardType developmentCardType) {
+        return developmentCards
                 .stream()
-                .filter(x -> x.getColor().equals(color) && x.getLevel().equals(level))
+                .filter(x -> x.getDevelopmentCardType().equals(developmentCardType))
                 .collect(Collectors.toList());
     }
 
@@ -69,7 +68,7 @@ public class DevelopmentCardsInitializer {
                     new HashMap<>() {{
                         put(costs[finalI], 2);
                     }},
-                    COLORS[i], Level.FIRST,
+                    new DevelopmentCardType(COLORS[i], Level.FIRST),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 1);
                     }},
@@ -97,7 +96,7 @@ public class DevelopmentCardsInitializer {
                         put(costs2[finalI], 1);
                         put(costs3[finalI], 1);
                     }},
-                    COLORS[i], Level.FIRST,
+                    new DevelopmentCardType(COLORS[i], Level.FIRST),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 1);
                     }},
@@ -123,7 +122,7 @@ public class DevelopmentCardsInitializer {
                     new HashMap<>() {{
                         put(costs[finalI], 3);
                     }},
-                    COLORS[i], Level.FIRST,
+                    new DevelopmentCardType(COLORS[i], Level.FIRST),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 2);
                     }},
@@ -153,7 +152,7 @@ public class DevelopmentCardsInitializer {
                         put(costs1[finalI], 2);
                         put(costs2[finalI], 2);
                     }},
-                    COLORS[i], Level.FIRST,
+                    new DevelopmentCardType(COLORS[i], Level.FIRST),
                     new HashMap<>() {{
                         put(productionCosts1[finalI], 1);
                         put(productionCosts2[finalI], 1);
@@ -179,7 +178,7 @@ public class DevelopmentCardsInitializer {
                     new HashMap<>() {{
                         put(costs[finalI], 4);
                     }},
-                    COLORS[i], Level.SECOND,
+                    new DevelopmentCardType(COLORS[i], Level.SECOND),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 1);
                     }},
@@ -206,7 +205,7 @@ public class DevelopmentCardsInitializer {
                         put(costs1[finalI], 3);
                         put(costs2[finalI], 2);
                     }},
-                    COLORS[i], Level.SECOND,
+                    new DevelopmentCardType(COLORS[i], Level.SECOND),
                     new HashMap<>() {{
                         put(productionCosts1[finalI], 1);
                         put(productionCosts2[finalI], 1);
@@ -232,7 +231,7 @@ public class DevelopmentCardsInitializer {
                     new HashMap<>() {{
                         put(costs[finalI], 5);
                     }},
-                    COLORS[i], Level.SECOND,
+                    new DevelopmentCardType(COLORS[i], Level.SECOND),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 2);
                     }},
@@ -260,7 +259,7 @@ public class DevelopmentCardsInitializer {
                         put(costs1[finalI], 5);
                         put(costs2[finalI], 5);
                     }},
-                    COLORS[i], Level.SECOND,
+                    new DevelopmentCardType(COLORS[i], Level.SECOND),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 1);
                     }},
@@ -286,7 +285,7 @@ public class DevelopmentCardsInitializer {
                     new HashMap<>() {{
                         put(costs[finalI], 6);
                     }},
-                    COLORS[i], Level.THIRD,
+                    new DevelopmentCardType(COLORS[i], Level.THIRD),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 2);
                     }},
@@ -316,7 +315,7 @@ public class DevelopmentCardsInitializer {
                         put(costs1[finalI], 5);
                         put(costs2[finalI], 2);
                     }},
-                    COLORS[i], Level.THIRD,
+                    new DevelopmentCardType(COLORS[i], Level.THIRD),
                     new HashMap<>() {{
                         put(productionCosts1[finalI], 1);
                         put(productionCosts2[finalI], 1);
@@ -344,7 +343,7 @@ public class DevelopmentCardsInitializer {
                     new HashMap<>() {{
                         put(costs[finalI], 7);
                     }},
-                    COLORS[i], Level.THIRD,
+                    new DevelopmentCardType(COLORS[i], Level.THIRD),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 1);
                     }},
@@ -372,7 +371,7 @@ public class DevelopmentCardsInitializer {
                         put(costs1[finalI], 4);
                         put(costs2[finalI], 4);
                     }},
-                    COLORS[i], Level.THIRD,
+                    new DevelopmentCardType(COLORS[i], Level.THIRD),
                     new HashMap<>() {{
                         put(productionCosts[finalI], 1);
                     }},

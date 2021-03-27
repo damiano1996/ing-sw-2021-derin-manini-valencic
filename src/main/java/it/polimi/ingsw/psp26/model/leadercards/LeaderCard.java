@@ -1,22 +1,26 @@
 package it.polimi.ingsw.psp26.model.leadercards;
 
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class LeaderCard {
 
     private final HashMap<Resource, Integer> resourcesRequirements;
-    private final List<DevelopmentCard> developmentCardRequirements;
+    private final HashMap<DevelopmentCardType, Integer> developmentCardRequirements;
     private final int victoryPoints;
     private final SpecialAbility specialAbility;
 
     private boolean active;
 
-    public LeaderCard(HashMap<Resource, Integer> resourcesRequirements, List<DevelopmentCard> developmentCardRequirements, int victoryPoints, SpecialAbility specialAbility) {
+    public LeaderCard(
+            HashMap<Resource, Integer> resourcesRequirements,
+            HashMap<DevelopmentCardType, Integer> developmentCardRequirements,
+            int victoryPoints,
+            SpecialAbility specialAbility
+    ) {
         this.resourcesRequirements = resourcesRequirements;
         this.developmentCardRequirements = developmentCardRequirements;
         this.victoryPoints = victoryPoints;
@@ -36,7 +40,7 @@ public class LeaderCard {
         return resourcesRequirements;
     }
 
-    public List<DevelopmentCard> getDevelopmentCardRequirements() {
+    public HashMap<DevelopmentCardType, Integer> getDevelopmentCardRequirements() {
         return developmentCardRequirements;
     }
 

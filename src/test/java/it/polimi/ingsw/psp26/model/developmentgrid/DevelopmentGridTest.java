@@ -25,8 +25,8 @@ public class DevelopmentGridTest {
         Level level = Level.THIRD;
 
         DevelopmentCard developmentCard = developmentGrid.drawCard(color, level);
-        assertEquals(color, developmentCard.getColor());
-        assertEquals(level, developmentCard.getLevel());
+        assertEquals(color, developmentCard.getDevelopmentCardType().getColor());
+        assertEquals(level, developmentCard.getDevelopmentCardType().getLevel());
     }
 
     @Test(expected = NoMoreDevelopmentCardsException.class)

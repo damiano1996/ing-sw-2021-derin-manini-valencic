@@ -1,33 +1,21 @@
 package it.polimi.ingsw.psp26.model.developmentgrid;
 
 import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
-import it.polimi.ingsw.psp26.model.enums.Color;
-import it.polimi.ingsw.psp26.model.enums.Level;
 
 import java.util.Collections;
 import java.util.List;
 
 public class DevelopmentGridCell {
 
-    private final Color color;
-    private final Level level;
+    private final DevelopmentCardType developmentCardType;
     private final List<DevelopmentCard> developmentCards;
 
-    public DevelopmentGridCell(Color color, Level level) {
-        this.color = color;
-        this.level = level;
+    public DevelopmentGridCell(DevelopmentCardType developmentCardType) {
+        this.developmentCardType = developmentCardType;
 
         DevelopmentCardsInitializer initializer = DevelopmentCardsInitializer.getInstance();
-        developmentCards = initializer.getByColorAndLevel(color, level);
+        developmentCards = initializer.getByDevelopmentCardType(developmentCardType);
         Collections.shuffle(developmentCards);
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public Level getLevel() {
-        return level;
     }
 
     public DevelopmentCard drawCard() throws NoMoreDevelopmentCardsException {
@@ -40,5 +28,9 @@ public class DevelopmentGridCell {
 
     public boolean isEmpty() {
         return developmentCards.size() == 0;
+    }
+
+    public DevelopmentCardType getDevelopmentCardType() {
+        return developmentCardType;
     }
 }

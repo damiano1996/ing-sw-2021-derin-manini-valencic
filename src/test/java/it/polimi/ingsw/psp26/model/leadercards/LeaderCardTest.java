@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.model.leadercards;
 
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -9,16 +9,14 @@ import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbi
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class LeaderCardTest {
 
     private HashMap<Resource, Integer> resourcesRequirements;
-    private List<DevelopmentCard> developmentCardRequirements;
+    private HashMap<DevelopmentCardType, Integer> developmentCardRequirements;
     private int victoryPoints;
     private SpecialAbility specialAbility;
 
@@ -33,8 +31,7 @@ public class LeaderCardTest {
         HashMap<Resource, Integer> cost = new HashMap<>() {{
             put(Resource.SHIELD, 7);
         }};
-        Color color = Color.GREEN;
-        Level level = Level.THIRD;
+        DevelopmentCardType developmentCardType = new DevelopmentCardType(Color.GREEN, Level.THIRD);
         HashMap<Resource, Integer> productionCost = new HashMap<>() {{
             put(Resource.SERVANT, 1);
         }};
@@ -43,13 +40,12 @@ public class LeaderCardTest {
             put(Resource.FAITH_MARKER, 3);
         }};
 
-        DevelopmentCard developmentCard = new DevelopmentCard(cost, color, level, productionCost, productionReturn, 11);
-        developmentCardRequirements = new ArrayList<>() {{
-            add(developmentCard);
+        developmentCardRequirements = new HashMap<>() {{
+            put(new DevelopmentCardType(Color.GREEN, Level.FIRST), 2);
         }};
 
         victoryPoints = 2;
-        specialAbility = new ProductionAbility();
+        specialAbility = new ProductionAbility(Resource.COIN);
 
         leaderCard = new LeaderCard(resourcesRequirements, developmentCardRequirements, victoryPoints, specialAbility);
     }

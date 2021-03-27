@@ -10,8 +10,7 @@ import static org.junit.Assert.*;
 
 public class DevelopmentGridCellTest {
 
-    private Color color;
-    private Level level;
+    private DevelopmentCardType developmentCardType;
 
     private int cardsInCell;
 
@@ -19,30 +18,28 @@ public class DevelopmentGridCellTest {
 
     @Before
     public void setUp() {
-        color = Color.GREEN;
-        level = Level.THIRD;
+        developmentCardType = new DevelopmentCardType(Color.GREEN, Level.THIRD);
 
         cardsInCell = 4; // by rules
 
-        developmentGridCell = new DevelopmentGridCell(color, level);
+        developmentGridCell = new DevelopmentGridCell(developmentCardType);
     }
 
     @Test
     public void testGetColor() {
-        assertEquals(color, developmentGridCell.getColor());
+        assertEquals(developmentCardType, developmentGridCell.getDevelopmentCardType());
     }
 
     @Test
     public void testGetLevel() {
-        assertEquals(level, developmentGridCell.getLevel());
+        assertEquals(developmentCardType, developmentGridCell.getDevelopmentCardType());
     }
 
     @Test
     public void testDrawCard_StandardCase() throws NoMoreDevelopmentCardsException {
         DevelopmentCard drawnDevelopmentCard = developmentGridCell.drawCard();
         assertNotNull(drawnDevelopmentCard);
-        assertEquals(color, drawnDevelopmentCard.getColor());
-        assertEquals(level, drawnDevelopmentCard.getLevel());
+        assertEquals(developmentCardType, drawnDevelopmentCard.getDevelopmentCardType());
     }
 
     @Test(expected = NoMoreDevelopmentCardsException.class)

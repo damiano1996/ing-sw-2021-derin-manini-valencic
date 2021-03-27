@@ -65,7 +65,7 @@ public class PersonalBoard {
 
     public void addDevelopmentCard(int indexSlot, DevelopmentCard developmentCard) throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
         if (indexSlot > developmentCardsSlots.size()) throw new DevelopmentCardSlotOutOfBoundsException();
-        if (isCardPleaceable(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
+        if (isCardPlaceable(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
         else throw new CanNotAddDevelopmentCardToSlotException();
     }
 
@@ -76,8 +76,16 @@ public class PersonalBoard {
      * @param developmentCard the card to place
      * @return true if the card can be places, false if not
      */
-    private boolean isCardPleaceable(int indexSlot, DevelopmentCard developmentCard) {
-        return (developmentCardsSlots.get(indexSlot).size() == 0 || developmentCardsSlots.get(indexSlot).get(developmentCardsSlots.get(indexSlot).size() - 1).getLevel().getLevelNumber() < developmentCard.getLevel().getLevelNumber());
+    private boolean isCardPlaceable(int indexSlot, DevelopmentCard developmentCard) {
+        return (developmentCardsSlots.get(indexSlot).size() == 0 ||
+                developmentCardsSlots
+                        .get(indexSlot)
+                        .get(developmentCardsSlots.get(indexSlot).size() - 1)
+                        .getDevelopmentCardType().getLevel().getLevelNumber() <
+                        developmentCard
+                                .getDevelopmentCardType()
+                                .getLevel()
+                                .getLevelNumber());
     }
 
     public void addResourceToStrongbox(List<Resource> resource) {

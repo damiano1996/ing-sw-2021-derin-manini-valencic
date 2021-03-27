@@ -8,13 +8,13 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class DevelopmentCardTest {
 
     private HashMap<Resource, Integer> cost;
-    private Color color;
-    private Level level;
+    private DevelopmentCardType developmentCardType;
     private HashMap<Resource, Integer> productionCost;
     private HashMap<Resource, Integer> productionReturn;
     private int victoryPoints;
@@ -26,8 +26,7 @@ public class DevelopmentCardTest {
         cost = new HashMap<>() {{
             put(Resource.SHIELD, 7);
         }};
-        color = Color.GREEN;
-        level = Level.THIRD;
+        developmentCardType = new DevelopmentCardType(Color.GREEN, Level.THIRD);
         productionCost = new HashMap<>() {{
             put(Resource.SERVANT, 1);
         }};
@@ -37,7 +36,7 @@ public class DevelopmentCardTest {
         }};
         victoryPoints = 11;
 
-        developmentCard = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);
+        developmentCard = new DevelopmentCard(cost, developmentCardType, productionCost, productionReturn, victoryPoints);
     }
 
     @Test
@@ -46,13 +45,8 @@ public class DevelopmentCardTest {
     }
 
     @Test
-    public void testGetColor() {
-        assertEquals(color, developmentCard.getColor());
-    }
-
-    @Test
-    public void testGetLevel() {
-        assertEquals(level, developmentCard.getLevel());
+    public void testGetDevelopmentCardType() {
+        assertEquals(developmentCardType, developmentCard.getDevelopmentCardType());
     }
 
     @Test
@@ -72,14 +66,13 @@ public class DevelopmentCardTest {
 
     @Test
     public void testEquals_TrueCase() {
-        DevelopmentCard AnotherDevelopmentCard = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);
-        assertTrue(developmentCard.equals(AnotherDevelopmentCard));
+        DevelopmentCard AnotherDevelopmentCard = new DevelopmentCard(cost, developmentCardType, productionCost, productionReturn, victoryPoints);
+        assertEquals(developmentCard, AnotherDevelopmentCard);
     }
 
     @Test
     public void testEquals_FalseCase() {
-        Color differentColor = Color.RED;
-        DevelopmentCard AnotherDevelopmentCard = new DevelopmentCard(cost, differentColor, level, productionCost, productionReturn, victoryPoints);
-        assertFalse(developmentCard.equals(AnotherDevelopmentCard));
+        DevelopmentCard AnotherDevelopmentCard = new DevelopmentCard(cost, new DevelopmentCardType(Color.BLUE, Level.FIRST), productionCost, productionReturn, victoryPoints);
+        assertNotEquals(developmentCard, AnotherDevelopmentCard);
     }
 }

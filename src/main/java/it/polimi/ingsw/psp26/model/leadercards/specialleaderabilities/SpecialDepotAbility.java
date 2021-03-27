@@ -1,10 +1,10 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
-public class SpecialDepotAbility implements SpecialAbility {
+import it.polimi.ingsw.psp26.model.enums.Resource;
 
+public class SpecialDepotAbility extends SpecialAbility {
 
-    @Override
-    public void execute() {
-
+    public SpecialDepotAbility(Resource resource) {
+        super(resource);
     }
 }

@@ -53,8 +53,8 @@ public class DiscardActionToken implements ActionToken {
                try {
                    for (int i = 0; i < cardsToRemove; i++) {
                        developmentGrid.drawCard(colorToDiscard, Level.THIRD);
-                       removedCards++;
                    }
+                   if (!developmentGrid.isAvailable(colorToDiscard, Level.THIRD)) throw new LorenzoWinException();
                } catch (NoMoreDevelopmentCardsException e) {
                     throw new LorenzoWinException();
                }

@@ -4,8 +4,11 @@ import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToDrawException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
+import it.polimi.ingsw.psp26.model.actiontokens.BlackCrossActionToken;
+import it.polimi.ingsw.psp26.model.actiontokens.BlackCrossShuffleActionToken;
 import it.polimi.ingsw.psp26.model.actiontokens.DiscardActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.ProductionAbility;
 
@@ -46,11 +49,13 @@ public class Match extends Observable {
     }
 
     private void initializeActionTokenStack() {
-        // Temporary solution
-        for (int i = 0; i < 7; i++) {
-            actionTokenStack.add(new DiscardActionToken());
-        }
-
+        actionTokenStack.add(new BlackCrossActionToken());
+        actionTokenStack.add(new BlackCrossActionToken());
+        actionTokenStack.add(new BlackCrossShuffleActionToken());
+        actionTokenStack.add(new DiscardActionToken(Color.GREEN));
+        actionTokenStack.add(new DiscardActionToken(Color.YELLOW));
+        actionTokenStack.add(new DiscardActionToken(Color.BLUE));
+        actionTokenStack.add(new DiscardActionToken(Color.PURPLE));
         shuffleActionTokenStack();
     }
 

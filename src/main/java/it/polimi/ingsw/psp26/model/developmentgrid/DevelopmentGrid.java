@@ -14,7 +14,7 @@ public class DevelopmentGrid {
     private final DevelopmentGridCell[][] grid;
 
     public DevelopmentGrid() {
-        grid = new DevelopmentGridCell[4][4];
+        grid = new DevelopmentGridCell[3][4];
 
         initializeGrid();
     }

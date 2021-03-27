@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -41,8 +42,8 @@ public class PlayerTest {
     @Test
     public void getLeaderCards() {
         List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
-            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
+            add(new LeaderCard(new HashMap<>(), new ArrayList<>(), 0, new ProductionAbility()));
+            add(new LeaderCard(new HashMap<>(), new ArrayList<>(), 0, new ProductionAbility()));
         }};
 
         player.setLeaderCards(leaderCards);
@@ -64,7 +65,7 @@ public class PlayerTest {
     @Test
     public void isLeaderActionPlayable() {
         List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
+            add(new LeaderCard(new HashMap<>(), new ArrayList<>(), 0, new ProductionAbility()));
         }};
 
         // First case: playable leader

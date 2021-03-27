@@ -8,9 +8,6 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
-import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
-import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +44,7 @@ public class PersonalBoardTest {
         }};
         productionReturn = new HashMap<>() {{
             put(Resource.COIN, 1);
-            put(Resource.FAITH_MARKERS, 3);
+            put(Resource.FAITH_MARKER, 3);
         }};
         victoryPoints = 11;
 
@@ -62,7 +59,7 @@ public class PersonalBoardTest {
         }};
         productionReturn = new HashMap<>() {{
             put(Resource.COIN, 1);
-            put(Resource.FAITH_MARKERS, 1);
+            put(Resource.FAITH_MARKER, 1);
         }};
         victoryPoints = 1;
         developmentCard2 = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);
@@ -77,7 +74,7 @@ public class PersonalBoardTest {
         }};
         productionReturn = new HashMap<>() {{
             put(Resource.COIN, 5);
-            put(Resource.FAITH_MARKERS, 3);
+            put(Resource.FAITH_MARKER, 3);
         }};
         victoryPoints = 13;
         developmentCard3 = new DevelopmentCard(cost, color, level, productionCost, productionReturn, victoryPoints);

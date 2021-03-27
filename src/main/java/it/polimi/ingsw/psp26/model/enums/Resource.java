@@ -5,7 +5,7 @@ public enum Resource {
     STONE("Stone", Color.GREY),
     SERVANT("Servant", Color.PURPLE),
     SHIELD("Shield", Color.BLUE),
-    FAITH_MARKERS("Faith Markers", Color.RED),
+    FAITH_MARKER("Faith Marker", Color.RED),
     EMPTY("Empty", Color.WHITE);
 
     private final String name;

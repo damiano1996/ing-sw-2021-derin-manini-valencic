@@ -1,7 +1,5 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
-import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
-import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import org.junit.Before;
 import org.junit.Test;
 

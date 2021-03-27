@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.model.developmentgrid;
 
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -34,7 +33,7 @@ public class DevelopmentCardTest {
         }};
         productionReturn = new HashMap<>() {{
             put(Resource.COIN, 1);
-            put(Resource.FAITH_MARKERS, 3);
+            put(Resource.FAITH_MARKER, 3);
         }};
         victoryPoints = 11;
 

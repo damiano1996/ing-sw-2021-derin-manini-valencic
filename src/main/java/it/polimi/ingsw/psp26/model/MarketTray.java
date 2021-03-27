@@ -16,7 +16,7 @@ public class MarketTray {
     public MarketTray() {
         List<Resource> MarblesList = new ArrayList<>(Arrays.asList(Resource.EMPTY, Resource.EMPTY, Resource.EMPTY, Resource.EMPTY,
                 Resource.COIN, Resource.COIN, Resource.SERVANT, Resource.SERVANT, Resource.SHIELD, Resource.SHIELD, Resource.STONE,
-                Resource.STONE, Resource.FAITH_MARKERS));
+                Resource.STONE, Resource.FAITH_MARKER));
         Collections.shuffle(MarblesList);
 
         marketMarbles = new Resource[3][4];

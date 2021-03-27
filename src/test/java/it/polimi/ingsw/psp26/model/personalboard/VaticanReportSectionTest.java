@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
-import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -23,15 +22,15 @@ public class VaticanReportSectionTest {
     }
 
     @Test
-    public void testIsinVaticanReportSection_FalseCase() {
+    public void testIsInVaticanReportSection_FalseCase() {
         section = new VaticanReportSection(5, 9);
-        assertFalse(section.isinVaticanReportSection(10));
+        assertFalse(section.isInVaticanReportSection(10));
     }
 
     @Test
     public void testIsinVaticanReportSection_TrueCase() {
         section = new VaticanReportSection(5, 9);
-        assertTrue(section.isinVaticanReportSection(6));
+        assertTrue(section.isInVaticanReportSection(6));
     }
 
     @Test

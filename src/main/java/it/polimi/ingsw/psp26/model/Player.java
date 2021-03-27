@@ -50,6 +50,8 @@ public class Player {
     }
 
     public boolean isLeaderActionPlayable() {
-        return leaderCards.stream().anyMatch(x -> !x.isActive());
+        return leaderCards
+                .stream()
+                .anyMatch(x -> !x.isActive());
     }
 }

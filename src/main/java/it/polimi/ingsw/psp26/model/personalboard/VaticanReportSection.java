@@ -21,7 +21,7 @@ public class VaticanReportSection {
         popesFavorTileStatus = true;
     }
 
-    public boolean isinVaticanReportSection(int markerPosition) {
+    public boolean isInVaticanReportSection(int markerPosition) {
         return (startSection <= markerPosition && markerPosition <= endSection);
     }
 

@@ -11,6 +11,7 @@ import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.Production
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class Match extends Observable {
@@ -39,7 +40,7 @@ public class Match extends Observable {
     private void initializeLeaderDeck() {
         // Temporary solution
         for (int i = 0; i < 16; i++)
-            leaderDeck.add(new LeaderCard(new ArrayList<>(), new ArrayList<>(), 0, new ProductionAbility()));
+            leaderDeck.add(new LeaderCard(new HashMap<>(), new ArrayList<>(), 0, new ProductionAbility()));
 
         shuffleLeaderDeck();
     }
@@ -66,7 +67,8 @@ public class Match extends Observable {
     }
 
     public Player getPlayerByNickname(String nickname) throws PlayerDoesNotExistException {
-        return players.stream()
+        return players
+                .stream()
                 .filter(x -> x.getNickname().equals(nickname))
                 .reduce((a, b) -> b)
                 .orElseThrow(PlayerDoesNotExistException::new);

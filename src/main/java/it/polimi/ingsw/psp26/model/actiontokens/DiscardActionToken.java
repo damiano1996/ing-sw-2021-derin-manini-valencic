@@ -20,45 +20,52 @@ public class DiscardActionToken implements ActionToken {
 
     @Override
     public void execute(FaithTrack faithTrack, DevelopmentGrid developmentGrid) throws ColorDoesNotExistException, LevelDoesNotExistException, LorenzoWinException {
-
         int cardsToRemove = 2;
-        int removedCards = 0;
 
         //Try removing cards from first level slot
+        cardsToRemove = removeFirstAndSecondLevel(cardsToRemove, developmentGrid, Level.FIRST);
+
+        //If there are cards left to remove, proceed to the second level slot
+        if (cardsToRemove > 0) {
+            cardsToRemove = removeFirstAndSecondLevel(cardsToRemove, developmentGrid, Level.SECOND);
+
+            //If there are cards left to remove, proceed to the third level slot
+            if (cardsToRemove > 0) {
+                removeThirdLevel(cardsToRemove, developmentGrid);
+            }
+        }
+    }
+
+    /**
+     * Used by the token to remove cards from First, Second or both DevelopmentGrid levels
+     *
+     * @param cardsToRemove the number of cards to remove
+     * @param developmentGrid the grid where the cards are removed
+     * @param level the desired level of cards to be removed
+     * @return the number of cards left to remove
+     */
+    private int removeFirstAndSecondLevel(int cardsToRemove, DevelopmentGrid developmentGrid, Level level) throws ColorDoesNotExistException, LevelDoesNotExistException {
+        int removedCards = 2 - cardsToRemove;
         try {
             for (int i = 0; i < cardsToRemove; i++) {
-                developmentGrid.drawCard(colorToDiscard, Level.FIRST);
+                developmentGrid.drawCard(colorToDiscard, level);
                 removedCards++;
             }
             cardsToRemove = 0;
         } catch (NoMoreDevelopmentCardsException e) {
             cardsToRemove -= removedCards;
         }
-
-        //If there are cards left to remove, proceed to the second level slot
-        if (cardsToRemove > 0) {
-            try {
-                for (int i = 0; i < cardsToRemove; i++) {
-                    developmentGrid.drawCard(colorToDiscard, Level.SECOND);
-                    removedCards++;
-                }
-                cardsToRemove = 0;
-            } catch (NoMoreDevelopmentCardsException e) {
-                cardsToRemove -= removedCards;
-            }
-
-            //If there are cards left to remove, proceed to the third level slot
-            if (cardsToRemove > 0) {
-                try {
-                    for (int i = 0; i < cardsToRemove; i++) {
-                        developmentGrid.drawCard(colorToDiscard, Level.THIRD);
-                    }
-                    if (!developmentGrid.isAvailable(colorToDiscard, Level.THIRD)) throw new LorenzoWinException();
-                } catch (NoMoreDevelopmentCardsException e) {
-                    throw new LorenzoWinException();
-                }
-            }
-        }
+        return cardsToRemove;
     }
 
+    private void removeThirdLevel(int cardsToRemove, DevelopmentGrid developmentGrid) throws ColorDoesNotExistException, LevelDoesNotExistException, LorenzoWinException {
+        try {
+            for (int i = 0; i < cardsToRemove; i++) {
+                developmentGrid.drawCard(colorToDiscard, Level.THIRD);
+            }
+            if (!developmentGrid.isAvailable(colorToDiscard, Level.THIRD)) throw new LorenzoWinException();
+        } catch (NoMoreDevelopmentCardsException e) {
+            throw new LorenzoWinException();
+        }
+    }
 }

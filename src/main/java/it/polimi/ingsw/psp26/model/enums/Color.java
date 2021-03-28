@@ -1,11 +1,30 @@
 package it.polimi.ingsw.psp26.model.enums;
 
 public enum Color {
-    GREY,
-    RED,
-    WHITE,
-    GREEN,
-    BLUE,
-    YELLOW,
-    PURPLE
+    GREY("\033[38;5;242m"),
+    RED("\u001b[31m"),
+    WHITE("\u001b[37m"),
+    GREEN("\u001b[32m"),
+    BLUE("\u001b[34;1m"),
+    YELLOW("\u001b[33m"),
+    PURPLE("\u001b[35m"),
+
+    RESET("\u001b[0m");
+
+    private final String ANSIcode;
+
+    Color(String ANSIcode)
+    {
+        this.ANSIcode = ANSIcode;
+    }
+
+    public void setColor()
+    {
+        System.out.print(ANSIcode);
+    }
+
+    public String toString()
+    {
+        return ANSIcode;
+    }
 }

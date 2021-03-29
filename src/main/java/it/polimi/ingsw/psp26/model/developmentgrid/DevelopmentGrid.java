@@ -52,4 +52,9 @@ public class DevelopmentGrid {
         int col = getColumn(color);
         return !grid[row][col].isEmpty();
     }
+
+    //rep exposed?
+    public DevelopmentGridCell getDevelopmentGridCell(int row, int col) {
+        return grid[row][col];
+    }
 }

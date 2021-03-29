@@ -33,4 +33,13 @@ public class DevelopmentGridCell {
     public DevelopmentCardType getDevelopmentCardType() {
         return developmentCardType;
     }
+
+    //rep exposed?
+    public DevelopmentCard getFirstCard() {
+        return developmentCards.get(0);
+    }
+
+    public int getDevelopmentCardsSize() {
+        return developmentCards.size();
+    }
 }

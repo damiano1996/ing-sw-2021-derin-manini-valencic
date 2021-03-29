@@ -5,22 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
-import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
-import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGridCell;
 import it.polimi.ingsw.psp26.model.enums.Color;
-import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 
 public class CLI {
 
     //CLI testing
-    public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException {
+    public static void main(String[] args) {
         CLI cli = new CLI();
         FaithTrack faithTrack = new FaithTrack();
         MarketTray marketTray = new MarketTray();
@@ -30,21 +26,20 @@ public class CLI {
 
         //DevelpmentGridTest
         cli.cls();
-        developmentGrid.drawCard(Color.GREEN, Level.SECOND);
-        //developmentGrid.drawCard(Color.GREEN, Level.SECOND);
         /*developmentGrid.drawCard(Color.GREEN, Level.SECOND);
-        developmentGrid.drawCard(Color.GREEN, Level.SECOND);
+        developmentGrid.drawCard(Color.BLUE, Level.SECOND);
+        developmentGrid.drawCard(Color.BLUE, Level.SECOND);
+        //developmentGrid.drawCard(Color.GREEN, Level.SECOND);
+
+        developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
+        developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
+        developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
+
+        developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
+        developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
+        developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
+        developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
         */
-        developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
-        developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
-        developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
-
-        /*developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
-        developmentGrid.drawCard(Color.YELLOW, Level.THIRD);
-        developmentGrid.drawCard(Color.YELLOW, Level.THIRD);
-        developmentGrid.drawCard(Color.YELLOW, Level.THIRD);
-        developmentGrid.drawCard(Color.YELLOW, Level.THIRD);*/
-
         cli.printDevelopmentGrid(developmentGrid);
         in.nextLine();
 
@@ -80,7 +75,6 @@ public class CLI {
     }
 
 
-
     //----------TITLE----------//
 
     public void printTitle() {
@@ -110,7 +104,6 @@ public class CLI {
                         "                                                                  |_____] |_____/ |______ |______ |______      |______ | \\  |    |    |______ |_____/\n" +
                         "                                                                  |       |    \\_ |______ ______| ______|      |______ |  \\_|    |    |______ |    \\_");
     }
-
 
 
     //----------FAITH-TRACK----------//
@@ -174,7 +167,6 @@ public class CLI {
     }
 
 
-
     //----------MARKET----------//
 
     public void printMarket(MarketTray marketTray) {
@@ -228,76 +220,136 @@ public class CLI {
     }
 
 
-
     //----------DEVELOPMENT-CARD-GRID----------//
 
     public void printDevelopmentGrid(DevelopmentGrid developmentGrid) {
-
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j <= 13; j++) System.out.println(hSpace(12) + printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i,0), j) +
-                                                             hSpace(12) + printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i,1), j) +
-                                                             hSpace(12) + printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i,2), j) +
-                                                             hSpace(12) + printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i,3), j));
+            for (int j = 0; j <= 16; j++)
+                System.out.println(
+                        hSpace(12) + printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 0), j) +
+                                hSpace(12) + printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 1), j) +
+                                hSpace(12) + printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 2), j) +
+                                hSpace(12) + printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 3), j));
             vSpace(1);
         }
     }
 
+    /**
+     * Used to print the DevelopmentCardGridCard.
+     *
+     * @param developmentGridCell If the cell contains one or more cards, print the one on the top. Otherwise, leave a blank space.
+     * @param cardLineToPrint     Each row of the card is printed individually to provide maximum control over variations of the grid structure
+     * @return One line of the grid
+     */
     private String printDevelopmentGridCard(DevelopmentGridCell developmentGridCell, int cardLineToPrint) {
         String s = "";
 
+        //In each switch cases, the code near break command is used to build the outline of the cards under the top one
         if (!developmentGridCell.isEmpty()) {
             switch (cardLineToPrint) {
                 case 0:
                     s = ",---------------------.";
+
+                    s = s + hSpace(3);
                     break;
 
                 case 1:
                     s = printDevelopmentCardRequirements(developmentGridCell.getFirstCard());
+
+                    if (developmentGridCell.getDevelopmentCardsSize() > 1) s = s + "." + hSpace(2);
+                    else s = s + hSpace(3);
                     break;
 
                 case 2:
                     s = "| " + pCS(".-----------------.", developmentGridCell.getFirstCard().getDevelopmentCardType().getColor()) + " |";
+
+                    if (developmentGridCell.getDevelopmentCardsSize() == 1) s = s + hSpace(3);
+                    else if (developmentGridCell.getDevelopmentCardsSize() == 2) s = s + "\u2502" + hSpace(2);
+                    else s = s + "\u2502." + hSpace(1);
                     break;
 
                 case 3:
                     s = printDevelopmentCardLevel(developmentGridCell.getFirstCard());
+
+                    if (developmentGridCell.getDevelopmentCardsSize() == 1) s = s + hSpace(3);
+                    else if (developmentGridCell.getDevelopmentCardsSize() == 2) s = s + "\u2502" + hSpace(2);
+                    else if (developmentGridCell.getDevelopmentCardsSize() == 3) s = s + "\u2502\u2502" + hSpace(1);
+                    else s = s + "\u2502\u2502.";
                     break;
 
                 case 4:
                     s = "| " + pCS("`-----------------'", developmentGridCell.getFirstCard().getDevelopmentCardType().getColor()) + " |";
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
                     break;
 
                 case 5:
                 case 11:
                     s = "|                     |";
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
                     break;
 
                 case 6:
                     s = "| .-----------------. |";
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
                     break;
 
                 case 7:
                     s = printProductionLines(developmentGridCell.getFirstCard(), 1);
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
                     break;
 
                 case 8:
                     s = printProductionLines(developmentGridCell.getFirstCard(), 2);
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
                     break;
 
                 case 9:
                     s = printProductionLines(developmentGridCell.getFirstCard(), 3);
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
                     break;
 
                 case 10:
                     s = "| |_________________| |";
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
                     break;
 
                 case 12:
                     s = printCardVictoryPoints(developmentGridCell.getFirstCard());
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
                     break;
 
                 case 13:
                     s = "`---------------------'";
+
+                    s = s + printHorizontalBorder(developmentGridCell.getDevelopmentCardsSize());
+                    break;
+
+                case 14:
+                    if (developmentGridCell.getDevelopmentCardsSize() == 2) s = " `---------------------'" + hSpace(2);
+                    else if (developmentGridCell.getDevelopmentCardsSize() == 3)
+                        s = " `---------------------'\u2502" + hSpace(1);
+                    else if (developmentGridCell.getDevelopmentCardsSize() == 4)
+                        s = " `---------------------'\u2502\u2502";
+                    else s = hSpace(26);
+                    break;
+
+                case 15:
+                    if (developmentGridCell.getDevelopmentCardsSize() == 3) s = "  `---------------------'" + hSpace(1);
+                    else if (developmentGridCell.getDevelopmentCardsSize() == 4) s = "  `---------------------'\u2502";
+                    else s = hSpace(26);
+                    break;
+
+                case 16:
+                    if (developmentGridCell.getDevelopmentCardsSize() == 4) s = "   `---------------------'";
+                    else s = hSpace(26);
                     break;
 
                 default:
@@ -305,12 +357,12 @@ public class CLI {
             }
             return s;
         }
-        return hSpace(23);
+        return hSpace(26);
     }
 
-    //private String printHorizontalBorder(int numberOfCards) {
-    //    return "\u2502".repeat(Math.max(0, numberOfCards));
-    //}
+    private String printHorizontalBorder(int numberOfCards) {
+        return "\u2502".repeat(Math.max(0, numberOfCards - 1)) + hSpace(4 - numberOfCards);
+    }
 
     private String printDevelopmentCardRequirements(DevelopmentCard developmentCard) {
         StringBuilder s = new StringBuilder("| ");
@@ -339,10 +391,13 @@ public class CLI {
         return pCS("\u25CF ", color).repeat(Math.max(0, level));
     }
 
-    /**SCRIVI MEGLIO STO COMMENTO
-     * Transform the HashMaps in Lists and use them to print the Production
-     * Use the line parameter to print all the Production
-     * @param developmentCard the cart from which print the Production
+    /**
+     * Used to print the Production section of a DevelopmentCard.
+     * It calls three auxiliary methods in order to get a clean print of the Resources
+     *
+     * @param developmentCard The card that is gonna to be printed
+     * @param line            Print the first, second or third line of the Production section
+     * @return The line that will be printed
      */
     private String printProductionLines(DevelopmentCard developmentCard, int line) {
         List<Resource> requiredResources = new ArrayList<>();
@@ -360,9 +415,12 @@ public class CLI {
             numberOfProducedResources.add(entry.getValue());
         }
 
-        if (line == 1) return printFirstProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources);
-        else if (line == 2) return printSecondProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources);
-        else return printThirdProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources);
+        if (line == 1)
+            return printFirstProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources);
+        else if (line == 2)
+            return printSecondProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources);
+        else
+            return printThirdProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources);
     }
 
     private String printFirstProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources) {
@@ -380,11 +438,14 @@ public class CLI {
     private String printSecondProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources) {
         String s = "| |  ";
 
-        if (requiredResources.size() == 1) s = s + numberOfRequiredResources.get(0) + pCS(" \u25A0", requiredResources.get(0).getColor()) + "  -->  ";
+        if (requiredResources.size() == 1)
+            s = s + numberOfRequiredResources.get(0) + pCS(" \u25A0", requiredResources.get(0).getColor()) + "  -->  ";
         else s = s + "     -->  ";
 
-        if (producedResources.size() == 1) s = s + numberOfProducedResources.get(0) + pCS(" \u25A0  ", producedResources.get(0).getColor()) + "| |";
-        else if (producedResources.size() == 3) s = s + numberOfProducedResources.get(1) + pCS(" \u25A0  ", producedResources.get(1).getColor()) + "| |";
+        if (producedResources.size() == 1)
+            s = s + numberOfProducedResources.get(0) + pCS(" \u25A0  ", producedResources.get(0).getColor()) + "| |";
+        else if (producedResources.size() == 3)
+            s = s + numberOfProducedResources.get(1) + pCS(" \u25A0  ", producedResources.get(1).getColor()) + "| |";
         else s = s + "     | |";
 
         return s;
@@ -393,11 +454,14 @@ public class CLI {
     private String printThirdProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources) {
         String s = "| |  ";
 
-        if (requiredResources.size() == 2) s = s + numberOfRequiredResources.get(1) + pCS(" \u25A0", requiredResources.get(1).getColor()) + hSpace(7);
+        if (requiredResources.size() == 2)
+            s = s + numberOfRequiredResources.get(1) + pCS(" \u25A0", requiredResources.get(1).getColor()) + hSpace(7);
         else s = s + hSpace(10);
 
-        if (producedResources.size() == 2) s = s + numberOfProducedResources.get(1) + pCS(" \u25A0  ", producedResources.get(1).getColor()) + "| |";
-        else if (producedResources.size() == 3) s = s + numberOfProducedResources.get(2) + pCS(" \u25A0  ", producedResources.get(2).getColor()) + "| |";
+        if (producedResources.size() == 2)
+            s = s + numberOfProducedResources.get(1) + pCS(" \u25A0  ", producedResources.get(1).getColor()) + "| |";
+        else if (producedResources.size() == 3)
+            s = s + numberOfProducedResources.get(2) + pCS(" \u25A0  ", producedResources.get(2).getColor()) + "| |";
         else s = s + "     | |";
 
         return s;
@@ -408,7 +472,6 @@ public class CLI {
         s = s + "|" + hSpace(10) + developmentCard.getVictoryPoints() + hSpace(10 - (developmentCard.getVictoryPoints() / 10)) + "|";
         return s;
     }
-
 
 
     //----------CLI-UTILS----------//

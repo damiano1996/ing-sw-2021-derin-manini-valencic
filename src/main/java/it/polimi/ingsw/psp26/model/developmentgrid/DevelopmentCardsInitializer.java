@@ -256,8 +256,8 @@ public class DevelopmentCardsInitializer {
             int finalI = i;
             cards.add(new DevelopmentCard(
                     new HashMap<>() {{
-                        put(costs1[finalI], 5);
-                        put(costs2[finalI], 5);
+                        put(costs1[finalI], 3);
+                        put(costs2[finalI], 3);
                     }},
                     new DevelopmentCardType(COLORS[i], Level.SECOND),
                     new HashMap<>() {{

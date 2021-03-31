@@ -1,9 +1,4 @@
-package it.polimi.ingsw.psp26.view;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
@@ -16,6 +11,11 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class CLI {
 

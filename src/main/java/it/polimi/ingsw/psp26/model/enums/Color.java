@@ -13,18 +13,15 @@ public enum Color {
 
     private final String ANSIcode;
 
-    Color(String ANSIcode)
-    {
+    Color(String ANSIcode) {
         this.ANSIcode = ANSIcode;
     }
 
-    public void setColor()
-    {
+    public void setColor() {
         System.out.print(ANSIcode);
     }
 
-    public String toString()
-    {
+    public String toString() {
         return ANSIcode;
     }
 }

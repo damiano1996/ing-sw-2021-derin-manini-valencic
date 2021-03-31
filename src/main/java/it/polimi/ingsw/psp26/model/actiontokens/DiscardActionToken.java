@@ -39,9 +39,9 @@ public class DiscardActionToken implements ActionToken {
     /**
      * Used by the token to remove cards from First, Second or both DevelopmentGrid levels
      *
-     * @param cardsToRemove the number of cards to remove
+     * @param cardsToRemove   the number of cards to remove
      * @param developmentGrid the grid where the cards are removed
-     * @param level the desired level of cards to be removed
+     * @param level           the desired level of cards to be removed
      * @return the number of cards left to remove
      */
     private int removeFirstAndSecondLevel(int cardsToRemove, DevelopmentGrid developmentGrid, Level level) throws ColorDoesNotExistException, LevelDoesNotExistException {

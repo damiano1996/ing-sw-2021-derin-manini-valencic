@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class CLI {
 
@@ -29,6 +30,8 @@ public class CLI {
 
 
         cli.cls();
+        List<Resource> strongbox = new ArrayList<>();
+
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.SHIELD);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
@@ -39,17 +42,32 @@ public class CLI {
         cli.printPersonalBoard(personalBoard);
         in.nextLine();
         cli.cls();
+        strongbox.add(Resource.STONE);
+        strongbox.add(Resource.SERVANT);
+        personalBoard.addResourceToStrongbox(strongbox);
+
         personalBoard.addDevelopmentCard(0, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
         personalBoard.addDevelopmentCard(1, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
         personalBoard.addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
         cli.printPersonalBoard(personalBoard);
         in.nextLine();
         cli.cls();
+        strongbox.add(Resource.COIN);
+        strongbox.add(Resource.STONE);
+        strongbox.add(Resource.SERVANT);
+        personalBoard.addResourceToStrongbox(strongbox);
+
         personalBoard.addDevelopmentCard(1, developmentGrid.drawCard(Color.BLUE, Level.SECOND));
         personalBoard.addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
         cli.printPersonalBoard(personalBoard);
         in.nextLine();
         cli.cls();
+        strongbox.add(Resource.COIN);
+        strongbox.add(Resource.STONE);
+        strongbox.add(Resource.SERVANT);
+        strongbox.add(Resource.COIN);
+        personalBoard.addResourceToStrongbox(strongbox);
+
         personalBoard.addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
         cli.printPersonalBoard(personalBoard);
         in.nextLine();
@@ -151,16 +169,101 @@ public class CLI {
 
         printWarehouse(personalBoard.getWarehouseDepots());
 
-        printDevelopmentCardSlots(personalBoard.getDevelopmentCardsSlots());
+        vSpace(1);
+
+        printDevelopmentCardSlotsAndStrongbox(personalBoard.getDevelopmentCardsSlots(), personalBoard.getStrongbox());
+
     }
 
 
-    //----------DEVELOPMENT-CARD-SLOTS----------//
+    //----------STRONGBOX----------//
 
-    private void printDevelopmentCardSlots(List<List<DevelopmentCard>> developmentSlots) {
-        for (int j = 0; j <= 16; j++)
+    /**
+     * Used to get the number of the resources stored in the strongbox
+     *
+     * @param resources    The resources in the strongbox
+     * @param resourceType The desired type of resource
+     * @return The number of Resources of resourceType stored in the strongbox
+     */
+    private int getStrongboxResourcesNumber(List<Resource> resources, Resource resourceType) {
+        if (!resources.contains(resourceType)) return 0;
+        Map<Resource, Long> numberOfResources = resources.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+        return numberOfResources.get(resourceType).intValue();
+    }
+
+    private String printStrongbox(int lineToPrint, List<Resource> resources) {
+        String s = "";
+
+        switch (lineToPrint) {
+            case 0:
+                s = "       ____...------------...____        ";
+                break;
+
+            case 1:
+                s = "  _.-\"` /o/__ ____ __ __  __ \\o\\_`\"-._   ";
+                break;
+
+            case 2:
+                s = ".'     / /                    \\ \\     '. ";
+                break;
+
+            case 3:
+                s = "|=====/o/======================\\o\\=====| ";
+                break;
+
+            case 4:
+                s = "|____/_/________..____..________\\_\\____| ";
+                break;
+
+            case 5:
+                s = "/   _/ \\_     <_o#\\__/#o_>     _/ \\_   \\ ";
+                break;
+
+            case 6:
+                s = "\\       _________\\####/_________       / ";
+                break;
+
+            case 7:
+                s = " |===\\!/========================\\!/===|  ";
+                break;
+
+            case 8:
+            case 10:
+            case 12:
+                s = " |   |o|                        |o|   |  ";
+                break;
+
+            case 9:
+                s = " |   |o|   " + pCS("\u2588\u2588", Color.YELLOW) + " " + getStrongboxResourcesNumber(resources, Resource.COIN) + "          " + pCS("\u2588\u2588", Color.BLUE) + " " + getStrongboxResourcesNumber(resources, Resource.SHIELD) + "   |o|   |  ";
+                break;
+
+            case 11:
+                s = " |   |o|   " + pCS("\u2588\u2588", Color.PURPLE) + " " + getStrongboxResourcesNumber(resources, Resource.SERVANT) + "     " +
+                        "     " + pCS("\u2588\u2588", Color.GREY) + " " + getStrongboxResourcesNumber(resources, Resource.STONE) + "   |o|   |  ";
+                break;
+
+            case 13:
+                s = " | __/ \\========================/ \\__ |  ";
+                break;
+
+            case 14:
+                s = " |  _\\o/   __  {.' __  '.} _   _\\o/  _|  ";
+                break;
+
+            case 15:
+                s = " `\"\"\"\"-\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"-\"\"\"\"`  ";
+
+        }
+        return s;
+    }
+
+
+    //----------DEVELOPMENT-CARD-SLOTS----------// AL MOMENTO TI STAMPA PURE LO STRONGBOX
+
+    private void printDevelopmentCardSlotsAndStrongbox(List<List<DevelopmentCard>> developmentSlots, List<Resource> strongbox) {
+        for (int j = 0; j <= 15; j++)
             System.out.println(
-                    hSpace(50) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(0), j) +
+                    printStrongbox(j, strongbox) + hSpace(20) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(0), j) +
                             hSpace(5) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(1), j) +
                             hSpace(5) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(2), j) + hSpace(5) + "\u2502");
         vSpace(1);
@@ -184,13 +287,13 @@ public class CLI {
     //----------WAREHOUSE----------//
 
     private void printWarehouse(List<Depot> warehouseDepots) {
-        System.out.println("       _______\n" + "   ,--'       `--.");
-        System.out.println("  /" + printDepot(warehouseDepots.get(0)) + "\\");
-        System.out.println(" | _______________ |\n" + " )                 |");
-        System.out.println(" | " + printDepot(warehouseDepots.get(1)) + " |");
-        System.out.println(" | _______________ (\n" + " |                 |");
-        System.out.println(" ) " + printDepot(warehouseDepots.get(2)) + " |");
-        System.out.println(" | _______________ |\n" + " |                 |\n" + " |___.-__;----.____|");
+        System.out.println(hSpace(10) + "       _______\n" + hSpace(10) + "   ,--'       `--.");
+        System.out.println(hSpace(10) + "  /" + printDepot(warehouseDepots.get(0)) + "\\");
+        System.out.println(hSpace(10) + " | _______________ |\n" + hSpace(10) + " )                 |");
+        System.out.println(hSpace(10) + " | " + printDepot(warehouseDepots.get(1)) + " |");
+        System.out.println(hSpace(10) + " | _______________ (\n" + hSpace(10) + " |                 |");
+        System.out.println(hSpace(10) + " ) " + printDepot(warehouseDepots.get(2)) + " |");
+        System.out.println(hSpace(10) + " | _______________ |\n" + hSpace(10) + " |                 |\n" + hSpace(10) + " |___.-__;----.____|");
     }
 
     private String printDepot(Depot depot) {

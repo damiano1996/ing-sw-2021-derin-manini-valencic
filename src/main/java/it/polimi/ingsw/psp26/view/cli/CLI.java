@@ -287,13 +287,18 @@ public class CLI {
     //----------WAREHOUSE----------//
 
     private void printWarehouse(List<Depot> warehouseDepots) {
-        System.out.println(hSpace(10) + "       _______\n" + hSpace(10) + "   ,--'       `--.");
-        System.out.println(hSpace(10) + "  /" + printDepot(warehouseDepots.get(0)) + "\\");
-        System.out.println(hSpace(10) + " | _______________ |\n" + hSpace(10) + " )                 |");
-        System.out.println(hSpace(10) + " | " + printDepot(warehouseDepots.get(1)) + " |");
-        System.out.println(hSpace(10) + " | _______________ (\n" + hSpace(10) + " |                 |");
-        System.out.println(hSpace(10) + " ) " + printDepot(warehouseDepots.get(2)) + " |");
-        System.out.println(hSpace(10) + " | _______________ |\n" + hSpace(10) + " |                 |\n" + hSpace(10) + " |___.-__;----.____|");
+        System.out.println(hSpace(9) + "        ________\n" + hSpace(10) +
+                                               "   ,=='        `==.");
+        System.out.println(hSpace(9) + "  ╭/ " + printDepot(warehouseDepots.get(0)) + " \\╮");
+        System.out.println(hSpace(9) + "  || ______________ ||\n" + hSpace(10) +
+                                               " |)                ||");
+        System.out.println(hSpace(9) + "  || " + printDepot(warehouseDepots.get(1)) + " ||");
+        System.out.println(hSpace(9) + "  || ______________ (|\n" + hSpace(10) +
+                                               " ||                ||");
+        System.out.println(hSpace(9) + "  )| " + printDepot(warehouseDepots.get(2)) + " ||");
+        System.out.println(hSpace(9) + "  || ______________ ||\n" + hSpace(10) +
+                                               " ||                ||\n" + hSpace(10) +
+                                               " ||___.-__;----.___||");
     }
 
     private String printDepot(Depot depot) {
@@ -303,8 +308,8 @@ public class CLI {
         if (resources.size() == 0) return hSpace(15);
 
         s.append(hSpace(6 - (2 * resources.size())));
-        for (Resource resource : resources) s.append(pCS("   \u25A0", resource.getColor()));
-        s.append(hSpace(9 - (2 * resources.size())));
+        for (Resource resource : resources) s.append(pCS("  \u2588\u2588", resource.getColor()));
+        s.append(hSpace(8 - (2 * resources.size())));
         return s.toString();
     }
 
@@ -332,7 +337,7 @@ public class CLI {
     }
 
     private void printCross() {
-        System.out.print("   \u001b[41;1m\u2020\u001b[0m   ");
+        System.out.print("  \u001b[41;1m \u2020 \u001b[0m  ");
     }
 
     private void printRow(int start, int end, int fp) {

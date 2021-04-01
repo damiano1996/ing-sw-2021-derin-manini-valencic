@@ -31,6 +31,16 @@ public class Depot {
         else throw new CanNotAddResourceToDepotException();
     }
 
+    public void addResource(List<Resource> newResources) throws CanNotAddResourceToDepotException{
+        if(resources.size() != 0) throw new CanNotAddResourceToDepotException();
+        if(newResources.size() != maxNumberOfResources) throw new CanNotAddResourceToDepotException();
+        resources.addAll(newResources);
+    }
+
+    public void removeResource(){
+        resources.clear();
+    }
+
     /**
      * checks if a resource could be added to a specified depot
      *

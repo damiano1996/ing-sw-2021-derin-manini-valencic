@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,8 +20,9 @@ public class DiscardActionTokenTest {
 
     @Before
     public void setUp() {
-        faithTrack = new FaithTrack();
-        developmentGrid = new DevelopmentGrid();
+        VirtualView virtualView = new VirtualView();
+        faithTrack = new FaithTrack(virtualView);
+        developmentGrid = new DevelopmentGrid(virtualView);
         discardActionTokenGreen = new DiscardActionToken(Color.GREEN);
     }
 

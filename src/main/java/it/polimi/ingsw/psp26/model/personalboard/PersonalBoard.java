@@ -1,15 +1,18 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
+import it.polimi.ingsw.psp26.application.Observable;
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
 import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonalBoard {
+public class PersonalBoard extends Observable<Message> {
 
     private final FaithTrack faithTrack;
     private final List<List<DevelopmentCard>> developmentCardsSlots;
@@ -17,15 +20,20 @@ public class PersonalBoard {
     private final List<Resource> strongbox;
 
 
-    public PersonalBoard() {
-        faithTrack = new FaithTrack();
+    public PersonalBoard(VirtualView virtualView) {
+        super();
+        addObserver(virtualView);
+
+        faithTrack = new FaithTrack(virtualView);
         developmentCardsSlots = new ArrayList<>(3);
         warehouseDepots = new ArrayList<>(3);
         for (int i = 0; i < 3; i++) {
             developmentCardsSlots.add(new ArrayList<>());
-            warehouseDepots.add(new Depot(i + 1));
+            warehouseDepots.add(new Depot(virtualView, i + 1));
         }
         strongbox = new ArrayList<>();
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     public FaithTrack getFaithTrack() {
@@ -67,6 +75,8 @@ public class PersonalBoard {
         if (indexSlot > developmentCardsSlots.size()) throw new DevelopmentCardSlotOutOfBoundsException();
         if (isCardPlaceable(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
         else throw new CanNotAddDevelopmentCardToSlotException();
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -90,6 +100,7 @@ public class PersonalBoard {
 
     public void addResourceToStrongbox(List<Resource> resource) {
         strongbox.addAll(resource);
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
 

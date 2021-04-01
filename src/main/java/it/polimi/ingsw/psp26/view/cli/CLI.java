@@ -11,6 +11,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,10 @@ public class CLI {
     //CLI testing. Only press start to test CLI functionalities
     public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
         CLI cli = new CLI();
-        PersonalBoard personalBoard = new PersonalBoard();
-        MarketTray marketTray = new MarketTray();
-        DevelopmentGrid developmentGrid = new DevelopmentGrid();
+        VirtualView virtualView = new VirtualView();
+        PersonalBoard personalBoard = new PersonalBoard(virtualView);
+        MarketTray marketTray = new MarketTray(virtualView);
+        DevelopmentGrid developmentGrid = new DevelopmentGrid(virtualView);
         Scanner in = new Scanner(System.in);
 
 
@@ -73,7 +75,7 @@ public class CLI {
         in.nextLine();
 
 
-        developmentGrid = new DevelopmentGrid();
+        developmentGrid = new DevelopmentGrid(virtualView);
 
 
         //DevelpmentGridTest press enter 4 times

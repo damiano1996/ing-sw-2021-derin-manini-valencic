@@ -1,33 +1,42 @@
 package it.polimi.ingsw.psp26.controller;
 
+import it.polimi.ingsw.psp26.application.Observer;
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.endgamecheckers.EndMatchChecker;
 import it.polimi.ingsw.psp26.controller.endgamecheckers.MultiPlayerEndMatchChecker;
 import it.polimi.ingsw.psp26.controller.turns.SinglePlayerTurn;
 import it.polimi.ingsw.psp26.controller.turns.Turn;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class MatchesController {
+public class MatchController implements Observer<Message> {
 
-    private final Match match;
+    private final VirtualView virtualView;
+    private Match match;
 
     private Turn currentTurn;
     private EndMatchChecker endMatchChecker;
 
-    public MatchesController(Match match) {
-        this.match = match;
+    public MatchController(VirtualView virtualView) {
+        this.virtualView = virtualView;
 
         initializeEndMatchChecker();
     }
 
-    public void initializeMatch(int id, List<Player> players) {
+    @Override
+    public void update(Message object) {
+
+    }
+
+    private void initializeMatch(int id, List<Player> players) {
         Collections.shuffle(players);
-        Match NewMatch = new Match(id, players);
+        match = new Match(virtualView, id, players);
     }
 
     private void initializeTurn() {
@@ -44,10 +53,9 @@ public class MatchesController {
     }
 
     private void initializeEndMatchChecker() {
-        if (match.isMultiPlayerMode())
-            endMatchChecker = new MultiPlayerEndMatchChecker();
-        else
-            endMatchChecker = new EndMatchChecker();
+        endMatchChecker = (match.isMultiPlayerMode()) ?
+                new MultiPlayerEndMatchChecker() :
+                new EndMatchChecker();
     }
 
     private Turn createTurn(Player player) {
@@ -56,28 +64,20 @@ public class MatchesController {
                 new SinglePlayerTurn(match, player);
     }
 
-    public Match getMatch() {
-        return match;
-    }
-
-    public Turn getCurrentTurn() {
-        return currentTurn;
-    }
-
-    public EndMatchChecker getEndMatchChecker() {
+    private EndMatchChecker getEndMatchChecker() {
         return endMatchChecker;
     }
 
-    public void updateCurrentTurn() {
+    private void updateCurrentTurn() {
         currentTurn = createTurn(getNextPlayer());
     }
 
-    public void playCurrentTurn() {
+    private void playCurrentTurn() {
         // to be implemented
     }
 
 
-    public Player getNextPlayer() {
+    private Player getNextPlayer() {
         Player currentPlayer = currentTurn.getTurnPlayer();
         int playerIndex = match.getPlayers().indexOf(currentPlayer);
         return match.getPlayers().get((playerIndex + 1) % match.getPlayers().size());
@@ -93,14 +93,14 @@ public class MatchesController {
         //Display first 4 cards of the deck and return List<2Leader> and discard the rest of them
     }
 
-    public void endMatch() {
+    private void endMatch() {
     }
 
-    public HashMap<Player, Integer> computePlayersPoints() {
+    private HashMap<Player, Integer> computePlayersPoints() {
         // to be implemented
         return null;
     }
 
-    public void checkEndMatch() {
+    private void checkEndMatch() {
     }
 }

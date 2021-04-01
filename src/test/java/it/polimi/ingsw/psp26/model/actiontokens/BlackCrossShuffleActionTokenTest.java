@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.model.actiontokens;
 import it.polimi.ingsw.psp26.exceptions.MustShuffleActionTokenStackException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,9 +17,11 @@ public class BlackCrossShuffleActionTokenTest {
 
     @Before
     public void setUp() {
-        developmentGrid = new DevelopmentGrid();
+        VirtualView virtualView = new VirtualView();
+
+        developmentGrid = new DevelopmentGrid(virtualView);
         blackCrossShuffleActionToken = new BlackCrossShuffleActionToken();
-        faithTrack = new FaithTrack();
+        faithTrack = new FaithTrack(virtualView);
     }
 
     @Test(expected = MustShuffleActionTokenStackException.class)

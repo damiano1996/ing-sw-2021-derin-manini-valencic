@@ -1,6 +1,9 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.application.Observable;
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,12 +11,15 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class MarketTray {
+public class MarketTray extends Observable<Message> {
 
     private final Resource[][] marketMarbles;
     private Resource marbleOnSlide;
 
-    public MarketTray() {
+    public MarketTray(VirtualView virtualView) {
+        super();
+        addObserver(virtualView);
+
         List<Resource> MarblesList = new ArrayList<>(Arrays.asList(Resource.EMPTY, Resource.EMPTY, Resource.EMPTY, Resource.EMPTY,
                 Resource.COIN, Resource.COIN, Resource.SERVANT, Resource.SERVANT, Resource.SHIELD, Resource.SHIELD, Resource.STONE,
                 Resource.STONE, Resource.FAITH_MARKER));
@@ -26,6 +32,8 @@ public class MarketTray {
                 marketMarbles[j][i] = MarblesList.get(j + i * marketMarbles.length);
             }
         }
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
 
@@ -34,7 +42,7 @@ public class MarketTray {
     }
 
 
-    public Resource[] getMarbleOnColumn(int column) {
+    public Resource[] getMarblesOnColumn(int column) {
         Resource[] marketColumn = new Resource[marketMarbles.length];
         for (int i = 0; i < marketMarbles.length; i++) {
             marketColumn[i] = marketMarbles[i][column];
@@ -56,6 +64,8 @@ public class MarketTray {
             marketMarbles[row][marketMarbles[0].length - i - 1] = marketMarbles[row][marketMarbles[0].length - i - 2];
         }
         marketMarbles[row][0] = marbleTemp;
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
 
@@ -65,5 +75,7 @@ public class MarketTray {
         for (int i = 0; i < marketMarbles.length - 1; i++)
             marketMarbles[marketMarbles.length - i - 1][column] = marketMarbles[marketMarbles.length - i - 2][column];
         marketMarbles[0][column] = marbleTemp;
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 }

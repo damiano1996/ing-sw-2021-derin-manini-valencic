@@ -42,8 +42,10 @@ public class Depot extends Observable<Message> {
     }
 
     public void addResource(List<Resource> newResources) throws CanNotAddResourceToDepotException {
-        if (resources.size() != 0) throw new CanNotAddResourceToDepotException();
-        if (newResources.size() != maxNumberOfResources) throw new CanNotAddResourceToDepotException();
+        if (newResources.size() > (maxNumberOfResources - resources.size()))
+            throw new CanNotAddResourceToDepotException();
+        for (Resource resource : newResources)
+            if (!isAdmissible(resource)) throw new CanNotAddResourceToDepotException();
         resources.addAll(newResources);
 
         notifyObservers(new Message()); // TODO: to be completed
@@ -52,7 +54,6 @@ public class Depot extends Observable<Message> {
     public void removeResource() {
         resources.clear();
         notifyObservers(new Message()); // TODO: to be completed
-
     }
 
     /**

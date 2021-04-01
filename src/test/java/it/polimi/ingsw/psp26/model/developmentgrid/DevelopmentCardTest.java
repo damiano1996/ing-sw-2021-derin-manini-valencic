@@ -66,13 +66,13 @@ public class DevelopmentCardTest {
 
     @Test
     public void testEquals_TrueCase() {
-        DevelopmentCard AnotherDevelopmentCard = new DevelopmentCard(cost, developmentCardType, productionCost, productionReturn, victoryPoints);
-        assertEquals(developmentCard, AnotherDevelopmentCard);
+        DevelopmentCard anotherDevelopmentCard = new DevelopmentCard(cost, developmentCardType, productionCost, productionReturn, victoryPoints);
+        assertEquals(developmentCard, anotherDevelopmentCard);
     }
 
     @Test
     public void testEquals_FalseCase() {
-        DevelopmentCard AnotherDevelopmentCard = new DevelopmentCard(cost, new DevelopmentCardType(Color.BLUE, Level.FIRST), productionCost, productionReturn, victoryPoints);
-        assertNotEquals(developmentCard, AnotherDevelopmentCard);
+        DevelopmentCard anotherDevelopmentCard = new DevelopmentCard(cost, new DevelopmentCardType(Color.BLUE, Level.FIRST), productionCost, productionReturn, victoryPoints);
+        assertNotEquals(developmentCard, anotherDevelopmentCard);
     }
 }

@@ -43,4 +43,10 @@ public class VaticanReportSection extends Observable<Message> {
         return endSection;
     }
 
+    public boolean equals(VaticanReportSection vaticanReportSection) {
+        return (this.popesFavorTileStatus == vaticanReportSection.popesFavorTileStatus
+                && this.startSection == vaticanReportSection.startSection
+                && this.endSection == vaticanReportSection.endSection);
+    }
+
 }

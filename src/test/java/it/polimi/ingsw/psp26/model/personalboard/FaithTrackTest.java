@@ -9,11 +9,13 @@ import static org.junit.Assert.*;
 public class FaithTrackTest {
 
     FaithTrack faithTrack;
-    VaticanReportSection[] vaticanReportSections = new VaticanReportSection[3];
+    VaticanReportSection[] vaticanReportSections;
 
     @Before
     public void setUp() {
         VirtualView virtualView = new VirtualView();
+        vaticanReportSections = new VaticanReportSection[3];
+
         vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8);
         vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16);
         vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, 24);
@@ -24,11 +26,7 @@ public class FaithTrackTest {
     @Test
     public void testGetVaticanReportSections() {
         for (int i = 0; i < 3; i++)
-            assertEquals(vaticanReportSections[i].isPopesFavorTileActive(), faithTrack.getVaticanReportSections()[i].isPopesFavorTileActive());
-        for (int i = 0; i < 3; i++)
-            assertEquals(vaticanReportSections[i].getStartSection(), faithTrack.getVaticanReportSections()[i].getStartSection());
-        for (int i = 0; i < 3; i++)
-            assertEquals(vaticanReportSections[i].getEndSection(), faithTrack.getVaticanReportSections()[i].getEndSection());
+            assertTrue(vaticanReportSections[i].equals(faithTrack.getVaticanReportSections()[i]));
     }
 
     @Test
@@ -83,6 +81,5 @@ public class FaithTrackTest {
         faithTrack.addFaithPoints(5);
         faithTrack.moveBlackCrossPosition(7);
         assertFalse(faithTrack.equals(faithTrack1));
-
     }
 }

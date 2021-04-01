@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.application;
 
-public interface Observer {
+public interface Observer<T> {
 
-    void update(Observable observable);
+    void update(T object);
 }

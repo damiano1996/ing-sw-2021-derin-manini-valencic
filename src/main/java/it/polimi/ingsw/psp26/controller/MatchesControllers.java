@@ -1,32 +1,33 @@
 package it.polimi.ingsw.psp26.controller;
 
-import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.Observer;
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.MatchDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MatchesControllers implements Observer {
+public class MatchesControllers implements Observer<Message> {
 
     private final List<MatchesController> matchesControllers;
     private final HashMap<Player, Integer> leaderboard;
 
-    public MatchesControllers() {
+    public MatchesControllers(VirtualView virtualView) {
         matchesControllers = new ArrayList<>();
         leaderboard = new HashMap<>();
     }
 
     @Override
-    public void update(Observable observable) {
+    public void update(Message message) {
 
     }
 
-    public MatchesController getMatchController(String sessionToken) throws PlayerDoesNotExistException {
+    private MatchesController getMatchController(String sessionToken) throws PlayerDoesNotExistException {
         for (MatchesController matchesController : matchesControllers)
             for (Player player : matchesController.getMatch().getPlayers())
                 if (player.getSessionToken().equals(sessionToken))
@@ -35,7 +36,7 @@ public class MatchesControllers implements Observer {
         throw new PlayerDoesNotExistException();
     }
 
-    public MatchesController getMatchController(int idMatch) throws MatchDoesNotExistException {
+    private MatchesController getMatchController(int idMatch) throws MatchDoesNotExistException {
         return matchesControllers
                 .stream()
                 .filter(x -> x.getMatch().getId() == idMatch)
@@ -43,16 +44,17 @@ public class MatchesControllers implements Observer {
                 .orElseThrow(MatchDoesNotExistException::new);
     }
 
-    public void updateLeaderboard(String sessionToken) {
+    private void updateLeaderboard(String sessionToken) {
     }
 
-    public void updateLeaderboard(int idMatch) {
+    private void updateLeaderboard(int idMatch) {
     }
 
-    public void createMatchController(List<Player> players) {
+    private void createMatchController(VirtualView virtualView, List<Player> players) {
         int idMatch = matchesControllers.get(matchesControllers.size() - 1).getMatch().getId() + 1;
         Match match = new Match(idMatch, players);
         MatchesController matchesController = new MatchesController(match);
         matchesControllers.add(matchesController);
     }
+
 }

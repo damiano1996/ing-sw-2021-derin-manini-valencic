@@ -9,7 +9,7 @@ import java.util.List;
 public class Depot {
 
     private final int maxNumberOfResources;
-    private List<Resource> resources;
+    private final List<Resource> resources;
 
 
     public Depot(int maxNumberOfResources) {
@@ -31,13 +31,13 @@ public class Depot {
         else throw new CanNotAddResourceToDepotException();
     }
 
-    public void addResource(List<Resource> newResources) throws CanNotAddResourceToDepotException{
-        if(resources.size() != 0) throw new CanNotAddResourceToDepotException();
-        if(newResources.size() != maxNumberOfResources) throw new CanNotAddResourceToDepotException();
+    public void addResource(List<Resource> newResources) throws CanNotAddResourceToDepotException {
+        if (resources.size() != 0) throw new CanNotAddResourceToDepotException();
+        if (newResources.size() != maxNumberOfResources) throw new CanNotAddResourceToDepotException();
         resources.addAll(newResources);
     }
 
-    public void removeResource(){
+    public void removeResource() {
         resources.clear();
     }
 

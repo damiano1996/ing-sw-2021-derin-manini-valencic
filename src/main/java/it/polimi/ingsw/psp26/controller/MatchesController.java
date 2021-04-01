@@ -6,8 +6,6 @@ import it.polimi.ingsw.psp26.controller.turns.SinglePlayerTurn;
 import it.polimi.ingsw.psp26.controller.turns.Turn;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
-import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,10 +34,10 @@ public class MatchesController {
         //it could be called initializeGame
         Player firstPlayer = match.getPlayers().get(0);
         firstPlayer.giveInkwell();
-        if(match.isMultiPlayerMode()) DistributeResource();
-        for(Player player : match.getPlayers()){
+        if (match.isMultiPlayerMode()) DistributeResource();
+        for (Player player : match.getPlayers()) {
             ChooseLeaders();
-           // player.setLeaderCards(); Da mettere i Leader scelti nel ChooseLeaders
+            // player.setLeaderCards(); Da mettere i Leader scelti nel ChooseLeaders
         }
         currentTurn = createTurn(firstPlayer);
 
@@ -82,15 +80,15 @@ public class MatchesController {
     public Player getNextPlayer() {
         Player currentPlayer = currentTurn.getTurnPlayer();
         int playerIndex = match.getPlayers().indexOf(currentPlayer);
-        return match.getPlayers().get((playerIndex + 1) % match.getPlayers().size() );
+        return match.getPlayers().get((playerIndex + 1) % match.getPlayers().size());
     }
 
-    private void DistributeResource(){
+    private void DistributeResource() {
         // to be implemented
         //It should give to each player the resource they want + faith point (established by rule table)
     }
 
-    private void ChooseLeaders(){
+    private void ChooseLeaders() {
         //to be implemented
         //Display first 4 cards of the deck and return List<2Leader> and discard the rest of them
     }

@@ -4,12 +4,18 @@ import java.io.Serializable;
 
 public class Message implements Serializable {
 
+    private final String sessionToken;
     private final MessageType messageType;
     private final Object payload;
 
-    public Message(MessageType messageType, Object payload) {
+    public Message(String sessionToken, MessageType messageType, Object payload) {
+        this.sessionToken = sessionToken;
         this.messageType = messageType;
         this.payload = payload;
+    }
+
+    public String getSessionToken() {
+        return sessionToken;
     }
 
     public MessageType getMessageType() {

@@ -1,20 +1,28 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
+import it.polimi.ingsw.psp26.application.Observable;
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Depot {
+public class Depot extends Observable<Message> {
 
     private final int maxNumberOfResources;
     private final List<Resource> resources;
 
 
-    public Depot(int maxNumberOfResources) {
+    public Depot(VirtualView virtualView, int maxNumberOfResources) {
+        super();
+        addObserver(virtualView);
+
         this.maxNumberOfResources = maxNumberOfResources;
         resources = new ArrayList<>();
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     public int getMaxNumberOfResources() {
@@ -29,16 +37,22 @@ public class Depot {
         if (resources.size() == maxNumberOfResources) throw new CanNotAddResourceToDepotException();
         if (isAdmissible(resource)) resources.add(resource);
         else throw new CanNotAddResourceToDepotException();
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     public void addResource(List<Resource> newResources) throws CanNotAddResourceToDepotException {
         if (resources.size() != 0) throw new CanNotAddResourceToDepotException();
         if (newResources.size() != maxNumberOfResources) throw new CanNotAddResourceToDepotException();
         resources.addAll(newResources);
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     public void removeResource() {
         resources.clear();
+        notifyObservers(new Message()); // TODO: to be completed
+
     }
 
     /**

@@ -1,14 +1,17 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.application.Observable;
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.List;
 
 /**
  * Class modeling the player.
  */
-public class Player {
+public class Player extends Observable<Message> {
 
     private final String nickname;
     private final String sessionToken;
@@ -20,18 +23,24 @@ public class Player {
     /**
      * Constructor of the player.
      *
+     * @param virtualView  virtual view to be added to the observers list
      * @param nickname     nickname of the player
      * @param sessionToken token assigned to the player to be uniquely distinguished
      */
-    public Player(String nickname, String sessionToken) {
+    public Player(VirtualView virtualView, String nickname, String sessionToken) {
+        super();
+        addObserver(virtualView);
+
         this.nickname = nickname;
         this.sessionToken = sessionToken;
-        personalBoard = new PersonalBoard();
+        personalBoard = new PersonalBoard(virtualView);
         inkwell = false;
+
+        notifyObservers(new Message());
     }
 
     /**
-     * To get the player's nickname.
+     * Getter of the player's nickname.
      *
      * @return nickname of the player
      */
@@ -40,7 +49,7 @@ public class Player {
     }
 
     /**
-     * To get the session token that has been assigned to the player.
+     * Getter of the session token that has been assigned to the player.
      *
      * @return the token of the player
      */
@@ -49,7 +58,7 @@ public class Player {
     }
 
     /**
-     * To get the personal board of the player.
+     * Getter of the personal board of the player.
      *
      * @return the personal board of the player
      */
@@ -58,7 +67,7 @@ public class Player {
     }
 
     /**
-     * To get the leader cards that the players has.
+     * Getter of the leader cards that the players has.
      *
      * @return the list containing the leader cards of the player
      */
@@ -67,12 +76,13 @@ public class Player {
     }
 
     /**
-     * To set the drawn leader cards.
+     * Setter of the drawn leader cards.
      *
      * @param leaderCards list of leader cards that the player chose
      */
     public void setLeaderCards(List<LeaderCard> leaderCards) {
         this.leaderCards = leaderCards;
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -80,6 +90,7 @@ public class Player {
      */
     public void giveInkwell() {
         inkwell = true;
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**

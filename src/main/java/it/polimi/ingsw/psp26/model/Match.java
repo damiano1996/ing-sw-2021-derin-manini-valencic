@@ -12,6 +12,7 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,22 +34,26 @@ public class Match extends Observable<Message> {
     /**
      * Class constructor.
      *
-     * @param id      match identifier
-     * @param players list of players in the match
+     * @param virtualView virtual view to be added to the observers list
+     * @param id          match identifier
+     * @param players     list of players in the match
      */
-    public Match(int id, List<Player> players) {
+    public Match(VirtualView virtualView, int id, List<Player> players) {
         super();
+        addObserver(virtualView);
 
         this.id = id;
         this.players = players;
         resourceSupply = new ResourceSupply();
-        developmentGrid = new DevelopmentGrid();
-        marketTray = new MarketTray();
+        developmentGrid = new DevelopmentGrid(virtualView);
+        marketTray = new MarketTray(virtualView);
         leaderDeck = new ArrayList<>();
         actionTokenStack = new ArrayList<>();
 
         initializeLeaderDeck();
         initializeActionTokenStack();
+
+        notifyObservers(new Message()); // TODO: to be completed properly
     }
 
     /**
@@ -75,7 +80,7 @@ public class Match extends Observable<Message> {
     }
 
     /**
-     * To get the identifier of the match.
+     * Getter of the identifier of the match.
      *
      * @return match identifier
      */
@@ -84,7 +89,7 @@ public class Match extends Observable<Message> {
     }
 
     /**
-     * To get the players in the match.
+     * Getter of the players in the match.
      *
      * @return list of players
      */
@@ -102,7 +107,7 @@ public class Match extends Observable<Message> {
     }
 
     /**
-     * To get the player object by nickname.
+     * Getter of the player object by nickname.
      *
      * @param nickname nickname of the player
      * @return the player object with the corresponding nickname
@@ -117,7 +122,7 @@ public class Match extends Observable<Message> {
     }
 
     /**
-     * To get the resource supply object.
+     * Getter of the resource supply object.
      *
      * @return the resource supply object
      */
@@ -126,7 +131,7 @@ public class Match extends Observable<Message> {
     }
 
     /**
-     * To get the development grid object.
+     * Getter of the development grid object.
      *
      * @return the development grid object
      */
@@ -135,7 +140,7 @@ public class Match extends Observable<Message> {
     }
 
     /**
-     * To get the market tray object.
+     * Getter of the market tray object.
      *
      * @return the market tray object
      */

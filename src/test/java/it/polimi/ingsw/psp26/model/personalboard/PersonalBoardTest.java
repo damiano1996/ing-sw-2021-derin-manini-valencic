@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +32,8 @@ public class PersonalBoardTest {
     private HashMap<Resource, Integer> productionCost;
     private HashMap<Resource, Integer> productionReturn;
     private int victoryPoints;
+
+    private VirtualView virtualView;
 
     @Before
     public void setUp() {
@@ -82,18 +85,18 @@ public class PersonalBoardTest {
         cardSlots.get(0).add(developmentCard2);
         cardSlots.get(2).add(developmentCard3);
 
+        virtualView = new VirtualView();
+        personalBoard = new PersonalBoard(virtualView);
     }
 
     @Test
     public void testGetFaithTrack() {
-        personalBoard = new PersonalBoard();
-        FaithTrack faithTrack = new FaithTrack();
+        FaithTrack faithTrack = new FaithTrack(virtualView);
         assertTrue(faithTrack.equals(personalBoard.getFaithTrack()));
     }
 
     @Test
     public void testGetDevelopmentCardsSlots() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-        personalBoard = new PersonalBoard();
         personalBoard.addDevelopmentCard(0, developmentCard1);
         personalBoard.addDevelopmentCard(0, developmentCard2);
         personalBoard.addDevelopmentCard(2, developmentCard3);
@@ -107,7 +110,6 @@ public class PersonalBoardTest {
 
     @Test(expected = CanNotAddDevelopmentCardToSlotException.class)
     public void testGetDevelopmentCardsSlots_CanNotAddDevelopmentCardToSlotException() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-        personalBoard = new PersonalBoard();
         personalBoard.addDevelopmentCard(0, developmentCard3);
         personalBoard.addDevelopmentCard(0, developmentCard1);
         personalBoard.addDevelopmentCard(2, developmentCard2);
@@ -122,7 +124,6 @@ public class PersonalBoardTest {
     @Test
     public void testGetDevelopmentCardsSlot() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
         int indexSlot = 0;
-        personalBoard = new PersonalBoard();
         personalBoard.addDevelopmentCard(0, developmentCard1);
         personalBoard.addDevelopmentCard(0, developmentCard2);
         personalBoard.addDevelopmentCard(2, developmentCard3);
@@ -135,7 +136,6 @@ public class PersonalBoardTest {
     @Test(expected = DevelopmentCardSlotOutOfBoundsException.class)
     public void testGetDevelopmentCardsSlot_DevelopmentCardSlotOutOfBoundsException() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
         int indexSlot = 3;
-        personalBoard = new PersonalBoard();
         personalBoard.addDevelopmentCard(0, developmentCard1);
         personalBoard.addDevelopmentCard(0, developmentCard2);
         personalBoard.addDevelopmentCard(2, developmentCard3);
@@ -150,7 +150,6 @@ public class PersonalBoardTest {
 
     @Test
     public void testGetVisibleDevelopmentCards() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-        personalBoard = new PersonalBoard();
         personalBoard.addDevelopmentCard(0, developmentCard1);
         personalBoard.addDevelopmentCard(0, developmentCard2);
         personalBoard.addDevelopmentCard(2, developmentCard3);
@@ -166,7 +165,6 @@ public class PersonalBoardTest {
 
     @Test
     public void testGetWarehouseDepots() throws CanNotAddResourceToDepotException {
-        PersonalBoard personalBoard = new PersonalBoard();
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
@@ -175,9 +173,9 @@ public class PersonalBoardTest {
         personalBoard.getWarehouseDepots().get(2).addResource(Resource.SHIELD);
 
         List<Depot> depots = new ArrayList<>();
-        depots.add(new Depot(1));
-        depots.add(new Depot(2));
-        depots.add(new Depot(3));
+        depots.add(new Depot(virtualView, 1));
+        depots.add(new Depot(virtualView, 2));
+        depots.add(new Depot(virtualView, 3));
         depots.get(0).addResource(Resource.STONE);
         depots.get(1).addResource(Resource.COIN);
         depots.get(1).addResource(Resource.COIN);
@@ -192,15 +190,14 @@ public class PersonalBoardTest {
 
     @Test(expected = CanNotAddResourceToDepotException.class)
     public void testGetWarehouseDepots_CanNotAddResourceToDepotException_WrongResourceType() throws CanNotAddResourceToDepotException {
-        PersonalBoard personalBoard = new PersonalBoard();
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.SERVANT);
 
         List<Depot> depots = new ArrayList<>();
-        depots.add(new Depot(1));
-        depots.add(new Depot(2));
-        depots.add(new Depot(3));
+        depots.add(new Depot(virtualView, 1));
+        depots.add(new Depot(virtualView, 2));
+        depots.add(new Depot(virtualView, 3));
         depots.get(0).addResource(Resource.STONE);
         depots.get(1).addResource(Resource.COIN);
         depots.get(1).addResource(Resource.COIN);
@@ -212,16 +209,15 @@ public class PersonalBoardTest {
 
     @Test(expected = CanNotAddResourceToDepotException.class)
     public void testGetWarehouseDepots_CanNotAddResourceToDepotException_WrongMaxNumberOfResource() throws CanNotAddResourceToDepotException {
-        PersonalBoard personalBoard = new PersonalBoard();
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
 
         List<Depot> depots = new ArrayList<>();
-        depots.add(new Depot(1));
-        depots.add(new Depot(2));
-        depots.add(new Depot(3));
+        depots.add(new Depot(virtualView, 1));
+        depots.add(new Depot(virtualView, 2));
+        depots.add(new Depot(virtualView, 3));
         depots.get(0).addResource(Resource.STONE);
         depots.get(1).addResource(Resource.COIN);
         depots.get(1).addResource(Resource.COIN);
@@ -233,24 +229,22 @@ public class PersonalBoardTest {
 
     @Test
     public void testGetWarehouseDepot() throws CanNotAddResourceToDepotException, DepotOutOfBoundException {
-        PersonalBoard personalBoard = new PersonalBoard();
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
 
-        Depot depot = new Depot(2);
+        Depot depot = new Depot(virtualView, 2);
 
         assertTrue(depot.equals(personalBoard.getWarehouseDepot(1)));
     }
 
     @Test(expected = DepotOutOfBoundException.class)
     public void testGetWarehouseDepot_DepotOutOfBoundException() throws CanNotAddResourceToDepotException, DepotOutOfBoundException {
-        PersonalBoard personalBoard = new PersonalBoard();
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
 
-        Depot depot = new Depot(2);
+        Depot depot = new Depot(virtualView, 2);
 
         assertTrue(depot.equals(personalBoard.getWarehouseDepot(5)));
     }
@@ -264,7 +258,6 @@ public class PersonalBoardTest {
         resources.add(Resource.COIN);
         resources.add(Resource.SHIELD);
 
-        personalBoard = new PersonalBoard();
         personalBoard.addResourceToStrongbox(resources);
 
         assertEquals(resources, personalBoard.getStrongbox());

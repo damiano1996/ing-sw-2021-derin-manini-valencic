@@ -1,6 +1,10 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
-public class FaithTrack {
+import it.polimi.ingsw.psp26.application.Observable;
+import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
+
+public class FaithTrack extends Observable<Message> {
 
     private final int length;
     private final VaticanReportSection[] vaticanReportSections;
@@ -9,19 +13,25 @@ public class FaithTrack {
     private int blackCrossPosition;
 
 
-    public FaithTrack() {
+    public FaithTrack(VirtualView virtualView) {
+        super();
+        addObserver(virtualView);
+
         this.length = 24;
         vaticanReportSections = new VaticanReportSection[3];
-        vaticanReportSections[0] = new VaticanReportSection(5, 8);
-        vaticanReportSections[1] = new VaticanReportSection(12, 16);
-        vaticanReportSections[2] = new VaticanReportSection(19, 24);
+        vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8);
+        vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16);
+        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, 24);
         this.markerPosition = 0;
         this.blackCrossPosition = 0;
         this.faithPoints = 0;
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     public void addFaithPoints(int points) {
         this.faithPoints += points;
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     //maybe a useless method
@@ -46,10 +56,14 @@ public class FaithTrack {
     public void moveMarkerPosition(int numberOfSteps) {
         this.markerPosition = this.markerPosition + numberOfSteps;
         this.faithPoints = this.faithPoints + numberOfSteps;
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     public void moveBlackCrossPosition(int numberOfSteps) {
         this.blackCrossPosition = this.blackCrossPosition + numberOfSteps;
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     public boolean equals(FaithTrack faithTrack) {

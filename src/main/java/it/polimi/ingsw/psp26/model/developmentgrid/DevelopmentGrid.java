@@ -1,22 +1,30 @@
 package it.polimi.ingsw.psp26.model.developmentgrid;
 
+import it.polimi.ingsw.psp26.application.Observable;
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
-public class DevelopmentGrid {
+public class DevelopmentGrid extends Observable<Message> {
 
     public static final Color[] COLORS = new Color[]{Color.GREEN, Color.BLUE, Color.YELLOW, Color.PURPLE};
     public static final Level[] LEVELS = new Level[]{Level.THIRD, Level.SECOND, Level.FIRST};
 
     private final DevelopmentGridCell[][] grid;
 
-    public DevelopmentGrid() {
+    public DevelopmentGrid(VirtualView virtualView) {
+        super();
+        addObserver(virtualView);
+
         grid = new DevelopmentGridCell[LEVELS.length][COLORS.length];
 
         initializeGrid();
+
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     private void initializeGrid() {

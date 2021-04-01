@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class DepotTest {
 
     @Before
     public void setUp() throws CanNotAddResourceToDepotException {
-        depotWithResources = new Depot(3);
+        depotWithResources = new Depot(new VirtualView(), 3);
         depotWithResources.addResource(Resource.STONE);
         depotWithResources.addResource(Resource.STONE);
     }

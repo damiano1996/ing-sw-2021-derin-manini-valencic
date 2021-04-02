@@ -11,7 +11,6 @@ import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
-import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
@@ -37,8 +36,10 @@ public class CLI {
 
         cli.cls();
 
+        List<LeaderCard> fourLeaders = new ArrayList<>();
+
         for (int i = 0; i < 4; i++) {
-            List<LeaderCard> fourLeaders = new ArrayList<>();
+            fourLeaders = new ArrayList<>();
             fourLeaders.add(leaderCards.get(i));
             fourLeaders.add(leaderCards.get(4 + i));
             fourLeaders.add(leaderCards.get(8 + i));
@@ -48,6 +49,10 @@ public class CLI {
             in.nextLine();
             cli.cls();
         }
+
+        cli.selectLeaders(fourLeaders);
+        in.nextLine();
+        cli.cls();
 
 
         List<Resource> strongbox = new ArrayList<>();
@@ -146,7 +151,6 @@ public class CLI {
         in.nextLine();
 
     }
-
 
     //----------TITLE----------//
 
@@ -726,7 +730,64 @@ public class CLI {
 
     //----------LEADER-CARDS----------//
 
-    public void printLeaderChoice(List<LeaderCard> leaderCards) {
+    //TEMPORARY SOLUTION
+    public void selectLeaders(List<LeaderCard> leaderCards) { //void method, may be modified into return List<LeaderCard>
+        List<LeaderCard> selectedLeaders = new ArrayList<>();
+        Scanner in = new Scanner(System.in);
+        int index;
+
+        for (int i = 0; i < 2; i++) {
+            cls();
+            System.out.println(
+                    hSpace(27) + ".|'''|  '||''''| '||     '||''''| .|'''', |''||''|          '\\\\  //` .|''''|, '||   ||` '||'''|,          '||     '||''''|      /.\\      '||'''|. '||''''| '||'''|, .|'''|  \n" +
+                            hSpace(27) + "||       ||   .   ||      ||   .  ||         ||               \\\\//   ||    ||  ||   ||   ||   ||           ||      ||   .      // \\\\      ||   ||  ||   .   ||   || ||      \n" +
+                            hSpace(27) + "`|'''|,  ||'''|   ||      ||'''|  ||         ||                ||    ||    ||  ||   ||   ||...|'           ||      ||'''|     //...\\\\     ||   ||  ||'''|   ||...|' `|'''|, \n" +
+                            hSpace(27) + " .   ||  ||       ||      ||      ||         ||                ||    ||    ||  ||   ||   || \\\\             ||      ||        //     \\\\    ||   ||  ||       || \\\\    .   || \n" +
+                            hSpace(27) + " |...|' .||....| .||...| .||....| `|....'   .||.              .||.   `|....|'  `|...|'  .||  \\\\.          .||...| .||....| .//       \\\\. .||...|' .||....| .||  \\\\.  |...|' \n" +
+                            hSpace(27) + "___________________________________________________________________________________________________________________________________________________________________________");
+
+            vSpace(5);
+            printLeaderChoice(leaderCards);
+            vSpace(1);
+
+            System.out.println(hSpace(37) + isLeaderSelected(leaderCards.get(0), selectedLeaders, leaderCards) +
+                    hSpace(34) + isLeaderSelected(leaderCards.get(1), selectedLeaders, leaderCards) +
+                    hSpace(34) + isLeaderSelected(leaderCards.get(2), selectedLeaders, leaderCards) +
+                    hSpace(34) + isLeaderSelected(leaderCards.get(3), selectedLeaders, leaderCards));
+            vSpace(3);
+
+            System.out.print("Please type the number of the ");
+            if (i == 0) System.out.print("first ");
+            else System.out.print("second ");
+            System.out.print("Leader of your choice: ");
+
+            //TEMPORARY SOLUTION
+            do {
+                do {
+                    index = in.nextInt() - 1;
+                    if (index < 0 || index > 3) {
+                        System.out.print("Index is out of bounds! Please try again: ");
+                    }
+                }  while (index > 3 || index < 0);
+                 if (!selectedLeaders.contains(leaderCards.get(index))) {
+                    selectedLeaders.add(leaderCards.get(index));
+                    break;
+                } else System.out.print("Leader already selected! Please try again: ");
+            } while (selectedLeaders.contains(leaderCards.get(index)));
+        }
+
+        in.nextLine();
+
+        //Debug only
+        System.out.println("You selected Leader " + (leaderCards.indexOf(selectedLeaders.get(0)) + 1) + " and Leader " + (leaderCards.indexOf(selectedLeaders.get(1)) + 1));
+    }
+
+    private String isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leadercards) {
+        if (selectedLeaders.contains(leaderCard)) return "\u001b[41m  SELECTED  \u001b[0m";
+        else return "  Leader " + (leadercards.indexOf(leaderCard) + 1) + "  ";
+    }
+
+    private void printLeaderChoice(List<LeaderCard> leaderCards) {
         for (int i = 0; i < 18; i++) {
             System.out.println(hSpace(30) + printLeader(leaderCards.get(0), i) +
                     hSpace(20) + printLeader(leaderCards.get(1), i) +
@@ -748,6 +809,8 @@ public class CLI {
                 break;
 
             case 2:
+
+            case 7:
                 s = "|  .------------------.  |";
                 break;
 
@@ -760,15 +823,13 @@ public class CLI {
                 break;
 
             case 5:
+
+            case 15:
                 s = "|                        |";
                 break;
 
             case 6:
                 s = "| Power                  |";
-                break;
-
-            case 7:
-                s = "|  .------------------.  |";
                 break;
 
             case 8:
@@ -788,10 +849,6 @@ public class CLI {
 
             case 14:
                 s = "| |____________________| |";
-                break;
-
-            case 15:
-                s = "|                        |";
                 break;
 
             case 16:
@@ -824,15 +881,14 @@ public class CLI {
                 s.append(pCS(" \u25CF \u25CF", entry.getKey().getColor()));
                 remainingSpace -= 4;
             }
-            s.append(hSpace(remainingSpace)).append("|");
         } else {
             s.append("|  DevCardsCost:  ");
             for (Map.Entry<DevelopmentCardType, Integer> entry : requirements.entrySet()) {
                 s.append(entry.getValue()).append(pCS("\u25D8", entry.getKey().getColor())).append(" ");
                 remainingSpace -= 3;
             }
-            s.append(hSpace(remainingSpace)).append("|");
         }
+        s.append(hSpace(remainingSpace)).append("|");
 
         return s.toString();
     }

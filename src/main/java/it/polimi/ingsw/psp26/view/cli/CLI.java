@@ -768,8 +768,8 @@ public class CLI {
                     if (index < 0 || index > 3) {
                         System.out.print("Index is out of bounds! Please try again: ");
                     }
-                }  while (index > 3 || index < 0);
-                 if (!selectedLeaders.contains(leaderCards.get(index))) {
+                } while (index > 3 || index < 0);
+                if (!selectedLeaders.contains(leaderCards.get(index))) {
                     selectedLeaders.add(leaderCards.get(index));
                     break;
                 } else System.out.print("Leader already selected! Please try again: ");
@@ -787,6 +787,11 @@ public class CLI {
         else return "  Leader " + (leadercards.indexOf(leaderCard) + 1) + "  ";
     }
 
+    /**
+     * Prints the 4 Leader cards one next to the others. Used in selectLeaders() method
+     *
+     * @param leaderCards The cards to print
+     */
     private void printLeaderChoice(List<LeaderCard> leaderCards) {
         for (int i = 0; i < 18; i++) {
             System.out.println(hSpace(30) + printLeader(leaderCards.get(0), i) +

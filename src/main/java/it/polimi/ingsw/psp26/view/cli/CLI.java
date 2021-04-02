@@ -3,26 +3,30 @@ package it.polimi.ingsw.psp26.view.cli;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGridCell;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
+import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CLI {
 
     //CLI testing. Only press start to test CLI functionalities
     public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
+        LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
+        List<LeaderCard> leaderCards = leaderCardsInitializer.getLeaderCards();
+
         CLI cli = new CLI();
         VirtualView virtualView = new VirtualView();
         PersonalBoard personalBoard = new PersonalBoard(virtualView);
@@ -32,6 +36,20 @@ public class CLI {
 
 
         cli.cls();
+
+        for (int i = 0; i < 4; i++) {
+            List<LeaderCard> fourLeaders = new ArrayList<>();
+            fourLeaders.add(leaderCards.get(i));
+            fourLeaders.add(leaderCards.get(4 + i));
+            fourLeaders.add(leaderCards.get(8 + i));
+            fourLeaders.add(leaderCards.get(12 + i));
+
+            cli.printLeaderChoice(fourLeaders);
+            in.nextLine();
+            cli.cls();
+        }
+
+
         List<Resource> strongbox = new ArrayList<>();
 
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.SHIELD);
@@ -289,18 +307,18 @@ public class CLI {
     //----------WAREHOUSE----------//
 
     private void printWarehouse(List<Depot> warehouseDepots) {
-        System.out.println(hSpace(9) + "        ________\n" + hSpace(10) +
-                                               "   ,=='        `==.");
-        System.out.println(hSpace(9) + "  ╭/ " + printDepot(warehouseDepots.get(0)) + " \\╮");
-        System.out.println(hSpace(9) + "  || ______________ ||\n" + hSpace(10) +
-                                               " |)                ||");
-        System.out.println(hSpace(9) + "  || " + printDepot(warehouseDepots.get(1)) + " ||");
-        System.out.println(hSpace(9) + "  || ______________ (|\n" + hSpace(10) +
-                                               " ||                ||");
-        System.out.println(hSpace(9) + "  )| " + printDepot(warehouseDepots.get(2)) + " ||");
-        System.out.println(hSpace(9) + "  || ______________ ||\n" + hSpace(10) +
-                                               " ||                ||\n" + hSpace(10) +
-                                               " ||___.-__;----.___||");
+        System.out.println(hSpace(8) + "        ________\n" + hSpace(10) +
+                "  ,=='        `==.");
+        System.out.println(hSpace(8) + "  ╭/ " + printDepot(warehouseDepots.get(0)) + " \\╮");
+        System.out.println(hSpace(8) + "  || ______________ ||\n" + hSpace(10) +
+                "|)                ||");
+        System.out.println(hSpace(8) + "  || " + printDepot(warehouseDepots.get(1)) + " ||");
+        System.out.println(hSpace(8) + "  || ______________ (|\n" + hSpace(10) +
+                "||                ||");
+        System.out.println(hSpace(8) + "  )| " + printDepot(warehouseDepots.get(2)) + " ||");
+        System.out.println(hSpace(8) + "  || ______________ ||\n" + hSpace(10) +
+                "||                ||\n" + hSpace(10) +
+                "||___.-__;----.___||");
     }
 
     private String printDepot(Depot depot) {
@@ -703,6 +721,134 @@ public class CLI {
         String s = "";
         s = s + "|" + hSpace(10) + developmentCard.getVictoryPoints() + hSpace(10 - (developmentCard.getVictoryPoints() / 10)) + "|";
         return s;
+    }
+
+
+    //----------LEADER-CARDS----------//
+
+    public void printLeaderChoice(List<LeaderCard> leaderCards) {
+        for (int i = 0; i < 18; i++) {
+            System.out.println(hSpace(30) + printLeader(leaderCards.get(0), i) +
+                    hSpace(20) + printLeader(leaderCards.get(1), i) +
+                    hSpace(20) + printLeader(leaderCards.get(2), i) +
+                    hSpace(20) + printLeader(leaderCards.get(3), i));
+        }
+    }
+
+    private String printLeader(LeaderCard leaderCard, int lineToPrint) {
+        String s = "";
+
+        switch (lineToPrint) {
+            case 0:
+                s = ",------------------------.";
+                break;
+
+            case 1:
+                s = printLeaderRequirements(leaderCard);
+                break;
+
+            case 2:
+                s = "|  .------------------.  |";
+                break;
+
+            case 3:
+                s = "| | " + leaderCard.getSpecialAbility().getAbilityType() + " | |";
+                break;
+
+            case 4:
+                s = "|  `------------------'  |";
+                break;
+
+            case 5:
+                s = "|                        |";
+                break;
+
+            case 6:
+                s = "| Power                  |";
+                break;
+
+            case 7:
+                s = "|  .------------------.  |";
+                break;
+
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                s = "| " + leaderCard.getSpecialAbility().getPowerDescription(lineToPrint - 8) + " |";
+                break;
+
+            case 12:
+                s = "| |--------------------| |";
+                break;
+
+            case 13:
+                s = "| |        VP " + leaderCard.getVictoryPoints() + "        | |";
+                break;
+
+            case 14:
+                s = "| |____________________| |";
+                break;
+
+            case 15:
+                s = "|                        |";
+                break;
+
+            case 16:
+                s = "| " + leaderCard.getSpecialAbility().getResourceInformation() + " |";
+                break;
+
+            case 17:
+                s = "`------------------------'";
+                break;
+
+            default:
+                break;
+        }
+        return s;
+    }
+
+    private String printLeaderRequirements(LeaderCard leaderCard) {
+        if (leaderCard.getDevelopmentCardRequirements().keySet().size() == 0)
+            return printLeaderResourcesRequirements(leaderCard.getResourcesRequirements());
+        else return printLeaderDevelopmentCardRequirements(leaderCard.getDevelopmentCardRequirements());
+    }
+
+    private String printLeaderDevelopmentCardRequirements(HashMap<DevelopmentCardType, Integer> requirements) {
+        StringBuilder s = new StringBuilder();
+        int remainingSpace = 7;
+
+        if (requirements.keySet().size() == 1) {
+            s.append("|  LevelRequired: ");
+            for (Map.Entry<DevelopmentCardType, Integer> entry : requirements.entrySet()) {
+                s.append(pCS(" \u25CF \u25CF", entry.getKey().getColor()));
+                remainingSpace -= 4;
+            }
+            s.append(hSpace(remainingSpace)).append("|");
+        } else {
+            s.append("|  DevCardsCost:  ");
+            for (Map.Entry<DevelopmentCardType, Integer> entry : requirements.entrySet()) {
+                s.append(entry.getValue()).append(pCS("\u25D8", entry.getKey().getColor())).append(" ");
+                remainingSpace -= 3;
+            }
+            s.append(hSpace(remainingSpace)).append("|");
+        }
+
+        return s.toString();
+    }
+
+    private String printLeaderResourcesRequirements(HashMap<Resource, Integer> requirements) {
+        StringBuilder s = new StringBuilder();
+        int remainingSpace = 7;
+
+        s.append("|  ResourcesCost: ");
+        for (Map.Entry<Resource, Integer> entry : requirements.entrySet()) {
+            s.append(entry.getValue()).append(pCS("\u25A0", entry.getKey().getColor())).append(" ");
+            remainingSpace -= 3;
+        }
+        s.append(hSpace(remainingSpace)).append("|");
+
+        return s.toString();
     }
 
 

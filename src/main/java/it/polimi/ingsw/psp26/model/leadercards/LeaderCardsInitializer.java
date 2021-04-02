@@ -23,7 +23,7 @@ public class LeaderCardsInitializer {
 
     private final List<LeaderCard> leaderCards;
 
-    private LeaderCardsInitializer() {
+    public LeaderCardsInitializer() {
         leaderCards = createLeaderCards();
     }
 

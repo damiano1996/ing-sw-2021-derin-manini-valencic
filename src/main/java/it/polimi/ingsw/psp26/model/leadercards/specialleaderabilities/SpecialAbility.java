@@ -16,4 +16,10 @@ public abstract class SpecialAbility {
     public Resource getResource() {
         return resource;
     }
+
+    public abstract String getAbilityType();
+
+    public abstract String getPowerDescription(int linetoPrint);
+
+    public abstract String getResourceInformation();
 }

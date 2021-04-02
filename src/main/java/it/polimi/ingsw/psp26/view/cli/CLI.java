@@ -38,6 +38,7 @@ public class CLI {
 
         List<LeaderCard> fourLeaders = new ArrayList<>();
 
+        //LeaderCard test, press enter 4 times
         for (int i = 0; i < 4; i++) {
             fourLeaders = new ArrayList<>();
             fourLeaders.add(leaderCards.get(i));
@@ -50,6 +51,7 @@ public class CLI {
             cli.cls();
         }
 
+        //Select Leader screen test, follow terminal instructions
         cli.selectLeaders(fourLeaders);
         in.nextLine();
         cli.cls();

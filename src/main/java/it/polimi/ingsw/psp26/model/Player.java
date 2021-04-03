@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +36,7 @@ public class Player extends Observable<Message> {
         this.sessionToken = sessionToken;
         personalBoard = new PersonalBoard(virtualView);
         inkwell = false;
+        leaderCards = new ArrayList<>();
 
         notifyObservers(new Message());
     }

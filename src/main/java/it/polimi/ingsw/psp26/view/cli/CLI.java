@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
@@ -23,22 +24,30 @@ public class CLI {
 
     //CLI testing. Only press start to test CLI functionalities
     public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-        LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
-        List<LeaderCard> leaderCards = leaderCardsInitializer.getLeaderCards();
+
+        //---OBJECTS-DECLARATION---//
 
         CLI cli = new CLI();
         VirtualView virtualView = new VirtualView();
+        Player player = new Player(virtualView, "Player", "000000");
+        LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
+        List<LeaderCard> leaderCards = leaderCardsInitializer.getLeaderCards();
         PersonalBoard personalBoard = new PersonalBoard(virtualView);
         MarketTray marketTray = new MarketTray(virtualView);
         DevelopmentGrid developmentGrid = new DevelopmentGrid(virtualView);
         Scanner in = new Scanner(System.in);
 
 
-        cli.cls();
+        //---TITLE-SCREEN-TEST---// Press Enter and follow terminal instructions
 
+        cli.askForCredentials();
+
+
+        //---SHOW-ALL-LEADERS-TEST---// Press enter 4 times
+
+        cli.cls();
         List<LeaderCard> fourLeaders = new ArrayList<>();
 
-        //LeaderCard test, press enter 4 times
         for (int i = 0; i < 4; i++) {
             fourLeaders = new ArrayList<>();
             fourLeaders.add(leaderCards.get(i));
@@ -51,60 +60,85 @@ public class CLI {
             cli.cls();
         }
 
-        //Select Leader screen test, follow terminal instructions
-        cli.selectLeaders(fourLeaders);
-        in.nextLine();
+
+        //---SELECT-LEADER-SCREEN-TEST---// Follow terminal instructions
+
         cli.cls();
+        player.setLeaderCards(cli.selectLeaders(fourLeaders));
+        in.nextLine();
 
 
+        //---PERSONAL-BOARD-TEST---// Press Enter 3 times
+
+        cli.cls();
         List<Resource> strongbox = new ArrayList<>();
-
-        personalBoard.getWarehouseDepots().get(0).addResource(Resource.SHIELD);
-        personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
-        personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
-        personalBoard.getWarehouseDepots().get(2).addResource(Resource.SERVANT);
-        personalBoard.getWarehouseDepots().get(2).addResource(Resource.SERVANT);
-        personalBoard.getWarehouseDepots().get(2).addResource(Resource.SERVANT);
-
-        cli.printPersonalBoard(personalBoard);
+        cli.printPersonalBoard(player);
         in.nextLine();
         cli.cls();
-        strongbox.add(Resource.STONE);
-        strongbox.add(Resource.SERVANT);
-        personalBoard.addResourcesToStrongbox(strongbox);
 
-        personalBoard.addDevelopmentCard(0, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
-        personalBoard.addDevelopmentCard(1, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
-        personalBoard.addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
-        cli.printPersonalBoard(personalBoard);
+        player.getPersonalBoard().getWarehouseDepots().get(0).addResource(Resource.SHIELD);
+        player.getPersonalBoard().getWarehouseDepots().get(1).addResource(Resource.COIN);
+        player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
+        player.getPersonalBoard().getStrongbox().add(Resource.STONE);
+        player.getPersonalBoard().getStrongbox().add(Resource.SERVANT);
+        player.getPersonalBoard().addResourcesToStrongbox(strongbox);
+        player.getPersonalBoard().addDevelopmentCard(0, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
+        player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
+        player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
+        cli.printPersonalBoard(player);
         in.nextLine();
         cli.cls();
-        strongbox.add(Resource.COIN);
-        strongbox.add(Resource.STONE);
-        strongbox.add(Resource.SERVANT);
-        personalBoard.addResourcesToStrongbox(strongbox);
 
-        personalBoard.addDevelopmentCard(1, developmentGrid.drawCard(Color.BLUE, Level.SECOND));
-        personalBoard.addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
-        cli.printPersonalBoard(personalBoard);
+        player.getPersonalBoard().getWarehouseDepots().get(1).addResource(Resource.COIN);
+        player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
+        player.getPersonalBoard().getStrongbox().add(Resource.COIN);
+        player.getPersonalBoard().getStrongbox().add(Resource.STONE);
+        player.getPersonalBoard().getStrongbox().add(Resource.SHIELD);
+        player.getPersonalBoard().addResourcesToStrongbox(strongbox);
+        player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.BLUE, Level.SECOND));
+        player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
+        cli.printPersonalBoard(player);
         in.nextLine();
         cli.cls();
-        strongbox.add(Resource.COIN);
-        strongbox.add(Resource.STONE);
-        strongbox.add(Resource.SERVANT);
-        strongbox.add(Resource.COIN);
-        personalBoard.addResourcesToStrongbox(strongbox);
 
-        personalBoard.addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
-        cli.printPersonalBoard(personalBoard);
+        player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
+        player.getPersonalBoard().getStrongbox().add(Resource.COIN);
+        player.getPersonalBoard().getStrongbox().add(Resource.SHIELD);
+        player.getPersonalBoard().getStrongbox().add(Resource.SERVANT);
+        player.getPersonalBoard().getStrongbox().add(Resource.COIN);
+        player.getPersonalBoard().addResourcesToStrongbox(strongbox);
+        player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
+        cli.printPersonalBoard(player);
         in.nextLine();
 
+
+        //---PRINT-PLAYER-LEADER-CARDS-TEST---// Press Enter 4 times
+
+        cli.cls();
+        cli.printPlayerLeaderCards(player.getLeaderCards());
+        in.nextLine();
+        cli.cls();
+
+        player.getLeaderCards().get(0).activate();
+        cli.printPersonalBoard(player);
+        in.nextLine();
+        cli.cls();
+        cli.printPlayerLeaderCards(player.getLeaderCards());
+        in.nextLine();
+        cli.cls();
+
+        player.getLeaderCards().get(1).activate();
+        cli.printPersonalBoard(player);
+        in.nextLine();
+        cli.cls();
+        cli.printPlayerLeaderCards(player.getLeaderCards());
+        in.nextLine();
+
+
+        //---DEVELOPMENT-GRID-SHOW-ALL-CARDS-TEST---// Press Enter 4 times
 
         developmentGrid = new DevelopmentGrid(virtualView);
 
-
-        //DevelpmentGridTest press enter 4 times
-        cli.cls();
         for (int i = 0; i < 4; i++) {
             cli.cls();
             cli.printDevelopmentGrid(developmentGrid);
@@ -124,12 +158,8 @@ public class CLI {
         }
 
 
-        //Title test
-        cli.printTitle();
-        in.nextLine();
+        //FAITH-TRACH-MOVEMENT-TEST---// Press Enter 25 times
 
-
-        //FaithTrack test (press enter 25 times)
         cli.cls();
         for (int i = 0; i < 25; i++) {
             cli.printFaithTrack(personalBoard.getFaithTrack());
@@ -139,7 +169,8 @@ public class CLI {
         }
 
 
-        //Market test (press enter 3 times)
+        //---MARKET-TEST---// Press Enter 3 times
+
         cli.cls();
         cli.printMarket(marketTray);
         in.nextLine();
@@ -154,9 +185,10 @@ public class CLI {
 
     }
 
+
     //----------TITLE----------//
 
-    public void printTitle() {
+    private void printTitle() {
         cls();
         Color.GREEN.setColor();
         System.out.println("#####   ##    ##                                                                            /##           ##### /##                                                                                 \n" +
@@ -184,21 +216,96 @@ public class CLI {
                         "                                                                  |       |    \\_ |______ ______| ______|      |______ |  \\_|    |    |______ |    \\_");
     }
 
+    public void askForCredentials() { //MUST BE COMPLETED WITH CONTROLLER INTEGRATION
+        String nickname = "";
+        String ipAddress = "";
+        Scanner in = new Scanner(System.in);
+
+        printTitle();
+        in.nextLine();
+
+        for (int i = 0; i < 2; i++) {
+            if (i == 0) {
+                printTitle();
+                vSpace(3);
+                System.out.print(hSpace(90) + "Enter Nickname: ");
+                nickname = in.nextLine();
+            } else {
+                printTitle();
+                vSpace(3);
+                System.out.println(hSpace(90) + "Enter Nickname: " + nickname);
+                vSpace(1);
+                System.out.print(hSpace(90) + "Enter IP-Address: ");
+                in.nextLine();
+                //ipAddress = in.nextLine();
+            }
+        }
+    }
+
 
     //----------PERSONAL-BOARD----------//
 
-    public void printPersonalBoard(PersonalBoard personalBoard) {
+    public void printPersonalBoard(Player player) {
 
-        printFaithTrack(personalBoard.getFaithTrack());
-
-        vSpace(1);
-
-        printWarehouse(personalBoard.getWarehouseDepots());
+        printFaithTrack(player.getPersonalBoard().getFaithTrack());
 
         vSpace(1);
 
-        printDevelopmentCardSlotsAndStrongbox(personalBoard.getDevelopmentCardsSlots(), personalBoard.getStrongbox());
+        printWarehouse(player.getPersonalBoard().getWarehouseDepots());
 
+        vSpace(1);
+
+        printDevelopmentCardSlotsAndStrongbox(player.getPersonalBoard().getDevelopmentCardsSlots(), player.getPersonalBoard().getStrongbox());
+
+        printLeaderCardsInPersonalBoard(player.getLeaderCards());
+    }
+
+    private void printLeaderCardsInPersonalBoard(List<LeaderCard> leaderCards) {
+        System.out.print(hSpace(200));
+        for (int i = 0; i < leaderCards.size(); i++) System.out.print(",----------." + hSpace(5));
+        vSpace(1);
+        System.out.print(hSpace(200));
+        for (int i = 0; i < leaderCards.size(); i++) System.out.print("|          |" + hSpace(5));
+        vSpace(1);
+        System.out.print(hSpace(200));
+        for (int i = 0; i < leaderCards.size(); i++) System.out.print("| Leader " + (i + 1) + " |" + hSpace(5));
+        vSpace(1);
+        System.out.print(hSpace(200));
+        for (int i = 0; i < leaderCards.size(); i++) System.out.print("|          |" + hSpace(5));
+        vSpace(1);
+        System.out.print(hSpace(200));
+        for (int i = 0; i < leaderCards.size(); i++) System.out.print("|          |" + hSpace(5));
+        vSpace(1);
+        System.out.print(hSpace(200));
+        for (LeaderCard leaderCard : leaderCards)
+            System.out.print("| " + isLeaderCardActive(leaderCard) + " |" + hSpace(5));
+        vSpace(1);
+        System.out.print(hSpace(200));
+        for (int i = 0; i < leaderCards.size(); i++) System.out.print("|          |" + hSpace(5));
+        vSpace(1);
+        System.out.print(hSpace(200));
+        for (int i = 0; i < leaderCards.size(); i++) System.out.print("'----------'" + hSpace(5));
+        vSpace(1);
+    }
+
+    private String isLeaderCardActive(LeaderCard leaderCard) {
+        if (leaderCard.isActive()) return " ACTIVE ";
+        else return "INACTIVE";
+    }
+
+    public void printPlayerLeaderCards(List<LeaderCard> leaderCards) {
+        for (int i = 0; i < 18; i++) {
+            System.out.print(hSpace(80));
+            for (LeaderCard leaderCard : leaderCards) System.out.print(printLeader(leaderCard, i) + hSpace(20));
+            vSpace(1);
+        }
+
+        vSpace(1);
+        System.out.print(hSpace(89));
+        for (LeaderCard leaderCard : leaderCards) {
+            System.out.print(isLeaderCardActive(leaderCard) + hSpace(38));
+        }
+        vSpace(1);
     }
 
 
@@ -331,7 +438,7 @@ public class CLI {
         StringBuilder s = new StringBuilder();
         List<Resource> resources = new ArrayList<>(depot.getResources());
 
-        if (resources.size() == 0) return hSpace(15);
+        if (resources.size() == 0) return hSpace(14);
 
         s.append(hSpace(6 - (2 * resources.size())));
         for (Resource resource : resources) s.append(pCS("  \u2588\u2588", resource.getColor()));
@@ -401,7 +508,9 @@ public class CLI {
     }
 
 
-    //----------MARKET----------//
+    //--------------------------//
+    //          MARKET          //
+    //--------------------------//
 
     //   .d88b.
     //   8b88d8    marble protothype
@@ -733,7 +842,7 @@ public class CLI {
     //----------LEADER-CARDS----------//
 
     //TEMPORARY SOLUTION
-    public void selectLeaders(List<LeaderCard> leaderCards) { //void method, may be modified into return List<LeaderCard>
+    public List<LeaderCard> selectLeaders(List<LeaderCard> leaderCards) { //void method, may be modified into return List<LeaderCard>
         List<LeaderCard> selectedLeaders = new ArrayList<>();
         Scanner in = new Scanner(System.in);
         int index;
@@ -752,10 +861,11 @@ public class CLI {
             printLeaderChoice(leaderCards);
             vSpace(1);
 
-            System.out.println(hSpace(37) + isLeaderSelected(leaderCards.get(0), selectedLeaders, leaderCards) +
-                    hSpace(34) + isLeaderSelected(leaderCards.get(1), selectedLeaders, leaderCards) +
-                    hSpace(34) + isLeaderSelected(leaderCards.get(2), selectedLeaders, leaderCards) +
-                    hSpace(34) + isLeaderSelected(leaderCards.get(3), selectedLeaders, leaderCards));
+            System.out.println(
+                    hSpace(37) + isLeaderSelected(leaderCards.get(0), selectedLeaders, leaderCards) +
+                            hSpace(34) + isLeaderSelected(leaderCards.get(1), selectedLeaders, leaderCards) +
+                            hSpace(34) + isLeaderSelected(leaderCards.get(2), selectedLeaders, leaderCards) +
+                            hSpace(34) + isLeaderSelected(leaderCards.get(3), selectedLeaders, leaderCards));
             vSpace(3);
 
             System.out.print("Please type the number of the ");
@@ -780,8 +890,9 @@ public class CLI {
 
         in.nextLine();
 
-        //Debug only
-        System.out.println("You selected Leader " + (leaderCards.indexOf(selectedLeaders.get(0)) + 1) + " and Leader " + (leaderCards.indexOf(selectedLeaders.get(1)) + 1));
+        /*Debug only*/ System.out.println("You selected Leader " + (leaderCards.indexOf(selectedLeaders.get(0)) + 1) + " and Leader " + (leaderCards.indexOf(selectedLeaders.get(1)) + 1));
+
+        return selectedLeaders;
     }
 
     private String isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leadercards) {

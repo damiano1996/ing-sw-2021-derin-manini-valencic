@@ -8,13 +8,15 @@ import it.polimi.ingsw.psp26.model.Player;
 public class Turn {
 
     private final Match match;
+    private final int turnNumber;
     private final Player turnPlayer;
     private NormalAction normalAction;
     private LeaderAction leaderAction;
 
-    public Turn(Match match, Player turnPlayer) {
+    public Turn(Match match, Player turnPlayer, int turnNumber) {
         this.match = match;
         this.turnPlayer = turnPlayer;
+        this.turnNumber = turnNumber;
     }
 
     public void chooseNormalAction() {
@@ -41,5 +43,9 @@ public class Turn {
 
     public Player getTurnPlayer() {
         return turnPlayer;
+    }
+
+    public int getTurnNumber() {
+        return turnNumber;
     }
 }

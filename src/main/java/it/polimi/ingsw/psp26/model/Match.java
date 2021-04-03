@@ -37,14 +37,13 @@ public class Match extends Observable<Message> {
      *
      * @param virtualView virtual view to be added to the observers list
      * @param id          match identifier
-     * @param players     list of players in the match
      */
-    public Match(VirtualView virtualView, int id, List<Player> players) {
+    public Match(VirtualView virtualView, int id) {
         super();
         addObserver(virtualView);
 
         this.id = id;
-        this.players = players;
+        this.players = new ArrayList<>();
         resourceSupply = new ResourceSupply();
         developmentGrid = new DevelopmentGrid(virtualView);
         marketTray = new MarketTray(virtualView);
@@ -87,6 +86,15 @@ public class Match extends Observable<Message> {
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * Method to add a player to the match.
+     *
+     * @param player player to add
+     */
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 
     /**

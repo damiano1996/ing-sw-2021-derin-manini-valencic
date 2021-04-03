@@ -1288,6 +1288,7 @@ public class CLI {
 
     /**
      * Inserts blank lines
+     *
      * @param spaces The number of the lines
      */
     private void vSpace(int spaces) {
@@ -1296,6 +1297,7 @@ public class CLI {
 
     /**
      * Inserts blank spaces in a String
+     *
      * @param spaces The number of the spaces
      * @return A blank String which length is == spaces
      */

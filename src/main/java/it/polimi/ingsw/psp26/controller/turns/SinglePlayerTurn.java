@@ -6,8 +6,8 @@ import it.polimi.ingsw.psp26.model.Player;
 public class SinglePlayerTurn extends Turn {
 
 
-    public SinglePlayerTurn(Match match, Player turnPlayer) {
-        super(match, turnPlayer);
+    public SinglePlayerTurn(Match match, Player turnPlayer, int turnNumber) {
+        super(match, turnPlayer, turnNumber);
     }
 
     public void playLorenzoMagnifico() {

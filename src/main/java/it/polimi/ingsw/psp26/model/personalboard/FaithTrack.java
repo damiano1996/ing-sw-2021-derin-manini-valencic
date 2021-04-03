@@ -30,9 +30,9 @@ public class FaithTrack extends Observable<Message> {
 
         this.length = 24;
         vaticanReportSections = new VaticanReportSection[3];
-        vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8);
-        vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16);
-        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, 24);
+        vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2);
+        vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16, 3);
+        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, 24, 4);
         this.markerPosition = 0;
         this.blackCrossPosition = 0;
         this.faithPoints = 0;

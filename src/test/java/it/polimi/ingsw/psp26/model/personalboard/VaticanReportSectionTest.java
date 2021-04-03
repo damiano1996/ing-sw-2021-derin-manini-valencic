@@ -13,7 +13,7 @@ public class VaticanReportSectionTest {
     @Before
     public void setUp() {
         VirtualView virtualView = new VirtualView();
-        section = new VaticanReportSection(virtualView, 1, 5);
+        section = new VaticanReportSection(virtualView, 1, 5, 1);
     }
 
     @Test
@@ -45,5 +45,10 @@ public class VaticanReportSectionTest {
     @Test
     public void testGetEndSection() {
         assertEquals(5, section.getEndSection());
+    }
+
+    @Test
+    public void testGetValue() {
+        assertEquals(1, section.getValue());
     }
 }

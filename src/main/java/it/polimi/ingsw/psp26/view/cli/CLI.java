@@ -15,6 +15,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
+import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.*;
@@ -85,6 +86,7 @@ public class CLI {
         player.getPersonalBoard().addDevelopmentCard(0, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
         player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
+        player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
         cli.printPersonalBoard(player);
         in.nextLine();
         cli.cls();
@@ -97,6 +99,7 @@ public class CLI {
         player.getPersonalBoard().addResourcesToStrongbox(strongbox);
         player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.BLUE, Level.SECOND));
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
+        player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].activatePopesFavorTile();
         cli.printPersonalBoard(player);
         in.nextLine();
         cli.cls();
@@ -108,6 +111,7 @@ public class CLI {
         player.getPersonalBoard().getStrongbox().add(Resource.COIN);
         player.getPersonalBoard().addResourcesToStrongbox(strongbox);
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
+        player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].activatePopesFavorTile();
         cli.printPersonalBoard(player);
         in.nextLine();
 
@@ -543,27 +547,28 @@ public class CLI {
 
     /**
      * Prints the Player's Faith Track
+     * The PopeSpace intervals are printed thicker
      *
      * @param faithTrack The Faith Track to print
      */
     private void printFaithTrack(FaithTrack faithTrack) {
         System.out.println(
-                "                                    +-------+-------+-------+-------+-------+-------+                               +-------+-------+-------+-------+-------+-------+-------+\n" +
-                        "                                    |       |       |       |       |       |       |                               |       |       |       |       |       |       |       |");
+                        "                                    +-------+=======+===" + pCS("2", Color.YELLOW) + "===+=======+=======+---" + pCS("4", Color.YELLOW) + "---+                               +--" + pCS("1", Color.YELLOW) + "-" + pCS("2", Color.YELLOW) + "--+=======+=======+==" + pCS("1", Color.YELLOW) + "-" + pCS("6", Color.YELLOW) + "==+=======+=======+==" + pCS("2", Color.YELLOW) + "-" + pCS("0", Color.YELLOW) + "==+\n" +
+                        "                                    |       \u2551       |       |       |       \u2551       |                               |       \u2551       |       |       |       |       |       \u2551");
         firstLine(faithTrack.getFaithPoints());
         System.out.println(
-                "                                    |       |       |       |       |       |       |                               |       |       |       |       |       |       |       |\n" +
-                        "                                    +-------+-------+-------+-------+-------+-------+                               +-------+-------+-------+-------+-------+-------+-------+\n" +
-                        "                                    |       |                               |       |                               |       |");
-        midLine(faithTrack.getFaithPoints());
+                        "                                    |       \u2551       |       |       |       \u2551       |                               |       \u2551       |       |       |       |       |       \u2551\n" +
+                        "                                    +-------+=======+=======+=======+=======+-------+           +-------+           +-------+=======+=======+=======+=======+=======+=======+\n" +
+                        "                                    |       |           |       |           |       |           |       |           |       |                   |       |");
+        midLine(faithTrack.getFaithPoints(), faithTrack.getVaticanReportSections());
         System.out.println(
-                "                                    |       |                               |       |                               |       |\n" +
-                        "                    +-------+-------+-------+                               +-------+-------+-------+-------+-------+-------+\n" +
-                        "                    |       |       |       |                               |       |       |       |       |       |       |");
+                        "                                    |       |           |       |           |       |           |       |           |       |                   |       |\n" +
+                        "                    +-------+-------+-------+           +-------+           +-------+=======+=======+=======+=======+=======+                   +-------+\n" +
+                        "                    |       |       |       |                               |       \u2551       |       |       |       |       \u2551");
         lastine(faithTrack.getFaithPoints());
         System.out.println(
-                "                    |       |       |       |                               |       |       |       |       |       |       |\n" +
-                        "                    +-------+-------+-------+                               +-------+-------+-------+-------+-------+-------+");
+                        "                    |       |       |       |                               |       \u2551       |       |       |       |       \u2551\n" +
+                        "                    +-------+-------+-------+                               +-------+===" + pCS("6", Color.YELLOW) + "===+=======+=======+===" + pCS("9", Color.YELLOW) + "===+=======+");
     }
 
     /**
@@ -583,9 +588,19 @@ public class CLI {
      */
     private void printRow(int start, int end, int fp) {
         for (int i = start; i <= end; i++) {
-            if (i != fp) System.out.print(hSpace(7));
+            if (i != fp) {
+                if (i < 10) {
+                    if (i == 8) System.out.print(pCS(hSpace(3) + "\u256C" + hSpace(3), Color.WHITE)); //PopeSpace symbol
+                    else System.out.print(pCS(hSpace(3) + i + hSpace(3), Color.GREY));
+                }
+                else {
+                    if (i == 16 || i == 24) System.out.print(pCS(hSpace(3) + "\u256C" + hSpace(3), Color.WHITE)); //PopeSpace symbol
+                    else System.out.print(pCS(hSpace(2) + (i / 10) + " " + (i % 10) + hSpace(2), Color.GREY));
+                }
+            }
             else printCross();
-            System.out.print("|");
+            if (i == 4 || i == 8 || i == 11 || i == 16 || i == 18 || i == 24) System.out.print("\u2551");
+            else System.out.print("|");
         }
     }
 
@@ -595,7 +610,7 @@ public class CLI {
      * @param fp Has the same function as before
      */
     private void firstLine(int fp) {
-        System.out.print(hSpace(36) + "|");
+        System.out.print(hSpace(36) + pCS("1", Color.YELLOW));
         printRow(4, 9, fp);
         System.out.print(hSpace(31) + "|");
         printRow(18, 24, fp);
@@ -603,18 +618,32 @@ public class CLI {
     }
 
     /**
-     * Prints the second line of the Track
+     * Prints the second line of the Track, including VaticanReportSections
      *
      * @param fp Has the same function as before
      */
-    private void midLine(int fp) {
+    private void midLine(int fp, VaticanReportSection[] vaticanReportSections) {
         System.out.print(hSpace(36) + "|");
         printRow(3, 3, fp);
-        System.out.print(hSpace(31) + "|");
+        System.out.print(hSpace(11) + printVaticanReportSection(vaticanReportSections[0]));
+        System.out.print(hSpace(11) + "|");
         printRow(10, 10, fp);
-        System.out.print(hSpace(31) + "|");
+        System.out.print(hSpace(11) + printVaticanReportSection(vaticanReportSections[1]));
+        System.out.print(hSpace(11) + "|");
         printRow(17, 17, fp);
+        System.out.print(hSpace(19) + printVaticanReportSection(vaticanReportSections[2]));
         vSpace(1);
+    }
+
+    /**
+     * Prints the Vatican Report Tiles in the Faith Track
+
+     * @param vaticanReportSection The section to print
+     * @return X if the Section isn't active, the Section's value if it's active
+     */
+    private String printVaticanReportSection(VaticanReportSection vaticanReportSection) {
+        if (vaticanReportSection.isPopesFavorTileActive()) return "|   " + vaticanReportSection.getValue() + "   |";
+        else return "|   X   |";
     }
 
     /**

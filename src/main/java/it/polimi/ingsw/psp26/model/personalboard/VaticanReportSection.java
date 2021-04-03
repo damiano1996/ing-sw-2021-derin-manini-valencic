@@ -11,6 +11,7 @@ import java.util.Objects;
  */
 public class VaticanReportSection extends Observable<Message> {
 
+    private final int value;
     private final int startSection;
     private final int endSection;
     private boolean popesFavorTileStatus;
@@ -22,13 +23,14 @@ public class VaticanReportSection extends Observable<Message> {
      * @param startSection initial position of the section
      * @param endSection   final position of the section
      */
-    public VaticanReportSection(VirtualView virtualView, int startSection, int endSection) {
+    public VaticanReportSection(VirtualView virtualView, int startSection, int endSection, int value) {
         super();
         addObserver(virtualView);
 
         this.popesFavorTileStatus = false;
         this.startSection = startSection;
         this.endSection = endSection;
+        this.value = value;
 
         notifyObservers(new Message()); // TODO: to be completed
     }
@@ -79,6 +81,15 @@ public class VaticanReportSection extends Observable<Message> {
     }
 
     /**
+     * Getter of the value of the tile.
+     *
+     * @return the value of the tile
+     */
+    public int getValue() {
+        return value;
+    }
+
+    /**
      * Equals method.
      *
      * @param o object to be compared
@@ -91,7 +102,7 @@ public class VaticanReportSection extends Observable<Message> {
         VaticanReportSection that = (VaticanReportSection) o;
         return startSection == that.startSection &&
                 endSection == that.endSection &&
-                popesFavorTileStatus == that.popesFavorTileStatus;
+                popesFavorTileStatus == that.popesFavorTileStatus && value == that.value;
     }
 
     /**

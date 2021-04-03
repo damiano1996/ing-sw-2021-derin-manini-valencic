@@ -174,7 +174,7 @@ public class CLI {
         }
 
 
-        //FAITH-TRACH-MOVEMENT-TEST---// Press Enter 25 times
+        //FAITH-TRACK-MOVEMENT-TEST---// Press Enter 25 times
 
         cli.cls();
         for (int i = 0; i < 25; i++) {
@@ -477,7 +477,7 @@ public class CLI {
 
 
     //------------------------------------------//
-    //          DEVELOPMENT CARD SLOTS          // AL MOMENTO TI STAMPA PURE LO STRONGBOX
+    //          DEVELOPMENT CARD SLOTS          //
     //------------------------------------------//
 
     /**
@@ -1056,7 +1056,7 @@ public class CLI {
     //          LEADER CARDS          //
     //--------------------------------//
 
-    //TEMPORARY SOLUTION
+    //TEMPORARY SOLUTION selectLeaders è la temporary solution
 
     /**
      * Prints the Leader selection Screen

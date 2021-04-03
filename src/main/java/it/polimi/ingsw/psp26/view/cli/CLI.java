@@ -112,7 +112,7 @@ public class CLI {
         in.nextLine();
 
 
-        //---PRINT-PLAYER-LEADER-CARDS-TEST---// Press Enter 4 times
+        //---PRINT-PLAYER-LEADER-CARDS-TEST---// Press Enter 7 times
 
         cli.cls();
         cli.printPlayerLeaderCards(player.getLeaderCards());
@@ -128,6 +128,22 @@ public class CLI {
         cli.cls();
 
         player.getLeaderCards().get(1).activate();
+        cli.printPersonalBoard(player);
+        in.nextLine();
+        cli.cls();
+        cli.printPlayerLeaderCards(player.getLeaderCards());
+        in.nextLine();
+        cli.cls();
+
+        player.getLeaderCards().remove(0); //Simulate a Leader Card discard
+        cli.printPersonalBoard(player);
+        in.nextLine();
+        cli.cls();
+        cli.printPlayerLeaderCards(player.getLeaderCards());
+        in.nextLine();
+        cli.cls();
+
+        player.getLeaderCards().remove(0); //Simulate a Leader Card discard
         cli.printPersonalBoard(player);
         in.nextLine();
         cli.cls();
@@ -186,8 +202,14 @@ public class CLI {
     }
 
 
-    //----------TITLE----------//
+    //-------------------------//
+    //          TITLE          //
+    //-------------------------//
 
+    /**
+     * Prints the Title Screen when the program is launched
+     * Used in printTitle() method
+     */
     private void printTitle() {
         cls();
         Color.GREEN.setColor();
@@ -216,6 +238,9 @@ public class CLI {
                         "                                                                  |       |    \\_ |______ ______| ______|      |______ |  \\_|    |    |______ |    \\_");
     }
 
+    /**
+     * Used to ask the Player's credentials
+     */
     public void askForCredentials() { //MUST BE COMPLETED WITH CONTROLLER INTEGRATION
         String nickname = "";
         String ipAddress = "";
@@ -237,15 +262,22 @@ public class CLI {
                 vSpace(1);
                 System.out.print(hSpace(90) + "Enter IP-Address: ");
                 in.nextLine();
-                //ipAddress = in.nextLine();
+                //ipAddress = in.nextLine(); COMMENTATO SOLO PER EVITARE IL WARNING NEL COMMIT, NELLA VERSIONE FINALE VA CONTROLLATO L'INSERIMENTO DELL'IP ADDRESS
             }
         }
     }
 
 
-    //----------PERSONAL-BOARD----------//
+    //----------------------------------//
+    //          PERSONAL BOARD          //
+    //----------------------------------//
 
-    public void printPersonalBoard(Player player) {
+    /**
+     * Prints the Personal Board of a given player
+     *
+     * @param player The player who's Personal Board is gonna be printed
+     */
+    public void printPersonalBoard(Player player) { //MANCA L'INKWELL
 
         printFaithTrack(player.getPersonalBoard().getFaithTrack());
 
@@ -260,6 +292,11 @@ public class CLI {
         printLeaderCardsInPersonalBoard(player.getLeaderCards());
     }
 
+    /**
+     * Prints the Player's Leader Cards in the bottom right corner
+     *
+     * @param leaderCards The Player's cards
+     */
     private void printLeaderCardsInPersonalBoard(List<LeaderCard> leaderCards) {
         System.out.print(hSpace(200));
         for (int i = 0; i < leaderCards.size(); i++) System.out.print(",----------." + hSpace(5));
@@ -288,12 +325,34 @@ public class CLI {
         vSpace(1);
     }
 
+    /**
+     * Used to print the String under the Player's Leader Cards
+     *
+     * @param leaderCard The card to be controlled
+     * @return ACTIVE if the Leader Card has been activated, INACTIVE in the other cases
+     */
     private String isLeaderCardActive(LeaderCard leaderCard) {
         if (leaderCard.isActive()) return " ACTIVE ";
         else return "INACTIVE";
     }
 
+    /**
+     * Prints the Player's Leader Cards in a new screen
+     *
+     * @param leaderCards The Player's Leader Cards to print
+     */
     public void printPlayerLeaderCards(List<LeaderCard> leaderCards) {
+        System.out.println(hSpace(20) + "ooo        ooooo oooooo   oooo      ooooo        oooooooooooo       .o.       oooooooooo.   oooooooooooo ooooooooo.          .oooooo.         .o.       ooooooooo.   oooooooooo.    .oooooo..o \n" +
+                hSpace(20) + "`88.       .888'  `888.   .8'       `888'        `888'     `8      .888.      `888'   `Y8b  `888'     `8 `888   `Y88.       d8P'  `Y8b       .888.      `888   `Y88. `888'   `Y8b  d8P'    `Y8 \n" +
+                hSpace(20) + " 888b     d'888    `888. .8'         888          888             .8\"888.      888      888  888          888   .d88'      888              .8\"888.      888   .d88'  888      888 Y88bo.      \n" +
+                hSpace(20) + " 8 Y88. .P  888     `888.8'          888          888oooo8       .8' `888.     888      888  888oooo8     888ooo88P'       888             .8' `888.     888ooo88P'   888      888  `\"Y8888o.  \n" +
+                hSpace(20) + " 8  `888'   888      `888'           888          888    \"      .88ooo8888.    888      888  888    \"     888`88b.         888            .88ooo8888.    888`88b.     888      888      `\"Y88b \n" +
+                hSpace(20) + " 8    Y     888       888            888       o  888       o  .8'     `888.   888     d88'  888       o  888  `88b.       `88b    ooo   .8'     `888.   888  `88b.   888     d88' oo     .d8P \n" +
+                hSpace(20) + "o8o        o888o     o888o          o888ooooood8 o888ooooood8 o88o     o8888o o888bood8P'   o888ooooood8 o888o  o888o       `Y8bood8P'  o88o     o8888o o888o  o888o o888bood8P'   8\"\"88888P'\n" +
+                hSpace(20) + "______________________________________________________________________________________________________________________________________________________________________________________________");
+
+        vSpace(4);
+
         for (int i = 0; i < 18; i++) {
             System.out.print(hSpace(80));
             for (LeaderCard leaderCard : leaderCards) System.out.print(printLeader(leaderCard, i) + hSpace(20));
@@ -305,11 +364,30 @@ public class CLI {
         for (LeaderCard leaderCard : leaderCards) {
             System.out.print(isLeaderCardActive(leaderCard) + hSpace(38));
         }
+        vSpace(5);
+
+        System.out.println("Press Enter to exit this view."); //FORSE VA SISTEMATO IN UNA FUTURA INTERAZIONE COL CONTROLLER
+    }
+
+    /**
+     * Prints the Development Card Slots and Strongbox section of the Player's Personal Board
+     *
+     * @param developmentSlots The Development Card Slots to print
+     * @param strongbox        The Strongbox to print
+     */
+    private void printDevelopmentCardSlotsAndStrongbox(List<List<DevelopmentCard>> developmentSlots, List<Resource> strongbox) {
+        for (int j = 0; j <= 15; j++)
+            System.out.println(
+                    printStrongbox(j, strongbox) + hSpace(20) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(0), j) +
+                            hSpace(5) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(1), j) +
+                            hSpace(5) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(2), j) + hSpace(5) + "\u2502");
         vSpace(1);
     }
 
 
-    //----------STRONGBOX----------//
+    //-----------------------------//
+    //          STRONGBOX          //
+    //-----------------------------//
 
     /**
      * Used to get the number of the resources stored in the strongbox
@@ -324,6 +402,13 @@ public class CLI {
         return numberOfResources.get(resourceType).intValue();
     }
 
+    /**
+     * Used to print the Strongbox. Each line is individually printed due to the fact that Development Cards are also printed on the same lines
+     *
+     * @param lineToPrint The current line to be printed
+     * @param resources   The Strongbox's Resources
+     * @return The corresponding line to print
+     */
     private String printStrongbox(int lineToPrint, List<Resource> resources) {
         String s = "";
 
@@ -391,20 +476,12 @@ public class CLI {
     }
 
 
-    //----------DEVELOPMENT-CARD-SLOTS----------// AL MOMENTO TI STAMPA PURE LO STRONGBOX
-
-    private void printDevelopmentCardSlotsAndStrongbox(List<List<DevelopmentCard>> developmentSlots, List<Resource> strongbox) {
-        for (int j = 0; j <= 15; j++)
-            System.out.println(
-                    printStrongbox(j, strongbox) + hSpace(20) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(0), j) +
-                            hSpace(5) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(1), j) +
-                            hSpace(5) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(2), j) + hSpace(5) + "\u2502");
-        vSpace(1);
-    }
-
+    //------------------------------------------//
+    //          DEVELOPMENT CARD SLOTS          // AL MOMENTO TI STAMPA PURE LO STRONGBOX
+    //------------------------------------------//
 
     /**
-     * It has the same function of the printDevelopmentGridCard() method, but instead prints the cards on the player board
+     * Return one line of the Development Card on the Player Board
      *
      * @param developmentSlot The slot to be printed
      * @param cardLineToPrint Each row of the card is printed individually to provide maximum control over variations of the grid structure
@@ -417,8 +494,15 @@ public class CLI {
     }
 
 
-    //----------WAREHOUSE----------//
+    //-----------------------------//
+    //          WAREHOUSE          //
+    //-----------------------------//
 
+    /**
+     * Prints the Warehouse and the Resources in it
+     *
+     * @param warehouseDepots A list of Depots that will be printed
+     */
     private void printWarehouse(List<Depot> warehouseDepots) {
         System.out.println(hSpace(8) + "        ________\n" + hSpace(10) +
                 "  ,=='        `==.");
@@ -434,6 +518,12 @@ public class CLI {
                 "||___.-__;----.___||");
     }
 
+    /**
+     * Used in printWarehouse() to get the correct representation of Resources
+     *
+     * @param depot The current Depot that will be printed
+     * @return A formatted representation of the Resources in this Depot
+     */
     private String printDepot(Depot depot) {
         StringBuilder s = new StringBuilder();
         List<Resource> resources = new ArrayList<>(depot.getResources());
@@ -447,8 +537,15 @@ public class CLI {
     }
 
 
-    //----------FAITH-TRACK----------//
+    //-------------------------------//
+    //          FAITH TRACK          //
+    //-------------------------------//
 
+    /**
+     * Prints the Player's Faith Track
+     *
+     * @param faithTrack The Faith Track to print
+     */
     private void printFaithTrack(FaithTrack faithTrack) {
         System.out.println(
                 "                                    +-------+-------+-------+-------+-------+-------+                               +-------+-------+-------+-------+-------+-------+-------+\n" +
@@ -469,10 +566,21 @@ public class CLI {
                         "                    +-------+-------+-------+                               +-------+-------+-------+-------+-------+-------+");
     }
 
+    /**
+     * Return a String representing the Player's cross
+     */
     private void printCross() {
         System.out.print("  \u001b[41;1m \u2020 \u001b[0m  ");
     }
 
+    /**
+     * Auxiliary method used in firstLine(), secondLine() and thirdLine() methods
+     *
+     * @param start The position of the first cell of the line on the track
+     * @param end   The position of the last cell of the line on the track
+     * @param fp    (start <= fp <= end) ==> a cross will be printed in fp position
+     *              A blank space is printed otherwise
+     */
     private void printRow(int start, int end, int fp) {
         for (int i = start; i <= end; i++) {
             if (i != fp) System.out.print(hSpace(7));
@@ -481,6 +589,11 @@ public class CLI {
         }
     }
 
+    /**
+     * Prints the first line of the Track
+     *
+     * @param fp Has the same function as before
+     */
     private void firstLine(int fp) {
         System.out.print(hSpace(36) + "|");
         printRow(4, 9, fp);
@@ -489,6 +602,11 @@ public class CLI {
         vSpace(1);
     }
 
+    /**
+     * Prints the second line of the Track
+     *
+     * @param fp Has the same function as before
+     */
     private void midLine(int fp) {
         System.out.print(hSpace(36) + "|");
         printRow(3, 3, fp);
@@ -499,6 +617,11 @@ public class CLI {
         vSpace(1);
     }
 
+    /**
+     * Prints the third line of the Track
+     *
+     * @param fp Has the same function as before
+     */
     private void lastine(int fp) {
         System.out.print(hSpace(20) + "|");
         printRow(0, 2, fp);
@@ -516,6 +639,11 @@ public class CLI {
     //   8b88d8    marble protothype
     //   `Y88P'
 
+    /**
+     * Prints the Market Tray
+     *
+     * @param marketTray The Market Tray to print
+     */
     public void printMarket(MarketTray marketTray) {
         System.out.println(
                 "             ,----------------------------------+");
@@ -534,6 +662,11 @@ public class CLI {
         printMarketLegend();
     }
 
+    /**
+     * Prints the rows of the Market Tray
+     *
+     * @param marketTray The Market Tray to print
+     */
     private void printMarketMarbleRows(MarketTray marketTray) {
         for (int i = 2; i >= 0; i--) {
             Resource[] resources = marketTray.getMarblesOnRow(i);
@@ -544,6 +677,11 @@ public class CLI {
         }
     }
 
+    /**
+     * Prints the marble on the Market Tray slide
+     *
+     * @param marketTray The Market Tray to print
+     */
     private void printMarbleOnSlide(MarketTray marketTray) {
         Color marbleOnSlideColor = marketTray.getMarbleOnSlide().getColor();
         System.out.println(
@@ -552,6 +690,9 @@ public class CLI {
                         "          /                              " + pCS("\\___/", marbleOnSlideColor) + "  |");
     }
 
+    /**
+     * Prints the Market legend
+     */
     private void printMarketLegend() {
         System.out.println(
                 "+--------------------------------------------------------+\n" +
@@ -567,8 +708,15 @@ public class CLI {
     }
 
 
-    //----------DEVELOPMENT-CARD-GRID----------//
+    //-----------------------------------------//
+    //          DEVELOPMENT CARD GRID          //
+    //-----------------------------------------//
 
+    /**
+     * Prints the Development Card Grid
+     *
+     * @param developmentGrid The Development Grid to print
+     */
     public void printDevelopmentGrid(DevelopmentGrid developmentGrid) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j <= 16; j++)
@@ -582,9 +730,9 @@ public class CLI {
     }
 
     /**
-     * Used to print the DevelopmentGridCard.
+     * Used to print the Development Cards in the Development Grid
      *
-     * @param developmentGridCell If the cell contains one or more cards, print the one on the top. Otherwise, leave a blank space.
+     * @param developmentGridCell If the cell contains one or more cards, print the one on the top. Otherwise, leave a blank space
      * @param cardLineToPrint     Each row of the card is printed individually to provide maximum control over variations of the grid structure
      * @return One line of the grid
      */
@@ -595,13 +743,15 @@ public class CLI {
     }
 
 
-    //----------DEVELOPMENT-CARDS----------//
+    //-------------------------------------//
+    //          DEVELOPMENT CARDS          //
+    //-------------------------------------//
 
     /**
      * Used to print DevelopmentCards.
      *
      * @param developmentCard The desired card to print
-     * @param cardLineToPrint Each row of the card is printed individually to provide maximum control over variations of the grid structure
+     * @param cardLineToPrint Each row of the card is printed individually to provide maximum control
      * @param cardStackSize   How many cards are on the top of each other
      * @return One line of the card
      */
@@ -721,14 +871,31 @@ public class CLI {
         return s;
     }
 
+    /**
+     * If there are no Development Cards, leave a blank space
+     *
+     * @return The blank space to print
+     */
     private String printEmptyDevelopmentCardSpace() {
         return hSpace(26);
     }
 
+    /**
+     * In case of a Development Card stack, prints the border of the cards under the top one
+     *
+     * @param numberOfCards How many cards there are in the stack
+     * @return The correct border representation of the stack
+     */
     private String printHorizontalBorder(int numberOfCards) {
         return "\u2502".repeat(Math.max(0, numberOfCards - 1)) + hSpace(4 - numberOfCards);
     }
 
+    /**
+     * Prints the Development Card requirements line
+     *
+     * @param developmentCard The Card to print
+     * @return The requirements of the Card
+     */
     private String printDevelopmentCardRequirements(DevelopmentCard developmentCard) {
         StringBuilder s = new StringBuilder("| ");
         int remainingSpace = 20;
@@ -742,6 +909,12 @@ public class CLI {
         return s.toString();
     }
 
+    /**
+     * Prints the Development Card level lines in the correct color
+     *
+     * @param developmentCard The Card to print
+     * @return The level of the Card
+     */
     private String printDevelopmentCardLevel(DevelopmentCard developmentCard) {
         String s = "| ";
 
@@ -752,12 +925,19 @@ public class CLI {
         return s;
     }
 
+    /**
+     * Prints a Card level dots in the correct Color
+     *
+     * @param level The level number of the Card
+     * @param color The Color of the Card
+     * @return A formatted String of the Level dots
+     */
     private String printLevelDots(int level, Color color) {
         return pCS("\u25CF ", color).repeat(Math.max(0, level));
     }
 
     /**
-     * Used to print the Production section of a DevelopmentCard.
+     * Used to print the Production section of a DevelopmentCard
      * It calls three auxiliary methods in order to get a clean print of the Resources
      *
      * @param developmentCard The card that is gonna to be printed
@@ -788,6 +968,15 @@ public class CLI {
             return printThirdProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources);
     }
 
+    /**
+     * Prints the first line of the Development Card production section
+     *
+     * @param requiredResources         Resources type required to perform the production action
+     * @param numberOfRequiredResources Resources number required to perform the production action
+     * @param producedResources         Resources type produced by the production action
+     * @param numberOfProducedResources Resources number produced by the production action
+     * @return A formatted String of the first production section's line
+     */
     private String printFirstProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources) {
         String s = "| |  ";
 
@@ -800,6 +989,15 @@ public class CLI {
         return s;
     }
 
+    /**
+     * Prints the second line of the Development Card production section
+     *
+     * @param requiredResources         Resources type required to perform the production action
+     * @param numberOfRequiredResources Resources number required to perform the production action
+     * @param producedResources         Resources type produced by the production action
+     * @param numberOfProducedResources Resources number produced by the production action
+     * @return A formatted String of the second production section's line
+     */
     private String printSecondProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources) {
         String s = "| |  ";
 
@@ -816,6 +1014,15 @@ public class CLI {
         return s;
     }
 
+    /**
+     * Prints the third line of the Development Card production section
+     *
+     * @param requiredResources         Resources type required to perform the production action
+     * @param numberOfRequiredResources Resources number required to perform the production action
+     * @param producedResources         Resources type produced by the production action
+     * @param numberOfProducedResources Resources number produced by the production action
+     * @return A formatted String of the third production section's line
+     */
     private String printThirdProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources) {
         String s = "| |  ";
 
@@ -832,6 +1039,12 @@ public class CLI {
         return s;
     }
 
+    /**
+     * Print the Development Card's Victory Points
+     *
+     * @param developmentCard The Card where to get the VictoryPoints
+     * @return The Card's Victory Points
+     */
     private String printCardVictoryPoints(DevelopmentCard developmentCard) {
         String s = "";
         s = s + "|" + hSpace(10) + developmentCard.getVictoryPoints() + hSpace(10 - (developmentCard.getVictoryPoints() / 10)) + "|";
@@ -839,9 +1052,18 @@ public class CLI {
     }
 
 
-    //----------LEADER-CARDS----------//
+    //--------------------------------//
+    //          LEADER CARDS          //
+    //--------------------------------//
 
     //TEMPORARY SOLUTION
+
+    /**
+     * Prints the Leader selection Screen
+     *
+     * @param leaderCards The 4 Leader Cards given to the Player choice
+     * @return The chosen Cards
+     */
     public List<LeaderCard> selectLeaders(List<LeaderCard> leaderCards) { //void method, may be modified into return List<LeaderCard>
         List<LeaderCard> selectedLeaders = new ArrayList<>();
         Scanner in = new Scanner(System.in);
@@ -890,11 +1112,20 @@ public class CLI {
 
         in.nextLine();
 
-        /*Debug only*/ System.out.println("You selected Leader " + (leaderCards.indexOf(selectedLeaders.get(0)) + 1) + " and Leader " + (leaderCards.indexOf(selectedLeaders.get(1)) + 1));
+        /*Debug only*/
+        System.out.println("You selected Leader " + (leaderCards.indexOf(selectedLeaders.get(0)) + 1) + " and Leader " + (leaderCards.indexOf(selectedLeaders.get(1)) + 1));
 
         return selectedLeaders;
     }
 
+    /**
+     * If a Leader Cards is selected, mark it with a red SELECTED String
+     *
+     * @param leaderCard      The card to check if has been selected
+     * @param selectedLeaders The Leaders selected by the Player
+     * @param leadercards     The 4 Leader Cards given to the Player's choice
+     * @return SELECTED if the Card has been selected, Leader #ofLeader otherwise
+     */
     private String isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leadercards) {
         if (selectedLeaders.contains(leaderCard)) return "\u001b[41m  SELECTED  \u001b[0m";
         else return "  Leader " + (leadercards.indexOf(leaderCard) + 1) + "  ";
@@ -914,6 +1145,13 @@ public class CLI {
         }
     }
 
+    /**
+     * Prints a LeaderCard line by line
+     *
+     * @param leaderCard  The Leader Card to print
+     * @param lineToPrint The line to print
+     * @return The corresponding line to print
+     */
     private String printLeader(LeaderCard leaderCard, int lineToPrint) {
         String s = "";
 
@@ -983,12 +1221,24 @@ public class CLI {
         return s;
     }
 
+    /**
+     * Prints the requirement of a given Leader Card
+     *
+     * @param leaderCard The Leader Card to analyze
+     * @return The Leader Card's requirements
+     */
     private String printLeaderRequirements(LeaderCard leaderCard) {
         if (leaderCard.getDevelopmentCardRequirements().keySet().size() == 0)
             return printLeaderResourcesRequirements(leaderCard.getResourcesRequirements());
         else return printLeaderDevelopmentCardRequirements(leaderCard.getDevelopmentCardRequirements());
     }
 
+    /**
+     * If the Leader Cards requires Development Cards, this method is invoked in printLeaderRequirements()
+     *
+     * @param requirements The requirements of the Leader Card
+     * @return A formatted String of the requirements
+     */
     private String printLeaderDevelopmentCardRequirements(HashMap<DevelopmentCardType, Integer> requirements) {
         StringBuilder s = new StringBuilder();
         int remainingSpace = 7;
@@ -1011,6 +1261,12 @@ public class CLI {
         return s.toString();
     }
 
+    /**
+     * If the Leader Cards requires Resources, this method is invoked in printLeaderRequirements()
+     *
+     * @param requirements The requirements of the Leader Card
+     * @return A formatted String of the requirements
+     */
     private String printLeaderResourcesRequirements(HashMap<Resource, Integer> requirements) {
         StringBuilder s = new StringBuilder();
         int remainingSpace = 7;
@@ -1026,28 +1282,41 @@ public class CLI {
     }
 
 
-    //----------CLI-UTILS----------//
+    //-----------------------------//
+    //          CLI UTILS          //
+    //-----------------------------//
 
+    /**
+     * Inserts blank lines
+     * @param spaces The number of the lines
+     */
     private void vSpace(int spaces) {
         for (int i = 0; i < spaces; i++) System.out.println();
     }
 
+    /**
+     * Inserts blank spaces in a String
+     * @param spaces The number of the spaces
+     * @return A blank String which length is == spaces
+     */
     private String hSpace(int spaces) {
         return " ".repeat(Math.max(0, spaces));
     }
 
+    /**
+     * Clears the terminal screen
+     */
     public void cls() {
         System.out.println("\033[H\033[2J");
         System.out.flush();
     }
 
     /**
-     * pCS = print colored string
-     * Returns a colored String
+     * pCS = Print Colored String. Returns a colored String
      *
-     * @param string the string to be colored
-     * @param color  the color
-     * @return the colored string
+     * @param string The String to be colored
+     * @param color  The Color
+     * @return The colored String
      */
     private String pCS(String string, Color color) {
         return color + string + Color.RESET;

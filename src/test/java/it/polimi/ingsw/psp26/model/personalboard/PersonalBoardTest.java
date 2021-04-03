@@ -57,7 +57,7 @@ public class PersonalBoardTest {
     @Test
     public void testGetFaithTrack() {
         FaithTrack faithTrack = new FaithTrack(virtualView);
-        assertTrue(faithTrack.equals(personalBoard.getFaithTrack()));
+        assertEquals(faithTrack, personalBoard.getFaithTrack());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class PersonalBoardTest {
         for (int i = 0; i < depots.get(2).getMaxNumberOfResources(); i++) depots.get(2).addResource(Resource.SHIELD);
 
         for (int i = 0; i < depots.size(); i++) {
-            assertTrue(depots.get(i).equals(personalBoard.getWarehouseDepots().get(i)));
+            assertEquals(depots.get(i), personalBoard.getWarehouseDepots().get(i));
         }
     }
 
@@ -146,8 +146,10 @@ public class PersonalBoardTest {
         personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
 
         Depot depot = new Depot(virtualView, 2);
+        depot.addResource(Resource.COIN);
+        depot.addResource(Resource.COIN);
 
-        assertTrue(depot.equals(personalBoard.getWarehouseDepot(1)));
+        assertEquals(depot, personalBoard.getWarehouseDepot(1));
     }
 
     @Test(expected = DepotOutOfBoundException.class)
@@ -164,7 +166,7 @@ public class PersonalBoardTest {
         resources.add(Resource.COIN);
         resources.add(Resource.SHIELD);
 
-        personalBoard.addResourceToStrongbox(resources);
+        personalBoard.addResourcesToStrongbox(resources);
 
         assertEquals(resources, personalBoard.getStrongbox());
     }

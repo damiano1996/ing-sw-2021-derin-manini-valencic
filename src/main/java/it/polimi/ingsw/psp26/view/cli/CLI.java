@@ -71,7 +71,7 @@ public class CLI {
         cli.cls();
         strongbox.add(Resource.STONE);
         strongbox.add(Resource.SERVANT);
-        personalBoard.addResourceToStrongbox(strongbox);
+        personalBoard.addResourcesToStrongbox(strongbox);
 
         personalBoard.addDevelopmentCard(0, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
         personalBoard.addDevelopmentCard(1, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
@@ -82,7 +82,7 @@ public class CLI {
         strongbox.add(Resource.COIN);
         strongbox.add(Resource.STONE);
         strongbox.add(Resource.SERVANT);
-        personalBoard.addResourceToStrongbox(strongbox);
+        personalBoard.addResourcesToStrongbox(strongbox);
 
         personalBoard.addDevelopmentCard(1, developmentGrid.drawCard(Color.BLUE, Level.SECOND));
         personalBoard.addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
@@ -93,7 +93,7 @@ public class CLI {
         strongbox.add(Resource.STONE);
         strongbox.add(Resource.SERVANT);
         strongbox.add(Resource.COIN);
-        personalBoard.addResourceToStrongbox(strongbox);
+        personalBoard.addResourcesToStrongbox(strongbox);
 
         personalBoard.addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
         cli.printPersonalBoard(personalBoard);

@@ -10,17 +10,16 @@ public class ProductionAbility extends SpecialAbility {
     }
 
 
-
     public String getAbilityType() {
         return "PRODUCTION  LEADER";
     }
 
     @Override
     public String getPowerDescription(int linetoPrint) {
-        if (linetoPrint == 0) return      "| Pay one Resource   |";
+        if (linetoPrint == 0) return "| Pay one Resource   |";
         else if (linetoPrint == 1) return "| and get 1 Faith    |";
         else if (linetoPrint == 2) return "| Point and 1 Resou- |";
-        else return                       "| rce of your choice |";
+        else return "| rce of your choice |";
     }
 
     @Override

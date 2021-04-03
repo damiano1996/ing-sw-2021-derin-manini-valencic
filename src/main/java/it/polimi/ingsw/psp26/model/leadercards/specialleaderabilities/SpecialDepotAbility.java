@@ -10,17 +10,16 @@ public class SpecialDepotAbility extends SpecialAbility {
     }
 
 
-
     public String getAbilityType() {
         return "   DEPOT LEADER   ";
     }
 
     @Override
     public String getPowerDescription(int linetoPrint) {
-        if (linetoPrint == 0) return      "| Add an extra Depot |";
+        if (linetoPrint == 0) return "| Add an extra Depot |";
         else if (linetoPrint == 1) return "| which can only     |";
         else if (linetoPrint == 2) return "| contains 2 Resour- |";
-        else return                       "| ces of one type    |";
+        else return "| ces of one type    |";
     }
 
     @Override

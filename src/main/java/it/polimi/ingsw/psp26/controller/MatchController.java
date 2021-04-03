@@ -30,7 +30,7 @@ public class MatchController implements Observer<Message> {
     }
 
     @Override
-    public void update(Message object) {
+    public void update(Message message) {
 
     }
 

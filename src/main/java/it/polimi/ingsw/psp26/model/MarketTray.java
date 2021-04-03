@@ -10,12 +10,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * Class to model the market tray.
+ */
 public class MarketTray extends Observable<Message> {
 
     private final Resource[][] marketMarbles;
     private Resource marbleOnSlide;
 
+    /**
+     * Constructor of the class.
+     * It initializes the marbles (with shuffling) on the market.
+     *
+     * @param virtualView virtual view that must be notified
+     */
     public MarketTray(VirtualView virtualView) {
         super();
         addObserver(virtualView);
@@ -37,11 +45,23 @@ public class MarketTray extends Observable<Message> {
     }
 
 
+    /**
+     * Getter of the marbles on the requested row.
+     *
+     * @param row row of the market
+     * @return array containing the resources associated to the marbles on the requested row
+     */
     public Resource[] getMarblesOnRow(int row) {
         return marketMarbles[row];
     }
 
 
+    /**
+     * Getter of the marbles on the requested column.
+     *
+     * @param column column of the market
+     * @return array containing the resources associated to marbles on the requested column
+     */
     public Resource[] getMarblesOnColumn(int column) {
         Resource[] marketColumn = new Resource[marketMarbles.length];
         for (int i = 0; i < marketMarbles.length; i++) {
@@ -51,11 +71,21 @@ public class MarketTray extends Observable<Message> {
     }
 
 
+    /**
+     * Getter of the marble on the slide.
+     *
+     * @return resource located on the slide
+     */
     public Resource getMarbleOnSlide() {
         return marbleOnSlide;
     }
 
 
+    /**
+     * Method to push the marble from the slide to the specified row.
+     *
+     * @param row row of the market
+     */
     public void pushMarbleFromSlideToRow(int row) {
 
         Resource marbleTemp = marbleOnSlide;
@@ -68,7 +98,11 @@ public class MarketTray extends Observable<Message> {
         notifyObservers(new Message()); // TODO: to be completed
     }
 
-
+    /**
+     * Method to push the marble fro the slide to the specified column.
+     *
+     * @param column column of the market
+     */
     public void pushMarbleFromSlideToColumn(int column) {
         Resource marbleTemp = marbleOnSlide;
         marbleOnSlide = marketMarbles[marketMarbles.length - 1][column];

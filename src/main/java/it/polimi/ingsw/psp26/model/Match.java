@@ -33,6 +33,7 @@ public class Match extends Observable<Message> {
 
     /**
      * Class constructor.
+     * It initializes the components of the match. Moreover, it shuffles the leader deck and the token stack.
      *
      * @param virtualView virtual view to be added to the observers list
      * @param id          match identifier

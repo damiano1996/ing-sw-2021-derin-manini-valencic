@@ -4,6 +4,12 @@ import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
+import java.util.Arrays;
+import java.util.Objects;
+
+/**
+ * Class to model the faith track.
+ */
 public class FaithTrack extends Observable<Message> {
 
     private final int length;
@@ -12,7 +18,12 @@ public class FaithTrack extends Observable<Message> {
     private int faithPoints;
     private int blackCrossPosition;
 
-
+    /**
+     * Constructor of the class.
+     * It initialized the track with the vatican report sections.
+     *
+     * @param virtualView virtual view that must be notified in case of model changes
+     */
     public FaithTrack(VirtualView virtualView) {
         super();
         addObserver(virtualView);
@@ -29,30 +40,57 @@ public class FaithTrack extends Observable<Message> {
         notifyObservers(new Message()); // TODO: to be completed
     }
 
+    /**
+     * Method to add points to the track.
+     *
+     * @param points points to add
+     */
     public void addFaithPoints(int points) {
         this.faithPoints += points;
         notifyObservers(new Message()); // TODO: to be completed
     }
 
-    //maybe a useless method
-    //public void discardPopesFavorTile(int position) { }
-
+    /**
+     * Getter of the vatican report sections
+     *
+     * @return an array containing the vatican report sections
+     */
     public VaticanReportSection[] getVaticanReportSections() {
         return vaticanReportSections;
     }
 
+    /**
+     * Getter of the marker position.
+     *
+     * @return the marker position
+     */
     public int getMarkerPosition() {
         return markerPosition;
     }
 
+    /**
+     * Getter of the black cross position.
+     *
+     * @return the position of the black cross
+     */
     public int getBlackCrossPosition() {
         return blackCrossPosition;
     }
 
+    /**
+     * Getter of the faith points.
+     *
+     * @return number of faith points
+     */
     public int getFaithPoints() {
         return faithPoints;
     }
 
+    /**
+     * Method to move the marker position given the number of steps to perform.
+     *
+     * @param numberOfSteps number of steps
+     */
     public void moveMarkerPosition(int numberOfSteps) {
         this.markerPosition = this.markerPosition + numberOfSteps;
         this.faithPoints = this.faithPoints + numberOfSteps;
@@ -60,25 +98,40 @@ public class FaithTrack extends Observable<Message> {
         notifyObservers(new Message()); // TODO: to be completed
     }
 
+    /**
+     * Method to move the black cross position given the number of steps to perform.
+     *
+     * @param numberOfSteps number of steps
+     */
     public void moveBlackCrossPosition(int numberOfSteps) {
         this.blackCrossPosition = this.blackCrossPosition + numberOfSteps;
 
         notifyObservers(new Message()); // TODO: to be completed
     }
 
-    public boolean equals(FaithTrack faithTrack) {
-        if (this.length != faithTrack.length) return false;
-        if (this.markerPosition != faithTrack.markerPosition) return false;
-        if (this.blackCrossPosition != faithTrack.blackCrossPosition) return false;
-        if (this.faithPoints != faithTrack.faithPoints) return false;
-        for (int i = 0; i < 3; i++) {
-            if (this.vaticanReportSections[i].isPopesFavorTileActive() != faithTrack.vaticanReportSections[i].isPopesFavorTileActive())
-                return false;
-            if (this.vaticanReportSections[i].getStartSection() != faithTrack.vaticanReportSections[i].getStartSection())
-                return false;
-            if (this.vaticanReportSections[i].getEndSection() != faithTrack.vaticanReportSections[i].getEndSection())
-                return false;
-        }
-        return true;
+    /**
+     * Equals method.
+     *
+     * @param o object to be compared
+     * @return true if equals, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FaithTrack that = (FaithTrack) o;
+        return length == that.length && markerPosition == that.markerPosition && faithPoints == that.faithPoints && blackCrossPosition == that.blackCrossPosition && Arrays.equals(vaticanReportSections, that.vaticanReportSections);
+    }
+
+    /**
+     * Hashing method.
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(length, markerPosition, faithPoints, blackCrossPosition);
+        result = 31 * result + Arrays.hashCode(vaticanReportSections);
+        return result;
     }
 }

@@ -10,17 +10,16 @@ public class WhiteMarbleAbility extends SpecialAbility {
     }
 
 
-
     public String getAbilityType() {
         return "  MARBLE  LEADER  ";
     }
 
     @Override
     public String getPowerDescription(int linetoPrint) {
-        if (linetoPrint == 0) return      "| Gives you an extra |";
+        if (linetoPrint == 0) return "| Gives you an extra |";
         else if (linetoPrint == 1) return "| Resource when you  |";
         else if (linetoPrint == 2) return "| get a white Marble |";
-        else return                       "| from the Market    |";
+        else return "| from the Market    |";
     }
 
     @Override

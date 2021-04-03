@@ -10,17 +10,16 @@ public class ResourceDiscountAbility extends SpecialAbility {
     }
 
 
-
     public String getAbilityType() {
         return " DISCOUNT  LEADER ";
     }
 
     @Override
     public String getPowerDescription(int linetoPrint) {
-        if (linetoPrint == 0) return      "| When buying a      |";
+        if (linetoPrint == 0) return "| When buying a      |";
         else if (linetoPrint == 1) return "| DevelopmentCard    |";
         else if (linetoPrint == 2) return "| you pay one Resou- |";
-        else return                       "| ce less            |";
+        else return "| ce less            |";
     }
 
     @Override

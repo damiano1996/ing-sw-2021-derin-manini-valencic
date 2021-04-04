@@ -72,6 +72,7 @@ public class CLI {
         //---PERSONAL-BOARD-TEST---// Press Enter 3 times
 
         cli.cls();
+        player.giveInkwell();
         List<Resource> strongbox = new ArrayList<>();
         cli.printPersonalBoard(player);
         in.nextLine();
@@ -182,7 +183,7 @@ public class CLI {
 
         cli.cls();
         for (int i = 0; i < 25; i++) {
-            cli.printFaithTrack(personalBoard.getFaithTrack());
+            cli.printFaithTrack(personalBoard.getFaithTrack(), player.isInkwell());
             in.nextLine();
             personalBoard.getFaithTrack().moveMarkerPosition(1);
             cli.cls();
@@ -281,9 +282,9 @@ public class CLI {
      *
      * @param player The player who's Personal Board is gonna be printed
      */
-    public void printPersonalBoard(Player player) { //MANCA L'INKWELL
+    public void printPersonalBoard(Player player) {
 
-        printFaithTrack(player.getPersonalBoard().getFaithTrack());
+        printFaithTrack(player.getPersonalBoard().getFaithTrack(), player.isInkwell());
 
         vSpace(1);
 
@@ -294,6 +295,61 @@ public class CLI {
         printDevelopmentCardSlotsAndStrongbox(player.getPersonalBoard().getDevelopmentCardsSlots(), player.getPersonalBoard().getStrongbox());
 
         printLeaderCardsInPersonalBoard(player.getLeaderCards());
+    }
+
+    /**
+     * Prints the Inkwell line by line
+     *
+     * @param isPrintable Tells the method if the Player has the Inkwell
+     * @param lineToPrint The current line to print
+     * @return The corresponding line to be printed
+     */
+    private String printInkwell(boolean isPrintable, int lineToPrint) {
+        String s = "";
+
+        if (isPrintable) {
+            switch (lineToPrint) {
+                case 0:
+                    s = "      .----.";
+                    break;
+
+                case 1:
+                    s = "     (______)";
+                    break;
+
+                case 2:
+                    s = "    _--|  |--_";
+                    break;
+
+                case 3:
+                    s = "   /\\  |  |   \\";
+                    break;
+
+                case 4:
+                    s = "  /  \\____----'\\";
+                    break;
+
+                case 5:
+                    s = " /   /    __    \\";
+                    break;
+
+                case 6:
+                    s = "/   /    /  \\    \\";
+                    break;
+
+                case 7:
+                    s = "\\  /      ''      \\";
+                    break;
+
+                case 8:
+                    s = " \\/______-----'''''";
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        return s;
     }
 
     /**
@@ -475,6 +531,8 @@ public class CLI {
             case 15:
                 s = " `\"\"\"\"-\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"-\"\"\"\"`  ";
 
+            default:
+                break;
         }
         return s;
     }
@@ -546,29 +604,29 @@ public class CLI {
     //-------------------------------//
 
     /**
-     * Prints the Player's Faith Track
+     * Prints the Player's Faith Track and the Inkwell if the Player has it
      * The PopeSpace intervals are printed thicker
      *
      * @param faithTrack The Faith Track to print
      */
-    private void printFaithTrack(FaithTrack faithTrack) {
+    private void printFaithTrack(FaithTrack faithTrack, boolean isInkwell) {
         System.out.println(
-                        "                                    +-------+=======+===" + pCS("2", Color.YELLOW) + "===+=======+=======+---" + pCS("4", Color.YELLOW) + "---+                               +--" + pCS("1", Color.YELLOW) + "-" + pCS("2", Color.YELLOW) + "--+=======+=======+==" + pCS("1", Color.YELLOW) + "-" + pCS("6", Color.YELLOW) + "==+=======+=======+==" + pCS("2", Color.YELLOW) + "-" + pCS("0", Color.YELLOW) + "==+\n" +
+                "                                    +-------+=======+===" + pCS("2", Color.BYELLOW) + "===+=======+=======+---" + pCS("4", Color.BYELLOW) + "---+                               +--" + pCS("1", Color.BYELLOW) + "-" + pCS("2", Color.BYELLOW) + "--+=======+=======+==" + pCS("1", Color.BYELLOW) + "-" + pCS("6", Color.BYELLOW) + "==+=======+=======+==" + pCS("2", Color.BYELLOW) + "-" + pCS("0", Color.BYELLOW) + "==+\n" +
                         "                                    |       \u2551       |       |       |       \u2551       |                               |       \u2551       |       |       |       |       |       \u2551");
-        firstLine(faithTrack.getFaithPoints());
+        firstLine(isInkwell, faithTrack.getFaithPoints());
         System.out.println(
-                        "                                    |       \u2551       |       |       |       \u2551       |                               |       \u2551       |       |       |       |       |       \u2551\n" +
-                        "                                    +-------+=======+=======+=======+=======+-------+           +-------+           +-------+=======+=======+=======+=======+=======+=======+\n" +
-                        "                                    |       |           |       |           |       |           |       |           |       |                   |       |");
-        midLine(faithTrack.getFaithPoints(), faithTrack.getVaticanReportSections());
+                "                                    |       \u2551       |       |       |       \u2551       |                               |       \u2551       |       |       |       |       |       \u2551" + hSpace(31) + printInkwell(isInkwell, 1) + "\n" +
+                        "                                    +-------+=======+=======+=======+=======+-------+           +=======+           +-------+=======+=======+=======+=======+=======+=======+" + hSpace(31) + printInkwell(isInkwell, 2) + "\n" +
+                        "                                    |       |           \u2551       \u2551           |       |           \u2551       \u2551           |       |                   \u2551       \u2551" + hSpace(51) + printInkwell(isInkwell, 3));
+        midLine(isInkwell, faithTrack.getFaithPoints(), faithTrack.getVaticanReportSections());
         System.out.println(
-                        "                                    |       |           |       |           |       |           |       |           |       |                   |       |\n" +
-                        "                    +-------+-------+-------+           +-------+           +-------+=======+=======+=======+=======+=======+                   +-------+\n" +
-                        "                    |       |       |       |                               |       \u2551       |       |       |       |       \u2551");
-        lastine(faithTrack.getFaithPoints());
+                "                                    |       |           \u2551       \u2551           |       |           \u2551       \u2551           |       |                   \u2551       \u2551" + hSpace(51) + printInkwell(isInkwell, 5) + "\n" +
+                        "                    +-------+-------+-------+           +=======+           +-------+=======+=======+=======+=======+=======+                   +=======+" + hSpace(51) + printInkwell(isInkwell, 6) + "\n" +
+                        "                    |       |       |       |                               |       \u2551       |       |       |       |       \u2551" + hSpace(79) + printInkwell(isInkwell, 7));
+        lastine(isInkwell, faithTrack.getFaithPoints());
         System.out.println(
-                        "                    |       |       |       |                               |       \u2551       |       |       |       |       \u2551\n" +
-                        "                    +-------+-------+-------+                               +-------+===" + pCS("6", Color.YELLOW) + "===+=======+=======+===" + pCS("9", Color.YELLOW) + "===+=======+");
+                "                    |       |       |       |                               |       \u2551       |       |       |       |       \u2551\n" +
+                        "                    +-------+-------+-------+                               +-------+===" + pCS("6", Color.BYELLOW) + "===+=======+=======+===" + pCS("9", Color.BYELLOW) + "===+=======+");
     }
 
     /**
@@ -592,37 +650,39 @@ public class CLI {
                 if (i < 10) {
                     if (i == 8) System.out.print(pCS(hSpace(3) + "\u256C" + hSpace(3), Color.WHITE)); //PopeSpace symbol
                     else System.out.print(pCS(hSpace(3) + i + hSpace(3), Color.GREY));
-                }
-                else {
-                    if (i == 16 || i == 24) System.out.print(pCS(hSpace(3) + "\u256C" + hSpace(3), Color.WHITE)); //PopeSpace symbol
+                } else {
+                    if (i == 16 || i == 24)
+                        System.out.print(pCS(hSpace(3) + "\u256C" + hSpace(3), Color.WHITE)); //PopeSpace symbol
                     else System.out.print(pCS(hSpace(2) + (i / 10) + " " + (i % 10) + hSpace(2), Color.GREY));
                 }
-            }
-            else printCross();
+            } else printCross();
             if (i == 4 || i == 8 || i == 11 || i == 16 || i == 18 || i == 24) System.out.print("\u2551");
             else System.out.print("|");
         }
     }
 
     /**
-     * Prints the first line of the Track
+     * Prints the first line of the Track and one line of the Inkwell
      *
-     * @param fp Has the same function as before
+     * @param isInkwell If the Player has the inkwell, prints it
+     * @param fp        Has the same function as before
      */
-    private void firstLine(int fp) {
-        System.out.print(hSpace(36) + pCS("1", Color.YELLOW));
+    private void firstLine(boolean isInkwell, int fp) {
+        System.out.print(hSpace(36) + pCS("1", Color.BYELLOW));
         printRow(4, 9, fp);
         System.out.print(hSpace(31) + "|");
         printRow(18, 24, fp);
+        System.out.print(hSpace(31) + printInkwell(isInkwell, 0)); //Inkwell line
         vSpace(1);
     }
 
     /**
-     * Prints the second line of the Track, including VaticanReportSections
+     * Prints the second line of the Track, including VaticanReportSections and one line of the Inkwell
      *
-     * @param fp Has the same function as before
+     * @param isInkwell If the Player has the inkwell, prints it
+     * @param fp        Has the same function as before
      */
-    private void midLine(int fp, VaticanReportSection[] vaticanReportSections) {
+    private void midLine(boolean isInkwell, int fp, VaticanReportSection[] vaticanReportSections) {
         System.out.print(hSpace(36) + "|");
         printRow(3, 3, fp);
         System.out.print(hSpace(11) + printVaticanReportSection(vaticanReportSections[0]));
@@ -632,30 +692,34 @@ public class CLI {
         System.out.print(hSpace(11) + "|");
         printRow(17, 17, fp);
         System.out.print(hSpace(19) + printVaticanReportSection(vaticanReportSections[2]));
+        System.out.print(hSpace(51) + printInkwell(isInkwell, 4)); //Inkwell line
         vSpace(1);
     }
 
     /**
      * Prints the Vatican Report Tiles in the Faith Track
-
+     *
      * @param vaticanReportSection The section to print
      * @return X if the Section isn't active, the Section's value if it's active
      */
     private String printVaticanReportSection(VaticanReportSection vaticanReportSection) {
-        if (vaticanReportSection.isPopesFavorTileActive()) return "|   " + vaticanReportSection.getValue() + "   |";
-        else return "|   X   |";
+        if (vaticanReportSection.isPopesFavorTileActive())
+            return "\u2551   \u001b[38;5;209m" + vaticanReportSection.getValue() + "\u001b[0m   \u2551";
+        else return "\u2551   X   \u2551";
     }
 
     /**
-     * Prints the third line of the Track
+     * Prints the third line of the Track and one line of the Inkwell
      *
-     * @param fp Has the same function as before
+     * @param isInkwell If the Player has the inkwell, prints it
+     * @param fp        Has the same function as before
      */
-    private void lastine(int fp) {
+    private void lastine(boolean isInkwell, int fp) {
         System.out.print(hSpace(20) + "|");
         printRow(0, 2, fp);
         System.out.print(hSpace(31) + "|");
         printRow(11, 16, fp);
+        System.out.print(hSpace(79) + printInkwell(isInkwell, 8)); //Inkwell line
         vSpace(1);
     }
 

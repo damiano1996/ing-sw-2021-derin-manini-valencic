@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class CLI {
 
     //CLI testing. Only press start to test CLI functionalities
-    public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
+    public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, DepotOutOfBoundException {
 
         //---OBJECTS-DECLARATION---//
 
@@ -37,6 +37,31 @@ public class CLI {
         MarketTray marketTray = new MarketTray(virtualView);
         DevelopmentGrid developmentGrid = new DevelopmentGrid(virtualView);
         Scanner in = new Scanner(System.in);
+
+
+        //---WAREHOUSE-CONFIGURATION-TEST---// Press Enter 3 times
+
+        PersonalBoard p = new PersonalBoard(virtualView);
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.STONE);
+        resources.add(Resource.STONE);
+        resources.add(Resource.COIN);
+        resources.add(Resource.FAITH_MARKER);
+        cli.printWarehouseConfigurations(p.getWarehouseDepots(), resources);
+
+        p.getWarehouseDepot(2).addResource(Resource.STONE);
+        p.getWarehouseDepot(2).addResource(Resource.STONE);
+        resources.remove(0);
+        resources.remove(0);
+        cli.printWarehouseConfigurations(p.getWarehouseDepots(), resources);
+
+        p.getWarehouseDepot(1).addResource(Resource.COIN);
+        resources.remove(0);
+        cli.printWarehouseConfigurations(p.getWarehouseDepots(), resources);
+
+        p.getWarehouseDepot(0).addResource(Resource.FAITH_MARKER);
+        resources.remove(0);
+        cli.printWarehouseConfigurations(p.getWarehouseDepots(), resources);
 
 
         //---TITLE-SCREEN-TEST---// Press Enter and follow terminal instructions
@@ -286,9 +311,9 @@ public class CLI {
 
         printFaithTrack(player.getPersonalBoard().getFaithTrack(), player.isInkwell());
 
-        vSpace(1);
+        vSpace(2);
 
-        printWarehouse(player.getPersonalBoard().getWarehouseDepots());
+        printWarehouse(player.getPersonalBoard().getWarehouseDepots(), 0);
 
         vSpace(1);
 
@@ -563,20 +588,22 @@ public class CLI {
     /**
      * Prints the Warehouse and the Resources in it
      *
-     * @param warehouseDepots A list of Depots that will be printed
+     * @param warehouseDepots          A list of Depots that will be printed
+     * @param rearrangeWarehouseHSpace The number of spaces from margin if the Warehouse is in rearrangement visualization
+     *                                 Put this param to 0 in the other cases
      */
-    private void printWarehouse(List<Depot> warehouseDepots) {
-        System.out.println(hSpace(8) + "        ________\n" + hSpace(10) +
+    private void printWarehouse(List<Depot> warehouseDepots, int rearrangeWarehouseHSpace) {
+        System.out.println(hSpace(8 + rearrangeWarehouseHSpace) + "        ________\n" + hSpace(10 + rearrangeWarehouseHSpace) +
                 "  ,=='        `==.");
-        System.out.println(hSpace(8) + "  ╭/ " + printDepot(warehouseDepots.get(0)) + " \\╮");
-        System.out.println(hSpace(8) + "  || ______________ ||\n" + hSpace(10) +
+        System.out.println(hSpace(8 + rearrangeWarehouseHSpace) + "  ╭/ " + printDepot(warehouseDepots.get(0)) + " \\╮" + hSpace(3) + pCS("Depot 1", Color.GREY));
+        System.out.println(hSpace(8 + rearrangeWarehouseHSpace) + "  || ______________ ||\n" + hSpace(10 + rearrangeWarehouseHSpace) +
                 "|)                ||");
-        System.out.println(hSpace(8) + "  || " + printDepot(warehouseDepots.get(1)) + " ||");
-        System.out.println(hSpace(8) + "  || ______________ (|\n" + hSpace(10) +
+        System.out.println(hSpace(8 + rearrangeWarehouseHSpace) + "  || " + printDepot(warehouseDepots.get(1)) + " ||" + hSpace(3) + pCS("Depot 2", Color.GREY));
+        System.out.println(hSpace(8 + rearrangeWarehouseHSpace) + "  || ______________ (|\n" + hSpace(10 + rearrangeWarehouseHSpace) +
                 "||                ||");
-        System.out.println(hSpace(8) + "  )| " + printDepot(warehouseDepots.get(2)) + " ||");
-        System.out.println(hSpace(8) + "  || ______________ ||\n" + hSpace(10) +
-                "||                ||\n" + hSpace(10) +
+        System.out.println(hSpace(8 + rearrangeWarehouseHSpace) + "  )| " + printDepot(warehouseDepots.get(2)) + " ||" + hSpace(3) + pCS("Depot 3", Color.GREY));
+        System.out.println(hSpace(8 + rearrangeWarehouseHSpace) + "  || ______________ ||\n" + hSpace(10 + rearrangeWarehouseHSpace) +
+                "||                ||\n" + hSpace(10 + rearrangeWarehouseHSpace) +
                 "||___.-__;----.___||");
     }
 
@@ -596,6 +623,44 @@ public class CLI {
         for (Resource resource : resources) s.append(pCS("  \u2588\u2588", resource.getColor()));
         s.append(hSpace(8 - (2 * resources.size())));
         return s.toString();
+    }
+
+
+    /**
+     * Show the screen that appears after getting Resources from the Market
+     *
+     * @param warehouseDepots The Warehouse to print
+     * @param resources       The resources get prom the Market to insert into the Warehouse
+     */
+    public void printWarehouseConfigurations(List<Depot> warehouseDepots, List<Resource> resources) {
+        Scanner in = new Scanner(System.in); //temporary solution
+        cls();
+
+        System.out.println(hSpace(20) + "____ ____ ____ ____ ____ ____ _  _ ____ ____    _   _ ____ _  _ ____    _ _ _ ____ ____ ____ _  _ ____ _  _ ____ ____    ___  ____ ____ ____ ____ ____    ____ ____ _  _ ___ _ _  _ _  _ _ _  _ ____ \n" +
+                hSpace(20) + "|__/ |___ |__| |__/ |__/ |__| |\\ | | __ |___     \\_/  |  | |  | |__/    | | | |__| |__/ |___ |__| |  | |  | [__  |___    |__] |___ |___ |  | |__/ |___    |    |  | |\\ |  |  | |\\ | |  | | |\\ | | __ \n" +
+                hSpace(20) + "|  \\ |___ |  | |  \\ |  \\ |  | | \\| |__] |___      |   |__| |__| |  \\    |_|_| |  | |  \\ |___ |  | |__| |__| ___] |___    |__] |___ |    |__| |  \\ |___    |___ |__| | \\|  |  | | \\| |__| | | \\| |__] \n" +
+                hSpace(20) + "____________________________________________________________________________________________________________________________________________________________________________________________________");
+
+        vSpace(3);
+
+        printWarehouse(warehouseDepots, 73);
+
+        vSpace(3);
+
+        System.out.print(hSpace(83) + "Resources left to insert:");
+        for (Resource resource : resources) {
+            System.out.print(hSpace(8) + pCS("\u2588\u2588  ", resource.getColor()));
+        }
+        vSpace(5);
+
+        System.out.println(hSpace(20) + "Please type the ResourceType and the number of the Depot in which you want to store it.");
+        System.out.println(hSpace(20) + "The Resources that can't be added to the Warehouse will be discarded.");
+
+        //Possibile soluzione soggetta a futuri cambiamenti
+        vSpace(1);
+        System.out.println(hSpace(20) + pCS("[RESOURCETYPE - DEPOTNUMBER]", Color.GREY));
+        System.out.print("\u001b[20C"); //moving cursor right of 20 spaces
+        in.nextLine(); //temporary solution
     }
 
 

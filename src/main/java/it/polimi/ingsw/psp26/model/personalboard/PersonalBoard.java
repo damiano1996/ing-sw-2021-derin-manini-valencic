@@ -163,5 +163,14 @@ public class PersonalBoard extends Observable<Message> {
         notifyObservers(new Message()); // TODO: to be completed
     }
 
+    /**
+     * Method to add a Leader Depot to the warehouseDepots List when activating a Depot Leader Card
+     *
+     * @param leaderDepot the LeaderDepot to add
+     */
+    public void addLeaderDepot(LeaderDepot leaderDepot) {
+        warehouseDepots.add(leaderDepot);
+    }
+
 
 }

@@ -12,10 +12,7 @@ import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
-import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
-import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
-import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
+import it.polimi.ingsw.psp26.model.personalboard.*;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.*;
@@ -99,10 +96,14 @@ public class CLI {
         cli.cls();
         player.giveInkwell();
         List<Resource> strongbox = new ArrayList<>();
+        LeaderDepot coinDepot = new LeaderDepot(virtualView, Resource.COIN);
+        LeaderDepot servantDepot = new LeaderDepot(virtualView, Resource.SERVANT);
         cli.printPersonalBoard(player);
         in.nextLine();
         cli.cls();
 
+        player.getPersonalBoard().addLeaderDepot(coinDepot);
+        player.getPersonalBoard().addLeaderDepot(servantDepot);
         player.getPersonalBoard().getWarehouseDepots().get(0).addResource(Resource.SHIELD);
         player.getPersonalBoard().getWarehouseDepots().get(1).addResource(Resource.COIN);
         player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
@@ -117,6 +118,8 @@ public class CLI {
         in.nextLine();
         cli.cls();
 
+        player.getPersonalBoard().getWarehouseDepot(3).addResource(Resource.COIN);
+        player.getPersonalBoard().getWarehouseDepot(4).addResource(Resource.SERVANT);
         player.getPersonalBoard().getWarehouseDepots().get(1).addResource(Resource.COIN);
         player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
         player.getPersonalBoard().getStrongbox().add(Resource.COIN);
@@ -130,6 +133,8 @@ public class CLI {
         in.nextLine();
         cli.cls();
 
+        player.getPersonalBoard().getWarehouseDepot(3).addResource(Resource.COIN);
+        player.getPersonalBoard().getWarehouseDepot(4).addResource(Resource.SERVANT);
         player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
         player.getPersonalBoard().getStrongbox().add(Resource.COIN);
         player.getPersonalBoard().getStrongbox().add(Resource.SHIELD);
@@ -265,8 +270,8 @@ public class CLI {
         vSpace(4);
         System.out.println(
                 hSpace(10) + "                                                                   _____   ______ _______ _______ _______      _______ __   _ _______ _______  ______\n" +
-                        hSpace(10) +         "                                                                  |_____] |_____/ |______ |______ |______      |______ | \\  |    |    |______ |_____/\n" +
-                        hSpace(10) +         "                                                                  |       |    \\_ |______ ______| ______|      |______ |  \\_|    |    |______ |    \\_");
+                        hSpace(10) + "                                                                  |_____] |_____/ |______ |______ |______      |______ | \\  |    |    |______ |_____/\n" +
+                        hSpace(10) + "                                                                  |       |    \\_ |______ ______| ______|      |______ |  \\_|    |    |______ |    \\_");
     }
 
     /**
@@ -320,6 +325,9 @@ public class CLI {
 
         printDevelopmentCardsStrongboxAndLeaders(player.getPersonalBoard().getDevelopmentCardsSlots(), player.getPersonalBoard().getStrongbox(), player.getLeaderCards());
 
+        vSpace(1);
+
+        printLeaderDepots(player.getPersonalBoard().getWarehouseDepots());
     }
 
     /**
@@ -475,12 +483,42 @@ public class CLI {
         for (int j = 0; j <= 15; j++)
             System.out.println(
                     printStrongbox(j, strongbox) + hSpace(20) + "\u2502" + hSpace(8) +
-                    printDevelopmentSlotCard(developmentSlots.get(0), j) + hSpace(5) + "\u2502" + hSpace(8) +
-                    printDevelopmentSlotCard(developmentSlots.get(1), j) + hSpace(5) + "\u2502" + hSpace(8) +
-                    printDevelopmentSlotCard(developmentSlots.get(2), j) + hSpace(5) + "\u2502" +
-                    printLeaderCardsInPersonalBoard(leaderCards, j));
+                            printDevelopmentSlotCard(developmentSlots.get(0), j) + hSpace(5) + "\u2502" + hSpace(8) +
+                            printDevelopmentSlotCard(developmentSlots.get(1), j) + hSpace(5) + "\u2502" + hSpace(8) +
+                            printDevelopmentSlotCard(developmentSlots.get(2), j) + hSpace(5) + "\u2502" +
+                            printLeaderCardsInPersonalBoard(leaderCards, j));
     }
 
+    /**
+     * If the Warehouse has more than 3 depots, prints the corresponding Leader Depots
+     *
+     * @param depots The total Warehouse Depots
+     */
+    private void printLeaderDepots(List<Depot> depots) { //forse c'è una soluzione più elegante
+        if (depots.size() > 3) {
+            for (int i = 3; i < depots.size(); i++) System.out.print("   ____________" + hSpace(6));
+            vSpace(1);
+            for (int i = 3; i < depots.size(); i++) System.out.print("  |            |" + hSpace(5));
+            vSpace(1);
+            for (int i = 3; i < depots.size(); i++) System.out.print(printLeaderDepotResources((LeaderDepot) depots.get(i)) + hSpace(5));
+            vSpace(1);
+            for (int i = 3; i < depots.size(); i++) System.out.print("  |____________|" + hSpace(5));
+        }
+    }
+
+    /**
+     * Prints the Resource stored in the Leader Depot
+     *
+     * @param leaderDepot The Leader Depot to print
+     * @return A formatted String of the Resources stored in the Leader Depot
+     */
+    private String printLeaderDepotResources(LeaderDepot leaderDepot) {
+        if (leaderDepot.getResources().size() == 0) return "  |" + pCS(leaderDepot.getDepotResource().getName(), Color.GREY) + "|";
+        else if (leaderDepot.getResources().size() == 1)
+            return "  |     " + pCS("\u2588\u2588", leaderDepot.getDepotResource().getColor()) + "     |";
+        else
+            return "  |  " + pCS("\u2588\u2588", leaderDepot.getDepotResource().getColor()) + "    " + pCS("\u2588\u2588", leaderDepot.getDepotResource().getColor()) + "  |";
+    }
 
     //-----------------------------//
     //          STRONGBOX          //

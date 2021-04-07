@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.model.enums;
 
 public enum Level {
+    UNDEFINED(0),
     FIRST(1),
     SECOND(2),
     THIRD(3);

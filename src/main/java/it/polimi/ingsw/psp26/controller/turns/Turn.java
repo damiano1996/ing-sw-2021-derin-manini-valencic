@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.controller.turns;
 
-import it.polimi.ingsw.psp26.controller.turns.actions.leader.LeaderAction;
-import it.polimi.ingsw.psp26.controller.turns.actions.normal.NormalAction;
+import it.polimi.ingsw.psp26.controller.turns.states.TurnState;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 
@@ -10,8 +9,8 @@ public class Turn {
     private final Match match;
     private final int turnNumber;
     private final Player turnPlayer;
-    private NormalAction normalAction;
-    private LeaderAction leaderAction;
+
+    private TurnState turnState;
 
     public Turn(Match match, Player turnPlayer, int turnNumber) {
         this.match = match;
@@ -19,22 +18,21 @@ public class Turn {
         this.turnNumber = turnNumber;
     }
 
-    public void chooseNormalAction() {
-        // temporary solution
-        normalAction = null;
-    }
-
-    public void chooseLeaderAction() {
-        // temporary solution
-        leaderAction = null;
-    }
-
-    public void playNormalAction() {
-        // to be implemented
-    }
-
-    public void playLeaderAction() {
-        // to be implemented
+    public void firstTurnBenefits() {
+        switch (turnNumber) {
+            case 0:
+                turnPlayer.giveInkwell();
+                break;
+            case 1:
+                // TODO: choice 1 extra resource
+                break;
+            case 2:
+                // TODO choice 1 extra resource + 1 FP
+                break;
+            case 3:
+                // TODO choice 2 extra resources + 1 FP
+                break;
+        }
     }
 
     public void checkVaticanReport() {

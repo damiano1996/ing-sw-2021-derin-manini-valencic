@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller;
 
 import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.controller.endgamecheckers.EndMatchChecker;
 import it.polimi.ingsw.psp26.controller.endgamecheckers.MultiPlayerEndMatchChecker;
 import it.polimi.ingsw.psp26.controller.turns.SinglePlayerTurn;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -17,6 +19,7 @@ public class MatchController implements Observer<Message> {
 
     private final VirtualView virtualView;
     private Match match;
+    private int maxNumberOfPlayers;
 
     private Turn currentTurn;
     private EndMatchChecker endMatchChecker;
@@ -30,22 +33,45 @@ public class MatchController implements Observer<Message> {
 
     @Override
     public void update(Message message) {
-
+        MessageType messageType = message.getMessageType();
+        switch (messageType) {
+            case ADD_PLAYER:
+                addPlayer(message);
+                break;
+            case MAX_NUMBER_OF_PLAYERS:
+                setMaxNumberOfPlayers(message);
+                break;
+            case NORMAL_ACTION_MARKET_RESOURCE:
+            case NORMAL_ACTION_ACTIVATE_PRODUCTION:
+            case NORMAL_ACTION_BUY_CARD:
+            case LEADER_ACTION_PLAY:
+            case LEADER_ACTION_DISCARD:
+                playCurrentTurn(message);
+                break;
+        }
     }
 
     private void initializeMatch(int id) {
         match = new Match(virtualView, id);
     }
 
-    private void addPlayer(String nickname, String sessionToken) {
+    private void addPlayer(Message message) {
+        String nickname = (String) message.getPayload().get("nickname");
+        String sessionToken = (String) message.getPayload().get("sessionToken");
         match.addPlayer(new Player(virtualView, nickname, sessionToken));
+
+        if (match.getPlayers().size() == maxNumberOfPlayers)
+            initializeTurn();
+    }
+
+    private void setMaxNumberOfPlayers(Message message) {
+        maxNumberOfPlayers = (int) message.getPayload().get("maxNumberOfPlayers");
+        if (maxNumberOfPlayers > 4) maxNumberOfPlayers = 4;
     }
 
     private void initializeTurn() {
-        //it could be called initializeGame
-        Player firstPlayer = match.getPlayers().get(0);
-        firstPlayer.giveInkwell();
-        currentTurn = createTurn(firstPlayer);
+        Collections.shuffle(match.getPlayers());
+        currentTurn = createTurn(match.getPlayers().get(0));
     }
 
     private void initializeEndMatchChecker() {
@@ -69,8 +95,9 @@ public class MatchController implements Observer<Message> {
         currentTurn = createTurn(getNextPlayer());
     }
 
-    private void playCurrentTurn() {
+    private void playCurrentTurn(Message message) {
         // to be implemented
+        // currentTurn.play();
     }
 
     private Player getNextPlayer() {

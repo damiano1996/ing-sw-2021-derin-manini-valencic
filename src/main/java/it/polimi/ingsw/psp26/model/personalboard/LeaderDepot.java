@@ -3,11 +3,18 @@ package it.polimi.ingsw.psp26.model.personalboard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
-import java.util.Objects;
-
 public class LeaderDepot extends Depot {
 
     private final Resource depotResource;
+
+    /**
+     * Getter of the Resources Type that can be contained in the Depot.
+     *
+     * @return Resource Type thet can be contained in the Depot
+     */
+    public Resource getDepotResource() {
+        return depotResource;
+    }
 
     /**
      * Constructor of the class.

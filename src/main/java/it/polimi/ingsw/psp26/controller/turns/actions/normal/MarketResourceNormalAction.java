@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.controller.turns.actions.normal;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//To test after message.class is completed
 
 public class MarketResourceNormalAction extends NormalAction {
     List<Resource> tempResources;
@@ -28,55 +30,55 @@ public class MarketResourceNormalAction extends NormalAction {
             tempResources = Arrays.asList(match.getMarketTray().getMarblesOnRow(i));
             match.getMarketTray().pushMarbleFromSlideToRow(i);
         }
-        IsRedMarblePresent(player);
-        tempResources = ParseResource();
+        isRedMarblePresent(player);
+        tempResources = parseResource();
 
         List<Depot> CurrentDepotsStatus = player.getPersonalBoard().getWarehouseDepots();
-
-        OrganizeResource(CurrentDepotsStatus);
-
+        organizeResource(CurrentDepotsStatus);
         discardResources(match, player);
 
 
     }
 
-    private List<Resource> ParseResource() {
+    private List<Resource> parseResource() {
         return tempResources.stream().filter(x -> !x.equals(Resource.EMPTY)).filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
     }
 
-    private void IsRedMarblePresent(Player player) {
+    private void isRedMarblePresent(Player player) {
         tempResources.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> player.getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    private void OrganizeResource(List<Depot> CurrentDepots) {
+    private void organizeResource(List<Depot> CurrentDepots) {
         boolean IsPlayerNotFinished = true;
         while (IsPlayerNotFinished) {
-            //Get messagge
+            //Get message
             getResourceFromDepot(CurrentDepots.get(1));
-            moveAddResourceIntoDepot(Resource.COIN, CurrentDepots.get(1));
-
+            addResourceIntoDepot(Resource.COIN, 1,  CurrentDepots.get(1));
 
         }
     }
 
-    private void moveAddResourceIntoDepot(Resource resource, Depot depot) {
-        if (depot.getMaxNumberOfResources() <= (int) tempResources.stream().filter(x -> x.equals(resource)).count()) {
-            getResourceFromDepot(depot);
-            try {
-                depot.addResource(tempResources.stream().filter(x -> x.equals(resource)).collect(Collectors.toList()).subList(0, depot.getMaxNumberOfResources()));
-            } catch (CanNotAddResourceToDepotException e) {
-                System.out.println("Errore"); // Da migliorare
-            }
-            //Misses the remove the resources added from tempResources to complete the action
-        } else {
-            System.out.println("Not enough resources"); // Temp solution
-        }
+    private void addResourceIntoDepot(Resource resource, int resourceNum, Depot depot) {
+      //if(depot.isAdmissible(resource) && ((depot.getResources().size() + resourceNum )<= depot.getMaxNumberOfResources() )){
+          for(int i = 0; i < resourceNum ; i++){
+              try {
+                  depot.addResource(resource);
+              }catch (CanNotAddResourceToDepotException e) {
+                      System.out.println("Errore"); // To improve
+              }
+              tempResources.remove(resource);
+          }
+
+
     }
+
+
 
     private void getResourceFromDepot(Depot depot) {
         tempResources.addAll(depot.getResources());
         depot.removeResource();
     }
+
 
     private void discardResources(Match match, Player player) {
         match.getPlayers().stream().filter(x -> !x.equals(player)).forEach(x -> x.getPersonalBoard().getFaithTrack().addFaithPoints(tempResources.size()));

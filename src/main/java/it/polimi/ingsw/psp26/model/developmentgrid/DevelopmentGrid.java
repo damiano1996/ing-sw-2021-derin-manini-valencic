@@ -9,6 +9,8 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
+import java.util.List;
+
 public class DevelopmentGrid extends Observable<Message> {
 
     public static final Color[] COLORS = new Color[]{Color.GREEN, Color.BLUE, Color.YELLOW, Color.PURPLE};
@@ -59,6 +61,16 @@ public class DevelopmentGrid extends Observable<Message> {
         int row = getRow(level);
         int col = getColumn(color);
         return !grid[row][col].isEmpty();
+    }
+
+    public List<DevelopmentCard> getAllVisibleCards(){
+        List<DevelopmentCard> visibleCards = null;
+        for (int row = 0; row < LEVELS.length; row++) {
+            for (int col = 0; col < COLORS.length; col++) {
+                visibleCards.add(getDevelopmentGridCell(row,col).getFirstCard());
+            }
+        }
+        return visibleCards;
     }
 
     //rep exposed?

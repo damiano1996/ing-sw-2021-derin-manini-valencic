@@ -63,11 +63,11 @@ public class DevelopmentGrid extends Observable<Message> {
         return !grid[row][col].isEmpty();
     }
 
-    public List<DevelopmentCard> getAllVisibleCards(){
+    public List<DevelopmentCard> getAllVisibleCards() {
         List<DevelopmentCard> visibleCards = null;
         for (int row = 0; row < LEVELS.length; row++) {
             for (int col = 0; col < COLORS.length; col++) {
-                visibleCards.add(getDevelopmentGridCell(row,col).getFirstCard());
+                visibleCards.add(getDevelopmentGridCell(row, col).getFirstCard());
             }
         }
         return visibleCards;

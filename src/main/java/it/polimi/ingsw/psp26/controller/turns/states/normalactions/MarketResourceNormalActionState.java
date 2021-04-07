@@ -1,6 +1,9 @@
-package it.polimi.ingsw.psp26.controller.turns.actions.normal;
+package it.polimi.ingsw.psp26.controller.turns.states.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.controller.turns.Turn;
+import it.polimi.ingsw.psp26.controller.turns.states.CheckVaticanReportState;
+import it.polimi.ingsw.psp26.controller.turns.states.TurnState;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
@@ -13,31 +16,39 @@ import java.util.stream.Collectors;
 
 //To test after message.class is completed
 
-public class MarketResourceNormalAction extends NormalAction {
+public class MarketResourceNormalActionState extends TurnState {
     List<Resource> tempResources;
 
-    @Override
-    public void play(Match match, Player player) {
+    public MarketResourceNormalActionState(Turn turn) {
+        super(turn);
+    }
+
+    public void play(Message message) {
+        // TODO: to implement sub-states
+
         //Get message
         boolean choice = false; // Temporal fix of Player choice
         int i = 1;             // Temporal fix of Player choice
         //message su play che contiene informazioni sulla mossa
         //choose()
+
         if (choice) {
-            tempResources = Arrays.asList(match.getMarketTray().getMarblesOnRow(i));
-            match.getMarketTray().pushMarbleFromSlideToColumn(i);
+            tempResources = Arrays.asList(turn.getMatch().getMarketTray().getMarblesOnRow(i));
+            turn.getMatch().getMarketTray().pushMarbleFromSlideToColumn(i);
         } else {
-            tempResources = Arrays.asList(match.getMarketTray().getMarblesOnRow(i));
-            match.getMarketTray().pushMarbleFromSlideToRow(i);
+            tempResources = Arrays.asList(turn.getMatch().getMarketTray().getMarblesOnRow(i));
+            turn.getMatch().getMarketTray().pushMarbleFromSlideToRow(i);
         }
-        isRedMarblePresent(player);
+
+        isRedMarblePresent(turn.getTurnPlayer());
         tempResources = parseResource();
 
-        List<Depot> CurrentDepotsStatus = player.getPersonalBoard().getWarehouseDepots();
+        List<Depot> CurrentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepots();
         organizeResource(CurrentDepotsStatus);
-        discardResources(match, player);
+        discardResources(turn.getMatch(), turn.getTurnPlayer());
 
-
+        // next state is...
+        turn.changeState(new CheckVaticanReportState(turn));
     }
 
     private List<Resource> parseResource() {
@@ -53,25 +64,24 @@ public class MarketResourceNormalAction extends NormalAction {
         while (IsPlayerNotFinished) {
             //Get message
             getResourceFromDepot(CurrentDepots.get(1));
-            addResourceIntoDepot(Resource.COIN, 1,  CurrentDepots.get(1));
+            addResourceIntoDepot(Resource.COIN, 1, CurrentDepots.get(1));
 
         }
     }
 
     private void addResourceIntoDepot(Resource resource, int resourceNum, Depot depot) {
-      //if(depot.isAdmissible(resource) && ((depot.getResources().size() + resourceNum )<= depot.getMaxNumberOfResources() )){
-          for(int i = 0; i < resourceNum ; i++){
-              try {
-                  depot.addResource(resource);
-              }catch (CanNotAddResourceToDepotException e) {
-                      System.out.println("Errore"); // To improve
-              }
-              tempResources.remove(resource);
-          }
+        //if(depot.isAdmissible(resource) && ((depot.getResources().size() + resourceNum )<= depot.getMaxNumberOfResources() )){
+        for (int i = 0; i < resourceNum; i++) {
+            try {
+                depot.addResource(resource);
+            } catch (CanNotAddResourceToDepotException e) {
+                System.out.println("Errore"); // To improve
+            }
+            tempResources.remove(resource);
+        }
 
 
     }
-
 
 
     private void getResourceFromDepot(Depot depot) {

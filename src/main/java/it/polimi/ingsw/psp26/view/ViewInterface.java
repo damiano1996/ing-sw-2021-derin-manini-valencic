@@ -1,7 +1,5 @@
 package it.polimi.ingsw.psp26.view;
 
-import it.polimi.ingsw.psp26.controller.turns.actions.leader.LeaderAction;
-import it.polimi.ingsw.psp26.controller.turns.actions.normal.NormalAction;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
@@ -39,7 +37,7 @@ public interface ViewInterface {
 
     void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots);
 
-    void displayNormalActionsSelection(List<NormalAction> normalActions);
+    void displayNormalActionsSelection();
 
     void displayMarketTray(MarketTray marketTray);
 
@@ -53,7 +51,7 @@ public interface ViewInterface {
 
     void displayVaticanReport(FaithTrack faithTrack);
 
-    void displayLeaderActionSelection(List<LeaderAction> leaderActions);
+    void displayLeaderActionSelection();
 
     void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards);
 

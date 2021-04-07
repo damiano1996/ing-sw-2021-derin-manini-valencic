@@ -243,29 +243,30 @@ public class CLI {
     private void printTitle() {
         cls();
         Color.GREEN.setColor();
-        System.out.println("#####   ##    ##                                                                            /##           ##### /##                                                                                 \n" +
-                "  ######  /#### #####                                                                          #/ ###       ######  / ##            #                                                                                    \n" +
-                " /#   /  /  ##### #####                        #                                              ##   ###     /#   /  /  ##           ###                                                                                   \n" +
-                "/    /  /   # ##  # ##                        ##                                              ##          /    /  /   ##            #                                                                                    \n" +
-                "    /  /    #     #                           ##                                              ##              /  /    /                                                                                                  \n" +
-                "   ## ##    #     #      /###      /###     ######## /##  ###  /###     /###          /###    ######         ## ##   /       /##  ###   ###  /###     /###      /###     /###      /###   ###  /###     /###      /##    \n" +
-                "   ## ##    #     #     / ###  /  / #### / ######## / ###  ###/ #### / / #### /      / ###  / #####          ## ##  /       / ###  ###   ###/ #### / / ###  /  / #### / / #### /  / ###  / ###/ #### / / ###  /  / ###   \n" +
-                "   ## ##    #     #    /   ###/  ##  ###/     ##   /   ###  ##   ###/ ##  ###/      /   ###/  ##             ## ###/       /   ###  ##    ##   ###/ /   ###/  ##  ###/ ##  ###/  /   ###/   ##   ###/ /   ###/  /   ###  \n" +
-                "   ## ##    #     #   ##    ##  ####          ##  ##    ### ##       ####          ##    ##   ##             ## ##  ###   ##    ### ##    ##    ## ##    ##  ####     ####      ##    ##    ##    ## ##        ##    ### \n" +
-                "   ## ##    #     ##  ##    ##    ###         ##  ########  ##         ###         ##    ##   ##             ## ##    ##  ########  ##    ##    ## ##    ##    ###      ###     ##    ##    ##    ## ##        ########  \n" +
-                "   #  ##    #     ##  ##    ##      ###       ##  #######   ##           ###       ##    ##   ##             #  ##    ##  #######   ##    ##    ## ##    ##      ###      ###   ##    ##    ##    ## ##        #######   \n" +
-                "      /     #      ## ##    ##        ###     ##  ##        ##             ###     ##    ##   ##                /     ##  ##        ##    ##    ## ##    ##        ###      ### ##    ##    ##    ## ##        ##        \n" +
-                "  /##/      #      ## ##    /#   /###  ##     ##  ####    / ##        /###  ##     ##    ##   ##            /##/      ### ####    / ##    ##    ## ##    /#   /###  ## /###  ## ##    /#    ##    ## ###     / ####    / \n" +
-                " /  #####           ## ####/ ## / #### /      ##   ######/  ###      / #### /       ######    ##           /  ####    ##   ######/  ### / ###   ### ####/ ## / #### / / #### /   ####/ ##   ###   ### ######/   ######/  \n" +
-                "/     ##                ###   ##   ###/        ##   #####    ###        ###/         ####      ##         /    ##     #     #####    ##/   ###   ### ###   ##   ###/     ###/     ###   ##   ###   ### #####     #####   \n" +
-                "#                                                                                                         #                                                                                                              \n" +
-                " ##                                                                                                        ##                                                                                                            ");
+        System.out.println(
+                hSpace(10) + "#####   ##    ##                                                                            /##           ##### /##                                                                                 \n" +
+                        hSpace(10) + "  ######  /#### #####                                                                          #/ ###       ######  / ##            #                                                                                    \n" +
+                        hSpace(10) + " /#   /  /  ##### #####                        #                                              ##   ###     /#   /  /  ##           ###                                                                                   \n" +
+                        hSpace(10) + "/    /  /   # ##  # ##                        ##                                              ##          /    /  /   ##            #                                                                                    \n" +
+                        hSpace(10) + "    /  /    #     #                           ##                                              ##              /  /    /                                                                                                  \n" +
+                        hSpace(10) + "   ## ##    #     #      /###      /###     ######## /##  ###  /###     /###          /###    ######         ## ##   /       /##  ###   ###  /###     /###      /###     /###      /###   ###  /###     /###      /##    \n" +
+                        hSpace(10) + "   ## ##    #     #     / ###  /  / #### / ######## / ###  ###/ #### / / #### /      / ###  / #####          ## ##  /       / ###  ###   ###/ #### / / ###  /  / #### / / #### /  / ###  / ###/ #### / / ###  /  / ###   \n" +
+                        hSpace(10) + "   ## ##    #     #    /   ###/  ##  ###/     ##   /   ###  ##   ###/ ##  ###/      /   ###/  ##             ## ###/       /   ###  ##    ##   ###/ /   ###/  ##  ###/ ##  ###/  /   ###/   ##   ###/ /   ###/  /   ###  \n" +
+                        hSpace(10) + "   ## ##    #     #   ##    ##  ####          ##  ##    ### ##       ####          ##    ##   ##             ## ##  ###   ##    ### ##    ##    ## ##    ##  ####     ####      ##    ##    ##    ## ##        ##    ### \n" +
+                        hSpace(10) + "   ## ##    #     ##  ##    ##    ###         ##  ########  ##         ###         ##    ##   ##             ## ##    ##  ########  ##    ##    ## ##    ##    ###      ###     ##    ##    ##    ## ##        ########  \n" +
+                        hSpace(10) + "   #  ##    #     ##  ##    ##      ###       ##  #######   ##           ###       ##    ##   ##             #  ##    ##  #######   ##    ##    ## ##    ##      ###      ###   ##    ##    ##    ## ##        #######   \n" +
+                        hSpace(10) + "      /     #      ## ##    ##        ###     ##  ##        ##             ###     ##    ##   ##                /     ##  ##        ##    ##    ## ##    ##        ###      ### ##    ##    ##    ## ##        ##        \n" +
+                        hSpace(10) + "  /##/      #      ## ##    /#   /###  ##     ##  ####    / ##        /###  ##     ##    ##   ##            /##/      ### ####    / ##    ##    ## ##    /#   /###  ## /###  ## ##    /#    ##    ## ###     / ####    / \n" +
+                        hSpace(10) + " /  #####           ## ####/ ## / #### /      ##   ######/  ###      / #### /       ######    ##           /  ####    ##   ######/  ### / ###   ### ####/ ## / #### / / #### /   ####/ ##   ###   ### ######/   ######/  \n" +
+                        hSpace(10) + "/     ##                ###   ##   ###/        ##   #####    ###        ###/         ####      ##         /    ##     #     #####    ##/   ###   ### ###   ##   ###/     ###/     ###   ##   ###   ### #####     #####   \n" +
+                        hSpace(10) + "#                                                                                                         #                                                                                                              \n" +
+                        hSpace(10) + " ##                                                                                                        ##                                                                                                            ");
         Color.RESET.setColor();
         vSpace(4);
         System.out.println(
-                "                                                                   _____   ______ _______ _______ _______      _______ __   _ _______ _______  ______\n" +
-                        "                                                                  |_____] |_____/ |______ |______ |______      |______ | \\  |    |    |______ |_____/\n" +
-                        "                                                                  |       |    \\_ |______ ______| ______|      |______ |  \\_|    |    |______ |    \\_");
+                hSpace(10) + "                                                                   _____   ______ _______ _______ _______      _______ __   _ _______ _______  ______\n" +
+                        hSpace(10) +         "                                                                  |_____] |_____/ |______ |______ |______      |______ | \\  |    |    |______ |_____/\n" +
+                        hSpace(10) +         "                                                                  |       |    \\_ |______ ______| ______|      |______ |  \\_|    |    |______ |    \\_");
     }
 
     /**
@@ -283,14 +284,14 @@ public class CLI {
             if (i == 0) {
                 printTitle();
                 vSpace(3);
-                System.out.print(hSpace(90) + "Enter Nickname: ");
+                System.out.print(hSpace(100) + "Enter Nickname: ");
                 nickname = in.nextLine();
             } else {
                 printTitle();
                 vSpace(3);
-                System.out.println(hSpace(90) + "Enter Nickname: " + nickname);
+                System.out.println(hSpace(100) + "Enter Nickname: " + nickname);
                 vSpace(1);
-                System.out.print(hSpace(90) + "Enter IP-Address: ");
+                System.out.print(hSpace(100) + "Enter IP-Address: ");
                 in.nextLine();
                 //ipAddress = in.nextLine(); COMMENTATO SOLO PER EVITARE IL WARNING NEL COMMIT, NELLA VERSIONE FINALE VA CONTROLLATO L'INSERIMENTO DELL'IP ADDRESS
             }
@@ -317,9 +318,8 @@ public class CLI {
 
         vSpace(1);
 
-        printDevelopmentCardSlotsAndStrongbox(player.getPersonalBoard().getDevelopmentCardsSlots(), player.getPersonalBoard().getStrongbox());
+        printDevelopmentCardsStrongboxAndLeaders(player.getPersonalBoard().getDevelopmentCardsSlots(), player.getPersonalBoard().getStrongbox(), player.getLeaderCards());
 
-        printLeaderCardsInPersonalBoard(player.getLeaderCards());
     }
 
     /**
@@ -378,36 +378,47 @@ public class CLI {
     }
 
     /**
-     * Prints the Player's Leader Cards in the bottom right corner
+     * Prints the Player's Leader Cards in the bottom right after the Development Card Slots
      *
      * @param leaderCards The Player's cards
      */
-    private void printLeaderCardsInPersonalBoard(List<LeaderCard> leaderCards) {
-        System.out.print(hSpace(200));
-        for (int i = 0; i < leaderCards.size(); i++) System.out.print(",----------." + hSpace(5));
-        vSpace(1);
-        System.out.print(hSpace(200));
-        for (int i = 0; i < leaderCards.size(); i++) System.out.print("|          |" + hSpace(5));
-        vSpace(1);
-        System.out.print(hSpace(200));
-        for (int i = 0; i < leaderCards.size(); i++) System.out.print("| Leader " + (i + 1) + " |" + hSpace(5));
-        vSpace(1);
-        System.out.print(hSpace(200));
-        for (int i = 0; i < leaderCards.size(); i++) System.out.print("|          |" + hSpace(5));
-        vSpace(1);
-        System.out.print(hSpace(200));
-        for (int i = 0; i < leaderCards.size(); i++) System.out.print("|          |" + hSpace(5));
-        vSpace(1);
-        System.out.print(hSpace(200));
-        for (LeaderCard leaderCard : leaderCards)
-            System.out.print("| " + isLeaderCardActive(leaderCard) + " |" + hSpace(5));
-        vSpace(1);
-        System.out.print(hSpace(200));
-        for (int i = 0; i < leaderCards.size(); i++) System.out.print("|          |" + hSpace(5));
-        vSpace(1);
-        System.out.print(hSpace(200));
-        for (int i = 0; i < leaderCards.size(); i++) System.out.print("'----------'" + hSpace(5));
-        vSpace(1);
+    private String printLeaderCardsInPersonalBoard(List<LeaderCard> leaderCards, int lineToPrint) {
+        StringBuilder s = new StringBuilder();
+
+        if (lineToPrint > 7) {
+            s.append(hSpace(20));
+
+            switch (lineToPrint) {
+                case 8:
+                    for (int i = 0; i < leaderCards.size(); i++) s.append(",----------.").append(hSpace(5));
+                    break;
+
+                case 9:
+                case 11:
+                case 12:
+                case 14:
+                    for (int i = 0; i < leaderCards.size(); i++) s.append("|          |").append(hSpace(5));
+                    break;
+
+                case 10:
+                    for (int i = 0; i < leaderCards.size(); i++)
+                        s.append("| Leader ").append(i + 1).append(" |").append(hSpace(5));
+                    break;
+
+                case 13:
+                    for (LeaderCard leaderCard : leaderCards)
+                        s.append("| ").append(isLeaderCardActive(leaderCard)).append(" |").append(hSpace(5));
+                    break;
+
+                case 15:
+                    for (int i = 0; i < leaderCards.size(); i++) s.append("'----------'").append(hSpace(5));
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        return s.toString();
     }
 
     /**
@@ -455,18 +466,19 @@ public class CLI {
     }
 
     /**
-     * Prints the Development Card Slots and Strongbox section of the Player's Personal Board
+     * Prints the Development Card Slots, Strongbox and the Leader Cards section of the Player's Personal Board
      *
      * @param developmentSlots The Development Card Slots to print
      * @param strongbox        The Strongbox to print
      */
-    private void printDevelopmentCardSlotsAndStrongbox(List<List<DevelopmentCard>> developmentSlots, List<Resource> strongbox) {
+    private void printDevelopmentCardsStrongboxAndLeaders(List<List<DevelopmentCard>> developmentSlots, List<Resource> strongbox, List<LeaderCard> leaderCards) {
         for (int j = 0; j <= 15; j++)
             System.out.println(
-                    printStrongbox(j, strongbox) + hSpace(20) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(0), j) +
-                            hSpace(5) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(1), j) +
-                            hSpace(5) + "\u2502" + hSpace(8) + printDevelopmentSlotCard(developmentSlots.get(2), j) + hSpace(5) + "\u2502");
-        vSpace(1);
+                    printStrongbox(j, strongbox) + hSpace(20) + "\u2502" + hSpace(8) +
+                    printDevelopmentSlotCard(developmentSlots.get(0), j) + hSpace(5) + "\u2502" + hSpace(8) +
+                    printDevelopmentSlotCard(developmentSlots.get(1), j) + hSpace(5) + "\u2502" + hSpace(8) +
+                    printDevelopmentSlotCard(developmentSlots.get(2), j) + hSpace(5) + "\u2502" +
+                    printLeaderCardsInPersonalBoard(leaderCards, j));
     }
 
 

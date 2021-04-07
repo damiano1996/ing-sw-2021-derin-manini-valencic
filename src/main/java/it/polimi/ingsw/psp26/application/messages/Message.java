@@ -1,17 +1,18 @@
 package it.polimi.ingsw.psp26.application.messages;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class Message implements Serializable {
 
     private String sessionToken;
     private MessageType messageType;
-    private Object payload;
+    private HashMap<String, Object> payload;
 
-    public Message() {
+    public Message() { // TODO: temporary
     }
 
-    public Message(String sessionToken, MessageType messageType, Object payload) {
+    public Message(String sessionToken, MessageType messageType, HashMap<String, Object> payload) {
         this.sessionToken = sessionToken;
         this.messageType = messageType;
         this.payload = payload;
@@ -25,7 +26,7 @@ public class Message implements Serializable {
         return messageType;
     }
 
-    public Object getPayload() {
+    public HashMap<String, Object> getPayload() {
         return payload;
     }
 }

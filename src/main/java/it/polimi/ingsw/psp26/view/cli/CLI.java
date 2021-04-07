@@ -500,7 +500,8 @@ public class CLI {
             vSpace(1);
             for (int i = 3; i < depots.size(); i++) System.out.print("  |            |" + hSpace(5));
             vSpace(1);
-            for (int i = 3; i < depots.size(); i++) System.out.print(printLeaderDepotResources((LeaderDepot) depots.get(i)) + hSpace(5));
+            for (int i = 3; i < depots.size(); i++)
+                System.out.print(printLeaderDepotResources((LeaderDepot) depots.get(i)) + hSpace(5));
             vSpace(1);
             for (int i = 3; i < depots.size(); i++) System.out.print("  |____________|" + hSpace(5));
         }
@@ -513,7 +514,8 @@ public class CLI {
      * @return A formatted String of the Resources stored in the Leader Depot
      */
     private String printLeaderDepotResources(LeaderDepot leaderDepot) {
-        if (leaderDepot.getResources().size() == 0) return "  |" + pCS(leaderDepot.getDepotResource().getName(), Color.GREY) + "|";
+        if (leaderDepot.getResources().size() == 0)
+            return "  |" + pCS(leaderDepot.getDepotResource().getName(), Color.GREY) + "|";
         else if (leaderDepot.getResources().size() == 1)
             return "  |     " + pCS("\u2588\u2588", leaderDepot.getDepotResource().getColor()) + "     |";
         else

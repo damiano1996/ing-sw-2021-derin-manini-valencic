@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.model.enums.Color.*;
-import static it.polimi.ingsw.psp26.model.enums.Level.FIRST;
 import static it.polimi.ingsw.psp26.model.enums.Level.SECOND;
+import static it.polimi.ingsw.psp26.model.enums.Level.UNDEFINED;
 import static it.polimi.ingsw.psp26.model.enums.Resource.*;
 
 public class LeaderCardsInitializer {
@@ -62,9 +62,9 @@ public class LeaderCardsInitializer {
                     new HashMap<>(),
                     new HashMap<>() {{
                         put(new DevelopmentCardType(
-                                developmentCardRequirementsColors1[finalI], FIRST), 1);
+                                developmentCardRequirementsColors1[finalI], UNDEFINED), 1);
                         put(new DevelopmentCardType(
-                                developmentCardRequirementsColors2[finalI], FIRST), 1);
+                                developmentCardRequirementsColors2[finalI], UNDEFINED), 1);
                     }},
                     2,
                     new ResourceDiscountAbility(specialAbilityResources[i])
@@ -127,9 +127,9 @@ public class LeaderCardsInitializer {
                     new HashMap<>(),
                     new HashMap<>() {{
                         put(new DevelopmentCardType(
-                                developmentCardRequirementsColors1[finalI], FIRST), 2);
+                                developmentCardRequirementsColors1[finalI], UNDEFINED), 2);
                         put(new DevelopmentCardType(
-                                developmentCardRequirementsColors2[finalI], FIRST), 1);
+                                developmentCardRequirementsColors2[finalI], UNDEFINED), 1);
                     }},
                     5,
                     new WhiteMarbleAbility(specialAbilityResources[i])

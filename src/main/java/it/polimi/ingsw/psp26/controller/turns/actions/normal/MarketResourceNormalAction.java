@@ -28,34 +28,30 @@ public class MarketResourceNormalAction extends NormalAction {
             tempResources = Arrays.asList(match.getMarketTray().getMarblesOnRow(i));
             match.getMarketTray().pushMarbleFromSlideToRow(i);
         }
-        IsRedMarblePresent(player);
-        tempResources = ParseResource();
+        isRedMarblePresent(player);
+        tempResources = parseResource();
 
         List<Depot> CurrentDepotsStatus = player.getPersonalBoard().getWarehouseDepots();
 
-        OrganizeResource(CurrentDepotsStatus);
+        organizeResource(CurrentDepotsStatus);
 
         discardResources(match, player);
-
-
     }
 
-    private List<Resource> ParseResource() {
+    private List<Resource> parseResource() {
         return tempResources.stream().filter(x -> !x.equals(Resource.EMPTY)).filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
     }
 
-    private void IsRedMarblePresent(Player player) {
+    private void isRedMarblePresent(Player player) {
         tempResources.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> player.getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    private void OrganizeResource(List<Depot> CurrentDepots) {
+    private void organizeResource(List<Depot> CurrentDepots) {
         boolean IsPlayerNotFinished = true;
         while (IsPlayerNotFinished) {
             //Get messagge
             getResourceFromDepot(CurrentDepots.get(1));
             moveAddResourceIntoDepot(Resource.COIN, CurrentDepots.get(1));
-
-
         }
     }
 

@@ -8,15 +8,6 @@ public class LeaderDepot extends Depot {
     private final Resource depotResource;
 
     /**
-     * Getter of the Resources Type that can be contained in the Depot.
-     *
-     * @return Resource Type thet can be contained in the Depot
-     */
-    public Resource getDepotResource() {
-        return depotResource;
-    }
-
-    /**
      * Constructor of the class.
      *
      * @param depotResource the only ResourceType that can be inserted in this depot
@@ -25,6 +16,15 @@ public class LeaderDepot extends Depot {
     public LeaderDepot(VirtualView virtualView, Resource depotResource) {
         super(virtualView, 2);
         this.depotResource = depotResource;
+    }
+
+    /**
+     * Getter of the Resources Type that can be contained in the Depot.
+     *
+     * @return Resource Type that can be contained in the Depot
+     */
+    public Resource getDepotResource() {
+        return depotResource;
     }
 
     /**

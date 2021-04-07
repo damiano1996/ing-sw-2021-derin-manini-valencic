@@ -47,21 +47,21 @@ public class CLI {
         resources.add(Resource.STONE);
         resources.add(Resource.COIN);
         resources.add(Resource.FAITH_MARKER);
-        cli.printWarehouseConfigurations(p.getWarehouseDepots(), resources);
+        cli.printWarehouseConfiguration(p.getWarehouseDepots(), resources);
 
         p.getWarehouseDepot(2).addResource(Resource.STONE);
         p.getWarehouseDepot(2).addResource(Resource.STONE);
         resources.remove(0);
         resources.remove(0);
-        cli.printWarehouseConfigurations(p.getWarehouseDepots(), resources);
+        cli.printWarehouseConfiguration(p.getWarehouseDepots(), resources);
 
         p.getWarehouseDepot(1).addResource(Resource.COIN);
         resources.remove(0);
-        cli.printWarehouseConfigurations(p.getWarehouseDepots(), resources);
+        cli.printWarehouseConfiguration(p.getWarehouseDepots(), resources);
 
         p.getWarehouseDepot(0).addResource(Resource.FAITH_MARKER);
         resources.remove(0);
-        cli.printWarehouseConfigurations(p.getWarehouseDepots(), resources);
+        cli.printWarehouseConfiguration(p.getWarehouseDepots(), resources);
 
 
         //---TITLE-SCREEN-TEST---// Press Enter and follow terminal instructions
@@ -632,7 +632,7 @@ public class CLI {
      * @param warehouseDepots The Warehouse to print
      * @param resources       The resources get prom the Market to insert into the Warehouse
      */
-    public void printWarehouseConfigurations(List<Depot> warehouseDepots, List<Resource> resources) {
+    public void printWarehouseConfiguration(List<Depot> warehouseDepots, List<Resource> resources) {
         Scanner in = new Scanner(System.in); //temporary solution
         cls();
 

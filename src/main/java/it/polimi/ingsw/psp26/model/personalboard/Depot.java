@@ -25,7 +25,6 @@ public class Depot extends Observable<Message> {
      * @param maxNumberOfResources max number of resources that can be allocated in the depot
      */
     public Depot(VirtualView virtualView, int maxNumberOfResources) {
-        super();
         addObserver(virtualView);
 
         this.maxNumberOfResources = maxNumberOfResources;
@@ -92,7 +91,7 @@ public class Depot extends Observable<Message> {
      * @param resource resource to be added to the depot
      * @return true if the resource can be added, false in the other case
      */
-    private boolean isAdmissible(Resource resource) {
+    protected boolean isAdmissible(Resource resource) {
         return (resources.size() == 0 || resources.contains(resource));
     }
 

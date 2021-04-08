@@ -12,9 +12,11 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BuyCardNormalActionState extends TurnState {
     public BuyCardNormalActionState(Turn turn) {
@@ -23,10 +25,10 @@ public class BuyCardNormalActionState extends TurnState {
 
     public void play(Message message) {
         List<Resource> playerResources = getPlayerResources(turn.getTurnPlayer());
-        List<DevelopmentCard> playerCard = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
-        getAvailableCard(turn.getMatch(), playerResources, playerCard);
+        List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
+        getAvailableCard(turn.getMatch(), playerResources, playerCards);
         //WaitPlayerAction
-        //buyCard() It needs player to specify if from depot or chest
+        //buyCard() It needs player to specify if from depot or chest?
 
 
     }
@@ -38,9 +40,9 @@ public class BuyCardNormalActionState extends TurnState {
         return resources;
     }
 
-    private List<DevelopmentCard> getAvailableCard(Match match, List<Resource> resources, List<DevelopmentCard> cards) {
+    private List<DevelopmentCard> getAvailableCard(Match match, List<Resource> resources, List<DevelopmentCard> playerCard) {
         List<DevelopmentCard> availableCard = new ArrayList<>();
-
+        List<Integer> feasibleLevels = playerCard.stream().map(x -> x.getDevelopmentCardType().getLevel().getLevelNumber() + 1).distinct().collect(Collectors.toList());
         boolean isAvailable = true;
         for (DevelopmentCard card : match.getDevelopmentGrid().getAllVisibleCards()) {
             for (Resource resource : card.getCost().keySet()) {
@@ -49,24 +51,38 @@ public class BuyCardNormalActionState extends TurnState {
                         isAvailable = false;
                 }
             }
-            if (isAvailable) availableCard.add(card);
+            if (isAvailable && feasibleLevels.contains(card.getDevelopmentCardType().getLevel().getLevelNumber())) availableCard.add(card);
             isAvailable = true;
         }
         return availableCard;
 
     }
 
-    private void buyCard(Color color, Level level, Match match) {
+    private void buyCard(Color color, Level level, Player player) {
         DevelopmentCard drawnCard = null;
         try {
-            drawnCard = match.getDevelopmentGrid().drawCard(color, level);
+            drawnCard = turn.getMatch().getDevelopmentGrid().drawCard(color, level);
         } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) {
             System.out.print("Error"); // To improve
-
         }
+        int numberResources = 0;
         for (Resource resource : drawnCard.getCost().keySet()) {
-
+            numberResources = drawnCard.getCost().get(resource);
+            for (Depot depot : player.getPersonalBoard().getWarehouseDepots()){
+                if(!depot.getResources().isEmpty() && depot.getResources().get(0).equals(resource)){
+                 try{
+                     depot.removeResource(Math.min(depot.getResources().size(), numberResources));
+                 }catch(IndexOutOfBoundsException e){
+                     System.out.println("Tried to remove to many resources");
+                    }
+                    numberResources = numberResources - Math.min(depot.getResources().size(), numberResources);
+                }
+            }
+            for(int i = 0; i < numberResources; i++) {
+                player.getPersonalBoard().getStrongbox().remove(resource);
+            }
         }
+
 
     }
 

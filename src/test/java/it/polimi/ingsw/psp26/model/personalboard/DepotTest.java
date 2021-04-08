@@ -41,11 +41,27 @@ public class DepotTest {
 
 
     @Test
-    public void testRemoveResources() throws CanNotAddResourceToDepotException {
+    public void testRemoveResource() throws CanNotAddResourceToDepotException {
         depot.addResource(Resource.STONE);
         depot.removeResource();
 
         assertEquals(resourceList, depot.getResources());
+    }
+
+    @Test
+    public void testRemoveVariableNumberOfResource() throws CanNotAddResourceToDepotException {
+        depot.addResource(Resource.STONE);
+        depot.addResource(Resource.STONE);
+        depot.removeResource(2);
+
+        assertEquals(resourceList, depot.getResources());
+    }
+
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void testRemoveVariableNumberOfResource_IndexOutOfBoundsException_RemovedTooMuchResources() throws CanNotAddResourceToDepotException {
+        depot.addResource(Resource.STONE);
+        depot.addResource(Resource.STONE);
+        depot.removeResource(3);
     }
 
     @Test

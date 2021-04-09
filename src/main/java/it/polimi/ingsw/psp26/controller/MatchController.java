@@ -10,9 +10,8 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 public class MatchController implements Observer<Message> {
 
     private final VirtualView virtualView;
-    private Match match;
-
     private final Phase phase;
+    private Match match;
 
     public MatchController(VirtualView virtualView, int matchId) {
         this.virtualView = virtualView;

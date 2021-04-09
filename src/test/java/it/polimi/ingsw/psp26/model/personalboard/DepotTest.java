@@ -2,7 +2,7 @@ package it.polimi.ingsw.psp26.model.personalboard;
 
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
-import it.polimi.ingsw.psp26.exceptions.ExcessiveResourceRequestedException;
+import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
@@ -42,55 +42,28 @@ public class DepotTest {
 
 
     @Test
-    public void testRemoveResource() throws CanNotAddResourceToDepotException {
+    public void testGrabAllResources() throws CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
         depot.addResource(Resource.STONE);
-        depot.removeResource();
-
+        depot.grabAllResources();
         assertEquals(resourceList, depot.getResources());
     }
 
     @Test
-    public void testRemoveVariableNumberOfResource() throws CanNotAddResourceToDepotException, ExcessiveResourceRequestedException {
+    public void testRemoveVariableNumberOfResource() throws CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
         depot.addResource(Resource.STONE);
         depot.addResource(Resource.STONE);
-        depot.removeResource(2);
+        depot.grabResources(2);
 
         assertEquals(resourceList, depot.getResources());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testRemoveVariableNumberOfResource_ExcessiveResourceRequestedException_RemovedTooMuchResources() throws CanNotAddResourceToDepotException, ExcessiveResourceRequestedException {
+    public void testRemoveVariableNumberOfResource_ExcessiveResourceRequestedException_RemovedTooMuchResources() throws CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
         depot.addResource(Resource.STONE);
         depot.addResource(Resource.STONE);
-        depot.removeResource(3);
+        depot.grabResources(3);
     }
 
-    @Test
-    public void testAddResourcesList() throws CanNotAddResourceToDepotException {
-        for (int i = 0; i < 3; i++) resourceList.add(Resource.STONE);
-
-        depot.addResource(resourceList);
-
-        assertEquals(resourceList, depot.getResources());
-    }
-
-    @Test(expected = CanNotAddResourceToDepotException.class)
-    public void testAddResourceList_CanNotAddResourceToDepotException_TooMuchResourcesInList() throws CanNotAddResourceToDepotException {
-        for (int i = 0; i < 4; i++) resourceList.add(Resource.STONE);
-
-        depot.addResource(resourceList);
-    }
-
-    @Test(expected = CanNotAddResourceToDepotException.class)
-    public void testAddResourceList_CanNotAddResourceToDepotException_WrongResourceTypeInList() throws CanNotAddResourceToDepotException {
-        resourceList.add(Resource.STONE);
-        resourceList.add(Resource.STONE);
-        resourceList.add(Resource.COIN);
-
-        depot.addResource(Resource.STONE);
-
-        depot.addResource(resourceList);
-    }
 
     @Test(expected = CanNotAddResourceToDepotException.class)
     public void testAddResource_CanNotAddResourceToDepotException_WrongResourceType() throws CanNotAddResourceToDepotException {

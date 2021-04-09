@@ -171,62 +171,66 @@ public class PersonalBoard extends Observable<Message> {
     }
 
     /**
-     * Method that retrieves all resources from a given depot
-     *
-     * @param depot the depot where to grab all resources
-     */
-
-    public List<Resource> grabAllResourcesFromDepot(Depot depot) {
-        List<Resource> resources = new ArrayList<>();
-        resources.addAll(depot.getResources());
-        depot.removeResource();
-        return resources;
-    }
-
-    /**
      * Method that provides a fixed exchange of resource 2:1
      *
      * @param resourceRequirement the list of resources to give in
      * @param product             the resource given back
      */
-
     public Resource baseProductionPower(List<Resource> resourceRequirement, Resource product) throws WrongBasicPowerResourceRequirementException {
         if (resourceRequirement.size() != 2) throw new WrongBasicPowerResourceRequirementException();
         return product;
     }
 
     /**
-     * Method to remove a number of resources from the strongbox
+     * Method to grab resources from strongbox.
      *
      * @param resource          the resource type to remove
      * @param numberOfResources the number of resource of that type to remove
+     * @return list of grabbed resources
      */
-
-    public void removeResourceFromStrongbox(Resource resource, int numberOfResources) throws ExcessiveResourceRequestedException {
-        if (numberOfResources > getStrongbox().stream().filter(x -> x.equals(resource)).count())
-            throw new ExcessiveResourceRequestedException();
+    public List<Resource> grabResourcesFromStrongbox(Resource resource, int numberOfResources) {
+        List<Resource> grabbedResources = new ArrayList<>();
         for (int i = 0; i < numberOfResources; i++) {
-            getStrongbox().remove(resource);
+            if (strongbox.remove(resource))
+                grabbedResources.add(resource);
         }
+        return grabbedResources;
     }
 
     /**
-     * Method to grab the minimum number of a given resource between the number of resources in the depot and the input number
+     * Method to grab resources from warehouse in the specified quantity.
      *
-     * @param resource          the resource type to remove
-     * @param numberOfResources the number of resource of that type to remove
+     * @param resource          resource to grab
+     * @param numberOfResources quantity of resources to grab
+     * @return list containing the requested resources
+     * @throws NegativeNumberOfElementsToGrabException if number of resources is negative
      */
-
-    public List<Resource> grabMinResourceFromDepots(Resource resource, int numberOfResources) throws ExcessiveResourceRequestedException {
-        List<Resource> grabbedResources = new ArrayList<>();
-        for (Depot depot : getWarehouseDepots()) {
-            if (!depot.getResources().isEmpty() && depot.getResources().get(0).equals(resource)) {
-                for (int i = 0; i < Math.min(depot.getResources().size(), numberOfResources); i++) {
-                    grabbedResources.add(resource);
-                }
-                depot.removeResource(Math.min(depot.getResources().size(), numberOfResources));
-            }
+    public List<Resource> grabResourcesFromWarehouse(Resource resource, int numberOfResources) throws NegativeNumberOfElementsToGrabException {
+        for (Depot depot : warehouseDepots) {
+            if (depot.getResources().size() > 0)
+                if (depot.getResources().get(0).equals(resource))
+                    return depot.grabResources(Math.min(numberOfResources, depot.getResources().size()));
         }
+        return new ArrayList<Resource>();
+    }
+
+    /**
+     * Method to grab resources from warehouse and strongbox.
+     * By default the resources are grabbed before from the warehouse and after from the strongbox.
+     *
+     * @param resource          resource type to grab
+     * @param numberOfResources quantity of resources to grab
+     * @return list containing the requested resources
+     * @throws NoResourceTypeInWarehouseException      if the requested resource isn't in the warehouse
+     * @throws NegativeNumberOfElementsToGrabException if the number of resources to grab is negative
+     */
+    public List<Resource> grabResourcesFromWarehouseAndStrongbox(Resource resource, int numberOfResources) throws NegativeNumberOfElementsToGrabException {
+        List<Resource> grabbedResources = new ArrayList<>();
+        grabbedResources.addAll(grabResourcesFromWarehouse(resource, numberOfResources));
+
+        if (grabbedResources.size() < numberOfResources)
+            grabbedResources.addAll(grabResourcesFromStrongbox(resource, numberOfResources));
+
         return grabbedResources;
     }
 }

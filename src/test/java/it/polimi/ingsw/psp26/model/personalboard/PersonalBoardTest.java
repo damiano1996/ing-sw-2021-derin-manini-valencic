@@ -171,7 +171,7 @@ public class PersonalBoardTest {
     }
 
     @Test
-    public void testRemoveResourceFromStrongbox() throws ExcessiveResourceRequestedException {
+    public void testGRabFromStrongbox() {
         List<Resource> resources = new ArrayList<>();
         resources.add(Resource.COIN);
         resources.add(Resource.STONE);
@@ -182,24 +182,9 @@ public class PersonalBoardTest {
         personalBoard.addResourcesToStrongbox(resources);
         resources.remove(Resource.COIN);
         resources.remove(Resource.COIN);
-        personalBoard.removeResourceFromStrongbox(Resource.COIN, 2);
+        personalBoard.grabResourcesFromStrongbox(Resource.COIN, 2);
         assertEquals(resources, personalBoard.getStrongbox());
 
-    }
-
-    @Test(expected = ExcessiveResourceRequestedException.class)
-    public void testRemoveResourceFromStrongbox_ExcessiveResourceRequestedException() throws ExcessiveResourceRequestedException {
-        List<Resource> resources = new ArrayList<>();
-        resources.add(Resource.COIN);
-        resources.add(Resource.STONE);
-        resources.add(Resource.SERVANT);
-        resources.add(Resource.COIN);
-        resources.add(Resource.SHIELD);
-
-        personalBoard.addResourcesToStrongbox(resources);
-        resources.remove(Resource.COIN);
-        resources.remove(Resource.COIN);
-        personalBoard.removeResourceFromStrongbox(Resource.COIN, 3);
     }
 
     @Test
@@ -221,29 +206,34 @@ public class PersonalBoardTest {
     }
 
     @Test
-    public void testGrabAllResourcesFromDepot() throws DepotOutOfBoundException, CanNotAddResourceToDepotException {
-        List<Resource> resources1 = new ArrayList<>();
-        List<Resource> resources2 = new ArrayList<>();
-        Depot depot = personalBoard.getWarehouseDepot(2);
-        resources1.add(Resource.COIN);
-        resources1.add(Resource.COIN);
-        depot.addResource(Resource.COIN);
-        depot.addResource(Resource.COIN);
-        resources2 = personalBoard.grabAllResourcesFromDepot(depot);
-        assertEquals(resources1, resources2);
+    public void testGrabAllResourcesFromDepot() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
+        personalBoard.getWarehouseDepot(0).addResource(Resource.COIN);
+        assertEquals(new ArrayList<>() {{
+            add(Resource.COIN);
+        }}, personalBoard.getWarehouseDepot(0).grabAllResources());
     }
 
     @Test
-    public void TestGrabMinResourceFromDepots() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, ExcessiveResourceRequestedException {
-        List<Resource> resources1 = new ArrayList<>();
-        List<Resource> resources2 = new ArrayList<>();
+    public void TestGrabResourcesFromWarehouse() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
+
         Depot depot = personalBoard.getWarehouseDepot(2);
-        resources1.add(Resource.COIN);
-        resources1.add(Resource.COIN);
         depot.addResource(Resource.COIN);
         depot.addResource(Resource.COIN);
-        resources2 = personalBoard.grabMinResourceFromDepots(Resource.COIN, 3);
-        assertEquals(resources1, resources2);
+
+        assertEquals(new ArrayList<>() {{
+            add(Resource.COIN);
+            add(Resource.COIN);
+        }}, personalBoard.grabResourcesFromWarehouse(Resource.COIN, 2));
+    }
+
+    @Test
+    public void testGrabResourcesFromWarehouseAndStrongbox() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
+        personalBoard.getWarehouseDepot(0).addResource(Resource.COIN);
+        personalBoard.getStrongbox().add(Resource.COIN);
+        assertEquals(new ArrayList<>() {{
+            add(Resource.COIN);
+            add(Resource.COIN);
+        }}, personalBoard.grabResourcesFromWarehouseAndStrongbox(Resource.COIN, 2));
     }
 
 }

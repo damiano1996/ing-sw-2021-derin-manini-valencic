@@ -3,13 +3,15 @@ package it.polimi.ingsw.psp26.model.personalboard;
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
-import it.polimi.ingsw.psp26.exceptions.ExcessiveResourceRequestedException;
+import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
 
 /**
  * Class to model the depot (one shelf of the warehouse)
@@ -67,38 +69,26 @@ public class Depot extends Observable<Message> {
         notifyObservers(new Message()); // TODO: to be completed
     }
 
-    // TODO: Is it necessary?
-    public void addResource(List<Resource> newResources) throws CanNotAddResourceToDepotException {
-        if (newResources.size() > (maxNumberOfResources - resources.size()))
-            throw new CanNotAddResourceToDepotException();
-        for (Resource resource : newResources)
-            if (!isAdmissible(resource)) throw new CanNotAddResourceToDepotException();
-        resources.addAll(newResources);
-
-        notifyObservers(new Message()); // TODO: to be completed
-    }
-
     /**
-     * Method to clear the depot.
-     */
-    public void removeResource() {
-        resources.clear();
-        notifyObservers(new Message()); // TODO: to be completed
-    }
-
-    /**
-     * Method to clear a variable number of resources from the depot.
+     * Method to obtain all the resources from the depot.
      *
-     * @param number number of resources to be removed from the depot
-     * @throws IndexOutOfBoundsException if trying to remove more resources than the depot contains
+     * @return ist containing all the resources of the depot
+     * @throws NegativeNumberOfElementsToGrabException
      */
+    public List<Resource> grabAllResources() throws NegativeNumberOfElementsToGrabException {
+        return grabResources(resources.size());
+    }
 
-    public void removeResource(int number) throws ExcessiveResourceRequestedException {
-        if (resources.size() - number < 0) throw new ExcessiveResourceRequestedException();
-        for (int i = 0; i < number; i++) {
-            resources.remove(resources.size() - 1);
-        }
-        notifyObservers(new Message()); // TODO: to be completed
+    /**
+     * Method to grab resources from the depot.
+     *
+     * @param quantity quantity of resources to be removed from the depot
+     * @return list containing the number of requested resources
+     * @throws NegativeNumberOfElementsToGrabException if negative quantity
+     * @throws IndexOutOfBoundsException               if trying to remove more resources than the depot contains
+     */
+    public List<Resource> grabResources(int quantity) throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
+        return grabElements(resources, quantity);
     }
 
     /**
@@ -108,7 +98,9 @@ public class Depot extends Observable<Message> {
      * @return true if the resource can be added, false in the other case
      */
     protected boolean isAdmissible(Resource resource) {
-        return (resources.size() == 0 || resources.contains(resource));
+        return (resources.size() == 0 || resources.contains(resource)) &&
+                !resource.equals(Resource.FAITH_MARKER) &&
+                !resource.equals(Resource.EMPTY);
     }
 
     /**

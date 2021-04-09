@@ -5,6 +5,8 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
+import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
+import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -44,7 +46,11 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         tempResources = parseResource();
 
         List<Depot> CurrentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepots();
-        organizeResource(CurrentDepotsStatus);
+        try {
+            organizeResource(CurrentDepotsStatus);
+        } catch (DepotOutOfBoundException | NegativeNumberOfElementsToGrabException e) {
+            e.printStackTrace();
+        }
         discardResources(turn.getMatch(), turn.getTurnPlayer());
 
         // next state is...
@@ -59,13 +65,12 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         tempResources.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> player.getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    private void organizeResource(List<Depot> CurrentDepots) {
+    private void organizeResource(List<Depot> CurrentDepots) throws DepotOutOfBoundException, NegativeNumberOfElementsToGrabException {
         boolean IsPlayerNotFinished = true;
         while (IsPlayerNotFinished) {
             //Get message
-            tempResources = turn.getTurnPlayer().getPersonalBoard().grabAllResourcesFromDepot(CurrentDepots.get(1));
+            tempResources = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(1).grabAllResources();
             moveResourceFromSlideToDepot(Resource.COIN, 1, CurrentDepots.get(1));
-
         }
     }
 

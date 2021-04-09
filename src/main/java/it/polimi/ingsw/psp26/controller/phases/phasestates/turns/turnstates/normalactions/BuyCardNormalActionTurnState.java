@@ -55,7 +55,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     }
 
-    private void buyCard(Color color, Level level, Player player) {
+    private void buyCard(Color color, Level level, Player player) throws NegativeNumberOfElementsToGrabException {
         DevelopmentCard drawnCard = null;
         int numberResources = 0;
         int i = 0;
@@ -67,17 +67,9 @@ public class BuyCardNormalActionTurnState extends TurnState {
         }
         for (Resource resource : drawnCard.getCost().keySet()) {
             numberResources = drawnCard.getCost().get(resource);
-            try {
-                numberResources -= player.getPersonalBoard().grabMinResourceFromDepots(resource, numberResources).size();
-            } catch (ExcessiveResourceRequestedException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (numberResources > 0)
-                    player.getPersonalBoard().removeResourceFromStrongbox(resource, numberResources);
-            } catch (ExcessiveResourceRequestedException e) {
-                System.out.println("Error");
-            }
+            numberResources -= player.getPersonalBoard().grabResourcesFromWarehouse(resource, numberResources).size();
+            if (numberResources > 0)
+                player.getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
         }
         try {
             player.getPersonalBoard().addDevelopmentCard(i, drawnCard);

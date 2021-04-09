@@ -2,7 +2,7 @@ package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.Message;
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToDrawException;
+import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.actiontokens.BlackCrossActionToken;
@@ -17,6 +17,8 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
 
 /**
  * Class that models the whole game
@@ -158,34 +160,15 @@ public class Match extends Observable<Message> {
     }
 
     /**
-     * Allows to draw elements from a list, removing them from it.
-     *
-     * @param list             list containing the elements to draw
-     * @param numberOfElements number of elements to draw
-     * @param <T>              generic object
-     * @return list containing the drawn elements
-     * @throws NegativeNumberOfElementsToDrawException if the number of elements to draw is a negative number
-     * @throws IndexOutOfBoundsException               if the index of the card to draw is out of bounds
-     */
-    private <T> List<T> drawElements(List<T> list, int numberOfElements) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
-        if (numberOfElements < 0) throw new NegativeNumberOfElementsToDrawException();
-
-        List<T> drawnElements = new ArrayList<>(list.subList(0, numberOfElements));
-
-        list.removeAll(drawnElements);
-        return drawnElements;
-    }
-
-    /**
      * To draw a given number of cards from the leader deck.
      *
      * @param numberOfCards number of leader cards to draw
      * @return list containing the drawn leaders
-     * @throws NegativeNumberOfElementsToDrawException if the number of cards to draw is negative
+     * @throws NegativeNumberOfElementsToGrabException if the number of cards to draw is negative
      * @throws IndexOutOfBoundsException               if the index of the card to draw is out of bounds
      */
-    public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
-        return drawElements(leaderDeck, numberOfCards);
+    public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
+        return grabElements(leaderDeck, numberOfCards);
     }
 
     /**
@@ -193,11 +176,11 @@ public class Match extends Observable<Message> {
      *
      * @param numberOfTokens number of tokens to draw
      * @return list containing the drawn tokens
-     * @throws NegativeNumberOfElementsToDrawException if the number of cards to draw is negative
+     * @throws NegativeNumberOfElementsToGrabException if the number of cards to draw is negative
      * @throws IndexOutOfBoundsException               if the index of the card to draw is out of bounds
      */
-    public List<ActionToken> drawActionTokens(int numberOfTokens) throws NegativeNumberOfElementsToDrawException, IndexOutOfBoundsException {
-        return drawElements(actionTokenStack, numberOfTokens);
+    public List<ActionToken> drawActionTokens(int numberOfTokens) throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
+        return grabElements(actionTokenStack, numberOfTokens);
     }
 
     /**

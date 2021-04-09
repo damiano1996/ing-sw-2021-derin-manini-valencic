@@ -57,7 +57,7 @@ public class DepotTest {
         assertEquals(resourceList, depot.getResources());
     }
 
-    @Test (expected = IndexOutOfBoundsException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testRemoveVariableNumberOfResource_IndexOutOfBoundsException_RemovedTooMuchResources() throws CanNotAddResourceToDepotException {
         depot.addResource(Resource.STONE);
         depot.addResource(Resource.STONE);

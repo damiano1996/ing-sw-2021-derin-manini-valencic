@@ -87,14 +87,14 @@ public class Depot extends Observable<Message> {
 
     /**
      * Method to clear a variable number of resources from the depot.
+     *
      * @param number number of resources to be removed from the depot
      * @throws IndexOutOfBoundsException if trying to remove more resources than the depot contains
-     *
      */
 
-    public void removeResource(int number) throws IndexOutOfBoundsException{
-        if(resources.size() - number < 0) throw new IndexOutOfBoundsException();
-        for(int i = 0; i < number; i++) {
+    public void removeResource(int number) throws IndexOutOfBoundsException {
+        if (resources.size() - number < 0) throw new IndexOutOfBoundsException();
+        for (int i = 0; i < number; i++) {
             resources.remove(resources.size() - 1);
         }
         notifyObservers(new Message()); // TODO: to be completed

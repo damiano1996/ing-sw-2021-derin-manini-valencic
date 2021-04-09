@@ -1,9 +1,9 @@
-package it.polimi.ingsw.psp26.controller.turns.states.normalactions;
+package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
-import it.polimi.ingsw.psp26.controller.turns.Turn;
-import it.polimi.ingsw.psp26.controller.turns.states.CheckVaticanReportState;
-import it.polimi.ingsw.psp26.controller.turns.states.TurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 
 //To test after message.class is completed
 
-public class MarketResourceNormalActionState extends TurnState {
+public class MarketResourceNormalActionTurnState extends TurnState {
     List<Resource> tempResources;
 
-    public MarketResourceNormalActionState(Turn turn) {
+    public MarketResourceNormalActionTurnState(Turn turn) {
         super(turn);
     }
 
@@ -48,7 +48,7 @@ public class MarketResourceNormalActionState extends TurnState {
         discardResources(turn.getMatch(), turn.getTurnPlayer());
 
         // next state is...
-        turn.changeState(new CheckVaticanReportState(turn));
+        turn.changeState(new CheckVaticanReportTurnState(turn));
     }
 
     private List<Resource> parseResource() {

@@ -1,8 +1,8 @@
-package it.polimi.ingsw.psp26.controller.turns.states.normalactions;
+package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
-import it.polimi.ingsw.psp26.controller.turns.Turn;
-import it.polimi.ingsw.psp26.controller.turns.states.TurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BuyCardNormalActionState extends TurnState {
-    public BuyCardNormalActionState(Turn turn) {
+public class BuyCardNormalActionTurnState extends TurnState {
+    public BuyCardNormalActionTurnState(Turn turn) {
         super(turn);
     }
 
@@ -51,7 +51,8 @@ public class BuyCardNormalActionState extends TurnState {
                         isAvailable = false;
                 }
             }
-            if (isAvailable && feasibleLevels.contains(card.getDevelopmentCardType().getLevel().getLevelNumber())) availableCard.add(card);
+            if (isAvailable && feasibleLevels.contains(card.getDevelopmentCardType().getLevel().getLevelNumber()))
+                availableCard.add(card);
             isAvailable = true;
         }
         return availableCard;
@@ -68,17 +69,17 @@ public class BuyCardNormalActionState extends TurnState {
         int numberResources = 0;
         for (Resource resource : drawnCard.getCost().keySet()) {
             numberResources = drawnCard.getCost().get(resource);
-            for (Depot depot : player.getPersonalBoard().getWarehouseDepots()){
-                if(!depot.getResources().isEmpty() && depot.getResources().get(0).equals(resource)){
-                 try{
-                     depot.removeResource(Math.min(depot.getResources().size(), numberResources));
-                 }catch(IndexOutOfBoundsException e){
-                     System.out.println("Tried to remove to many resources");
+            for (Depot depot : player.getPersonalBoard().getWarehouseDepots()) {
+                if (!depot.getResources().isEmpty() && depot.getResources().get(0).equals(resource)) {
+                    try {
+                        depot.removeResource(Math.min(depot.getResources().size(), numberResources));
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("Tried to remove to many resources");
                     }
                     numberResources = numberResources - Math.min(depot.getResources().size(), numberResources);
                 }
             }
-            for(int i = 0; i < numberResources; i++) {
+            for (int i = 0; i < numberResources; i++) {
                 player.getPersonalBoard().getStrongbox().remove(resource);
             }
         }

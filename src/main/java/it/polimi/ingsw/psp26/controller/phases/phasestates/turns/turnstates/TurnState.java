@@ -1,7 +1,7 @@
-package it.polimi.ingsw.psp26.controller.turns.states;
+package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
-import it.polimi.ingsw.psp26.controller.turns.Turn;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 
 public abstract class TurnState {
 

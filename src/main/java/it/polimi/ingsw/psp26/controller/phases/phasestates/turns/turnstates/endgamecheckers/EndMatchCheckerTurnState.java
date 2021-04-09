@@ -7,6 +7,9 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+
+import java.util.List;
 
 public class EndMatchCheckerTurnState extends TurnState {
 
@@ -37,10 +40,16 @@ public class EndMatchCheckerTurnState extends TurnState {
         }
     }
 
-    private void seventhCardDrawn() {
+    private boolean seventhCardDrawn() {
+        int nCards = 0;
+        for (List<DevelopmentCard> cards : turn.getTurnPlayer().getPersonalBoard().getDevelopmentCardsSlots())
+            nCards += cards.size();
+        return nCards >= 7;
     }
 
-    private void finalTilePosition() {
+    private boolean finalTilePosition() {
+        return turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getMarkerPosition() ==
+                turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].getEndSection();
     }
 
     private void noMoreCards() { // Multiplayer

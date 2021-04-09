@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.model.personalboard;
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
+import it.polimi.ingsw.psp26.exceptions.ExcessiveResourceRequestedException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
@@ -92,8 +93,8 @@ public class Depot extends Observable<Message> {
      * @throws IndexOutOfBoundsException if trying to remove more resources than the depot contains
      */
 
-    public void removeResource(int number) throws IndexOutOfBoundsException {
-        if (resources.size() - number < 0) throw new IndexOutOfBoundsException();
+    public void removeResource(int number) throws ExcessiveResourceRequestedException {
+        if (resources.size() - number < 0) throw new ExcessiveResourceRequestedException();
         for (int i = 0; i < number; i++) {
             resources.remove(resources.size() - 1);
         }
@@ -133,4 +134,5 @@ public class Depot extends Observable<Message> {
     public int hashCode() {
         return Objects.hash(maxNumberOfResources, resources);
     }
+
 }

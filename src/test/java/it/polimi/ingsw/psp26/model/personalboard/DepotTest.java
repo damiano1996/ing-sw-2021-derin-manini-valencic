@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.model.personalboard;
 
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
+import it.polimi.ingsw.psp26.exceptions.ExcessiveResourceRequestedException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class DepotTest {
     }
 
     @Test
-    public void testRemoveVariableNumberOfResource() throws CanNotAddResourceToDepotException {
+    public void testRemoveVariableNumberOfResource() throws CanNotAddResourceToDepotException, ExcessiveResourceRequestedException {
         depot.addResource(Resource.STONE);
         depot.addResource(Resource.STONE);
         depot.removeResource(2);
@@ -58,7 +59,7 @@ public class DepotTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testRemoveVariableNumberOfResource_IndexOutOfBoundsException_RemovedTooMuchResources() throws CanNotAddResourceToDepotException {
+    public void testRemoveVariableNumberOfResource_ExcessiveResourceRequestedException_RemovedTooMuchResources() throws CanNotAddResourceToDepotException, ExcessiveResourceRequestedException {
         depot.addResource(Resource.STONE);
         depot.addResource(Resource.STONE);
         depot.removeResource(3);

@@ -3,16 +3,13 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
-import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
-import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
+import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +25,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
         List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
         getAvailableCard(turn.getMatch(), playerResources, playerCards);
         //WaitPlayerAction
-        //buyCard() It needs player to specify if from depot or chest?
-
+        //buyCard()
 
     }
 
@@ -61,30 +57,36 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     private void buyCard(Color color, Level level, Player player) {
         DevelopmentCard drawnCard = null;
+        int numberResources = 0;
+        int i = 0;
+
         try {
             drawnCard = turn.getMatch().getDevelopmentGrid().drawCard(color, level);
         } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) {
             System.out.print("Error"); // To improve
         }
-        int numberResources = 0;
         for (Resource resource : drawnCard.getCost().keySet()) {
             numberResources = drawnCard.getCost().get(resource);
-            for (Depot depot : player.getPersonalBoard().getWarehouseDepots()) {
-                if (!depot.getResources().isEmpty() && depot.getResources().get(0).equals(resource)) {
-                    try {
-                        depot.removeResource(Math.min(depot.getResources().size(), numberResources));
-                    } catch (IndexOutOfBoundsException e) {
-                        System.out.println("Tried to remove to many resources");
-                    }
-                    numberResources = numberResources - Math.min(depot.getResources().size(), numberResources);
-                }
+            try {
+                numberResources -= player.getPersonalBoard().grabMinResourceFromDepots(resource, numberResources).size();
+            } catch (ExcessiveResourceRequestedException e) {
+                e.printStackTrace();
             }
-            for (int i = 0; i < numberResources; i++) {
-                player.getPersonalBoard().getStrongbox().remove(resource);
+            try {
+                if (numberResources > 0)
+                    player.getPersonalBoard().removeResourceFromStrongbox(resource, numberResources);
+            } catch (ExcessiveResourceRequestedException e) {
+                System.out.println("Error");
             }
         }
-
+        try {
+            player.getPersonalBoard().addDevelopmentCard(i, drawnCard);
+        } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
+            System.out.println("The position chosen is not correct, choose another one");
+            //To improve
+        }
 
     }
+
 
 }

@@ -63,13 +63,13 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         boolean IsPlayerNotFinished = true;
         while (IsPlayerNotFinished) {
             //Get message
-            getResourceFromDepot(CurrentDepots.get(1));
-            addResourceIntoDepot(Resource.COIN, 1, CurrentDepots.get(1));
+            tempResources = turn.getTurnPlayer().getPersonalBoard().grabAllResourcesFromDepot(CurrentDepots.get(1));
+            moveResourceFromSlideToDepot(Resource.COIN, 1, CurrentDepots.get(1));
 
         }
     }
 
-    private void addResourceIntoDepot(Resource resource, int resourceNum, Depot depot) {
+    private void moveResourceFromSlideToDepot(Resource resource, int resourceNum, Depot depot) {
         //if(depot.isAdmissible(resource) && ((depot.getResources().size() + resourceNum )<= depot.getMaxNumberOfResources() )){
         for (int i = 0; i < resourceNum; i++) {
             try {
@@ -82,13 +82,6 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
 
     }
-
-
-    private void getResourceFromDepot(Depot depot) {
-        tempResources.addAll(depot.getResources());
-        depot.removeResource();
-    }
-
 
     private void discardResources(Match match, Player player) {
         match.getPlayers().stream().filter(x -> !x.equals(player)).forEach(x -> x.getPersonalBoard().getFaithTrack().addFaithPoints(tempResources.size()));

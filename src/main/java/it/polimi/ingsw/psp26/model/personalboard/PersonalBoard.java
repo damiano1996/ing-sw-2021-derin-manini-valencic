@@ -2,9 +2,7 @@ package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.Message;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
-import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
-import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
+import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -172,5 +170,63 @@ public class PersonalBoard extends Observable<Message> {
         warehouseDepots.add(leaderDepot);
     }
 
+    /**
+     * Method that retrieves all resources from a given depot
+     *
+     * @param depot the depot where to grab all resources
+     */
 
+    public List<Resource> grabAllResourcesFromDepot(Depot depot) {
+        List<Resource> resources = new ArrayList<>();
+        resources.addAll(depot.getResources());
+        depot.removeResource();
+        return resources;
+    }
+
+    /**
+     * Method that provides a fixed exchange of resource 2:1
+     *
+     * @param resourceRequirement the list of resources to give in
+     * @param product             the resource given back
+     */
+
+    public Resource baseProductionPower(List<Resource> resourceRequirement, Resource product) throws WrongBasicPowerResourceRequirementException {
+        if (resourceRequirement.size() != 2) throw new WrongBasicPowerResourceRequirementException();
+        return product;
+    }
+
+    /**
+     * Method to remove a number of resources from the strongbox
+     *
+     * @param resource          the resource type to remove
+     * @param numberOfResources the number of resource of that type to remove
+     */
+
+    public void removeResourceFromStrongbox(Resource resource, int numberOfResources) throws ExcessiveResourceRequestedException {
+        if (numberOfResources > getStrongbox().stream().filter(x -> x.equals(resource)).count())
+            throw new ExcessiveResourceRequestedException();
+        for (int i = 0; i < numberOfResources; i++) {
+            getStrongbox().remove(resource);
+        }
+    }
+
+    /**
+     * Method to grab the minimum number of a given resource between the number of resources in the depot and the input number
+     *
+     * @param resource          the resource type to remove
+     * @param numberOfResources the number of resource of that type to remove
+     */
+
+    public List<Resource> grabMinResourceFromDepots(Resource resource, int numberOfResources) throws ExcessiveResourceRequestedException {
+        List<Resource> grabbedResources = new ArrayList<>();
+        for (Depot depot : getWarehouseDepots()) {
+            if (!depot.getResources().isEmpty() && depot.getResources().get(0).equals(resource)) {
+                for (int i = 0; i < Math.min(depot.getResources().size(), numberOfResources); i++) {
+                    grabbedResources.add(resource);
+                }
+                depot.removeResource(Math.min(depot.getResources().size(), numberOfResources));
+            }
+        }
+        return grabbedResources;
+    }
 }

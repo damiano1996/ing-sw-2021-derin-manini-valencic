@@ -170,4 +170,80 @@ public class PersonalBoardTest {
         assertEquals(resources, personalBoard.getStrongbox());
     }
 
+    @Test
+    public void testRemoveResourceFromStrongbox() throws ExcessiveResourceRequestedException {
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.COIN);
+        resources.add(Resource.STONE);
+        resources.add(Resource.SERVANT);
+        resources.add(Resource.COIN);
+        resources.add(Resource.SHIELD);
+
+        personalBoard.addResourcesToStrongbox(resources);
+        resources.remove(Resource.COIN);
+        resources.remove(Resource.COIN);
+        personalBoard.removeResourceFromStrongbox(Resource.COIN, 2);
+        assertEquals(resources, personalBoard.getStrongbox());
+
+    }
+
+    @Test(expected = ExcessiveResourceRequestedException.class)
+    public void testRemoveResourceFromStrongbox_ExcessiveResourceRequestedException() throws ExcessiveResourceRequestedException {
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.COIN);
+        resources.add(Resource.STONE);
+        resources.add(Resource.SERVANT);
+        resources.add(Resource.COIN);
+        resources.add(Resource.SHIELD);
+
+        personalBoard.addResourcesToStrongbox(resources);
+        resources.remove(Resource.COIN);
+        resources.remove(Resource.COIN);
+        personalBoard.removeResourceFromStrongbox(Resource.COIN, 3);
+    }
+
+    @Test
+    public void testBaseProductionPower() throws WrongBasicPowerResourceRequirementException {
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.COIN);
+        resources.add(Resource.STONE);
+        Resource resource = personalBoard.baseProductionPower(resources, Resource.SHIELD);
+        assertEquals(resource, Resource.SHIELD);
+    }
+
+    @Test(expected = WrongBasicPowerResourceRequirementException.class)
+    public void testBaseProductionPower_WrongBasicPowerResourceRequirementException() throws WrongBasicPowerResourceRequirementException {
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.COIN);
+        resources.add(Resource.STONE);
+        resources.add(Resource.STONE);
+        Resource resource = personalBoard.baseProductionPower(resources, Resource.SHIELD);
+    }
+
+    @Test
+    public void testGrabAllResourcesFromDepot() throws DepotOutOfBoundException, CanNotAddResourceToDepotException {
+        List<Resource> resources1 = new ArrayList<>();
+        List<Resource> resources2 = new ArrayList<>();
+        Depot depot = personalBoard.getWarehouseDepot(2);
+        resources1.add(Resource.COIN);
+        resources1.add(Resource.COIN);
+        depot.addResource(Resource.COIN);
+        depot.addResource(Resource.COIN);
+        resources2 = personalBoard.grabAllResourcesFromDepot(depot);
+        assertEquals(resources1, resources2);
+    }
+
+    @Test
+    public void TestGrabMinResourceFromDepots() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, ExcessiveResourceRequestedException {
+        List<Resource> resources1 = new ArrayList<>();
+        List<Resource> resources2 = new ArrayList<>();
+        Depot depot = personalBoard.getWarehouseDepot(2);
+        resources1.add(Resource.COIN);
+        resources1.add(Resource.COIN);
+        depot.addResource(Resource.COIN);
+        depot.addResource(Resource.COIN);
+        resources2 = personalBoard.grabMinResourceFromDepots(Resource.COIN, 3);
+        assertEquals(resources1, resources2);
+    }
+
 }

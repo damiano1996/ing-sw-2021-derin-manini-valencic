@@ -12,7 +12,7 @@ public class MatchController implements Observer<Message> {
     private final VirtualView virtualView;
     private Match match;
 
-    private Phase phase;
+    private final Phase phase;
 
     public MatchController(VirtualView virtualView, int matchId) {
         this.virtualView = virtualView;

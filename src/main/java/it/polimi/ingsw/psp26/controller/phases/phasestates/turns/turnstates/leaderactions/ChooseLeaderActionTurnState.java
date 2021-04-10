@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
+import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 
 public class ChooseLeaderActionTurnState extends TurnState {
 
@@ -14,7 +15,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
     }
 
     @Override
-    public void play(Message message) {
+    public void play(Message message) throws DepotOutOfBoundException {
         super.play(message);
 
         turn.setTurnPhase(TurnPhase.NORMAL_ACTION);

@@ -12,6 +12,7 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,18 +70,26 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         boolean IsPlayerNotFinished = true;
         while (IsPlayerNotFinished) {
             //Get message
+            //option 1
             tempResources = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(1).grabAllResources();
+            // option 2
             moveResourceFromSlideToDepot(Resource.COIN, 1, CurrentDepots.get(1));
+            //option 3
+            // End cycle
         }
     }
 
     private void moveResourceFromSlideToDepot(Resource resource, int resourceNum, Depot depot) {
-        //if(depot.isAdmissible(resource) && ((depot.getResources().size() + resourceNum )<= depot.getMaxNumberOfResources() )){
+        List<Resource> DepotCopy = new ArrayList<>();
+        DepotCopy.addAll(depot.getResources());
         for (int i = 0; i < resourceNum; i++) {
             try {
                 depot.addResource(resource);
             } catch (CanNotAddResourceToDepotException e) {
-                System.out.println("Errore"); // To improve
+                depot.getResources().clear();
+                depot.getResources().addAll(DepotCopy);
+                System.out.println("Error move not allowed");
+                //NotifyObserver();
             }
             tempResources.remove(resource);
         }

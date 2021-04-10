@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 
 public class BenefitsTurnState extends TurnState {
@@ -29,6 +30,6 @@ public class BenefitsTurnState extends TurnState {
 
         // next state is...
         // step 2: leader action (-> check vatican report -> check endgame)
-        turn.changeState(new ChooseLeaderActionTurnState(turn));
+        turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
     }
 }

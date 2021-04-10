@@ -71,6 +71,11 @@ public class FaithTrackTest {
     }
 
     @Test
+    public void testGetFinalPosition() {
+        assertEquals(24, faithTrack.getFinalPosition());
+    }
+
+    @Test
     public void testEquals_TrueCase() {
         FaithTrack faithTrack1 = new FaithTrack(new VirtualView());
         assertEquals(faithTrack, faithTrack1);

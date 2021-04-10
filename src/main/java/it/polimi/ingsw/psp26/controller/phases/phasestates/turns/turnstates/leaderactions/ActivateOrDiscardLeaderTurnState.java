@@ -3,12 +3,11 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.lea
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
+
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Utils.goToNextStateAfterLeaderAction;
 
 public class ActivateOrDiscardLeaderTurnState extends TurnState {
 
@@ -45,22 +44,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
         switch (lastMessage) {
             case ACTIVATE_LEADER:
                 activateLeader(leaderCard); // no needs to check vatican report after activation
-
-                if (turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_FIRST_TIME)) {
-                    // go to normal action
-                    turn.changeState(new ChooseNormalActionTurnState(turn));
-                    turn.play(message);
-
-                } else {
-
-                    if (turn.getMatch().isMultiPlayerMode()) {
-                        turn.getPlayingPhaseState().updateCurrentTurn(); // next turn
-                    } else {
-                        turn.changeState(new LorenzoMagnificoTurnState(turn)); // Lorenzo's turn
-                        turn.play(message);
-                    }
-
-                }
+                goToNextStateAfterLeaderAction(turn, message);
                 break;
 
             case DISCARD_LEADER:
@@ -68,7 +52,6 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
                 // only in case of discard we have to check the vatican report!
                 turn.changeState(new CheckVaticanReportTurnState(turn));
                 turn.play(message);
-
                 break;
         }
     }

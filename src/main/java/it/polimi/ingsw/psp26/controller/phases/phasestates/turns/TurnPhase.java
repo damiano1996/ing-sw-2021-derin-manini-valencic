@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 
 public enum TurnPhase {
-    LEADER_ACTION_FIRST_TIME,
-    NORMAL_ACTION,
-    LEADER_ACTION_SECOND_TIME
+    LEADER_TO_NORMAL_ACTION,
+    NORMAL_TO_LEADER_ACTION,
+    LEADER_ACTION_TO_END
 }

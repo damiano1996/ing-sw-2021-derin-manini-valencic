@@ -21,9 +21,6 @@ public class PlayingPhaseState extends PhaseState {
     public void execute(Message message) {
         super.execute(message);
         currentTurn.play(message);
-
-        // next state is...
-        phase.changeState(new EndMatchPhaseState(phase));
     }
 
     private void initializeFirstTurn() {
@@ -44,6 +41,12 @@ public class PlayingPhaseState extends PhaseState {
     private Player getNextPlayer() {
         int currentPlayerIndex = phase.getMatchController().getMatch().getPlayers().indexOf(currentTurn.getTurnPlayer());
         return phase.getMatchController().getMatch().getPlayers().get((currentPlayerIndex + 1) % phase.getMatchController().getMatch().getPlayers().size());
+    }
+
+    public void goToEndMatchPhaseState(Message message) {
+        // next state is...
+        phase.changeState(new EndMatchPhaseState(phase));
+        phase.execute(message);
     }
 
 }

@@ -1,15 +1,19 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.endgamecheckers;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
+import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
+import it.polimi.ingsw.psp26.model.enums.Color;
+import it.polimi.ingsw.psp26.model.enums.Level;
 
 import java.util.List;
+
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Utils.goToNextStateAfterLeaderAction;
+import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.COLORS;
+import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.LEVELS;
 
 public class EndMatchCheckerTurnState extends TurnState {
 
@@ -21,37 +25,102 @@ public class EndMatchCheckerTurnState extends TurnState {
     public void play(Message message) {
         super.play(message);
 
-        if (turn.getMatch().isMultiPlayerMode()) {
-            seventhCardDrawn();
-            finalTilePosition();
-        } else {
-            // ...
-        }
+        checkMultiPlayerEnd(); // checks in any case
 
-        if (turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_FIRST_TIME)) // If first leader action has been played, go to normal action
-            turn.changeState(new ChooseNormalActionTurnState(turn));
-        else if (turn.getTurnPhase().equals(TurnPhase.NORMAL_ACTION)) // After normal action, go to leader action
-            turn.changeState(new ChooseLeaderActionTurnState(turn));
-        else {
-            if (turn.getMatch().isMultiPlayerMode())
-                turn.getPlayingPhaseState().updateCurrentTurn(); // After the second leader action, go to next player turn
-            else
-                turn.changeState(new LorenzoMagnificoTurnState(turn)); // After the second leader action, go to Lorenzo action
-        }
+        if (!turn.getMatch().isMultiPlayerMode()) checkSinglePlayerEnd();
+
+        goToNextStateAfterLeaderAction(turn, message);
     }
 
-    private boolean seventhCardDrawn() {
-        int nCards = 0;
-        for (List<DevelopmentCard> cards : turn.getTurnPlayer().getPersonalBoard().getDevelopmentCardsSlots())
-            nCards += cards.size();
-        return nCards >= 7;
+    /**
+     * Method to check if the game has finished.
+     * It checks the conditions and modifies the state of the phase of the match.
+     */
+    private void checkMultiPlayerEnd() {
+        if (isSeventhCardDrawn())
+            turn.getPlayingPhaseState().goToEndMatchPhaseState(new Message(MessageType.SEVENTH_CARD_DRAWN));
+        else if (isFinalTilePosition())
+            turn.getPlayingPhaseState().goToEndMatchPhaseState(new Message(MessageType.FINAL_TILE_POSITION));
     }
 
-    private boolean finalTilePosition() {
+    /**
+     * Method to check if the game has finished with the additional rules of multiplayer mode.
+     * It checks the conditions and modifies the state of the phase of the match.
+     */
+    private void checkSinglePlayerEnd() {
+        if (isNoMoreColumnOfDevelopmentCards())
+            turn.getPlayingPhaseState().goToEndMatchPhaseState(new Message(MessageType.NO_MORE_COLUMN_DEVELOPMENT_CARDS));
+        else if (isBlackCrossFinalPosition())
+            turn.getPlayingPhaseState().goToEndMatchPhaseState(new Message(MessageType.BLACK_CROSS_FINAL_POSITION));
+    }
+
+    /**
+     * Method to check if the seventh card has been drawn.
+     *
+     * @return true if player has seven cards, false otherwise
+     */
+    private boolean isSeventhCardDrawn() {
+        return turn.getTurnPlayer().getPersonalBoard().getDevelopmentCardsSlots()
+                .stream()
+                .map(List::size)
+                .reduce(0, Integer::sum) >= 7;
+    }
+
+    /**
+     * Method to check if the marker is on the last position of the faith track.
+     *
+     * @return true if marker on the last position, false otherwise.
+     */
+    private boolean isFinalTilePosition() {
         return turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getMarkerPosition() ==
-                turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].getEndSection();
+                turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getFinalPosition();
     }
 
-    private void noMoreCards() { // Multiplayer
+
+    /**
+     * Method to check if the black cross has reached the end of the faith track.
+     *
+     * @return true if the black cross is on the final position, false otherwise
+     */
+    private boolean isBlackCrossFinalPosition() {
+        return turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getBlackCrossPosition() ==
+                turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getFinalPosition();
+    }
+
+    /**
+     * Method to check if there is an empty column of the development grid.
+     *
+     * @return true if there is an empty column, false otherwise
+     */
+    private boolean isNoMoreColumnOfDevelopmentCards() {
+        for (Color color : COLORS) {
+            try {
+                if (!isCardOnColumn(color)) return true;
+            } catch (ColorDoesNotExistException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Method to check if there is at least one card available on a column of the development card grid.
+     *
+     * @param color color of the column
+     * @return true if there is a card, false otherwise
+     * @throws ColorDoesNotExistException if the given color does not exist
+     */
+    private boolean isCardOnColumn(Color color) throws ColorDoesNotExistException {
+        for (Level level : LEVELS) {
+            try {
+                if (turn.getMatch().getDevelopmentGrid().isAvailable(color, level)) {
+                    return true;
+                }
+            } catch (LevelDoesNotExistException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }

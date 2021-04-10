@@ -50,7 +50,9 @@ public class Depot extends Observable<Message> {
      *
      * @return list of the resources in the depot
      */
-    public List<Resource> getResources() { return resources; }
+    public List<Resource> getResources() {
+        return resources;
+    }
 
     /**
      * Method to add a resource to the depot.

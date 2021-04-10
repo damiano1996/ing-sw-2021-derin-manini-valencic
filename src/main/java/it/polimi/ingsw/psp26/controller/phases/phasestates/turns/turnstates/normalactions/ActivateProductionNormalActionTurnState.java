@@ -18,7 +18,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         super(turn);
     }
 
-    public void play(Message message) throws DepotOutOfBoundException {
+    public void play(Message message) {
         List<Resource> playerStrongBoxCopy = new ArrayList<>();
         List<List<Resource>> playerDepotsCopy = new ArrayList<List<Resource>>();
 
@@ -32,7 +32,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             } catch (NegativeNumberOfElementsToGrabException e) {
                 System.out.println("Number of resources insufficient to activate all development card");
                 System.out.println("Choose another action or choose a different set of development cards");
-                Reverse(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
+                try {
+                    Reverse(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
+                } catch (DepotOutOfBoundException depotOutOfBoundException) {
+                    depotOutOfBoundException.printStackTrace();
+                }
             }
             resourcesProduced.addAll(getProductionResources(card));
         }
@@ -64,9 +68,9 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         return resourcesProduced;
     }
 
-    private void takePlayerResourcesSnapShot(Player player, List<Resource> StrongBoxCopy, List<List<Resource>> DepotsCopy){
+    private void takePlayerResourcesSnapShot(Player player, List<Resource> StrongBoxCopy, List<List<Resource>> DepotsCopy) {
         StrongBoxCopy.addAll(player.getPersonalBoard().getStrongbox());
-        for(Depot depot : player.getPersonalBoard().getWarehouseDepots()){
+        for (Depot depot : player.getPersonalBoard().getWarehouseDepots()) {
             List<Resource> DepotCopy1 = new ArrayList<>();
             DepotCopy1.addAll(depot.getResources());
             DepotsCopy.add(DepotCopy1);
@@ -77,7 +81,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     private void Reverse(List<Resource> StrongBoxCopy, List<List<Resource>> DepotsCopy, Player player) throws DepotOutOfBoundException {
         player.getPersonalBoard().getStrongbox().clear();
         player.getPersonalBoard().getStrongbox().addAll(StrongBoxCopy);
-        for(int i = 0; i < player.getPersonalBoard().getWarehouseDepots().size(); i++){
+        for (int i = 0; i < player.getPersonalBoard().getWarehouseDepots().size(); i++) {
             player.getPersonalBoard().getWarehouseDepot(i).getResources().clear();
             player.getPersonalBoard().getWarehouseDepot(i).getResources().addAll(DepotsCopy.get(i));
         }

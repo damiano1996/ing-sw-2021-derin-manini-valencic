@@ -32,8 +32,6 @@ public class Turn {
         // starting from:
         // step 1: check first turn benefits // it can be performed every time
         turnState = new BenefitsTurnState(this);
-
-        turnPhase = TurnPhase.LEADER_ACTION_FIRST_TIME;
     }
 
     public void play(Message message) {

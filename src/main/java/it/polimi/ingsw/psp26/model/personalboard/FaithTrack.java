@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class FaithTrack extends Observable<Message> {
 
-    private final int length;
+    private final int finalPosition;
     private final VaticanReportSection[] vaticanReportSections;
     private int markerPosition;
     private int faithPoints;
@@ -28,11 +28,11 @@ public class FaithTrack extends Observable<Message> {
         super();
         addObserver(virtualView);
 
-        this.length = 24;
+        this.finalPosition = 24;
         vaticanReportSections = new VaticanReportSection[3];
         vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2);
         vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16, 3);
-        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, 24, 4);
+        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, finalPosition, 4);
         this.markerPosition = 0;
         this.blackCrossPosition = 0;
         this.faithPoints = 0;
@@ -110,6 +110,15 @@ public class FaithTrack extends Observable<Message> {
     }
 
     /**
+     * Getter of the final position.
+     *
+     * @return final position of the track
+     */
+    public int getFinalPosition() {
+        return finalPosition;
+    }
+
+    /**
      * Equals method.
      *
      * @param o object to be compared
@@ -120,7 +129,7 @@ public class FaithTrack extends Observable<Message> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FaithTrack that = (FaithTrack) o;
-        return length == that.length && markerPosition == that.markerPosition && faithPoints == that.faithPoints && blackCrossPosition == that.blackCrossPosition && Arrays.equals(vaticanReportSections, that.vaticanReportSections);
+        return finalPosition == that.finalPosition && markerPosition == that.markerPosition && faithPoints == that.faithPoints && blackCrossPosition == that.blackCrossPosition && Arrays.equals(vaticanReportSections, that.vaticanReportSections);
     }
 
     /**
@@ -130,7 +139,7 @@ public class FaithTrack extends Observable<Message> {
      */
     @Override
     public int hashCode() {
-        int result = Objects.hash(length, markerPosition, faithPoints, blackCrossPosition);
+        int result = Objects.hash(finalPosition, markerPosition, faithPoints, blackCrossPosition);
         result = 31 * result + Arrays.hashCode(vaticanReportSections);
         return result;
     }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 public class ChooseNormalActionTurnState extends TurnState {
     public ChooseNormalActionTurnState(Turn turn) {
         super(turn);
+        turn.setTurnPhase(TurnPhase.NORMAL_TO_LEADER_ACTION);
     }
 
     @Override
@@ -20,7 +21,6 @@ public class ChooseNormalActionTurnState extends TurnState {
 
         // e.g
         // next state is...
-        turn.setTurnPhase(TurnPhase.LEADER_ACTION_SECOND_TIME);
         turn.changeState(new MarketResourceNormalActionTurnState(turn));
     }
 }

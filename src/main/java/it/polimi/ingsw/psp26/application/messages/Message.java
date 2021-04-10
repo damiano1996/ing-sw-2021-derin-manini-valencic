@@ -18,6 +18,10 @@ public class Message implements Serializable {
         this.payload = payload;
     }
 
+    public Message(MessageType messageType) {
+        this.messageType = messageType;
+    }
+
     public String getSessionToken() {
         return sessionToken;
     }

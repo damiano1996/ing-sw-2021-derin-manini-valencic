@@ -68,8 +68,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
         for (Resource resource : drawnCard.getCost().keySet()) {
             numberResources = drawnCard.getCost().get(resource);
             numberResources -= player.getPersonalBoard().grabResourcesFromWarehouse(resource, numberResources).size();
-            if (numberResources > 0)
-                player.getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
+            if (numberResources > 0) player.getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
         }
         try {
             player.getPersonalBoard().addDevelopmentCard(i, drawnCard);

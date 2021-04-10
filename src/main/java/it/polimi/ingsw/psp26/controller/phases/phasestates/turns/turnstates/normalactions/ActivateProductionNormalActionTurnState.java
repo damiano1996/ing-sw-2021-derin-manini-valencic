@@ -3,10 +3,12 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
+import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +18,25 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         super(turn);
     }
 
-    public void play(Message message) {
+    public void play(Message message) throws DepotOutOfBoundException {
+        List<Resource> playerStrongBoxCopy = new ArrayList<>();
+        List<List<Resource>> playerDepotsCopy = new ArrayList<List<Resource>>();
 
         List<Resource> playerResources = getPlayerResources(turn.getTurnPlayer());
         List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
-        List<Resource> resourcesProduced = turn.getTurnPlayer().getPersonalBoard().getStrongbox();
+        List<Resource> resourcesProduced = new ArrayList<>();
         //ShowCards() and getMessage()
         for (DevelopmentCard card : playerCards) { // Instead of player cards there should be chosenCards
             try {
-                activateProduction(card, turn.getTurnPlayer());
+                activateCardProduction(card, turn.getTurnPlayer());
             } catch (NegativeNumberOfElementsToGrabException e) {
-                e.printStackTrace();
+                System.out.println("Number of resources insufficient to activate all development card");
+                System.out.println("Choose another action or choose a different set of development cards");
+                Reverse(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
             }
             resourcesProduced.addAll(getProductionResources(card));
         }
+        turn.getTurnPlayer().getPersonalBoard().getStrongbox().addAll(resourcesProduced);
     }
 
     private List<Resource> getPlayerResources(Player player) {
@@ -39,13 +46,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         return resources;
     }
 
-    private void activateProduction(DevelopmentCard chosenCard, Player player) throws NegativeNumberOfElementsToGrabException {
+    private void activateCardProduction(DevelopmentCard chosenCard, Player player) throws NegativeNumberOfElementsToGrabException {
         int resourceCost = 0;
         for (Resource resource : chosenCard.getProductionCost().keySet()) {
             resourceCost = chosenCard.getProductionCost().get(resource);
-            resourceCost -= player.getPersonalBoard().grabResourcesFromWarehouse(resource, resourceCost).size();
-            if (resourceCost > 0) player.getPersonalBoard().grabResourcesFromStrongbox(resource, resourceCost);
-
+            player.getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource, resourceCost);
         }
     }
 
@@ -57,6 +62,27 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             }
         }
         return resourcesProduced;
+    }
+
+    private void takePlayerResourcesSnapShot(Player player, List<Resource> StrongBoxCopy, List<List<Resource>> DepotsCopy){
+        StrongBoxCopy.addAll(player.getPersonalBoard().getStrongbox());
+        for(Depot depot : player.getPersonalBoard().getWarehouseDepots()){
+            List<Resource> DepotCopy1 = new ArrayList<>();
+            DepotCopy1.addAll(depot.getResources());
+            DepotsCopy.add(DepotCopy1);
+        }
+    }
+
+
+    private void Reverse(List<Resource> StrongBoxCopy, List<List<Resource>> DepotsCopy, Player player) throws DepotOutOfBoundException {
+        player.getPersonalBoard().getStrongbox().clear();
+        player.getPersonalBoard().getStrongbox().addAll(StrongBoxCopy);
+        for(int i = 0; i < player.getPersonalBoard().getWarehouseDepots().size(); i++){
+            player.getPersonalBoard().getWarehouseDepot(i).getResources().clear();
+            player.getPersonalBoard().getWarehouseDepot(i).getResources().addAll(DepotsCopy.get(i));
+        }
+
+
     }
 
 }

@@ -233,4 +233,5 @@ public class PersonalBoard extends Observable<Message> {
 
         return grabbedResources;
     }
+
 }

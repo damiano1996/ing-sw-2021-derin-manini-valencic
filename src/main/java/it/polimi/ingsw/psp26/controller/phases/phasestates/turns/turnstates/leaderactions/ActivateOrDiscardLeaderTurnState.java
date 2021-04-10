@@ -57,7 +57,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
     }
 
     private void discardLeader(LeaderCard leaderCard) {
-        turn.getTurnPlayer().getLeaderCards().remove(leaderCard);
+        turn.getTurnPlayer().discardLeaderCard(leaderCard);
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1);
     }
 

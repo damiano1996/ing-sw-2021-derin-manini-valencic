@@ -157,7 +157,7 @@ public class PersonalBoardTest {
     }
 
     @Test
-    public void testGetStrongbox() throws CanNotAddResourceToStrongboxException{
+    public void testGetStrongbox() throws CanNotAddResourceToStrongboxException {
         List<Resource> resources = new ArrayList<>();
         resources.add(Resource.COIN);
         resources.add(Resource.STONE);
@@ -172,7 +172,7 @@ public class PersonalBoardTest {
 
 
     @Test(expected = CanNotAddResourceToStrongboxException.class)
-    public void testGetStrongbox_CanNotAddResourceToStrongboxException() throws CanNotAddResourceToStrongboxException{
+    public void testGetStrongbox_CanNotAddResourceToStrongboxException() throws CanNotAddResourceToStrongboxException {
         List<Resource> resources = new ArrayList<>();
         resources.add(Resource.COIN);
         resources.add(Resource.STONE);

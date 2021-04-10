@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class DevelopmentCard {
 
-    private final HashMap<Resource, Integer> cost;
+    private final Map<Resource, Integer> cost;
     private final DevelopmentCardType developmentCardType;
     private final Map<Resource, Integer> productionCost;
     private final Map<Resource, Integer> productionReturn;
@@ -30,8 +30,8 @@ public class DevelopmentCard {
         this.victoryPoints = victoryPoints;
     }
 
-    public HashMap<Resource, Integer> getCost() {
-        return cost;
+    public Map<Resource, Integer> getCost() {
+        return Collections.unmodifiableMap(cost);
     }
 
     public DevelopmentCardType getDevelopmentCardType() {

@@ -56,7 +56,7 @@ public class FaithTrack extends Observable<Message> {
      * @return an array containing the vatican report sections
      */
     public VaticanReportSection[] getVaticanReportSections() {
-        return vaticanReportSections;
+        return Arrays.copyOf(vaticanReportSections, vaticanReportSections.length);
     }
 
     /**

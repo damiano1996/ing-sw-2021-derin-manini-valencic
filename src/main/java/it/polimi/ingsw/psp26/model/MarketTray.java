@@ -52,7 +52,7 @@ public class MarketTray extends Observable<Message> {
      * @return array containing the resources associated to the marbles on the requested row
      */
     public Resource[] getMarblesOnRow(int row) {
-        return marketMarbles[row];
+        return Arrays.copyOf(marketMarbles[row], marketMarbles[row].length);
     }
 
 
@@ -67,7 +67,7 @@ public class MarketTray extends Observable<Message> {
         for (int i = 0; i < marketMarbles.length; i++) {
             marketColumn[i] = marketMarbles[i][column];
         }
-        return marketColumn;
+        return Arrays.copyOf(marketColumn, marketColumn.length);
     }
 
 

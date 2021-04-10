@@ -85,7 +85,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         player.getPersonalBoard().getStrongbox().addAll(StrongBoxCopy);
         for (int i = 0; i < player.getPersonalBoard().getWarehouseDepots().size(); i++) {
             player.getPersonalBoard().getWarehouseDepot(i).grabAllResources();
-            for(int j = 0; j < DepotsCopy.get(i).size(); j++){
+            for (int j = 0; j < DepotsCopy.get(i).size(); j++) {
                 player.getPersonalBoard().getWarehouseDepot(i).addResource(DepotsCopy.get(i).get(0));
             }
 

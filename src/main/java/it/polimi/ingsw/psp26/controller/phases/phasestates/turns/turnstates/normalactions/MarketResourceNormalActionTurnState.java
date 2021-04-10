@@ -93,7 +93,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     }
                     System.out.println("Error move not allowed");
                     //NotifyObserver();
-                }catch(NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc){
+                } catch (NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {
                     exc.printStackTrace();
                 }
             }

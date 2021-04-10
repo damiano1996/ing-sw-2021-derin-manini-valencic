@@ -157,7 +157,7 @@ public class PersonalBoardTest {
     }
 
     @Test
-    public void testGetStrongbox() {
+    public void testGetStrongbox() throws CanNotAddResourceToStrongboxException{
         List<Resource> resources = new ArrayList<>();
         resources.add(Resource.COIN);
         resources.add(Resource.STONE);
@@ -170,8 +170,22 @@ public class PersonalBoardTest {
         assertEquals(resources, personalBoard.getStrongbox());
     }
 
-    @Test
-    public void testGrabFromStrongbox() {
+
+    @Test(expected = CanNotAddResourceToStrongboxException.class)
+    public void testGetStrongbox_CanNotAddResourceToStrongboxException() throws CanNotAddResourceToStrongboxException{
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.COIN);
+        resources.add(Resource.STONE);
+        resources.add(Resource.EMPTY);
+        resources.add(Resource.COIN);
+        resources.add(Resource.SHIELD);
+
+        personalBoard.addResourcesToStrongbox(resources);
+
+        assertEquals(resources, personalBoard.getStrongbox());
+    }
+
+    public void testGRabFromStrongbox() throws CanNotAddResourceToStrongboxException {
         List<Resource> resources = new ArrayList<>();
         resources.add(Resource.COIN);
         resources.add(Resource.STONE);
@@ -229,7 +243,7 @@ public class PersonalBoardTest {
     @Test
     public void testGrabResourcesFromWarehouseAndStrongbox() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
         personalBoard.getWarehouseDepot(0).addResource(Resource.COIN);
-        personalBoard.addResourceToStrongbox(Resource.COIN);
+        personalBoard.getStrongbox().add(Resource.COIN);
         assertEquals(new ArrayList<>() {{
             add(Resource.COIN);
             add(Resource.COIN);

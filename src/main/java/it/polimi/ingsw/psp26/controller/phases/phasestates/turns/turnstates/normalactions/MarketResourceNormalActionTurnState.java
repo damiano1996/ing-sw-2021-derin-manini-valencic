@@ -86,10 +86,16 @@ public class MarketResourceNormalActionTurnState extends TurnState {
             try {
                 depot.addResource(resource);
             } catch (CanNotAddResourceToDepotException e) {
-                depot.getResources().clear();
-                depot.getResources().addAll(DepotCopy);
-                System.out.println("Error move not allowed");
-                //NotifyObserver();
+                try {
+                    depot.grabAllResources();
+                    for (int j = 0; j < DepotCopy.size(); j++) {
+                        depot.addResource(DepotCopy.get(0));
+                    }
+                    System.out.println("Error move not allowed");
+                    //NotifyObserver();
+                }catch(NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc){
+                    exc.printStackTrace();
+                }
             }
             tempResources.remove(resource);
         }

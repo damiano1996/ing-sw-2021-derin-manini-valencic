@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.Player;
@@ -26,6 +27,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
         List<Resource> resourcesProduced = new ArrayList<>();
         //ShowCards() and getMessage()
+
         for (DevelopmentCard card : playerCards) { // Instead of player cards there should be chosenCards
             try {
                 activateCardProduction(card, turn.getTurnPlayer());
@@ -34,8 +36,8 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 System.out.println("Choose another action or choose a different set of development cards");
                 try {
                     Reverse(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
-                } catch (DepotOutOfBoundException depotOutOfBoundException) {
-                    depotOutOfBoundException.printStackTrace();
+                } catch (DepotOutOfBoundException | NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {
+                    exc.printStackTrace();
                 }
             }
             resourcesProduced.addAll(getProductionResources(card));
@@ -78,12 +80,15 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     }
 
 
-    private void Reverse(List<Resource> StrongBoxCopy, List<List<Resource>> DepotsCopy, Player player) throws DepotOutOfBoundException {
+    private void Reverse(List<Resource> StrongBoxCopy, List<List<Resource>> DepotsCopy, Player player) throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
         player.getPersonalBoard().getStrongbox().clear();
         player.getPersonalBoard().getStrongbox().addAll(StrongBoxCopy);
         for (int i = 0; i < player.getPersonalBoard().getWarehouseDepots().size(); i++) {
-            player.getPersonalBoard().getWarehouseDepot(i).getResources().clear();
-            player.getPersonalBoard().getWarehouseDepot(i).getResources().addAll(DepotsCopy.get(i));
+            player.getPersonalBoard().getWarehouseDepot(i).grabAllResources();
+            for(int j = 0; j < DepotsCopy.get(i).size(); j++){
+                player.getPersonalBoard().getWarehouseDepot(i).addResource(DepotsCopy.get(i).get(0));
+            }
+
         }
 
 

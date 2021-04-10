@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -36,7 +37,7 @@ public class LeaderBoard {
      * @return leaderboard (hashmap) containing scores in the following format <player, victory points>
      */
     public HashMap<Player, Integer> getLeaderboard() {
-        return leaderboard;
+        return (HashMap<Player, Integer>) Collections.unmodifiableMap(leaderboard);
     }
 
     /**

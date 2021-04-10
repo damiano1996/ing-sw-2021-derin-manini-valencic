@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialDep
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.WhiteMarbleAbility;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class LeaderCardsInitializer {
     }
 
     public List<LeaderCard> getLeaderCards() {
-        return leaderCards;
+        return Collections.unmodifiableList(leaderCards);
     }
 
     private List<LeaderCard> createLeaderCards() {
@@ -46,7 +47,7 @@ public class LeaderCardsInitializer {
         cards.addAll(createVPFour());
         cards.addAll(createVPFive());
 
-        return cards;
+        return Collections.unmodifiableList(cards);
     }
 
     private List<LeaderCard> createVPTwo() {

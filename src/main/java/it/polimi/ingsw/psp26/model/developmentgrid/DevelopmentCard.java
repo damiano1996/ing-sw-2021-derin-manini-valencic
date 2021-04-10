@@ -2,15 +2,17 @@ package it.polimi.ingsw.psp26.model.developmentgrid;
 
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class DevelopmentCard {
 
     private final HashMap<Resource, Integer> cost;
     private final DevelopmentCardType developmentCardType;
-    private final HashMap<Resource, Integer> productionCost;
-    private final HashMap<Resource, Integer> productionReturn;
+    private final Map<Resource, Integer> productionCost;
+    private final Map<Resource, Integer> productionReturn;
     private final int victoryPoints;
 
 
@@ -36,12 +38,12 @@ public class DevelopmentCard {
         return developmentCardType;
     }
 
-    public HashMap<Resource, Integer> getProductionCost() {
-        return productionCost;
+    public Map<Resource, Integer> getProductionCost() {
+        return Collections.unmodifiableMap(productionCost);
     }
 
-    public HashMap<Resource, Integer> getProductionReturn() {
-        return productionReturn;
+    public Map<Resource, Integer> getProductionReturn() {
+        return Collections.unmodifiableMap(productionReturn);
     }
 
     public int getVictoryPoints() {

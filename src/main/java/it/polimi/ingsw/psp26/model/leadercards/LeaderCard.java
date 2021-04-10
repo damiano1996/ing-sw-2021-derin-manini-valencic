@@ -4,20 +4,21 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
 
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Map;
 
 public class LeaderCard {
 
-    private final HashMap<Resource, Integer> resourcesRequirements;
-    private final HashMap<DevelopmentCardType, Integer> developmentCardRequirements;
+    private final Map<Resource, Integer> resourcesRequirements;
+    private final Map<DevelopmentCardType, Integer> developmentCardRequirements;
     private final int victoryPoints;
     private final SpecialAbility specialAbility;
 
     private boolean active;
 
     public LeaderCard(
-            HashMap<Resource, Integer> resourcesRequirements,
-            HashMap<DevelopmentCardType, Integer> developmentCardRequirements,
+            Map<Resource, Integer> resourcesRequirements,
+            Map<DevelopmentCardType, Integer> developmentCardRequirements,
             int victoryPoints,
             SpecialAbility specialAbility
     ) {
@@ -36,12 +37,12 @@ public class LeaderCard {
         active = true;
     }
 
-    public HashMap<Resource, Integer> getResourcesRequirements() {
-        return resourcesRequirements;
+    public Map<Resource, Integer> getResourcesRequirements() {
+        return Collections.unmodifiableMap(resourcesRequirements);
     }
 
-    public HashMap<DevelopmentCardType, Integer> getDevelopmentCardRequirements() {
-        return developmentCardRequirements;
+    public Map<DevelopmentCardType, Integer> getDevelopmentCardRequirements() {
+        return Collections.unmodifiableMap(developmentCardRequirements);
     }
 
     public SpecialAbility getSpecialAbility() {

@@ -4,7 +4,11 @@ public enum MessageType {
 
     GENERAL_MESSAGE,
 
-    // Leader actions
+    // Initialize game:
+    MAX_NUMBER_OF_PLAYERS,
+    ADD_PLAYER,
+
+    // Leader actions:
     DISCARD_LEADER,
     ACTIVATE_LEADER,
     SKIP_LEADER_ACTION,

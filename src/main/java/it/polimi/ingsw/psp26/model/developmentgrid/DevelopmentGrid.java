@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
+import java.util.Collections;
 import java.util.List;
 
 public class DevelopmentGrid extends Observable<Message> {
@@ -70,7 +71,7 @@ public class DevelopmentGrid extends Observable<Message> {
                 visibleCards.add(getDevelopmentGridCell(row, col).getFirstCard());
             }
         }
-        return visibleCards;
+        return Collections.unmodifiableList(visibleCards);
     }
 
     //rep exposed?

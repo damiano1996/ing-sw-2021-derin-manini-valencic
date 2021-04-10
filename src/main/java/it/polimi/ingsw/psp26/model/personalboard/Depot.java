@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,7 +52,7 @@ public class Depot extends Observable<Message> {
      * @return list of the resources in the depot
      */
     public List<Resource> getResources() {
-        return resources;
+        return Collections.unmodifiableList(resources);
     }
 
     /**

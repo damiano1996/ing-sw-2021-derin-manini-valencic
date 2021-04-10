@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,7 +75,7 @@ public class Player extends Observable<Message> {
      * @return the list containing the leader cards of the player
      */
     public List<LeaderCard> getLeaderCards() {
-        return leaderCards;
+        return Collections.unmodifiableList(leaderCards);
     }
 
     /**
@@ -85,6 +86,15 @@ public class Player extends Observable<Message> {
     public void setLeaderCards(List<LeaderCard> leaderCards) {
         this.leaderCards = leaderCards;
         notifyObservers(new Message()); // TODO: to be completed
+    }
+
+    /**
+     * Method to discard a leader card.
+     *
+     * @param leaderCard leader card to discard
+     */
+    public void discardLeaderCard(LeaderCard leaderCard) {
+        leaderCards.remove(leaderCard);
     }
 
     /**

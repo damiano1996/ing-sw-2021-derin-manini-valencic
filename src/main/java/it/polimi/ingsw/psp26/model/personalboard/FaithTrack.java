@@ -129,7 +129,11 @@ public class FaithTrack extends Observable<Message> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FaithTrack that = (FaithTrack) o;
-        return finalPosition == that.finalPosition && markerPosition == that.markerPosition && faithPoints == that.faithPoints && blackCrossPosition == that.blackCrossPosition && Arrays.equals(vaticanReportSections, that.vaticanReportSections);
+        return finalPosition == that.finalPosition &&
+                markerPosition == that.markerPosition &&
+                faithPoints == that.faithPoints &&
+                blackCrossPosition == that.blackCrossPosition &&
+                Arrays.equals(vaticanReportSections, that.vaticanReportSections);
     }
 
     /**

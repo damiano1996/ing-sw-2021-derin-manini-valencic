@@ -105,7 +105,7 @@ public class Match extends Observable<Message> {
      * @return list of players
      */
     public List<Player> getPlayers() {
-        return players;
+        return Collections.unmodifiableList(players);
     }
 
     /**

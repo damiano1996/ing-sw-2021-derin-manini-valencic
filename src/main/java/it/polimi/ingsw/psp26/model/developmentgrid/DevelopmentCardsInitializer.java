@@ -29,10 +29,10 @@ public class DevelopmentCardsInitializer {
     }
 
     public List<DevelopmentCard> getByDevelopmentCardType(DevelopmentCardType developmentCardType) {
-        return developmentCards
+        return new ArrayList<>(developmentCards
                 .stream()
                 .filter(x -> x.getDevelopmentCardType().equals(developmentCardType))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     private List<DevelopmentCard> createDevelopmentCards() {

@@ -16,7 +16,13 @@ public class InitializationPhaseState extends PhaseState {
     public void execute(Message message) {
         super.execute(message);
 
-        // TODO: to be implemented
+        switch (message.getMessageType()) {
+            case MAX_NUMBER_OF_PLAYERS:
+                setMaxNumberOfPlayers(message);
+                break;
+            case ADD_PLAYER:
+                addPlayer(message);
+        }
 
         // next state is...
         // if (phase.getMatchController().getMatch().getPlayers().size() == maxNumberOfPlayers)

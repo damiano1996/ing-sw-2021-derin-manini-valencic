@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,7 +58,7 @@ public class PersonalBoard extends Observable<Message> {
      * @return list containing slots (sub-lists) of development cards
      */
     public List<List<DevelopmentCard>> getDevelopmentCardsSlots() {
-        return developmentCardsSlots;
+        return Collections.unmodifiableList(developmentCardsSlots);
     }
 
     /**
@@ -69,7 +70,7 @@ public class PersonalBoard extends Observable<Message> {
      */
     public List<DevelopmentCard> getDevelopmentCardsSlot(int slotIndex) throws DevelopmentCardSlotOutOfBoundsException {
         if (slotIndex >= developmentCardsSlots.size()) throw new DevelopmentCardSlotOutOfBoundsException();
-        else return developmentCardsSlots.get(slotIndex);
+        else return Collections.unmodifiableList(developmentCardsSlots.get(slotIndex));
     }
 
     /**
@@ -83,7 +84,7 @@ public class PersonalBoard extends Observable<Message> {
             if (developmentCardsSlot.size() > 0)
                 visibleCards.add(developmentCardsSlot.get(developmentCardsSlot.size() - 1));
         }
-        return visibleCards;
+        return Collections.unmodifiableList(visibleCards);
     }
 
     /**
@@ -113,7 +114,26 @@ public class PersonalBoard extends Observable<Message> {
      * @return list containing resources of the strongbox
      */
     public List<Resource> getStrongbox() {
-        return strongbox;
+        return Collections.unmodifiableList(strongbox);
+    }
+
+    /**
+     * Method to add a resource to the strongbox.
+     *
+     * @param resource resource to add
+     */
+    public void addResourceToStrongbox(Resource resource) {
+        strongbox.add(resource);
+    }
+
+    /**
+     * Method to add a list of resources to the strongbox.
+     *
+     * @param resources list of resources to add
+     */
+    public void addResourcesToStrongbox(List<Resource> resources) {
+        strongbox.addAll(resources);
+        notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -149,16 +169,6 @@ public class PersonalBoard extends Observable<Message> {
                                 .getDevelopmentCardType()
                                 .getLevel()
                                 .getLevelNumber());
-    }
-
-    /**
-     * Method to add a list of resources to the strongbox.
-     *
-     * @param resources list of resources to add
-     */
-    public void addResourcesToStrongbox(List<Resource> resources) {
-        strongbox.addAll(resources);
-        notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**

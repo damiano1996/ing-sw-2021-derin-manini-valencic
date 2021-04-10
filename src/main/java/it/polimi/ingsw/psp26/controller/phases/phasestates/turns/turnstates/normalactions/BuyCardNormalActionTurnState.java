@@ -74,10 +74,11 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
 
     }
-    private void placeCard(Message message, DevelopmentCard drawnCard){
+
+    private void placeCard(Message message, DevelopmentCard drawnCard) {
         int i = 0; //Message body give position information
         try {
-           turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(i, drawnCard);
+            turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(i, drawnCard);
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
             System.out.println("The position chosen is not correct, choose another one");
             //NotifyObserver();

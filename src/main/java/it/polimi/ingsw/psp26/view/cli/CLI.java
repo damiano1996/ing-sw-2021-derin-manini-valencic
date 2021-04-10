@@ -15,7 +15,10 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 import it.polimi.ingsw.psp26.model.personalboard.*;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class CLI {
@@ -1449,7 +1452,7 @@ public class CLI {
      * @param requirements The requirements of the Leader Card
      * @return A formatted String of the requirements
      */
-    private String printLeaderDevelopmentCardRequirements(HashMap<DevelopmentCardType, Integer> requirements) {
+    private String printLeaderDevelopmentCardRequirements(Map<DevelopmentCardType, Integer> requirements) {
         StringBuilder s = new StringBuilder();
         int remainingSpace = 7;
 
@@ -1477,7 +1480,7 @@ public class CLI {
      * @param requirements The requirements of the Leader Card
      * @return A formatted String of the requirements
      */
-    private String printLeaderResourcesRequirements(HashMap<Resource, Integer> requirements) {
+    private String printLeaderResourcesRequirements(Map<Resource, Integer> requirements) {
         StringBuilder s = new StringBuilder();
         int remainingSpace = 7;
 

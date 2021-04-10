@@ -15,7 +15,7 @@ public class VirtualView extends Observable<Message> implements Observer<Message
 
     @Override
     public void update(Message message) {
-        // it receives notification from model and it has to notify the "real" view
+        // it receives notification from model/controller and it has to notify the "real" view
     }
 
     private void forwardMessage(Message message) {

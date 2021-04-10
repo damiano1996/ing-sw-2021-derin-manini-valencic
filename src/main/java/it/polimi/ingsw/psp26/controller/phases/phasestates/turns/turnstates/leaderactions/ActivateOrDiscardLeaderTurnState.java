@@ -7,6 +7,8 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Chec
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
+import java.util.HashMap;
+
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Utils.goToNextStateAfterLeaderAction;
 
 public class ActivateOrDiscardLeaderTurnState extends TurnState {
@@ -35,7 +37,10 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
                 break;
 
             default:
-                // TODO: client.displayLeaderToActivate();
+                turn.getVirtualView().update(
+                        new Message(turn.getTurnPlayer().getSessionToken(),
+                                MessageType.CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD)
+                );
                 break;
         }
     }
@@ -66,6 +71,13 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
             if (playerLeaderCard.equals(leaderCard))
                 playerLeaderCard.activate();
         }
-        // TODO: client.displayActiveLeader()
+        turn.getVirtualView().update(
+                new Message(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.LEADER_ACTIVATED,
+                        new HashMap<>() {{
+                            put("leaderCard", leaderCard);
+                        }}
+                )
+        );
     }
 }

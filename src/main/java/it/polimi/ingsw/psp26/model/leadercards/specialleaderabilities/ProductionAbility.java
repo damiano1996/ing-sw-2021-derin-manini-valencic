@@ -9,6 +9,12 @@ public class ProductionAbility extends SpecialAbility {
         super(resource);
     }
 
+    @Override
+    public void execute() {
+        super.execute();
+
+
+    }
 
     public String getAbilityType() {
         return "PRODUCTION  LEADER";

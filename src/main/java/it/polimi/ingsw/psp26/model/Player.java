@@ -124,4 +124,5 @@ public class Player extends Observable<Message> {
                 .stream()
                 .anyMatch(x -> !x.isActive());
     }
+
 }

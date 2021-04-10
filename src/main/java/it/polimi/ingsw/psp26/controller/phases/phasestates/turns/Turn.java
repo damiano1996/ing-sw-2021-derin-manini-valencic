@@ -6,10 +6,12 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Bene
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 public class Turn {
 
     private final PlayingPhaseState playingPhaseState;
+    private final VirtualView virtualView;
     private final Match match;
     private final int turnNumber;
     private final Player turnPlayer;
@@ -17,8 +19,9 @@ public class Turn {
     private TurnState turnState;
     private TurnPhase turnPhase;
 
-    public Turn(PlayingPhaseState playingPhaseState, Match match, Player turnPlayer, int turnNumber) {
+    public Turn(PlayingPhaseState playingPhaseState, VirtualView virtualView, Match match, Player turnPlayer, int turnNumber) {
         this.playingPhaseState = playingPhaseState;
+        this.virtualView = virtualView;
         this.match = match;
         this.turnPlayer = turnPlayer;
         this.turnNumber = turnNumber;
@@ -64,5 +67,9 @@ public class Turn {
 
     public PlayingPhaseState getPlayingPhaseState() {
         return playingPhaseState;
+    }
+
+    public VirtualView getVirtualView() {
+        return virtualView;
     }
 }

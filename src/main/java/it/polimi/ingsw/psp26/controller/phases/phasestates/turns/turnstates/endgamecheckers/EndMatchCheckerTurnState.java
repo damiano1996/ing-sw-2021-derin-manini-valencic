@@ -76,7 +76,6 @@ public class EndMatchCheckerTurnState extends TurnState {
                 turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getFinalPosition();
     }
 
-
     /**
      * Method to check if the black cross has reached the end of the faith track.
      *
@@ -102,7 +101,6 @@ public class EndMatchCheckerTurnState extends TurnState {
         }
         return false;
     }
-
 
     /**
      * Method to check if there is at least one card available on a column of the development card grid.

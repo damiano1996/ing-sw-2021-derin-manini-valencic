@@ -9,9 +9,12 @@ public enum MessageType {
     ADD_PLAYER,
 
     // Leader actions:
-    DISCARD_LEADER,
-    ACTIVATE_LEADER,
+    CHOICE_LEADER_ACTION, // to display to the client the leader action options
+    DISCARD_LEADER, // action
+    ACTIVATE_LEADER, // action
     SKIP_LEADER_ACTION,
+    CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD, // to display to the client the leader cards
+    LEADER_ACTIVATED, // to display the activated leader
 
     // Leader action activation:
     LEADER_CHOSEN,

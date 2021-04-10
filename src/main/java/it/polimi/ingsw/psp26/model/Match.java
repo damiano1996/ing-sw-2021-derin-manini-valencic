@@ -17,6 +17,7 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
 
@@ -195,5 +196,35 @@ public class Match extends Observable<Message> {
      */
     private void shuffleActionTokenStack() {
         Collections.shuffle(actionTokenStack);
+    }
+
+    /**
+     * Equals method.
+     *
+     * @param o object to be compared
+     * @return true if the given object is equal to this, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Match match = (Match) o;
+        return id == match.id &&
+                Objects.equals(players, match.players) &&
+                Objects.equals(resourceSupply, match.resourceSupply) &&
+                Objects.equals(developmentGrid, match.developmentGrid) &&
+                Objects.equals(marketTray, match.marketTray) &&
+                Objects.equals(leaderDeck, match.leaderDeck) &&
+                Objects.equals(actionTokenStack, match.actionTokenStack);
+    }
+
+    /**
+     * Hashing method.
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, players, resourceSupply, developmentGrid, marketTray, leaderDeck, actionTokenStack);
     }
 }

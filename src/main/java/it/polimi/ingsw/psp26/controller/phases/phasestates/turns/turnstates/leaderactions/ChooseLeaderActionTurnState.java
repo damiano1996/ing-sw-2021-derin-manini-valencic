@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -39,7 +40,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
 
                 default:
                     // if message type doesn't match with any of previous cases, we have to display the choice to the client!
-                    // client.displayChooseLeaderAction();
+                    turn.getVirtualView().update(new Message(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_LEADER_ACTION));
                     break;
             }
         }

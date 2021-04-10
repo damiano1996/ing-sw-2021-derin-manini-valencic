@@ -27,6 +27,7 @@ public class PlayingPhaseState extends PhaseState {
         Collections.shuffle(phase.getMatchController().getMatch().getPlayers());
         currentTurn = new Turn(
                 this,
+                phase.getMatchController().getVirtualView(),
                 phase.getMatchController().getMatch(),
                 phase.getMatchController().getMatch().getPlayers().get(0),
                 0
@@ -35,7 +36,11 @@ public class PlayingPhaseState extends PhaseState {
 
     public void updateCurrentTurn() {
         int nextTurnNUmber = currentTurn.getTurnNumber() + 1;
-        currentTurn = new Turn(this, phase.getMatchController().getMatch(), getNextPlayer(), nextTurnNUmber);
+        currentTurn = new Turn(this,
+                phase.getMatchController().getVirtualView(),
+                phase.getMatchController().getMatch(),
+                getNextPlayer(),
+                nextTurnNUmber);
     }
 
     private Player getNextPlayer() {

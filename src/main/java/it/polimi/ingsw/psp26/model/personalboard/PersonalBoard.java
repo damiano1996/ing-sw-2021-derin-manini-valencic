@@ -156,9 +156,11 @@ public class PersonalBoard extends Observable<Message> {
      *
      * @param resources list of resources to add
      */
-    public void addResourcesToStrongbox(List<Resource> resources) {
-        strongbox.addAll(resources);
-        notifyObservers(new Message()); // TODO: to be completed
+    public void addResourcesToStrongbox(List<Resource> resources) throws CanNotAddResourceToStrongboxException{
+        if(resources.contains(Resource.EMPTY) || resources.contains(Resource.FAITH_MARKER)) throw new CanNotAddResourceToStrongboxException();
+            strongbox.addAll(resources);
+            notifyObservers(new Message()); // TODO: to be completed
+
     }
 
     /**

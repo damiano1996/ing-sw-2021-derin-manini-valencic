@@ -122,7 +122,9 @@ public class PersonalBoard extends Observable<Message> {
      *
      * @param resource resource to add
      */
-    public void addResourceToStrongbox(Resource resource) {
+    public void addResourceToStrongbox(Resource resource) throws CanNotAddResourceToStrongboxException {
+        if (resource.equals(Resource.EMPTY) || resource.equals(Resource.FAITH_MARKER))
+            throw new CanNotAddResourceToStrongboxException();
         strongbox.add(resource);
     }
 
@@ -131,8 +133,8 @@ public class PersonalBoard extends Observable<Message> {
      *
      * @param resources list of resources to add
      */
-    public void addResourcesToStrongbox(List<Resource> resources) {
-        strongbox.addAll(resources);
+    public void addResourcesToStrongbox(List<Resource> resources) throws CanNotAddResourceToStrongboxException {
+        for (Resource resource : resources) addResourceToStrongbox(resource);
         notifyObservers(new Message()); // TODO: to be completed
     }
 
@@ -221,7 +223,7 @@ public class PersonalBoard extends Observable<Message> {
                 if (depot.getResources().get(0).equals(resource))
                     return depot.grabResources(Math.min(numberOfResources, depot.getResources().size()));
         }
-        return new ArrayList<Resource>();
+        return new ArrayList<>();
     }
 
     /**
@@ -231,12 +233,10 @@ public class PersonalBoard extends Observable<Message> {
      * @param resource          resource type to grab
      * @param numberOfResources quantity of resources to grab
      * @return list containing the requested resources
-     * @throws NoResourceTypeInWarehouseException      if the requested resource isn't in the warehouse
      * @throws NegativeNumberOfElementsToGrabException if the number of resources to grab is negative
      */
     public List<Resource> grabResourcesFromWarehouseAndStrongbox(Resource resource, int numberOfResources) throws NegativeNumberOfElementsToGrabException {
-        List<Resource> grabbedResources = new ArrayList<>();
-        grabbedResources.addAll(grabResourcesFromWarehouse(resource, numberOfResources));
+        List<Resource> grabbedResources = new ArrayList<>(grabResourcesFromWarehouse(resource, numberOfResources));
 
         if (grabbedResources.size() < numberOfResources)
             grabbedResources.addAll(grabResourcesFromStrongbox(resource, numberOfResources));

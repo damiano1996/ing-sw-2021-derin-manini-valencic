@@ -25,7 +25,8 @@ public class BuyCardNormalActionTurnState extends TurnState {
         List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
         getAvailableCard(turn.getMatch(), playerResources, playerCards);
         //WaitPlayerAction
-        //buyCard()
+        //buyCard(Message); // State 1
+        //placeCard(Message); // State 2
 
     }
 
@@ -70,11 +71,16 @@ public class BuyCardNormalActionTurnState extends TurnState {
             numberResources -= player.getPersonalBoard().grabResourcesFromWarehouse(resource, numberResources).size();
             if (numberResources > 0) player.getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
         }
+
+
+    }
+    private void placeCard(Message message, DevelopmentCard drawnCard){
+        int i = 0; //Message body give position information
         try {
-            player.getPersonalBoard().addDevelopmentCard(i, drawnCard);
+           turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(i, drawnCard);
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
             System.out.println("The position chosen is not correct, choose another one");
-            //To improve
+            //NotifyObserver();
         }
 
     }

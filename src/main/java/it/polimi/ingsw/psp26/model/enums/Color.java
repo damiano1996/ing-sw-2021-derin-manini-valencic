@@ -18,8 +18,8 @@ public enum Color {
         this.ANSIcode = ANSIcode;
     }
 
-    public void setColor() {
-        System.out.print(ANSIcode);
+    public String setColor() {
+        return ANSIcode;
     }
 
     public String toString() {

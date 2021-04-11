@@ -1,0 +1,281 @@
+package it.polimi.ingsw.psp26.view.cli;
+
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGridCell;
+import it.polimi.ingsw.psp26.model.enums.Color;
+import it.polimi.ingsw.psp26.model.enums.Resource;
+
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class DevelopmentCardsCli {
+
+    private final PrintWriter pw;
+    private final CliUtils cliUtils;
+
+    public DevelopmentCardsCli() {
+        this.pw = new PrintWriter(System.out);
+        this.cliUtils = new CliUtils();
+    }
+
+    /**
+     * Prints the Development Card Grid
+     *
+     * @param developmentGrid The Development Grid to print
+     */
+    public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
+        for (int i = 0; i < 3; i++) {
+            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 0), 1 + (19 * i), 1);
+            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 1), 1 + (19 * i), 32);
+            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 2), 1 + (19 * i), 63);
+            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 3), 1 + (19 * i), 94);
+        }
+
+        cliUtils.setCursorBottomLeft();
+    }
+
+    /**
+     * Printrint DevelopmentCards.
+     *
+     * @param developmentCard The desired card to print
+     * @param startingRow     The row where the Card will be printed
+     * @param startingColumn  The column where the Card will be printed
+     * @param cardStackSize   How many cards are on the top of each other
+     */
+    public void printDevelopmentCard(DevelopmentCard developmentCard, int startingRow, int startingColumn, int cardStackSize) {
+        printDevelopmentCardBorder(startingRow, startingColumn, cardStackSize);
+        cliUtils.printFigure("DevelopmentCard", startingRow, startingColumn);
+        printDevelopmentCardRequirements(developmentCard, startingRow, startingColumn);
+        printCardColor(developmentCard, startingRow, startingColumn, true);
+        printDevelopmentCardLevel(developmentCard, startingRow, startingColumn);
+        printCardColor(developmentCard, startingRow, startingColumn, false);
+        printProductionLines(developmentCard, 1, startingRow, startingColumn);
+        printProductionLines(developmentCard, 2, startingRow, startingColumn);
+        printProductionLines(developmentCard, 3, startingRow, startingColumn);
+        printCardVictoryPoints(developmentCard, startingRow, startingColumn);
+
+        pw.flush();
+    }
+
+    /**
+     * Prints one border for each Development Card under the top one
+     *
+     * @param startingRow    The row where the Card will be printed
+     * @param startingColumn The column where the Card will be printed
+     * @param cardStackSize  How many cards are on the top of each othe
+     */
+    private void printDevelopmentCardBorder(int startingRow, int startingColumn, int cardStackSize) {
+        if (cardStackSize > 1)
+            cliUtils.printFigure("DevelopmentCardBorder" + (cardStackSize - 1), startingRow, startingColumn);
+    }
+
+    /**
+     * Prints the Card color on top and on bottom of the level dots
+     *
+     * @param developmentCard Get the color of this Card
+     * @param startingRow     The row where the Card will be printed
+     * @param startingColumn  The column where the Card will be printed
+     * @param upOrDown        If true prints the upper section, if false print the lower section
+     */
+    private void printCardColor(DevelopmentCard developmentCard, int startingRow, int startingColumn, boolean upOrDown) {
+        if (upOrDown) {
+            cliUtils.setCursorPosition(startingRow + 2, startingColumn);
+            pw.print("| " + cliUtils.pCS(".-----------------.", developmentCard.getDevelopmentCardType().getColor()) + " |");
+        } else {
+            cliUtils.setCursorPosition(startingRow + 4, startingColumn);
+            pw.print("| " + cliUtils.pCS("`-----------------'", developmentCard.getDevelopmentCardType().getColor()) + " |");
+        }
+
+        pw.flush();
+    }
+
+    /**
+     * Prints the Development Card requirements line
+     *
+     * @param developmentCard The Card to print
+     */
+    private void printDevelopmentCardRequirements(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
+        cliUtils.setCursorPosition(startingRow + 1, startingColumn);
+
+        StringBuilder s = new StringBuilder("| ");
+        int remainingSpace = 20;
+
+        for (Map.Entry<Resource, Integer> entry : developmentCard.getCost().entrySet()) {
+            s.append(entry.getValue()).append(cliUtils.pCS("\u25A0", entry.getKey().getColor())).append("  ");
+            remainingSpace -= 4;
+        }
+        s.append(cliUtils.hSpace(remainingSpace)).append("|");
+
+        pw.print(s.toString());
+        pw.flush();
+    }
+
+    /**
+     * Prints the Development Card level line in the correct color
+     *
+     * @param developmentCard The Card to print
+     */
+    private void printDevelopmentCardLevel(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
+        cliUtils.setCursorPosition(startingRow + 3, startingColumn);
+
+        String s = "| ";
+
+        s = s + printLevelDots(developmentCard.getDevelopmentCardType().getLevel().getLevelNumber(), developmentCard.getDevelopmentCardType().getColor());
+        s = s + cliUtils.hSpace(8 - (2 * developmentCard.getDevelopmentCardType().getLevel().getLevelNumber())) + "lvl   " + cliUtils.hSpace(6 - (2 * developmentCard.getDevelopmentCardType().getLevel().getLevelNumber()));
+        s = s + printLevelDots(developmentCard.getDevelopmentCardType().getLevel().getLevelNumber(), developmentCard.getDevelopmentCardType().getColor());
+        s = s + "|";
+
+        pw.print(s);
+        pw.flush();
+    }
+
+    /**
+     * Prints a Card level dots in the correct Color
+     *
+     * @param level The level number of the Card
+     * @param color The Color of the Card
+     * @return A formatted String of the Level dots
+     */
+    private String printLevelDots(int level, Color color) {
+        return cliUtils.pCS("\u25CF ", color).repeat(Math.max(0, level));
+    }
+
+    /**
+     * Used to print the Production section of a DevelopmentCard
+     * It calls three auxiliary methods in order to get a clean print of the Resources
+     *
+     * @param developmentCard The card that is gonna to be printed
+     * @param line            Print the first, second or third line of the Production section
+     */
+    private void printProductionLines(DevelopmentCard developmentCard, int line, int startingRow, int startingColumn) {
+        List<Resource> requiredResources = new ArrayList<>();
+        List<Resource> producedResources = new ArrayList<>();
+        List<Integer> numberOfRequiredResources = new ArrayList<>();
+        List<Integer> numberOfProducedResources = new ArrayList<>();
+
+        for (Map.Entry<Resource, Integer> entry : developmentCard.getProductionCost().entrySet()) { //TODO magari una gestione miglore delle HashMap
+            requiredResources.add(entry.getKey());
+            numberOfRequiredResources.add(entry.getValue());
+        }
+
+        for (Map.Entry<Resource, Integer> entry : developmentCard.getProductionReturn().entrySet()) {
+            producedResources.add(entry.getKey());
+            numberOfProducedResources.add(entry.getValue());
+        }
+
+        if (line == 1)
+            printFirstProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources, startingRow, startingColumn);
+        else if (line == 2)
+            printSecondProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources, startingRow, startingColumn);
+        else
+            printThirdProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources, startingRow, startingColumn);
+    }
+
+    /**
+     * Prints the first line of the Development Card production section
+     *
+     * @param requiredResources         Resources type required to perform the production action
+     * @param numberOfRequiredResources Resources number required to perform the production action
+     * @param producedResources         Resources type produced by the production action
+     * @param numberOfProducedResources Resources number produced by the production action
+     */
+    private void printFirstProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
+        cliUtils.setCursorPosition(startingRow + 7, startingColumn);
+
+        String s = "| |  ";
+
+        if (requiredResources.size() == 1) s = s + cliUtils.hSpace(10);
+        else
+            s = s + numberOfRequiredResources.get(0) + cliUtils.pCS(" \u25A0", requiredResources.get(0).getColor()) + cliUtils.hSpace(7);
+
+        if (producedResources.size() == 1) s = s + cliUtils.hSpace(5) + "| |";
+        else
+            s = s + numberOfProducedResources.get(0) + cliUtils.pCS(" \u25A0  ", producedResources.get(0).getColor()) + "| |";
+
+        pw.print(s);
+        pw.flush();
+    }
+
+    /**
+     * Prints the second line of the Development Card production section
+     *
+     * @param requiredResources         Resources type required to perform the production action
+     * @param numberOfRequiredResources Resources number required to perform the production action
+     * @param producedResources         Resources type produced by the production action
+     * @param numberOfProducedResources Resources number produced by the production action
+     */
+    private void printSecondProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
+        cliUtils.setCursorPosition(startingRow + 8, startingColumn);
+
+        String s = "| |  ";
+
+        if (requiredResources.size() == 1)
+            s = s + numberOfRequiredResources.get(0) + cliUtils.pCS(" \u25A0", requiredResources.get(0).getColor()) + "  -->  ";
+        else s = s + "     -->  ";
+
+        if (producedResources.size() == 1)
+            s = s + numberOfProducedResources.get(0) + cliUtils.pCS(" \u25A0  ", producedResources.get(0).getColor()) + "| |";
+        else if (producedResources.size() == 3)
+            s = s + numberOfProducedResources.get(1) + cliUtils.pCS(" \u25A0  ", producedResources.get(1).getColor()) + "| |";
+        else s = s + "     | |";
+
+        pw.print(s);
+        pw.flush();
+    }
+
+    /**
+     * Prints the third line of the Development Card production section
+     *
+     * @param requiredResources         Resources type required to perform the production action
+     * @param numberOfRequiredResources Resources number required to perform the production action
+     * @param producedResources         Resources type produced by the production action
+     * @param numberOfProducedResources Resources number produced by the production action
+     */
+    private void printThirdProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
+        cliUtils.setCursorPosition(startingRow + 9, startingColumn);
+
+        String s = "| |  ";
+
+        if (requiredResources.size() == 2)
+            s = s + numberOfRequiredResources.get(1) + cliUtils.pCS(" \u25A0", requiredResources.get(1).getColor()) + cliUtils.hSpace(7);
+        else s = s + cliUtils.hSpace(10);
+
+        if (producedResources.size() == 2)
+            s = s + numberOfProducedResources.get(1) + cliUtils.pCS(" \u25A0  ", producedResources.get(1).getColor()) + "| |";
+        else if (producedResources.size() == 3)
+            s = s + numberOfProducedResources.get(2) + cliUtils.pCS(" \u25A0  ", producedResources.get(2).getColor()) + "| |";
+        else s = s + "     | |";
+
+        pw.print(s);
+        pw.flush();
+    }
+
+    /**
+     * Print the Development Card's Victory Points
+     *
+     * @param developmentCard The Card where to get the VictoryPoints
+     */
+    private void printCardVictoryPoints(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
+        cliUtils.setCursorPosition(startingRow + 12, startingColumn);
+
+        String s = "";
+        s = s + "|" + cliUtils.hSpace(10) + developmentCard.getVictoryPoints() + cliUtils.hSpace(10 - (developmentCard.getVictoryPoints() / 10)) + "|";
+
+        pw.print(s);
+        pw.flush();
+    }
+
+    /**
+     * Used to print the Development Cards in the Development Grid
+     *
+     * @param developmentGridCell If the cell contains one or more cards, print the one on the top. Otherwise, leave a blank space
+     */
+    private void printDevelopmentGridCard(DevelopmentGridCell developmentGridCell, int startingRow, int startingColumn) {
+        if (!developmentGridCell.isEmpty())
+            printDevelopmentCard(developmentGridCell.getFirstCard(), startingRow, startingColumn, developmentGridCell.getDevelopmentCardsSize());
+    }
+
+}

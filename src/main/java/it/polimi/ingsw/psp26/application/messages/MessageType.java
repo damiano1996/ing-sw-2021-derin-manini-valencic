@@ -16,6 +16,14 @@ public enum MessageType {
     CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD, // to display to the client the leader cards
     LEADER_ACTIVATED, // to display the activated leader
 
+    //Normal actions:
+    CHOICE_NORMAL_ACTION, // to display to the client the normal action options
+    ACTIVATE_PRODUCTION, // action
+    CHOICE_RESOURCE_IN_RESOURCE_OUT, //to display to the client the resource to use in base power
+    MARKET_RESOURCE, // action
+    BUY_CARD, // action
+    RESOURCE_CHOSEN, // resource chosen to use in base power
+
     // Leader action activation:
     LEADER_CHOSEN,
 

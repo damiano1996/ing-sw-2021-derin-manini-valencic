@@ -4,12 +4,18 @@ import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
+import it.polimi.ingsw.psp26.model.enums.Color;
+import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+
+import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.COLORS;
 
 /**
  * Class to model the personal board.
@@ -20,6 +26,7 @@ public class PersonalBoard extends Observable<Message> {
     private final List<List<DevelopmentCard>> developmentCardsSlots;
     private final List<Depot> warehouseDepots;
     private final List<Resource> strongbox;
+    private final DevelopmentCard baseCard;
 
     /**
      * Constructor of the class.
@@ -39,6 +46,24 @@ public class PersonalBoard extends Observable<Message> {
             warehouseDepots.add(new Depot(virtualView, i + 1));
         }
         strongbox = new ArrayList<>();
+        baseCard = new DevelopmentCard(
+                new HashMap<>() {{
+                    put(Resource.EMPTY, 0);
+                }},
+                new DevelopmentCardType(Color.WHITE, Level.UNDEFINED),
+                new HashMap<>() {{
+                    put(Resource.COIN, 2);
+                    put(Resource.SERVANT, 2);
+                    put(Resource.STONE, 2);
+                    put(Resource.SHIELD, 2);
+                }},
+                new HashMap<>() {{
+                    put(Resource.COIN, 1);
+                    put(Resource.SERVANT, 1);
+                    put(Resource.STONE, 1);
+                    put(Resource.SHIELD, 1);
+                }},
+                0);
 
         notifyObservers(new Message()); // TODO: to be completed
     }

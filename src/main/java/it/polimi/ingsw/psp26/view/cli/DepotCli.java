@@ -23,8 +23,12 @@ public class DepotCli {
 
     /**
      * Used to print the Strongbox
+     *
+     * @param strongbox      The Strongbox Resources to print
+     * @param startingRow    The starting row where the Strongbox is going to be printed
+     * @param startingColumn The starting column where the Strongbox is going to be printed
      */
-    public void printStrongbox(List<Resource> strongbox, int startingRow, int startingColumn) {
+    public void displayStrongbox(List<Resource> strongbox, int startingRow, int startingColumn) {
         cliUtils.printFigure("Strongbox", startingRow, startingColumn);
 
         printStrongboxResources(Resource.STONE, getStrongboxResourcesNumber(strongbox, Resource.STONE), startingRow, startingColumn);
@@ -39,6 +43,8 @@ public class DepotCli {
      * Prints the Warehouse and the Resources in it
      *
      * @param warehouseDepots A list of Depots that will be printed
+     * @param startingRow     The starting row where the Warehouse is going to be printed
+     * @param startingColumn  The starting column where the Warehouse is going to be printed
      */
     public void printWarehouse(List<Depot> warehouseDepots, int startingRow, int startingColumn) {
         cliUtils.printFigure("Warehouse", startingRow, startingColumn);
@@ -53,7 +59,7 @@ public class DepotCli {
      * @param warehouseDepots The Warehouse to print
      * @param resources       The resources get prom the Market to insert into the Warehouse
      */
-    public void displayWarehouseConfiguration(List<Depot> warehouseDepots, List<Resource> resources) { //TODO temporary solution
+    public void displayMarketResourcesSelection(List<Depot> warehouseDepots, List<Resource> resources) { //TODO temporary solution
         Scanner in = new Scanner(System.in);
         cliUtils.cls();
         pw.flush();
@@ -134,7 +140,9 @@ public class DepotCli {
     /**
      * Used in printWarehouse() to get the correct representation of Resources
      *
-     * @param depot The current Depot that will be printed
+     * @param depot          The current Depot that will be printed
+     * @param startingRow    The starting row where the Warehouse is going to be printed
+     * @param startingColumn The starting column where the Warehouse is going to be printed
      */
     private void printDepot(Depot depot, int startingRow, int startingColumn, int depotNumber) {
         cliUtils.setCursorPosition(startingRow + ((3 * depotNumber) - 1), startingColumn + 3);

@@ -51,7 +51,7 @@ public class CliUtils {
      * @return The colored String
      */
     public String pCS(String string, Color color) {
-        return color + string + Color.RESET;
+        return color.toString() + string + Color.RESET;
     }
 
     /**

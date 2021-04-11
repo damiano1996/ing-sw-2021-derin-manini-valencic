@@ -19,9 +19,11 @@ public class FaithTrackCli {
     /**
      * Prints the Player's Faith Track. The PopeSpace intervals are printed thicker
      *
-     * @param faithTrack The Faith Track to print
+     * @param faithTrack     The Faith Track to print
+     * @param startingRow    The starting row where the Faith Track is going to be printed
+     * @param startingColumn The starting column where the Faith Track is going to be printed
      */
-    public void printFaithTrack(FaithTrack faithTrack, int startingRow, int startingColumn) {
+    public void displayFaithTrack(FaithTrack faithTrack, int startingRow, int startingColumn) {
         cliUtils.printFigure("FaithTrack", startingRow, startingColumn);
         setPointsNumbers(startingRow, startingColumn);
         firstLine(startingRow, startingColumn, faithTrack.getMarkerPosition());
@@ -133,10 +135,12 @@ public class FaithTrackCli {
     /**
      * Prints the first line of the Track
      *
-     * @param fp Has the same function as before
+     * @param fp             Has the same function as before
+     * @param startingRow    The starting row where the Faith Track is going to be printed
+     * @param startingColumn The starting column where the Faith Track is going to be printed
      */
-    private void firstLine(int startingRow, int startngColumn, int fp) {
-        cliUtils.setCursorPosition(startingRow + 2, startngColumn);
+    private void firstLine(int startingRow, int startingColumn, int fp) {
+        cliUtils.setCursorPosition(startingRow + 2, startingColumn);
 
         pw.print(cliUtils.hSpace(16) + "|");
         printRow(4, 9, fp);
@@ -149,10 +153,12 @@ public class FaithTrackCli {
     /**
      * Prints the second line of the Track, including VaticanReportSections
      *
-     * @param fp Has the same function as before
+     * @param fp             Has the same function as before
+     * @param startingRow    The starting row where the Faith Track is going to be printed
+     * @param startingColumn The starting column where the Faith Track is going to be printed
      */
-    private void midLine(int startingRow, int startngColumn, int fp, VaticanReportSection[] vaticanReportSections) {
-        cliUtils.setCursorPosition(startingRow + 6, startngColumn);
+    private void midLine(int startingRow, int startingColumn, int fp, VaticanReportSection[] vaticanReportSections) {
+        cliUtils.setCursorPosition(startingRow + 6, startingColumn);
 
         pw.print(cliUtils.hSpace(16) + "|");
         printRow(3, 3, fp);
@@ -170,10 +176,12 @@ public class FaithTrackCli {
     /**
      * Prints the third line of the Track
      *
-     * @param fp Has the same function as before
+     * @param fp             Has the same function as before
+     * @param startingRow    The starting row where the Faith Track is going to be printed
+     * @param startingColumn The starting column where the Faith Track is going to be printed
      */
-    private void lastine(int startingRow, int startngColumn, int fp) {
-        cliUtils.setCursorPosition(startingRow + 10, startngColumn);
+    private void lastine(int startingRow, int startingColumn, int fp) {
+        cliUtils.setCursorPosition(startingRow + 10, startingColumn);
 
         pw.print("|");
         printRow(0, 2, fp);

@@ -96,6 +96,8 @@ public class DevelopmentCardsCli {
      * Prints the Development Card requirements line
      *
      * @param developmentCard The Card to print
+     * @param startingRow     The starting row where the Development Card is going to be printed
+     * @param startingColumn  The starting column where the Development Card is going to be printed
      */
     private void printDevelopmentCardRequirements(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 1, startingColumn);
@@ -117,6 +119,8 @@ public class DevelopmentCardsCli {
      * Prints the Development Card level line in the correct color
      *
      * @param developmentCard The Card to print
+     * @param startingRow     The starting row where the Development Card is going to be printed
+     * @param startingColumn  The starting column where the Development Card is going to be printed
      */
     private void printDevelopmentCardLevel(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 3, startingColumn);
@@ -149,6 +153,8 @@ public class DevelopmentCardsCli {
      *
      * @param developmentCard The card that is gonna to be printed
      * @param line            Print the first, second or third line of the Production section
+     * @param startingRow     The starting row where the Development Card is going to be printed
+     * @param startingColumn  The starting column where the Development Card is going to be printed
      */
     private void printProductionLines(DevelopmentCard developmentCard, int line, int startingRow, int startingColumn) {
         List<Resource> requiredResources = new ArrayList<>();
@@ -181,6 +187,8 @@ public class DevelopmentCardsCli {
      * @param numberOfRequiredResources Resources number required to perform the production action
      * @param producedResources         Resources type produced by the production action
      * @param numberOfProducedResources Resources number produced by the production action
+     * @param startingRow               The starting row where the Development Card is going to be printed
+     * @param startingColumn            The starting column where the Development Card is going to be printed
      */
     private void printFirstProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 7, startingColumn);
@@ -206,6 +214,8 @@ public class DevelopmentCardsCli {
      * @param numberOfRequiredResources Resources number required to perform the production action
      * @param producedResources         Resources type produced by the production action
      * @param numberOfProducedResources Resources number produced by the production action
+     * @param startingRow               The starting row where the Development Card is going to be printed
+     * @param startingColumn            The starting column where the Development Card is going to be printed
      */
     private void printSecondProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 8, startingColumn);
@@ -233,6 +243,8 @@ public class DevelopmentCardsCli {
      * @param numberOfRequiredResources Resources number required to perform the production action
      * @param producedResources         Resources type produced by the production action
      * @param numberOfProducedResources Resources number produced by the production action
+     * @param startingRow               The starting row where the Development Card is going to be printed
+     * @param startingColumn            The starting column where the Development Card is going to be printed
      */
     private void printThirdProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 9, startingColumn);
@@ -257,6 +269,8 @@ public class DevelopmentCardsCli {
      * Print the Development Card's Victory Points
      *
      * @param developmentCard The Card where to get the VictoryPoints
+     * @param startingRow     The starting row where the Development Card is going to be printed
+     * @param startingColumn  The starting column where the Development Card is going to be printed
      */
     private void printCardVictoryPoints(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 12, startingColumn);
@@ -272,6 +286,8 @@ public class DevelopmentCardsCli {
      * Used to print the Development Cards in the Development Grid
      *
      * @param developmentGridCell If the cell contains one or more cards, print the one on the top. Otherwise, leave a blank space
+     * @param startingRow         The starting row where the Development Card is going to be printed
+     * @param startingColumn      The starting column where the Development Card is going to be printed
      */
     private void printDevelopmentGridCard(DevelopmentGridCell developmentGridCell, int startingRow, int startingColumn) {
         if (!developmentGridCell.isEmpty())

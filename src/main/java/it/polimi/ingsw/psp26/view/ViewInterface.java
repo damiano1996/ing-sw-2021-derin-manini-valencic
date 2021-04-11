@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.view;
 
 import it.polimi.ingsw.psp26.model.MarketTray;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
@@ -21,27 +22,29 @@ public interface ViewInterface {
 
     void displayMatchSelection();
 
+    void displayLeaderChoice(List<LeaderCard> leaderCards);
+
     void displayLeaderCardsDrawn(List<LeaderCard> leaderCards);
 
-    void displayInkwell();
+    void displayInkwell(boolean isPrintable, int startingRow, int startingColumn);
 
     void displayInitialResources(List<Resource> resources);
 
-    void displayPersonalBoard(PersonalBoard personalBoard);
+    void displayPersonalBoard(Player player);
 
-    void displayWarehouseDepots(List<Depot> warehouseDepot);
+    void displayWarehouseDepots(List<Depot> warehouseDepot, int startingRow, int startingColumn);
 
-    void displayStrongbox(List<Resource> strongbox);
+    void displayStrongbox(List<Resource> strongbox, int startingRow, int startingColumn);
 
-    void displayFaithTrack(FaithTrack faithTrack);
+    void displayFaithTrack(FaithTrack faithTrack, int startingRow, int startingColumn);
 
-    void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots);
+    void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots, int startingRow, int startingColumn);
 
     void displayNormalActionsSelection();
 
-    void displayMarketTray(MarketTray marketTray);
+    void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn);
 
-    void displayMarketTrayResourcesSelection(MarketTray marketTray);
+    void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources);
 
     void displayDevelopmentGrid(DevelopmentGrid developmentGrid);
 
@@ -49,13 +52,9 @@ public interface ViewInterface {
 
     void displayProductionActivation(PersonalBoard personalBoard);
 
-    void displayVaticanReport(FaithTrack faithTrack);
-
     void displayLeaderActionSelection();
 
     void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards);
-
-    void displayLeaderCardActivation(List<LeaderCard> leaderCards);
 
     void displayActionTokens(ActionToken actionToken);
 

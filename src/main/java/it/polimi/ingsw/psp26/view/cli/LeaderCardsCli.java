@@ -76,6 +76,8 @@ public class LeaderCardsCli {
      * @param leaderCard      The card to check if has been selected
      * @param selectedLeaders The Leaders selected by the Player
      * @param leadercards     The 4 Leader Cards given to the Player's choice
+     * @param startingRow     The starting row where the Leader Card is going to be printed
+     * @param startingColumn  The starting column where the Leader Card is going to be printed
      */
     private void isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leadercards, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow, startingColumn);
@@ -88,6 +90,7 @@ public class LeaderCardsCli {
      * Prints the 4 Leader cards one next to the others. Used in selectLeaders() method
      *
      * @param leaderCards The cards to print
+     * @param startingRow The starting row where the Leader Card is going to be printed
      */
     public void printLeaderChoice(List<LeaderCard> leaderCards, int startingRow) {
         for (int i = 0; i < leaderCards.size(); i++) printLeader(leaderCards.get(i), startingRow, 33 + (i * 45));
@@ -170,7 +173,9 @@ public class LeaderCardsCli {
     /**
      * Prints the requirement of a given Leader Card
      *
-     * @param leaderCard The Leader Card to analyze
+     * @param leaderCard     The Leader Card to analyze
+     * @param startingRow    The starting row where the Leader Card is going to be printed
+     * @param startingColumn The starting column where the Leader Card is going to be printed
      */
     private void printLeaderRequirements(LeaderCard leaderCard, int startingRow, int startingColumn) {
         if (leaderCard.getDevelopmentCardRequirements().keySet().size() == 0)
@@ -182,7 +187,9 @@ public class LeaderCardsCli {
     /**
      * If the Leader Cards requires Development Cards, this method is invoked in printLeaderRequirements()
      *
-     * @param requirements The requirements of the Leader Card
+     * @param requirements   The requirements of the Leader Card
+     * @param startingRow    The starting row where the Leader Card is going to be printed
+     * @param startingColumn The starting column where the Leader Card is going to be printed
      */
     private void printLeaderDevelopmentCardRequirements(Map<DevelopmentCardType, Integer> requirements, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 1, startingColumn);
@@ -212,7 +219,9 @@ public class LeaderCardsCli {
     /**
      * If the Leader Cards requires Resources, this method is invoked in printLeaderRequirements()
      *
-     * @param requirements The requirements of the Leader Card
+     * @param requirements   The requirements of the Leader Card
+     * @param startingRow    The starting row where the Leader Card is going to be printed
+     * @param startingColumn The starting column where the Leader Card is going to be printed
      */
     private void printLeaderResourcesRequirements(Map<Resource, Integer> requirements, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 1, startingColumn);

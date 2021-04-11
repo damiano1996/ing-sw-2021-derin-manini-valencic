@@ -19,7 +19,9 @@ public class MarketCli {
     /**
      * Prints the Market Tray
      *
-     * @param marketTray The Market Tray to print
+     * @param marketTray     The Market Tray to print
+     * @param startingRow    The starting row where the Market is going to be printed
+     * @param startingColumn The starting column where the Market is going to be printed
      */
     public void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn) {
         cliUtils.printFigure("Market", startingRow, startingColumn + 6);
@@ -31,7 +33,9 @@ public class MarketCli {
     /**
      * Prints the rows of the Market Tray
      *
-     * @param marketTray The Market Tray to print
+     * @param marketTray     The Market Tray to print
+     * @param startingRow    The starting row where the Market is going to be printed
+     * @param startingColumn The starting column where the Market is going to be printed
      */
     private void printMarketMarbleRows(MarketTray marketTray, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 8, startingColumn + 18);
@@ -54,7 +58,9 @@ public class MarketCli {
     /**
      * Prints the marble on the Market Tray slide
      *
-     * @param marketTray The Market Tray to print
+     * @param marketTray     The Market Tray to print
+     * @param startingRow    The starting row where the Market is going to be printed
+     * @param startingColumn The starting column where the Market is going to be printed
      */
     private void printMarbleOnSlide(MarketTray marketTray, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 2, startingColumn + 40);
@@ -66,6 +72,8 @@ public class MarketCli {
 
     /**
      * Prints the Market legend
+     *
+     * @param startingColumn The starting column where the Market is going to be printed
      */
     private void printMarketLegend(int startingColumn) {
         cliUtils.vSpace(7);

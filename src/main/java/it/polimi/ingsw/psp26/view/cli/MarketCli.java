@@ -17,6 +17,16 @@ public class MarketCli {
     }
 
     /**
+     * Prints the Market interaction screen
+     *
+     * @param marketTray The market
+     */
+    public void displayMarketScreen(MarketTray marketTray) {
+        cliUtils.printFigure("MarketTitle", 1, 59);
+        displayMarketTray(marketTray, 12, 88);
+    }
+
+    /**
      * Prints the Market Tray
      *
      * @param marketTray     The Market Tray to print

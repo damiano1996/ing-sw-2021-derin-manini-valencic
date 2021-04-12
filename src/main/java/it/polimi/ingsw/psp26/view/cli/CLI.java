@@ -78,7 +78,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
         for (int i = 0; i < 4; i++) {
             cliUtils.cls();
-            developmentCardsCli.displayDevelopmentGrid(developmentGrid);
+            displayDevelopmentGridCardSelection(developmentGrid);
             in.nextLine();
             developmentGrid.drawCard(Color.PURPLE, Level.FIRST);
             developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
@@ -269,15 +269,15 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         //---MARKET-TEST---// Press Enter 3 times
 
         cliUtils.cls();
-        displayMarketTray(marketTray, 10, 10);
+        displayMarketScreen(marketTray);
         in.nextLine();
         marketTray.pushMarbleFromSlideToRow(1);
         cliUtils.cls();
-        displayMarketTray(marketTray, 10, 10);
+        displayMarketScreen(marketTray);
         in.nextLine();
         marketTray.pushMarbleFromSlideToColumn(3);
         cliUtils.cls();
-        displayMarketTray(marketTray, 10, 10);
+        displayMarketScreen(marketTray);
         in.nextLine();
 
     }
@@ -415,6 +415,11 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
+    public void displayMarketScreen(MarketTray marketTray) {
+        marketCli.displayMarketScreen(marketTray);
+    }
+
+    @Override
     public void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources) {
         depotCli.displayMarketResourcesSelection(depots, resources);
     }
@@ -422,6 +427,15 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     @Override
     public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
         developmentCardsCli.displayDevelopmentGrid(developmentGrid);
+    }
+
+    @Override
+    public void displayDevelopmentGridCardSelection(DevelopmentGrid developmentGrid) { //TODO must be completed with controller integration
+        displayDevelopmentGrid(developmentGrid);
+
+        cliUtils.setCursorPosition(33, 135);
+        pw.print("Select a Card by typing the desired LEVEL and COLOR: ");
+        pw.flush();
     }
 
     @Override
@@ -480,7 +494,9 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayError(String error) {
-        //To be implemented
+        cliUtils.setCursorBottomLeft();
+        pw.println(cliUtils.pCS(error, Color.RED));
+        pw.flush();
     }
 
 }

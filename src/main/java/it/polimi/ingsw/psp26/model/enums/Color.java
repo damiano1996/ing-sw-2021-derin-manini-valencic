@@ -9,6 +9,7 @@ public enum Color {
     YELLOW("\u001b[33m"),
     PURPLE("\u001b[35m"),
     BYELLOW("\u001b[33;1m"),
+    BLACK("\u001b[30m"), // TODO: check
 
     RESET("\u001b[0m");
 

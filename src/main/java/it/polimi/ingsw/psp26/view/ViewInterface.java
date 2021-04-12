@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -20,8 +21,13 @@ public interface ViewInterface {
 
     void displayLogIn();
 
+    /**
+     * @deprecated use {@link #displayChoices} instead.
+     */
+    @Deprecated
     void displayMatchSelection();
 
+    @Deprecated
     void displayLeaderChoice(List<LeaderCard> leaderCards);
 
     void displayLeaderCardsDrawn(List<LeaderCard> leaderCards);
@@ -40,10 +46,12 @@ public interface ViewInterface {
 
     void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots, int startingRow, int startingColumn);
 
+    @Deprecated
     void displayNormalActionsSelection();
 
     void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn);
 
+    @Deprecated
     void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources);
 
     void displayDevelopmentGrid(DevelopmentGrid developmentGrid);
@@ -52,13 +60,17 @@ public interface ViewInterface {
 
     void displayProductionActivation(PersonalBoard personalBoard);
 
+    @Deprecated
     void displayLeaderActionSelection();
 
+    @Deprecated
     void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards);
 
-    void displayActionTokens(ActionToken actionToken);
+    void displayActionToken(ActionToken actionToken);
 
     void displayDevelopmentCardDiscard(DevelopmentGrid developmentGrid, DevelopmentCardType developmentCardType);
+
+    void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices);
 
     void displayText(String text);
 

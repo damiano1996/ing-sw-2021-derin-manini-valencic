@@ -6,7 +6,8 @@ public enum Resource {
     SERVANT("  Servants  ", Color.PURPLE),
     SHIELD("   Shield   ", Color.BLUE),
     FAITH_MARKER("Faith Marker", Color.RED),
-    EMPTY("Empty", Color.WHITE);
+    EMPTY("Empty", Color.WHITE),
+    UNKNOWN("Unknown", Color.BLACK);
 
     private final String name;
     private final Color color;

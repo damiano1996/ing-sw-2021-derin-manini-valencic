@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
@@ -459,13 +460,18 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayActionTokens(ActionToken actionToken) {
+    public void displayActionToken(ActionToken actionToken) {
         //To be implemented
     }
 
     @Override
     public void displayDevelopmentCardDiscard(DevelopmentGrid developmentGrid, DevelopmentCardType developmentCardType) {
         //To be implemented
+    }
+
+    @Override
+    public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
+
     }
 
     @Override

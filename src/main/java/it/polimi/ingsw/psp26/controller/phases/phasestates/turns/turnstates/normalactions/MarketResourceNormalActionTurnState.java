@@ -66,14 +66,14 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         tempResources.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> player.getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    private void organizeResource(List<Depot> CurrentDepots) throws DepotOutOfBoundException, NegativeNumberOfElementsToGrabException {
+    private void organizeResource(List<Depot> currentDepots) throws DepotOutOfBoundException, NegativeNumberOfElementsToGrabException {
         boolean IsPlayerNotFinished = true;
         while (IsPlayerNotFinished) {
             //Get message
             //option 1
             tempResources = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(1).grabAllResources();
             // option 2
-            moveResourceFromSlideToDepot(Resource.COIN, 1, CurrentDepots.get(1));
+            moveResourceFromSlideToDepot(Resource.COIN, 1, currentDepots.get(1));
             //option 3
             // End cycle
         }

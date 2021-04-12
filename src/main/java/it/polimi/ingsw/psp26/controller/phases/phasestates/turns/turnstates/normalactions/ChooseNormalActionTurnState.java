@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ActivateOrDiscardLeaderTurnState;
 
 public class ChooseNormalActionTurnState extends TurnState {
     public ChooseNormalActionTurnState(Turn turn) {
@@ -18,9 +19,22 @@ public class ChooseNormalActionTurnState extends TurnState {
         // TODO: to implement
 
         // ... switch cases
+        switch (message.getMessageType()) {
+            case ACTIVATE_PRODUCTION:
+                turn.changeState(new BuyCardNormalActionTurnState(turn));
+                turn.play(message);
+            case MARKET_RESOURCE:
+                turn.changeState(new MarketResourceNormalActionTurnState(turn));
+                turn.play(message);
+                break;
+            case BUY_CARD:
+                turn.changeState(new BuyCardNormalActionTurnState(turn));
+                turn.play(message);
+                break;
 
-        // e.g
-        // next state is...
-        turn.changeState(new MarketResourceNormalActionTurnState(turn));
+            // e.g
+            // next state is...
+            // turn.changeState(new MarketResourceNormalActionTurnState(turn));
+        }
     }
 }

@@ -12,12 +12,12 @@ import java.util.Scanner;
 
 public class LeaderCardsCli {
 
-    private final CliUtils cliUtils;
     private final PrintWriter pw;
+    private final CliUtils cliUtils;
 
-    public LeaderCardsCli() {
-        this.cliUtils = new CliUtils();
-        this.pw = new PrintWriter(System.out);
+    public LeaderCardsCli(PrintWriter pw) {
+        this.pw = pw;
+        this.cliUtils = new CliUtils(pw);
     }
 
     /**

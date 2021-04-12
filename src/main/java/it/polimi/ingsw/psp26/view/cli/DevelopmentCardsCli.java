@@ -16,9 +16,9 @@ public class DevelopmentCardsCli {
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
-    public DevelopmentCardsCli() {
-        this.pw = new PrintWriter(System.out);
-        this.cliUtils = new CliUtils();
+    public DevelopmentCardsCli(PrintWriter pw) {
+        this.pw = pw;
+        this.cliUtils = new CliUtils(pw);
     }
 
     /**
@@ -28,13 +28,13 @@ public class DevelopmentCardsCli {
      */
     public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
         for (int i = 0; i < 3; i++) {
-            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 0), 1 + (19 * i), 1);
-            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 1), 1 + (19 * i), 32);
-            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 2), 1 + (19 * i), 63);
-            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 3), 1 + (19 * i), 94);
+            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 0), 2 + (19 * i), 5);
+            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 1), 2 + (19 * i), 36);
+            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 2), 2 + (19 * i), 67);
+            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 3), 2 + (19 * i), 98);
         }
 
-        cliUtils.setCursorBottomLeft();
+        cliUtils.printFigure("GridTitle", 10, 135);
     }
 
     /**

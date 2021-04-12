@@ -16,9 +16,9 @@ public class DepotCli {
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
-    public DepotCli() {
-        this.cliUtils = new CliUtils();
-        this.pw = new PrintWriter(System.out);
+    public DepotCli(PrintWriter pw) {
+        this.pw = pw;
+        this.cliUtils = new CliUtils(pw);
     }
 
     /**
@@ -35,8 +35,6 @@ public class DepotCli {
         printStrongboxResources(Resource.SERVANT, getStrongboxResourcesNumber(strongbox, Resource.SERVANT), startingRow, startingColumn);
         printStrongboxResources(Resource.SHIELD, getStrongboxResourcesNumber(strongbox, Resource.SHIELD), startingRow, startingColumn);
         printStrongboxResources(Resource.COIN, getStrongboxResourcesNumber(strongbox, Resource.COIN), startingRow, startingColumn);
-
-        cliUtils.setCursorBottomLeft();
     }
 
     /**
@@ -49,8 +47,6 @@ public class DepotCli {
     public void printWarehouse(List<Depot> warehouseDepots, int startingRow, int startingColumn) {
         cliUtils.printFigure("Warehouse", startingRow, startingColumn);
         for (int i = 0; i < 3; i++) printDepot(warehouseDepots.get(i), startingRow, startingColumn, i + 1);
-
-        cliUtils.setCursorBottomLeft();
     }
 
     /**

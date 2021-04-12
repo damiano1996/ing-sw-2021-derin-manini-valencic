@@ -18,11 +18,9 @@ import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
-import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +28,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TEST METTI NELLE ALTRE CLASSI I METODI CHE NON SERVONO PRIVATI E LA VIRTUALVIEW
-
-    private Client client;
 
     private final PrintWriter pw;
     private final boolean isMultiPlayerMode;
@@ -44,35 +40,23 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
 
-    public CLI() { // TODO: temporary constructor
-        this.pw = new PrintWriter(System.out);
-        this.isMultiPlayerMode = true;
-        this.cliUtils = new CliUtils();
-        this.depotCli = new DepotCli();
-        this.developmentCardsCli = new DevelopmentCardsCli();
-        this.faithTrackCli = new FaithTrackCli();
-        this.leaderCardsCli = new LeaderCardsCli();
-        this.marketCli = new MarketCli();
-        this.personalBoardCli = new PersonalBoardCli();
-    }
 
-    public CLI(Client client) {
-        this.client = client;
-
-        this.pw = new PrintWriter(System.out);
+    public CLI(PrintWriter pw) { //TODO devi passare al costruttore un match e ricavare isMultiPlayerMode da quello
+        this.pw = pw;
         this.isMultiPlayerMode = true;
-        this.cliUtils = new CliUtils();
-        this.depotCli = new DepotCli();
-        this.developmentCardsCli = new DevelopmentCardsCli();
-        this.faithTrackCli = new FaithTrackCli();
-        this.leaderCardsCli = new LeaderCardsCli();
-        this.marketCli = new MarketCli();
-        this.personalBoardCli = new PersonalBoardCli();
+        this.cliUtils = new CliUtils(pw);
+        this.depotCli = new DepotCli(pw);
+        this.developmentCardsCli = new DevelopmentCardsCli(pw);
+        this.faithTrackCli = new FaithTrackCli(pw);
+        this.leaderCardsCli = new LeaderCardsCli(pw);
+        this.marketCli = new MarketCli(pw);
+        this.personalBoardCli = new PersonalBoardCli(pw);
     }
 
     //CLI testing. Only press start to test CLI functionalities
     public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, DepotOutOfBoundException, CanNotAddResourceToStrongboxException {
-        CLI cli = new CLI();
+        PrintWriter pwr = new PrintWriter(System.out);
+        CLI cli = new CLI(pwr);
 
         cli.testMethod();
     }
@@ -80,7 +64,6 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, DepotOutOfBoundException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
         //---OBJECTS-DECLARATION---//
 
-        CLI cli = new CLI();
         VirtualView virtualView = new VirtualView();
         Player player = new Player(virtualView, "Player", "000000");
         LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
@@ -96,7 +79,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
         for (int i = 0; i < 4; i++) {
             cliUtils.cls();
-            developmentCardsCli.displayDevelopmentGrid(developmentGrid);
+            displayDevelopmentGridCardSelection(developmentGrid);
             in.nextLine();
             developmentGrid.drawCard(Color.PURPLE, Level.FIRST);
             developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
@@ -139,7 +122,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
         //---TITLE-SCREEN-TEST---// Press Enter and follow terminal instructions
 
-        cli.displayLogIn();
+        displayLogIn();
 
 
         //---SHOW-ALL-LEADERS-TEST---// Press enter 4 times
@@ -179,7 +162,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         playerCards.add(fourLeaders.get(1));
         player.setLeaderCards(playerCards);
         displayPersonalBoard(player);
-        cli.displayNormalActionsSelection();
+        displayNormalActionsSelection();
         List<Resource> strResource = new ArrayList<>();
         in.nextLine();
         cliUtils.cls();
@@ -199,7 +182,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
         displayPersonalBoard(player);
-        cli.displayLeaderActionSelection();
+        displayLeaderActionSelection();
         in.nextLine();
         cliUtils.cls();
 
@@ -215,7 +198,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].activatePopesFavorTile();
         displayPersonalBoard(player);
-        cli.displayNormalActionsSelection();
+        displayNormalActionsSelection();
         in.nextLine();
         cliUtils.cls();
 
@@ -230,7 +213,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].activatePopesFavorTile();
         displayPersonalBoard(player);
-        cli.displayNormalActionsSelection();
+        displayNormalActionsSelection();
         in.nextLine();
 
 
@@ -277,7 +260,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
         cliUtils.cls();
         for (int i = 0; i < 25; i++) {
-            displayFaithTrack(personalBoard.getFaithTrack(), 5, 5);
+            displayFaithTrack(personalBoard.getFaithTrack());
             in.nextLine();
             personalBoard.getFaithTrack().moveMarkerPosition(1);
             cliUtils.cls();
@@ -287,15 +270,15 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         //---MARKET-TEST---// Press Enter 3 times
 
         cliUtils.cls();
-        displayMarketTray(marketTray, 10, 10);
+        displayMarketScreen(marketTray);
         in.nextLine();
         marketTray.pushMarbleFromSlideToRow(1);
         cliUtils.cls();
-        displayMarketTray(marketTray, 10, 10);
+        displayMarketScreen(marketTray);
         in.nextLine();
         marketTray.pushMarbleFromSlideToColumn(3);
         cliUtils.cls();
-        displayMarketTray(marketTray, 10, 10);
+        displayMarketScreen(marketTray);
         in.nextLine();
 
     }
@@ -313,18 +296,21 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         cliUtils.printFigure("MainTitle", 1, 10);
         pw.print(Color.RESET.setColor());
         pw.flush();
+
+
     }
 
 
     //------------------------------------------//
-    //          VIEW INTERFACE METHODS          //
+    //          VIEW INFERFACE METHODS          //
     //------------------------------------------//
 
 
     /**
      * Used to ask the Player's credentials
      */
-    public void displayLogIn() {
+    public void displayLogIn() { //MUST BE COMPLETED WITH CONTROLLER INTEGRATION
+        String nickname = "";
         String ipAddress = "";
         Scanner in = new Scanner(System.in);
 
@@ -339,20 +325,17 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                 cliUtils.vSpace(4);
                 pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
                 pw.flush();
-                client.setNickname(in.nextLine());
+                nickname = in.nextLine();
             } else {
                 printTitle();
                 cliUtils.vSpace(4);
-                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
+                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + nickname);
                 pw.flush();
                 cliUtils.vSpace(2);
-                pw.print(cliUtils.hSpace(100) + "Enter Server IP-Address: ");
+                pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                 pw.flush();
-                try {
-                    client.initializeNetworkNode(in.nextLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                in.nextLine();
+                //ipAddress = in.nextLine(); COMMENTATO SOLO PER EVITARE IL WARNING NEL COMMIT, NELLA VERSIONE FINALE VA CONTROLLATO L'INSERIMENTO DELL'IP ADDRESS
             }
         }
     }
@@ -373,8 +356,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayInkwell(boolean isPrintable, int startingRow, int startingColumn) {
-        personalBoardCli.displayInkwell(isPrintable, startingRow, startingColumn);
+    public void displayInkwell(boolean isPrintable) {
+        personalBoardCli.displayInkwell(isPrintable, 5, 190);
     }
 
     @Override
@@ -388,23 +371,23 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayWarehouseDepots(List<Depot> warehouseDepot, int startingRow, int startingColumn) {
-        depotCli.printWarehouse(warehouseDepot, startingRow, startingColumn);
+    public void displayWarehouseDepots(List<Depot> warehouseDepot) {
+        depotCli.printWarehouse(warehouseDepot, 17, 13);
     }
 
     @Override
-    public void displayStrongbox(List<Resource> strongbox, int startingRow, int startingColumn) {
-        depotCli.displayStrongbox(strongbox, startingRow, startingColumn);
+    public void displayStrongbox(List<Resource> strongbox) {
+        depotCli.displayStrongbox(strongbox, 30, 3);
     }
 
     @Override
-    public void displayFaithTrack(FaithTrack faithTrack, int startingRow, int startingColumn) {
-        faithTrackCli.displayFaithTrack(faithTrack, startingRow, startingColumn);
+    public void displayFaithTrack(FaithTrack faithTrack) {
+        faithTrackCli.displayFaithTrack(faithTrack, 3, 10);
     }
 
     @Override
-    public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots, int startingRow, int startingColumn) {
-        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, startingRow, startingColumn);
+    public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
+        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
     }
 
     /**
@@ -414,13 +397,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         Scanner in = new Scanner(System.in);
         int action;
 
-        vSpace(5);
+        cliUtils.vSpace(5);
         pw.println(cliUtils.hSpace(5) + "\u001b[4mSELECT A NORMAL ACTION" + Color.RESET);
-        vSpace(1);
+        cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + "1 - Get Resources from the Market");
         pw.println(cliUtils.hSpace(3) + "2 - Activate production");
         pw.println(cliUtils.hSpace(3) + "3 - Buy a Development Card");
-        vSpace(2);
+        cliUtils.vSpace(2);
         pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding action: ");
         //action = in.nextInt();
         //in.nextLine();
@@ -428,8 +411,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn) {
-        marketCli.displayMarketTray(marketTray, startingRow, startingColumn);
+    public void displayMarketTray(MarketTray marketTray) {
+        marketCli.displayMarketTray(marketTray, 12, 88);
+    }
+
+    @Override
+    public void displayMarketScreen(MarketTray marketTray) {
+        marketCli.displayMarketScreen(marketTray);
     }
 
     @Override
@@ -440,6 +428,15 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     @Override
     public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
         developmentCardsCli.displayDevelopmentGrid(developmentGrid);
+    }
+
+    @Override
+    public void displayDevelopmentGridCardSelection(DevelopmentGrid developmentGrid) { //TODO must be completed with controller integration
+        displayDevelopmentGrid(developmentGrid);
+
+        cliUtils.setCursorPosition(33, 135);
+        pw.print("Select a Card by typing the desired LEVEL and COLOR: ");
+        pw.flush();
     }
 
     @Override
@@ -459,11 +456,11 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         Scanner in = new Scanner(System.in);
         int action;
 
-        vSpace(5);
+        cliUtils.vSpace(5);
         pw.println(cliUtils.hSpace(3) + "\u001b[4mSELECT A LEADER ACTION" + Color.RESET);
         pw.println(cliUtils.hSpace(3) + "1 - Discard a Leader");
         pw.println(cliUtils.hSpace(3) + "2 - Activate a Leader");
-        vSpace(1);
+        cliUtils.vSpace(1);
         pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding action: ");
         //action = in.nextInt();
         //in.nextLine();
@@ -477,7 +474,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayActionToken(ActionToken actionToken) {
+    public void displayActionTokens(ActionToken actionToken) {
         //To be implemented
     }
 
@@ -488,7 +485,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
-
+        //To be implemented
     }
 
     @Override
@@ -503,11 +500,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayError(String error) {
-        //To be implemented
-    }
-
-    public void vSpace(int spaces) {
-        for (int i = 0; i < spaces; i++) pw.println();
+        cliUtils.setCursorBottomLeft();
+        pw.println(cliUtils.pCS(error, Color.RED));
         pw.flush();
     }
 

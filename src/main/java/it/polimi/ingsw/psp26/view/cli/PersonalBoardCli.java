@@ -12,20 +12,20 @@ import java.util.List;
 
 public class PersonalBoardCli {
 
+    private final PrintWriter pw;
     private final CliUtils cliUtils;
     private final LeaderCardsCli leaderCardsCli;
     private final DevelopmentCardsCli developmentCardsCli;
     private final FaithTrackCli faithTrackCli;
     private final DepotCli depotCli;
-    private final PrintWriter pw;
 
-    public PersonalBoardCli() {
-        this.pw = new PrintWriter(System.out);
-        this.cliUtils = new CliUtils();
-        this.faithTrackCli = new FaithTrackCli();
-        this.developmentCardsCli = new DevelopmentCardsCli();
-        this.leaderCardsCli = new LeaderCardsCli();
-        this.depotCli = new DepotCli();
+    public PersonalBoardCli(PrintWriter pw) {
+        this.pw = pw;
+        this.cliUtils = new CliUtils(pw);
+        this.leaderCardsCli = new LeaderCardsCli(pw);
+        this.developmentCardsCli = new DevelopmentCardsCli(pw);
+        this.faithTrackCli = new FaithTrackCli(pw);
+        this.depotCli = new DepotCli(pw);
     }
 
     /**
@@ -73,8 +73,6 @@ public class PersonalBoardCli {
             cliUtils.printFigure("LeaderInPersonalBoard", startingRow, startingColumn + (16 * i));
             printLeaderNumber(startingRow, startingColumn + (16 * i), i + 1);
             isLeaderCardActive(leaderCards.get(i), startingRow, startingColumn + (16 * i));
-
-
         }
     }
 
@@ -122,9 +120,9 @@ public class PersonalBoardCli {
         for (int i = 0; i < leaderCards.size(); i++) isLeaderCardActive(leaderCards.get(i), 25, 78 + (65 * i));
 
         cliUtils.vSpace(5);
-        cliUtils.pw.println("Press Enter to exit this view.");
+        pw.println("Press Enter to exit this view.");
 
-        cliUtils.pw.flush();
+        pw.flush();
     }
 
     /**

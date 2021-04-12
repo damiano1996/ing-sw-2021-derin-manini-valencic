@@ -8,12 +8,12 @@ import java.io.PrintWriter;
 
 public class FaithTrackCli {
 
-    private final CliUtils cliUtils;
     private final PrintWriter pw;
+    private final CliUtils cliUtils;
 
-    public FaithTrackCli() {
-        this.cliUtils = new CliUtils();
-        this.pw = new PrintWriter(System.out);
+    public FaithTrackCli(PrintWriter pw) {
+        this.pw =pw;
+        this.cliUtils = new CliUtils(pw);
     }
 
     /**

@@ -84,6 +84,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         DevelopmentGrid developmentGrid;
         Scanner in = new Scanner(System.in);
 
+
+        //---ERROR-TEST---//
+
+        displayError("ERROR                     TEST");
+        in.nextLine();
+
+
         //---DEVELOPMENT-GRID-SHOW-ALL-CARDS-TEST---// Press Enter 4 times
 
         developmentGrid = new DevelopmentGrid(virtualView);
@@ -327,15 +334,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         in.nextLine();
 
         for (int i = 0; i < 2; i++) {
+            printTitle();
+            cliUtils.vSpace(4);
             if (i == 0) {
-                printTitle();
-                cliUtils.vSpace(4);
                 pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
                 pw.flush();
                 client.setNickname(in.nextLine());
             } else {
-                printTitle();
-                cliUtils.vSpace(4);
                 pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
                 pw.flush();
                 cliUtils.vSpace(2);
@@ -510,7 +515,24 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
             case MULTI_OR_SINGLE_PLAYER_MODE:
                 // TODO: to be completed
                 break;
+
+            case CHOICE_NORMAL_ACTION:
+                displayNormalActionsSelection();
+                break;
+
+            case CHOICE_LEADER_ACTION:
+                displayLeaderActionSelection();
+                break;
+
+            case LEADER_ACTIVATED:
+                displayLeaderCardsDrawn((List<LeaderCard>) (Object) choices);
+                break;
+
+            default:
+                break;
         }
+
+        pw.flush();
     }
 
     @Override
@@ -525,8 +547,17 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayError(String error) {
-        cliUtils.setCursorBottomLeft();
-        pw.println(cliUtils.pCS(error, Color.RED));
+        cliUtils.cls();
+        cliUtils.setCursorPosition(20, 81);
+        for (int i = 0; i < error.length() + 8; i++) pw.print(cliUtils.pCS("=", Color.RED));
+        cliUtils.setCursorPosition(21, 1);
+        for (int i = 0; i < 2; i++)
+            pw.println(cliUtils.hSpace(80) + cliUtils.pCS("║   ", Color.RED) + cliUtils.hSpace(error.length()) + cliUtils.pCS("   ║", Color.RED));
+        pw.println(cliUtils.hSpace(80) + cliUtils.pCS("║   ", Color.RED) + cliUtils.pCS(error, Color.RED) + cliUtils.pCS("   ║", Color.RED));
+        for (int i = 0; i < 2; i++)
+            pw.println(cliUtils.hSpace(80) + cliUtils.pCS("║   ", Color.RED) + cliUtils.hSpace(error.length()) + cliUtils.pCS("   ║", Color.RED));
+        cliUtils.setCursorPosition(26, 81);
+        for (int i = 0; i < error.length() + 8; i++) pw.print(cliUtils.pCS("=", Color.RED));
         pw.flush();
     }
 

@@ -89,7 +89,7 @@ public class MarketCli {
         cliUtils.vSpace(7);
 
         pw.println(cliUtils.hSpace(startingColumn) + "+-----------------------------------------------------------+");
-        pw.println(cliUtils.hSpace(startingColumn) + "|                         Legend                            |");
+        pw.println(cliUtils.hSpace(startingColumn) + "|                          Legend                           |");
         pw.println(cliUtils.hSpace(startingColumn) + "|                                                           |");
         pw.println(cliUtils.hSpace(startingColumn) + "|  " + cliUtils.pCS(".d88b.", Color.GREY) + "     " + cliUtils.pCS("__", Color.GREY) + "         " + cliUtils.pCS(".d88b.", Color.PURPLE) + "     " + cliUtils.pCS("__", Color.PURPLE) + "        " + cliUtils.pCS(".d88b.", Color.RED) + "   " + cliUtils.pCS("_|_", Color.RED) + "  |");
         pw.println(cliUtils.hSpace(startingColumn) + "|  " + cliUtils.pCS("8b88d8", Color.GREY) + " _  " + cliUtils.pCS("/  \\_", Color.GREY) + "       " + cliUtils.pCS("8b88d8", Color.PURPLE) + " _  " + cliUtils.pCS("(  )", Color.PURPLE) + "       " + cliUtils.pCS("8b88d8", Color.RED) + " _  " + cliUtils.pCS("|", Color.RED) + "   |");

@@ -20,7 +20,7 @@ public class ChooseNormalActionTurnState extends TurnState {
         // ... switch cases
         switch (message.getMessageType()) {
             case ACTIVATE_PRODUCTION:
-                turn.changeState(new BuyCardNormalActionTurnState(turn));
+                turn.changeState(new ActivateProductionNormalActionTurnState(turn));
                 turn.play(message);
             case MARKET_RESOURCE:
                 turn.changeState(new MarketResourceNormalActionTurnState(turn));

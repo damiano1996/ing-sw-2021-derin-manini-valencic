@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -28,34 +29,46 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
     public void play(Message message) {
         // TODO: to implement sub-states
+        List<Integer> rowColumn = (List<Integer>) message.getPayload().get("RowColumn");
+        switch (message.getMessageType()) {
+            case MARKET_RESOURCE:
+                if (rowColumn.get(0) == 0) {
+                    tempResources = Arrays.asList(turn.getMatch().getMarketTray().getMarblesOnRow(rowColumn.get(1)));
+                    turn.getMatch().getMarketTray().pushMarbleFromSlideToColumn(rowColumn.get(1));
+                } else {
+                    tempResources = Arrays.asList(turn.getMatch().getMarketTray().getMarblesOnRow(rowColumn.get(1)));
+                    turn.getMatch().getMarketTray().pushMarbleFromSlideToRow(rowColumn.get(1));
+                }
+                isRedMarblePresent(turn.getTurnPlayer());
+                tempResources = parseResource();
+                new Message(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_ORGANIZATION_MOVE);
+                break;
+            case RESOURCE_POSITION_CHOSEN:
+                List<Depot> currentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepots();
+                moveResourceFromSlideToDepot(Resource.COIN, 1, currentDepotsStatus.get(1));
+                new Message(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_ORGANIZATION_MOVE);
+                break;
+            case GRAB_RESOURCES:
+                try {
+                    tempResources.addAll(turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot((int) message.getPayload().get("DepotIndex")).grabAllResources());
+                } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
+                    e.printStackTrace();
+                }
+                new Message(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_ORGANIZATION_MOVE);
 
-        //Get message
-        boolean choice = false; // Temporal fix of Player choice
-        int i = 1;             // Temporal fix of Player choice
-        //message su play che contiene informazioni sulla mossa
-        //choose()
+            case MARKET_NEXT:
+                discardResources(turn.getMatch(), turn.getTurnPlayer());
+                turn.changeState(new CheckVaticanReportTurnState(turn));
+                turn.play(message);
+                break;
 
-        if (choice) {
-            tempResources = Arrays.asList(turn.getMatch().getMarketTray().getMarblesOnRow(i));
-            turn.getMatch().getMarketTray().pushMarbleFromSlideToColumn(i);
-        } else {
-            tempResources = Arrays.asList(turn.getMatch().getMarketTray().getMarblesOnRow(i));
-            turn.getMatch().getMarketTray().pushMarbleFromSlideToRow(i);
+            default:
+                new Message(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_NORMAL_ACTION);
         }
-
-        isRedMarblePresent(turn.getTurnPlayer());
-        tempResources = parseResource();
-
-        List<Depot> CurrentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepots();
-        try {
-            organizeResource(CurrentDepotsStatus);
-        } catch (DepotOutOfBoundException | NegativeNumberOfElementsToGrabException e) {
-            e.printStackTrace();
-        }
-        discardResources(turn.getMatch(), turn.getTurnPlayer());
-
-        // next state is...
-        turn.changeState(new CheckVaticanReportTurnState(turn));
     }
 
     private List<Resource> parseResource() {
@@ -64,19 +77,6 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
     private void isRedMarblePresent(Player player) {
         tempResources.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> player.getPersonalBoard().getFaithTrack().addFaithPoints(1));
-    }
-
-    private void organizeResource(List<Depot> currentDepots) throws DepotOutOfBoundException, NegativeNumberOfElementsToGrabException {
-        boolean IsPlayerNotFinished = true;
-        while (IsPlayerNotFinished) {
-            //Get message
-            //option 1
-            tempResources = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(1).grabAllResources();
-            // option 2
-            moveResourceFromSlideToDepot(Resource.COIN, 1, currentDepots.get(1));
-            //option 3
-            // End cycle
-        }
     }
 
     private void moveResourceFromSlideToDepot(Resource resource, int resourceNum, Depot depot) {
@@ -92,7 +92,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                         depot.addResource(DepotCopy.get(0));
                     }
                     System.out.println("Error move not allowed");
-                    //NotifyObserver();
+                    new Message(turn.getTurnPlayer().getSessionToken(),
+                            MessageType.CHOICE_ORGANIZATION_MOVE);
                 } catch (NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {
                     exc.printStackTrace();
                 }

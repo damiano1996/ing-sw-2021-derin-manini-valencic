@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+
 public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TEST METTI NELLE ALTRE CLASSI I METODI CHE NON SERVONO PRIVATI E LA VIRTUALVIEW
 
     private final Client client;
@@ -341,6 +343,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                 pw.flush();
                 try {
                     client.initializeNetworkNode(in.nextLine());
+                    // go to Multi/single player choice
+                    displayChoices(MULTI_OR_SINGLE_PLAYER_MODE,
+                            "Do you want to play in multi or single player mode?",
+                            new ArrayList<>() {{
+                                add(MULTIPLAYER_MODE);
+                                add(SINGLE_PLAYER_MODE);
+                            }}, 1, 1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -493,7 +502,15 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
-        //To be implemented
+
+        cliUtils.cls();
+        pw.println(question);
+
+        switch (messageType) {
+            case MULTI_OR_SINGLE_PLAYER_MODE:
+                // TODO: to be completed
+                break;
+        }
     }
 
     @Override

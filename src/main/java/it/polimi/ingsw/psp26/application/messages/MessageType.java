@@ -5,6 +5,9 @@ public enum MessageType {
     GENERAL_MESSAGE,
 
     // Initialize game:
+    MULTI_OR_SINGLE_PLAYER_MODE,
+    MULTIPLAYER_MODE,
+    SINGLE_PLAYER_MODE,
     MAX_NUMBER_OF_PLAYERS,
     ADD_PLAYER,
 

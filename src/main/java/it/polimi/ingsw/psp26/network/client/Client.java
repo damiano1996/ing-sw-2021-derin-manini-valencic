@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.network.client;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
 import java.io.IOException;
@@ -35,5 +36,9 @@ public class Client {
 
     public void setSessionToken(String sessionToken) {
         this.sessionToken = sessionToken;
+    }
+
+    public void sendToServer(Message message) throws IOException {
+        networkNode.sendData(message);
     }
 }

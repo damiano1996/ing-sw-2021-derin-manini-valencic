@@ -9,8 +9,6 @@ import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.enums.Color;
-import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
@@ -18,11 +16,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BuyCardNormalActionTurnState extends TurnState {
+    DevelopmentCard boughtCard = null;
+
     public BuyCardNormalActionTurnState(Turn turn) {
         super(turn);
     }
-
-    DevelopmentCard boughtCard = null;
 
     public void play(Message message) {
         super.play(message);

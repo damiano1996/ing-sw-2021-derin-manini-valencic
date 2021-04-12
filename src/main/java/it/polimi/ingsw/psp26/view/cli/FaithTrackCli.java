@@ -12,7 +12,7 @@ public class FaithTrackCli {
     private final CliUtils cliUtils;
 
     public FaithTrackCli(PrintWriter pw) {
-        this.pw =pw;
+        this.pw = pw;
         this.cliUtils = new CliUtils(pw);
     }
 

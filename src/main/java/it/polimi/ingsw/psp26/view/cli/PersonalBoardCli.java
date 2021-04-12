@@ -119,8 +119,8 @@ public class PersonalBoardCli {
             leaderCardsCli.printLeader(leaderCards.get(i), startingRow + 10, startingColumn + 70 + (65 * i));
         for (int i = 0; i < leaderCards.size(); i++) isLeaderCardActive(leaderCards.get(i), 25, 78 + (65 * i));
 
-        cliUtils.vSpace(5);
-        pw.println("Press Enter to exit this view.");
+        cliUtils.setCursorBottomLeft();
+        pw.print("Press Enter to exit this view.");
 
         pw.flush();
     }

@@ -255,6 +255,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         in.nextLine();
         cliUtils.cls();
         displayLeaderCardsDrawn(player.getLeaderCards());
+        displayLeaderCardDiscardSelection(player.getLeaderCards());
         in.nextLine();
         cliUtils.cls();
 
@@ -491,8 +492,12 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards) {
-        //To be implemented
+    public void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards) { //TODO devi mandare al server cosa scegli
+        personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
+
+        cliUtils.setCursorPosition(35, 21);
+        pw.print("Type the LeaderCard number you want to discard: ");
+        pw.flush();
     }
 
     @Override

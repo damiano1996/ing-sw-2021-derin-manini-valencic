@@ -44,13 +44,9 @@ public interface ViewInterface {
 
     void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn);
 
-    void displayMarketScreen(MarketTray marketTray);
-
     void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources);
 
     void displayDevelopmentGrid(DevelopmentGrid developmentGrid);
-
-    void displayDevelopmentGridCardSelection(DevelopmentGrid developmentGrid);
 
     void displayResourceSupply(ResourceSupply resourceSupply);
 

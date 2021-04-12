@@ -73,8 +73,6 @@ public class PersonalBoardCli {
             cliUtils.printFigure("LeaderInPersonalBoard", startingRow, startingColumn + (16 * i));
             printLeaderNumber(startingRow, startingColumn + (16 * i), i + 1);
             isLeaderCardActive(leaderCards.get(i), startingRow, startingColumn + (16 * i));
-
-
         }
     }
 
@@ -122,9 +120,9 @@ public class PersonalBoardCli {
         for (int i = 0; i < leaderCards.size(); i++) isLeaderCardActive(leaderCards.get(i), 25, 78 + (65 * i));
 
         cliUtils.vSpace(5);
-        cliUtils.pw.println("Press Enter to exit this view.");
+        pw.println("Press Enter to exit this view.");
 
-        cliUtils.pw.flush();
+        pw.flush();
     }
 
     /**

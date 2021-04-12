@@ -35,7 +35,6 @@ public class DevelopmentCardsCli {
         }
 
         cliUtils.printFigure("GridTitle", 10, 135);
-        cliUtils.setCursorBottomLeft();
     }
 
     /**

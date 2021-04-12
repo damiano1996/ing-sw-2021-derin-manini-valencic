@@ -13,8 +13,8 @@ public class CliUtils {
 
     public final PrintWriter pw;
 
-    public CliUtils() {
-        this.pw = new PrintWriter(System.out);
+    public CliUtils(PrintWriter pw) {
+        this.pw = pw;
     }
 
     /**

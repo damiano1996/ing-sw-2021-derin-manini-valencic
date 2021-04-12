@@ -8,12 +8,12 @@ import java.io.PrintWriter;
 
 public class MarketCli {
 
-    private final CliUtils cliUtils;
     private final PrintWriter pw;
+    private final CliUtils cliUtils;
 
-    public MarketCli() {
-        this.cliUtils = new CliUtils();
-        pw = new PrintWriter(System.out);
+    public MarketCli(PrintWriter pw) {
+        this.pw = pw;
+        this.cliUtils = new CliUtils(pw);
     }
 
     /**

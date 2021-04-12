@@ -16,9 +16,9 @@ public class DepotCli {
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
-    public DepotCli() {
-        this.cliUtils = new CliUtils();
-        this.pw = new PrintWriter(System.out);
+    public DepotCli(PrintWriter pw) {
+        this.pw = pw;
+        this.cliUtils = new CliUtils(pw);
     }
 
     /**

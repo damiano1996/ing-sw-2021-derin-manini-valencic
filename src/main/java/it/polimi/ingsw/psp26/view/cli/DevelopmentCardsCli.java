@@ -16,9 +16,9 @@ public class DevelopmentCardsCli {
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
-    public DevelopmentCardsCli() {
-        this.pw = new PrintWriter(System.out);
-        this.cliUtils = new CliUtils();
+    public DevelopmentCardsCli(PrintWriter pw) {
+        this.pw = pw;
+        this.cliUtils = new CliUtils(pw);
     }
 
     /**

@@ -40,21 +40,22 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     private final PersonalBoardCli personalBoardCli;
 
 
-    public CLI() { //TODO devi passare al costruttore un match e ricavare isMultiPlayerMode da quello
-        this.pw = new PrintWriter(System.out);
+    public CLI(PrintWriter pw) { //TODO devi passare al costruttore un match e ricavare isMultiPlayerMode da quello
+        this.pw = pw;
         this.isMultiPlayerMode = true;
-        this.cliUtils = new CliUtils();
-        this.depotCli = new DepotCli();
-        this.developmentCardsCli = new DevelopmentCardsCli();
-        this.faithTrackCli = new FaithTrackCli();
-        this.leaderCardsCli = new LeaderCardsCli();
-        this.marketCli = new MarketCli();
-        this.personalBoardCli = new PersonalBoardCli();
+        this.cliUtils = new CliUtils(pw);
+        this.depotCli = new DepotCli(pw);
+        this.developmentCardsCli = new DevelopmentCardsCli(pw);
+        this.faithTrackCli = new FaithTrackCli(pw);
+        this.leaderCardsCli = new LeaderCardsCli(pw);
+        this.marketCli = new MarketCli(pw);
+        this.personalBoardCli = new PersonalBoardCli(pw);
     }
 
     //CLI testing. Only press start to test CLI functionalities
     public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, DepotOutOfBoundException, CanNotAddResourceToStrongboxException {
-        CLI cli = new CLI();
+        PrintWriter pwr = new PrintWriter(System.out);
+        CLI cli = new CLI(pwr);
 
         cli.testMethod();
     }
@@ -62,7 +63,6 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, DepotOutOfBoundException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
         //---OBJECTS-DECLARATION---//
 
-        CLI cli = new CLI();
         VirtualView virtualView = new VirtualView();
         Player player = new Player(virtualView, "Player", "000000");
         LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
@@ -121,7 +121,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
         //---TITLE-SCREEN-TEST---// Press Enter and follow terminal instructions
 
-        cli.displayLogIn();
+        displayLogIn();
 
 
         //---SHOW-ALL-LEADERS-TEST---// Press enter 4 times
@@ -161,7 +161,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         playerCards.add(fourLeaders.get(1));
         player.setLeaderCards(playerCards);
         displayPersonalBoard(player);
-        cli.displayNormalActionsSelection();
+        displayNormalActionsSelection();
         List<Resource> strResource = new ArrayList<>();
         in.nextLine();
         cliUtils.cls();
@@ -181,7 +181,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
         displayPersonalBoard(player);
-        cli.displayLeaderActionSelection();
+        displayLeaderActionSelection();
         in.nextLine();
         cliUtils.cls();
 
@@ -197,7 +197,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].activatePopesFavorTile();
         displayPersonalBoard(player);
-        cli.displayNormalActionsSelection();
+        displayNormalActionsSelection();
         in.nextLine();
         cliUtils.cls();
 
@@ -212,7 +212,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].activatePopesFavorTile();
         displayPersonalBoard(player);
-        cli.displayNormalActionsSelection();
+        displayNormalActionsSelection();
         in.nextLine();
 
 
@@ -396,13 +396,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         Scanner in = new Scanner(System.in);
         int action;
 
-        vSpace(5);
+        cliUtils.vSpace(5);
         pw.println(cliUtils.hSpace(5) + "\u001b[4mSELECT A NORMAL ACTION" + Color.RESET);
-        vSpace(1);
+        cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + "1 - Get Resources from the Market");
         pw.println(cliUtils.hSpace(3) + "2 - Activate production");
         pw.println(cliUtils.hSpace(3) + "3 - Buy a Development Card");
-        vSpace(2);
+        cliUtils.vSpace(2);
         pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding action: ");
         //action = in.nextInt();
         //in.nextLine();
@@ -441,11 +441,11 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         Scanner in = new Scanner(System.in);
         int action;
 
-        vSpace(5);
+        cliUtils.vSpace(5);
         pw.println(cliUtils.hSpace(3) + "\u001b[4mSELECT A LEADER ACTION" + Color.RESET);
         pw.println(cliUtils.hSpace(3) + "1 - Discard a Leader");
         pw.println(cliUtils.hSpace(3) + "2 - Activate a Leader");
-        vSpace(1);
+        cliUtils.vSpace(1);
         pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding action: ");
         //action = in.nextInt();
         //in.nextLine();
@@ -481,11 +481,6 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     @Override
     public void displayError(String error) {
         //To be implemented
-    }
-
-    public void vSpace(int spaces) {
-        for (int i = 0; i < spaces; i++) pw.println();
-        pw.flush();
     }
 
 }

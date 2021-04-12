@@ -12,20 +12,20 @@ import java.util.List;
 
 public class PersonalBoardCli {
 
+    private final PrintWriter pw;
     private final CliUtils cliUtils;
     private final LeaderCardsCli leaderCardsCli;
     private final DevelopmentCardsCli developmentCardsCli;
     private final FaithTrackCli faithTrackCli;
     private final DepotCli depotCli;
-    private final PrintWriter pw;
 
-    public PersonalBoardCli() {
-        this.pw = new PrintWriter(System.out);
-        this.cliUtils = new CliUtils();
-        this.faithTrackCli = new FaithTrackCli();
-        this.developmentCardsCli = new DevelopmentCardsCli();
-        this.leaderCardsCli = new LeaderCardsCli();
-        this.depotCli = new DepotCli();
+    public PersonalBoardCli(PrintWriter pw) {
+        this.pw = pw;
+        this.cliUtils = new CliUtils(pw);
+        this.leaderCardsCli = new LeaderCardsCli(pw);
+        this.developmentCardsCli = new DevelopmentCardsCli(pw);
+        this.faithTrackCli = new FaithTrackCli(pw);
+        this.depotCli = new DepotCli(pw);
     }
 
     /**

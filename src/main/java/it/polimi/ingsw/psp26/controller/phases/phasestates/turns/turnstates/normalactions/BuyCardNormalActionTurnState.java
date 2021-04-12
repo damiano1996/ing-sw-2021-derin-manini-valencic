@@ -1,7 +1,9 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Match;
@@ -20,14 +22,36 @@ public class BuyCardNormalActionTurnState extends TurnState {
         super(turn);
     }
 
-    public void play(Message message) {
-        List<Resource> playerResources = getPlayerResources(turn.getTurnPlayer());
-        List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
-        getAvailableCard(turn.getMatch(), playerResources, playerCards);
-        //WaitPlayerAction
-        //buyCard(Message); // State 1
-        //placeCard(Message); // State 2
+    DevelopmentCard boughtCard = null;
 
+    public void play(Message message) {
+        super.play(message);
+
+        switch (message.getMessageType()) {
+            case BUY_CARD:
+                List<Resource> playerResources = getPlayerResources(turn.getTurnPlayer());
+                List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
+                getAvailableCard(turn.getMatch(), playerResources, playerCards);
+                try {
+                    boughtCard = buyCard((DevelopmentCard) message.getPayload().get("DevelopmentCard"), turn.getTurnPlayer());
+                } catch (NegativeNumberOfElementsToGrabException e) {
+                    e.printStackTrace();
+                }
+                new Message(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_POSITION);
+                break;
+
+            case POSITION_CHOSEN:
+                placeCard((int) message.getPayload().get("position"));
+                turn.changeState(new CheckVaticanReportTurnState(turn));
+                turn.play(message);
+                break;
+
+            default:
+                new Message(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_NORMAL_ACTION);
+
+        }
     }
 
     private List<Resource> getPlayerResources(Player player) {
@@ -56,13 +80,13 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     }
 
-    private void buyCard(Color color, Level level, Player player) throws NegativeNumberOfElementsToGrabException {
+    private DevelopmentCard buyCard(DevelopmentCard playerCard, Player player) throws NegativeNumberOfElementsToGrabException {
         DevelopmentCard drawnCard = null;
         int numberResources = 0;
         int i = 0;
 
         try {
-            drawnCard = turn.getMatch().getDevelopmentGrid().drawCard(color, level);
+            drawnCard = turn.getMatch().getDevelopmentGrid().drawCard(playerCard.getDevelopmentCardType().getColor(), playerCard.getDevelopmentCardType().getLevel());
         } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) {
             System.out.print("Error"); // To improve
         }
@@ -71,17 +95,18 @@ public class BuyCardNormalActionTurnState extends TurnState {
             numberResources -= player.getPersonalBoard().grabResourcesFromWarehouse(resource, numberResources).size();
             if (numberResources > 0) player.getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
         }
+        return drawnCard;
 
 
     }
 
-    private void placeCard(Message message, DevelopmentCard drawnCard) {
-        int i = 0; //Message body give position information
+    private void placeCard(int position) {
         try {
-            turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(i, drawnCard);
+            turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
             System.out.println("The position chosen is not correct, choose another one");
-            //NotifyObserver();
+            new Message(turn.getTurnPlayer().getSessionToken(),
+                    MessageType.CHOICE_POSITION);
         }
 
     }

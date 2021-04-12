@@ -4,7 +4,6 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ActivateOrDiscardLeaderTurnState;
 
 public class ChooseNormalActionTurnState extends TurnState {
     public ChooseNormalActionTurnState(Turn turn) {

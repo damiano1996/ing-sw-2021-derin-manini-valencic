@@ -9,7 +9,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
 import java.util.HashMap;
 
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Utils.goToNextStateAfterLeaderAction;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
 
 public class ActivateOrDiscardLeaderTurnState extends TurnState {
 

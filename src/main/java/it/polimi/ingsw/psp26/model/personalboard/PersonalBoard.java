@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.COLORS;
-
 /**
  * Class to model the personal board.
  */

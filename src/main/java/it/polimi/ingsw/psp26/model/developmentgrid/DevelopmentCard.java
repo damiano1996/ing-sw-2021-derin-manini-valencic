@@ -11,8 +11,8 @@ public class DevelopmentCard {
 
     private final Map<Resource, Integer> cost;
     private final DevelopmentCardType developmentCardType;
-    private final Map<Resource, Integer> productionCost;
-    private final Map<Resource, Integer> productionReturn;
+    private final Production production;
+
     private final int victoryPoints;
 
 
@@ -25,8 +25,7 @@ public class DevelopmentCard {
     ) {
         this.cost = cost;
         this.developmentCardType = colorLevel;
-        this.productionCost = productionCost;
-        this.productionReturn = productionReturn;
+        this.production = new Production(productionCost, productionReturn);
         this.victoryPoints = victoryPoints;
     }
 
@@ -38,12 +37,8 @@ public class DevelopmentCard {
         return developmentCardType;
     }
 
-    public Map<Resource, Integer> getProductionCost() {
-        return Collections.unmodifiableMap(productionCost);
-    }
-
-    public Map<Resource, Integer> getProductionReturn() {
-        return Collections.unmodifiableMap(productionReturn);
+    public Production getProduction() {
+        return production;
     }
 
     public int getVictoryPoints() {
@@ -58,12 +53,11 @@ public class DevelopmentCard {
         return victoryPoints == that.victoryPoints &&
                 Objects.equals(cost, that.cost) &&
                 Objects.equals(developmentCardType, that.developmentCardType) &&
-                Objects.equals(productionCost, that.productionCost) &&
-                Objects.equals(productionReturn, that.productionReturn);
+                Objects.equals(production, that.production);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cost, developmentCardType, productionCost, productionReturn, victoryPoints);
+        return Objects.hash(cost, developmentCardType, production, victoryPoints);
     }
 }

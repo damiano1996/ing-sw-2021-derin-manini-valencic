@@ -5,7 +5,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.lead
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
 
-public class Utils {
+public class TurnUtils {
 
     public static void goToNextStateAfterLeaderAction(Turn turn, Message message) {
         switch (turn.getTurnPhase()) {

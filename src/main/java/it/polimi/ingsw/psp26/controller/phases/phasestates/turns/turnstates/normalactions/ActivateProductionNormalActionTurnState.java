@@ -9,7 +9,6 @@ import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
 import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.Player;
-import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
@@ -18,15 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActivateProductionNormalActionTurnState extends TurnState {
+    List<DevelopmentCard> ChosenCards = new ArrayList<>();
+
     public ActivateProductionNormalActionTurnState(Turn turn) {
         super(turn);
     }
 
-    List<DevelopmentCard> ChosenCards = new ArrayList<>();
-
     public void play(Message message) { // TO BE FINISHED
 
-        if (!IsBasePowerPresent((List<DevelopmentCard>) message.getPayload().get("DevelopmentCards")) ) {
+        if (!IsBasePowerPresent((List<DevelopmentCard>) message.getPayload().get("DevelopmentCards"))) {
             List<Resource> resourcesProduced = new ArrayList<>(); //
             resourcesProduced = ActivateProduction((List<DevelopmentCard>) message.getPayload().get("DevelopmentCards"));
 
@@ -35,8 +34,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             } catch (CanNotAddResourceToStrongboxException ex) {
                 ex.printStackTrace();
             }
-        }
-        else{
+        } else {
 
             switch (message.getMessageType()) {
                 case RESOURCE_CHOSEN:
@@ -59,16 +57,16 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
     private void activateACardProduction(DevelopmentCard chosenCard, Player player) throws NegativeNumberOfElementsToGrabException {
         int resourceCost = 0;
-        for (Resource resource : chosenCard.getProductionCost().keySet()) {
-            resourceCost = chosenCard.getProductionCost().get(resource);
+        for (Resource resource : chosenCard.getProduction().getProductionCost().keySet()) {
+            resourceCost = chosenCard.getProduction().getProductionCost().get(resource);
             player.getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource, resourceCost);
         }
     }
 
     private List<Resource> getProductionResources(DevelopmentCard chosenCard) {
         List<Resource> resourcesProduced = new ArrayList<>();
-        for (Resource resource : chosenCard.getProductionReturn().keySet()) {
-            for (int i = 0; i < chosenCard.getProductionReturn().get(resource); i++) {
+        for (Resource resource : chosenCard.getProduction().getProductionReturn().keySet()) {
+            for (int i = 0; i < chosenCard.getProduction().getProductionReturn().get(resource); i++) {
                 resourcesProduced.add(resource);
             }
         }
@@ -97,12 +95,12 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         }
     }
 
-    private List<Resource> ActivateProduction(List<DevelopmentCard> chosenCards){
+    private List<Resource> ActivateProduction(List<DevelopmentCard> chosenCards) {
         List<Resource> playerStrongBoxCopy = new ArrayList<>();
         List<List<Resource>> playerDepotsCopy = new ArrayList<List<Resource>>();
         takePlayerResourcesSnapShot(turn.getTurnPlayer(), playerStrongBoxCopy, playerDepotsCopy);
         List<Resource> resourcesProduced = new ArrayList<>();
-        for (DevelopmentCard card : chosenCards ) {
+        for (DevelopmentCard card : chosenCards) {
             try {
                 activateACardProduction(card, turn.getTurnPlayer());
             } catch (NegativeNumberOfElementsToGrabException e) {
@@ -118,9 +116,9 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         return resourcesProduced;
     }
 
-    private boolean IsBasePowerPresent(List<DevelopmentCard> cards){
-        for(DevelopmentCard card : cards){
-            if(card.getCost().get(Resource.EMPTY) == 0) return true;
+    private boolean IsBasePowerPresent(List<DevelopmentCard> cards) {
+        for (DevelopmentCard card : cards) {
+            if (card.getCost().get(Resource.EMPTY) == 0) return true;
         }
         return false;
     }

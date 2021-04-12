@@ -51,12 +51,12 @@ public class DevelopmentCardTest {
 
     @Test
     public void testGetProductionCost() {
-        assertEquals(productionCost, developmentCard.getProductionCost());
+        assertEquals(productionCost, developmentCard.getProduction().getProductionCost());
     }
 
     @Test
     public void testGetProductionReturn() {
-        assertEquals(productionReturn, developmentCard.getProductionReturn());
+        assertEquals(productionReturn, developmentCard.getProduction().getProductionReturn());
     }
 
     @Test

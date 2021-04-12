@@ -162,12 +162,12 @@ public class DevelopmentCardsCli {
         List<Integer> numberOfRequiredResources = new ArrayList<>();
         List<Integer> numberOfProducedResources = new ArrayList<>();
 
-        for (Map.Entry<Resource, Integer> entry : developmentCard.getProductionCost().entrySet()) { //TODO magari una gestione miglore delle HashMap
+        for (Map.Entry<Resource, Integer> entry : developmentCard.getProduction().getProductionCost().entrySet()) { //TODO magari una gestione miglore delle HashMap
             requiredResources.add(entry.getKey());
             numberOfRequiredResources.add(entry.getValue());
         }
 
-        for (Map.Entry<Resource, Integer> entry : developmentCard.getProductionReturn().entrySet()) {
+        for (Map.Entry<Resource, Integer> entry : developmentCard.getProduction().getProductionReturn().entrySet()) {
             producedResources.add(entry.getKey());
             numberOfProducedResources.add(entry.getValue());
         }

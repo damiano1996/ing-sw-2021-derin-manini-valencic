@@ -13,12 +13,18 @@ import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
-import it.polimi.ingsw.psp26.model.personalboard.*;
+import it.polimi.ingsw.psp26.model.personalboard.Depot;
+import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
+import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
+import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TEST METTI NELLE ALTRE CLASSI I METODI CHE NON SERVONO PRIVATI E LA VIRTUALVIEW
 

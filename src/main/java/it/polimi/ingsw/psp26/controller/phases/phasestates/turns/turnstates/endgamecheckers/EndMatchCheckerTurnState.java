@@ -11,7 +11,7 @@ import it.polimi.ingsw.psp26.model.enums.Level;
 
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Utils.goToNextStateAfterLeaderAction;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
 import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.COLORS;
 import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.LEVELS;
 

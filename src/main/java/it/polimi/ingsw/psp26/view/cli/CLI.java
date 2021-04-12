@@ -18,9 +18,11 @@ import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
+import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +30,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TEST METTI NELLE ALTRE CLASSI I METODI CHE NON SERVONO PRIVATI E LA VIRTUALVIEW
+
+    private final Client client;
 
     private final PrintWriter pw;
     private final boolean isMultiPlayerMode;
@@ -41,8 +45,10 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     private final PersonalBoardCli personalBoardCli;
 
 
-    public CLI(PrintWriter pw) { //TODO devi passare al costruttore un match e ricavare isMultiPlayerMode da quello
-        this.pw = pw;
+    public CLI(Client client) { //TODO devi passare al costruttore un match e ricavare isMultiPlayerMode da quello
+        this.client = client;
+
+        this.pw = new PrintWriter(System.out);
         this.isMultiPlayerMode = true;
         this.cliUtils = new CliUtils(pw);
         this.depotCli = new DepotCli(pw);
@@ -55,10 +61,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     //CLI testing. Only press start to test CLI functionalities
     public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, DepotOutOfBoundException, CanNotAddResourceToStrongboxException {
-        PrintWriter pwr = new PrintWriter(System.out);
-        CLI cli = new CLI(pwr);
+        try {
+            CLI cli = new CLI(new Client());
+            cli.testMethod();
 
-        cli.testMethod();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, DepotOutOfBoundException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
@@ -296,22 +305,18 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         cliUtils.printFigure("MainTitle", 1, 10);
         pw.print(Color.RESET.setColor());
         pw.flush();
-
-
     }
 
 
     //------------------------------------------//
-    //          VIEW INFERFACE METHODS          //
+    //          VIEW INTERFACE METHODS          //
     //------------------------------------------//
 
 
     /**
      * Used to ask the Player's credentials
      */
-    public void displayLogIn() { //MUST BE COMPLETED WITH CONTROLLER INTEGRATION
-        String nickname = "";
-        String ipAddress = "";
+    public void displayLogIn() {
         Scanner in = new Scanner(System.in);
 
         printTitle();
@@ -325,17 +330,20 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                 cliUtils.vSpace(4);
                 pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
                 pw.flush();
-                nickname = in.nextLine();
+                client.setNickname(in.nextLine());
             } else {
                 printTitle();
                 cliUtils.vSpace(4);
-                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + nickname);
+                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
                 pw.flush();
                 cliUtils.vSpace(2);
                 pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                 pw.flush();
-                in.nextLine();
-                //ipAddress = in.nextLine(); COMMENTATO SOLO PER EVITARE IL WARNING NEL COMMIT, NELLA VERSIONE FINALE VA CONTROLLATO L'INSERIMENTO DELL'IP ADDRESS
+                try {
+                    client.initializeNetworkNode(in.nextLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

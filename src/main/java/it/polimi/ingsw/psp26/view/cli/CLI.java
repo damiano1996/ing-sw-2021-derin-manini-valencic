@@ -260,7 +260,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
         cliUtils.cls();
         for (int i = 0; i < 25; i++) {
-            displayFaithTrack(personalBoard.getFaithTrack(), 5, 5);
+            displayFaithTrack(personalBoard.getFaithTrack());
             in.nextLine();
             personalBoard.getFaithTrack().moveMarkerPosition(1);
             cliUtils.cls();
@@ -356,8 +356,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayInkwell(boolean isPrintable, int startingRow, int startingColumn) {
-        personalBoardCli.displayInkwell(isPrintable, startingRow, startingColumn);
+    public void displayInkwell(boolean isPrintable) {
+        personalBoardCli.displayInkwell(isPrintable, 5, 190);
     }
 
     @Override
@@ -371,23 +371,23 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayWarehouseDepots(List<Depot> warehouseDepot, int startingRow, int startingColumn) {
-        depotCli.printWarehouse(warehouseDepot, startingRow, startingColumn);
+    public void displayWarehouseDepots(List<Depot> warehouseDepot) {
+        depotCli.printWarehouse(warehouseDepot, 17, 13);
     }
 
     @Override
-    public void displayStrongbox(List<Resource> strongbox, int startingRow, int startingColumn) {
-        depotCli.displayStrongbox(strongbox, startingRow, startingColumn);
+    public void displayStrongbox(List<Resource> strongbox) {
+        depotCli.displayStrongbox(strongbox, 30, 3);
     }
 
     @Override
-    public void displayFaithTrack(FaithTrack faithTrack, int startingRow, int startingColumn) {
-        faithTrackCli.displayFaithTrack(faithTrack, startingRow, startingColumn);
+    public void displayFaithTrack(FaithTrack faithTrack) {
+        faithTrackCli.displayFaithTrack(faithTrack, 3, 10);
     }
 
     @Override
-    public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots, int startingRow, int startingColumn) {
-        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, startingRow, startingColumn);
+    public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
+        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
     }
 
     /**
@@ -411,8 +411,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn) {
-        marketCli.displayMarketTray(marketTray, startingRow, startingColumn);
+    public void displayMarketTray(MarketTray marketTray) {
+        marketCli.displayMarketTray(marketTray, 12, 88);
     }
 
     @Override
@@ -474,7 +474,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayActionToken(ActionToken actionToken) {
+    public void displayActionTokens(ActionToken actionToken) {
         //To be implemented
     }
 
@@ -485,7 +485,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
-
+        //To be implemented
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -20,49 +21,89 @@ public interface ViewInterface {
 
     void displayLogIn();
 
+    /**
+     * @deprecated use {@link #displayChoices} instead.
+     */
+    @Deprecated
     void displayMatchSelection();
 
+
+    @Deprecated
     void displayLeaderChoice(List<LeaderCard> leaderCards);
+
 
     void displayLeaderCardsDrawn(List<LeaderCard> leaderCards);
 
-    void displayInkwell(boolean isPrintable, int startingRow, int startingColumn);
+
+    void displayInkwell(boolean isPrintable);
+
 
     void displayInitialResources(List<Resource> resources);
 
+
     void displayPersonalBoard(Player player);
 
-    void displayWarehouseDepots(List<Depot> warehouseDepot, int startingRow, int startingColumn);
 
-    void displayStrongbox(List<Resource> strongbox, int startingRow, int startingColumn);
+    void displayWarehouseDepots(List<Depot> warehouseDepot);
 
-    void displayFaithTrack(FaithTrack faithTrack, int startingRow, int startingColumn);
 
-    void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots, int startingRow, int startingColumn);
+    void displayStrongbox(List<Resource> strongbox);
 
+
+    void displayFaithTrack(FaithTrack faithTrack);
+
+
+    void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots);
+
+
+    @Deprecated
     void displayNormalActionsSelection();
 
-    void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn);
 
+    void displayMarketTray(MarketTray marketTray);
+
+
+    @Deprecated
     void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources);
+
 
     void displayDevelopmentGrid(DevelopmentGrid developmentGrid);
 
+
     void displayResourceSupply(ResourceSupply resourceSupply);
+
 
     void displayProductionActivation(PersonalBoard personalBoard);
 
+
+    @Deprecated
     void displayLeaderActionSelection();
 
+
+    @Deprecated
     void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards);
+
+
+    void displayMarketScreen(MarketTray marketTray);
+
+
+    void displayDevelopmentGridCardSelection(DevelopmentGrid developmentGrid);
+
+
+    void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices);
+
 
     void displayActionTokens(ActionToken actionToken);
 
+
     void displayDevelopmentCardDiscard(DevelopmentGrid developmentGrid, DevelopmentCardType developmentCardType);
+
 
     void displayText(String text);
 
+
     void displayEndGame(HashMap<String, Integer> playersVictoryPoints);
+
 
     void displayError(String error);
 }

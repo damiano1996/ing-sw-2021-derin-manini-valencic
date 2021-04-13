@@ -182,4 +182,18 @@ public class CliUtils {
         moveCursor("dn", 1);
     }
 
+    /**
+     * Prints a colored String in a specified position
+     *
+     * @param s              The string to print
+     * @param color          The Color of the string
+     * @param startingRow    The row where the String will be printed
+     * @param startingColumn The column where the String will be printed
+     */
+    public void pPCS(String s, Color color, int startingRow, int startingColumn) {
+        setCursorPosition(startingRow, startingColumn);
+        pw.print(pCS(s, color));
+        pw.flush();
+    }
+
 }

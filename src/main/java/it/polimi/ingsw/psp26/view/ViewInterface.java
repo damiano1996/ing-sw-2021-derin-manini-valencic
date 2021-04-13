@@ -73,7 +73,7 @@ public interface ViewInterface {
     void displayResourceSupply(ResourceSupply resourceSupply);
 
 
-    void displayProductionActivation(PersonalBoard personalBoard);
+    void displayProductionActivation(Player player);
 
 
     @Deprecated

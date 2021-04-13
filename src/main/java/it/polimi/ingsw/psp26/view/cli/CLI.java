@@ -176,8 +176,11 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         LeaderDepot coinDepot = new LeaderDepot(virtualView, Resource.COIN);
         LeaderDepot servantDepot = new LeaderDepot(virtualView, Resource.SERVANT);
         List<LeaderCard> playerCards = new ArrayList<>();
-        playerCards.add(fourLeaders.get(0));
-        playerCards.add(fourLeaders.get(1));
+        List<LeaderCard> leaderCardList = new ArrayList<>();
+        LeaderCardsInitializer l = new LeaderCardsInitializer();
+        leaderCardList = l.getLeaderCards();
+        playerCards.add(leaderCardList.get(8));
+        playerCards.add(leaderCardList.get(9));
         player.setLeaderCards(playerCards);
         displayPersonalBoard(player);
         displayNormalActionsSelection();
@@ -232,6 +235,9 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].activatePopesFavorTile();
         displayPersonalBoard(player);
         displayNormalActionsSelection();
+        in.nextLine();
+
+        displayProductionActivation(player);
         in.nextLine();
 
 
@@ -468,8 +474,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayProductionActivation(PersonalBoard personalBoard) {
-        //To be completed
+    public void displayProductionActivation(Player player) { //TODO must be completed with controller integration e forse mettere la lista di object
+        personalBoardCli.displayProductionActivation(player);
+
+
+        cliUtils.vSpace(10);
+        pw.print(cliUtils.hSpace(20) + "Select which production you want to activate: ");
+        pw.flush();
     }
 
     /**

@@ -17,6 +17,9 @@ public class InitializationPhaseState extends PhaseState {
         super.execute(message);
 
         switch (message.getMessageType()) {
+            case MULTI_OR_SINGLE_PLAYER_MODE:
+                // TODO: to be completed
+                break;
             case MAX_NUMBER_OF_PLAYERS:
                 setMaxNumberOfPlayers(message);
                 break;

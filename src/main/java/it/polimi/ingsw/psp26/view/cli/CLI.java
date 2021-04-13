@@ -246,7 +246,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         //---PRINT-PLAYER-LEADER-CARDS-TEST---// Press Enter 7 times
 
         cliUtils.cls();
-        displayLeaderCardsDrawn(player.getLeaderCards());
+        displayLeaderCards(player.getLeaderCards());
         in.nextLine();
         cliUtils.cls();
 
@@ -254,7 +254,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         displayPersonalBoard(player);
         in.nextLine();
         cliUtils.cls();
-        displayLeaderCardsDrawn(player.getLeaderCards());
+        displayLeaderCards(player.getLeaderCards());
         in.nextLine();
         cliUtils.cls();
 
@@ -262,7 +262,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         displayPersonalBoard(player);
         in.nextLine();
         cliUtils.cls();
-        displayLeaderCardsDrawn(player.getLeaderCards());
+        displayLeaderCards(player.getLeaderCards());
         displayLeaderCardDiscardSelection(player.getLeaderCards());
         in.nextLine();
         cliUtils.cls();
@@ -271,7 +271,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         displayPersonalBoard(player);
         in.nextLine();
         cliUtils.cls();
-        displayLeaderCardsDrawn(player.getLeaderCards());
+        displayLeaderCards(player.getLeaderCards());
         in.nextLine();
         cliUtils.cls();
 
@@ -279,7 +279,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         displayPersonalBoard(player);
         in.nextLine();
         cliUtils.cls();
-        displayLeaderCardsDrawn(player.getLeaderCards());
+        displayLeaderCards(player.getLeaderCards());
         in.nextLine();
 
 
@@ -376,7 +376,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayLeaderCardsDrawn(List<LeaderCard> leaderCards) {
+    public void displayLeaderCards(List<LeaderCard> leaderCards) {
         personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
     }
 
@@ -545,6 +545,10 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                     displayLeaderActionSelection();
                     break;
 
+                case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
+
+
+
                 default:
                     break;
             }
@@ -563,12 +567,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         cliUtils.vSpace(1);
         pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
 
-        for (int i = 0; i < maxChoices; i++) {
+        while (choices.size() < nChoices) {
             pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'q' - to quit): ");
 
+            pw.flush();
             String item = in.nextLine();
-            if (item.equals("q") && choices.size() > minChoices) i = maxChoices;
-            int itemInt = Integer.parseInt(item);
+            if (item.equals("q") && choices.size() > minChoices) break;
+            int itemInt = Integer.parseInt(item) - 1;
 
             if (!choices.contains(itemInt))
                 choices.add(itemInt);

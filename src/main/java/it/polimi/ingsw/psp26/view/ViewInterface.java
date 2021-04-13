@@ -21,7 +21,7 @@ public interface ViewInterface {
     void displayLogIn();
 
 
-    void displayLeaderCardsDrawn(List<LeaderCard> leaderCards);
+    void displayLeaderCards(List<LeaderCard> leaderCards);
 
 
     void displayInkwell(boolean isPrintable);

@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
@@ -180,25 +181,17 @@ public class PersonalBoardCli {
     /**
      * Prints the Player's available production actions
      *
-     * @param player The player that has to activate productions
+     * @param productions The Productions available for the Player
      */
-    public void displayProductionActivation(Player player) {
+    public void displayProductionActivation(List<Production> productions) {
         cliUtils.cls();
 
         cliUtils.printFigure("ActivateProductionTitle", 1, 18);
-        cliUtils.printFigure("BaseProductionPower", 18, 20);
-        cliUtils.pPCS("BASE PRODUCTION", Color.WHITE, 35, 25);
 
-        for (int i = 0; i < player.getPersonalBoard().getVisibleDevelopmentCards().size(); i++) {
-            developmentCardsCli.printDevelopmentCard(player.getPersonalBoard().getVisibleDevelopmentCards().get(i), 16, 63 + (30 * i), 1);
-            cliUtils.pPCS("DEV  PRODUCTION " + (i + 1), Color.WHITE, 35, 66 + (i * 30));
-        }
-
-        for (int i = 0; i < player.getLeaderCards().size(); i++) {
-            if (player.getLeaderCards().get(i).getSpecialAbility().getAbilityType().equals("PRODUCTION  LEADER")) {
-                leaderCardsCli.printLeader(player.getLeaderCards().get(i), 14, 165 + (i * 30));
-                cliUtils.pPCS("LEADER  PRODUCTION " + (i + 1), Color.WHITE, 35, 168 + (i * 30));
-            }
+        for (int i = 0; i < productions.size(); i++) {
+            cliUtils.printFigure("ProductionBook", 15, 20 + (i * 35));
+            developmentCardsCli.printProduction(productions.get(i).getProductionCost(), productions.get(i).getProductionReturn(), 10, 21 + (i * 35));
+            cliUtils.pPCS("PRODUCTION  " + (i + 1), Color.WHITE, 25, 26 + (i * 35));
         }
     }
 

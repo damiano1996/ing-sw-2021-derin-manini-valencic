@@ -52,9 +52,7 @@ public class DevelopmentCardsCli {
         printCardColor(developmentCard, startingRow, startingColumn, true);
         printDevelopmentCardLevel(developmentCard, startingRow, startingColumn);
         printCardColor(developmentCard, startingRow, startingColumn, false);
-        printProductionLines(developmentCard, 1, startingRow, startingColumn);
-        printProductionLines(developmentCard, 2, startingRow, startingColumn);
-        printProductionLines(developmentCard, 3, startingRow, startingColumn);
+        printProduction(developmentCard.getProduction().getProductionCost(), developmentCard.getProduction().getProductionReturn(), startingRow, startingColumn);
         printCardVictoryPoints(developmentCard, startingRow, startingColumn);
 
         pw.flush();
@@ -111,7 +109,7 @@ public class DevelopmentCardsCli {
         }
         s.append(cliUtils.hSpace(remainingSpace)).append("|");
 
-        pw.print(s.toString());
+        pw.print(s);
         pw.flush();
     }
 
@@ -148,33 +146,47 @@ public class DevelopmentCardsCli {
     }
 
     /**
+     * Generic method that prints a Production. May be used with every Production Object
+     *
+     * @param productionCost   The cost of the Production
+     * @param productionReturn The Resources returned by the Production
+     * @param startingRow      The row where the Production is gonna be printed
+     * @param startingColumn   The column where the Production is gonna be printed
+     */
+    public void printProduction(Map<Resource, Integer> productionCost, Map<Resource, Integer> productionReturn, int startingRow, int startingColumn) {
+        for (int i = 0; i < 3; i++)
+            printProductionLines(productionCost, productionReturn, i, startingRow, startingColumn);
+    }
+
+    /**
      * Used to print the Production section of a DevelopmentCard
      * It calls three auxiliary methods in order to get a clean print of the Resources
      *
-     * @param developmentCard The card that is gonna to be printed
-     * @param line            Print the first, second or third line of the Production section
-     * @param startingRow     The starting row where the Development Card is going to be printed
-     * @param startingColumn  The starting column where the Development Card is going to be printed
+     * @param productionCost   The cost of the Production
+     * @param productionReturn The Resources returned by the Production
+     * @param line             Print the first, second or third line of the Production section
+     * @param startingRow      The starting row where the Development Card is going to be printed
+     * @param startingColumn   The starting column where the Development Card is going to be printed
      */
-    private void printProductionLines(DevelopmentCard developmentCard, int line, int startingRow, int startingColumn) {
+    private void printProductionLines(Map<Resource, Integer> productionCost, Map<Resource, Integer> productionReturn, int line, int startingRow, int startingColumn) {
         List<Resource> requiredResources = new ArrayList<>();
         List<Resource> producedResources = new ArrayList<>();
         List<Integer> numberOfRequiredResources = new ArrayList<>();
         List<Integer> numberOfProducedResources = new ArrayList<>();
 
-        for (Map.Entry<Resource, Integer> entry : developmentCard.getProduction().getProductionCost().entrySet()) { //TODO magari una gestione miglore delle HashMap
+        for (Map.Entry<Resource, Integer> entry : productionCost.entrySet()) { //TODO magari una gestione miglore delle HashMap
             requiredResources.add(entry.getKey());
             numberOfRequiredResources.add(entry.getValue());
         }
 
-        for (Map.Entry<Resource, Integer> entry : developmentCard.getProduction().getProductionReturn().entrySet()) {
+        for (Map.Entry<Resource, Integer> entry : productionReturn.entrySet()) {
             producedResources.add(entry.getKey());
             numberOfProducedResources.add(entry.getValue());
         }
 
-        if (line == 1)
+        if (line == 0)
             printFirstProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources, startingRow, startingColumn);
-        else if (line == 2)
+        else if (line == 1)
             printSecondProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources, startingRow, startingColumn);
         else
             printThirdProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources, startingRow, startingColumn);
@@ -191,17 +203,17 @@ public class DevelopmentCardsCli {
      * @param startingColumn            The starting column where the Development Card is going to be printed
      */
     private void printFirstProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
-        cliUtils.setCursorPosition(startingRow + 7, startingColumn);
+        cliUtils.setCursorPosition(startingRow + 7, startingColumn + 5);
 
-        String s = "| |  ";
+        String s = "";
 
         if (requiredResources.size() == 1) s = s + cliUtils.hSpace(10);
         else
             s = s + numberOfRequiredResources.get(0) + cliUtils.pCS(" \u25A0", requiredResources.get(0).getColor()) + cliUtils.hSpace(7);
 
-        if (producedResources.size() == 1) s = s + cliUtils.hSpace(5) + "| |";
+        if (producedResources.size() == 1) s = s + cliUtils.hSpace(5);
         else
-            s = s + numberOfProducedResources.get(0) + cliUtils.pCS(" \u25A0  ", producedResources.get(0).getColor()) + "| |";
+            s = s + numberOfProducedResources.get(0) + cliUtils.pCS(" \u25A0  ", producedResources.get(0).getColor());
 
         pw.print(s);
         pw.flush();
@@ -218,19 +230,18 @@ public class DevelopmentCardsCli {
      * @param startingColumn            The starting column where the Development Card is going to be printed
      */
     private void printSecondProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
-        cliUtils.setCursorPosition(startingRow + 8, startingColumn);
+        cliUtils.setCursorPosition(startingRow + 8, startingColumn + 5);
 
-        String s = "| |  ";
+        String s = "";
 
         if (requiredResources.size() == 1)
             s = s + numberOfRequiredResources.get(0) + cliUtils.pCS(" \u25A0", requiredResources.get(0).getColor()) + "  -->  ";
         else s = s + "     -->  ";
 
         if (producedResources.size() == 1)
-            s = s + numberOfProducedResources.get(0) + cliUtils.pCS(" \u25A0  ", producedResources.get(0).getColor()) + "| |";
+            s = s + numberOfProducedResources.get(0) + cliUtils.pCS(" \u25A0  ", producedResources.get(0).getColor());
         else if (producedResources.size() == 3)
-            s = s + numberOfProducedResources.get(1) + cliUtils.pCS(" \u25A0  ", producedResources.get(1).getColor()) + "| |";
-        else s = s + "     | |";
+            s = s + numberOfProducedResources.get(1) + cliUtils.pCS(" \u25A0  ", producedResources.get(1).getColor());
 
         pw.print(s);
         pw.flush();
@@ -247,19 +258,18 @@ public class DevelopmentCardsCli {
      * @param startingColumn            The starting column where the Development Card is going to be printed
      */
     private void printThirdProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
-        cliUtils.setCursorPosition(startingRow + 9, startingColumn);
+        cliUtils.setCursorPosition(startingRow + 9, startingColumn + 5);
 
-        String s = "| |  ";
+        String s = "";
 
         if (requiredResources.size() == 2)
             s = s + numberOfRequiredResources.get(1) + cliUtils.pCS(" \u25A0", requiredResources.get(1).getColor()) + cliUtils.hSpace(7);
         else s = s + cliUtils.hSpace(10);
 
         if (producedResources.size() == 2)
-            s = s + numberOfProducedResources.get(1) + cliUtils.pCS(" \u25A0  ", producedResources.get(1).getColor()) + "| |";
+            s = s + numberOfProducedResources.get(1) + cliUtils.pCS(" \u25A0  ", producedResources.get(1).getColor());
         else if (producedResources.size() == 3)
-            s = s + numberOfProducedResources.get(2) + cliUtils.pCS(" \u25A0  ", producedResources.get(2).getColor()) + "| |";
-        else s = s + "     | |";
+            s = s + numberOfProducedResources.get(2) + cliUtils.pCS(" \u25A0  ", producedResources.get(2).getColor());
 
         pw.print(s);
         pw.flush();

@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
@@ -54,7 +55,7 @@ public interface ViewInterface {
     void displayResourceSupply(ResourceSupply resourceSupply);
 
 
-    void displayProductionActivation(Player player);
+    void displayProductionActivation(List<Production> productions);
 
 
     void displayMarketScreen(MarketTray marketTray);

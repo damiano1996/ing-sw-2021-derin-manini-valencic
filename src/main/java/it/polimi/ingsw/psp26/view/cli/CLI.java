@@ -10,6 +10,7 @@ import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -239,7 +240,19 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         displayNormalActionsSelection();
         in.nextLine();
 
-        displayProductionActivation(player);
+
+        //---ACTIVATE-PRODUCTION-TEST---// Press enter 1 time
+
+        cliUtils.cls();
+        developmentGrid = new DevelopmentGrid(virtualView);
+        List<Production> productions = new ArrayList<>();
+        productions.add(developmentGrid.drawCard(Color.GREEN, Level.FIRST).getProduction());
+        productions.add(developmentGrid.drawCard(Color.GREEN, Level.SECOND).getProduction());
+        productions.add(developmentGrid.drawCard(Color.GREEN, Level.THIRD).getProduction());
+        productions.add(developmentGrid.drawCard(Color.GREEN, Level.FIRST).getProduction());
+        productions.add(developmentGrid.drawCard(Color.GREEN, Level.SECOND).getProduction());
+        productions.add(developmentGrid.drawCard(Color.GREEN, Level.THIRD).getProduction());
+        displayProductionActivation(productions);
         in.nextLine();
 
 
@@ -469,8 +482,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayProductionActivation(Player player) { //TODO must be completed with controller integration e forse mettere la lista di object
-        personalBoardCli.displayProductionActivation(player);
+    public void displayProductionActivation(List<Production> productions) { //TODO must be completed with controller integration e forse mettere la lista di object
+        personalBoardCli.displayProductionActivation(productions);
 
 
         cliUtils.vSpace(10);
@@ -546,7 +559,6 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                     break;
 
                 case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
-
 
 
                 default:

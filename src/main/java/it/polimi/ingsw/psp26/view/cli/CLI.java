@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
 
 public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TEST METTI NELLE ALTRE CLASSI I METODI CHE NON SERVONO PRIVATI E LA VIRTUALVIEW
 
@@ -369,13 +371,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         }
     }
 
-    @Override
-    public void displayMatchSelection() {
-        //To be completed
-    }
-
-    @Override
-    public void displayLeaderChoice(List<LeaderCard> leaderCards) {
+    private void displayLeaderChoice(List<LeaderCard> leaderCards) {
         leaderCardsCli.displayLeaderSelection(leaderCards);
     }
 
@@ -449,8 +445,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         marketCli.displayMarketScreen(marketTray);
     }
 
-    @Override
-    public void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources) {
+    private void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources) {
         depotCli.displayMarketResourcesSelection(depots, resources);
     }
 
@@ -502,8 +497,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         pw.flush();
     }
 
-    @Override
-    public void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards) { //TODO devi mandare al server cosa scegli
+    private void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards) { //TODO devi mandare al server cosa scegli
         personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
 
         cliUtils.setCursorPosition(35, 21);
@@ -523,32 +517,66 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
+        try {
 
-        cliUtils.cls();
-        pw.println(question);
+            cliUtils.cls();
+            pw.println(question);
 
-        switch (messageType) {
-            case MULTI_OR_SINGLE_PLAYER_MODE:
-                // TODO: to be completed
-                break;
+            switch (messageType) {
+                case MULTI_OR_SINGLE_PLAYER_MODE:
+                    // TODO: to be completed
 
-            case CHOICE_NORMAL_ACTION:
-                displayNormalActionsSelection();
-                break;
+                    client.sendToServer(new Message(
+                            client.getSessionToken(),
+                            messageType,
+                            new HashMap<>() {{
+                                put("choices", getElementsByIndices(
+                                        choices,
+                                        displayInputChoice(choices.size(), minChoices, maxChoices)));
+                            }}));
 
-            case CHOICE_LEADER_ACTION:
-                displayLeaderActionSelection();
-                break;
+                    break;
 
-            case LEADER_ACTIVATED:
-                displayLeaderCardsDrawn((List<LeaderCard>) (Object) choices);
-                break;
+                case CHOICE_NORMAL_ACTION:
+                    displayNormalActionsSelection();
+                    break;
 
-            default:
-                break;
+                case CHOICE_LEADER_ACTION:
+                    displayLeaderActionSelection();
+                    break;
+
+                default:
+                    break;
+            }
+
+            pw.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices) {
+        Scanner in = new Scanner(System.in);
+        List<Integer> choices = new ArrayList<>();
+
+        cliUtils.vSpace(1);
+        pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
+
+        for (int i = 0; i < maxChoices; i++) {
+            pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'q' - to quit): ");
+
+            String item = in.nextLine();
+            if (item.equals("q") && choices.size() > minChoices) i = maxChoices;
+            int itemInt = Integer.parseInt(item);
+
+            if (!choices.contains(itemInt))
+                choices.add(itemInt);
         }
 
         pw.flush();
+
+        return choices;
     }
 
     @Override

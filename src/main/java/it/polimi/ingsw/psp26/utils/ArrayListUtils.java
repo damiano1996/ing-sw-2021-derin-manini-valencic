@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ArrayListUtils {
 
@@ -24,5 +25,9 @@ public class ArrayListUtils {
 
         list.removeAll(drawnElements);
         return drawnElements;
+    }
+
+    public static <T> List<T> getElementsByIndices(List<T> list, List<Integer> indices) {
+        return indices.stream().map(list::get).collect(Collectors.toList());
     }
 }

@@ -12,7 +12,6 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
-import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,16 +19,6 @@ import java.util.List;
 public interface ViewInterface {
 
     void displayLogIn();
-
-    /**
-     * @deprecated use {@link #displayChoices} instead.
-     */
-    @Deprecated
-    void displayMatchSelection();
-
-
-    @Deprecated
-    void displayLeaderChoice(List<LeaderCard> leaderCards);
 
 
     void displayLeaderCardsDrawn(List<LeaderCard> leaderCards);
@@ -56,15 +45,7 @@ public interface ViewInterface {
     void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots);
 
 
-    @Deprecated
-    void displayNormalActionsSelection();
-
-
     void displayMarketTray(MarketTray marketTray);
-
-
-    @Deprecated
-    void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources);
 
 
     void displayDevelopmentGrid(DevelopmentGrid developmentGrid);
@@ -74,14 +55,6 @@ public interface ViewInterface {
 
 
     void displayProductionActivation(Player player);
-
-
-    @Deprecated
-    void displayLeaderActionSelection();
-
-
-    @Deprecated
-    void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards);
 
 
     void displayMarketScreen(MarketTray marketTray);

@@ -27,6 +27,14 @@ public class ArrayListUtils {
         return drawnElements;
     }
 
+    /**
+     * Method returns a sublist containing objects in the position indicated by the list of indices.
+     *
+     * @param list    list containing objects to select
+     * @param indices list containing the indices
+     * @param <T>     generic type
+     * @return sublist of list
+     */
     public static <T> List<T> getElementsByIndices(List<T> list, List<Integer> indices) {
         return indices.stream().map(list::get).collect(Collectors.toList());
     }

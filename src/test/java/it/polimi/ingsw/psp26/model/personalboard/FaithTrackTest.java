@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
+import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ public class FaithTrackTest {
 
     @Before
     public void setUp() {
-        VirtualView virtualView = new VirtualView();
+        VirtualView virtualView = new VirtualView(new Server());
         vaticanReportSections = new VaticanReportSection[3];
 
         vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2);
@@ -77,13 +78,13 @@ public class FaithTrackTest {
 
     @Test
     public void testEquals_TrueCase() {
-        FaithTrack faithTrack1 = new FaithTrack(new VirtualView());
+        FaithTrack faithTrack1 = new FaithTrack(new VirtualView(new Server()));
         assertEquals(faithTrack, faithTrack1);
     }
 
     @Test
     public void testEquals_FalseCase() {
-        FaithTrack faithTrack1 = new FaithTrack(new VirtualView());
+        FaithTrack faithTrack1 = new FaithTrack(new VirtualView(new Server()));
         faithTrack.addFaithPoints(5);
         faithTrack.moveBlackCrossPosition(7);
         assertNotEquals(faithTrack, faithTrack1);

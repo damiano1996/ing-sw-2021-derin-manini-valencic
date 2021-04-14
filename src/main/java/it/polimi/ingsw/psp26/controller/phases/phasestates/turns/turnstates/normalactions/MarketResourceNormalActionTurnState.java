@@ -29,7 +29,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
     public void play(Message message) {
         // TODO: to implement sub-states
-        List<Integer> rowColumn = (List<Integer>) message.getPayload().get("RowColumn");
+        List<Integer> rowColumn = (List<Integer>) message.getPayload();
         switch (message.getMessageType()) {
             case MARKET_RESOURCE:
                 if (rowColumn.get(0) == 0) {
@@ -52,7 +52,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 break;
             case GRAB_RESOURCES:
                 try {
-                    tempResources.addAll(turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot((int) message.getPayload().get("DepotIndex")).grabAllResources());
+                    tempResources.addAll(turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot((int) message.getPayload()).grabAllResources());
                 } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
                     e.printStackTrace();
                 }

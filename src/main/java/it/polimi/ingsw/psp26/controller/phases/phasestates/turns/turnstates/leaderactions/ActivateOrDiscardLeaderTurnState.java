@@ -32,7 +32,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
         switch (message.getMessageType()) {
             case LEADER_CHOSEN:
 
-                LeaderCard leaderCard = (LeaderCard) message.getPayload().get("leader");
+                LeaderCard leaderCard = (LeaderCard) message.getPayload();
                 playAction(leaderCard, message);
                 break;
 

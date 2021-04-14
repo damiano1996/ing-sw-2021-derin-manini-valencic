@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class PersonalBoardTest {
 
     @Before
     public void setUp() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-        virtualView = new VirtualView();
+        virtualView = new VirtualView(new Server());
 
         developmentGrid = new DevelopmentGrid(virtualView);
         personalBoard = new PersonalBoard(virtualView);

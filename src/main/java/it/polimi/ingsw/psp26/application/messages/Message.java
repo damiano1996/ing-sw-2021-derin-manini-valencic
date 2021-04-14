@@ -1,21 +1,23 @@
 package it.polimi.ingsw.psp26.application.messages;
 
+import it.polimi.ingsw.psp26.application.GsonConverter;
+
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Message implements Serializable {
 
     private String sessionToken;
     private MessageType messageType;
-    private HashMap<String, Object> payload;
+    private List<String> jsonPayloads;
+    private Class<?> payloadClass;
 
     public Message() { // TODO: temporary
     }
 
-    public Message(String sessionToken, MessageType messageType, HashMap<String, Object> payload) {
-        this.sessionToken = sessionToken;
+    public Message(MessageType messageType) {
         this.messageType = messageType;
-        this.payload = payload;
     }
 
     public Message(String sessionToken, MessageType messageType) {
@@ -23,8 +25,25 @@ public class Message implements Serializable {
         this.messageType = messageType;
     }
 
-    public Message(MessageType messageType) {
+    public Message(MessageType messageType, Object... payloads) {
         this.messageType = messageType;
+        objectToJson(payloads);
+    }
+
+    public Message(String sessionToken, MessageType messageType, Object... payloads) {
+        this.sessionToken = sessionToken;
+        this.messageType = messageType;
+        objectToJson(payloads);
+    }
+
+    private void objectToJson(Object... payloads) {
+        this.payloadClass = payloads[0].getClass();
+
+        this.jsonPayloads = new ArrayList<>();
+        for (Object payload : payloads)
+            this.jsonPayloads.add(
+                    GsonConverter.getInstance().getGson().toJson(payload, this.payloadClass)
+            );
     }
 
     public String getSessionToken() {
@@ -35,7 +54,18 @@ public class Message implements Serializable {
         return messageType;
     }
 
-    public HashMap<String, Object> getPayload() {
-        return payload;
+    public Object getPayload(int index) {
+        return GsonConverter.getInstance().getGson().fromJson(jsonPayloads.get(index), payloadClass);
+    }
+
+    public Object getPayload() {
+        return getPayload(0);
+    }
+
+    public List<Object> getPayloads() {
+        List<Object> objectPayloads = new ArrayList<>();
+        for (int i = 0; i < jsonPayloads.size(); i++)
+            objectPayloads.add(getPayload(i));
+        return objectPayloads;
     }
 }

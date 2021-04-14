@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
+import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class MatchTest {
 
     @Before
     public void setUp() {
-        virtualView = new VirtualView();
+        virtualView = new VirtualView(new Server());
         id = 0;
         multiPlayersList = new ArrayList<>() {{
             add(new Player(virtualView, "nickname0", "sessionToken0"));

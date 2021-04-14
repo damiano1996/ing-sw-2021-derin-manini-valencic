@@ -32,7 +32,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
                 getAvailableCard(turn.getMatch(), playerResources, playerCards);
                 try {
-                    boughtCard = buyCard((DevelopmentCard) message.getPayload().get("DevelopmentCard"), turn.getTurnPlayer());
+                    boughtCard = buyCard((DevelopmentCard) message.getPayload(), turn.getTurnPlayer());
                 } catch (NegativeNumberOfElementsToGrabException e) {
                     e.printStackTrace();
                 }
@@ -41,7 +41,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 break;
 
             case POSITION_CHOSEN:
-                placeCard((int) message.getPayload().get("position"));
+                placeCard((int) message.getPayload());
                 turn.changeState(new CheckVaticanReportTurnState(turn));
                 turn.play(message);
                 break;

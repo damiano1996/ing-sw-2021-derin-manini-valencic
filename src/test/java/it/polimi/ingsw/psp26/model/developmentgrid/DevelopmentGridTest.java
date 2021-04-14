@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
+import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ public class DevelopmentGridTest {
 
     @Before
     public void setUp() {
-        developmentGrid = new DevelopmentGrid(new VirtualView());
+        developmentGrid = new DevelopmentGrid(new VirtualView(new Server()));
     }
 
     @Test

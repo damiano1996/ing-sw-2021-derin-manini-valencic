@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class LeaderDepotTest {
 
     @Before
     public void setUp() {
-        virtualView = new VirtualView();
+        virtualView = new VirtualView(new Server());
         coinDepot = new LeaderDepot(virtualView, Resource.COIN);
     }
 

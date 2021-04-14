@@ -134,6 +134,21 @@ public class Match extends Observable<Message> {
     }
 
     /**
+     * Getter of the player object by sessionToken.
+     *
+     * @param sessionToken sessionToken of the player
+     * @return the player object with the corresponding nickname
+     * @throws PlayerDoesNotExistException if there aren't players with this nickname
+     */
+    public Player getPlayerBySessionToken(String sessionToken) throws PlayerDoesNotExistException {
+        return players
+                .stream()
+                .filter(x -> x.getSessionToken().equals(sessionToken))
+                .reduce((a, b) -> b)
+                .orElseThrow(PlayerDoesNotExistException::new);
+    }
+
+    /**
      * Getter of the resource supply object.
      *
      * @return the resource supply object

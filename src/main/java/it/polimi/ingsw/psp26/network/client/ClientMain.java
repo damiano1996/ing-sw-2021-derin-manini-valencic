@@ -10,6 +10,8 @@ public class ClientMain {
         try {
             Client client = new Client();
             CLI cli = new CLI(client);
+            client.setViewInterface(cli);
+
             cli.displayLogIn();
 
         } catch (IOException e) {

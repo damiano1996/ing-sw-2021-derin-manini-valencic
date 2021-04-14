@@ -12,6 +12,8 @@ public class ServerMain {
 
     public static void main(String[] args) {
 
+        Server server = new Server();
+
         try {
             ServerSocket serverSocket = new ServerSocket(DEFAULT_SERVER_PORT);
 
@@ -21,8 +23,8 @@ public class ServerMain {
                 Socket socket = serverSocket.accept();
                 System.out.println("New client!");
 
-                NetworkNode networkNode = new NetworkNode(socket);
-                networkNode.sendData("Hello Client!!");
+                NetworkNode nodeClient = new NetworkNode(socket);
+                server.addNodeClient(nodeClient);
             }
 
         } catch (IOException e) {

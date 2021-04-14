@@ -8,9 +8,11 @@ import it.polimi.ingsw.psp26.controller.MatchController;
 public class VirtualView extends Observable<Message> implements Observer<Message> {
 
     private final MatchController matchController;
+    private final Server server;
 
-    public VirtualView() {
+    public VirtualView(Server server) {
         matchController = new MatchController(this, getMatchId());
+        this.server = server;
     }
 
     @Override
@@ -18,12 +20,16 @@ public class VirtualView extends Observable<Message> implements Observer<Message
         // it receives notification from model/controller and it has to notify the "real" view
     }
 
-    private void forwardMessage(Message message) {
+    public void forwardToMatchController(Message message) {
         // it receives message from the communication channel and it has to forward the message to the controller
         matchController.update(message);
     }
 
     private int getMatchId() {
         return 0; // TODO: if we want an incremental id we should implement a way to retrieve the last assigned id
+    }
+
+    public MatchController getMatchController() {
+        return matchController;
     }
 }

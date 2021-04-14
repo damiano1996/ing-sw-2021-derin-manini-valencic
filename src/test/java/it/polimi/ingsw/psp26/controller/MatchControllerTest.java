@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.controller;
 
+import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ public class MatchControllerTest {
 
     @Before
     public void setUp() {
-        virtualView = new VirtualView();
+        virtualView = new VirtualView(new Server());
         matchController = new MatchController(virtualView, 0);
     }
 

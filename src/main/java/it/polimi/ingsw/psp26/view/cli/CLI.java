@@ -21,6 +21,7 @@ import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
@@ -78,7 +79,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, DepotOutOfBoundException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
         //---OBJECTS-DECLARATION---//
 
-        VirtualView virtualView = new VirtualView();
+        VirtualView virtualView = new VirtualView(new Server());
         Player player = new Player(virtualView, "Player", "000000");
         LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
         List<LeaderCard> leaderCards = leaderCardsInitializer.getLeaderCards();
@@ -186,7 +187,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         playerCards.add(leaderCardList.get(9));
         player.setLeaderCards(playerCards);
         displayPersonalBoard(player);
-        displayNormalActionsSelection();
+//        displayNormalActionsSelection();
         List<Resource> strResource = new ArrayList<>();
         in.nextLine();
         cliUtils.cls();
@@ -206,7 +207,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
         displayPersonalBoard(player);
-        displayLeaderActionSelection();
+//        displayLeaderActionSelection();
         in.nextLine();
         cliUtils.cls();
 
@@ -222,7 +223,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].activatePopesFavorTile();
         displayPersonalBoard(player);
-        displayNormalActionsSelection();
+//        displayNormalActionsSelection();
         in.nextLine();
         cliUtils.cls();
 
@@ -237,7 +238,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].activatePopesFavorTile();
         displayPersonalBoard(player);
-        displayNormalActionsSelection();
+//        displayNormalActionsSelection();
         in.nextLine();
 
 
@@ -371,12 +372,10 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                 try {
                     client.initializeNetworkNode(in.nextLine());
                     // go to Multi/single player choice
-                    displayChoices(MULTI_OR_SINGLE_PLAYER_MODE,
-                            "Do you want to play in multi or single player mode?",
-                            new ArrayList<>() {{
-                                add(MULTIPLAYER_MODE);
-                                add(SINGLE_PLAYER_MODE);
-                            }}, 1, 1);
+                    client.handleMessage(new Message(
+                            MULTI_OR_SINGLE_PLAYER_MODE, // message type
+                            MULTIPLAYER_MODE, SINGLE_PLAYER_MODE // choices
+                    ));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -428,26 +427,6 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
     }
 
-    /**
-     * Displays the normal action selection
-     */
-    public void displayNormalActionsSelection() { // TODO Final implementation may be different
-        Scanner in = new Scanner(System.in);
-        int action;
-
-        cliUtils.vSpace(5);
-        pw.println(cliUtils.hSpace(5) + "\u001b[4mSELECT A NORMAL ACTION" + Color.RESET);
-        cliUtils.vSpace(1);
-        pw.println(cliUtils.hSpace(3) + "1 - Get Resources from the Market");
-        pw.println(cliUtils.hSpace(3) + "2 - Activate production");
-        pw.println(cliUtils.hSpace(3) + "3 - Buy a Development Card");
-        cliUtils.vSpace(2);
-        pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding action: ");
-        //action = in.nextInt();
-        //in.nextLine();
-        pw.flush();
-    }
-
     @Override
     public void displayMarketTray(MarketTray marketTray) {
         marketCli.displayMarketTray(marketTray, 12, 88);
@@ -491,25 +470,6 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         pw.flush();
     }
 
-    /**
-     * Displays the leader action selection
-     */
-    public void displayLeaderActionSelection() { // TODO Final implementation may be different
-        Scanner in = new Scanner(System.in);
-        int action;
-
-        cliUtils.vSpace(5);
-        pw.println(cliUtils.hSpace(3) + "\u001b[4mSELECT A LEADER ACTION" + Color.RESET);
-        pw.println(cliUtils.hSpace(3) + "1 - Discard a Leader");
-        pw.println(cliUtils.hSpace(3) + "2 - Activate a Leader");
-        cliUtils.vSpace(1);
-        pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding action: ");
-        //action = in.nextInt();
-        //in.nextLine();
-
-        pw.flush();
-    }
-
     private void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards) { //TODO devi mandare al server cosa scegli
         personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
 
@@ -532,30 +492,35 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
         try {
 
+            List<Object> selected = new ArrayList<>();
+
             cliUtils.cls();
-            pw.println(question);
+            cliUtils.vSpace(1);
+            pw.println(cliUtils.hSpace(3) + question);
 
             switch (messageType) {
                 case MULTI_OR_SINGLE_PLAYER_MODE:
-                    // TODO: to be completed
+                    // display list of choices
+                    displayMultipleMessageTypeChoices(choices);
+                    selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
 
-                    client.sendToServer(new Message(
-                            client.getSessionToken(),
-                            messageType,
-                            new HashMap<>() {{
-                                put("choices", getElementsByIndices(
-                                        choices,
-                                        displayInputChoice(choices.size(), minChoices, maxChoices)));
-                            }}));
+                    // send to server response
+                    client.sendToServer(
+                            new Message(
+                                    client.getSessionToken(),
+                                    MULTI_OR_SINGLE_PLAYER_MODE,
+                                    selected.toArray(new Object[0]) // to array
+                            )
+                    );
 
                     break;
 
                 case CHOICE_NORMAL_ACTION:
-                    displayNormalActionsSelection();
+//                    displayNormalActionsSelection();
                     break;
 
                 case CHOICE_LEADER_ACTION:
-                    displayLeaderActionSelection();
+//                    displayLeaderActionSelection();
                     break;
 
                 case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
@@ -579,7 +544,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         cliUtils.vSpace(1);
         pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
 
-        while (choices.size() < nChoices) {
+        while (choices.size() < maxChoices) {
             pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'q' - to quit): ");
 
             pw.flush();
@@ -594,6 +559,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         pw.flush();
 
         return choices;
+    }
+
+    private void displayMultipleMessageTypeChoices(List<Object> choices) {
+        for (int i = 0; i < choices.size(); i++) {
+            cliUtils.vSpace(1);
+            pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + choices.get(i));
+        }
     }
 
     @Override

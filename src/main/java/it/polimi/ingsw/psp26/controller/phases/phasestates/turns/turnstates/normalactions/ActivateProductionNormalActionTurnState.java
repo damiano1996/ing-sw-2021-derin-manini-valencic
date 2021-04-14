@@ -25,9 +25,9 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
     public void play(Message message) { // TO BE FINISHED
 
-        if (!IsBasePowerPresent((List<DevelopmentCard>) message.getPayload().get("DevelopmentCards"))) {
+        if (!IsBasePowerPresent((List<DevelopmentCard>) message.getPayload())) {
             List<Resource> resourcesProduced = new ArrayList<>(); //
-            resourcesProduced = ActivateProduction((List<DevelopmentCard>) message.getPayload().get("DevelopmentCards"));
+            resourcesProduced = ActivateProduction((List<DevelopmentCard>) message.getPayload());
 
             try {
                 turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
@@ -39,13 +39,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             switch (message.getMessageType()) {
                 case RESOURCE_CHOSEN:
 
-                    List<Resource> ChosenResources = (List<Resource>) message.getPayload().get("Resources");
+                    List<Resource> ChosenResources = (List<Resource>) message.getPayload();
                     turn.changeState(new ActivateProductionNormalActionTurnState(turn));
                     turn.play(message);
                     break;
 
                 default:
-                    ChosenCards = (List<DevelopmentCard>) message.getPayload().get("DevelopmentCards");
+                    ChosenCards = (List<DevelopmentCard>) message.getPayload();
                     turn.getVirtualView().update(
                             new Message(turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_RESOURCE_IN_RESOURCE_OUT)

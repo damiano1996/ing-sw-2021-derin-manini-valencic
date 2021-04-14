@@ -7,30 +7,30 @@ public class NetworkNode {
 
     private final Socket socket;
 
-    // To read data
-    private final InputStream inputStream;
-    private final InputStreamReader inputStreamReader;
-    private final BufferedReader bufferedReader;
-//    private final ObjectInputStream objectInputStream;
-
     // To send data
     private final OutputStream outputStream;
     private final PrintWriter printWriter;
     private final ObjectOutputStream objectOutputStream;
 
+    // To read data
+    private final InputStream inputStream;
+    private final InputStreamReader inputStreamReader;
+    private final BufferedReader bufferedReader;
+    private final ObjectInputStream objectInputStream;
+
     public NetworkNode(Socket socket) throws IOException {
         this.socket = socket;
-
-        // To read data
-        inputStream = this.socket.getInputStream();
-        inputStreamReader = new InputStreamReader(inputStream);
-        bufferedReader = new BufferedReader(inputStreamReader);
-//        objectInputStream = new ObjectInputStream(inputStream);
 
         // To send data
         outputStream = this.socket.getOutputStream();
         printWriter = new PrintWriter(outputStream, true);
         objectOutputStream = new ObjectOutputStream(outputStream);
+
+        // To read data
+        inputStream = this.socket.getInputStream();
+        inputStreamReader = new InputStreamReader(inputStream);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        objectInputStream = new ObjectInputStream(inputStream);
     }
 
     public void sendData(String data) {
@@ -41,15 +41,16 @@ public class NetworkNode {
         objectOutputStream.writeObject(data);
     }
 
-    public String readStringData() throws IOException {
+    public String receiveStringData() throws IOException {
         return bufferedReader.readLine();
     }
 
-//    public Object readObjectData() throws IOException, ClassNotFoundException {
-//        return objectInputStream.readObject();
-//    }
+    public Object receiveObjectData() throws IOException, ClassNotFoundException {
+        return objectInputStream.readObject();
+    }
 
     public void closeConnection() throws IOException {
         socket.close();
     }
+
 }

@@ -183,6 +183,7 @@ public class CliUtils {
     }
 
     /**
+     * pPCS = print Positioned Colored String
      * Prints a colored String in a specified position
      *
      * @param s              The string to print

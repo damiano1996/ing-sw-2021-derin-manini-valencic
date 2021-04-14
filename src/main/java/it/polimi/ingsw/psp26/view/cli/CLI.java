@@ -86,7 +86,14 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         PersonalBoard personalBoard = new PersonalBoard(virtualView);
         MarketTray marketTray = new MarketTray(virtualView);
         DevelopmentGrid developmentGrid;
+        ResourceSupply resourceSupply = new ResourceSupply();
         Scanner in = new Scanner(System.in);
+
+
+        //--RESOURCE-SUPPLY-TEST---// Press enter 1 time
+
+        displayResourceSupply(resourceSupply);
+        in.nextLine();
 
 
         //---ERROR-TEST---//
@@ -457,7 +464,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayResourceSupply(ResourceSupply resourceSupply) {
-        //To be completed
+        personalBoardCli.displayResourceSupply(resourceSupply, 1, 37);
     }
 
     @Override

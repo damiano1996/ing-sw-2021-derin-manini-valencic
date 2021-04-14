@@ -1,6 +1,8 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.exceptions.ResourceSupplySlotOutOfBoundsException;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
@@ -193,6 +195,41 @@ public class PersonalBoardCli {
             developmentCardsCli.printProduction(productions.get(i).getProductionCost(), productions.get(i).getProductionReturn(), 10, 21 + (i * 35));
             cliUtils.pPCS("PRODUCTION  " + (i + 1), Color.WHITE, 25, 26 + (i * 35));
         }
+    }
+
+    /**
+     * Prints the Resource Supply on screen
+     *
+     * @param resourceSupply The Resource Supply
+     * @param startingRow    The row where the Resource Supply will be printed
+     * @param startingColumn The column where the Resource Supply will be printed
+     */
+    public void displayResourceSupply(ResourceSupply resourceSupply, int startingRow, int startingColumn) {
+        cliUtils.cls();
+
+        cliUtils.printFigure("ResourceSupplyTitle", startingRow, startingColumn);
+        cliUtils.printFigure("ResourceSupply", startingRow + 19, startingColumn + 37);
+        try {
+            for (int i = 0; i <= 3; i++)
+                printResourceSupplyResources(resourceSupply.grabResources(i, 1).get(0).getColor(), startingRow, startingColumn + (i * 22));
+        } catch (ResourceSupplySlotOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Prints the Resources in the Resource Supply Slots
+     * Please note that these are not a real representation, since the Resources are infinite
+     *
+     * @param color          The color of the Resource Supply Slot
+     * @param startingRow    The row where the Resource Supply Slot Resources will be printed
+     * @param startingColumn The column where the Resource Supply Slot Resources will be printed
+     */
+    private void printResourceSupplyResources(Color color, int startingRow, int startingColumn) {
+        for (int i = 0; i < 3; i++) cliUtils.pPCS("\u25A0", color, startingRow + 22, startingColumn + 41 + (i * 6));
+        for (int i = 0; i < 3; i++) cliUtils.pPCS("\u25A0", color, startingRow + 24, startingColumn + 41 + (i * 6));
+        for (int i = 0; i < 6; i++) cliUtils.pPCS("\u25A0", color, startingRow + 26, startingColumn + 41 + (i * 3));
+        for (int i = 0; i < 4; i++) cliUtils.pPCS("\u25A0", color, startingRow + 28, startingColumn + 41 + (i * 5));
     }
 
 }

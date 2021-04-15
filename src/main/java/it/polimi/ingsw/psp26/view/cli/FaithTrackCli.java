@@ -25,77 +25,10 @@ public class FaithTrackCli {
      */
     public void displayFaithTrack(FaithTrack faithTrack, int startingRow, int startingColumn) {
         cliUtils.printFigure("FaithTrack", startingRow, startingColumn);
-        setPointsNumbers(startingRow, startingColumn);
+
         firstLine(startingRow, startingColumn, faithTrack.getMarkerPosition());
         midLine(startingRow, startingColumn, faithTrack.getMarkerPosition(), faithTrack.getVaticanReportSections());
-        lastine(startingRow, startingColumn, faithTrack.getMarkerPosition());
-    }
-
-    /**
-     * Prints the yellow numbers on the FaithTrack
-     *
-     * @param startingRow    The row where the FaithTrack will be printed
-     * @param startingColumn The column where the FaithTrack will be printed
-     */
-    private void setPointsNumbers(int startingRow, int startingColumn) {
-        int[] pointsNumbers = {1, 2, 4, 6, 9, 12, 16, 20};
-
-        for (int pointsNumber : pointsNumbers) printPointsNumber(pointsNumber, startingRow, startingColumn);
-    }
-
-    /**
-     * Auxiliary method that print the points numbers in the correct position
-     *
-     * @param pointNumber    The point number to print
-     * @param startingRow    The row where the FaithTrack will be printed
-     * @param startingColumn The column where the FaithTrack will be printed
-     */
-    private void printPointsNumber(int pointNumber, int startingRow, int startingColumn) { //TODO se si possono leggere direttamente i codici ansi da file cambia questo metodo
-        switch (pointNumber) {
-            case 1:
-                cliUtils.setCursorPosition(startingRow + 6, startingColumn + 16);
-                pw.print(cliUtils.pCS("1", Color.BYELLOW));
-                break;
-
-            case 2:
-                cliUtils.setCursorPosition(startingRow, startingColumn + 36);
-                pw.print(cliUtils.pCS("2", Color.BYELLOW));
-                break;
-
-            case 4:
-                cliUtils.setCursorPosition(startingRow, startingColumn + 60);
-                pw.print(cliUtils.pCS("4", Color.BYELLOW));
-                break;
-
-            case 6:
-                cliUtils.setCursorPosition(startingRow + 12, startingColumn + 68);
-                pw.print(cliUtils.pCS("6", Color.BYELLOW));
-                break;
-
-            case 9:
-                cliUtils.setCursorPosition(startingRow + 12, startingColumn + 92);
-                pw.print(cliUtils.pCS("9", Color.BYELLOW));
-                break;
-
-            case 12:
-                cliUtils.setCursorPosition(startingRow, startingColumn + 99);
-                pw.print(cliUtils.pCS("1", Color.BYELLOW) + "-" + cliUtils.pCS("2", Color.BYELLOW));
-                break;
-
-            case 16:
-                cliUtils.setCursorPosition(startingRow, startingColumn + 123);
-                pw.print(cliUtils.pCS("1", Color.BYELLOW) + "-" + cliUtils.pCS("6", Color.BYELLOW));
-                break;
-
-            case 20:
-                cliUtils.setCursorPosition(startingRow, startingColumn + 147);
-                pw.print(cliUtils.pCS("2", Color.BYELLOW) + "-" + cliUtils.pCS("0", Color.BYELLOW));
-                break;
-
-            default:
-                break;
-        }
-        pw.flush();
+        lastLine(startingRow, startingColumn, faithTrack.getMarkerPosition());
     }
 
     /**
@@ -158,9 +91,8 @@ public class FaithTrackCli {
      * @param startingColumn The starting column where the Faith Track is going to be printed
      */
     private void midLine(int startingRow, int startingColumn, int fp, VaticanReportSection[] vaticanReportSections) {
-        cliUtils.setCursorPosition(startingRow + 6, startingColumn);
+        cliUtils.setCursorPosition(startingRow + 6, startingColumn + 17);
 
-        pw.print(cliUtils.hSpace(16) + "|");
         printRow(3, 3, fp);
         pw.print(cliUtils.hSpace(11) + printVaticanReportSection(vaticanReportSections[0]));
         pw.print(cliUtils.hSpace(11) + "|");
@@ -180,7 +112,7 @@ public class FaithTrackCli {
      * @param startingRow    The starting row where the Faith Track is going to be printed
      * @param startingColumn The starting column where the Faith Track is going to be printed
      */
-    private void lastine(int startingRow, int startingColumn, int fp) {
+    private void lastLine(int startingRow, int startingColumn, int fp) {
         cliUtils.setCursorPosition(startingRow + 10, startingColumn);
 
         pw.print("|");

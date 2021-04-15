@@ -5,9 +5,18 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 
 public class BlackCrossShuffleActionToken implements ActionToken {
+
     @Override
     public void execute(FaithTrack faithTrack, DevelopmentGrid developmentGrid) throws MustShuffleActionTokenStackException {
         faithTrack.moveBlackCrossPosition(1);
         throw new MustShuffleActionTokenStackException();
+    }
+
+    /**
+     * @return The Token's name
+     */
+    @Override
+    public String getTokenName() {
+        return "BlackCrossShuffleActionToken";
     }
 }

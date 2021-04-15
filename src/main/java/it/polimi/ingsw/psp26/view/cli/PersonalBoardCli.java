@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.view.cli;
 import it.polimi.ingsw.psp26.exceptions.ResourceSupplySlotOutOfBoundsException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
+import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
@@ -232,4 +233,27 @@ public class PersonalBoardCli {
         for (int i = 0; i < 4; i++) cliUtils.pPCS("\u25A0", color, startingRow + 28, startingColumn + 41 + (i * 5));
     }
 
+
+    /**
+     * Prints the Action Tokens
+     *
+     * @param actionTokens The action Tokens to print
+     */
+    public void displayActionTokens(List<ActionToken> actionTokens) {
+        cliUtils.cls();
+
+        cliUtils.printFigure("ActionTokensTitle", 1, 48);
+        cliUtils.printFigure(actionTokens.get(0).getTokenName(), 20, 141);
+        cliUtils.pPCS("ACTIVATED  TOKEN", Color.WHITE, 34, 148);
+        printTokenStack(actionTokens.size());
+    }
+
+    /**
+     * Prints the stack of covered Tokens
+     *
+     * @param stackSize The number of Tokens that are not used yet
+     */
+    private void printTokenStack(int stackSize) {
+        if (stackSize > 1) cliUtils.printFigure("ActionTokenBorder" + (stackSize - 1), 20, 67);
+    }
 }

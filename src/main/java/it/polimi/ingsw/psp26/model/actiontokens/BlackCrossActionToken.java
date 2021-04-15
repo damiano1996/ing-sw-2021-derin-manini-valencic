@@ -4,8 +4,17 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 
 public class BlackCrossActionToken implements ActionToken {
+
     @Override
     public void execute(FaithTrack faithTrack, DevelopmentGrid developmentGrid) {
         faithTrack.moveBlackCrossPosition(2);
+    }
+
+    /**
+     * @return The Token's name
+     */
+    @Override
+    public String getTokenName() {
+        return "BlackCrossActionToken";
     }
 }

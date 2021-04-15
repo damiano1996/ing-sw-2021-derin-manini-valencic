@@ -30,4 +30,9 @@ public class BlackCrossActionTokenTest {
         assertEquals(4, faithTrack.getBlackCrossPosition());
     }
 
+    @Test
+    public void testGetTokenName() {
+        assertEquals("BlackCrossActionToken", blackCrossActionToken.getTokenName());
+    }
+
 }

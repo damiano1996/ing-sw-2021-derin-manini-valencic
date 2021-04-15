@@ -13,6 +13,8 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class DiscardActionTokenTest {
 
     FaithTrack faithTrack;
@@ -126,6 +128,11 @@ public class DiscardActionTokenTest {
         for (int i = 0; i < 4; i++) developmentGrid.drawCard(Color.GREEN, Level.SECOND);
         for (int i = 0; i < 2; i++) developmentGrid.drawCard(Color.GREEN, Level.THIRD);
         discardActionTokenGreen.execute(faithTrack, developmentGrid);
+    }
+
+    @Test
+    public void testGetTokenName() {
+        assertEquals("DiscardActionToken", discardActionTokenGreen.getTokenName());
     }
 
 }

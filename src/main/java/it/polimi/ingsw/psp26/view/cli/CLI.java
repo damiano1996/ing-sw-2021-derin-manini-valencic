@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
+import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
@@ -50,7 +51,6 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
 
-
     public CLI(Client client) { //TODO devi passare al costruttore un match e ricavare isMultiPlayerMode da quello
         this.client = client;
 
@@ -71,12 +71,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
             CLI cli = new CLI(new Client());
             cli.testMethod();
 
-        } catch (IOException e) {
+        } catch (IOException | NegativeNumberOfElementsToGrabException e) {
             e.printStackTrace();
         }
     }
 
-    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, DepotOutOfBoundException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
+    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, DepotOutOfBoundException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException {
+
         //---OBJECTS-DECLARATION---//
 
         VirtualView virtualView = new VirtualView(new Server());
@@ -87,7 +88,21 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         MarketTray marketTray = new MarketTray(virtualView);
         DevelopmentGrid developmentGrid;
         ResourceSupply resourceSupply = new ResourceSupply();
+        Match metch = new Match(virtualView, 0);
         Scanner in = new Scanner(System.in);
+
+
+
+        //---ACTION-TOKENS-TEST---//
+
+        List<ActionToken> unusedTokens = new ArrayList<>();
+
+        unusedTokens = metch.drawActionTokens(7);
+        for (int i = 0; i < 7; i++) {
+            displayActionTokens(unusedTokens);
+            in.nextLine();
+            unusedTokens.remove(0);
+        }
 
 
         //--RESOURCE-SUPPLY-TEST---// Press enter 1 time
@@ -486,8 +501,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayActionTokens(ActionToken actionToken) {
-        //To be implemented
+    public void displayActionTokens(List<ActionToken> unusedTokens) {
+        personalBoardCli.displayActionTokens(unusedTokens);
     }
 
     @Override

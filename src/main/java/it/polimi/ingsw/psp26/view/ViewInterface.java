@@ -67,7 +67,7 @@ public interface ViewInterface {
     void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices);
 
 
-    void displayActionTokens(ActionToken actionToken);
+    void displayActionTokens(List<ActionToken> unusedTokens);
 
 
     void displayDevelopmentCardDiscard(DevelopmentGrid developmentGrid, DevelopmentCardType developmentCardType);

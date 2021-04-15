@@ -5,19 +5,26 @@ import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.MatchController;
 
+import java.io.IOException;
+
 public class VirtualView extends Observable<Message> implements Observer<Message> {
 
     private final MatchController matchController;
     private final Server server;
 
     public VirtualView(Server server) {
-        matchController = new MatchController(this, getMatchId());
         this.server = server;
+        matchController = new MatchController(this, getMatchId());
     }
 
     @Override
     public void update(Message message) {
         // it receives notification from model/controller and it has to notify the "real" view
+        try {
+            server.sendToClient(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void forwardToMatchController(Message message) {

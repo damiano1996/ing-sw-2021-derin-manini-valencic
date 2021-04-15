@@ -373,6 +373,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                     client.initializeNetworkNode(in.nextLine());
                     // go to Multi/single player choice
                     client.handleMessage(new Message(
+                            client.getSessionToken(),
                             MULTI_OR_SINGLE_PLAYER_MODE, // message type
                             MULTIPLAYER_MODE, SINGLE_PLAYER_MODE // choices
                     ));

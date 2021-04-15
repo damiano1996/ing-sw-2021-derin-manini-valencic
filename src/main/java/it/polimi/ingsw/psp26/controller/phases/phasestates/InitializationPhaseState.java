@@ -5,10 +5,6 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.model.Player;
 
-import java.util.HashMap;
-
-import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-
 public class InitializationPhaseState extends PhaseState {
 
     private int maxNumberOfPlayers;
@@ -36,15 +32,13 @@ public class InitializationPhaseState extends PhaseState {
 
                 // next state is...
                 if (phase.getMatchController().getMatch().getPlayers().size() == maxNumberOfPlayers) {
+                    // Communicating to match controller that we reached the maximum number of players.
+                    phase.getMatchController().stopWaitingForPlayers();
+                    // Updating the state. The match can begin!
                     phase.changeState(new PlayingPhaseState(phase));
                     phase.execute(new Message());
                 }
                 break;
-            default:
-
-                phase.getMatchController().getVirtualView().update(new Message(
-                        MULTI_OR_SINGLE_PLAYER_MODE, // message type
-                        MULTIPLAYER_MODE, SINGLE_PLAYER_MODE)); // choices
         }
     }
 
@@ -68,12 +62,8 @@ public class InitializationPhaseState extends PhaseState {
 
     private void addPlayer(Message message) {
         String nickname = (String) message.getPayload();
-        String sessionToken = generateAccessToken();
+        String sessionToken = message.getSessionToken();
         phase.getMatchController().getMatch().addPlayer(new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken));
     }
 
-    private String generateAccessToken() {
-        // TODO: to be implemented
-        return null;
-    }
 }

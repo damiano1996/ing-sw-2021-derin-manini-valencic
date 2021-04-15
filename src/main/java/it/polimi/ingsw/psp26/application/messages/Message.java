@@ -8,26 +8,23 @@ import java.util.List;
 
 public class Message implements Serializable {
 
-    private String sessionToken;
+    private final String sessionToken;
     private MessageType messageType;
     private List<String> jsonPayloads;
     private Class<?> payloadClass;
 
     public Message() { // TODO: temporary
+        sessionToken = null;
     }
 
     public Message(MessageType messageType) {
+        this.sessionToken = null;
         this.messageType = messageType;
     }
 
     public Message(String sessionToken, MessageType messageType) {
         this.sessionToken = sessionToken;
         this.messageType = messageType;
-    }
-
-    public Message(MessageType messageType, Object... payloads) {
-        this.messageType = messageType;
-        objectToJson(payloads);
     }
 
     public Message(String sessionToken, MessageType messageType, Object... payloads) {

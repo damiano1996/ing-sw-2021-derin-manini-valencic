@@ -21,7 +21,6 @@ public class ServerMain {
 
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println("New client!");
 
                 NetworkNode nodeClient = new NetworkNode(socket);
                 server.addNodeClient(nodeClient);

@@ -13,8 +13,11 @@ public class MatchController implements Observer<Message> {
     private final Phase phase;
     private Match match;
 
+    private boolean isWaitingForPlayers;
+
     public MatchController(VirtualView virtualView, int matchId) {
         this.virtualView = virtualView;
+        this.isWaitingForPlayers = true;
 
         initializeMatch(matchId);
         phase = new Phase(this);
@@ -35,5 +38,13 @@ public class MatchController implements Observer<Message> {
 
     public VirtualView getVirtualView() {
         return virtualView;
+    }
+
+    public boolean isWaitingForPlayers() {
+        return isWaitingForPlayers;
+    }
+
+    public void stopWaitingForPlayers() {
+        isWaitingForPlayers = false;
     }
 }

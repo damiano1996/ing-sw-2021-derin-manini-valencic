@@ -7,9 +7,6 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class ChooseLeaderActionTurnState extends TurnState {
 
 

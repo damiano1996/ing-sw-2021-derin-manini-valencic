@@ -8,19 +8,13 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
-import it.polimi.ingsw.psp26.view.cli.CliUtils;
-
-import java.io.PrintWriter;
 
 public class DiscardActionToken implements ActionToken {
 
     private final Color colorToDiscard;
-    private final CliUtils cliUtils; //TODO se si trova un metodo per leggere i colori direttamente da file andrà tolta
 
     public DiscardActionToken(Color colorToDiscard) {
         this.colorToDiscard = colorToDiscard;
-        this.cliUtils = new CliUtils(new PrintWriter(System.out));
-
     }
 
 
@@ -87,17 +81,10 @@ public class DiscardActionToken implements ActionToken {
     }
 
     /**
-     * @return The Token's name
+     * @return The Token's name with the Color of the Cards to discard
      */
     @Override
-    public String getTokenName() { //TODO modificare questo se si vuole mettere un metodo per stampare i token direttamente nelle singole classi
-        cliUtils.printFigure("BlankToken", 20, 141);
-        cliUtils.pPCS("▄▄▄▄▄", this.colorToDiscard, 24, 161);
-        cliUtils.pPCS("█   █", this.colorToDiscard, 25, 161);
-        cliUtils.pPCS("█   █", this.colorToDiscard, 26, 161);
-        cliUtils.pPCS("█████", this.colorToDiscard, 27, 161);
-        cliUtils.pPCS("▀▀▀▀▀", this.colorToDiscard, 28, 161);
-
-        return "DiscardActionToken";
+    public String getTokenName() {
+        return "DiscardActionToken" + colorToDiscard.getName();
     }
 }

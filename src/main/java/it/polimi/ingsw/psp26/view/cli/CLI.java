@@ -91,13 +91,9 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         Match metch = new Match(virtualView, 0);
         Scanner in = new Scanner(System.in);
 
-
-
         //---ACTION-TOKENS-TEST---//
 
-        List<ActionToken> unusedTokens = new ArrayList<>();
-
-        unusedTokens = metch.drawActionTokens(7);
+        List<ActionToken> unusedTokens = metch.drawActionTokens(7);
         for (int i = 0; i < 7; i++) {
             displayActionTokens(unusedTokens);
             in.nextLine();

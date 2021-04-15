@@ -78,14 +78,14 @@ public class LeaderCardsCli {
      *
      * @param leaderCard      The card to check if has been selected
      * @param selectedLeaders The Leaders selected by the Player
-     * @param leadercards     The 4 Leader Cards given to the Player's choice
+     * @param leaderCards     The 4 Leader Cards given to the Player's choice
      * @param startingRow     The starting row where the Leader Card is going to be printed
      * @param startingColumn  The starting column where the Leader Card is going to be printed
      */
-    private void isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leadercards, int startingRow, int startingColumn) {
+    private void isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow, startingColumn);
         if (selectedLeaders.contains(leaderCard)) pw.print("\u001b[41m  SELECTED  \u001b[0m");
-        else pw.print("  Leader " + (leadercards.indexOf(leaderCard) + 1) + "  ");
+        else pw.print("  Leader " + (leaderCards.indexOf(leaderCard) + 1) + "  ");
         pw.flush();
     }
 
@@ -215,7 +215,7 @@ public class LeaderCardsCli {
         }
         s.append(cliUtils.hSpace(remainingSpace)).append("|");
 
-        pw.print(s.toString());
+        pw.print(s);
         pw.flush();
     }
 
@@ -239,7 +239,7 @@ public class LeaderCardsCli {
         }
         s.append(cliUtils.hSpace(remainingSpace)).append("|");
 
-        pw.print(s.toString());
+        pw.print(s);
         pw.flush();
     }
 

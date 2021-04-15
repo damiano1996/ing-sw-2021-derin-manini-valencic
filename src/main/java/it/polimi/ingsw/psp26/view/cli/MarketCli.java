@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.model.MarketTray;
-import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.io.PrintWriter;
@@ -23,7 +22,7 @@ public class MarketCli {
      */
     public void displayMarketScreen(MarketTray marketTray) {
         cliUtils.printFigure("MarketTitle", 1, 59);
-        displayMarketTray(marketTray, 12, 88);
+        displayMarketTray(marketTray, 13, 18);
     }
 
     /**
@@ -34,10 +33,10 @@ public class MarketCli {
      * @param startingColumn The starting column where the Market is going to be printed
      */
     public void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn) {
-        cliUtils.printFigure("Market", startingRow, startingColumn + 6);
-        printMarbleOnSlide(marketTray, startingRow, startingColumn + 6);
-        printMarketMarbleRows(marketTray, startingRow, startingColumn + 6);
-        printMarketLegend(startingColumn);
+        cliUtils.printFigure("Market", startingRow, startingColumn + 17);
+        cliUtils.printFigure("MarketLegend", startingRow, startingColumn + 102);
+        printMarbleOnSlide(marketTray, startingRow, startingColumn + 17);
+        printMarketMarbleRows(marketTray, startingRow, startingColumn + 17);
     }
 
     /**
@@ -78,30 +77,6 @@ public class MarketCli {
         cliUtils.printAndBackWithColor(".d88b.", marketTray.getMarbleOnSlide().getColor());
         cliUtils.printAndBackWithColor("8b88d8", marketTray.getMarbleOnSlide().getColor());
         cliUtils.printAndBackWithColor("`Y88P'", marketTray.getMarbleOnSlide().getColor());
-    }
-
-    /**
-     * Prints the Market legend
-     *
-     * @param startingColumn The starting column where the Market is going to be printed
-     */
-    private void printMarketLegend(int startingColumn) {
-        cliUtils.vSpace(7);
-
-        pw.println(cliUtils.hSpace(startingColumn) + "+-----------------------------------------------------------+");
-        pw.println(cliUtils.hSpace(startingColumn) + "|                          Legend                           |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|                                                           |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|  " + cliUtils.pCS(".d88b.", Color.GREY) + "     " + cliUtils.pCS("__", Color.GREY) + "         " + cliUtils.pCS(".d88b.", Color.PURPLE) + "     " + cliUtils.pCS("__", Color.PURPLE) + "        " + cliUtils.pCS(".d88b.", Color.RED) + "   " + cliUtils.pCS("_|_", Color.RED) + "  |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|  " + cliUtils.pCS("8b88d8", Color.GREY) + " _  " + cliUtils.pCS("/  \\_", Color.GREY) + "       " + cliUtils.pCS("8b88d8", Color.PURPLE) + " _  " + cliUtils.pCS("(  )", Color.PURPLE) + "       " + cliUtils.pCS("8b88d8", Color.RED) + " _  " + cliUtils.pCS("|", Color.RED) + "   |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|  " + cliUtils.pCS("`Y88P'", Color.GREY) + "   " + cliUtils.pCS("/_____|", Color.GREY) + "      " + cliUtils.pCS("`Y88P'", Color.PURPLE) + "   " + cliUtils.pCS("/____\\", Color.PURPLE) + "      " + cliUtils.pCS("`Y88P'", Color.RED) + "    " + cliUtils.pCS("|", Color.RED) + "   |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|                                                           |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|  " + cliUtils.pCS(".d88b.", Color.BLUE) + "   " + cliUtils.pCS("_____", Color.BLUE) + "        " + cliUtils.pCS(".d88b.", Color.YELLOW) + "    " + cliUtils.pCS("____", Color.YELLOW) + "       " + cliUtils.pCS(".d88b.", Color.WHITE) + "    " + cliUtils.pCS("_", Color.WHITE) + "   |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|  " + cliUtils.pCS("8b88d8", Color.BLUE) + " _ " + cliUtils.pCS("\\   /", Color.BLUE) + "        " + cliUtils.pCS("8b88d8", Color.YELLOW) + " _ " + cliUtils.pCS("/ __ \\", Color.YELLOW) + "      " + cliUtils.pCS("8b88d8", Color.WHITE) + " _ " + cliUtils.pCS("| |", Color.WHITE) + "  |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|  " + cliUtils.pCS("`Y88P'", Color.BLUE) + "    " + cliUtils.pCS("\\_/", Color.BLUE) + "         " + cliUtils.pCS("`Y88P'", Color.YELLOW) + "   " + cliUtils.pCS("\\____/", Color.YELLOW) + "      " + cliUtils.pCS("`Y88P'", Color.WHITE) + "   " + cliUtils.pCS("|_|", Color.WHITE) + "  |");
-        pw.println(cliUtils.hSpace(startingColumn) + "|                                                           |");
-        pw.println(cliUtils.hSpace(startingColumn) + "+-----------------------------------------------------------+");
-
-        pw.flush();
     }
 
 }

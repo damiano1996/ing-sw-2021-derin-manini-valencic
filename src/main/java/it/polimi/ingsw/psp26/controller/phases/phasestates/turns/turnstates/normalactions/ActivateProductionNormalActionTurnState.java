@@ -16,6 +16,8 @@ import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+
 public class ActivateProductionNormalActionTurnState extends TurnState {
     List<DevelopmentCard> ChosenCards = new ArrayList<>();
 
@@ -25,9 +27,9 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
     public void play(Message message) { // TO BE FINISHED
 
-        if (!IsBasePowerPresent((List<DevelopmentCard>) message.getPayload())) {
+        if (!IsBasePowerPresent(castElements(DevelopmentCard.class, message.getPayloads()))) {
             List<Resource> resourcesProduced = new ArrayList<>(); //
-            resourcesProduced = ActivateProduction((List<DevelopmentCard>) message.getPayload());
+            resourcesProduced = ActivateProduction(castElements(DevelopmentCard.class, message.getPayloads()));
 
             try {
                 turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
@@ -39,13 +41,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             switch (message.getMessageType()) {
                 case RESOURCE_CHOSEN:
 
-                    List<Resource> ChosenResources = (List<Resource>) message.getPayload();
+                    List<Resource> ChosenResources = castElements(Resource.class, message.getPayloads());
                     turn.changeState(new ActivateProductionNormalActionTurnState(turn));
                     turn.play(message);
                     break;
 
                 default:
-                    ChosenCards = (List<DevelopmentCard>) message.getPayload();
+                    ChosenCards = castElements(DevelopmentCard.class, message.getPayloads());
                     turn.getVirtualView().update(
                             new Message(turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_RESOURCE_IN_RESOURCE_OUT)

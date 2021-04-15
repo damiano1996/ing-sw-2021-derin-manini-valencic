@@ -38,4 +38,10 @@ public class ArrayListUtils {
     public static <T> List<T> getElementsByIndices(List<T> list, List<Integer> indices) {
         return indices.stream().map(list::get).collect(Collectors.toList());
     }
+
+    public static <T> List<T> castElements(Class<T> targetClassType, List<Object> objects) {
+        List<T> castedList = new ArrayList<>();
+        for (Object object : objects) castedList.add((T) object);
+        return castedList;
+    }
 }

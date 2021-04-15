@@ -384,7 +384,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
             if (i == 0) {
                 pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
                 pw.flush();
-                client.setNickname(in.nextLine());
+                String nickname = in.nextLine();
+                client.setNickname(nickname);
             } else {
                 pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
                 pw.flush();
@@ -392,7 +393,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                 pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                 pw.flush();
                 try {
-                    client.initializeNetworkNode(in.nextLine());
+                    String serverIP = in.nextLine();
+                    client.initializeNetworkNode(serverIP);
                     // go to Multi/single player choice
                     client.handleMessage(new Message(
                             client.getSessionToken(),

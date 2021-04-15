@@ -31,22 +31,22 @@ public class Server {
             client.sendData(sessionToken);
             nodeClients.put(sessionToken, client);
 
-            Message message = (Message) client.receiveObjectData();
-            handleMessage(message);
+//            Message message = (Message) client.receiveObjectData();
+//            handleMessage(message);
 
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    while (true) {
-//                        try {
-//                            Message message = (Message) client.receiveObjectData();
-//                            handleMessage(message);
-//                        } catch (IOException | ClassNotFoundException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }).start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            Message message = (Message) client.receiveObjectData();
+                            handleMessage(message);
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,7 +88,7 @@ public class Server {
         switch ((MessageType) message.getPayload()) {
 
             case MULTIPLAYER_MODE:
-
+                // TODO: if different number of players?
                 boolean assigned = false;
                 // searching for a match that is waiting for new players:
                 for (VirtualView virtualView : virtualViews) {

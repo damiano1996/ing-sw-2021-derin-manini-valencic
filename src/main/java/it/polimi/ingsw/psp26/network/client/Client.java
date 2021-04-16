@@ -1,30 +1,61 @@
 package it.polimi.ingsw.psp26.network.client;
 
+import it.polimi.ingsw.psp26.application.Observable;
+import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.Message;
-import it.polimi.ingsw.psp26.network.NetworkNode;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
-import java.net.Socket;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.MULTI_OR_SINGLE_PLAYER_MODE;
-import static it.polimi.ingsw.psp26.configurations.Configurations.DEFAULT_SERVER_PORT;
 
-public class Client {
+public class Client extends Observable<Message> implements Observer<Message> {
 
-    private NetworkNode networkNode;
-
+    private final NetworkHandler networkHandler;
     private ViewInterface viewInterface;
 
     private String nickname;
-    private String sessionToken;
 
     public Client() throws IOException {
+        super();
+        networkHandler = new NetworkHandler(this);
+        addObserver(networkHandler);
     }
 
-    public void initializeNetworkNode(String serverIP) throws IOException {
-        networkNode = new NetworkNode(new Socket(serverIP, DEFAULT_SERVER_PORT));
-        sessionToken = networkNode.receiveStringData();
+    @Override
+    public void update(Message message) {
+
+        switch (message.getMessageType()) {
+
+            case GENERAL_MESSAGE:
+                viewInterface.displayText((String) message.getPayload());
+                break;
+
+            case MULTI_OR_SINGLE_PLAYER_MODE:
+                viewInterface.displayChoices(
+                        MULTI_OR_SINGLE_PLAYER_MODE,
+                        "Choose the game mode:",
+                        message.getPayloads(),
+                        1, 1);
+                break;
+
+            case PERSONAL_BOARD:
+                Player player = (Player) message.getPayload();
+                System.out.println("player: " + player.getNickname());
+                viewInterface.displayPersonalBoard(player);
+
+            default:
+                break;
+        }
+    }
+
+    public void initializeNetworkHandler(String serverIP) {
+        try {
+            networkHandler.initializeNetworkNode(serverIP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getNickname() {
@@ -33,33 +64,6 @@ public class Client {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getSessionToken() {
-        return sessionToken;
-    }
-
-    public void sendToServer(Message message) throws IOException {
-        networkNode.sendData(message);
-    }
-
-    public void handleMessage(Message message) {
-
-        switch (message.getMessageType()) {
-            case MULTI_OR_SINGLE_PLAYER_MODE:
-                viewInterface.displayChoices(
-                        MULTI_OR_SINGLE_PLAYER_MODE,
-                        "Choose the game mode:",
-                        message.getPayloads(),
-                        1, 1);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public ViewInterface getViewInterface() {
-        return viewInterface;
     }
 
     public void setViewInterface(ViewInterface viewInterface) {

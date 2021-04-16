@@ -9,6 +9,7 @@ public class ClientMain {
     public static void main(String[] args) {
         try {
             Client client = new Client();
+
             CLI cli = new CLI(client);
             client.setViewInterface(cli);
 

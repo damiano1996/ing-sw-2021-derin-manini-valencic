@@ -30,7 +30,6 @@ public class InitializationPhaseState extends PhaseState {
         }
     }
 
-
     private void addPlayer(Message message) {
         String nickname = (String) message.getPayload();
         String sessionToken = message.getSessionToken();

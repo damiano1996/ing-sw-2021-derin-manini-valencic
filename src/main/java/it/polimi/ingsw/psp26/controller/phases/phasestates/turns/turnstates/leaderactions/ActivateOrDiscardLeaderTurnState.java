@@ -37,7 +37,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
                 break;
 
             default:
-                turn.getVirtualView().update(
+                turn.getMatchController().notifyObservers(
                         new Message(turn.getTurnPlayer().getSessionToken(),
                                 MessageType.CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD)
                 );
@@ -71,7 +71,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
             if (playerLeaderCard.equals(leaderCard))
                 playerLeaderCard.activate();
         }
-        turn.getVirtualView().update(
+        turn.getMatchController().notifyObservers(
                 new Message(turn.getTurnPlayer().getSessionToken(),
                         MessageType.LEADER_ACTIVATED,
                         new HashMap<>() {{

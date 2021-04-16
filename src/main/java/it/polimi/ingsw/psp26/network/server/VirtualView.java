@@ -17,10 +17,18 @@ public class VirtualView extends Observable<Message> implements Observer<Message
     private final Map<String, NetworkNode> nodeClients;
 
     public VirtualView() {
+        super();
         nodeClients = new HashMap<>();
         matchController = new MatchController(this, getMatchId());
+        addObserver(matchController);
     }
 
+    /**
+     * Updates the virtual view.
+     * Messages will be sent to the network handler of the client.
+     *
+     * @param message message to forward
+     */
     @Override
     public void update(Message message) {
         // it receives notification from model/controller and it has to notify the "real" view
@@ -33,15 +41,20 @@ public class VirtualView extends Observable<Message> implements Observer<Message
         startListening(nodeClient);
     }
 
-    private void startListening(NetworkNode client) {
+    /**
+     * Starts to listen the client node. If message received, it will notify the observers (match controller).
+     *
+     * @param nodeClient network node of the client
+     */
+    private void startListening(NetworkNode nodeClient) {
         // it receives message from the communication channel and it has to forward the message to the controller
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
-                        Message message = (Message) client.receiveObjectData();
-                        matchController.update(message);
+                        Message message = (Message) nodeClient.receiveObjectData();
+                        notifyObservers(message); // send to match controller
                     } catch (IOException | ClassNotFoundException e) {
                         // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                     }

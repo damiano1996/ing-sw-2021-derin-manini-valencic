@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Color;
@@ -34,7 +35,7 @@ public class PersonalBoardTest {
         virtualView = new VirtualView();
 
         developmentGrid = new DevelopmentGrid(virtualView);
-        personalBoard = new PersonalBoard(virtualView);
+        personalBoard = new PersonalBoard(virtualView, new Player(virtualView, "nickname", "sessionToken"));
 
         developmentCard1 = developmentGrid.drawCard(Color.GREEN, Level.FIRST);
         developmentCard2 = developmentGrid.drawCard(Color.GREEN, Level.SECOND);

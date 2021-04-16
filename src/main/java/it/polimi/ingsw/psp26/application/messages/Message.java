@@ -8,18 +8,13 @@ import java.util.List;
 
 public class Message implements Serializable {
 
-    private final String sessionToken;
+    private String sessionToken;
     private MessageType messageType;
     private List<String> jsonPayloads;
     private Class<?> payloadClass;
 
     public Message() { // TODO: temporary
         sessionToken = null;
-    }
-
-    public Message(MessageType messageType) {
-        this.sessionToken = null;
-        this.messageType = messageType;
     }
 
     public Message(String sessionToken, MessageType messageType) {
@@ -29,6 +24,11 @@ public class Message implements Serializable {
 
     public Message(String sessionToken, MessageType messageType, Object... payloads) {
         this.sessionToken = sessionToken;
+        this.messageType = messageType;
+        objectToJson(payloads);
+    }
+
+    public Message(MessageType messageType, Object... payloads) {
         this.messageType = messageType;
         objectToJson(payloads);
     }
@@ -45,6 +45,10 @@ public class Message implements Serializable {
 
     public String getSessionToken() {
         return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
     }
 
     public MessageType getMessageType() {

@@ -3,16 +3,13 @@ package it.polimi.ingsw.psp26.model.personalboard;
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
-import it.polimi.ingsw.psp26.model.enums.Color;
-import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,21 +17,25 @@ import java.util.List;
  */
 public class PersonalBoard extends Observable<Message> {
 
+    private transient final Player player; // "transient" doesn't serialize the player. Necessary to avoid recursion in Gson.
+
     private final FaithTrack faithTrack;
     private final List<List<DevelopmentCard>> developmentCardsSlots;
     private final List<Depot> warehouseDepots;
     private final List<Resource> strongbox;
-    private final DevelopmentCard baseCard;
 
     /**
      * Constructor of the class.
      * It initializes all the components inside it and notifies the observers.
      *
      * @param virtualView virtual view to be notified on models changes
+     * @param player      player that has this personal board. He is used to get the sessionToken
      */
-    public PersonalBoard(VirtualView virtualView) {
+    public PersonalBoard(VirtualView virtualView, Player player) {
         super();
         addObserver(virtualView);
+
+        this.player = player;
 
         faithTrack = new FaithTrack(virtualView);
         developmentCardsSlots = new ArrayList<>(3);
@@ -44,26 +45,8 @@ public class PersonalBoard extends Observable<Message> {
             warehouseDepots.add(new Depot(virtualView, i + 1));
         }
         strongbox = new ArrayList<>();
-        baseCard = new DevelopmentCard(
-                new HashMap<>() {{
-                    put(Resource.EMPTY, 0);
-                }},
-                new DevelopmentCardType(Color.WHITE, Level.UNDEFINED),
-                new HashMap<>() {{
-                    put(Resource.COIN, 2);
-                    put(Resource.SERVANT, 2);
-                    put(Resource.STONE, 2);
-                    put(Resource.SHIELD, 2);
-                }},
-                new HashMap<>() {{
-                    put(Resource.COIN, 1);
-                    put(Resource.SERVANT, 1);
-                    put(Resource.STONE, 1);
-                    put(Resource.SHIELD, 1);
-                }},
-                0);
 
-        notifyObservers(new Message()); // TODO: to be completed
+//        notifyObservers(new Message(player.getSessionToken(), MessageType.PERSONAL_BOARD, player));
     }
 
     /**

@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -35,11 +36,12 @@ public class Player extends Observable<Message> {
 
         this.nickname = nickname;
         this.sessionToken = sessionToken;
-        personalBoard = new PersonalBoard(virtualView);
+        personalBoard = new PersonalBoard(virtualView, this);
         inkwell = false;
         leaderCards = new ArrayList<>();
 
         notifyObservers(new Message());
+        notifyObservers(new Message(sessionToken, MessageType.PERSONAL_BOARD, this)); // TODO: why does not work from personal board?
     }
 
     /**

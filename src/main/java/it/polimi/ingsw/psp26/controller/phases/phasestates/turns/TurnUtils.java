@@ -23,7 +23,7 @@ public class TurnUtils {
                 break;
 
             case LEADER_ACTION_TO_END:
-                if (turn.getMatch().isMultiPlayerMode()) {
+                if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
                     // After the second leader action, go to next player turn
                     turn.getPlayingPhaseState().updateCurrentTurn();
                 } else {

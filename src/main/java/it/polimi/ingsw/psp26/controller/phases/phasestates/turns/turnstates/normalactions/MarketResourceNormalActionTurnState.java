@@ -33,11 +33,11 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         switch (message.getMessageType()) {
             case MARKET_RESOURCE:
                 if (rowColumn.get(0) == 0) {
-                    tempResources = Arrays.asList(turn.getMatch().getMarketTray().getMarblesOnRow(rowColumn.get(1)));
-                    turn.getMatch().getMarketTray().pushMarbleFromSlideToColumn(rowColumn.get(1));
+                    tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(rowColumn.get(1)));
+                    turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToColumn(rowColumn.get(1));
                 } else {
-                    tempResources = Arrays.asList(turn.getMatch().getMarketTray().getMarblesOnRow(rowColumn.get(1)));
-                    turn.getMatch().getMarketTray().pushMarbleFromSlideToRow(rowColumn.get(1));
+                    tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(rowColumn.get(1)));
+                    turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(rowColumn.get(1));
                 }
                 isRedMarblePresent(turn.getTurnPlayer());
                 tempResources = parseResource();
@@ -60,7 +60,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                         MessageType.CHOICE_ORGANIZATION_MOVE);
 
             case MARKET_NEXT:
-                discardResources(turn.getMatch(), turn.getTurnPlayer());
+                discardResources(turn.getMatchController().getMatch(), turn.getTurnPlayer());
                 turn.changeState(new CheckVaticanReportTurnState(turn));
                 turn.play(message);
                 break;

@@ -48,7 +48,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                 default:
                     ChosenCards = castElements(DevelopmentCard.class, message.getPayloads());
-                    turn.getVirtualView().update(
+                    turn.getMatchController().notifyObservers(
                             new Message(turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_RESOURCE_IN_RESOURCE_OUT)
                     );
@@ -106,7 +106,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             try {
                 activateACardProduction(card, turn.getTurnPlayer());
             } catch (NegativeNumberOfElementsToGrabException e) {
-                turn.getVirtualView().update(new Message(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION));
+                turn.getMatchController().notifyObservers(new Message(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION));
                 try {
                     Reverse(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
                 } catch (DepotOutOfBoundException | NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {

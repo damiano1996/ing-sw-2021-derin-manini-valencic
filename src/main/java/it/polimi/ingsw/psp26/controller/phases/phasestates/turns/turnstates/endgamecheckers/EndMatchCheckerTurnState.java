@@ -27,7 +27,7 @@ public class EndMatchCheckerTurnState extends TurnState {
 
         checkMultiPlayerEnd(); // checks in any case
 
-        if (!turn.getMatch().isMultiPlayerMode()) checkSinglePlayerEnd();
+        if (!turn.getMatchController().getMatch().isMultiPlayerMode()) checkSinglePlayerEnd();
 
         goToNextStateAfterLeaderAction(turn, message);
     }
@@ -112,7 +112,7 @@ public class EndMatchCheckerTurnState extends TurnState {
     private boolean isCardOnColumn(Color color) throws ColorDoesNotExistException {
         for (Level level : LEVELS) {
             try {
-                if (turn.getMatch().getDevelopmentGrid().isAvailable(color, level)) {
+                if (turn.getMatchController().getMatch().getDevelopmentGrid().isAvailable(color, level)) {
                     return true;
                 }
             } catch (LevelDoesNotExistException e) {

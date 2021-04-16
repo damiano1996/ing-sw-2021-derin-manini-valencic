@@ -29,7 +29,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
             case BUY_CARD:
                 List<Resource> playerResources = getPlayerResources(turn.getTurnPlayer());
                 List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
-                getAvailableCard(turn.getMatch(), playerResources, playerCards);
+                getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
                 try {
                     boughtCard = buyCard((DevelopmentCard) message.getPayload(), turn.getTurnPlayer());
                 } catch (NegativeNumberOfElementsToGrabException e) {
@@ -84,7 +84,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
         int i = 0;
 
         try {
-            drawnCard = turn.getMatch().getDevelopmentGrid().drawCard(playerCard.getDevelopmentCardType().getColor(), playerCard.getDevelopmentCardType().getLevel());
+            drawnCard = turn.getMatchController().getMatch().getDevelopmentGrid().drawCard(playerCard.getDevelopmentCardType().getColor(), playerCard.getDevelopmentCardType().getLevel());
         } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) {
             System.out.print("Error"); // To improve
         }

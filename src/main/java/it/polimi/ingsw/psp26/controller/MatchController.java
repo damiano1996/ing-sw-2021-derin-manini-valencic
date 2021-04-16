@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.controller;
 
+import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
@@ -7,7 +8,7 @@ import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 
-public class MatchController implements Observer<Message> {
+public class MatchController extends Observable<Message> implements Observer<Message> {
 
     private final VirtualView virtualView;
     private final Phase phase;
@@ -17,8 +18,11 @@ public class MatchController implements Observer<Message> {
     private int maxNumberOfPlayers;
 
     public MatchController(VirtualView virtualView, int matchId) {
-        System.out.println("New match controller has been created.");
+        super();
+        addObserver(virtualView);
         this.virtualView = virtualView;
+
+        System.out.println("New match controller has been created.");
         this.isWaitingForPlayers = true;
 
         initializeMatch(matchId);

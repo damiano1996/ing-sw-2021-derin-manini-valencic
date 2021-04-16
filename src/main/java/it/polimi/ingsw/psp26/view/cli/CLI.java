@@ -18,7 +18,6 @@ import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,18 +101,15 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                 cliUtils.vSpace(2);
                 pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                 pw.flush();
-                try {
-                    String serverIP = in.nextLine();
-                    client.initializeNetworkNode(serverIP);
-                    // go to Multi/single player choice
-                    client.handleMessage(new Message(
-                            client.getSessionToken(),
-                            MULTI_OR_SINGLE_PLAYER_MODE, // message type
-                            SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE // choices
-                    ));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String serverIP = in.nextLine();
+                client.initializeNetworkHandler(serverIP);
+                // go to Multi/single player choice
+                client.update(
+                        new Message(
+                                MULTI_OR_SINGLE_PLAYER_MODE, // message type
+                                SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE // choices
+                        )
+                );
             }
         }
     }
@@ -225,59 +221,52 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
-        try {
 
-            List<Object> selected = new ArrayList<>();
+        List<Object> selected = new ArrayList<>();
 
-            cliUtils.cls();
-            cliUtils.vSpace(1);
-            pw.println(cliUtils.hSpace(3) + question);
+        cliUtils.cls();
+        cliUtils.vSpace(1);
+        pw.println(cliUtils.hSpace(3) + question);
 
-            switch (messageType) {
-                case MULTI_OR_SINGLE_PLAYER_MODE: // Multi or Single player mode?
-                    // display list of choices
-                    displayMultipleMessageTypeChoices(choices);
-                    selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+        switch (messageType) {
+            case MULTI_OR_SINGLE_PLAYER_MODE: // Multi or Single player mode?
+                // display list of choices
+                displayMultipleMessageTypeChoices(choices);
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
 
-                    // send to server response
-                    client.sendToServer(
-                            new Message(
-                                    client.getSessionToken(),
-                                    MULTI_OR_SINGLE_PLAYER_MODE,
-                                    selected.toArray(new Object[0]) // to array
-                            )
-                    );
+                // send to server response
+                client.notifyObservers(
+                        new Message(
+                                MULTI_OR_SINGLE_PLAYER_MODE,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
 
-                    client.sendToServer(
-                            new Message(
-                                    client.getSessionToken(),
-                                    ADD_PLAYER,
-                                    client.getNickname()
-                            )
-                    );
+                client.notifyObservers(
+                        new Message(
+                                ADD_PLAYER,
+                                client.getNickname()
+                        )
+                );
 
-                    break;
+                break;
 
-                case CHOICE_NORMAL_ACTION:
+            case CHOICE_NORMAL_ACTION:
 //                    displayNormalActionsSelection();
-                    break;
+                break;
 
-                case CHOICE_LEADER_ACTION:
+            case CHOICE_LEADER_ACTION:
 //                    displayLeaderActionSelection();
-                    break;
+                break;
 
-                case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
+            case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
 
 
-                default:
-                    break;
-            }
-
-            pw.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            default:
+                break;
         }
+
+        pw.flush();
     }
 
     private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices) {

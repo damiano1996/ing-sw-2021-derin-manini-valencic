@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp26.application.messages;
 
+import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,5 +47,12 @@ public class MessageTest {
             add(COIN);
             add(SHIELD);
         }}, message.getPayloads());
+    }
+
+    @Test
+    public void testGetPayloads_ComplexObject() {
+        Player player = new Player(new VirtualView(), "nickname", "sessionToken");
+        message = new Message(player.getSessionToken(), MessageType.PERSONAL_BOARD, player);
+        assertEquals(player.getNickname(), ((Player) message.getPayload()).getNickname());
     }
 }

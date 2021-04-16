@@ -75,7 +75,7 @@ public class CliTest {
         Player player = new Player(virtualView, "Player", "000000");
         LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
         List<LeaderCard> leaderCards = leaderCardsInitializer.getLeaderCards();
-        PersonalBoard personalBoard = new PersonalBoard(virtualView);
+        PersonalBoard personalBoard = new PersonalBoard(virtualView, player);
         MarketTray marketTray = new MarketTray(virtualView);
         DevelopmentGrid developmentGrid;
         ResourceSupply resourceSupply = new ResourceSupply();
@@ -144,7 +144,7 @@ public class CliTest {
 
         //---WAREHOUSE-CONFIGURATION-TEST---// Press Enter 3 times
 
-        PersonalBoard p = new PersonalBoard(virtualView);
+        PersonalBoard p = new PersonalBoard(virtualView, player);
         List<Resource> resources = new ArrayList<>();
         resources.add(Resource.STONE);
         resources.add(Resource.STONE);

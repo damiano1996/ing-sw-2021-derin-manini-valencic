@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class Observable<T> {
 
-    private final List<Observer<T>> observers;
+    private transient final List<Observer<T>> observers;
 
     public Observable() {
         observers = new ArrayList<>();

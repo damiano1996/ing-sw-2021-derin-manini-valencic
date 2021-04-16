@@ -42,5 +42,8 @@ public enum MessageType {
     SEVENTH_CARD_DRAWN,
     FINAL_TILE_POSITION,
     NO_MORE_COLUMN_DEVELOPMENT_CARDS,
-    BLACK_CROSS_FINAL_POSITION;
+    BLACK_CROSS_FINAL_POSITION,
+
+    // Display model components
+    PERSONAL_BOARD;
 }

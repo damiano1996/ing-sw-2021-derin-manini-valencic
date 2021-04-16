@@ -40,7 +40,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
 
                 default:
                     // if message type doesn't match with any of previous cases, we have to display the choice to the client!
-                    turn.getVirtualView().update(new Message(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_LEADER_ACTION));
+                    turn.getMatchController().notifyObservers(new Message(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_LEADER_ACTION));
                     break;
             }
         }

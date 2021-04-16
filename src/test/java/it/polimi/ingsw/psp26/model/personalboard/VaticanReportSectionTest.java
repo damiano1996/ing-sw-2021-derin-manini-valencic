@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
-import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,7 @@ public class VaticanReportSectionTest {
 
     @Before
     public void setUp() {
-        VirtualView virtualView = new VirtualView(new Server());
+        VirtualView virtualView = new VirtualView();
         section = new VaticanReportSection(virtualView, 1, 5, 1);
     }
 

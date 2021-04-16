@@ -6,9 +6,10 @@ public enum MessageType {
 
     // Initialize game:
     MULTI_OR_SINGLE_PLAYER_MODE,
-    MULTIPLAYER_MODE,
     SINGLE_PLAYER_MODE,
-    MAX_NUMBER_OF_PLAYERS,
+    TWO_PLAYERS_MODE,
+    THREE_PLAYERS_MODE,
+    FOUR_PLAYERS_MODE,
     ADD_PLAYER,
 
     // Leader actions:

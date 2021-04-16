@@ -3,7 +3,6 @@ package it.polimi.ingsw.psp26.model;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialDepotAbility;
-import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +23,7 @@ public class PlayerTest {
     public void setUp() {
         nickname = "nickname";
         sessionToken = "sessionToken";
-        player = new Player(new VirtualView(new Server()), nickname, sessionToken);
+        player = new Player(new VirtualView(), nickname, sessionToken);
     }
 
     @Test

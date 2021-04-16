@@ -16,7 +16,6 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.io.IOException;
@@ -72,7 +71,7 @@ public class CliTest {
 
         //---OBJECTS-DECLARATION---//
 
-        VirtualView virtualView = new VirtualView(new Server());
+        VirtualView virtualView = new VirtualView();
         Player player = new Player(virtualView, "Player", "000000");
         LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
         List<LeaderCard> leaderCards = leaderCardsInitializer.getLeaderCards();

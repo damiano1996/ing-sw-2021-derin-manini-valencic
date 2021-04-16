@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,7 @@ public class MarketTrayTest {
 
     @Before
     public void setUp() {
-        marketTray = new MarketTray(new VirtualView(new Server()));
+        marketTray = new MarketTray(new VirtualView());
     }
 
     @Test

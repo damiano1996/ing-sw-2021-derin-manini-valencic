@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases;
 
 import it.polimi.ingsw.psp26.controller.MatchController;
-import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +14,7 @@ public class PhaseTest {
 
     @Before
     public void setUp() {
-        matchController = new MatchController(new VirtualView(new Server()), 0);
+        matchController = new MatchController(new VirtualView(), 0);
         phase = new Phase(matchController);
     }
 

@@ -4,7 +4,6 @@ package it.polimi.ingsw.psp26.model.personalboard;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +20,7 @@ public class DepotTest {
 
     @Before
     public void setUp() {
-        depot = new Depot(new VirtualView(new Server()), 3);
+        depot = new Depot(new VirtualView(), 3);
         resourceList = new ArrayList<>();
     }
 

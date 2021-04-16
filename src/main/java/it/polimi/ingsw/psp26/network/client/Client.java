@@ -49,7 +49,7 @@ public class Client {
             case MULTI_OR_SINGLE_PLAYER_MODE:
                 viewInterface.displayChoices(
                         MULTI_OR_SINGLE_PLAYER_MODE,
-                        "Do you want to play in multi or single player mode?",
+                        "Choose the game mode:",
                         message.getPayloads(),
                         1, 1);
                 break;

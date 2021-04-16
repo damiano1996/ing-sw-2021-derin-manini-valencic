@@ -5,8 +5,6 @@ import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.model.Player;
 
-import java.util.Collections;
-
 public class PlayingPhaseState extends PhaseState {
 
     private Turn currentTurn;
@@ -24,7 +22,7 @@ public class PlayingPhaseState extends PhaseState {
     }
 
     private void initializeFirstTurn() {
-        Collections.shuffle(phase.getMatchController().getMatch().getPlayers());
+        phase.getMatchController().getMatch().shufflePlayers();
         currentTurn = new Turn(
                 this,
                 phase.getMatchController().getVirtualView(),

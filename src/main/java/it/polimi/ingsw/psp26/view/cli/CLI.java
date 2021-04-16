@@ -2,9 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
-import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
@@ -13,17 +11,11 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
-import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
-import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
-import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.network.server.Server;
-import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
@@ -117,7 +109,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                     client.handleMessage(new Message(
                             client.getSessionToken(),
                             MULTI_OR_SINGLE_PLAYER_MODE, // message type
-                            MULTIPLAYER_MODE, SINGLE_PLAYER_MODE // choices
+                            SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE // choices
                     ));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -242,7 +234,7 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
             pw.println(cliUtils.hSpace(3) + question);
 
             switch (messageType) {
-                case MULTI_OR_SINGLE_PLAYER_MODE:
+                case MULTI_OR_SINGLE_PLAYER_MODE: // Multi or Single player mode?
                     // display list of choices
                     displayMultipleMessageTypeChoices(choices);
                     selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
@@ -253,6 +245,14 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
                                     client.getSessionToken(),
                                     MULTI_OR_SINGLE_PLAYER_MODE,
                                     selected.toArray(new Object[0]) // to array
+                            )
+                    );
+
+                    client.sendToServer(
+                            new Message(
+                                    client.getSessionToken(),
+                                    ADD_PLAYER,
+                                    client.getNickname()
                             )
                     );
 

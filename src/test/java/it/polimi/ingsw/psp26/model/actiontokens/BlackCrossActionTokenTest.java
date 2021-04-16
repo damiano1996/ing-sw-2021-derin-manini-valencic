@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.model.actiontokens;
 
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
-import it.polimi.ingsw.psp26.network.server.Server;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +16,7 @@ public class BlackCrossActionTokenTest {
 
     @Before
     public void setUp() {
-        VirtualView virtualView = new VirtualView(new Server());
+        VirtualView virtualView = new VirtualView();
         developmentGrid = new DevelopmentGrid(virtualView);
         blackCrossActionToken = new BlackCrossActionToken();
         faithTrack = new FaithTrack(virtualView);

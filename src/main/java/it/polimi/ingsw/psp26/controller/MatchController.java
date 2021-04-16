@@ -14,8 +14,10 @@ public class MatchController implements Observer<Message> {
     private Match match;
 
     private boolean isWaitingForPlayers;
+    private int maxNumberOfPlayers;
 
     public MatchController(VirtualView virtualView, int matchId) {
+        System.out.println("New match controller has been created.");
         this.virtualView = virtualView;
         this.isWaitingForPlayers = true;
 
@@ -46,5 +48,14 @@ public class MatchController implements Observer<Message> {
 
     public void stopWaitingForPlayers() {
         isWaitingForPlayers = false;
+    }
+
+    public int getMaxNumberOfPlayers() {
+        return maxNumberOfPlayers;
+    }
+
+    public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
+        this.maxNumberOfPlayers = maxNumberOfPlayers;
+        System.out.println("Number of players: " + this.maxNumberOfPlayers);
     }
 }

@@ -7,8 +7,6 @@ import it.polimi.ingsw.psp26.model.Player;
 
 public class InitializationPhaseState extends PhaseState {
 
-    private int maxNumberOfPlayers;
-
     public InitializationPhaseState(Phase phase) {
         super(phase);
     }
@@ -17,52 +15,26 @@ public class InitializationPhaseState extends PhaseState {
     public void execute(Message message) {
         super.execute(message);
 
-        switch (message.getMessageType()) {
+        if (message.getMessageType() == MessageType.ADD_PLAYER) {
 
-            case MULTI_OR_SINGLE_PLAYER_MODE:
-                setMultiOrSinglePlayer(message);
-                break;
+            addPlayer(message);
 
-            case MAX_NUMBER_OF_PLAYERS:
-                setMaxNumberOfPlayers(message);
-                break;
-
-            case ADD_PLAYER:
-                addPlayer(message);
-
-                // next state is...
-                if (phase.getMatchController().getMatch().getPlayers().size() == maxNumberOfPlayers) {
-                    // Communicating to match controller that we reached the maximum number of players.
-                    phase.getMatchController().stopWaitingForPlayers();
-                    // Updating the state. The match can begin!
-                    phase.changeState(new PlayingPhaseState(phase));
-                    phase.execute(new Message());
-                }
-                break;
+            // next state is...
+            if (phase.getMatchController().getMatch().getPlayers().size() == phase.getMatchController().getMaxNumberOfPlayers()) {
+                // Communicating to match controller that we reached the maximum number of players.
+                phase.getMatchController().stopWaitingForPlayers();
+                // Updating the state. The match can begin!
+                phase.changeState(new PlayingPhaseState(phase));
+                phase.execute(new Message());
+            }
         }
     }
 
-    private void setMultiOrSinglePlayer(Message message) {
-        switch ((MessageType) message.getPayload()) {
-            case MULTIPLAYER_MODE:
-                // TODO:
-                System.out.println("Multiplayer mode has been selected.");
-                break;
-            case SINGLE_PLAYER_MODE:
-                maxNumberOfPlayers = 1;
-                System.out.println("Single player mode has been selected.");
-                break;
-        }
-    }
-
-    private void setMaxNumberOfPlayers(Message message) {
-        maxNumberOfPlayers = (int) message.getPayload();
-        if (maxNumberOfPlayers > 4) maxNumberOfPlayers = 4;
-    }
 
     private void addPlayer(Message message) {
         String nickname = (String) message.getPayload();
         String sessionToken = message.getSessionToken();
+        System.out.println("Initialization phase - new player - nickname: " + nickname + " - sessionToken: " + sessionToken);
         phase.getMatchController().getMatch().addPlayer(new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken));
     }
 

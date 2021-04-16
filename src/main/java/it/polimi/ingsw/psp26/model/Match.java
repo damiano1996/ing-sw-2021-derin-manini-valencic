@@ -101,6 +101,13 @@ public class Match extends Observable<Message> {
     }
 
     /**
+     * Methods to shuffle players.
+     */
+    public void shufflePlayers() {
+        Collections.shuffle(players);
+    }
+
+    /**
      * Getter of the players in the match.
      *
      * @return list of players

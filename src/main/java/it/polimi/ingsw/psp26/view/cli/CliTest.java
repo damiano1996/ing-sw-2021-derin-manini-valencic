@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Match;
@@ -81,6 +82,59 @@ public class CliTest {
         ResourceSupply resourceSupply = new ResourceSupply();
         Match metch = new Match(virtualView, 0);
         Scanner in = new Scanner(System.in);
+
+        //---MESSAGES-TEST---//
+
+        List<Object> choices;
+
+        /*MARKET_RESOURCE
+        choices = new ArrayList<>();
+        choices.add(marketTray);
+        cli.displayChoices(MessageType.MARKET_RESOURCE, "Select Row", choices, 1, 1);   //*/
+
+        /*CHOICE_NORMAL_ACTION
+        choices = new ArrayList<>();
+        choices.add("1 - Go to market");
+        choices.add("2 - Buy a card");
+        choices.add("3 - Activate production");
+        cli.displayChoices(MessageType.CHOICE_NORMAL_ACTION, "Select a normal action", choices, 1, 1);   //*/
+
+        /*CHOICE_LEADER_ACTION
+        choices = new ArrayList<>();
+        choices.add("1 - Play Leader");
+        choices.add("2 - Discard Leader");
+        cli.displayChoices(MessageType.CHOICE_LEADER_ACTION, "Select a leader action", choices, 1, 1);   //*/
+
+        /*ACTIVATE_LEADER
+        choices = new ArrayList<>();
+        choices.add(leaderCardsInitializer.getLeaderCards().get(0));
+        choices.add(leaderCardsInitializer.getLeaderCards().get(1));
+        cli.displayChoices(MessageType.ACTIVATE_LEADER, "Select a leader to activate", choices, 1, 1);   //*/
+
+        /*DISCARD_LEADER
+        choices = new ArrayList<>();
+        choices.add(leaderCardsInitializer.getLeaderCards().get(0));
+        choices.add(leaderCardsInitializer.getLeaderCards().get(1));
+        cli.displayChoices(MessageType.ACTIVATE_LEADER, "Select a leader to discard", choices, 1, 1);   //*/
+
+        /*ACTIVATE_PRODUCTION
+        choices = new ArrayList<>();
+        DevelopmentGrid developmentGrid1 = new DevelopmentGrid(virtualView);
+        choices.add(developmentGrid1.drawCard(Color.GREEN, Level.FIRST).getProduction());
+        choices.add(developmentGrid1.drawCard(Color.GREEN, Level.SECOND).getProduction());
+        choices.add(developmentGrid1.drawCard(Color.GREEN, Level.THIRD).getProduction());
+        choices.add(developmentGrid1.drawCard(Color.GREEN, Level.FIRST).getProduction());
+        choices.add(developmentGrid1.drawCard(Color.GREEN, Level.SECOND).getProduction());
+        choices.add(developmentGrid1.drawCard(Color.GREEN, Level.THIRD).getProduction());
+        cli.displayChoices(MessageType.ACTIVATE_PRODUCTION, "Select the productions you want to activate", choices, 1, choices.size());   //*/
+
+        /*BUY_CARD
+        choices = new ArrayList<>();
+        DevelopmentGrid developmentGrid1 = new DevelopmentGrid(virtualView);
+        choices.add(developmentGrid1);
+        cli.displayChoices(MessageType.BUY_CARD, "Enter the Level/Color (potrà anche essere fatto con le coordinate della cella)", choices, 1, 1);   //*/
+
+
 
 
         //---MARKET-TEST---// Press Enter 3 times
@@ -169,7 +223,7 @@ public class CliTest {
 
         //---TITLE-SCREEN-TEST---// Press Enter and follow terminal instructions
 
-        cli.displayLogIn();
+        //cli.displayLogIn();
 
 
         //---SHOW-ALL-LEADERS-TEST---// Press enter 4 times
@@ -194,6 +248,12 @@ public class CliTest {
 
         cliUtils.cls();
         cli.displayLeaderChoice(fourLeaders);
+        in.nextLine();
+        List<LeaderCard> twoleaders = new ArrayList<>();
+        twoleaders.add(fourLeaders.get(0));
+        twoleaders.add(fourLeaders.get(1));
+        cliUtils.cls();
+        cli.displayLeaderCardDiscardActivationSelection(twoleaders);
         in.nextLine();
 
 
@@ -302,7 +362,7 @@ public class CliTest {
         in.nextLine();
         cliUtils.cls();
         cli.displayLeaderCards(player.getLeaderCards());
-        cli.displayLeaderCardDiscardSelection(player.getLeaderCards());
+        cli.displayLeaderCardDiscardActivationSelection(player.getLeaderCards());
         in.nextLine();
         cliUtils.cls();
 

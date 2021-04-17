@@ -119,14 +119,27 @@ public class PersonalBoardCli {
     public void displayPlayerLeaderCards(List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
         cliUtils.printFigure("MyLeaderCardsTitle", startingRow, startingColumn + 20);
 
-        for (int i = 0; i < leaderCards.size(); i++)
-            leaderCardsCli.printLeader(leaderCards.get(i), startingRow + 10, startingColumn + 70 + (65 * i));
-        for (int i = 0; i < leaderCards.size(); i++) isLeaderCardActive(leaderCards.get(i), 25, 78 + (65 * i));
+        printLeaders(leaderCards, startingRow, startingColumn);
+        for (int i = 0; i < leaderCards.size(); i++) isLeaderCardActive(leaderCards.get(i), 27, 78 + (65 * i));
 
         cliUtils.setCursorBottomLeft();
         pw.print("Press Enter to exit this view.");
 
         pw.flush();
+    }
+
+    /**
+     * Prints the given Leader Cards
+     *
+     * @param leaderCards    The Leader Cards to print
+     * @param startingRow    The first row where the cards are going to be printed
+     * @param startingColumn The first column where the cards are going to be printed
+     */
+    public void printLeaders(List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
+        for (int i = 0; i < leaderCards.size(); i++)
+            leaderCardsCli.printLeader(leaderCards.get(i), startingRow + 10, startingColumn + 70 + (65 * i));
+        for (int i = 0; i < leaderCards.size(); i++)
+            cliUtils.pPCS("LEADER  #" + (i + 1), Color.WHITE, 30, 79 + (65 * i));
     }
 
     /**

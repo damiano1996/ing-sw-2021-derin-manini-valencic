@@ -16,6 +16,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.utils.ArrayListUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.PrintWriter;
@@ -27,7 +28,7 @@ import java.util.Scanner;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
 
-public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TEST METTI NELLE ALTRE CLASSI I METODI CHE NON SERVONO PRIVATI E LA VIRTUALVIEW
+public class CLI implements ViewInterface {
 
     private final Client client;
 
@@ -178,12 +179,8 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayDevelopmentGridCardSelection(DevelopmentGrid developmentGrid) { //TODO must be completed with controller integration
-        displayDevelopmentGrid(developmentGrid);
-
-        cliUtils.setCursorPosition(33, 135);
-        pw.print("Select a Card by typing the desired LEVEL and COLOR: ");
-        pw.flush();
+    public void displayDevelopmentGridCardSelection(DevelopmentGrid developmentGrid) {
+        //Already done by displayChoices() + displayDevelopmentGrid()
     }
 
     @Override
@@ -192,21 +189,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
     }
 
     @Override
-    public void displayProductionActivation(List<Production> productions) { //TODO must be completed with controller integration e forse mettere la lista di object
+    public void displayProductionActivation(List<Production> productions) {
         personalBoardCli.displayProductionActivation(productions);
-
-
-        cliUtils.vSpace(10);
-        pw.print(cliUtils.hSpace(20) + "Select which production you want to activate: ");
-        pw.flush();
     }
 
-    public void displayLeaderCardDiscardSelection(List<LeaderCard> leaderCards) { //TODO devi mandare al server cosa scegli
-        personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
-
-        cliUtils.setCursorPosition(35, 21);
-        pw.print("Type the LeaderCard number you want to discard: ");
-        pw.flush();
+    public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
+        cliUtils.cls();
+        personalBoardCli.printLeaders(leaderCards, 1, 1);
     }
 
     @Override
@@ -226,12 +215,13 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
         cliUtils.cls();
         cliUtils.vSpace(1);
-        pw.println(cliUtils.hSpace(3) + question);
 
         switch (messageType) {
             case MULTI_OR_SINGLE_PLAYER_MODE: // Multi or Single player mode?
+                pw.println(cliUtils.hSpace(3) + question);
                 // display list of choices
                 displayMultipleMessageTypeChoices(choices);
+                cliUtils.vSpace(1);
                 selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
 
                 // send to server response
@@ -251,15 +241,127 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
 
                 break;
 
+
             case CHOICE_NORMAL_ACTION:
-//                    displayNormalActionsSelection();
+                pw.println(cliUtils.hSpace(3) + question);
+                displayMultipleMessageTypeChoices(choices);
+                cliUtils.vSpace(1);
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+                client.notifyObservers(
+                        new Message(
+                                CHOICE_NORMAL_ACTION,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
                 break;
+
 
             case CHOICE_LEADER_ACTION:
-//                    displayLeaderActionSelection();
+                pw.println(cliUtils.hSpace(3) + question);
+                displayMultipleMessageTypeChoices(choices);
+                cliUtils.vSpace(1);
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+                client.notifyObservers(
+                        new Message(
+                                CHOICE_LEADER_ACTION,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
                 break;
 
-            case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
+
+            case ACTIVATE_LEADER:
+                displayLeaderCardDiscardActivationSelection(ArrayListUtils.castElements(LeaderCard.class, choices));
+                //Making space for the question
+                cliUtils.vSpace(10);
+                pw.println(cliUtils.hSpace(3) + question);
+                cliUtils.vSpace(1);
+                //selected = LeaderCard
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+                client.notifyObservers(
+                        new Message(
+                                ACTIVATE_LEADER,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
+                break;
+
+
+            case DISCARD_LEADER:
+                displayLeaderCardDiscardActivationSelection(ArrayListUtils.castElements(LeaderCard.class, choices));
+                //Making space for the question
+                cliUtils.vSpace(10);
+                pw.println(cliUtils.hSpace(3) + question);
+                cliUtils.vSpace(1);
+                //selected = LeaderCard
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+                client.notifyObservers(
+                        new Message(
+                                DISCARD_LEADER,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
+                break;
+
+
+            case ACTIVATE_PRODUCTION:
+                displayProductionActivation(ArrayListUtils.castElements(Production.class, choices));
+                //Making space for the question
+                cliUtils.vSpace(10);
+                pw.println(cliUtils.hSpace(3) + question);
+                cliUtils.vSpace(1);
+                //selected= List<Production>
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+                client.notifyObservers(
+                        new Message(
+                                ACTIVATE_PRODUCTION,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
+                break;
+
+
+            case MARKET_RESOURCE: //TODO Ipotizzando che sia l'azione per scegliere il numero della riga o colonna, andrebbe messo un messaggio per scegliere se fare riga o colonna prima
+                //MarketTray is the unique element of choices List
+                displayMarketScreen((MarketTray) choices.get(0));
+                //Making space for the question
+                cliUtils.vSpace(10);
+                pw.println(cliUtils.hSpace(3) + question);
+                cliUtils.vSpace(1);
+                //selected = Integer
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+                client.notifyObservers(
+                        new Message(
+                                MARKET_RESOURCE,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
+                break;
+
+            case BUY_CARD:
+                //DevelopmentGrid is the unique element of choices List
+                displayDevelopmentGrid((DevelopmentGrid) choices.get(0));
+                //Setting the cursor position for the question
+                cliUtils.setCursorPosition(33, 132);
+                pw.print(cliUtils.hSpace(3) + question);
+                //Setting the cursor position for displayInputChoice()
+                cliUtils.setCursorPosition(35, 132);
+                //TODO selected = dipende se fai la scelta di implementare tramite colore/livello o righe/colonne
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+                client.notifyObservers(
+                        new Message(
+                                BUY_CARD,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
+                break;
 
 
             default:
@@ -273,7 +375,6 @@ public class CLI implements ViewInterface { //TODO SISTEMA STA CLASSE DOPO IL TE
         Scanner in = new Scanner(System.in);
         List<Integer> choices = new ArrayList<>();
 
-        cliUtils.vSpace(1);
         pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
 
         while (choices.size() < maxChoices) {

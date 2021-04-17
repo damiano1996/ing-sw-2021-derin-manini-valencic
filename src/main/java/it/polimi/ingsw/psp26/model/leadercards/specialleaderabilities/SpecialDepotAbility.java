@@ -1,7 +1,9 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 
 public class SpecialDepotAbility extends SpecialAbility {
 
@@ -9,6 +11,13 @@ public class SpecialDepotAbility extends SpecialAbility {
         super(resource);
     }
 
+    @Override
+    public void activate(Player player) {
+        super.activate(player);
+
+        LeaderDepot leaderDepot = new LeaderDepot(player.getVirtualView(), resource);
+        player.getPersonalBoard().addLeaderDepot(leaderDepot);
+    }
 
     public String getAbilityType() {
         return "   DEPOT LEADER   ";

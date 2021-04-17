@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model.leadercards;
 
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
@@ -33,8 +34,13 @@ public class LeaderCard {
         return active;
     }
 
-    public void activate() {
+    public void activate(Player ownerPlayer) {
         active = true;
+        specialAbility.activate(ownerPlayer);
+    }
+
+    public void execute(Player ownerPlayer) {
+        specialAbility.execute(ownerPlayer);
     }
 
     public Map<Resource, Integer> getResourcesRequirements() {
@@ -43,10 +49,6 @@ public class LeaderCard {
 
     public Map<DevelopmentCardType, Integer> getDevelopmentCardRequirements() {
         return Collections.unmodifiableMap(developmentCardRequirements);
-    }
-
-    public SpecialAbility getSpecialAbility() {
-        return specialAbility;
     }
 
     public int getVictoryPoints() {

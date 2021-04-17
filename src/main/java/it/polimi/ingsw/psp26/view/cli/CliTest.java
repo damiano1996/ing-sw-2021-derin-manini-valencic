@@ -371,7 +371,7 @@ public class CliTest {
         in.nextLine();
         cliUtils.cls();
 
-        player.getLeaderCards().get(0).activate();
+        player.getLeaderCards().get(0).activate(player);
         cli.displayPersonalBoard(player);
         in.nextLine();
         cliUtils.cls();
@@ -379,7 +379,7 @@ public class CliTest {
         in.nextLine();
         cliUtils.cls();
 
-        player.getLeaderCards().get(1).activate();
+        player.getLeaderCards().get(1).activate(player);
         cli.displayPersonalBoard(player);
         in.nextLine();
         cliUtils.cls();

@@ -1,22 +1,27 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 public abstract class SpecialAbility {
 
-    private final Resource resource;
+    protected final Resource resource;
 
     protected SpecialAbility(Resource resource) {
         this.resource = resource;
     }
 
-    public void execute() {
+    public void execute(Player player) {
+    }
+
+    public void activate(Player player) {
     }
 
     public Resource getResource() {
         return resource;
     }
 
+    // TODO: to be removed
     public abstract String getAbilityType();
 
     public abstract String getPowerDescription(int linetoPrint);

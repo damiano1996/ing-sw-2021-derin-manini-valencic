@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class Player extends Observable<Message> {
 
+    private transient final VirtualView virtualView;
+
     private final String nickname;
     private final String sessionToken;
     private final PersonalBoard personalBoard;
@@ -33,6 +35,7 @@ public class Player extends Observable<Message> {
     public Player(VirtualView virtualView, String nickname, String sessionToken) {
         super();
         addObserver(virtualView);
+        this.virtualView = virtualView;
 
         this.nickname = nickname;
         this.sessionToken = sessionToken;
@@ -41,7 +44,7 @@ public class Player extends Observable<Message> {
         leaderCards = new ArrayList<>();
 
         notifyObservers(new Message());
-        notifyObservers(new Message(sessionToken, MessageType.PERSONAL_BOARD, this)); // TODO: why does not work from personal board?
+        notifyObservers(new Message(sessionToken, MessageType.PERSONAL_BOARD, this));
     }
 
     /**
@@ -127,4 +130,12 @@ public class Player extends Observable<Message> {
                 .anyMatch(x -> !x.isActive());
     }
 
+    /**
+     * Getter for the virtual view.
+     *
+     * @return virtual view
+     */
+    public VirtualView getVirtualView() {
+        return virtualView;
+    }
 }

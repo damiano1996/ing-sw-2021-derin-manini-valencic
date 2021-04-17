@@ -1,11 +1,13 @@
 package it.polimi.ingsw.psp26.model.leadercards;
 
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.ProductionAbility;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,18 +30,6 @@ public class LeaderCardTest {
             put(Resource.COIN, 1);
         }};
 
-        HashMap<Resource, Integer> cost = new HashMap<>() {{
-            put(Resource.SHIELD, 7);
-        }};
-        DevelopmentCardType developmentCardType = new DevelopmentCardType(Color.GREEN, Level.THIRD);
-        HashMap<Resource, Integer> productionCost = new HashMap<>() {{
-            put(Resource.SERVANT, 1);
-        }};
-        HashMap<Resource, Integer> productionReturn = new HashMap<>() {{
-            put(Resource.COIN, 1);
-            put(Resource.FAITH_MARKER, 3);
-        }};
-
         developmentCardRequirements = new HashMap<>() {{
             put(new DevelopmentCardType(Color.GREEN, Level.FIRST), 2);
         }};
@@ -53,7 +43,7 @@ public class LeaderCardTest {
     @Test
     public void testIsActive_and_activate() {
         assertFalse(leaderCard.isActive());
-        leaderCard.activate();
+        leaderCard.activate(new Player(new VirtualView(), "nickname", "sessionToken"));
         assertTrue(leaderCard.isActive());
     }
 
@@ -65,11 +55,6 @@ public class LeaderCardTest {
     @Test
     public void testGetDevelopmentCardRequirements() {
         assertEquals(developmentCardRequirements, leaderCard.getDevelopmentCardRequirements());
-    }
-
-    @Test
-    public void testGetSpecialAbility() {
-        assertEquals(specialAbility, leaderCard.getSpecialAbility());
     }
 
     @Test

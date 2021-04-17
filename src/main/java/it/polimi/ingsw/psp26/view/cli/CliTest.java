@@ -140,8 +140,6 @@ public class CliTest {
         cli.displayChoices(MessageType.BUY_CARD, "Enter the Level/Color (potrà anche essere fatto con le coordinate della cella)", choices, 1, 1);   //*/
 
 
-
-
         //---MARKET-TEST---// Press Enter 3 times
 
         cliUtils.cls();
@@ -354,7 +352,7 @@ public class CliTest {
         in.nextLine();
         cliUtils.cls();
 
-        player.getLeaderCards().get(0).activate();
+        player.getLeaderCards().get(0).activate(player);
         cli.displayPersonalBoard(player);
         in.nextLine();
         cliUtils.cls();
@@ -362,7 +360,7 @@ public class CliTest {
         in.nextLine();
         cliUtils.cls();
 
-        player.getLeaderCards().get(1).activate();
+        player.getLeaderCards().get(1).activate(player);
         cli.displayPersonalBoard(player);
         in.nextLine();
         cliUtils.cls();

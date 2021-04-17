@@ -124,7 +124,7 @@ public class LeaderCardsCli {
      */
     private void printLeaderResourceInformation(LeaderCard leaderCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 16, startingColumn);
-        pw.print("| " + leaderCard.getSpecialAbility().getResourceInformation() + " |");
+//        pw.print("| " + leaderCard.getSpecialAbility().getResourceInformation() + " |"); // TODO: to be fixed
         pw.flush();
     }
 
@@ -153,7 +153,7 @@ public class LeaderCardsCli {
 
         for (int i = 0; i < 4; i++) {
             cliUtils.saveCursorPosition();
-            pw.print("| " + leaderCard.getSpecialAbility().getPowerDescription(i) + " |");
+//            pw.print("| " + leaderCard.getSpecialAbility().getPowerDescription(i) + " |"); // TODO: to be fixed
             pw.flush();
             cliUtils.restoreCursorPosition();
             cliUtils.moveCursor("dn", 1);
@@ -169,7 +169,7 @@ public class LeaderCardsCli {
      */
     private void printLeaderAbility(LeaderCard leaderCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 3, startingColumn);
-        pw.print("| | " + leaderCard.getSpecialAbility().getAbilityType() + " | |");
+//        pw.print("| | " + leaderCard.getSpecialAbility().getAbilityType() + " | |"); // TODO: to be fixed
         pw.flush();
     }
 

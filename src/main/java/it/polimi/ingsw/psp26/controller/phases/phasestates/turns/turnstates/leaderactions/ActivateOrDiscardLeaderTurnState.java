@@ -69,7 +69,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
     private void activateLeader(LeaderCard leaderCard) {
         for (LeaderCard playerLeaderCard : turn.getTurnPlayer().getLeaderCards()) {
             if (playerLeaderCard.equals(leaderCard))
-                playerLeaderCard.activate();
+                playerLeaderCard.activate(turn.getTurnPlayer());
         }
         turn.getMatchController().notifyObservers(
                 new Message(turn.getTurnPlayer().getSessionToken(),

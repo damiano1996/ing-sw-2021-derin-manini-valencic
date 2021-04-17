@@ -5,12 +5,15 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class to model the personal board.
@@ -21,6 +24,7 @@ public class PersonalBoard extends Observable<Message> {
 
     private final FaithTrack faithTrack;
     private final List<List<DevelopmentCard>> developmentCardsSlots;
+    private final List<Production> productions;
     private final List<Depot> warehouseDepots;
     private final List<Resource> strongbox;
 
@@ -39,6 +43,18 @@ public class PersonalBoard extends Observable<Message> {
 
         faithTrack = new FaithTrack(virtualView);
         developmentCardsSlots = new ArrayList<>(3);
+
+        // productions with base
+        productions = new ArrayList<>() {{
+            add(new Production(
+                    new HashMap<>() {{
+                        put(Resource.UNKNOWN, 2);
+                    }},
+                    new HashMap<>() {{
+                        put(Resource.UNKNOWN, 1);
+                    }}));
+        }};
+
         warehouseDepots = new ArrayList<>(3);
         for (int i = 0; i < 3; i++) {
             developmentCardsSlots.add(new ArrayList<>());
@@ -86,11 +102,41 @@ public class PersonalBoard extends Observable<Message> {
      */
     public List<DevelopmentCard> getVisibleDevelopmentCards() {
         List<DevelopmentCard> visibleCards = new ArrayList<>();
-        for (List<DevelopmentCard> developmentCardsSlot : developmentCardsSlots) {
-            if (developmentCardsSlot.size() > 0)
-                visibleCards.add(developmentCardsSlot.get(developmentCardsSlot.size() - 1));
+
+        for (int i = 0; i < developmentCardsSlots.size(); i++) {
+            try {
+                int nCardsInSlot = getDevelopmentCardsSlot(i).size();
+                if (nCardsInSlot > 0)
+                    visibleCards.add(getDevelopmentCardsSlot(i).get(nCardsInSlot - 1));
+            } catch (DevelopmentCardSlotOutOfBoundsException e) {
+                e.printStackTrace();
+            }
         }
+
         return Collections.unmodifiableList(visibleCards);
+    }
+
+    /**
+     * Method to add a production object to the list
+     *
+     * @param production production object
+     */
+    public void addProduction(Production production) {
+        productions.add(production);
+    }
+
+    /**
+     * Method return all visible productions:
+     * productions contained in the top development cards and external productions,
+     * such as the base production and the leader production.
+     *
+     * @return list of visible productions
+     */
+    public List<Production> getAllVisibleProductions() {
+        List<DevelopmentCard> visibleDevelopmentCards = getVisibleDevelopmentCards();
+        List<Production> visibleProductions = visibleDevelopmentCards.stream().map(DevelopmentCard::getProduction).collect(Collectors.toList());
+        visibleProductions.addAll(productions);
+        return visibleProductions;
     }
 
     /**
@@ -186,17 +232,6 @@ public class PersonalBoard extends Observable<Message> {
      */
     public void addLeaderDepot(LeaderDepot leaderDepot) {
         warehouseDepots.add(leaderDepot);
-    }
-
-    /**
-     * Method that provides a fixed exchange of resource 2:1
-     *
-     * @param resourceRequirement the list of resources to give in
-     * @param product             the resource given back
-     */
-    public Resource baseProductionPower(List<Resource> resourceRequirement, Resource product) throws WrongBasicPowerResourceRequirementException {
-        if (resourceRequirement.size() != 2) throw new WrongBasicPowerResourceRequirementException();
-        return product;
     }
 
     /**

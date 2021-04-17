@@ -84,7 +84,7 @@ public class PlayerTest {
 
         // Second case: leader already active
         player.setLeaderCards(leaderCards);
-        player.getLeaderCards().get(0).activate();
+        player.getLeaderCards().get(0).activate(player);
         assertFalse(player.isLeaderActionPlayable());
     }
 

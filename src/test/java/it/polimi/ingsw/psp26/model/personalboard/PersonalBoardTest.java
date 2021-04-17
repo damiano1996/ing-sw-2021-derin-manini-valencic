@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -12,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -108,6 +110,24 @@ public class PersonalBoardTest {
     }
 
     @Test
+    public void testGetVisibleProductions() {
+        Production baseProduction = new Production(
+                new HashMap<>() {{
+                    put(Resource.UNKNOWN, 2);
+                }},
+                new HashMap<>() {{
+                    put(Resource.UNKNOWN, 1);
+                }});
+        List<Production> productions = new ArrayList<>() {{
+            add(developmentCard2.getProduction());
+            add(developmentCard3.getProduction());
+            add(baseProduction);
+        }};
+
+        assertEquals(productions, personalBoard.getAllVisibleProductions());
+    }
+
+    @Test
     public void testGetWarehouseDepots() throws CanNotAddResourceToDepotException {
         personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
         for (int i = 0; i < personalBoard.getWarehouseDepots().get(1).getMaxNumberOfResources(); i++)
@@ -201,24 +221,6 @@ public class PersonalBoardTest {
         personalBoard.grabResourcesFromStrongbox(Resource.COIN, 2);
         assertEquals(resources, personalBoard.getStrongbox());
 
-    }
-
-    @Test
-    public void testBaseProductionPower() throws WrongBasicPowerResourceRequirementException {
-        List<Resource> resources = new ArrayList<>();
-        resources.add(Resource.COIN);
-        resources.add(Resource.STONE);
-        Resource resource = personalBoard.baseProductionPower(resources, Resource.SHIELD);
-        assertEquals(resource, Resource.SHIELD);
-    }
-
-    @Test(expected = WrongBasicPowerResourceRequirementException.class)
-    public void testBaseProductionPower_WrongBasicPowerResourceRequirementException() throws WrongBasicPowerResourceRequirementException {
-        List<Resource> resources = new ArrayList<>();
-        resources.add(Resource.COIN);
-        resources.add(Resource.STONE);
-        resources.add(Resource.STONE);
-        Resource resource = personalBoard.baseProductionPower(resources, Resource.SHIELD);
     }
 
     @Test

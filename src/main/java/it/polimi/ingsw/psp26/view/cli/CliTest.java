@@ -87,6 +87,11 @@ public class CliTest {
 
         List<Object> choices;
 
+        //INITIAL_RESOURCE_ASSIGNMENT
+        choices = new ArrayList<>();
+        choices.add(resourceSupply);
+        cli.displayChoices(MessageType.INITIAL_RESOURCE_ASSIGNMENT, "Select the Resource you want by typing the slot number", choices, 1, 1);
+
         /*MARKET_RESOURCE
         choices = new ArrayList<>();
         choices.add(marketTray);

@@ -363,6 +363,24 @@ public class CLI implements ViewInterface {
                 );
                 break;
 
+            case INITIAL_RESOURCE_ASSIGNMENT: //TODO se guardi nel test ho ipotizzato che venga richiesta una risorsa alla volta perchè altrimenti non potrebbe scegliere la stessa due volte o non si saprebbe quante ne deve scegliere se c'è solo la ResourceSupply nella lista di choices
+                //ResourceSupply is the unique element of choices List
+                displayResourceSupply((ResourceSupply) choices.get(0));
+                //Making space for the question
+                cliUtils.vSpace(10);
+                pw.println(cliUtils.hSpace(3) + question);
+                cliUtils.vSpace(1);
+                //selected = Integer
+                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+                client.notifyObservers(
+                        new Message(
+                                INITIAL_RESOURCE_ASSIGNMENT,
+                                selected.toArray(new Object[0]) // to array
+                        )
+                );
+                break;
+
 
             default:
                 break;

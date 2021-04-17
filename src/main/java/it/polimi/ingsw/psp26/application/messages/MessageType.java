@@ -11,6 +11,7 @@ public enum MessageType {
     THREE_PLAYERS_MODE,
     FOUR_PLAYERS_MODE,
     ADD_PLAYER,
+    INITIAL_RESOURCE_ASSIGNMENT, // to display the choice of the initial Resource to the Players that starts second, third or fourth
 
     // Leader actions:
     CHOICE_LEADER_ACTION, // to display to the client the leader action options

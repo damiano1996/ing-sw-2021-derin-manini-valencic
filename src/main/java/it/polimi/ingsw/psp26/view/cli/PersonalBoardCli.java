@@ -35,11 +35,12 @@ public class PersonalBoardCli {
     /**
      * Prints the Personal Board of a given player
      *
-     * @param player The player who's Personal Board is gonna be printed
+     * @param player            The player who's Personal Board is gonna be printed
+     * @param isMultiplayerMode Tells if the Match is Single or MultiPlayer (used to print the correct FaithTrack)
      */
-    public void displayPersonalBoard(Player player) {
+    public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
 
-        faithTrackCli.displayFaithTrack(player.getPersonalBoard().getFaithTrack(), 3, 10);
+        faithTrackCli.displayFaithTrack(player.getPersonalBoard().getFaithTrack(), 3, 10, isMultiplayerMode);
 
         displayInkwell(player.isInkwell(), 5, 190);
 

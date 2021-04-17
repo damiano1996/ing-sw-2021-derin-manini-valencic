@@ -83,14 +83,33 @@ public class CliTest {
         Match metch = new Match(virtualView, 0);
         Scanner in = new Scanner(System.in);
 
+        //FAITH-TRACK-MOVEMENT-TEST---// Press Enter 25 times
+
+        cliUtils.cls();
+        for (int i = 0; i < 25; i++) {
+            if (i == 3 || i == 7) personalBoard.getFaithTrack().moveBlackCrossPosition(1);
+            if (i == 14) {
+                for (int m = 0; m < 14; m++) {
+                    personalBoard.getFaithTrack().moveBlackCrossPosition(1);
+                    cli.displayFaithTrack(personalBoard.getFaithTrack());
+                    in.nextLine();
+                }
+            }
+            cli.displayFaithTrack(personalBoard.getFaithTrack());
+            in.nextLine();
+            personalBoard.getFaithTrack().moveMarkerPosition(1);
+            cliUtils.cls();
+        }
+
+
         //---MESSAGES-TEST---//
 
         List<Object> choices;
 
-        //INITIAL_RESOURCE_ASSIGNMENT
+        /*INITIAL_RESOURCE_ASSIGNMENT
         choices = new ArrayList<>();
         choices.add(resourceSupply);
-        cli.displayChoices(MessageType.INITIAL_RESOURCE_ASSIGNMENT, "Select the Resource you want by typing the slot number", choices, 1, 1);
+        cli.displayChoices(MessageType.INITIAL_RESOURCE_ASSIGNMENT, "Select the Resource you want by typing the slot number", choices, 1, 1);   */
 
         /*MARKET_RESOURCE
         choices = new ArrayList<>();
@@ -140,8 +159,6 @@ public class CliTest {
         cli.displayChoices(MessageType.BUY_CARD, "Enter the Level/Color (potrà anche essere fatto con le coordinate della cella)", choices, 1, 1);   //*/
 
 
-
-
         //---MARKET-TEST---// Press Enter 3 times
 
         cliUtils.cls();
@@ -185,7 +202,7 @@ public class CliTest {
 
         for (int i = 0; i < 4; i++) {
             cliUtils.cls();
-            cli.displayDevelopmentGridCardSelection(developmentGrid);
+            cli.displayDevelopmentGrid(developmentGrid);
             in.nextLine();
             developmentGrid.drawCard(Color.PURPLE, Level.FIRST);
             developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
@@ -385,17 +402,6 @@ public class CliTest {
         cliUtils.cls();
         cli.displayLeaderCards(player.getLeaderCards());
         in.nextLine();
-
-
-        //FAITH-TRACK-MOVEMENT-TEST---// Press Enter 25 times
-
-        cliUtils.cls();
-        for (int i = 0; i < 25; i++) {
-            cli.displayFaithTrack(personalBoard.getFaithTrack());
-            in.nextLine();
-            personalBoard.getFaithTrack().moveMarkerPosition(1);
-            cliUtils.cls();
-        }
 
     }
 }

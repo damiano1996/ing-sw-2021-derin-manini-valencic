@@ -47,7 +47,7 @@ public class CLI implements ViewInterface {
         this.client = client;
 
         this.pw = new PrintWriter(System.out);
-        this.isMultiPlayerMode = true;
+        this.isMultiPlayerMode = false;
         this.cliUtils = new CliUtils(pw);
         this.depotCli = new DepotCli(pw);
         this.developmentCardsCli = new DevelopmentCardsCli(pw);
@@ -136,7 +136,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayPersonalBoard(Player player) {
-        personalBoardCli.displayPersonalBoard(player);
+        personalBoardCli.displayPersonalBoard(player, isMultiPlayerMode);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayFaithTrack(FaithTrack faithTrack) {
-        faithTrackCli.displayFaithTrack(faithTrack, 3, 10);
+        faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
     }
 
     @Override

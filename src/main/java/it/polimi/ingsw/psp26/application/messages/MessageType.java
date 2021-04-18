@@ -46,5 +46,8 @@ public enum MessageType {
     BLACK_CROSS_FINAL_POSITION,
 
     // Display model components
-    PERSONAL_BOARD;
+    PERSONAL_BOARD,
+
+    // tmp
+    CHOICE_RESOURCE;
 }

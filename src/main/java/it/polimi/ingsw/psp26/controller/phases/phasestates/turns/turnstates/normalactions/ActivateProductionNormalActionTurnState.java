@@ -14,7 +14,9 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
@@ -60,7 +62,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     private void activateACardProduction(DevelopmentCard chosenCard, Player player) throws NegativeNumberOfElementsToGrabException {
         int resourceCost = 0;
         for (Resource resource : chosenCard.getProduction().getProductionCost().keySet()) {
-            resourceCost = chosenCard.getProduction().getProductionCost().get(resource);
+            resourceCost = getCleanResources(chosenCard.getProduction().getProductionCost()).get(resource);
             player.getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource, resourceCost);
         }
     }
@@ -123,6 +125,34 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             if (card.getCost().get(Resource.EMPTY) == 0) return true;
         }
         return false;
+    }
+
+    /**
+     * Methods resolves the unknown resources asking to the client the desired one.
+     *
+     * @param rawResources cost or production return of a Production object
+     * @return cost or productions cleaned replacing unknown resources with the chosen one
+     */
+    private Map<Resource, Integer> getCleanResources(Map<Resource, Integer> rawResources) {
+        Map<Resource, Integer> cleanResources = new HashMap<>();
+        for (Resource rawResource : rawResources.keySet()) {
+            int quantity = rawResources.get(rawResource);
+
+            if (!rawResource.equals(Resource.UNKNOWN)) {
+                cleanResources.put(rawResource, quantity);
+            } else {
+
+                UnknownResourceResolver unknownResourceResolver = UnknownResourceResolver.getInstance(
+                        turn.getMatchController().getVirtualView());
+
+                try {
+                    cleanResources.put(unknownResourceResolver.getResourceDefined(turn.getTurnPlayer()), quantity);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return cleanResources;
     }
 }
 

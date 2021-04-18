@@ -13,21 +13,15 @@ import static it.polimi.ingsw.psp26.model.enums.Resource.SHIELD;
 import static org.junit.Assert.assertEquals;
 
 public class MessageTest {
-    private String sessionToken;
+
     private MessageType messageType;
     private Message message;
     private Map<String, Object> payload;
 
     @Before
     public void setUp() {
-        sessionToken = "sessionToken";
         messageType = MessageType.GENERAL_MESSAGE;
-        message = new Message(sessionToken, messageType, COIN, COIN, SHIELD);
-    }
-
-    @Test
-    public void testGetSessionToken() {
-        assertEquals(sessionToken, message.getSessionToken());
+        message = new Message(messageType, COIN, COIN, SHIELD);
     }
 
     @Test
@@ -46,13 +40,13 @@ public class MessageTest {
             add(COIN);
             add(COIN);
             add(SHIELD);
-        }}, message.getPayloads());
+        }}, message.getListPayloads());
     }
 
     @Test
     public void testGetPayloads_ComplexObject() {
         Player player = new Player(new VirtualView(), "nickname", "sessionToken");
-        message = new Message(player.getSessionToken(), MessageType.PERSONAL_BOARD, player);
+        message = new Message(MessageType.PERSONAL_BOARD, player);
         assertEquals(player.getNickname(), ((Player) message.getPayload()).getNickname());
     }
 }

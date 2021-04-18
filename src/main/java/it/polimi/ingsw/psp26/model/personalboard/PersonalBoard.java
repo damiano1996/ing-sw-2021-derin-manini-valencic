@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * Class to model the personal board.
  */
-public class PersonalBoard extends Observable<Message> {
+public class PersonalBoard extends Observable<SessionMessage> {
 
     private transient final Player player; // "transient" doesn't serialize the player. Necessary to avoid recursion in Gson.
 
@@ -187,7 +187,7 @@ public class PersonalBoard extends Observable<Message> {
      */
     public void addResourcesToStrongbox(List<Resource> resources) throws CanNotAddResourceToStrongboxException {
         for (Resource resource : resources) addResourceToStrongbox(resource);
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -203,7 +203,7 @@ public class PersonalBoard extends Observable<Message> {
         if (isCardPlaceable(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
         else throw new CanNotAddDevelopmentCardToSlotException();
 
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**

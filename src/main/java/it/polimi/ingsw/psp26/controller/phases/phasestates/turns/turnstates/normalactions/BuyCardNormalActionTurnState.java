@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -35,7 +36,8 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 } catch (NegativeNumberOfElementsToGrabException e) {
                     e.printStackTrace();
                 }
-                new Message(turn.getTurnPlayer().getSessionToken(),
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
                         MessageType.CHOICE_POSITION);
                 break;
 
@@ -46,7 +48,8 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 break;
 
             default:
-                new Message(turn.getTurnPlayer().getSessionToken(),
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
                         MessageType.CHOICE_NORMAL_ACTION);
 
         }
@@ -103,7 +106,8 @@ public class BuyCardNormalActionTurnState extends TurnState {
             turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
             System.out.println("The position chosen is not correct, choose another one");
-            new Message(turn.getTurnPlayer().getSessionToken(),
+            new SessionMessage(
+                    turn.getTurnPlayer().getSessionToken(),
                     MessageType.CHOICE_POSITION);
         }
 

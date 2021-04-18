@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -41,13 +42,15 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 }
                 isRedMarblePresent(turn.getTurnPlayer());
                 tempResources = parseResource();
-                new Message(turn.getTurnPlayer().getSessionToken(),
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
                         MessageType.CHOICE_ORGANIZATION_MOVE);
                 break;
             case RESOURCE_POSITION_CHOSEN:
                 List<Depot> currentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepots();
                 moveResourceFromSlideToDepot(Resource.COIN, 1, currentDepotsStatus.get(1));
-                new Message(turn.getTurnPlayer().getSessionToken(),
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
                         MessageType.CHOICE_ORGANIZATION_MOVE);
                 break;
             case GRAB_RESOURCES:
@@ -56,7 +59,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
                     e.printStackTrace();
                 }
-                new Message(turn.getTurnPlayer().getSessionToken(),
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
                         MessageType.CHOICE_ORGANIZATION_MOVE);
 
             case MARKET_NEXT:
@@ -66,7 +70,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 break;
 
             default:
-                new Message(turn.getTurnPlayer().getSessionToken(),
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
                         MessageType.CHOICE_NORMAL_ACTION);
         }
     }
@@ -92,7 +97,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                         depot.addResource(DepotCopy.get(0));
                     }
                     System.out.println("Error move not allowed");
-                    new Message(turn.getTurnPlayer().getSessionToken(),
+                    new SessionMessage(
+                            turn.getTurnPlayer().getSessionToken(),
                             MessageType.CHOICE_ORGANIZATION_MOVE);
                 } catch (NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {
                     exc.printStackTrace();

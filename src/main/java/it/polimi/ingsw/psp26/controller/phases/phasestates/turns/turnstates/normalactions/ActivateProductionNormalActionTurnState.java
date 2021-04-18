@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
@@ -29,9 +30,9 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
     public void play(Message message) { // TO BE FINISHED
 
-        if (!IsBasePowerPresent(castElements(DevelopmentCard.class, message.getPayloads()))) {
+        if (!IsBasePowerPresent(castElements(DevelopmentCard.class, message.getListPayloads()))) {
             List<Resource> resourcesProduced = new ArrayList<>(); //
-            resourcesProduced = ActivateProduction(castElements(DevelopmentCard.class, message.getPayloads()));
+            resourcesProduced = ActivateProduction(castElements(DevelopmentCard.class, message.getListPayloads()));
 
             try {
                 turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
@@ -43,15 +44,15 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             switch (message.getMessageType()) {
                 case RESOURCE_CHOSEN:
 
-                    List<Resource> ChosenResources = castElements(Resource.class, message.getPayloads());
+                    List<Resource> ChosenResources = castElements(Resource.class, message.getListPayloads());
                     turn.changeState(new ActivateProductionNormalActionTurnState(turn));
                     turn.play(message);
                     break;
 
                 default:
-                    ChosenCards = castElements(DevelopmentCard.class, message.getPayloads());
+                    ChosenCards = castElements(DevelopmentCard.class, message.getListPayloads());
                     turn.getMatchController().notifyObservers(
-                            new Message(turn.getTurnPlayer().getSessionToken(),
+                            new SessionMessage(turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_RESOURCE_IN_RESOURCE_OUT)
                     );
                     break;
@@ -108,7 +109,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             try {
                 activateACardProduction(card, turn.getTurnPlayer());
             } catch (NegativeNumberOfElementsToGrabException e) {
-                turn.getMatchController().notifyObservers(new Message(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION));
+                turn.getMatchController().notifyObservers(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION));
                 try {
                     Reverse(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
                 } catch (DepotOutOfBoundException | NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {

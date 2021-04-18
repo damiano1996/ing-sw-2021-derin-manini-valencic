@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.network.client;
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
 import java.io.IOException;
@@ -28,8 +29,7 @@ public class NetworkHandler extends Observable<Message> implements Observer<Mess
     @Override
     public void update(Message message) {
         try {
-            message.setSessionToken(sessionToken);
-            sendToServer(message);
+            sendToServer(new SessionMessage(sessionToken, message.getMessageType(), message.getArrayPayloads()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,7 @@ public class NetworkHandler extends Observable<Message> implements Observer<Mess
         return sessionToken;
     }
 
-    public void sendToServer(Message message) throws IOException {
+    public void sendToServer(SessionMessage message) throws IOException {
         networkNode.sendData(message);
     }
 }

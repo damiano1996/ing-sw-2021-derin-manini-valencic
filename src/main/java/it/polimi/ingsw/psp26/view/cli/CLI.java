@@ -20,10 +20,7 @@ import it.polimi.ingsw.psp26.utils.ArrayListUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
@@ -105,11 +102,11 @@ public class CLI implements ViewInterface {
                 String serverIP = in.nextLine();
                 client.initializeNetworkHandler(serverIP);
                 // go to Multi/single player choice
-                client.update(
-                        new Message(
-                                MULTI_OR_SINGLE_PLAYER_MODE, // message type
-                                SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE // choices
-                        )
+                displayChoices(
+                        MULTI_OR_SINGLE_PLAYER_MODE,
+                        "Choose the playing mode:",
+                        Arrays.asList(new MessageType[]{SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE}),
+                        1, 1
                 );
             }
         }
@@ -211,118 +208,25 @@ public class CLI implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
 
-        List<Object> selected = new ArrayList<>();
-
         cliUtils.cls();
         cliUtils.vSpace(1);
+        pw.println(cliUtils.hSpace(3) + question);
+
 
         switch (messageType) {
-            case MULTI_OR_SINGLE_PLAYER_MODE: // Multi or Single player mode?
-                pw.println(cliUtils.hSpace(3) + question);
-                // display list of choices
-                displayMultipleMessageTypeChoices(choices);
-                cliUtils.vSpace(1);
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
 
-                // send to server response
-                client.notifyObservers(
-                        new Message(
-                                MULTI_OR_SINGLE_PLAYER_MODE,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
-
-                client.notifyObservers(
-                        new Message(
-                                ADD_PLAYER,
-                                client.getNickname()
-                        )
-                );
-
-                break;
-
-
+            case MULTI_OR_SINGLE_PLAYER_MODE:
             case CHOICE_NORMAL_ACTION:
-                pw.println(cliUtils.hSpace(3) + question);
-                displayMultipleMessageTypeChoices(choices);
-                cliUtils.vSpace(1);
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-
-                client.notifyObservers(
-                        new Message(
-                                CHOICE_NORMAL_ACTION,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
-                break;
-
-
             case CHOICE_LEADER_ACTION:
-                pw.println(cliUtils.hSpace(3) + question);
                 displayMultipleMessageTypeChoices(choices);
-                cliUtils.vSpace(1);
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-
-                client.notifyObservers(
-                        new Message(
-                                CHOICE_LEADER_ACTION,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
                 break;
 
-
-            case ACTIVATE_LEADER:
+            case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
                 displayLeaderCardDiscardActivationSelection(ArrayListUtils.castElements(LeaderCard.class, choices));
-                //Making space for the question
-                cliUtils.vSpace(10);
-                pw.println(cliUtils.hSpace(3) + question);
-                cliUtils.vSpace(1);
-                //selected = LeaderCard
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-
-                client.notifyObservers(
-                        new Message(
-                                ACTIVATE_LEADER,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
                 break;
-
-
-            case DISCARD_LEADER:
-                displayLeaderCardDiscardActivationSelection(ArrayListUtils.castElements(LeaderCard.class, choices));
-                //Making space for the question
-                cliUtils.vSpace(10);
-                pw.println(cliUtils.hSpace(3) + question);
-                cliUtils.vSpace(1);
-                //selected = LeaderCard
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-
-                client.notifyObservers(
-                        new Message(
-                                DISCARD_LEADER,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
-                break;
-
 
             case ACTIVATE_PRODUCTION:
                 displayProductionActivation(ArrayListUtils.castElements(Production.class, choices));
-                //Making space for the question
-                cliUtils.vSpace(10);
-                pw.println(cliUtils.hSpace(3) + question);
-                cliUtils.vSpace(1);
-                //selected= List<Production>
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-
-                client.notifyObservers(
-                        new Message(
-                                ACTIVATE_PRODUCTION,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
                 break;
 
 
@@ -330,61 +234,70 @@ public class CLI implements ViewInterface {
                 //MarketTray is the unique element of choices List
                 displayMarketScreen((MarketTray) choices.get(0));
                 //Making space for the question
-                cliUtils.vSpace(10);
-                pw.println(cliUtils.hSpace(3) + question);
-                cliUtils.vSpace(1);
-                //selected = Integer
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-
-                client.notifyObservers(
-                        new Message(
-                                MARKET_RESOURCE,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
+//                cliUtils.vSpace(10);
+//                pw.println(cliUtils.hSpace(3) + question);
+//                cliUtils.vSpace(1);
+//                //selected = Integer
+//                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+//
+//                client.notifyObservers(
+//                        new Message(
+//                                MARKET_RESOURCE,
+//                                selected.toArray(new Object[0]) // to array
+//                        )
+//                );
                 break;
 
             case BUY_CARD:
                 //DevelopmentGrid is the unique element of choices List
                 displayDevelopmentGrid((DevelopmentGrid) choices.get(0));
-                //Setting the cursor position for the question
-                cliUtils.setCursorPosition(33, 132);
-                pw.print(cliUtils.hSpace(3) + question);
-                //Setting the cursor position for displayInputChoice()
-                cliUtils.setCursorPosition(35, 132);
-                //TODO selected = dipende se fai la scelta di implementare tramite colore/livello o righe/colonne
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-
-                client.notifyObservers(
-                        new Message(
-                                BUY_CARD,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
+//                //Setting the cursor position for the question
+//                cliUtils.setCursorPosition(33, 132);
+//                pw.print(cliUtils.hSpace(3) + question);
+//                //Setting the cursor position for displayInputChoice()
+//                cliUtils.setCursorPosition(35, 132);
+//                //TODO selected = dipende se fai la scelta di implementare tramite colore/livello o righe/colonne
+//                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+//
+//                client.notifyObservers(
+//                        new Message(
+//                                BUY_CARD,
+//                                selected.toArray(new Object[0]) // to array
+//                        )
+//                );
                 break;
 
             case INITIAL_RESOURCE_ASSIGNMENT: //TODO se guardi nel test ho ipotizzato che venga richiesta una risorsa alla volta perchè altrimenti non potrebbe scegliere la stessa due volte o non si saprebbe quante ne deve scegliere se c'è solo la ResourceSupply nella lista di choices
                 //ResourceSupply is the unique element of choices List
                 displayResourceSupply((ResourceSupply) choices.get(0));
-                //Making space for the question
-                cliUtils.vSpace(10);
-                pw.println(cliUtils.hSpace(3) + question);
-                cliUtils.vSpace(1);
-                //selected = Integer
-                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-
-                client.notifyObservers(
-                        new Message(
-                                INITIAL_RESOURCE_ASSIGNMENT,
-                                selected.toArray(new Object[0]) // to array
-                        )
-                );
+//                //Making space for the question
+//                cliUtils.vSpace(10);
+//                pw.println(cliUtils.hSpace(3) + question);
+//                cliUtils.vSpace(1);
+//                //selected = Integer
+//                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+//
+//                client.notifyObservers(
+//                        new Message(
+//                                INITIAL_RESOURCE_ASSIGNMENT,
+//                                selected.toArray(new Object[0]) // to array
+//                        )
+//                );
                 break;
 
 
             default:
                 break;
         }
+
+        cliUtils.vSpace(1);
+        List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+
+        // send to server response
+        client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
+
+        if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE))
+            client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
 
         pw.flush();
     }

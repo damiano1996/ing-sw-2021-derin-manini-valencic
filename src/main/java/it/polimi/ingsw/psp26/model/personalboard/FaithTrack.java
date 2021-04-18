@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Class to model the faith track.
  */
-public class FaithTrack extends Observable<Message> {
+public class FaithTrack extends Observable<SessionMessage> {
 
     private final int finalPosition;
     private final VaticanReportSection[] vaticanReportSections;
@@ -37,7 +37,7 @@ public class FaithTrack extends Observable<Message> {
         this.blackCrossPosition = 0;
         this.faithPoints = 0;
 
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -47,7 +47,7 @@ public class FaithTrack extends Observable<Message> {
      */
     public void addFaithPoints(int points) {
         this.faithPoints += points;
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -95,7 +95,7 @@ public class FaithTrack extends Observable<Message> {
         this.markerPosition = this.markerPosition + numberOfSteps;
         this.faithPoints = this.faithPoints + numberOfSteps;
 
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -106,7 +106,7 @@ public class FaithTrack extends Observable<Message> {
     public void moveBlackCrossPosition(int numberOfSteps) {
         this.blackCrossPosition = this.blackCrossPosition + numberOfSteps;
 
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**

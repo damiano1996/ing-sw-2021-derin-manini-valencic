@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.network.server;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.DesiredVirtualViewDoesNotExistException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
@@ -55,7 +55,7 @@ public class Server {
             // step: send session token to client
             client.sendData(sessionToken);
             // step: receive player mode message
-            Message message = (Message) client.receiveObjectData();
+            SessionMessage message = (SessionMessage) client.receiveObjectData();
             // step: assign player to a virtual view
             handlePlayerModeMessage(client, message);
 
@@ -65,7 +65,9 @@ public class Server {
     }
 
 
-    private void handlePlayerModeMessage(NetworkNode clientNode, Message message) {
+    private void handlePlayerModeMessage(NetworkNode clientNode, SessionMessage message) {
+        System.out.println(message.getPayload());
+
         switch ((MessageType) message.getPayload()) {
 
             case SINGLE_PLAYER_MODE:

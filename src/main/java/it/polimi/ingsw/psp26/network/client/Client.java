@@ -3,12 +3,11 @@ package it.polimi.ingsw.psp26.network.client;
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
-
-import static it.polimi.ingsw.psp26.application.messages.MessageType.MULTI_OR_SINGLE_PLAYER_MODE;
 
 public class Client extends Observable<Message> implements Observer<Message> {
 
@@ -32,17 +31,17 @@ public class Client extends Observable<Message> implements Observer<Message> {
                 viewInterface.displayText((String) message.getPayload());
                 break;
 
-            case MULTI_OR_SINGLE_PLAYER_MODE:
+            case CHOICE_LEADER_ACTION:
+                MultipleChoicesMessage mcm = (MultipleChoicesMessage) message;
                 viewInterface.displayChoices(
-                        MULTI_OR_SINGLE_PLAYER_MODE,
-                        "Choose the game mode:",
-                        message.getPayloads(),
-                        1, 1);
-                break;
+                        mcm.getMessageType(),
+                        "Choose leader action:",
+                        mcm.getListPayloads(),
+                        mcm.getMinChoices(), mcm.getMaxChoices()
+                );
 
             case PERSONAL_BOARD:
                 Player player = (Player) message.getPayload();
-                System.out.println("player: " + player.getNickname());
                 viewInterface.displayPersonalBoard(player);
 
             default:

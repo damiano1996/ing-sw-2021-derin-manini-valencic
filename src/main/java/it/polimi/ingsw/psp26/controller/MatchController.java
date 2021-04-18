@@ -2,13 +2,13 @@ package it.polimi.ingsw.psp26.controller;
 
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.Observer;
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 
-public class MatchController extends Observable<Message> implements Observer<Message> {
+public class MatchController extends Observable<SessionMessage> implements Observer<SessionMessage> {
 
     private final VirtualView virtualView;
     private final Phase phase;
@@ -30,7 +30,7 @@ public class MatchController extends Observable<Message> implements Observer<Mes
     }
 
     @Override
-    public void update(Message message) {
+    public void update(SessionMessage message) {
         phase.execute(message);
     }
 

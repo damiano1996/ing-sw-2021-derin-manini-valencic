@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.model.Player;
 
@@ -32,7 +33,7 @@ public class InitializationPhaseState extends PhaseState {
 
     private void addPlayer(Message message) {
         String nickname = (String) message.getPayload();
-        String sessionToken = message.getSessionToken();
+        String sessionToken = ((SessionMessage) message).getSessionToken();
         System.out.println("Initialization phase - new player - nickname: " + nickname + " - sessionToken: " + sessionToken);
         phase.getMatchController().getMatch().addPlayer(new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken));
     }

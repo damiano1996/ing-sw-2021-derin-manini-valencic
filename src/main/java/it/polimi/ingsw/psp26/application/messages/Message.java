@@ -8,24 +8,11 @@ import java.util.List;
 
 public class Message implements Serializable {
 
-    private String sessionToken;
     private MessageType messageType;
     private List<String> jsonPayloads;
     private Class<?> payloadClass;
 
-    public Message() { // TODO: temporary
-        sessionToken = null;
-    }
-
-    public Message(String sessionToken, MessageType messageType) {
-        this.sessionToken = sessionToken;
-        this.messageType = messageType;
-    }
-
-    public Message(String sessionToken, MessageType messageType, Object... payloads) {
-        this.sessionToken = sessionToken;
-        this.messageType = messageType;
-        objectToJson(payloads);
+    public Message() {
     }
 
     public Message(MessageType messageType, Object... payloads) {
@@ -43,14 +30,6 @@ public class Message implements Serializable {
             );
     }
 
-    public String getSessionToken() {
-        return sessionToken;
-    }
-
-    public void setSessionToken(String sessionToken) {
-        this.sessionToken = sessionToken;
-    }
-
     public MessageType getMessageType() {
         return messageType;
     }
@@ -63,10 +42,14 @@ public class Message implements Serializable {
         return getPayload(0);
     }
 
-    public List<Object> getPayloads() {
+    public List<Object> getListPayloads() {
         List<Object> objectPayloads = new ArrayList<>();
         for (int i = 0; i < jsonPayloads.size(); i++)
             objectPayloads.add(getPayload(i));
         return objectPayloads;
+    }
+
+    public Object[] getArrayPayloads() {
+        return getListPayloads().toArray();
     }
 }

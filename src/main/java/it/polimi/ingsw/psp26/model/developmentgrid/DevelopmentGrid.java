@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model.developmentgrid;
 
 import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
@@ -12,7 +12,7 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.util.Collections;
 import java.util.List;
 
-public class DevelopmentGrid extends Observable<Message> {
+public class DevelopmentGrid extends Observable<SessionMessage> {
 
     public static final Color[] COLORS = new Color[]{Color.GREEN, Color.BLUE, Color.YELLOW, Color.PURPLE};
     public static final Level[] LEVELS = new Level[]{Level.THIRD, Level.SECOND, Level.FIRST};
@@ -27,7 +27,6 @@ public class DevelopmentGrid extends Observable<Message> {
 
         initializeGrid();
 
-        notifyObservers(new Message()); // TODO: to be completed
     }
 
     private void initializeGrid() {

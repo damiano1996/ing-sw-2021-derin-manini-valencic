@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.Objects;
@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Class modeling the vatican report section.
  */
-public class VaticanReportSection extends Observable<Message> {
+public class VaticanReportSection extends Observable<SessionMessage> {
 
     private final int value;
     private final int startSection;
@@ -32,7 +32,7 @@ public class VaticanReportSection extends Observable<Message> {
         this.endSection = endSection;
         this.value = value;
 
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -49,7 +49,7 @@ public class VaticanReportSection extends Observable<Message> {
      */
     public void activatePopesFavorTile() {
         popesFavorTileStatus = true;
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**

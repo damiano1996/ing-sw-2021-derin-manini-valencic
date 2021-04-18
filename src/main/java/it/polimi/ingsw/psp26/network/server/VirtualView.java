@@ -2,7 +2,7 @@ package it.polimi.ingsw.psp26.network.server;
 
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.Observer;
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VirtualView extends Observable<Message> implements Observer<Message> {
+public class VirtualView extends Observable<SessionMessage> implements Observer<SessionMessage> {
 
     private final MatchController matchController;
 
@@ -30,7 +30,7 @@ public class VirtualView extends Observable<Message> implements Observer<Message
      * @param message message to forward
      */
     @Override
-    public void update(Message message) {
+    public void update(SessionMessage message) {
         // it receives notification from model/controller and it has to notify the "real" view
         sendToClient(message);
     }
@@ -53,7 +53,7 @@ public class VirtualView extends Observable<Message> implements Observer<Message
             public void run() {
                 while (true) {
                     try {
-                        Message message = (Message) nodeClient.receiveObjectData();
+                        SessionMessage message = (SessionMessage) nodeClient.receiveObjectData();
                         notifyObservers(message); // send to match controller
                     } catch (IOException | ClassNotFoundException e) {
                         // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
@@ -71,7 +71,7 @@ public class VirtualView extends Observable<Message> implements Observer<Message
         return matchController;
     }
 
-    private void sendToClient(Message message) {
+    private void sendToClient(SessionMessage message) {
         try {
             if (nodeClients.get(message.getSessionToken()) != null)
                 nodeClients.get(message.getSessionToken()).sendData(message);

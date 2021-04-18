@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -17,7 +17,7 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
 /**
  * Class to model the depot (one shelf of the warehouse)
  */
-public class Depot extends Observable<Message> {
+public class Depot extends Observable<SessionMessage> {
 
     private final int maxNumberOfResources;
     private final List<Resource> resources;
@@ -34,7 +34,7 @@ public class Depot extends Observable<Message> {
         this.maxNumberOfResources = maxNumberOfResources;
         resources = new ArrayList<>();
 
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -67,7 +67,7 @@ public class Depot extends Observable<Message> {
         if (isAdmissible(resource)) resources.add(resource);
         else throw new CanNotAddResourceToDepotException();
 
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**

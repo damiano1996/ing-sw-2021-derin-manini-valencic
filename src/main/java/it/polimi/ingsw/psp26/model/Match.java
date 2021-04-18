@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
@@ -24,7 +24,7 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
 /**
  * Class that models the whole game
  */
-public class Match extends Observable<Message> {
+public class Match extends Observable<SessionMessage> {
 
     private final int id;
     private final List<Player> players;
@@ -56,7 +56,7 @@ public class Match extends Observable<Message> {
         initializeLeaderDeck();
         initializeActionTokenStack();
 
-        notifyObservers(new Message()); // TODO: to be completed properly
+        // notifyObservers(new Message()); // TODO: to be completed properly
     }
 
     /**

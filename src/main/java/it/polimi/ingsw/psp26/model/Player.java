@@ -1,8 +1,8 @@
 package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Class modeling the player.
  */
-public class Player extends Observable<Message> {
+public class Player extends Observable<SessionMessage> {
 
     private transient final VirtualView virtualView;
 
@@ -43,8 +43,8 @@ public class Player extends Observable<Message> {
         inkwell = false;
         leaderCards = new ArrayList<>();
 
-        notifyObservers(new Message());
-        notifyObservers(new Message(sessionToken, MessageType.PERSONAL_BOARD, this));
+        // notifyObservers(new Message());
+        notifyObservers(new SessionMessage(sessionToken, MessageType.PERSONAL_BOARD, this));
     }
 
     /**
@@ -90,7 +90,7 @@ public class Player extends Observable<Message> {
      */
     public void setLeaderCards(List<LeaderCard> leaderCards) {
         this.leaderCards = leaderCards;
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -107,7 +107,7 @@ public class Player extends Observable<Message> {
      */
     public void giveInkwell() {
         inkwell = true;
-        notifyObservers(new Message()); // TODO: to be completed
+        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**

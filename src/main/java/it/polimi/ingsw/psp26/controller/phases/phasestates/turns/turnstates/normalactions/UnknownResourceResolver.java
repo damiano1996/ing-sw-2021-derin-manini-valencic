@@ -2,12 +2,12 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 
 import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.Observer;
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
-public class UnknownResourceResolver extends Observable<Message> implements Observer<Message> {
+public class UnknownResourceResolver extends Observable<SessionMessage> implements Observer<SessionMessage> {
 
     private static UnknownResourceResolver instance;
 
@@ -16,13 +16,13 @@ public class UnknownResourceResolver extends Observable<Message> implements Obse
     private boolean isResourceDefined;
     private Resource resource;
 
-    private UnknownResourceResolver(Observer<Message> observer) {
+    private UnknownResourceResolver(Observer<SessionMessage> observer) {
         super();
         addObserver(observer);
         isResourceDefined = false;
     }
 
-    public static UnknownResourceResolver getInstance(Observer<Message> observer) {
+    public static UnknownResourceResolver getInstance(Observer<SessionMessage> observer) {
         if (instance == null)
             instance = new UnknownResourceResolver(observer);
 
@@ -30,7 +30,7 @@ public class UnknownResourceResolver extends Observable<Message> implements Obse
     }
 
     @Override
-    public void update(Message message) {
+    public void update(SessionMessage message) {
         if (message.getMessageType().equals(MessageType.CHOICE_RESOURCE) &&
                 player.getSessionToken().equals(message.getSessionToken())) {
             resource = (Resource) message.getPayload();
@@ -42,7 +42,7 @@ public class UnknownResourceResolver extends Observable<Message> implements Obse
     public Resource getResourceDefined(Player player) throws InterruptedException {
         this.player = player;
         notifyObservers(
-                new Message(
+                new SessionMessage(
                         player.getSessionToken(),
                         MessageType.CHOICE_RESOURCE,
                         Resource.COIN, Resource.STONE, Resource.SERVANT, Resource.SHIELD

@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
@@ -15,6 +16,8 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 public class BuyCardNormalActionTurnState extends TurnState {
     DevelopmentCard boughtCard = null;
@@ -30,15 +33,21 @@ public class BuyCardNormalActionTurnState extends TurnState {
             case BUY_CARD:
                 List<Resource> playerResources = getPlayerResources(turn.getTurnPlayer());
                 List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
-                getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
+                List<DevelopmentCard> gettableCards = getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
+                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_CARD_TO_BUY,1,1,
+                        gettableCards.toArray(new Object[0])
+                ));
+                break;
+            case CARD_TO_BUY_CHOSEN:
                 try {
                     boughtCard = buyCard((DevelopmentCard) message.getPayload(), turn.getTurnPlayer());
                 } catch (NegativeNumberOfElementsToGrabException e) {
                     e.printStackTrace();
                 }
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_POSITION);
+                turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                        CHOICE_POSITION,1,1, positionsForCard().toArray(new Object[0])
+                        ));
                 break;
 
             case POSITION_CHOSEN:
@@ -89,7 +98,6 @@ public class BuyCardNormalActionTurnState extends TurnState {
         try {
             drawnCard = turn.getMatchController().getMatch().getDevelopmentGrid().drawCard(playerCard.getDevelopmentCardType().getColor(), playerCard.getDevelopmentCardType().getLevel());
         } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) {
-            System.out.print("Error"); // To improve
         }
         for (Resource resource : drawnCard.getCost().keySet()) {
             numberResources = drawnCard.getCost().get(resource);
@@ -101,14 +109,27 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     }
 
+    private List<Integer> positionsForCard() {
+        List<Integer> CorrectPositions = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            CorrectPositions.add(i);
+            try {
+                turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(i, boughtCard);
+            } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
+                CorrectPositions.remove(i);
+            }
+        }
+        return CorrectPositions;
+    }
+
     private void placeCard(int position) {
         try {
             turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
             System.out.println("The position chosen is not correct, choose another one");
-            new SessionMessage(
-                    turn.getTurnPlayer().getSessionToken(),
-                    MessageType.CHOICE_POSITION);
+            turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                    CHOICE_POSITION,1,1, positionsForCard().toArray(new Object[0])
+            ));
         }
 
     }

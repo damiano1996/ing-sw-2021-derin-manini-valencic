@@ -38,9 +38,10 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         // TODO: to implement sub-states
         switch (message.getMessageType()) {
             case MARKET_RESOURCE:
+                int[] rowColumnInts = { 0, 1, 2, 3, 4, 5, 6};
                 turn.getMatchController().notifyObservers(
                         new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                                MessageType.CHOICE_ROW_COLUMN,1,1, tempResources));
+                                MessageType.CHOICE_ROW_COLUMN,1,1, rowColumnInts));
 
                 break;
             case ROW_COLUMN_CHOSEN:

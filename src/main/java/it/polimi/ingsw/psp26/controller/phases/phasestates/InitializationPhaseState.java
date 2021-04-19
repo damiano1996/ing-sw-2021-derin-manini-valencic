@@ -13,7 +13,7 @@ public class InitializationPhaseState extends PhaseState {
     }
 
     @Override
-    public void execute(Message message) {
+    public void execute(SessionMessage message) {
         super.execute(message);
 
         if (message.getMessageType() == MessageType.ADD_PLAYER) {
@@ -26,7 +26,7 @@ public class InitializationPhaseState extends PhaseState {
                 phase.getMatchController().stopWaitingForPlayers();
                 // Updating the state. The match can begin!
                 phase.changeState(new PlayingPhaseState(phase));
-                phase.execute(new Message());
+                phase.execute(message);
             }
         }
     }

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.InitializationPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PhaseState;
@@ -20,7 +20,7 @@ public class Phase {
         phaseState = new InitializationPhaseState(this);
     }
 
-    public void execute(Message message) {
+    public void execute(SessionMessage message) {
         phaseState.execute(message);
     }
 

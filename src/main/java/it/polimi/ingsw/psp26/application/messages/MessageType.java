@@ -58,5 +58,8 @@ public enum MessageType {
     PERSONAL_BOARD,
 
     // tmp
-    CHOICE_RESOURCE;
+    CHOICE_RESOURCE,
+    PLACE_IN_WAREHOUSE,
+
+    FIRST_RESOURCE;
 }

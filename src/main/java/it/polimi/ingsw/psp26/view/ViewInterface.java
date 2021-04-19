@@ -6,7 +6,6 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -36,6 +35,11 @@ public interface ViewInterface {
 
     void displayWarehouseDepots(List<Depot> warehouseDepot);
 
+    /**
+     * First list are new depotResources received by the client.
+     */
+    void displayDepotsNewResourcesAssignment(List<Resource> resourcesToAdd, List<List<Resource>> depots);
+
 
     void displayStrongbox(List<Resource> strongbox);
 
@@ -61,16 +65,10 @@ public interface ViewInterface {
     void displayMarketScreen(MarketTray marketTray);
 
 
-    void displayDevelopmentGridCardSelection(DevelopmentGrid developmentGrid);
-
-
     void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices);
 
 
     void displayActionTokens(List<ActionToken> unusedTokens);
-
-
-    void displayDevelopmentCardDiscard(DevelopmentGrid developmentGrid, DevelopmentCardType developmentCardType);
 
 
     void displayText(String text);

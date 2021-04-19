@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
@@ -8,8 +7,6 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-
-import java.util.HashMap;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
 
@@ -22,7 +19,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
     }
 
     @Override
-    public void play(Message message) {
+    public void play(SessionMessage message) {
         super.play(message);
 
         if (message.getPayload().equals(MessageType.ACTIVATE_LEADER) || message.getPayload().equals(MessageType.DISCARD_LEADER))
@@ -49,7 +46,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
         }
     }
 
-    private void playAction(LeaderCard leaderCard, Message message) {
+    private void playAction(LeaderCard leaderCard, SessionMessage message) {
         switch (lastMessage) {
             case ACTIVATE_LEADER:
                 activateLeader(leaderCard); // no needs to check vatican report after activation
@@ -79,9 +76,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
                 new SessionMessage(
                         turn.getTurnPlayer().getSessionToken(),
                         MessageType.LEADER_ACTIVATED,
-                        new HashMap<>() {{
-                            put("leaderCard", leaderCard);
-                        }}
+                        leaderCard
                 )
         );
     }

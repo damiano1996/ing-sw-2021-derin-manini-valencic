@@ -11,14 +11,13 @@ import java.util.List;
  */
 public class ResourceSupply {
 
-    private final Resource[] slots;
+    public static final Resource[] RESOURCES_SLOTS = new Resource[]{Resource.COIN, Resource.STONE, Resource.SERVANT, Resource.SHIELD};
 
     /**
      * Constructor of the class.
      * It initializes an array specifying which resource is contained in each slot.
      */
     public ResourceSupply() {
-        slots = new Resource[]{Resource.COIN, Resource.STONE, Resource.SERVANT, Resource.SHIELD};
     }
 
     /**
@@ -30,11 +29,11 @@ public class ResourceSupply {
      * @throws ResourceSupplySlotOutOfBoundsException if the requested index is out of bounds
      */
     public List<Resource> grabResources(int indexSlot, int amountOfResources) throws ResourceSupplySlotOutOfBoundsException {
-        if (indexSlot < 0 || indexSlot >= slots.length) throw new ResourceSupplySlotOutOfBoundsException();
+        if (indexSlot < 0 || indexSlot >= RESOURCES_SLOTS.length) throw new ResourceSupplySlotOutOfBoundsException();
 
         List<Resource> resources = new ArrayList<>();
         for (int i = 0; i < amountOfResources; i++) {
-            resources.add(slots[indexSlot]);
+            resources.add(RESOURCES_SLOTS[indexSlot]);
         }
         return resources;
     }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
@@ -28,7 +27,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         super(turn);
     }
 
-    public void play(Message message) { // TO BE FINISHED
+    public void play(SessionMessage message) { // TO BE FINISHED
 
         if (!IsBasePowerPresent(castElements(DevelopmentCard.class, message.getListPayloads()))) {
             List<Resource> resourcesProduced = new ArrayList<>(); //
@@ -143,14 +142,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 cleanResources.put(rawResource, quantity);
             } else {
 
-                UnknownResourceResolver unknownResourceResolver = UnknownResourceResolver.getInstance(
-                        turn.getMatchController().getVirtualView());
-
-                try {
-                    cleanResources.put(unknownResourceResolver.getResourceDefined(turn.getTurnPlayer()), quantity);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                UnknownResourceResolver unknownResourceResolver = new UnknownResourceResolver(turn.getMatchController().getVirtualView(), turn.getTurnPlayer());
+//
+//                try {
+//                    cleanResources.put(unknownResourceResolver.getResource(), quantity);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
         }
         return cleanResources;

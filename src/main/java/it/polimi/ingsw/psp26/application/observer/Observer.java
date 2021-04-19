@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.application;
+package it.polimi.ingsw.psp26.application.observer;
 
 public interface Observer<T> {
 

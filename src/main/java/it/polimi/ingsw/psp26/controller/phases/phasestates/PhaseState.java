@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 
 public abstract class PhaseState {
@@ -11,6 +11,6 @@ public abstract class PhaseState {
         this.phase = phase;
     }
 
-    public void execute(Message message) {
+    public void execute(SessionMessage message) {
     }
 }

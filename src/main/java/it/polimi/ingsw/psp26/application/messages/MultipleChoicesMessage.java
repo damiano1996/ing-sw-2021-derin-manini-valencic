@@ -26,4 +26,12 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
     public int getMaxChoices() {
         return maxChoices;
     }
+
+    @Override
+    public String toString() {
+        return "MultipleChoicesMessage{" +
+                "minChoices=" + minChoices +
+                ", maxChoices=" + maxChoices +
+                "} " + super.toString();
+    }
 }

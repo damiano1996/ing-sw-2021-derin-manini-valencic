@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model;
 
-import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.application;
+package it.polimi.ingsw.psp26.application.observer;
 
 import java.util.ArrayList;
 import java.util.List;

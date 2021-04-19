@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
@@ -17,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.MatchUtils.getAllPlayerResources;
 
 public class BuyCardNormalActionTurnState extends TurnState {
     DevelopmentCard boughtCard = null;
@@ -26,16 +26,16 @@ public class BuyCardNormalActionTurnState extends TurnState {
         super(turn);
     }
 
-    public void play(Message message) {
+    public void play(SessionMessage message) {
         super.play(message);
 
         switch (message.getMessageType()) {
             case BUY_CARD:
-                List<Resource> playerResources = getPlayerResources(turn.getTurnPlayer());
+                List<Resource> playerResources = getAllPlayerResources(turn.getTurnPlayer());
                 List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
                 List<DevelopmentCard> gettableCards = getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
                 turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_CARD_TO_BUY,1,1,
+                        MessageType.CHOICE_CARD_TO_BUY, 1, 1,
                         gettableCards.toArray(new Object[0])
                 ));
                 break;
@@ -45,9 +45,9 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 } catch (NegativeNumberOfElementsToGrabException e) {
                     e.printStackTrace();
                 }
-                turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        CHOICE_POSITION,1,1, positionsForCard().toArray(new Object[0])
-                        ));
+                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                        CHOICE_POSITION, 1, 1, positionsForCard().toArray(new Object[0])
+                ));
                 break;
 
             case POSITION_CHOSEN:
@@ -64,12 +64,6 @@ public class BuyCardNormalActionTurnState extends TurnState {
         }
     }
 
-    private List<Resource> getPlayerResources(Player player) {
-        List<Resource> resources = new ArrayList<>();
-        player.getPersonalBoard().getWarehouseDepots().stream().forEach(x -> resources.addAll(x.getResources()));
-        resources.addAll(player.getPersonalBoard().getStrongbox());
-        return resources;
-    }
 
     private List<DevelopmentCard> getAvailableCard(Match match, List<Resource> resources, List<DevelopmentCard> playerCard) {
         List<DevelopmentCard> availableCard = new ArrayList<>();
@@ -127,8 +121,8 @@ public class BuyCardNormalActionTurnState extends TurnState {
             turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
             System.out.println("The position chosen is not correct, choose another one");
-            turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                    CHOICE_POSITION,1,1, positionsForCard().toArray(new Object[0])
+            turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                    CHOICE_POSITION, 1, 1, positionsForCard().toArray(new Object[0])
             ));
         }
 

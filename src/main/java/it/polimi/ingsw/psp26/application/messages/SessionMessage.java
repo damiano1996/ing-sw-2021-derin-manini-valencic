@@ -19,4 +19,10 @@ public class SessionMessage extends Message implements Serializable {
         this.sessionToken = sessionToken;
     }
 
+    @Override
+    public String toString() {
+        return "SessionMessage{" +
+                "sessionToken='" + sessionToken + '\'' +
+                "} " + super.toString();
+    }
 }

@@ -1,13 +1,18 @@
 package it.polimi.ingsw.psp26.network.client;
 
-import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
+import it.polimi.ingsw.psp26.application.observer.Observable;
+import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class Client extends Observable<Message> implements Observer<Message> {
 
@@ -24,6 +29,7 @@ public class Client extends Observable<Message> implements Observer<Message> {
 
     @Override
     public void update(Message message) {
+        MultipleChoicesMessage mcm;
 
         switch (message.getMessageType()) {
 
@@ -31,27 +37,53 @@ public class Client extends Observable<Message> implements Observer<Message> {
                 viewInterface.displayText((String) message.getPayload());
                 break;
 
+            case CHOICE_RESOURCE:
+                mcm = (MultipleChoicesMessage) message;
+                viewInterface.displayChoices(
+                        mcm.getMessageType(),
+                        "Choose resource:",
+                        mcm.getListPayloads(),
+                        mcm.getMinChoices(), mcm.getMaxChoices()
+                );
+                break;
+
             case CHOICE_LEADER_ACTION:
-                MultipleChoicesMessage mcm = (MultipleChoicesMessage) message;
+                mcm = (MultipleChoicesMessage) message;
                 viewInterface.displayChoices(
                         mcm.getMessageType(),
                         "Choose leader action:",
                         mcm.getListPayloads(),
                         mcm.getMinChoices(), mcm.getMaxChoices()
                 );
+                break;
 
             case PERSONAL_BOARD:
                 Player player = (Player) message.getPayload();
                 viewInterface.displayPersonalBoard(player);
+                break;
 
             case CHOICE_NORMAL_ACTION:
-                MultipleChoicesMessage mcmNA = (MultipleChoicesMessage) message;
+                mcm = (MultipleChoicesMessage) message;
                 viewInterface.displayChoices(
-                        mcmNA.getMessageType(),
+                        mcm.getMessageType(),
                         "Choose normal action:",
-                        mcmNA.getListPayloads(),
-                        mcmNA.getMinChoices(), mcmNA.getMaxChoices()
+                        mcm.getListPayloads(),
+                        mcm.getMinChoices(), mcm.getMaxChoices()
                 );
+                break;
+
+            case PLACE_IN_WAREHOUSE:
+                List<List<Resource>> resourcesWarehouse = new ArrayList<>();
+
+                for (Object o : message.getListPayloads()) {
+                    List<Resource> resources = castElements(Resource.class, (List<Object>) o);
+                    resourcesWarehouse.add(resources);
+                }
+
+                List<Resource> resourcesToAdd = resourcesWarehouse.remove(0);
+
+                viewInterface.displayDepotsNewResourcesAssignment(resourcesToAdd, resourcesWarehouse);
+
             default:
                 break;
         }

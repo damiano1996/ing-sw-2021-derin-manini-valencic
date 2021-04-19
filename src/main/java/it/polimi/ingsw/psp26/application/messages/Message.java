@@ -34,6 +34,10 @@ public class Message implements Serializable {
         return messageType;
     }
 
+    public int getNumberOfPayloads() {
+        return jsonPayloads.size();
+    }
+
     public Object getPayload(int index) {
         return GsonConverter.getInstance().getGson().fromJson(jsonPayloads.get(index), payloadClass);
     }
@@ -51,5 +55,14 @@ public class Message implements Serializable {
 
     public Object[] getArrayPayloads() {
         return getListPayloads().toArray();
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "messageType=" + messageType +
+                ", jsonPayloads=" + jsonPayloads +
+                ", payloadClass=" + payloadClass +
+                '}';
     }
 }

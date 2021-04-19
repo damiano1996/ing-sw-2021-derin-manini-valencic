@@ -1,8 +1,8 @@
 package it.polimi.ingsw.psp26.controller;
 
-import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.application.observer.Observable;
+import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;

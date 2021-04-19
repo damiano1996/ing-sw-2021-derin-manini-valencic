@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
@@ -34,41 +33,41 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         super(turn);
     }
 
-    public void play(Message message) {
+    public void play(SessionMessage message) {
         // TODO: to implement sub-states
         switch (message.getMessageType()) {
             case MARKET_RESOURCE:
-                int[] rowColumnInts = { 0, 1, 2, 3, 4, 5, 6};
+                int[] rowColumnInts = {0, 1, 2, 3, 4, 5, 6};
                 turn.getMatchController().notifyObservers(
                         new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                                MessageType.CHOICE_ROW_COLUMN,1,1, rowColumnInts));
+                                MessageType.CHOICE_ROW_COLUMN, 1, 1, rowColumnInts));
 
                 break;
             case ROW_COLUMN_CHOSEN:
                 int RowColumnInt = (int) message.getPayload();
                 if (RowColumnInt >= 4) {
-                    tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(RowColumnInt%4));
-                    turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToColumn(RowColumnInt%4);
+                    tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(RowColumnInt % 4));
+                    turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToColumn(RowColumnInt % 4);
                 } else {
                     tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnColumn(RowColumnInt));
                     turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(RowColumnInt);
                 }
                 isRedMarblePresent(turn.getTurnPlayer());
                 tempResources = parseResource();
-                turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_ORGANIZATION_MOVE,1,1,
+                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
                         RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
                 break;
             case RESOURCE_POSITION_CHOSEN_ONE:
-                turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        CHOICE_RESOURCE,1,1,
+                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                        CHOICE_RESOURCE, 1, 1,
                         Resource.COIN, Resource.STONE, Resource.SHIELD, Resource.SERVANT));
                 break;
             case CHOICE_RESOURCE:
                 List<Depot> currentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepots();
                 moveResourceFromSlideToDepot(Resource.COIN, currentDepotsStatus.get(1));
-                turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_ORGANIZATION_MOVE,1,1,
+                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
                         RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
                 break;
             case GRAB_RESOURCES:
@@ -77,8 +76,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
                     e.printStackTrace();
                 }
-                turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_ORGANIZATION_MOVE,1,1,
+                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
                         RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
 
             case MARKET_NEXT:
@@ -100,7 +99,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
     private void moveResourceFromSlideToDepot(Resource resource, Depot depot) {
         List<Resource> DepotCopy = new ArrayList<>();
         DepotCopy.addAll(depot.getResources());
-        for (int i = 0; i < Math.min((int) tempResources.stream().filter(x -> x.equals(resource)).count(),depot.getMaxNumberOfResources()); i++) {
+        for (int i = 0; i < Math.min((int) tempResources.stream().filter(x -> x.equals(resource)).count(), depot.getMaxNumberOfResources()); i++) {
             try {
                 depot.addResource(resource);
             } catch (CanNotAddResourceToDepotException e) {
@@ -109,8 +108,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     for (int j = 0; j < DepotCopy.size(); j++) {
                         depot.addResource(DepotCopy.get(0));
                     }
-                    turn.getMatchController().notifyObservers( new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                            MessageType.CHOICE_ORGANIZATION_MOVE,1,1,
+                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                            MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
                             RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
                 } catch (NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {
                     exc.printStackTrace();

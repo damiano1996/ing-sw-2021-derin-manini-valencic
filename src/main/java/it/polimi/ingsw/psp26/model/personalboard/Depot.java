@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
-import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.enums.Resource;

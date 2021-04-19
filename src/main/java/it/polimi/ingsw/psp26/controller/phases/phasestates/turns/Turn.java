@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.BenefitsTurnState;
@@ -34,8 +34,9 @@ public class Turn {
         turnState = new BenefitsTurnState(this);
     }
 
-    public void play(Message message) {
-        turnState.play(message);
+    public void play(SessionMessage message) {
+        if (message.getSessionToken().equals(turnPlayer.getSessionToken()))
+            turnState.play(message);
     }
 
     public void changeState(TurnState newTurnState) {

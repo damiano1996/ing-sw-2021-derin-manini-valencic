@@ -1,8 +1,8 @@
 package it.polimi.ingsw.psp26.model;
 
-import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;

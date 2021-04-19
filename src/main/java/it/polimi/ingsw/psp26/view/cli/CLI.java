@@ -7,7 +7,6 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
@@ -142,6 +141,11 @@ public class CLI implements ViewInterface {
     }
 
     @Override
+    public void displayDepotsNewResourcesAssignment(List<Resource> resourcesToAdd, List<List<Resource>> depots) {
+
+    }
+
+    @Override
     public void displayStrongbox(List<Resource> strongbox) {
         depotCli.displayStrongbox(strongbox, 30, 3);
     }
@@ -175,10 +179,6 @@ public class CLI implements ViewInterface {
         developmentCardsCli.displayDevelopmentGrid(developmentGrid);
     }
 
-    @Override
-    public void displayDevelopmentGridCardSelection(DevelopmentGrid developmentGrid) {
-        //Already done by displayChoices() + displayDevelopmentGrid()
-    }
 
     @Override
     public void displayResourceSupply(ResourceSupply resourceSupply) {
@@ -200,10 +200,6 @@ public class CLI implements ViewInterface {
         personalBoardCli.displayActionTokens(unusedTokens);
     }
 
-    @Override
-    public void displayDevelopmentCardDiscard(DevelopmentGrid developmentGrid, DevelopmentCardType developmentCardType) {
-        //To be implemented
-    }
 
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
@@ -211,7 +207,6 @@ public class CLI implements ViewInterface {
         cliUtils.cls();
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + question);
-
 
         switch (messageType) {
 
@@ -228,7 +223,6 @@ public class CLI implements ViewInterface {
             case ACTIVATE_PRODUCTION:
                 displayProductionActivation(ArrayListUtils.castElements(Production.class, choices));
                 break;
-
 
             case MARKET_RESOURCE: //TODO Ipotizzando che sia l'azione per scegliere il numero della riga o colonna, andrebbe messo un messaggio per scegliere se fare riga o colonna prima
                 //MarketTray is the unique element of choices List
@@ -267,22 +261,10 @@ public class CLI implements ViewInterface {
 //                );
                 break;
 
-            case INITIAL_RESOURCE_ASSIGNMENT: //TODO se guardi nel test ho ipotizzato che venga richiesta una risorsa alla volta perchè altrimenti non potrebbe scegliere la stessa due volte o non si saprebbe quante ne deve scegliere se c'è solo la ResourceSupply nella lista di choices
+            case CHOICE_RESOURCE:
                 //ResourceSupply is the unique element of choices List
-                displayResourceSupply((ResourceSupply) choices.get(0));
-//                //Making space for the question
-//                cliUtils.vSpace(10);
-//                pw.println(cliUtils.hSpace(3) + question);
-//                cliUtils.vSpace(1);
-//                //selected = Integer
-//                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-//
-//                client.notifyObservers(
-//                        new Message(
-//                                INITIAL_RESOURCE_ASSIGNMENT,
-//                                selected.toArray(new Object[0]) // to array
-//                        )
-//                );
+                displayResourceSupply(new ResourceSupply());
+                cliUtils.vSpace(10);
                 break;
 
 
@@ -296,10 +278,10 @@ public class CLI implements ViewInterface {
         // send to server response
         client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
 
+        pw.flush();
+
         if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE))
             client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
-
-        pw.flush();
     }
 
     private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices) {

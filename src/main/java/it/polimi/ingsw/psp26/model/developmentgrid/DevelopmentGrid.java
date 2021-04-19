@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.model.developmentgrid;
 
-import it.polimi.ingsw.psp26.application.Observable;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;

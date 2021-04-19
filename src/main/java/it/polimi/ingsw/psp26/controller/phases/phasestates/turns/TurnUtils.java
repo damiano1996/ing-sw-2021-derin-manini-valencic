@@ -1,13 +1,13 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
 
 public class TurnUtils {
 
-    public static void goToNextStateAfterLeaderAction(Turn turn, Message message) {
+    public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
         switch (turn.getTurnPhase()) {
 
             case LEADER_TO_NORMAL_ACTION:

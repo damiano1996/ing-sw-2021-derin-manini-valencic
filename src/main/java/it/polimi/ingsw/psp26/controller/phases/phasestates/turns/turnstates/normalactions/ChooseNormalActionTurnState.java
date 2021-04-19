@@ -1,8 +1,8 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -16,7 +16,7 @@ public class ChooseNormalActionTurnState extends TurnState {
     }
 
     @Override
-    public void play(Message message) {
+    public void play(SessionMessage message) {
         super.play(message);
 
         if (message.getMessageType().equals(CHOICE_NORMAL_ACTION)) {
@@ -36,7 +36,7 @@ public class ChooseNormalActionTurnState extends TurnState {
 
         } else {
             turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                    CHOICE_NORMAL_ACTION,1,1,
+                    CHOICE_NORMAL_ACTION, 1, 1,
                     ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD));
         }
 

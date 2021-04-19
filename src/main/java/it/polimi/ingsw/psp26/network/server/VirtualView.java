@@ -1,8 +1,8 @@
 package it.polimi.ingsw.psp26.network.server;
 
-import it.polimi.ingsw.psp26.application.Observable;
-import it.polimi.ingsw.psp26.application.Observer;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.application.observer.Observable;
+import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
@@ -36,7 +36,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
     }
 
     public void addNetworkNodeClient(String sessionToken, NetworkNode nodeClient) {
-        System.out.println("A new client has been added to this virtual view.");
+        System.out.println("VirtualView - new client has been added.");
         nodeClients.put(sessionToken, nodeClient);
         startListening(nodeClient);
     }
@@ -48,16 +48,15 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
      */
     private void startListening(NetworkNode nodeClient) {
         // it receives message from the communication channel and it has to forward the message to the controller
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        SessionMessage message = (SessionMessage) nodeClient.receiveObjectData();
-                        notifyObservers(message); // send to match controller
-                    } catch (IOException | ClassNotFoundException e) {
-                        // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
-                    }
+        new Thread(() -> {
+            System.out.println("Starting to listen client node.");
+            while (true) {
+                try {
+                    SessionMessage message = (SessionMessage) nodeClient.receiveObjectData();
+                    System.out.println("VirtualView - message received: " + message.toString());
+                    notifyObservers(message);
+                } catch (IOException | ClassNotFoundException e) {
+                    // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }
             }
         }).start();

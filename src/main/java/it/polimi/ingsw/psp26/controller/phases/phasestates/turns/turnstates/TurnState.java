@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 
 public abstract class TurnState {
@@ -11,6 +11,6 @@ public abstract class TurnState {
         this.turn = turn;
     }
 
-    public void play(Message message) {
+    public void play(SessionMessage message) {
     }
 }

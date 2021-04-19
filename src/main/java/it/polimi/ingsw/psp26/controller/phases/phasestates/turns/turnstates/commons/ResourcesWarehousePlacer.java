@@ -50,18 +50,23 @@ public class ResourcesWarehousePlacer extends TurnState {
                 int quantity = Collections.frequency(playerResources, resourceOrder.get(i));
 
                 try {
-
                     // before to add, we have to clean the depot
                     turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(i).grabAllResources();
-                    // now we can add the resources
-                    for (int j = 0; j < quantity; j++)
-                        turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(i).addResource(resourceOrder.get(i));
 
+                    // now we can add the resources
+                    for (int j = 0; j < quantity; j++) {
+                        try {
+                            // try to add
+                            turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(i).addResource(resourceOrder.get(i));
+                        } catch (CanNotAddResourceToDepotException e) {
+                            // if not possible we discard the resource and later we will assign points to opponents
+                            discardedResources += 1;
+                        }
+                    }
                 } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
                     e.printStackTrace();
-                } catch (CanNotAddResourceToDepotException e) {
-                    discardedResources += 1;
                 }
+
             }
 
             // adding FP to other players

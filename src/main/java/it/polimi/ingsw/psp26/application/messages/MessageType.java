@@ -23,18 +23,27 @@ public enum MessageType {
 
     //Normal actions:
     CHOICE_NORMAL_ACTION, // to display to the client the normal action options
+
     ACTIVATE_PRODUCTION, // action
     CHOICE_RESOURCE_IN_RESOURCE_OUT, //to display to the client the resource to use in base power
     MARKET_RESOURCE, // action
+
     BUY_CARD, // action
+    CHOICE_CARD_TO_BUY, // to display the cards available to be bought
+    CARD_TO_BUY_CHOSEN, // DevelopmentCard chosen to be bought
+    CHOICE_POSITION, // to display the position of the card
+    POSITION_CHOSEN, // position chosen of the bought card
+
     CHOICE_RESOURCE_POSITION, // to display the position and resource
+    CHOICE_ROW_COLUMN, // to display the column or the row
+    ROW_COLUMN_CHOSEN, // row or column chosen
     MARKET_NEXT, // move to next turnPhase
     GRAB_RESOURCES,// Grab all resources from a depot
     CHOICE_ORGANIZATION_MOVE, // to display the moves possible about the organization
-    RESOURCE_POSITION_CHOSEN, // resource e position chosen
-    POSITION_CHOSEN, // position chosen of the bought card
+    RESOURCE_POSITION_CHOSEN_ONE, // resource position chosen
+    RESOURCE_POSITION_CHOSEN_TWO, //
+
     RESOURCE_CHOSEN, // resource chosen to use in base power
-    CHOICE_POSITION, // to display the position of the card
 
     // Leader action activation:
     LEADER_CHOSEN,

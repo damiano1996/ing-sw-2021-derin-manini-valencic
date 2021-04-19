@@ -44,6 +44,14 @@ public class Client extends Observable<Message> implements Observer<Message> {
                 Player player = (Player) message.getPayload();
                 viewInterface.displayPersonalBoard(player);
 
+            case CHOICE_NORMAL_ACTION:
+                MultipleChoicesMessage mcmNA = (MultipleChoicesMessage) message;
+                viewInterface.displayChoices(
+                        mcmNA.getMessageType(),
+                        "Choose normal action:",
+                        mcmNA.getListPayloads(),
+                        mcmNA.getMinChoices(), mcmNA.getMaxChoices()
+                );
             default:
                 break;
         }

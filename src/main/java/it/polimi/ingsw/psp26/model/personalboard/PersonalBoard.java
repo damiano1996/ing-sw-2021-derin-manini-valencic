@@ -136,7 +136,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
         List<DevelopmentCard> visibleDevelopmentCards = getVisibleDevelopmentCards();
         List<Production> visibleProductions = visibleDevelopmentCards.stream().map(DevelopmentCard::getProduction).collect(Collectors.toList());
         visibleProductions.addAll(productions);
-        return visibleProductions;
+        return Collections.unmodifiableList(visibleProductions);
     }
 
     /**

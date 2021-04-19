@@ -2,8 +2,10 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates;
 
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacer;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.List;
@@ -22,29 +24,32 @@ public class BenefitsTurnState extends TurnState {
     public void play(SessionMessage message) {
         System.out.println("BenefitsTurnState - " + message.toString());
 
-        // TODO: give leader cards...
+        // skipping if first turn played by all players
+        if (turn.getTurnNumber() > turn.getMatchController().getMatch().getPlayers().size() - 1) {
+            turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
+            turn.play(message);
 
-        switch (turn.getTurnNumber()) {
-            case 3:
-                turn.getTurnPlayer().giveInkwell();
-                break;
+        } else {
 
-            case 1:
-                assignResources(message, 1, false);
-                break;
+            switch (turn.getTurnNumber()) {
+                case 0:
+                    turn.getTurnPlayer().giveInkwell();
+                    break;
 
-            case 2:
-                assignResources(message, 1, true);
-                break;
+                case 1:
+                    assignResources(message, 1, false);
+                    break;
 
-            case 0:
-                assignResources(message, 2, true);
-                break;
+                case 2:
+                    assignResources(message, 1, true);
+                    break;
+
+                case 3:
+                    assignResources(message, 2, true);
+                    break;
+            }
         }
 
-        // next state is...
-        // step 2: leader action (-> check vatican report -> check endgame)
-        // turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
     }
 
     public void assignResources(SessionMessage message, int numOfResources, boolean faithPoint) {
@@ -57,12 +62,12 @@ public class BenefitsTurnState extends TurnState {
                 turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1);
 
             turn.changeState(new ResourcesWarehousePlacer(turn, resources));
-            turn.play(message);
 
         } else {
             turn.changeState(new OneResourceTurnState(turn, this, numOfResources));
-            turn.play(message);
         }
+
+        turn.play(message);
     }
 
 }

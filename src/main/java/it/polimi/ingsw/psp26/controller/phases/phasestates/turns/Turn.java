@@ -3,7 +3,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.BenefitsTurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.LeaderCardsAssignment;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.model.Player;
 
@@ -23,6 +23,7 @@ public class Turn {
         this.turnPlayer = turnPlayer;
         this.turnNumber = turnNumber;
 
+        // step 0: assign leaders
         // step 1: check first turn benefits // it can be performed every time
         // step 2: leader action (-> check vatican report -> check endgame)
         // step 3: normal action (-> check vatican report -> check endgame)
@@ -30,8 +31,7 @@ public class Turn {
         // step 5: next turn
 
         // starting from:
-        // step 1: check first turn benefits // it can be performed every time
-        turnState = new BenefitsTurnState(this);
+        turnState = new LeaderCardsAssignment(this);
     }
 
     public void play(SessionMessage message) {

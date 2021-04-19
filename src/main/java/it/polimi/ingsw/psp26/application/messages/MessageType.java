@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.application.messages;
 public enum MessageType {
 
     GENERAL_MESSAGE,
+    ERROR_MESSAGE,
 
     // Initialize game:
     MULTI_OR_SINGLE_PLAYER_MODE,
@@ -11,7 +12,7 @@ public enum MessageType {
     THREE_PLAYERS_MODE,
     FOUR_PLAYERS_MODE,
     ADD_PLAYER,
-    INITIAL_RESOURCE_ASSIGNMENT, // to display the choice of the initial Resource to the Players that starts second, third or fourth
+    CHOICE_LEADERS,
 
     // Leader actions:
     CHOICE_LEADER_ACTION, // to display to the client the leader action options
@@ -61,5 +62,5 @@ public enum MessageType {
     CHOICE_RESOURCE,
     PLACE_IN_WAREHOUSE,
 
-    FIRST_RESOURCE;
+    FIRST_RESOURCE
 }

@@ -76,7 +76,7 @@ public class ResourcesWarehousePlacer extends TurnState {
             turn.play(message);
 
         } else {
-            sendMessage(resourcesToAdd);
+            sendMessage();
         }
 
     }
@@ -86,9 +86,8 @@ public class ResourcesWarehousePlacer extends TurnState {
      * Method to send resources and warehouse to view.
      * By protocol design, the first element of the payload represents the resources that the player has received.
      *
-     * @param resourcesToAdd resources received by the player
      */
-    private void sendMessage(List<Resource> resourcesToAdd) {
+    private void sendMessage() {
         System.out.println("ResourcesWarehousePlacer - sending message to " + turn.getTurnPlayer().getNickname());
 
         turn.getMatchController().notifyObservers(

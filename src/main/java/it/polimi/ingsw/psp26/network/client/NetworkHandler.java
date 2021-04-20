@@ -50,6 +50,7 @@ public class NetworkHandler extends Observable<Message> implements Observer<Mess
                 while (true) {
                     try {
                         Message message = (Message) networkNode.receiveObjectData();
+                        System.out.println("NetworkHandler - new message received: " + message.toString());
                         notifyObservers(message);
                     } catch (IOException | ClassNotFoundException e) {
                         // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.

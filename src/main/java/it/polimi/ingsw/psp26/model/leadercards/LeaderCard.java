@@ -55,8 +55,8 @@ public class LeaderCard {
         return victoryPoints;
     }
 
-    public String getAbilityName() {
-        return specialAbility.getName();
+    public String getAbilityToString() {
+        return specialAbility.toString();
     }
 
     public Resource getAbilityResource() {

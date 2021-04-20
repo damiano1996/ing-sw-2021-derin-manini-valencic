@@ -15,13 +15,13 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.utils.ArrayListUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.PrintWriter;
 import java.util.*;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
 
 public class CLI implements ViewInterface {
@@ -216,12 +216,13 @@ public class CLI implements ViewInterface {
                 displayMultipleMessageTypeChoices(choices);
                 break;
 
+            case CHOICE_LEADERS:
             case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
-                displayLeaderCardDiscardActivationSelection(ArrayListUtils.castElements(LeaderCard.class, choices));
+                displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
                 break;
 
             case ACTIVATE_PRODUCTION:
-                displayProductionActivation(ArrayListUtils.castElements(Production.class, choices));
+                displayProductionActivation(castElements(Production.class, choices));
                 break;
 
             case MARKET_RESOURCE: //TODO Ipotizzando che sia l'azione per scegliere il numero della riga o colonna, andrebbe messo un messaggio per scegliere se fare riga o colonna prima
@@ -266,7 +267,6 @@ public class CLI implements ViewInterface {
                 displayResourceSupply(new ResourceSupply());
                 cliUtils.vSpace(10);
                 break;
-
 
             default:
                 break;

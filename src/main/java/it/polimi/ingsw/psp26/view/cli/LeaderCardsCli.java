@@ -107,7 +107,9 @@ public class LeaderCardsCli {
      * @param startingColumn The column in which the Leader Card will be printed
      */
     public void printLeader(LeaderCard leaderCard, int startingRow, int startingColumn) {
-        cliUtils.printFigure(leaderCard.getAbilityName(), startingRow, startingColumn);
+        cliUtils.printFigure(
+                "leadercards/" + leaderCard.getAbilityToString().split(":")[0],
+                startingRow, startingColumn);
         printLeaderRequirements(leaderCard, startingRow, startingColumn);
         //Prints the colored square for the Resource information
         cliUtils.pPCS("\u25A0", leaderCard.getAbilityResource().getColor(), startingRow + 16, startingColumn + 22);

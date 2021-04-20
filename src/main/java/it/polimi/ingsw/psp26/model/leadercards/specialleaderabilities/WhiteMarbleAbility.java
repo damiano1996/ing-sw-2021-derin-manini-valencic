@@ -8,10 +8,4 @@ public class WhiteMarbleAbility extends SpecialAbility {
         super(resource);
     }
 
-    /**
-     * @return The Production name
-     */
-    public String getName() {
-        return "MarbleLeader";
-    }
 }

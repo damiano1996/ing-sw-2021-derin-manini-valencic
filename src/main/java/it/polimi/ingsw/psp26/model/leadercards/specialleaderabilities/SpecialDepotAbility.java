@@ -18,11 +18,4 @@ public class SpecialDepotAbility extends SpecialAbility {
         player.getPersonalBoard().getWarehouse().addLeaderDepot(leaderDepot);
     }
 
-    /**
-     * @return The Production name
-     */
-    public String getName() {
-        return "DepotLeader";
-    }
-
 }

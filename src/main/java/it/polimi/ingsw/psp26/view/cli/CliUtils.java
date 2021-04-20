@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import static it.polimi.ingsw.psp26.configurations.Configurations.CLI_RESOURCES_PATH;
+import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH;
 
 public class CliUtils {
 
@@ -121,12 +121,11 @@ public class CliUtils {
      * @param col        The x coordinate
      */
     public void printFigure(String figureName, int row, int col) { //PATHS MAY DIFFER IN THE FINAL SOLUTION
-        String ubuntuPath = CLI_RESOURCES_PATH + figureName;
 
         Scanner in = null;
 
         try {
-            in = new Scanner(new File(ubuntuPath));
+            in = new Scanner(new File(RESOURCES_PATH + "cli/" + figureName));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

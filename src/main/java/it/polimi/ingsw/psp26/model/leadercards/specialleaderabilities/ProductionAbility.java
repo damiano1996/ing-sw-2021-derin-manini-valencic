@@ -28,10 +28,4 @@ public class ProductionAbility extends SpecialAbility {
         player.getPersonalBoard().addProduction(production);
     }
 
-    /**
-     * @return The Production name
-     */
-    public String getName() {
-        return "ProductionLeader";
-    }
 }

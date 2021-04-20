@@ -17,10 +17,13 @@ public abstract class SpecialAbility {
     public void activate(Player player) {
     }
 
-    public abstract String getName();
-
     public Resource getResource() {
         return resource;
+    }
+
+    @Override
+    public String toString() {
+        return ProductionAbility.class.getSimpleName() + ":" + getResource();
     }
 
 }

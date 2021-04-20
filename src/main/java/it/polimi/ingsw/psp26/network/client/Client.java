@@ -77,6 +77,18 @@ public class Client extends Observable<Message> implements Observer<Message> {
                 Warehouse warehouse = (Warehouse) messages.get(0).getPayload();
                 List<Resource> resourcesToAdd = castElements(Resource.class, messages.get(1).getListPayloads());
                 viewInterface.displayWarehouseNewResourcesAssignment(warehouse, resourcesToAdd);
+                break;
+
+            case CHOICE_LEADERS:
+                mcm = (MultipleChoicesMessage) message;
+                System.out.println("Client - num cards: " + message.getListPayloads().size());
+                viewInterface.displayChoices(
+                        mcm.getMessageType(),
+                        "Choose 2 leader cards:",
+                        mcm.getListPayloads(),
+                        mcm.getMinChoices(), mcm.getMaxChoices()
+                );
+                break;
 
             default:
                 break;

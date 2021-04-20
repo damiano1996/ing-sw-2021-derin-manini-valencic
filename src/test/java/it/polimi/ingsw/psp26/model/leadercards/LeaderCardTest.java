@@ -64,7 +64,7 @@ public class LeaderCardTest {
 
     @Test
     public void testGetAbilityName() {
-        assertEquals("ProductionLeader", leaderCard.getAbilityName());
+        assertEquals("ProductionAbility", leaderCard.getAbilityToString());
     }
 
     @Test

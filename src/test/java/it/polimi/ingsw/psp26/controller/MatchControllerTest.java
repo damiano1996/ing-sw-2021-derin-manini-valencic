@@ -1,11 +1,12 @@
 package it.polimi.ingsw.psp26.controller;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class MatchControllerTest {
 
@@ -19,16 +20,30 @@ public class MatchControllerTest {
     }
 
     @Test
-    public void testUpdate() {
+    public void testAddPlayer() {
+        matchController.update(new SessionMessage("sessionToken", MessageType.ADD_PLAYER, "nickname"));
+        assertEquals("sessionToken", matchController.getMatch().getPlayers().get(0).getSessionToken());
     }
 
     @Test
-    public void testGetMatch() {
-        assertNotNull(matchController.getMatch());
+    public void testIsWaitingForPlayers() {
+        matchController.setMaxNumberOfPlayers(1);
+        assertTrue(matchController.isWaitingForPlayers());
+        testAddPlayer();
+        assertFalse(matchController.isWaitingForPlayers());
     }
 
     @Test
-    public void testGetVirtualView() {
-        assertEquals(virtualView, matchController.getVirtualView());
+    public void testStopWaitingForPlayers() {
+        assertTrue(matchController.isWaitingForPlayers());
+        matchController.stopWaitingForPlayers();
+        assertFalse(matchController.isWaitingForPlayers());
     }
+
+    @Test
+    public void testSetMaxNumberOfPlayers() {
+        matchController.setMaxNumberOfPlayers(4);
+        assertEquals(4, matchController.getMaxNumberOfPlayers());
+    }
+
 }

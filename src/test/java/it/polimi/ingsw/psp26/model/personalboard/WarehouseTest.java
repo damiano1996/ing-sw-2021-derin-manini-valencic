@@ -18,7 +18,7 @@ public class WarehouseTest {
 
     @Before
     public void setUp() {
-        warehouse = new Warehouse(new VirtualView());
+        warehouse = new Warehouse(new VirtualView(), 3);
     }
 
     @Test

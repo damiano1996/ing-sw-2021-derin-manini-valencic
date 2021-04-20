@@ -31,9 +31,9 @@ public class ResourcesWarehousePlacer extends TurnState {
         if (message.getMessageType().equals(MessageType.PLACE_IN_WAREHOUSE)) {
 
             // by protocol we receive a list of resources which represents the order to fill the warehouse
-            List<Resource> resourceOrder = castElements(Resource.class, message.getListPayloads());
+            List<Resource> resourceOrder = castElements(Resource.class, message.getListPayloads()); // TODO: case in leader depot
             // collecting all the resources of the player
-            List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
+            List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getWarehouse().grabAllResources();
             playerResources.addAll(resourcesToAdd);
 
             int discardedResources = 0;

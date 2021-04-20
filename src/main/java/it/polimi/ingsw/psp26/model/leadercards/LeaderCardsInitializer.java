@@ -18,16 +18,28 @@ import static it.polimi.ingsw.psp26.model.enums.Level.SECOND;
 import static it.polimi.ingsw.psp26.model.enums.Level.UNDEFINED;
 import static it.polimi.ingsw.psp26.model.enums.Resource.*;
 
+/**
+ * Class to initialize the leader cards.
+ * (Singleton design pattern)
+ */
 public class LeaderCardsInitializer {
 
     private static LeaderCardsInitializer instance;
 
     private final List<LeaderCard> leaderCards;
 
-    public LeaderCardsInitializer() {
+    /**
+     * Private constructor of the class.
+     */
+    private LeaderCardsInitializer() {
         leaderCards = createLeaderCards();
     }
 
+    /**
+     * Method to get the instance.
+     *
+     * @return instance of the singleton
+     */
     public static LeaderCardsInitializer getInstance() {
         if (instance == null)
             instance = new LeaderCardsInitializer();
@@ -35,10 +47,20 @@ public class LeaderCardsInitializer {
         return instance;
     }
 
+    /**
+     * Getter of the deck containing all the leader cards.
+     *
+     * @return unmodifiable list of the leader cards
+     */
     public List<LeaderCard> getLeaderCards() {
-        return Collections.unmodifiableList(leaderCards);
+        return leaderCards;
     }
 
+    /**
+     * Method to create all the leader cards.
+     *
+     * @return unmodifiable list of cards
+     */
     private List<LeaderCard> createLeaderCards() {
         List<LeaderCard> cards = new ArrayList<>();
 
@@ -50,6 +72,11 @@ public class LeaderCardsInitializer {
         return Collections.unmodifiableList(cards);
     }
 
+    /**
+     * Method to create the leader with 2 VP.
+     *
+     * @return list of leader
+     */
     private List<LeaderCard> createVPTwo() {
         Color[] developmentCardRequirementsColors1 = new Color[]{YELLOW, YELLOW, GREEN, BLUE};
         Color[] developmentCardRequirementsColors2 = new Color[]{GREEN, PURPLE, BLUE, PURPLE};
@@ -74,6 +101,11 @@ public class LeaderCardsInitializer {
         return cards;
     }
 
+    /**
+     * Method to create the leader with 3 VP.
+     *
+     * @return list of leader
+     */
     private List<LeaderCard> createVPThree() {
         Resource[] resourceRequirements = new Resource[]{SERVANT, COIN, STONE, SHIELD};
 
@@ -94,6 +126,11 @@ public class LeaderCardsInitializer {
         return cards;
     }
 
+    /**
+     * Method to create the leader with 4 VP.
+     *
+     * @return list of leader
+     */
     private List<LeaderCard> createVPFour() {
         Color[] developmentCardRequirementsColors = new Color[]{BLUE, GREEN, PURPLE, YELLOW};
 
@@ -115,6 +152,11 @@ public class LeaderCardsInitializer {
         return cards;
     }
 
+    /**
+     * Method to create the leader with 5 VP.
+     *
+     * @return list of leader
+     */
     private List<LeaderCard> createVPFive() {
         Color[] developmentCardRequirementsColors1 = new Color[]{YELLOW, PURPLE, BLUE, GREEN};
         Color[] developmentCardRequirementsColors2 = new Color[]{BLUE, GREEN, YELLOW, PURPLE};

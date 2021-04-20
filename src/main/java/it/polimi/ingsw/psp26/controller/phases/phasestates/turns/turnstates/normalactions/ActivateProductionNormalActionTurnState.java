@@ -88,7 +88,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
     private void takePlayerResourcesSnapShot(Player player, List<Resource> strongBoxCopy, List<List<Resource>> depotsCopy) {
         strongBoxCopy.addAll(player.getPersonalBoard().getStrongbox());
-        for (Depot depot : player.getPersonalBoard().getWarehouseDepots()) {
+        for (Depot depot : player.getPersonalBoard().getWarehouse().getDepots()) {
             List<Resource> depotCopy1 = new ArrayList<>();
             depotCopy1.addAll(depot.getResources());
             depotsCopy.add(depotCopy1);
@@ -99,10 +99,10 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     private void Reverse(List<Resource> strongBoxCopy, List<List<Resource>> depotsCopy, Player player) throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
         player.getPersonalBoard().getStrongbox().clear();
         player.getPersonalBoard().getStrongbox().addAll(strongBoxCopy);
-        for (int i = 0; i < player.getPersonalBoard().getWarehouseDepots().size(); i++) {
-            player.getPersonalBoard().getWarehouseDepot(i).grabAllResources();
+        for (int i = 0; i < player.getPersonalBoard().getWarehouse().getDepots().size(); i++) {
+            player.getPersonalBoard().getWarehouse().grabAllResourcesFromDepot(i);
             for (int j = 0; j < depotsCopy.get(i).size(); j++) {
-                player.getPersonalBoard().getWarehouseDepot(i).addResource(depotsCopy.get(i).get(0));
+                player.getPersonalBoard().getWarehouse().addResourceToDepot(i, depotsCopy.get(i).get(0));
             }
 
         }

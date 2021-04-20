@@ -12,6 +12,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
+import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +34,10 @@ public interface ViewInterface {
     void displayPersonalBoard(Player player);
 
 
-    void displayWarehouseDepots(List<Depot> warehouseDepot);
+    void displayWarehouseDepots(Warehouse warehouse);
 
-    /**
-     * First list are new depotResources received by the client.
-     */
-    void displayDepotsNewResourcesAssignment(List<Resource> resourcesToAdd, List<List<Resource>> depots);
+
+    void displayDepotsNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd);
 
 
     void displayStrongbox(List<Resource> strongbox);

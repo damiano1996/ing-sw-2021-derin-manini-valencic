@@ -30,7 +30,7 @@ public class LeaderDepotTest {
 
     @Test
     public void testGetDepotResource() {
-        assertEquals(coinDepot.getDepotResource(), Resource.COIN);
+        assertEquals(coinDepot.getLeaderDepotResource(), Resource.COIN);
     }
 
     @Test

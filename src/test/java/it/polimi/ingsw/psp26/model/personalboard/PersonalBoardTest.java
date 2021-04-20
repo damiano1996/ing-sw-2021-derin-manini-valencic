@@ -128,56 +128,6 @@ public class PersonalBoardTest {
     }
 
     @Test
-    public void testGetWarehouseDepots() throws CanNotAddResourceToDepotException {
-        personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
-        for (int i = 0; i < personalBoard.getWarehouseDepots().get(1).getMaxNumberOfResources(); i++)
-            personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
-        for (int i = 0; i < personalBoard.getWarehouseDepots().get(2).getMaxNumberOfResources(); i++)
-            personalBoard.getWarehouseDepots().get(2).addResource(Resource.SHIELD);
-
-        List<Depot> depots = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) depots.add(new Depot(virtualView, i));
-
-        depots.get(0).addResource(Resource.STONE);
-        for (int i = 0; i < depots.get(1).getMaxNumberOfResources(); i++) depots.get(1).addResource(Resource.COIN);
-        for (int i = 0; i < depots.get(2).getMaxNumberOfResources(); i++) depots.get(2).addResource(Resource.SHIELD);
-
-        for (int i = 0; i < depots.size(); i++) {
-            assertEquals(depots.get(i), personalBoard.getWarehouseDepots().get(i));
-        }
-    }
-
-    @Test(expected = CanNotAddResourceToDepotException.class)
-    public void testGetWarehouseDepots_CanNotAddResourceToDepotException_WrongResourceType() throws CanNotAddResourceToDepotException {
-        personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
-        personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
-        personalBoard.getWarehouseDepots().get(1).addResource(Resource.SERVANT);
-    }
-
-    @Test(expected = CanNotAddResourceToDepotException.class)
-    public void testGetWarehouseDepots_CanNotAddResourceToDepotException_WrongMaxNumberOfResource() throws CanNotAddResourceToDepotException {
-        personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
-        personalBoard.getWarehouseDepots().get(0).addResource(Resource.STONE);
-    }
-
-    @Test
-    public void testGetWarehouseDepot() throws CanNotAddResourceToDepotException, DepotOutOfBoundException {
-        personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
-        personalBoard.getWarehouseDepots().get(1).addResource(Resource.COIN);
-
-        Depot depot = new Depot(virtualView, 2);
-        depot.addResource(Resource.COIN);
-        depot.addResource(Resource.COIN);
-
-        assertEquals(depot, personalBoard.getWarehouseDepot(1));
-    }
-
-    @Test(expected = DepotOutOfBoundException.class)
-    public void testGetWarehouseDepot_DepotOutOfBoundException() throws DepotOutOfBoundException {
-        personalBoard.getWarehouseDepot(5);
-    }
-
-    @Test
     public void testGetStrongbox() throws CanNotAddResourceToStrongboxException {
         List<Resource> resources = new ArrayList<>();
         resources.add(Resource.COIN);
@@ -221,37 +171,6 @@ public class PersonalBoardTest {
         personalBoard.grabResourcesFromStrongbox(Resource.COIN, 2);
         assertEquals(resources, personalBoard.getStrongbox());
 
-    }
-
-    @Test
-    public void testGrabAllResourcesFromDepot() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
-        personalBoard.getWarehouseDepot(0).addResource(Resource.COIN);
-        assertEquals(new ArrayList<>() {{
-            add(Resource.COIN);
-        }}, personalBoard.getWarehouseDepot(0).grabAllResources());
-    }
-
-    @Test
-    public void TestGrabResourcesFromWarehouse() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
-
-        Depot depot = personalBoard.getWarehouseDepot(2);
-        depot.addResource(Resource.COIN);
-        depot.addResource(Resource.COIN);
-
-        assertEquals(new ArrayList<>() {{
-            add(Resource.COIN);
-            add(Resource.COIN);
-        }}, personalBoard.grabResourcesFromWarehouse(Resource.COIN, 2));
-    }
-
-    @Test
-    public void testGrabResourcesFromWarehouseAndStrongbox() throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException, CanNotAddResourceToStrongboxException {
-        personalBoard.getWarehouseDepot(0).addResource(Resource.COIN);
-        personalBoard.addResourceToStrongbox(Resource.COIN);
-        assertEquals(new ArrayList<>() {{
-            add(Resource.COIN);
-            add(Resource.COIN);
-        }}, personalBoard.grabResourcesFromWarehouseAndStrongbox(Resource.COIN, 2));
     }
 
 }

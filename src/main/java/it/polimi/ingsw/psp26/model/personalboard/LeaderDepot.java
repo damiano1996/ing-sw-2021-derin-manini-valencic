@@ -19,11 +19,11 @@ public class LeaderDepot extends Depot {
     }
 
     /**
-     * Getter of the Resources Type that can be contained in the Depot.
+     * Getter of the resource managed by the leader depot.
      *
-     * @return Resource Type that can be contained in the Depot
+     * @return resource
      */
-    public Resource getDepotResource() {
+    public Resource getLeaderDepotResource() {
         return depotResource;
     }
 

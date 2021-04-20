@@ -101,12 +101,6 @@ public class MatchTest {
         assertNotNull(match.getMarketTray());
     }
 
-    @Test(expected = NegativeNumberOfElementsToGrabException.class)
-    public void testDrawLeaders_NegativeNumberOfElementsToDrawException() throws NegativeNumberOfElementsToGrabException {
-        int numberOfCardsToDraw = -1;
-        List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
-    }
-
     @Test(expected = IndexOutOfBoundsException.class)
     public void testDrawLeaders_IndexOutOfBoundsException() throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
         int numberOfCardsToDraw = 1000;
@@ -120,11 +114,6 @@ public class MatchTest {
         assertEquals(drawnCards.size(), numberOfCardsToDraw);
     }
 
-    @Test(expected = NegativeNumberOfElementsToGrabException.class)
-    public void testDrawActionTokens_NegativeNumberOfElementsToDrawException() throws NegativeNumberOfElementsToGrabException {
-        int numberOfTokensToDraw = -1;
-        List<ActionToken> drawnTokens = match.drawActionTokens(numberOfTokensToDraw);
-    }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testDrawActionTokens_IndexOutOfBoundsException() throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {

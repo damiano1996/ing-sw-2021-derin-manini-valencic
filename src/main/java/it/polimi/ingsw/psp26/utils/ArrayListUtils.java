@@ -15,14 +15,10 @@ public class ArrayListUtils {
      * @param numberOfElements number of elements to draw
      * @param <T>              generic object
      * @return list containing the drawn elements
-     * @throws NegativeNumberOfElementsToGrabException if the number of elements to draw is a negative number
      * @throws IndexOutOfBoundsException               if the index of the card to draw is out of bounds
      */
-    public static <T> List<T> grabElements(List<T> list, int numberOfElements) throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
-        if (numberOfElements < 0) throw new NegativeNumberOfElementsToGrabException();
-
+    public static <T> List<T> grabElements(List<T> list, int numberOfElements) throws IndexOutOfBoundsException {
         List<T> drawnElements = new ArrayList<>(list.subList(0, numberOfElements));
-
         list.removeAll(drawnElements);
         return drawnElements;
     }

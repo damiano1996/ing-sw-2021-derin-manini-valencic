@@ -3,9 +3,9 @@ package it.polimi.ingsw.psp26.view.cli;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
+import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -40,29 +40,29 @@ public class DepotCli {
     /**
      * Prints the Warehouse and the Resources in it
      *
-     * @param warehouseDepots A list of Depots that will be printed
-     * @param startingRow     The starting row where the Warehouse is going to be printed
-     * @param startingColumn  The starting column where the Warehouse is going to be printed
+     * @param warehouse      warehouse
+     * @param startingRow    The starting row where the Warehouse is going to be printed
+     * @param startingColumn The starting column where the Warehouse is going to be printed
      */
-    public void printWarehouse(List<Depot> warehouseDepots, int startingRow, int startingColumn) {
+    public void printWarehouse(Warehouse warehouse, int startingRow, int startingColumn) {
         cliUtils.printFigure("Warehouse", startingRow, startingColumn);
-        for (int i = 0; i < 3; i++) printDepot(warehouseDepots.get(i), startingRow, startingColumn, i + 1);
+        for (int i = 0; i < 3; i++) printDepot(warehouse.getDepots().get(i), startingRow, startingColumn, i + 1);
     }
 
     /**
      * Show the screen that appears after getting Resources from the Market
      *
-     * @param warehouseDepots The Warehouse to print
-     * @param resources       The resources get prom the Market to insert into the Warehouse
+     * @param warehouse The Warehouse to print
+     * @param resources The resources get prom the Market to insert into the Warehouse
      */
-    public void displayMarketResourcesSelection(List<Depot> warehouseDepots, List<Resource> resources) { //TODO temporary solution
+    public void displayMarketResourcesSelection(Warehouse warehouse, List<Resource> resources) { //TODO temporary solution
         Scanner in = new Scanner(System.in);
         cliUtils.cls();
         pw.flush();
 
         cliUtils.printFigure("WarehouseConfigurationTitle", 1, 21);
 
-        printWarehouse(warehouseDepots, 7, 74);
+        printWarehouse(warehouse, 7, 74);
 
         cliUtils.setCursorPosition(22, 74);
         pw.print("Resources left to insert:");
@@ -136,7 +136,7 @@ public class DepotCli {
     /**
      * Used in printWarehouse() to get the correct representation of Resources
      *
-     * @param depot          The current Depot that will be printed
+     * @param depot          Depot to print
      * @param startingRow    The starting row where the Warehouse is going to be printed
      * @param startingColumn The starting column where the Warehouse is going to be printed
      */
@@ -149,7 +149,7 @@ public class DepotCli {
         pw.flush();
         cliUtils.restoreCursorPosition();
 
-        List<Resource> resources = new ArrayList<>(depot.getResources());
+        List<Resource> resources = depot.getResources();
 
         if (resources.size() > 0) {
 

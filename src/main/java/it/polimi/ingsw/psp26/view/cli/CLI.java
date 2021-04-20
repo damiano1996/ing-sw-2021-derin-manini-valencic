@@ -12,8 +12,8 @@ import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
+import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.utils.ArrayListUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
@@ -136,12 +136,12 @@ public class CLI implements ViewInterface {
     }
 
     @Override
-    public void displayWarehouseDepots(List<Depot> warehouseDepot) {
-        depotCli.printWarehouse(warehouseDepot, 17, 13);
+    public void displayWarehouseDepots(Warehouse warehouse) {
+        depotCli.printWarehouse(warehouse, 17, 13);
     }
 
     @Override
-    public void displayDepotsNewResourcesAssignment(List<Resource> resourcesToAdd, List<List<Resource>> depots) {
+    public void displayDepotsNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
 
     }
 
@@ -170,8 +170,8 @@ public class CLI implements ViewInterface {
         marketCli.displayMarketScreen(marketTray);
     }
 
-    public void displayMarketResourcesSelection(List<Depot> depots, List<Resource> resources) {
-        depotCli.displayMarketResourcesSelection(depots, resources);
+    public void displayMarketResourcesSelection(Warehouse warehouse, List<Resource> resources) {
+        depotCli.displayMarketResourcesSelection(warehouse, resources);
     }
 
     @Override

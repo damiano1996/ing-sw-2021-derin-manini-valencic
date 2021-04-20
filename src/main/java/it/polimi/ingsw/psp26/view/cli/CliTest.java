@@ -225,21 +225,21 @@ public class CliTest {
         resources.add(Resource.STONE);
         resources.add(Resource.COIN);
         resources.add(Resource.SERVANT);
-        cli.displayMarketResourcesSelection(p.getWarehouseDepots(), resources);
+        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
 
-        p.getWarehouseDepot(2).addResource(Resource.STONE);
-        p.getWarehouseDepot(2).addResource(Resource.STONE);
+        p.getWarehouse().addResourceToDepot(2, Resource.STONE);
+        p.getWarehouse().addResourceToDepot(2, Resource.STONE);
         resources.remove(0);
         resources.remove(0);
-        cli.displayMarketResourcesSelection(p.getWarehouseDepots(), resources);
+        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
 
-        p.getWarehouseDepot(1).addResource(Resource.COIN);
+        p.getWarehouse().addResourceToDepot(1, Resource.COIN);
         resources.remove(0);
-        cli.displayMarketResourcesSelection(p.getWarehouseDepots(), resources);
+        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
 
-        p.getWarehouseDepot(0).addResource(Resource.SERVANT);
+        p.getWarehouse().addResourceToDepot(0, Resource.SERVANT);
         resources.remove(0);
-        cli.displayMarketResourcesSelection(p.getWarehouseDepots(), resources);
+        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
 
 
         //---TITLE-SCREEN-TEST---// Press Enter and follow terminal instructions
@@ -300,11 +300,11 @@ public class CliTest {
 
         developmentGrid = new DevelopmentGrid(virtualView);
 
-        player.getPersonalBoard().addLeaderDepot(coinDepot);
-        player.getPersonalBoard().addLeaderDepot(servantDepot);
-        player.getPersonalBoard().getWarehouseDepots().get(0).addResource(Resource.SHIELD);
-        player.getPersonalBoard().getWarehouseDepots().get(1).addResource(Resource.COIN);
-        player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
+        player.getPersonalBoard().getWarehouse().addLeaderDepot(coinDepot);
+        player.getPersonalBoard().getWarehouse().addLeaderDepot(servantDepot);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(0, Resource.SHIELD);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(1, Resource.COIN);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(2, Resource.SERVANT);
         strResource.add(Resource.STONE);
         strResource.add(Resource.SERVANT);
         player.getPersonalBoard().addResourcesToStrongbox(strResource);
@@ -317,10 +317,10 @@ public class CliTest {
         in.nextLine();
         cliUtils.cls();
 
-        player.getPersonalBoard().getWarehouseDepot(3).addResource(Resource.COIN);
-        player.getPersonalBoard().getWarehouseDepot(4).addResource(Resource.SERVANT);
-        player.getPersonalBoard().getWarehouseDepots().get(1).addResource(Resource.COIN);
-        player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(3, Resource.COIN);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(4, Resource.SERVANT);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(1, Resource.COIN);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(2, Resource.SERVANT);
         strResource.add(Resource.COIN);
         strResource.add(Resource.STONE);
         strResource.add(Resource.SHIELD);
@@ -333,9 +333,9 @@ public class CliTest {
         in.nextLine();
         cliUtils.cls();
 
-        player.getPersonalBoard().getWarehouseDepot(3).addResource(Resource.COIN);
-        player.getPersonalBoard().getWarehouseDepot(4).addResource(Resource.SERVANT);
-        player.getPersonalBoard().getWarehouseDepots().get(2).addResource(Resource.SERVANT);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(3, Resource.COIN);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(4, Resource.SERVANT);
+        player.getPersonalBoard().getWarehouse().addResourceToDepot(2, Resource.SERVANT);
         strResource.add(Resource.COIN);
         strResource.add(Resource.SHIELD);
         strResource.add(Resource.SERVANT);

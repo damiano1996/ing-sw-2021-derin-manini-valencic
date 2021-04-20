@@ -64,21 +64,21 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                         Resource.COIN, Resource.STONE, Resource.SHIELD, Resource.SERVANT));
                 break;
             case CHOICE_RESOURCE:
-                List<Depot> currentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouseDepots();
-                moveResourceFromSlideToDepot(Resource.COIN, currentDepotsStatus.get(1));
-                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
-                        RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
+//                List<Depot> currentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouse();
+//                moveResourceFromSlideToDepot(Resource.COIN, currentDepotsStatus.get(1));
+//                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+//                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
+//                        RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
                 break;
             case GRAB_RESOURCES:
-                try {
-                    tempResources.addAll(turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot((int) message.getPayload()).grabAllResources());
-                } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
-                    e.printStackTrace();
-                }
-                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
-                        RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
+//                try {
+//                    tempResources.addAll(turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot((int) message.getPayload()).grabAllResources());
+//                } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
+//                    e.printStackTrace();
+//                }
+//                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+//                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
+//                        RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
 
             case MARKET_NEXT:
                 discardResources(turn.getMatchController().getMatch(), turn.getTurnPlayer());
@@ -97,26 +97,26 @@ public class MarketResourceNormalActionTurnState extends TurnState {
     }
 
     private void moveResourceFromSlideToDepot(Resource resource, Depot depot) {
-        List<Resource> DepotCopy = new ArrayList<>();
-        DepotCopy.addAll(depot.getResources());
-        for (int i = 0; i < Math.min((int) tempResources.stream().filter(x -> x.equals(resource)).count(), depot.getMaxNumberOfResources()); i++) {
-            try {
-                depot.addResource(resource);
-            } catch (CanNotAddResourceToDepotException e) {
-                try {
-                    depot.grabAllResources();
-                    for (int j = 0; j < DepotCopy.size(); j++) {
-                        depot.addResource(DepotCopy.get(0));
-                    }
-                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                            MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
-                            RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
-                } catch (NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {
-                    exc.printStackTrace();
-                }
-            }
-            tempResources.remove(resource);
-        }
+//        List<Resource> DepotCopy = new ArrayList<>();
+//        DepotCopy.addAll(depot.getResources());
+//        for (int i = 0; i < Math.min((int) tempResources.stream().filter(x -> x.equals(resource)).count(), depot.getMaxNumberOfResources()); i++) {
+//            try {
+//                depot.addResource(resource);
+//            } catch (CanNotAddResourceToDepotException e) {
+//                try {
+//                    depot.grabAllResources();
+//                    for (int j = 0; j < DepotCopy.size(); j++) {
+//                        depot.addResource(DepotCopy.get(0));
+//                    }
+//                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+//                            MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
+//                            RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
+//                } catch (NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {
+//                    exc.printStackTrace();
+//                }
+//            }
+//            tempResources.remove(resource);
+//        }
 
 
     }

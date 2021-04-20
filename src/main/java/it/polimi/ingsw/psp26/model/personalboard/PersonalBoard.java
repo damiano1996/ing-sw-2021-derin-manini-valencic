@@ -2,7 +2,9 @@ package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
-import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
+import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
@@ -23,9 +25,9 @@ public class PersonalBoard extends Observable<SessionMessage> {
     private transient final Player player; // "transient" doesn't serialize the player. Necessary to avoid recursion in Gson.
 
     private final FaithTrack faithTrack;
+    private final Warehouse warehouse;
     private final List<List<DevelopmentCard>> developmentCardsSlots;
     private final List<Production> productions;
-    private final List<Depot> warehouseDepots;
     private final List<Resource> strongbox;
 
     /**
@@ -42,7 +44,11 @@ public class PersonalBoard extends Observable<SessionMessage> {
         this.player = player;
 
         faithTrack = new FaithTrack(virtualView);
-        developmentCardsSlots = new ArrayList<>(3);
+        developmentCardsSlots = new ArrayList<>() {{
+            add(new ArrayList<>());
+            add(new ArrayList<>());
+            add(new ArrayList<>());
+        }};
 
         // productions with base
         productions = new ArrayList<>() {{
@@ -55,11 +61,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
                     }}));
         }};
 
-        warehouseDepots = new ArrayList<>(3);
-        for (int i = 0; i < 3; i++) {
-            developmentCardsSlots.add(new ArrayList<>());
-            warehouseDepots.add(new Depot(virtualView, i + 1));
-        }
+        warehouse = new Warehouse(virtualView);
         strongbox = new ArrayList<>();
 
 //        notifyObservers(new Message(player.getSessionToken(), MessageType.PERSONAL_BOARD, player));
@@ -140,24 +142,12 @@ public class PersonalBoard extends Observable<SessionMessage> {
     }
 
     /**
-     * Getter of the warehouse depots.
+     * Getter of the warehouse.
      *
-     * @return list containing the depots of the warehouse
+     * @return warehouse object that handles the depots
      */
-    public List<Depot> getWarehouseDepots() {
-        return warehouseDepots;
-    }
-
-    /**
-     * Getter of the warehouse depot by index.
-     *
-     * @param index index of the depot
-     * @return depot in the corresponding position
-     * @throws DepotOutOfBoundException if index out of bounds
-     */
-    public Depot getWarehouseDepot(int index) throws DepotOutOfBoundException {
-        if (index >= warehouseDepots.size()) throw new DepotOutOfBoundException();
-        else return warehouseDepots.get(index);
+    public Warehouse getWarehouse() {
+        return warehouse;
     }
 
     /**
@@ -226,15 +216,6 @@ public class PersonalBoard extends Observable<SessionMessage> {
     }
 
     /**
-     * Method to add a Leader Depot to the warehouseDepots List when activating a Depot Leader Card
-     *
-     * @param leaderDepot the LeaderDepot to add
-     */
-    public void addLeaderDepot(LeaderDepot leaderDepot) {
-        warehouseDepots.add(leaderDepot);
-    }
-
-    /**
      * Method to grab resources from strongbox.
      *
      * @param resource          the resource type to remove
@@ -251,38 +232,43 @@ public class PersonalBoard extends Observable<SessionMessage> {
     }
 
     /**
-     * Method to grab resources from warehouse in the specified quantity.
-     *
-     * @param resource          resource to grab
-     * @param numberOfResources quantity of resources to grab
-     * @return list containing the requested resources
-     * @throws NegativeNumberOfElementsToGrabException if number of resources is negative
-     */
-    public List<Resource> grabResourcesFromWarehouse(Resource resource, int numberOfResources) throws NegativeNumberOfElementsToGrabException {
-        for (Depot depot : warehouseDepots) {
-            if (depot.getResources().size() > 0)
-                if (depot.getResources().get(0).equals(resource))
-                    return depot.grabResources(Math.min(numberOfResources, depot.getResources().size()));
-        }
-        return new ArrayList<>();
-    }
-
-    /**
      * Method to grab resources from warehouse and strongbox.
      * By default the resources are grabbed before from the warehouse and after from the strongbox.
      *
      * @param resource          resource type to grab
      * @param numberOfResources quantity of resources to grab
      * @return list containing the requested resources
-     * @throws NegativeNumberOfElementsToGrabException if the number of resources to grab is negative
      */
-    public List<Resource> grabResourcesFromWarehouseAndStrongbox(Resource resource, int numberOfResources) throws NegativeNumberOfElementsToGrabException {
-        List<Resource> grabbedResources = new ArrayList<>(grabResourcesFromWarehouse(resource, numberOfResources));
+    public List<Resource> grabResourcesFromWarehouseAndStrongbox(Resource resource, int numberOfResources) {
+        List<Resource> grabbedResources = new ArrayList<>(warehouse.grabResources(resource, numberOfResources));
 
         if (grabbedResources.size() < numberOfResources)
             grabbedResources.addAll(grabResourcesFromStrongbox(resource, numberOfResources));
 
         return grabbedResources;
+    }
+
+    /**
+     * Method to grab all the resources from warehouse and strongbox.
+     *
+     * @return list of resources
+     */
+    public List<Resource> grabAllAvailableResources() {
+        List<Resource> allResources = warehouse.grabAllResources();
+        allResources.addAll(strongbox);
+        strongbox.clear();
+        return allResources;
+    }
+
+    /**
+     * Getter of all the resources contained between strongbox and warehouse.
+     *
+     * @return list of resources
+     */
+    public List<Resource> getAllAvailableResources() {
+        List<Resource> resources = warehouse.getResources();
+        resources.addAll(strongbox);
+        return Collections.unmodifiableList(resources);
     }
 
 }

@@ -5,19 +5,13 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
-import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
-import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.MatchUtils.addFaithPointsToPlayers;
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.MatchUtils.getWarehouseResources;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class ResourcesWarehousePlacer extends TurnState {
@@ -35,38 +29,27 @@ public class ResourcesWarehousePlacer extends TurnState {
 
         if (message.getMessageType().equals(MessageType.PLACE_IN_WAREHOUSE)) {
 
-            // by protocol we receive a list of resources, which represents the type of resources to allocate in the corresponding depot
+            // by protocol we receive a list of resources which represents the order to fill the warehouse
             List<Resource> resourceOrder = castElements(Resource.class, message.getListPayloads());
             // collecting all the resources of the player
-            List<Resource> playerResources = getWarehouseResources(turn.getTurnPlayer());
+            List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
             playerResources.addAll(resourcesToAdd);
 
             int discardedResources = 0;
 
-            // for each resource type, we place them in the corresponding depot
-            for (int i = 0; i < resourceOrder.size(); i++) {
-
-                // quantity of the resources of this kind
-                int quantity = Collections.frequency(playerResources, resourceOrder.get(i));
-
-                try {
-                    // before to add, we have to clean the depot
-                    turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(i).grabAllResources();
-
-                    // now we can add the resources
-                    for (int j = 0; j < quantity; j++) {
-                        try {
-                            // try to add
-                            turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot(i).addResource(resourceOrder.get(i));
-                        } catch (CanNotAddResourceToDepotException e) {
-                            // if not possible we discard the resource and later we will assign points to opponents
-                            discardedResources += 1;
-                        }
+            // filling the warehouse with the given order
+            for (Resource resource : resourceOrder) {
+                // amount of this resource
+                int resourceQuantity = Collections.frequency(playerResources, resource);
+                // try to add
+                for (int i = 0; i < resourceQuantity; i++) {
+                    try {
+                        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToWarehouse(resource);
+                    } catch (CanNotAddResourceToWarehouse canNotAddResourceToWarehouse) {
+                        // if we reached the maximum we will add one point to opponents
+                        discardedResources += 1;
                     }
-                } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
-                    e.printStackTrace();
                 }
-
             }
 
             // adding FP to other players
@@ -81,12 +64,6 @@ public class ResourcesWarehousePlacer extends TurnState {
 
     }
 
-
-    /**
-     * Method to send resources and warehouse to view.
-     * By protocol design, the first element of the payload represents the resources that the player has received.
-     *
-     */
     private void sendMessage() {
         System.out.println("ResourcesWarehousePlacer - sending message to " + turn.getTurnPlayer().getNickname());
 
@@ -94,29 +71,10 @@ public class ResourcesWarehousePlacer extends TurnState {
                 new SessionMessage(
                         turn.getTurnPlayer().getSessionToken(),
                         MessageType.PLACE_IN_WAREHOUSE,
-                        warehouseToLists(resourcesToAdd, turn.getTurnPlayer()).toArray()
+                        turn.getTurnPlayer().getPersonalBoard().getWarehouse()
                 )
         );
 
     }
-
-    /**
-     * Method transforms the list of depots in a list of lists of resources.
-     * Useful for message payload purposes.
-     *
-     * @param resourcesToAdd list of resource to add to the warehouse
-     * @param player         player that is receiving new resources
-     * @return list of lists containing resources
-     */
-    private List<List<Resource>> warehouseToLists(List<Resource> resourcesToAdd, Player player) {
-        List<List<Resource>> listWarehouse = new ArrayList<>();
-        listWarehouse.add(resourcesToAdd);
-
-        for (Depot depot : player.getPersonalBoard().getWarehouseDepots())
-            listWarehouse.add(depot.getResources());
-
-        return listWarehouse;
-    }
-
 
 }

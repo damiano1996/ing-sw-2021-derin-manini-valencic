@@ -73,16 +73,16 @@ public class Client extends Observable<Message> implements Observer<Message> {
                 break;
 
             case PLACE_IN_WAREHOUSE:
-                List<List<Resource>> resourcesWarehouse = new ArrayList<>();
-
-                for (Object o : message.getListPayloads()) {
-                    List<Resource> resources = castElements(Resource.class, (List<Object>) o);
-                    resourcesWarehouse.add(resources);
-                }
-
-                List<Resource> resourcesToAdd = resourcesWarehouse.remove(0);
-
-                viewInterface.displayDepotsNewResourcesAssignment(resourcesToAdd, resourcesWarehouse);
+//                List<List<Resource>> resourcesWarehouse = new ArrayList<>();
+//
+//                for (Object o : message.getListPayloads()) {
+//                    List<Resource> resources = castElements(Resource.class, (List<Object>) o);
+//                    resourcesWarehouse.add(resources);
+//                }
+//
+//                List<Resource> resourcesToAdd = resourcesWarehouse.remove(0);
+//
+//                viewInterface.displayDepotsNewResourcesAssignment(resourcesToAdd, resourcesWarehouse);
 
             default:
                 break;

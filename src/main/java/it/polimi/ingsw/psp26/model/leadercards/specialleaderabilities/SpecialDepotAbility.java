@@ -15,7 +15,7 @@ public class SpecialDepotAbility extends SpecialAbility {
         super.activate(player);
 
         LeaderDepot leaderDepot = new LeaderDepot(player.getVirtualView(), resource);
-        player.getPersonalBoard().addLeaderDepot(leaderDepot);
+        player.getPersonalBoard().getWarehouse().addLeaderDepot(leaderDepot);
     }
 
     /**

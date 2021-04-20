@@ -3,7 +3,6 @@ package it.polimi.ingsw.psp26.model.personalboard;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
@@ -74,9 +73,8 @@ public class Depot extends Observable<SessionMessage> {
      * Method to obtain all the resources from the depot.
      *
      * @return ist containing all the resources of the depot
-     * @throws NegativeNumberOfElementsToGrabException
      */
-    public List<Resource> grabAllResources() throws NegativeNumberOfElementsToGrabException {
+    protected List<Resource> grabAllResources() {
         return grabResources(resources.size());
     }
 
@@ -85,10 +83,9 @@ public class Depot extends Observable<SessionMessage> {
      *
      * @param quantity quantity of resources to be removed from the depot
      * @return list containing the number of requested resources
-     * @throws NegativeNumberOfElementsToGrabException if negative quantity
-     * @throws IndexOutOfBoundsException               if trying to remove more resources than the depot contains
+     * @throws IndexOutOfBoundsException if trying to remove more resources than the depot contains
      */
-    public List<Resource> grabResources(int quantity) throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
+    protected List<Resource> grabResources(int quantity) throws IndexOutOfBoundsException {
         return grabElements(resources, quantity);
     }
 
@@ -102,6 +99,16 @@ public class Depot extends Observable<SessionMessage> {
         return (resources.size() == 0 || resources.contains(resource)) &&
                 !resource.equals(Resource.FAITH_MARKER) &&
                 !resource.equals(Resource.EMPTY);
+    }
+
+    /**
+     * Getter of the type of resources contained in the depot.
+     *
+     * @return contained resource type
+     */
+    public Resource getContainedResourceType() {
+        if (resources.size() > 0) return resources.get(0);
+        else return Resource.EMPTY;
     }
 
     /**

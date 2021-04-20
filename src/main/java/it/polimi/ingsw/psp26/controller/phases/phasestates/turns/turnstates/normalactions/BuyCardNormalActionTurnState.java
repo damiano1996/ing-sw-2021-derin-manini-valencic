@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.MatchUtils.getAllPlayerResources;
 
 public class BuyCardNormalActionTurnState extends TurnState {
     DevelopmentCard boughtCard = null;
@@ -31,7 +30,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
         switch (message.getMessageType()) {
             case BUY_CARD:
-                List<Resource> playerResources = getAllPlayerResources(turn.getTurnPlayer());
+                List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
                 List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
                 List<DevelopmentCard> gettableCards = getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
                 turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
@@ -95,7 +94,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
         }
         for (Resource resource : drawnCard.getCost().keySet()) {
             numberResources = drawnCard.getCost().get(resource);
-            numberResources -= player.getPersonalBoard().grabResourcesFromWarehouse(resource, numberResources).size();
+            numberResources -= player.getPersonalBoard().getWarehouse().grabResources(resource, numberResources).size();
             if (numberResources > 0) player.getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
         }
         return drawnCard;

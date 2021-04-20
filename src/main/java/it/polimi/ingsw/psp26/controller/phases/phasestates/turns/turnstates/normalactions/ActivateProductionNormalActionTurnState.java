@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
 import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
@@ -18,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class ActivateProductionNormalActionTurnState extends TurnState {
@@ -41,9 +45,14 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         } else {
 
             switch (message.getMessageType()) {
-                case RESOURCE_CHOSEN:
-
-                    List<Resource> ChosenResources = castElements(Resource.class, message.getListPayloads());
+                case ACTIVATE_PRODUCTION:
+                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                            CHOICE_CARDS_TO_ACTIVATE, 1,
+                            turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
+                            turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
+                    ));
+                case CARDS_TO_ACTIVATE_CHOSEN:
+                    List<Production> ProductionActivated = castElements(Production.class, message.getListPayloads());
                     turn.changeState(new ActivateProductionNormalActionTurnState(turn));
                     turn.play(message);
                     break;

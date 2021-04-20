@@ -106,12 +106,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
     private List<Integer> positionsForCard() {
         List<Integer> CorrectPositions = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            CorrectPositions.add(i);
-            try {
-                turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(i, boughtCard);
-            } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
-                CorrectPositions.remove(i);
-            }
+             if(turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard)) CorrectPositions.add(i);
         }
         return CorrectPositions;
     }

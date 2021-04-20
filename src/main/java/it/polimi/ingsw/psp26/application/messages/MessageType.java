@@ -26,7 +26,9 @@ public enum MessageType {
     CHOICE_NORMAL_ACTION, // to display to the client the normal action options
 
     ACTIVATE_PRODUCTION, // action
-    CHOICE_RESOURCE_IN_RESOURCE_OUT, //to display to the client the resource to use in base power
+    CHOICE_RESOURCE_IN_RESOURCE_OUT, //to display to the client the resource to use in base power TO ELIMINATE
+    CHOICE_CARDS_TO_ACTIVATE, // to display to the client the card to activate
+    CARDS_TO_ACTIVATE_CHOSEN, // cards chosen to be activated
     MARKET_RESOURCE, // action
 
     BUY_CARD, // action
@@ -35,14 +37,12 @@ public enum MessageType {
     CHOICE_POSITION, // to display the position of the card
     POSITION_CHOSEN, // position chosen of the bought card
 
-    CHOICE_RESOURCE_POSITION, // to display the position and resource
     CHOICE_ROW_COLUMN, // to display the column or the row
     ROW_COLUMN_CHOSEN, // row or column chosen
     MARKET_NEXT, // move to next turnPhase
     GRAB_RESOURCES,// Grab all resources from a depot
     CHOICE_ORGANIZATION_MOVE, // to display the moves possible about the organization
     RESOURCE_POSITION_CHOSEN_ONE, // resource position chosen
-    RESOURCE_POSITION_CHOSEN_TWO, //
 
     RESOURCE_CHOSEN, // resource chosen to use in base power
 

@@ -126,5 +126,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         tempResources.clear();
     }
 
+
+
 }
 

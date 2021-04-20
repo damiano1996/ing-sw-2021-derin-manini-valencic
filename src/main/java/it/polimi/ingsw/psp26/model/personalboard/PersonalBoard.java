@@ -213,7 +213,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
      * @param developmentCard the card to place
      * @return true if the card can be placed, false otherwise
      */
-    private boolean isCardPlaceable(int indexSlot, DevelopmentCard developmentCard) {
+    public boolean isCardPlaceable(int indexSlot, DevelopmentCard developmentCard) {
         return (developmentCardsSlots.get(indexSlot).size() == 0 ||
                 developmentCardsSlots
                         .get(indexSlot)

@@ -54,4 +54,12 @@ public class LeaderCard {
     public int getVictoryPoints() {
         return victoryPoints;
     }
+
+    public String getAbilityName() {
+        return specialAbility.getName();
+    }
+
+    public Resource getAbilityResource() {
+        return specialAbility.getResource();
+    }
 }

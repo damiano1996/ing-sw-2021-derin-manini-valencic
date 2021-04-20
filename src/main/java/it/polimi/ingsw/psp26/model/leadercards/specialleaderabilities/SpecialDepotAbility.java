@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
 import it.polimi.ingsw.psp26.model.Player;
-import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 
@@ -19,20 +18,11 @@ public class SpecialDepotAbility extends SpecialAbility {
         player.getPersonalBoard().addLeaderDepot(leaderDepot);
     }
 
-    public String getAbilityType() {
-        return "   DEPOT LEADER   ";
+    /**
+     * @return The Production name
+     */
+    public String getName() {
+        return "DepotLeader";
     }
 
-    @Override
-    public String getPowerDescription(int linetoPrint) {
-        if (linetoPrint == 0) return "| Add an extra Depot |";
-        else if (linetoPrint == 1) return "| which can only     |";
-        else if (linetoPrint == 2) return "| contains 2 Resour- |";
-        else return "| ces of one type    |";
-    }
-
-    @Override
-    public String getResourceInformation() {
-        return " Resource allowed: " + getResource().getColor() + " \u25A0 " + Color.RESET;
-    }
 }

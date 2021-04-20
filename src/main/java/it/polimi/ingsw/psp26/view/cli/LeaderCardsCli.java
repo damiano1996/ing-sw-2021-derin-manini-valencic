@@ -107,70 +107,10 @@ public class LeaderCardsCli {
      * @param startingColumn The column in which the Leader Card will be printed
      */
     public void printLeader(LeaderCard leaderCard, int startingRow, int startingColumn) {
-        cliUtils.printFigure("LeaderCard", startingRow, startingColumn);
+        cliUtils.printFigure(leaderCard.getAbilityName(), startingRow, startingColumn);
         printLeaderRequirements(leaderCard, startingRow, startingColumn);
-        printLeaderAbility(leaderCard, startingRow, startingColumn);
-        printLeaderDescription(leaderCard, startingRow, startingColumn);
-        printLeaderVictoryPoints(leaderCard, startingRow, startingColumn);
-        printLeaderResourceInformation(leaderCard, startingRow, startingColumn);
-    }
-
-    /**
-     * Prints the Leader Card Resource information
-     *
-     * @param leaderCard     The Leader Card to print
-     * @param startingRow    The row in which the Leader Card will be printed
-     * @param startingColumn The column in which the Leader Card will be printed
-     */
-    private void printLeaderResourceInformation(LeaderCard leaderCard, int startingRow, int startingColumn) {
-        cliUtils.setCursorPosition(startingRow + 16, startingColumn);
-//        pw.print("| " + leaderCard.getSpecialAbility().getResourceInformation() + " |"); // TODO: to be fixed
-        pw.flush();
-    }
-
-    /**
-     * Prints the Leader Card Victory Points
-     *
-     * @param leaderCard     The Leader Card to print
-     * @param startingRow    The row in which the Leader Card will be printed
-     * @param startingColumn The column in which the Leader Card will be printed
-     */
-    private void printLeaderVictoryPoints(LeaderCard leaderCard, int startingRow, int startingColumn) {
-        cliUtils.setCursorPosition(startingRow + 13, startingColumn);
-        pw.print("| |        VP " + leaderCard.getVictoryPoints() + "        | |");
-        pw.flush();
-    }
-
-    /**
-     * Prints the Leader Card description
-     *
-     * @param leaderCard     The Leader Card to print
-     * @param startingRow    The row in which the Leader Card will be printed
-     * @param startingColumn The column in which the Leader Card will be printed
-     */
-    private void printLeaderDescription(LeaderCard leaderCard, int startingRow, int startingColumn) {
-        cliUtils.setCursorPosition(startingRow + 8, startingColumn);
-
-        for (int i = 0; i < 4; i++) {
-            cliUtils.saveCursorPosition();
-//            pw.print("| " + leaderCard.getSpecialAbility().getPowerDescription(i) + " |"); // TODO: to be fixed
-            pw.flush();
-            cliUtils.restoreCursorPosition();
-            cliUtils.moveCursor("dn", 1);
-        }
-    }
-
-    /**
-     * Prints the Leader Card ability name
-     *
-     * @param leaderCard     The Leader Card to print
-     * @param startingRow    The row in which the Leader Card will be printed
-     * @param startingColumn The column in which the Leader Card will be printed
-     */
-    private void printLeaderAbility(LeaderCard leaderCard, int startingRow, int startingColumn) {
-        cliUtils.setCursorPosition(startingRow + 3, startingColumn);
-//        pw.print("| | " + leaderCard.getSpecialAbility().getAbilityType() + " | |"); // TODO: to be fixed
-        pw.flush();
+        //Prints the colored square for the Resource information
+        cliUtils.pPCS("\u25A0", leaderCard.getAbilityResource().getColor(), startingRow + 16, startingColumn + 22);
     }
 
     /**

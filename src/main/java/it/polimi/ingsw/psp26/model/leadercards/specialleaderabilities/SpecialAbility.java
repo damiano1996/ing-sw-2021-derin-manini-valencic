@@ -17,14 +17,10 @@ public abstract class SpecialAbility {
     public void activate(Player player) {
     }
 
+    public abstract String getName();
+
     public Resource getResource() {
         return resource;
     }
 
-    // TODO: to be removed
-    public abstract String getAbilityType();
-
-    public abstract String getPowerDescription(int linetoPrint);
-
-    public abstract String getResourceInformation();
 }

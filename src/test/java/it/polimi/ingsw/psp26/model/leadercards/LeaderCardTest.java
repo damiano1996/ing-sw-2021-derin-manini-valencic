@@ -61,4 +61,14 @@ public class LeaderCardTest {
     public void testGetVictoryPoints() {
         assertEquals(victoryPoints, leaderCard.getVictoryPoints());
     }
+
+    @Test
+    public void testGetAbilityName() {
+        assertEquals("ProductionLeader", leaderCard.getAbilityName());
+    }
+
+    @Test
+    public void testGetAbilityResource() {
+        assertEquals(Resource.COIN, leaderCard.getAbilityResource());
+    }
 }

@@ -105,7 +105,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
     private List<Integer> positionsForCard() {
         List<Integer> CorrectPositions = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-             if(turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard)) CorrectPositions.add(i);
+            if (turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard)) CorrectPositions.add(i);
         }
         return CorrectPositions;
     }

@@ -141,7 +141,7 @@ public class CLI implements ViewInterface {
     }
 
     @Override
-    public void displayDepotsNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
+    public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
 
     }
 

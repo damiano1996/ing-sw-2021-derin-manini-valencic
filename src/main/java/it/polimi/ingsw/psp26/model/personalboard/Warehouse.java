@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class Warehouse extends Observable<SessionMessage> {
 
-    public static final int NUMBER_OF_DEFAULT_DEPOTS = 3;
+    private static final int NUMBER_OF_DEFAULT_DEPOTS = 3;
     private final List<Depot> depots;
 
     /**
@@ -66,12 +66,12 @@ public class Warehouse extends Observable<SessionMessage> {
     }
 
     /**
-     * Method tries to add a resource to the warehouse iteration over all the depots.
+     * Method tries to add a resource to the warehouse iterating over all the depots.
      *
      * @param resource resource to add
      * @throws CanNotAddResourceToWarehouse if there is no depot to place the resource
      */
-    public void addResourceToWarehouse(Resource resource) throws CanNotAddResourceToWarehouse {
+    public void addResource(Resource resource) throws CanNotAddResourceToWarehouse {
         boolean added = false;
 
         for (int i = 0; i < depots.size(); i++) {
@@ -79,30 +79,37 @@ public class Warehouse extends Observable<SessionMessage> {
                 addResourceToDepot(i, resource);
                 added = true;
                 break;
-            } catch (CanNotAddResourceToDepotException e) {
-                e.printStackTrace();
+            } catch (CanNotAddResourceToDepotException ignored) {
             }
         }
         if (!added) throw new CanNotAddResourceToWarehouse();
     }
 
     /**
-     * Getter of depots.
+     * Getter of all depots.
      *
      * @return unmodifiable list of depots
      */
-    public List<Depot> getDepots() {
+    public List<Depot> getAllDepots() {
         return Collections.unmodifiableList(depots);
     }
 
     /**
-     * Method to grab resources from a depot.
+     * Getter of the base depots
      *
-     * @param indexDepot index of the depot
-     * @return list of resources
+     * @return list of depots
      */
-    public List<Resource> grabAllResourcesFromDepot(int indexDepot) {
-        return depots.get(indexDepot).grabAllResources();
+    public List<Depot> getBaseDepots() {
+        return Collections.unmodifiableList(depots.subList(0, NUMBER_OF_DEFAULT_DEPOTS));
+    }
+
+    /**
+     * Getter of the leader depots
+     *
+     * @return list of leader depots
+     */
+    public List<Depot> getLeaderDepots() {
+        return Collections.unmodifiableList(depots.subList(NUMBER_OF_DEFAULT_DEPOTS, depots.size()));
     }
 
     /**
@@ -114,6 +121,14 @@ public class Warehouse extends Observable<SessionMessage> {
         return depots.stream().map(Depot::grabAllResources).flatMap(List::stream).collect(Collectors.toList());
     }
 
+    /**
+     * Method to grab resources of a certain type from the depots.
+     * Returns the resources and remove them from the warehouse.
+     *
+     * @param resource          resource to grab
+     * @param numberOfResources quantity
+     * @return list of grabbed resources
+     */
     public List<Resource> grabResources(Resource resource, int numberOfResources) {
         List<Resource> grabbedResources = new ArrayList<>();
 
@@ -141,4 +156,5 @@ public class Warehouse extends Observable<SessionMessage> {
     public void addLeaderDepot(LeaderDepot leaderDepot) {
         depots.add(leaderDepot);
     }
+
 }

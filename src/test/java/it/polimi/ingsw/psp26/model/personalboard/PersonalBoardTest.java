@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PersonalBoardTest {
 
@@ -170,7 +171,35 @@ public class PersonalBoardTest {
         resources.remove(Resource.COIN);
         personalBoard.grabResourcesFromStrongbox(Resource.COIN, 2);
         assertEquals(resources, personalBoard.getStrongbox());
+    }
 
+    @Test
+    public void testGrabResourcesFromWarehouseAndStrongbox() throws CanNotAddResourceToStrongboxException, CanNotAddResourceToWarehouse {
+        personalBoard.getWarehouse().addResource(Resource.SHIELD);
+        personalBoard.getWarehouse().addResource(Resource.COIN);
+        personalBoard.addResourceToStrongbox(Resource.COIN);
+        assertEquals(new ArrayList<>() {{
+            add(Resource.COIN);
+            add(Resource.COIN);
+        }}, personalBoard.grabResourcesFromWarehouseAndStrongbox(Resource.COIN, 2));
+    }
+
+    @Test
+    public void testGrabAllAvailableResources() throws CanNotAddResourceToStrongboxException, CanNotAddResourceToWarehouse {
+        personalBoard.getWarehouse().addResource(Resource.SHIELD);
+        personalBoard.addResourceToStrongbox(Resource.COIN);
+        List<Resource> resources = personalBoard.grabAllAvailableResources();
+        assertTrue(resources.contains(Resource.SHIELD));
+        assertTrue(resources.contains(Resource.COIN));
+    }
+
+    @Test
+    public void testGetAllAvailableResources() throws CanNotAddResourceToStrongboxException, CanNotAddResourceToWarehouse {
+        personalBoard.getWarehouse().addResource(Resource.SHIELD);
+        personalBoard.addResourceToStrongbox(Resource.COIN);
+        List<Resource> resources = personalBoard.getAllAvailableResources();
+        assertTrue(resources.contains(Resource.SHIELD));
+        assertTrue(resources.contains(Resource.COIN));
     }
 
 }

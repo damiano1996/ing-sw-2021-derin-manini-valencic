@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class ActivateProductionNormalActionTurnState extends TurnState {
@@ -88,7 +87,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
     private void takePlayerResourcesSnapShot(Player player, List<Resource> strongBoxCopy, List<List<Resource>> depotsCopy) {
         strongBoxCopy.addAll(player.getPersonalBoard().getStrongbox());
-        for (Depot depot : player.getPersonalBoard().getWarehouse().getDepots()) {
+        for (Depot depot : player.getPersonalBoard().getWarehouse().getAllDepots()) {
             List<Resource> depotCopy1 = new ArrayList<>();
             depotCopy1.addAll(depot.getResources());
             depotsCopy.add(depotCopy1);
@@ -99,8 +98,8 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     private void Reverse(List<Resource> strongBoxCopy, List<List<Resource>> depotsCopy, Player player) throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
         player.getPersonalBoard().getStrongbox().clear();
         player.getPersonalBoard().getStrongbox().addAll(strongBoxCopy);
-        for (int i = 0; i < player.getPersonalBoard().getWarehouse().getDepots().size(); i++) {
-            player.getPersonalBoard().getWarehouse().grabAllResourcesFromDepot(i);
+        for (int i = 0; i < player.getPersonalBoard().getWarehouse().getAllDepots().size(); i++) {
+            player.getPersonalBoard().getWarehouse().getAllDepots().get(i).grabAllResources();
             for (int j = 0; j < depotsCopy.get(i).size(); j++) {
                 player.getPersonalBoard().getWarehouse().addResourceToDepot(i, depotsCopy.get(i).get(0));
             }

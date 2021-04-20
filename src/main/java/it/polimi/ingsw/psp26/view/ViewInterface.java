@@ -10,7 +10,6 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 
@@ -37,7 +36,7 @@ public interface ViewInterface {
     void displayWarehouseDepots(Warehouse warehouse);
 
 
-    void displayDepotsNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd);
+    void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd);
 
 
     void displayStrongbox(List<Resource> strongbox);

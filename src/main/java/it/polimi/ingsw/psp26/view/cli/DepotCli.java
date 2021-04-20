@@ -46,7 +46,8 @@ public class DepotCli {
      */
     public void printWarehouse(Warehouse warehouse, int startingRow, int startingColumn) {
         cliUtils.printFigure("Warehouse", startingRow, startingColumn);
-        for (int i = 0; i < 3; i++) printDepot(warehouse.getDepots().get(i), startingRow, startingColumn, i + 1);
+        for (int i = 0; i < warehouse.getBaseDepots().size(); i++)
+            printDepot(warehouse.getBaseDepots().get(i), startingRow, startingColumn, i + 1);
     }
 
     /**

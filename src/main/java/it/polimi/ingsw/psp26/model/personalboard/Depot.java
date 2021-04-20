@@ -74,7 +74,7 @@ public class Depot extends Observable<SessionMessage> {
      *
      * @return ist containing all the resources of the depot
      */
-    protected List<Resource> grabAllResources() {
+    public List<Resource> grabAllResources() {
         return grabResources(resources.size());
     }
 

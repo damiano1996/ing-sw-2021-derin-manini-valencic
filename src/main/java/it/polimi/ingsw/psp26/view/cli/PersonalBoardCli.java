@@ -14,8 +14,6 @@ import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import java.io.PrintWriter;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.model.personalboard.Warehouse.NUMBER_OF_DEFAULT_DEPOTS;
-
 public class PersonalBoardCli {
 
     private final PrintWriter pw;
@@ -54,7 +52,7 @@ public class PersonalBoardCli {
 
         printLeaderCardsInPersonalBoard(player.getLeaderCards(), 38, 195);
 
-        printLeaderDepots(player.getPersonalBoard().getWarehouse().getDepots(), 46, 7);
+        printLeaderDepots(player.getPersonalBoard().getWarehouse().getLeaderDepots(), 46, 7);
     }
 
     /**
@@ -164,16 +162,15 @@ public class PersonalBoardCli {
     /**
      * If the Warehouse has more than 3 depots, prints the corresponding Leader Depots
      *
-     * @param depots         The total Warehouse Depots
+     * @param leaderDepots   Leader Depots of the warehouse
      * @param startingRow    The starting row where the Player's Leader Depots are going to be printed
      * @param startingColumn The starting column where the Player's Leader Depots are going to be printed
      */
-    public void printLeaderDepots(List<Depot> depots, int startingRow, int startingColumn) { //forse c'è una soluzione più elegante
-        if (depots.size() > NUMBER_OF_DEFAULT_DEPOTS)
-            for (int i = NUMBER_OF_DEFAULT_DEPOTS; i < depots.size(); i++) {
-                cliUtils.printFigure("LeaderDepot", startingRow, startingColumn + ((i - 3) * 18));
-                printLeaderDepotResources((LeaderDepot) depots.get(i), startingRow, startingColumn + ((i - 3) * 18));
-            }
+    public void printLeaderDepots(List<Depot> leaderDepots, int startingRow, int startingColumn) {
+        for (int i = 0; i < leaderDepots.size(); i++) {
+            cliUtils.printFigure("LeaderDepot", startingRow, startingColumn + (i * 18));
+            printLeaderDepotResources((LeaderDepot) leaderDepots.get(i), startingRow, startingColumn + (i * 18));
+        }
     }
 
     /**

@@ -6,10 +6,10 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
@@ -73,16 +73,10 @@ public class Client extends Observable<Message> implements Observer<Message> {
                 break;
 
             case PLACE_IN_WAREHOUSE:
-//                List<List<Resource>> resourcesWarehouse = new ArrayList<>();
-//
-//                for (Object o : message.getListPayloads()) {
-//                    List<Resource> resources = castElements(Resource.class, (List<Object>) o);
-//                    resourcesWarehouse.add(resources);
-//                }
-//
-//                List<Resource> resourcesToAdd = resourcesWarehouse.remove(0);
-//
-//                viewInterface.displayDepotsNewResourcesAssignment(resourcesToAdd, resourcesWarehouse);
+                List<Message> messages = castElements(Message.class, message.getListPayloads());
+                Warehouse warehouse = (Warehouse) messages.get(0).getPayload();
+                List<Resource> resourcesToAdd = castElements(Resource.class, messages.get(1).getListPayloads());
+                viewInterface.displayWarehouseNewResourcesAssignment(warehouse, resourcesToAdd);
 
             default:
                 break;

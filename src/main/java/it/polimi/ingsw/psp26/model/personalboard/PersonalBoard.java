@@ -240,7 +240,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
      * @return list containing the requested resources
      */
     public List<Resource> grabResourcesFromWarehouseAndStrongbox(Resource resource, int numberOfResources) {
-        List<Resource> grabbedResources = new ArrayList<>(warehouse.grabResources(resource, numberOfResources));
+        List<Resource> grabbedResources = warehouse.grabResources(resource, numberOfResources);
 
         if (grabbedResources.size() < numberOfResources)
             grabbedResources.addAll(grabResourcesFromStrongbox(resource, numberOfResources));
@@ -266,7 +266,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
      * @return list of resources
      */
     public List<Resource> getAllAvailableResources() {
-        List<Resource> resources = warehouse.getResources();
+        List<Resource> resources = new ArrayList<>(warehouse.getResources());
         resources.addAll(strongbox);
         return Collections.unmodifiableList(resources);
     }

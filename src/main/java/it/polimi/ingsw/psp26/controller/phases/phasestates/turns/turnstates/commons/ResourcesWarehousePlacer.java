@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
@@ -44,7 +45,7 @@ public class ResourcesWarehousePlacer extends TurnState {
                 // try to add
                 for (int i = 0; i < resourceQuantity; i++) {
                     try {
-                        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToWarehouse(resource);
+                        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resource);
                     } catch (CanNotAddResourceToWarehouse canNotAddResourceToWarehouse) {
                         // if we reached the maximum we will add one point to opponents
                         discardedResources += 1;
@@ -67,11 +68,14 @@ public class ResourcesWarehousePlacer extends TurnState {
     private void sendMessage() {
         System.out.println("ResourcesWarehousePlacer - sending message to " + turn.getTurnPlayer().getNickname());
 
+        Message msg1 = new Message(MessageType.PLACE_IN_WAREHOUSE, turn.getTurnPlayer().getPersonalBoard().getWarehouse());
+        Message msg2 = new Message(MessageType.PLACE_IN_WAREHOUSE, resourcesToAdd.toArray());
+
         turn.getMatchController().notifyObservers(
                 new SessionMessage(
                         turn.getTurnPlayer().getSessionToken(),
                         MessageType.PLACE_IN_WAREHOUSE,
-                        turn.getTurnPlayer().getPersonalBoard().getWarehouse()
+                        msg1, msg2
                 )
         );
 

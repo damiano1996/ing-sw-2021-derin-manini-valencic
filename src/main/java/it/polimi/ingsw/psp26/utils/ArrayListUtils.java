@@ -1,7 +1,5 @@
 package it.polimi.ingsw.psp26.utils;
 
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +13,7 @@ public class ArrayListUtils {
      * @param numberOfElements number of elements to draw
      * @param <T>              generic object
      * @return list containing the drawn elements
-     * @throws IndexOutOfBoundsException               if the index of the card to draw is out of bounds
+     * @throws IndexOutOfBoundsException if the index of the card to draw is out of bounds
      */
     public static <T> List<T> grabElements(List<T> list, int numberOfElements) throws IndexOutOfBoundsException {
         List<T> drawnElements = new ArrayList<>(list.subList(0, numberOfElements));

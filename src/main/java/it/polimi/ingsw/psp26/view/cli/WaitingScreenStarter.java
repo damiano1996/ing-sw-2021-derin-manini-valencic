@@ -13,6 +13,7 @@ public class WaitingScreenStarter {
     private static WaitingScreenStarter instance;
     private final CliUtils cliUtils;
     private WaitingScreen waitingScreen;
+    private Thread waitingThread;
 
     //Control the ability to start or stop the Waiting Screen
     private boolean isWaiting;
@@ -34,6 +35,7 @@ public class WaitingScreenStarter {
         return instance;
     }
 
+
     /**
      * Starts a Waiting Screen by creating a new Waiting Screen
      *
@@ -45,21 +47,31 @@ public class WaitingScreenStarter {
             cliUtils.hideCursor();
             cliUtils.pPCS((String) message.getPayload(), Color.WHITE, 25, 90);
 
-            waitingScreen = new WaitingScreen();
             isWaiting = true;
-            waitingScreen.startWaiting();
+            waitingScreen = new WaitingScreen();
+            waitingThread = new Thread(waitingScreen);
+            waitingThread.start();
         }
     }
+
 
     /**
      * Stops the executing Waiting Screen
      */
     public void stopWaiting() {
         if (isWaiting) {
+            waitingScreen.stopWaiting();
+
+            cliUtils.cls();
             cliUtils.showCursor();
 
-            waitingScreen.stopWaiting();
+            try {
+                waitingThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             isWaiting = false;
         }
     }
+
 }

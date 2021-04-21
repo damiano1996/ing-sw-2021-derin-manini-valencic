@@ -77,11 +77,11 @@ public class CliTest {
         Scanner tast = new Scanner(System.in);
         Message message = new Message(MessageType.GENERAL_MESSAGE, "Please wait the other players to come");
         String s = "a";
-        //while (s.equals("a")) {
+        while (s.equals("a")) {
         waitingScreenStarter.startWaiting(message);
         tast.nextLine();
         waitingScreenStarter.stopWaiting();
-        //}
+        }
 
         message = new Message(MessageType.GENERAL_MESSAGE, "Please wait the other players to choose the resources");
         waitingScreenStarter.startWaiting(message);

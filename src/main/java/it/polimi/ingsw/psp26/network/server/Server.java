@@ -36,13 +36,7 @@ public class Server {
             NetworkNode nodeClient = new NetworkNode(socket);
 
             // run thread to handle client setup
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    addNodeClient(nodeClient);
-                }
-            }).start();
-
+            new Thread(() -> addNodeClient(nodeClient)).start();
         }
     }
 

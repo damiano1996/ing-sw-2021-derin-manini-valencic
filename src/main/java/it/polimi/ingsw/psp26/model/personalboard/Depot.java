@@ -61,7 +61,7 @@ public class Depot extends Observable<SessionMessage> {
      * @throws CanNotAddResourceToDepotException if depot has reached the maximum number of resources or
      *                                           if the resource is not admissible given the others
      */
-    public void addResource(Resource resource) throws CanNotAddResourceToDepotException {
+    protected void addResource(Resource resource) throws CanNotAddResourceToDepotException {
         if (resources.size() == maxNumberOfResources) throw new CanNotAddResourceToDepotException();
         if (isAdmissible(resource)) resources.add(resource);
         else throw new CanNotAddResourceToDepotException();
@@ -85,7 +85,7 @@ public class Depot extends Observable<SessionMessage> {
      * @return list containing the number of requested resources
      * @throws IndexOutOfBoundsException if trying to remove more resources than the depot contains
      */
-    protected List<Resource> grabResources(int quantity) throws IndexOutOfBoundsException {
+    public List<Resource> grabResources(int quantity) throws IndexOutOfBoundsException {
         return grabElements(resources, quantity);
     }
 

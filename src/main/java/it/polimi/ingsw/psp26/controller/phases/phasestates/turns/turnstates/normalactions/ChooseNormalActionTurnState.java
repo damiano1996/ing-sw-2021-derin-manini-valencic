@@ -21,13 +21,17 @@ public class ChooseNormalActionTurnState extends TurnState {
 
         if (message.getMessageType().equals(CHOICE_NORMAL_ACTION)) {
             switch ((MessageType) message.getPayload()) {
+
                 case ACTIVATE_PRODUCTION:
                     turn.changeState(new ActivateProductionNormalActionTurnState(turn));
                     turn.play(message);
+                    break;
+
                 case MARKET_RESOURCE:
                     turn.changeState(new MarketResourceNormalActionTurnState(turn));
                     turn.play(message);
                     break;
+
                 case BUY_CARD:
                     turn.changeState(new BuyCardNormalActionTurnState(turn));
                     turn.play(message);

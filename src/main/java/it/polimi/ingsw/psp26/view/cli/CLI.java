@@ -39,7 +39,7 @@ public class CLI implements ViewInterface {
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
 
-    public CLI(Client client) { //TODO devi passare al costruttore un match e ricavare isMultiPlayerMode da quello
+    public CLI(Client client) {
         this.client = client;
 
         this.pw = new PrintWriter(System.out);

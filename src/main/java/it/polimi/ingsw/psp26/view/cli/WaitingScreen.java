@@ -10,11 +10,11 @@ public class WaitingScreen implements Runnable {
     //TODO facendolo stoppare e ripartire in tempi molto ravvicinati 2 volte è successo che stampasse in posti dove non dovrebbe non so perchè
     // magari chiedere alla review se succede ancora
 
+    private final CliUtils cliUtils;
     //Setting this to true will stop the waiting screen
     private boolean stopWaiting;
-    private final CliUtils cliUtils;
 
-    
+
     public WaitingScreen() {
         this.stopWaiting = false;
         this.cliUtils = new CliUtils(new PrintWriter(System.out));
@@ -26,7 +26,7 @@ public class WaitingScreen implements Runnable {
      */
     @Override
     public void run() {
-        
+
         int frameCounter = 1;
 
         while (!stopWaiting) {
@@ -41,7 +41,7 @@ public class WaitingScreen implements Runnable {
             }
 
             frameCounter++;
-            
+
             //10 is the total amount of WaitingScreen's Frames
             if (frameCounter > 10) frameCounter = 1;
 

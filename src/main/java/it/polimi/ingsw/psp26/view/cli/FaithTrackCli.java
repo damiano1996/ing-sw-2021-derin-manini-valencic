@@ -140,7 +140,7 @@ public class FaithTrackCli {
         pw.print(isVaticanReportSectionActive(vaticanReportSections[2]));
     }
 
-    
+
     /**
      * If the Vatican Report Tile is active returns it's value
      *

@@ -139,7 +139,7 @@ public class DepotCli {
         pw.flush();
     }
 
-    
+
     /**
      * Used in printWarehouse() to get the correct representation of Resources
      *

@@ -10,8 +10,8 @@ import java.io.PrintWriter;
  */
 public class WaitingScreenStarter {
 
-    private final CliUtils cliUtils;
     private static WaitingScreenStarter instance;
+    private final CliUtils cliUtils;
     private WaitingScreen waitingScreen;
 
     //Control the ability to start or stop the Waiting Screen

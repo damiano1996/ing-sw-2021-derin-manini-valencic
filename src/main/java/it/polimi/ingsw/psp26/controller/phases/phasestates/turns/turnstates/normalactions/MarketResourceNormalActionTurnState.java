@@ -11,14 +11,11 @@ import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 //To test after message.class is completed
 
@@ -61,10 +58,10 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 Warehouse warehouse = turn.getTurnPlayer().getPersonalBoard().getWarehouse();
                 tempResources.addAll(warehouse.grabAllResources());
                 int depotNumber = 0;
-                for(int i =0 ; i < playerResourceChoice.size() ; i++){
-                        if(!playerResourceChoice.get(i).equals(Resource.EMPTY) || !tempResources.contains(playerResourceChoice.get(i))){
-                            for(int j = 0; j < warehouse.getAllDepots().get(i).getMaxNumberOfResources(); j++)
-                                if(tempResources.contains(playerResourceChoice.get(i))){
+                for (int i = 0; i < playerResourceChoice.size(); i++) {
+                    if (!playerResourceChoice.get(i).equals(Resource.EMPTY) || !tempResources.contains(playerResourceChoice.get(i))) {
+                        for (int j = 0; j < warehouse.getAllDepots().get(i).getMaxNumberOfResources(); j++)
+                            if (tempResources.contains(playerResourceChoice.get(i))) {
                                 try {
                                     warehouse.addResourceToDepot(i, playerResourceChoice.get(i));
                                     tempResources.remove(playerResourceChoice);
@@ -72,12 +69,11 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                                     turn.changeState(new OneResourceTurnState(turn, this, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots().size()));
                                     break;
                                 }
-                            }
-                            else{
+                            } else {
                                 j = warehouse.getAllDepots().get(i).getMaxNumberOfResources();
                             }
-                        }
                     }
+                }
                 discardResources(turn.getMatchController().getMatch(), turn.getTurnPlayer());
                 turn.changeState(new CheckVaticanReportTurnState(turn));
                 turn.play(message);

@@ -67,7 +67,7 @@ public class MarketCli {
         }
     }
 
-    
+
     /**
      * Prints the marble on the Market Tray slide
      *

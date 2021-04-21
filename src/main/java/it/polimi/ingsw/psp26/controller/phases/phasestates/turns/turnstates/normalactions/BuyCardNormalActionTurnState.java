@@ -33,12 +33,12 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
                 List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
                 List<DevelopmentCard> gettableCards = getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
-                if(gettableCards.size() != 0) {
+                if (gettableCards.size() != 0) {
                     turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
                             MessageType.CHOICE_CARD_TO_BUY, 1, 1,
                             gettableCards.toArray(new Object[0])
                     ));
-                }else{
+                } else {
                     turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
                             CHOICE_NORMAL_ACTION, 1, 1,
                             ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD));

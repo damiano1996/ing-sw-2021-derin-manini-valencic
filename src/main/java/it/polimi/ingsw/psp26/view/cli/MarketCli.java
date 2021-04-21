@@ -15,6 +15,7 @@ public class MarketCli {
         this.cliUtils = new CliUtils(pw);
     }
 
+
     /**
      * Prints the Market interaction screen
      *
@@ -24,6 +25,7 @@ public class MarketCli {
         cliUtils.printFigure("MarketTitle", 1, 59);
         displayMarketTray(marketTray, 13, 18);
     }
+
 
     /**
      * Prints the Market Tray
@@ -38,6 +40,7 @@ public class MarketCli {
         printMarbleOnSlide(marketTray, startingRow, startingColumn + 17);
         printMarketMarbleRows(marketTray, startingRow, startingColumn + 17);
     }
+
 
     /**
      * Prints the rows of the Market Tray
@@ -64,6 +67,7 @@ public class MarketCli {
         }
     }
 
+    
     /**
      * Prints the marble on the Market Tray slide
      *

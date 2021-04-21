@@ -21,6 +21,7 @@ public class DevelopmentCardsCli {
         this.cliUtils = new CliUtils(pw);
     }
 
+
     /**
      * Prints the Development Card Grid
      *
@@ -36,6 +37,7 @@ public class DevelopmentCardsCli {
 
         cliUtils.printFigure("GridTitle", 10, 135);
     }
+
 
     /**
      * Printrint DevelopmentCards.
@@ -58,6 +60,7 @@ public class DevelopmentCardsCli {
         pw.flush();
     }
 
+
     /**
      * Prints one border for each Development Card under the top one
      *
@@ -69,6 +72,7 @@ public class DevelopmentCardsCli {
         if (cardStackSize > 1)
             cliUtils.printFigure("DevelopmentCardBorder" + (cardStackSize - 1), startingRow, startingColumn);
     }
+
 
     /**
      * Prints the Card color on top and on bottom of the level dots
@@ -89,6 +93,7 @@ public class DevelopmentCardsCli {
 
         pw.flush();
     }
+
 
     /**
      * Prints the Development Card requirements line
@@ -113,6 +118,7 @@ public class DevelopmentCardsCli {
         pw.flush();
     }
 
+
     /**
      * Prints the Development Card level line in the correct color
      *
@@ -134,6 +140,7 @@ public class DevelopmentCardsCli {
         pw.flush();
     }
 
+
     /**
      * Prints a Card level dots in the correct Color
      *
@@ -144,6 +151,7 @@ public class DevelopmentCardsCli {
     private String printLevelDots(int level, Color color) {
         return cliUtils.pCS("\u25CF ", color).repeat(Math.max(0, level));
     }
+
 
     /**
      * Generic method that prints a Production. May be used with every Production Object
@@ -157,6 +165,7 @@ public class DevelopmentCardsCli {
         for (int i = 0; i < 3; i++)
             printProductionLines(productionCost, productionReturn, i, startingRow, startingColumn);
     }
+
 
     /**
      * Used to print the Production section of a DevelopmentCard
@@ -192,6 +201,7 @@ public class DevelopmentCardsCli {
             printThirdProductionRow(requiredResources, numberOfRequiredResources, producedResources, numberOfProducedResources, startingRow, startingColumn);
     }
 
+
     /**
      * Prints the first line of the Development Card production section
      *
@@ -218,6 +228,7 @@ public class DevelopmentCardsCli {
         pw.print(s);
         pw.flush();
     }
+
 
     /**
      * Prints the second line of the Development Card production section
@@ -247,6 +258,7 @@ public class DevelopmentCardsCli {
         pw.flush();
     }
 
+
     /**
      * Prints the third line of the Development Card production section
      *
@@ -275,6 +287,7 @@ public class DevelopmentCardsCli {
         pw.flush();
     }
 
+
     /**
      * Print the Development Card's Victory Points
      *
@@ -292,6 +305,7 @@ public class DevelopmentCardsCli {
         pw.flush();
     }
 
+    
     /**
      * Used to print the Development Cards in the Development Grid
      *

@@ -1,17 +1,17 @@
 package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
+import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
-public class LeaderCardsCli {
+public class LeaderCardsCli { //TODO se va bene così il metodo per scegliere i leader elimina le parti commentate sotto
 
+    private static final int CLI_WIDTH = 237;
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
@@ -20,58 +20,25 @@ public class LeaderCardsCli {
         this.cliUtils = new CliUtils(pw);
     }
 
+
     /**
      * Prints the Leader selection Screen
      *
      * @param leaderCards The 4 Leader Cards given to the Player choice
      */
-    public void displayLeaderSelection(List<LeaderCard> leaderCards) { //TODO migliora la gestione della scelta
-        List<LeaderCard> selectedLeaders = new ArrayList<>();
-        Scanner in = new Scanner(System.in);
-        int index;
+//    public void displayLeaderSelection(List<LeaderCard> leaderCards) {
+//        cliUtils.cls();
+//
+//        cliUtils.printFigure("LeaderSelectionTitle", 1, 28);
+//        printMultipleLeaders(leaderCards, 10);
+//
+//        //for (int j = 0; j < leaderCards.size(); j++)
+//        //isLeaderSelected(leaderCards.get(j), selectedLeaders, leaderCards, 30, 40 + (j * 45));
+//
+//        cliUtils.vSpace(5);
+//
+//    }
 
-        for (int i = 0; i < 2; i++) {
-            cliUtils.cls();
-
-            cliUtils.printFigure("LeaderSelectionTitle", 1, 28);
-
-            printLeaderChoice(leaderCards, 11);
-
-            for (int j = 0; j < leaderCards.size(); j++)
-                isLeaderSelected(leaderCards.get(j), selectedLeaders, leaderCards, 30, 40 + (j * 45));
-
-            cliUtils.vSpace(5);
-
-            pw.print(cliUtils.hSpace(27) + "Please type the number of the ");
-            if (i == 0) pw.print("first ");
-            else pw.print("second ");
-            pw.print("Leader of your choice: ");
-            pw.flush();
-
-            //TEMPORARY SOLUTION
-            do {
-                do {
-                    index = in.nextInt() - 1;
-                    if (index < 0 || index > 3) {
-                        pw.print(cliUtils.hSpace(27) + "Index is out of bounds! Please try again: ");
-                        pw.flush();
-                    }
-                } while (index > 3 || index < 0);
-                if (!selectedLeaders.contains(leaderCards.get(index))) {
-                    selectedLeaders.add(leaderCards.get(index));
-                    break;
-                } else {
-                    pw.print(cliUtils.hSpace(27) + "Leader already selected! Please try again: ");
-                    pw.flush();
-                }
-            } while (selectedLeaders.contains(leaderCards.get(index)));
-        }
-
-        in.nextLine();
-
-        /*Debug only*/
-        pw.println("You selected Leader " + (leaderCards.indexOf(selectedLeaders.get(0)) + 1) + " and Leader " + (leaderCards.indexOf(selectedLeaders.get(1)) + 1));
-    }
 
     /**
      * If a Leader Cards is selected, mark it with a red SELECTED String
@@ -82,31 +49,50 @@ public class LeaderCardsCli {
      * @param startingRow     The starting row where the Leader Card is going to be printed
      * @param startingColumn  The starting column where the Leader Card is going to be printed
      */
-    private void isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
-        cliUtils.setCursorPosition(startingRow, startingColumn);
-        if (selectedLeaders.contains(leaderCard)) pw.print("\u001b[41m  SELECTED  \u001b[0m");
-        else pw.print("  Leader " + (leaderCards.indexOf(leaderCard) + 1) + "  ");
-        pw.flush();
-    }
+//    private void isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
+//        cliUtils.setCursorPosition(startingRow, startingColumn);
+//        if (selectedLeaders.contains(leaderCard)) pw.print("\u001b[41m  SELECTED  \u001b[0m");
+//        else pw.print("  Leader " + (leaderCards.indexOf(leaderCard) + 1) + "  ");
+//        pw.flush();
+//    }
+
 
     /**
-     * Prints the 4 Leader cards one next to the others. Used in selectLeaders() method
+     * Prints the given Leader Cards by correctly aligning them on screen
      *
-     * @param leaderCards The cards to print
-     * @param startingRow The starting row where the Leader Card is going to be printed
+     * @param leaderCards The Leader Cards to print
+     * @param startingRow The row where the cards will be printed
      */
-    public void printLeaderChoice(List<LeaderCard> leaderCards, int startingRow) {
-        for (int i = 0; i < leaderCards.size(); i++) printLeader(leaderCards.get(i), startingRow, 33 + (i * 45));
+    public void printMultipleLeaders(List<LeaderCard> leaderCards, int startingRow) {
+        //print the cards
+        for (int i = 0; i < leaderCards.size(); i++)
+            printLeader(leaderCards.get(i), startingRow, getPrintMultipleLeadersStartingColumn(leaderCards.size()) + (i * 45));
+
+        //print the leader progressive number
+        for (int i = 0; i < leaderCards.size(); i++)
+            cliUtils.pPCS("LEADER  #" + (i + 1), Color.WHITE, startingRow + 19, getPrintMultipleLeadersStartingColumn(leaderCards.size()) + 8 + (i * 45));
     }
 
+
     /**
-     * Prints a LeaderCard line by line
+     * Calculate the correct position for printing the Leader Cards
+     *
+     * @param numberOfLeaders The number of Leader Cards to print
+     * @return The correct column position to print them
+     */
+    public int getPrintMultipleLeadersStartingColumn(int numberOfLeaders) {
+        return ((CLI_WIDTH - (numberOfLeaders * 27) - ((numberOfLeaders - 1) * 18)) / 2) - 4;
+    }
+
+
+    /**
+     * Prints a single LeaderCard
      *
      * @param leaderCard     The Leader Card to print
      * @param startingRow    The row in which the Leader Card will be printed
      * @param startingColumn The column in which the Leader Card will be printed
      */
-    public void printLeader(LeaderCard leaderCard, int startingRow, int startingColumn) {
+    private void printLeader(LeaderCard leaderCard, int startingRow, int startingColumn) {
         cliUtils.printFigure(
                 "leadercards/" + leaderCard.getAbilityToString().split(":")[0],
                 startingRow, startingColumn);
@@ -114,6 +100,7 @@ public class LeaderCardsCli {
         //Prints the colored square for the Resource information
         cliUtils.pPCS("\u25A0", leaderCard.getAbilityResource().getColor(), startingRow + 16, startingColumn + 22);
     }
+
 
     /**
      * Prints the requirement of a given Leader Card
@@ -128,6 +115,7 @@ public class LeaderCardsCli {
         else
             printLeaderDevelopmentCardRequirements(leaderCard.getDevelopmentCardRequirements(), startingRow, startingColumn);
     }
+
 
     /**
      * If the Leader Cards requires Development Cards, this method is invoked in printLeaderRequirements()
@@ -160,6 +148,7 @@ public class LeaderCardsCli {
         pw.print(s);
         pw.flush();
     }
+
 
     /**
      * If the Leader Cards requires Resources, this method is invoked in printLeaderRequirements()

@@ -17,6 +17,7 @@ public class CliUtils {
         this.pw = pw;
     }
 
+
     /**
      * Inserts blank lines
      *
@@ -26,6 +27,7 @@ public class CliUtils {
         for (int i = 0; i < spaces; i++) pw.println();
         pw.flush();
     }
+
 
     /**
      * Inserts blank spaces in a String
@@ -37,6 +39,7 @@ public class CliUtils {
         return " ".repeat(Math.max(0, spaces));
     }
 
+
     /**
      * Clears the terminal screen
      */
@@ -44,6 +47,7 @@ public class CliUtils {
         pw.print("\033[H\033[2J");
         pw.flush();
     }
+
 
     /**
      * pCS = Print Colored String. Returns a colored String
@@ -55,6 +59,7 @@ public class CliUtils {
     public String pCS(String string, Color color) {
         return color.toString() + string + Color.RESET;
     }
+
 
     /**
      * Moves the cursor in the specified direction and by the specified numbers
@@ -86,6 +91,7 @@ public class CliUtils {
         pw.flush();
     }
 
+
     /**
      * Saves the cursor position
      */
@@ -94,6 +100,7 @@ public class CliUtils {
         pw.flush();
     }
 
+
     /**
      * Restore the cursor position from the previous saved one
      */
@@ -101,6 +108,7 @@ public class CliUtils {
         pw.print("\u001b[u");
         pw.flush();
     }
+
 
     /**
      * Set the cursor position at the specified row and column
@@ -113,6 +121,7 @@ public class CliUtils {
         pw.flush();
     }
 
+
     /**
      * Prints an ASCII figure on the screen th the specified coordinates (x,y)
      *
@@ -120,7 +129,7 @@ public class CliUtils {
      * @param row        The y coordinate
      * @param col        The x coordinate
      */
-    public void printFigure(String figureName, int row, int col) { //PATHS MAY DIFFER IN THE FINAL SOLUTION
+    public void printFigure(String figureName, int row, int col) {
 
         Scanner in = null;
 
@@ -139,6 +148,7 @@ public class CliUtils {
 
         in.close();
     }
+
 
     /**
      * Auxiliary method that prints the specidied ascii figure
@@ -160,12 +170,14 @@ public class CliUtils {
         pw.flush();
     }
 
+
     /**
      * Set the cursor in the bottom left position of the screen
      */
     public void setCursorBottomLeft() {
         setCursorPosition(58, 1);
     }
+
 
     /**
      * Prints a colored string and set the cursor one line under the first column
@@ -180,6 +192,7 @@ public class CliUtils {
         restoreCursorPosition();
         moveCursor("dn", 1);
     }
+
 
     /**
      * pPCS = print Positioned Colored String
@@ -196,6 +209,7 @@ public class CliUtils {
         pw.flush();
     }
 
+
     /**
      * Hides the cursor from screen
      */
@@ -203,6 +217,7 @@ public class CliUtils {
         pw.print("\u001b[?25l");
         pw.flush();
     }
+
 
     /**
      * Put the cursor visibility back on screen

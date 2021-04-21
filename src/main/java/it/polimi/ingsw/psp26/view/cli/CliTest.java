@@ -78,11 +78,11 @@ public class CliTest {
         Message message = new Message(MessageType.GENERAL_MESSAGE, "Please wait the other players to come");
         String s = "a";
         //while (s.equals("a")) {
-            waitingScreenStarter.startWaiting(message);
-            tast.nextLine();
-            waitingScreenStarter.stopWaiting();
+        waitingScreenStarter.startWaiting(message);
+        tast.nextLine();
+        waitingScreenStarter.stopWaiting();
         //}
-        
+
         message = new Message(MessageType.GENERAL_MESSAGE, "Please wait the other players to choose the resources");
         waitingScreenStarter.startWaiting(message);
         tast.nextLine();
@@ -284,7 +284,7 @@ public class CliTest {
             fourLeaders.add(leaderCards.get(8 + i));
             fourLeaders.add(leaderCards.get(12 + i));
 
-            leaderCardsCli.printLeaderChoice(fourLeaders, 1);
+            leaderCardsCli.printMultipleLeaders(fourLeaders, 1);
             in.nextLine();
             cliUtils.cls();
         }
@@ -293,7 +293,7 @@ public class CliTest {
         //---SELECT-LEADER-SCREEN-TEST---// Follow terminal instructions
 
         cliUtils.cls();
-        cli.displayLeaderChoice(fourLeaders);
+        leaderCardsCli.printMultipleLeaders(fourLeaders, 1);
         in.nextLine();
         List<LeaderCard> twoleaders = new ArrayList<>();
         twoleaders.add(fourLeaders.get(0));

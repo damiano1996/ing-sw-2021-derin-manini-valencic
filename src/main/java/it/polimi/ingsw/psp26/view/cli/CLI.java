@@ -111,44 +111,52 @@ public class CLI implements ViewInterface {
         }
     }
 
-    public void displayLeaderChoice(List<LeaderCard> leaderCards) {
-        leaderCardsCli.displayLeaderSelection(leaderCards);
-    }
+
+//    public void displayLeaderChoice(List<LeaderCard> leaderCards) {
+//        leaderCardsCli.displayLeaderSelection(leaderCards);
+//    }
+
 
     @Override
     public void displayLeaderCards(List<LeaderCard> leaderCards) {
         personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
     }
 
+
     @Override
     public void displayInkwell(boolean isPrintable) {
         personalBoardCli.displayInkwell(isPrintable, 5, 190);
     }
+
 
     @Override
     public void displayInitialResources(List<Resource> resources) {
         //To be completed
     }
 
+
     @Override
     public void displayPersonalBoard(Player player) {
         personalBoardCli.displayPersonalBoard(player, isMultiPlayerMode);
     }
+
 
     @Override
     public void displayWarehouseDepots(Warehouse warehouse) {
         depotCli.printWarehouse(warehouse, 17, 13);
     }
 
+
     @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
-
+        //To be completed
     }
 
     @Override
     public void displayStrongbox(List<Resource> strongbox) {
         depotCli.displayStrongbox(strongbox, 30, 3);
     }
+
 
     @Override
     public void displayFaithTrack(FaithTrack faithTrack) {
@@ -160,19 +168,23 @@ public class CLI implements ViewInterface {
         personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
     }
 
+
     @Override
     public void displayMarketTray(MarketTray marketTray) {
         marketCli.displayMarketTray(marketTray, 12, 88);
     }
+
 
     @Override
     public void displayMarketScreen(MarketTray marketTray) {
         marketCli.displayMarketScreen(marketTray);
     }
 
+
     public void displayMarketResourcesSelection(Warehouse warehouse, List<Resource> resources) {
         depotCli.displayMarketResourcesSelection(warehouse, resources);
     }
+
 
     @Override
     public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
@@ -185,6 +197,7 @@ public class CLI implements ViewInterface {
         personalBoardCli.displayResourceSupply(resourceSupply, 1, 37);
     }
 
+
     @Override
     public void displayProductionActivation(List<Production> productions) {
         personalBoardCli.displayProductionActivation(productions);
@@ -192,7 +205,8 @@ public class CLI implements ViewInterface {
 
     public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
         cliUtils.cls();
-        personalBoardCli.printLeaders(leaderCards, 1, 1);
+        leaderCardsCli.printMultipleLeaders(leaderCards, 3);
+        cliUtils.vSpace(3);
     }
 
     @Override

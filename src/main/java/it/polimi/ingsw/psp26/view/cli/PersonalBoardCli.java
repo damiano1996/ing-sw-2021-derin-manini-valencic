@@ -32,6 +32,7 @@ public class PersonalBoardCli {
         this.depotCli = new DepotCli(pw);
     }
 
+
     /**
      * Prints the Personal Board of a given player
      *
@@ -55,6 +56,7 @@ public class PersonalBoardCli {
         printLeaderDepots(player.getPersonalBoard().getWarehouse().getLeaderDepots(), 46, 7);
     }
 
+
     /**
      * Prints the Inkwell
      *
@@ -65,6 +67,7 @@ public class PersonalBoardCli {
     public void displayInkwell(boolean isPrintable, int startingRow, int startingColumn) {
         if (isPrintable) cliUtils.printFigure("Inkwell", startingRow, startingColumn);
     }
+
 
     /**
      * Prints the Player's Leader Cards in the bottom right after the Development Card Slots
@@ -81,6 +84,7 @@ public class PersonalBoardCli {
         }
     }
 
+
     /**
      * Auxiliary method used to print the Leader Card number in the Personal Board view
      *
@@ -94,6 +98,7 @@ public class PersonalBoardCli {
         pw.print("| Leader " + index + " |");
         pw.flush();
     }
+
 
     /**
      * Used to print the String under the Player's Leader Cards
@@ -110,6 +115,7 @@ public class PersonalBoardCli {
         pw.flush();
     }
 
+
     /**
      * Prints the Player's Leader Cards in a new screen
      *
@@ -120,8 +126,12 @@ public class PersonalBoardCli {
     public void displayPlayerLeaderCards(List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
         cliUtils.printFigure("MyLeaderCardsTitle", startingRow, startingColumn + 20);
 
-        printLeaders(leaderCards, startingRow, startingColumn);
-        for (int i = 0; i < leaderCards.size(); i++) isLeaderCardActive(leaderCards.get(i), 27, 78 + (65 * i));
+        leaderCardsCli.printMultipleLeaders(leaderCards, 15);
+
+        //print the String ACTIVE or INACTIVE under each LeaderCard
+        for (int i = 0; i < leaderCards.size(); i++)
+            isLeaderCardActive(leaderCards.get(i), 32, leaderCardsCli.getPrintMultipleLeadersStartingColumn(leaderCards.size()) + 7 + (45 * i));
+
 
         cliUtils.setCursorBottomLeft();
         pw.print("Press Enter to exit this view.");
@@ -129,19 +139,6 @@ public class PersonalBoardCli {
         pw.flush();
     }
 
-    /**
-     * Prints the given Leader Cards
-     *
-     * @param leaderCards    The Leader Cards to print
-     * @param startingRow    The first row where the cards are going to be printed
-     * @param startingColumn The first column where the cards are going to be printed
-     */
-    public void printLeaders(List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
-        for (int i = 0; i < leaderCards.size(); i++)
-            leaderCardsCli.printLeader(leaderCards.get(i), startingRow + 10, startingColumn + 70 + (65 * i));
-        for (int i = 0; i < leaderCards.size(); i++)
-            cliUtils.pPCS("LEADER  #" + (i + 1), Color.WHITE, 30, 79 + (65 * i));
-    }
 
     /**
      * Prints the Player's Development Cards
@@ -159,6 +156,7 @@ public class PersonalBoardCli {
         cliUtils.printFigure("DevelopmentCardSeparator", startingRow, startingColumn + 108);
     }
 
+
     /**
      * If the Warehouse has more than 3 depots, prints the corresponding Leader Depots
      *
@@ -172,6 +170,7 @@ public class PersonalBoardCli {
             printLeaderDepotResources((LeaderDepot) leaderDepots.get(i), startingRow, startingColumn + (i * 18));
         }
     }
+
 
     /**
      * Prints the Resource stored in the Leader Depot
@@ -212,6 +211,7 @@ public class PersonalBoardCli {
         }
     }
 
+
     /**
      * Prints the Resource Supply on screen
      *
@@ -231,6 +231,7 @@ public class PersonalBoardCli {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Prints the Resources in the Resource Supply Slots
@@ -261,6 +262,7 @@ public class PersonalBoardCli {
         cliUtils.pPCS("ACTIVATED  TOKEN", Color.WHITE, 34, 148);
         printTokenStack(actionTokens.size());
     }
+
 
     /**
      * Prints the stack of covered Tokens

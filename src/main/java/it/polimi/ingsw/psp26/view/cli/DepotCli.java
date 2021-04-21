@@ -21,6 +21,7 @@ public class DepotCli {
         this.cliUtils = new CliUtils(pw);
     }
 
+
     /**
      * Used to print the Strongbox
      *
@@ -37,6 +38,7 @@ public class DepotCli {
         printStrongboxResources(Resource.COIN, getStrongboxResourcesNumber(strongbox, Resource.COIN), startingRow, startingColumn);
     }
 
+
     /**
      * Prints the Warehouse and the Resources in it
      *
@@ -49,6 +51,7 @@ public class DepotCli {
         for (int i = 0; i < warehouse.getBaseDepots().size(); i++)
             printDepot(warehouse.getBaseDepots().get(i), startingRow, startingColumn, i + 1);
     }
+
 
     /**
      * Show the screen that appears after getting Resources from the Market
@@ -87,6 +90,7 @@ public class DepotCli {
         in.nextLine(); //temporary solution
     }
 
+
     /**
      * Used to get the number of the resources stored in the strongbox
      *
@@ -99,6 +103,7 @@ public class DepotCli {
         Map<Resource, Long> numberOfResources = resources.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
         return numberOfResources.get(resourceType).intValue();
     }
+
 
     /**
      * Prints the Resources contained in the Strongbox
@@ -134,6 +139,7 @@ public class DepotCli {
         pw.flush();
     }
 
+    
     /**
      * Used in printWarehouse() to get the correct representation of Resources
      *

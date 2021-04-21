@@ -15,6 +15,7 @@ public class FaithTrackCli {
         this.cliUtils = new CliUtils(pw);
     }
 
+
     /**
      * Prints the Player's Faith Track. The PopeSpace intervals are printed thicker
      *
@@ -39,6 +40,7 @@ public class FaithTrackCli {
         }
     }
 
+
     /**
      * Return a String representing the Player's cross
      */
@@ -46,6 +48,7 @@ public class FaithTrackCli {
         pw.print("  \u001b[41;1m \u2020 \u001b[0m  ");
         pw.flush();
     }
+
 
     /**
      * Return a String representing Lorenzo's cross
@@ -55,6 +58,7 @@ public class FaithTrackCli {
         pw.flush();
     }
 
+
     /**
      * Return a String representing the Player's cross and Lorenzo's cross both in the same cell
      */
@@ -62,6 +66,7 @@ public class FaithTrackCli {
         pw.print(" \u001b[41;1m\u2020\u001b[0m   \u001b[47m\u001b[30m\u2020\u001b[0m ");
         pw.flush();
     }
+
 
     /**
      * If the Marker is in the first line of the Track, set the cursor to the correct position for printing it
@@ -76,6 +81,7 @@ public class FaithTrackCli {
             cliUtils.setCursorPosition(startingRow + 2, startingColumn + 97 + (8 * (fp - 18)));
     }
 
+
     /**
      * If the Marker is in the mid line of the Track, set the cursor to the correct position for printing it
      *
@@ -88,6 +94,7 @@ public class FaithTrackCli {
         else if (fp == 10) cliUtils.setCursorPosition(startingRow + 6, startingColumn + 57);
         else if (fp == 17) cliUtils.setCursorPosition(startingRow + 6, startingColumn + 97);
     }
+
 
     /**
      * If the Marker is in the last line of the Track, set the cursor to the correct position for printing it
@@ -102,6 +109,7 @@ public class FaithTrackCli {
             cliUtils.setCursorPosition(startingRow + 10, startingColumn + 57 + (8 * (fp - 11)));
     }
 
+
     /**
      * Set the cursor in the correct position for printing the Marker
      *
@@ -114,6 +122,7 @@ public class FaithTrackCli {
         midLineMarkerPosition(startingRow, startingColumn, fp);
         lastLineMarkerPosition(startingRow, startingColumn, fp);
     }
+
 
     /**
      * Prints the Vatican Report Sections on the Track
@@ -131,6 +140,7 @@ public class FaithTrackCli {
         pw.print(isVaticanReportSectionActive(vaticanReportSections[2]));
     }
 
+    
     /**
      * If the Vatican Report Tile is active returns it's value
      *

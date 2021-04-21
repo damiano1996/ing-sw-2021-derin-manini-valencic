@@ -69,7 +69,7 @@ public class CliTest {
         }
     }
 
-    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, DepotOutOfBoundException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException {
+    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException {
 
         //---WAIING-SCREEN-TEST---// press Enter 3 times
 
@@ -98,7 +98,7 @@ public class CliTest {
 
         VirtualView virtualView = new VirtualView();
         Player player = new Player(virtualView, "Player", "000000");
-        LeaderCardsInitializer leaderCardsInitializer = new LeaderCardsInitializer();
+        LeaderCardsInitializer leaderCardsInitializer = LeaderCardsInitializer.getInstance();
         List<LeaderCard> leaderCards = leaderCardsInitializer.getLeaderCards();
         PersonalBoard personalBoard = new PersonalBoard(virtualView, player);
         MarketTray marketTray = new MarketTray(virtualView);
@@ -311,8 +311,8 @@ public class CliTest {
         LeaderDepot coinDepot = new LeaderDepot(virtualView, Resource.COIN);
         LeaderDepot servantDepot = new LeaderDepot(virtualView, Resource.SERVANT);
         List<LeaderCard> playerCards = new ArrayList<>();
-        List<LeaderCard> leaderCardList = new ArrayList<>();
-        LeaderCardsInitializer l = new LeaderCardsInitializer();
+        List<LeaderCard> leaderCardList;
+        LeaderCardsInitializer l = LeaderCardsInitializer.getInstance();
         leaderCardList = l.getLeaderCards();
         playerCards.add(leaderCardList.get(8));
         playerCards.add(leaderCardList.get(9));

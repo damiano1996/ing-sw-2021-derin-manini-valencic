@@ -61,7 +61,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
                     }}));
         }};
 
-        warehouse = new Warehouse(virtualView);
+        warehouse = new Warehouse(virtualView, 3);
         strongbox = new ArrayList<>();
 
 //        notifyObservers(new Message(player.getSessionToken(), MessageType.PERSONAL_BOARD, player));

@@ -18,29 +18,23 @@ import java.util.stream.Collectors;
  */
 public class Warehouse extends Observable<SessionMessage> {
 
-    private static final int NUMBER_OF_DEFAULT_DEPOTS = 3;
     private final List<Depot> depots;
+    private int numberOfBaseDepots;
 
     /**
      * Class constructor.
      *
-     * @param virtualView virtual view that must be notified
+     * @param virtualView        virtual view that must be notified
+     * @param numberOfBaseDepots number of base depots
      */
-    public Warehouse(VirtualView virtualView) {
+    public Warehouse(VirtualView virtualView, int numberOfBaseDepots) {
         super();
         addObserver(virtualView);
 
-        depots = new ArrayList<>();
-        initializeDepots(virtualView);
-    }
+        this.numberOfBaseDepots = numberOfBaseDepots;
 
-    /**
-     * Method to initialize the depots.
-     *
-     * @param virtualView virtual view that must be notified
-     */
-    private void initializeDepots(VirtualView virtualView) {
-        for (int i = 0; i < NUMBER_OF_DEFAULT_DEPOTS; i++)
+        depots = new ArrayList<>();
+        for (int i = 0; i < numberOfBaseDepots; i++)
             depots.add(new Depot(virtualView, i + 1));
     }
 
@@ -58,8 +52,8 @@ public class Warehouse extends Observable<SessionMessage> {
         for (int i = 0; i < depots.size(); i++)
             if (depots.get(i).getContainedResourceType().equals(resource) &&
                     i != indexDepot &&
-                    indexDepot < NUMBER_OF_DEFAULT_DEPOTS &&
-                    i < NUMBER_OF_DEFAULT_DEPOTS)
+                    indexDepot < numberOfBaseDepots &&
+                    i < numberOfBaseDepots)
                 throw new CanNotAddResourceToDepotException();
 
         depots.get(indexDepot).addResource(resource);
@@ -100,7 +94,7 @@ public class Warehouse extends Observable<SessionMessage> {
      * @return list of depots
      */
     public List<Depot> getBaseDepots() {
-        return Collections.unmodifiableList(depots.subList(0, NUMBER_OF_DEFAULT_DEPOTS));
+        return Collections.unmodifiableList(depots.subList(0, numberOfBaseDepots));
     }
 
     /**
@@ -109,7 +103,7 @@ public class Warehouse extends Observable<SessionMessage> {
      * @return list of leader depots
      */
     public List<Depot> getLeaderDepots() {
-        return Collections.unmodifiableList(depots.subList(NUMBER_OF_DEFAULT_DEPOTS, depots.size()));
+        return Collections.unmodifiableList(depots.subList(numberOfBaseDepots, depots.size()));
     }
 
     /**

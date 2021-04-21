@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.application.messages;
 
-import it.polimi.ingsw.psp26.application.GsonConverter;
+import it.polimi.ingsw.psp26.application.serialization.GsonConverter;
 
 import java.io.Serializable;
 import java.util.ArrayList;

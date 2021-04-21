@@ -7,13 +7,21 @@ import java.lang.reflect.Type;
 import static it.polimi.ingsw.psp26.application.serialization.serializers.SerializerUtils.typeForName;
 
 /**
- * // TODO: discuss about this...
- * References: https://stackoverflow.com/questions/16000163/using-gson-and-abstract-classes
+ * Class to serialize abstract classes.
  *
- * @param <T>
+ * @param <T> generic abstract class
  */
 public class AbstractClassSerializer<T> implements JsonSerializer<T>, JsonDeserializer<T> {
 
+    /**
+     * Method to serialize an abstract class defined at runtime.
+     * It adds a parameter to the json indicating the runtime class type, and the data contained in the object.
+     *
+     * @param object                   generic object to be serialized
+     * @param type                     serialization type
+     * @param jsonSerializationContext serialization context
+     * @return the serialized object
+     */
     @Override
     public JsonElement serialize(T object, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();
@@ -24,6 +32,16 @@ public class AbstractClassSerializer<T> implements JsonSerializer<T>, JsonDeseri
         return jsonObject;
     }
 
+    /**
+     * Method to deserialize the abstract class.
+     * It reads the parameter that is referring to the class type and re-assemble the object.
+     *
+     * @param jsonElement                generic object to be serialized
+     * @param type                       deserialization type
+     * @param jsonDeserializationContext deserialization context
+     * @return deserialized object
+     * @throws JsonParseException if class type not found
+     */
     @Override
     public T deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject jsonObject = (JsonObject) jsonElement;

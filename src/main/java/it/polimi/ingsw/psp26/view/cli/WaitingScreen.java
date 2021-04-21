@@ -31,7 +31,7 @@ public class WaitingScreen implements Runnable {
 
         while (!stopWaiting) {
 
-            cliUtils.printFigure("/waitingscreenframes/WaitingScreenFrame" + frameCounter, 10, 101);
+            cliUtils.printFigure("waitingscreenframes/WaitingScreenFrame" + frameCounter, 10, 101);
 
             try {
                 //Using TimeUnit will not show a sleep warning in the IDE

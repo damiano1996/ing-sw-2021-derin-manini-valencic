@@ -14,11 +14,11 @@ import java.util.List;
 
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
-public class LeaderCardsAssignment extends TurnState {
+public class LeaderCardsAssignmentTurnState extends TurnState {
 
     private final List<LeaderCard> drawnLeaders;
 
-    public LeaderCardsAssignment(Turn turn) {
+    public LeaderCardsAssignmentTurnState(Turn turn) {
         super(turn);
 
         drawnLeaders = new ArrayList<>();

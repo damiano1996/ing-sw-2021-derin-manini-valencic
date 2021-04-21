@@ -3,7 +3,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.LeaderCardsAssignment;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.LeaderCardsAssignmentTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.model.Player;
 
@@ -31,7 +31,7 @@ public class Turn {
         // step 5: next turn
 
         // starting from:
-        turnState = new LeaderCardsAssignment(this);
+        turnState = new LeaderCardsAssignmentTurnState(this);
     }
 
     public void play(SessionMessage message) {

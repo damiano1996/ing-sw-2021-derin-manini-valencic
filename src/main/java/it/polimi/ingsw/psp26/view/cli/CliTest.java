@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Match;
@@ -68,6 +70,29 @@ public class CliTest {
     }
 
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, DepotOutOfBoundException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException {
+
+        //---WAIING-SCREEN-TEST---// press Enter 3 times
+
+        WaitingScreenStarter waitingScreenStarter = WaitingScreenStarter.getInstance();
+        Scanner tast = new Scanner(System.in);
+        Message message = new Message(MessageType.GENERAL_MESSAGE, "Please wait the other players to come");
+        String s = "a";
+        //while (s.equals("a")) {
+            waitingScreenStarter.startWaiting(message);
+            tast.nextLine();
+            waitingScreenStarter.stopWaiting();
+        //}
+        
+        message = new Message(MessageType.GENERAL_MESSAGE, "Please wait the other players to choose the resources");
+        waitingScreenStarter.startWaiting(message);
+        tast.nextLine();
+        waitingScreenStarter.stopWaiting();
+
+        message = new Message(MessageType.GENERAL_MESSAGE, "Press Enter to exit");
+        waitingScreenStarter.startWaiting(message);
+        tast.nextLine();
+        waitingScreenStarter.stopWaiting();
+
 
         //---OBJECTS-DECLARATION---//
 

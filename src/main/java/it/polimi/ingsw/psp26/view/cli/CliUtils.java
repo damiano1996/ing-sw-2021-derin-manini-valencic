@@ -196,4 +196,20 @@ public class CliUtils {
         pw.flush();
     }
 
+    /**
+     * Hides the cursor from screen
+     */
+    public void hideCursor() {
+        pw.print("\u001b[?25l");
+        pw.flush();
+    }
+
+    /**
+     * Put the cursor visibility back on screen
+     */
+    public void showCursor() {
+        pw.print("\u001b[?25h");
+        pw.flush();
+    }
+
 }

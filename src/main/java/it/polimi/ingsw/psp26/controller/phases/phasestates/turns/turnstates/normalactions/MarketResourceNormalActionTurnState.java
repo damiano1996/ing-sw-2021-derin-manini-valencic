@@ -44,9 +44,9 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 break;
             case ROW_COLUMN_CHOSEN:
                 int RowColumnInt = (int) message.getPayload();
-                if (RowColumnInt >= 4) {
-                    tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(RowColumnInt % 4));
-                    turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToColumn(RowColumnInt % 4);
+                if (RowColumnInt >= 3) {
+                    tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow((RowColumnInt + 1) % 4));
+                    turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToColumn((RowColumnInt + 1) % 4);
                 } else {
                     tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnColumn(RowColumnInt));
                     turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(RowColumnInt);

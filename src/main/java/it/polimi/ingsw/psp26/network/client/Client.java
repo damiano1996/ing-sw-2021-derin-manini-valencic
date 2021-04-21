@@ -72,6 +72,45 @@ public class Client extends Observable<Message> implements Observer<Message> {
                 );
                 break;
 
+            case CHOICE_CARD_TO_BUY:
+                mcm = (MultipleChoicesMessage) message;
+                viewInterface.displayChoices(
+                        mcm.getMessageType(),
+                        "Choose 1 card to buy:",
+                        mcm.getListPayloads(),
+                        mcm.getMinChoices(), mcm.getMaxChoices()
+                );
+                break;
+
+            case CHOICE_POSITION:
+                mcm = (MultipleChoicesMessage) message;
+                viewInterface.displayChoices(
+                        mcm.getMessageType(),
+                        "Choose where to place the new card:",
+                        mcm.getListPayloads(),
+                        mcm.getMinChoices(), mcm.getMaxChoices()
+                );
+                break;
+
+            case CHOICE_CARDS_TO_ACTIVATE:
+                mcm = (MultipleChoicesMessage) message;
+                viewInterface.displayChoices(
+                        mcm.getMessageType(),
+                        "Choose the development cards to activate:",
+                        mcm.getListPayloads(),
+                        mcm.getMinChoices(), mcm.getMaxChoices()
+                );
+                break;
+            case CHOICE_ROW_COLUMN:
+                mcm = (MultipleChoicesMessage) message;
+                viewInterface.displayChoices(
+                        mcm.getMessageType(),
+                        "Choose a number between 0 to 6 where 0-2 refers to columns and 3-6 refers to rows",
+                        mcm.getListPayloads(),
+                        mcm.getMinChoices(), mcm.getMaxChoices()
+                );
+                break;
+
             case PLACE_IN_WAREHOUSE:
                 List<Message> messages = castElements(Message.class, message.getListPayloads());
                 Warehouse warehouse = (Warehouse) messages.get(0).getPayload();

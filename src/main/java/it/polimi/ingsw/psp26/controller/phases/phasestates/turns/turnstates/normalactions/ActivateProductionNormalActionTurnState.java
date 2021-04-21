@@ -29,6 +29,7 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 public class ActivateProductionNormalActionTurnState extends TurnState {
 
     private List<Production> productionActivated = new ArrayList<>();
+    private List<Resource> unknownSwapResources;
     private int numOfUnknownCost;
     private int numOfUnknownProd;
 
@@ -60,13 +61,12 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
             case CHOICE_RESOURCE:
                 List<Resource> unknownSwapResources = castElements(Resource.class, message.getListPayloads());
-                activateProduction(message, unknownSwapResources);
+                activateProduction(message);
                 break;
         }
     }
 
-
-    private void takePlayerResourcesSnapShot(Player player, List<Resource> strongBoxCopy, List<List<Resource>> depotsCopy) {
+    private void takePlayerResourcesSnapShot(List<Resource> strongBoxCopy, List<List<Resource>> depotsCopy, Player player) {
         strongBoxCopy.addAll(player.getPersonalBoard().getStrongbox());
         for (Depot depot : player.getPersonalBoard().getWarehouse().getAllDepots()) {
             List<Resource> depotCopy1 = new ArrayList<>();
@@ -93,10 +93,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         ));
     }
 
-    private void activateProduction(SessionMessage message, List<Resource> unknownSwapResources) {
+
+    private void activateProduction(SessionMessage message) {
         List<Resource> playerStrongBoxCopy = new ArrayList<>();
         List<List<Resource>> playerDepotsCopy = new ArrayList<List<Resource>>();
-        takePlayerResourcesSnapShot(turn.getTurnPlayer(), playerStrongBoxCopy, playerDepotsCopy);
+        takePlayerResourcesSnapShot(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
         for (Production production : productionActivated) {
             for (Resource resource : production.getProductionCost().keySet()) {
                 if (resource == Resource.UNKNOWN) {
@@ -125,12 +126,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 }
             }
         }
-        collectProduction(unknownSwapResources);
+        collectProduction();
         turn.changeState(new CheckVaticanReportTurnState(turn));
         turn.play(message);
     }
 
-    private void collectProduction(List<Resource> unknownSwapResources) {
+
+    private void collectProduction() {
         List<Resource> resourcesProduced = new ArrayList<>();
         for (Production production : productionActivated) {
             for (Resource resourceProd : production.getProductionReturn().keySet()) {

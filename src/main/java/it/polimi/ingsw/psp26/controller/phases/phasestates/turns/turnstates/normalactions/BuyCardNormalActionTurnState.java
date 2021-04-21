@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 public class BuyCardNormalActionTurnState extends TurnState {
     DevelopmentCard boughtCard = null;
@@ -33,10 +33,16 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
                 List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
                 List<DevelopmentCard> gettableCards = getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
-                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_CARD_TO_BUY, 1, 1,
-                        gettableCards.toArray(new Object[0])
-                ));
+                if(gettableCards.size() != 0) {
+                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                            MessageType.CHOICE_CARD_TO_BUY, 1, 1,
+                            gettableCards.toArray(new Object[0])
+                    ));
+                }else{
+                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                            CHOICE_NORMAL_ACTION, 1, 1,
+                            ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD));
+                }
                 break;
             case CARD_TO_BUY_CHOSEN:
                 try {
@@ -56,9 +62,9 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 break;
 
             default:
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_NORMAL_ACTION);
+                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
+                        CHOICE_NORMAL_ACTION, 1, 1,
+                        ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD));
 
         }
     }

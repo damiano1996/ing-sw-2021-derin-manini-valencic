@@ -6,10 +6,13 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
+import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,33 +53,31 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 }
                 isRedMarblePresent(turn.getTurnPlayer());
                 tempResources = parseResource();
-                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
-                        RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
+                turn.changeState(new OneResourceTurnState(turn, this, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots().size()));
                 break;
-            case RESOURCE_POSITION_CHOSEN_ONE:
-                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        CHOICE_RESOURCE, 1, 1,
-                        Resource.COIN, Resource.STONE, Resource.SHIELD, Resource.SERVANT));
-                break;
-            case CHOICE_RESOURCE:
-//                List<Depot> currentDepotsStatus = turn.getTurnPlayer().getPersonalBoard().getWarehouse();
-//                moveResourceFromSlideToDepot(Resource.COIN, currentDepotsStatus.get(1));
-//                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-//                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
-//                        RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
-                break;
-            case GRAB_RESOURCES:
-//                try {
-//                    tempResources.addAll(turn.getTurnPlayer().getPersonalBoard().getWarehouseDepot((int) message.getPayload()).grabAllResources());
-//                } catch (NegativeNumberOfElementsToGrabException | DepotOutOfBoundException e) {
-//                    e.printStackTrace();
-//                }
-//                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-//                        MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
-//                        RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
 
-            case MARKET_NEXT:
+            case CHOICE_RESOURCE:
+                List<Resource> playerResourceChoice = (List<Resource>) message.getPayload();
+                Warehouse warehouse = turn.getTurnPlayer().getPersonalBoard().getWarehouse();
+                tempResources.addAll(warehouse.grabAllResources());
+                int depotNumber = 0;
+                for(int i =0 ; i < playerResourceChoice.size() ; i++){
+                        if(!playerResourceChoice.get(i).equals(Resource.EMPTY) || !tempResources.contains(playerResourceChoice.get(i))){
+                            for(int j = 0; j < warehouse.getAllDepots().get(i).getMaxNumberOfResources(); j++)
+                                if(tempResources.contains(playerResourceChoice.get(i))){
+                                try {
+                                    warehouse.addResourceToDepot(i, playerResourceChoice.get(i));
+                                    tempResources.remove(playerResourceChoice);
+                                } catch (CanNotAddResourceToDepotException e) {
+                                    turn.changeState(new OneResourceTurnState(turn, this, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots().size()));
+                                    break;
+                                }
+                            }
+                            else{
+                                j = warehouse.getAllDepots().get(i).getMaxNumberOfResources();
+                            }
+                        }
+                    }
                 discardResources(turn.getMatchController().getMatch(), turn.getTurnPlayer());
                 turn.changeState(new CheckVaticanReportTurnState(turn));
                 turn.play(message);
@@ -92,30 +93,6 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         tempResources.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> player.getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    private void moveResourceFromSlideToDepot(Resource resource, Depot depot) {
-//        List<Resource> DepotCopy = new ArrayList<>();
-//        DepotCopy.addAll(depot.getResources());
-//        for (int i = 0; i < Math.min((int) tempResources.stream().filter(x -> x.equals(resource)).count(), depot.getMaxNumberOfResources()); i++) {
-//            try {
-//                depot.addResource(resource);
-//            } catch (CanNotAddResourceToDepotException e) {
-//                try {
-//                    depot.grabAllResources();
-//                    for (int j = 0; j < DepotCopy.size(); j++) {
-//                        depot.addResource(DepotCopy.get(0));
-//                    }
-//                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-//                            MessageType.CHOICE_ORGANIZATION_MOVE, 1, 1,
-//                            RESOURCE_POSITION_CHOSEN_ONE, GRAB_RESOURCES, MARKET_NEXT));
-//                } catch (NegativeNumberOfElementsToGrabException | CanNotAddResourceToDepotException exc) {
-//                    exc.printStackTrace();
-//                }
-//            }
-//            tempResources.remove(resource);
-//        }
-
-
-    }
 
     private void discardResources(Match match, Player player) {
         match.getPlayers().stream().filter(x -> !x.equals(player)).forEach(x -> x.getPersonalBoard().getFaithTrack().addFaithPoints(tempResources.size()));

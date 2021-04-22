@@ -1,9 +1,12 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 
+import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
+
+import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 public class TurnUtils {
 
@@ -33,5 +36,17 @@ public class TurnUtils {
                 }
                 break;
         }
+    }
+
+    public static void sendChoiceNormalActionMessage(Turn turn) {
+        turn.getMatchController().notifyObservers(
+                new MultipleChoicesMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        CHOICE_NORMAL_ACTION,
+                        "Choice normal action to perform:",
+                        1, 1,
+                        ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD
+                )
+        );
     }
 }

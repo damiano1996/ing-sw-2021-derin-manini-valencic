@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.network.server;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.DesiredVirtualViewDoesNotExistException;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
 import java.io.IOException;
@@ -53,13 +54,13 @@ public class Server {
             // step: assign player to a virtual view
             handlePlayerModeMessage(client, message);
 
-        } catch (Exception e) {
+        } catch (Exception | EmptyPayloadException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void handlePlayerModeMessage(NetworkNode clientNode, SessionMessage message) {
+    private void handlePlayerModeMessage(NetworkNode clientNode, SessionMessage message) throws EmptyPayloadException {
         System.out.println(message.getPayload());
 
         switch ((MessageType) message.getPayload()) {

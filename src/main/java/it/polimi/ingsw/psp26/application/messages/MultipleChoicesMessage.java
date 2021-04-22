@@ -4,19 +4,26 @@ import java.io.Serializable;
 
 public class MultipleChoicesMessage extends SessionMessage implements Serializable {
 
+    private final String question;
     private final int minChoices;
     private final int maxChoices;
 
     public MultipleChoicesMessage(
             String sessionToken,
             MessageType messageType,
+            String question,
             int minChoices,
             int maxChoices,
             Object... objects) {
 
         super(sessionToken, messageType, objects);
+        this.question = question;
         this.minChoices = minChoices;
         this.maxChoices = maxChoices;
+    }
+
+    public String getQuestion() {
+        return question;
     }
 
     public int getMinChoices() {

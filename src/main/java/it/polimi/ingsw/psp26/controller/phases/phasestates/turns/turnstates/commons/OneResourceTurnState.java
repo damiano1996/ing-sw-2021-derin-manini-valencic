@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
@@ -29,23 +30,28 @@ public class OneResourceTurnState extends TurnState {
     public void play(SessionMessage message) {
         super.play(message);
 
-        System.out.println("OneResourceTurnState - " + message.toString());
+        try {
+            System.out.println("OneResourceTurnState - " + message.toString());
 
-        if (message.getMessageType().equals(MessageType.CHOICE_RESOURCE)) {
+            if (message.getMessageType().equals(MessageType.CHOICE_RESOURCE)) {
 
-            Resource resource = (Resource) message.getPayload();
-            resources.add(resource);
+                Resource resource = (Resource) message.getPayload();
+                resources.add(resource);
 
-            if (resources.size() == numOfResources) {
+                if (resources.size() == numOfResources) {
 
-                turn.changeState(nextState);
-                turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE, resources.toArray()));
+                    turn.changeState(nextState);
+                    turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE, resources.toArray()));
+                } else {
+                    sendMessage();
+                }
+
             } else {
                 sendMessage();
             }
 
-        } else {
-            sendMessage();
+        } catch (EmptyPayloadException ignored) {
+
         }
 
     }
@@ -57,6 +63,7 @@ public class OneResourceTurnState extends TurnState {
                 new MultipleChoicesMessage(
                         turn.getTurnPlayer().getSessionToken(),
                         MessageType.CHOICE_RESOURCE,
+                        "Choice resource:",
                         1, 1,
                         (Object[]) RESOURCES_SLOTS
                 )

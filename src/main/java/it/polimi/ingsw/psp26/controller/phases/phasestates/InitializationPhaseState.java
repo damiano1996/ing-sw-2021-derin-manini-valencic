@@ -1,9 +1,9 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 
 public class InitializationPhaseState extends PhaseState {
@@ -18,7 +18,11 @@ public class InitializationPhaseState extends PhaseState {
 
         if (message.getMessageType() == MessageType.ADD_PLAYER) {
 
-            addPlayer(message);
+            try {
+                addPlayer(message);
+            } catch (EmptyPayloadException e) {
+                e.printStackTrace();
+            }
 
             // next state is...
             if (phase.getMatchController().getMatch().getPlayers().size() == phase.getMatchController().getMaxNumberOfPlayers()) {
@@ -31,9 +35,9 @@ public class InitializationPhaseState extends PhaseState {
         }
     }
 
-    private void addPlayer(Message message) {
+    private void addPlayer(SessionMessage message) throws EmptyPayloadException {
         String nickname = (String) message.getPayload();
-        String sessionToken = ((SessionMessage) message).getSessionToken();
+        String sessionToken = message.getSessionToken();
         System.out.println("Initialization phase - new player - nickname: " + nickname + " - sessionToken: " + sessionToken);
         phase.getMatchController().getMatch().addPlayer(new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken));
     }

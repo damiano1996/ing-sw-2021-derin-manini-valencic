@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.application.messages;
 
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Color;
@@ -24,12 +25,17 @@ public class MessageTest {
 
     private MessageType messageType;
     private Message message;
-    private Map<String, Object> payload;
 
     @Before
     public void setUp() {
         messageType = MessageType.GENERAL_MESSAGE;
         message = new Message(messageType, COIN, COIN, SHIELD);
+    }
+
+    @Test(expected = EmptyPayloadException.class)
+    public void testNoPayload() throws EmptyPayloadException {
+        Message message = new Message(MessageType.GENERAL_MESSAGE);
+        message.getPayload();
     }
 
     @Test
@@ -38,12 +44,12 @@ public class MessageTest {
     }
 
     @Test
-    public void testGetPayload() {
+    public void testGetPayload() throws EmptyPayloadException {
         assertEquals(COIN, message.getPayload());
     }
 
     @Test
-    public void testGetPayloads() {
+    public void testGetPayloads() throws EmptyPayloadException {
         assertEquals(new ArrayList<>() {{
             add(COIN);
             add(COIN);
@@ -52,14 +58,14 @@ public class MessageTest {
     }
 
     @Test
-    public void testGetPayloads_ComplexObject() {
+    public void testGetPayloads_ComplexObject() throws EmptyPayloadException {
         Player player = new Player(new VirtualView(), "nickname", "sessionToken");
         message = new Message(MessageType.PERSONAL_BOARD, player);
         assertEquals(player.getNickname(), ((Player) message.getPayload()).getNickname());
     }
 
     @Test
-    public void testGetPayloads_ComplexObjectTwo() {
+    public void testGetPayloads_ComplexObjectTwo() throws EmptyPayloadException {
         Map<Resource, Integer> resourcesRequirements = new HashMap<>() {{
             put(Resource.COIN, 1);
         }};

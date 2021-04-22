@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
@@ -32,19 +33,22 @@ public class ChooseLeaderActionTurnState extends TurnState {
 
             if (message.getMessageType().equals(CHOICE_LEADER_ACTION)) {
 
-                switch ((MessageType) message.getPayload()) {
+                try {
+                    switch ((MessageType) message.getPayload()) {
 
-                    case ACTIVATE_LEADER:
-                    case DISCARD_LEADER:
-                        turn.changeState(new ActivateOrDiscardLeaderTurnState(turn));
-                        turn.play(message);
-                        break;
+                        case ACTIVATE_LEADER:
+                        case DISCARD_LEADER:
+                            turn.changeState(new ActivateOrDiscardLeaderTurnState(turn));
+                            turn.play(message);
+                            break;
 
-                    case SKIP_LEADER_ACTION:
-                        turn.changeState(new ChooseNormalActionTurnState(turn));
-                        turn.play(message);
-                        break;
+                        case SKIP_LEADER_ACTION:
+                            turn.changeState(new ChooseNormalActionTurnState(turn));
+                            turn.play(message);
+                            break;
 
+                    }
+                } catch (EmptyPayloadException ignored) {
                 }
 
             } else {
@@ -54,6 +58,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
                         new MultipleChoicesMessage(
                                 turn.getTurnPlayer().getSessionToken(),
                                 CHOICE_LEADER_ACTION,
+                                "Choice leader action to perform:",
                                 1, 1,
                                 ACTIVATE_LEADER, DISCARD_LEADER, SKIP_LEADER_ACTION
                         )

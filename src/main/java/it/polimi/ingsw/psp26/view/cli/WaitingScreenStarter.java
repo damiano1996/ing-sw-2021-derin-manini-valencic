@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Color;
 
 import java.io.PrintWriter;
@@ -41,7 +42,7 @@ public class WaitingScreenStarter {
      *
      * @param message A Message containing a String to display on screen
      */
-    public void startWaiting(Message message) {
+    public void startWaiting(Message message) throws EmptyPayloadException {
         if (!isWaiting) {
             cliUtils.cls();
             cliUtils.hideCursor();

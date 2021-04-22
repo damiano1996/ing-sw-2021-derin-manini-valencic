@@ -6,10 +6,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
-import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
+import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -34,34 +31,38 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
     public void play(SessionMessage message) { // TO BE FINISHED
 
-        switch (message.getMessageType()) {
-            case ACTIVATE_PRODUCTION:
-                turn.getMatchController().notifyObservers(
-                        new MultipleChoicesMessage(
-                                turn.getTurnPlayer().getSessionToken(),
-                                CHOICE_CARDS_TO_ACTIVATE,
-                                1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
-                                turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
-                        ));
-                break;
+        try {
+            switch (message.getMessageType()) {
+                case ACTIVATE_PRODUCTION:
+                    turn.getMatchController().notifyObservers(
+                            new MultipleChoicesMessage(
+                                    turn.getTurnPlayer().getSessionToken(),
+                                    CHOICE_CARDS_TO_ACTIVATE,
+                                    "Choose the development cards to activate:",
+                                    1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
+                                    turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
+                            ));
+                    break;
 
-            case CARDS_TO_ACTIVATE_CHOSEN:
-                productionActivated = castElements(Production.class, message.getListPayloads());
+                case CARDS_TO_ACTIVATE_CHOSEN:
+                    productionActivated = castElements(Production.class, message.getListPayloads());
 
-                for (Production production : productionActivated) {
-                    if (production.getProductionCost().containsKey(Resource.UNKNOWN))
-                        numOfUnknownCost += production.getProductionCost().get(Resource.UNKNOWN);
-                    if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
-                        numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
-                }
+                    for (Production production : productionActivated) {
+                        if (production.getProductionCost().containsKey(Resource.UNKNOWN))
+                            numOfUnknownCost += production.getProductionCost().get(Resource.UNKNOWN);
+                        if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
+                            numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
+                    }
 
-                turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd + numOfUnknownCost));
-                break;
+                    turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd + numOfUnknownCost));
+                    break;
 
-            case CHOICE_RESOURCE:
-                List<Resource> unknownSwapResources = castElements(Resource.class, message.getListPayloads());
-                activateProduction(message);
-                break;
+                case CHOICE_RESOURCE:
+                    List<Resource> unknownSwapResources = castElements(Resource.class, message.getListPayloads());
+                    activateProduction(message);
+                    break;
+            }
+        } catch (EmptyPayloadException ignored) {
         }
     }
 
@@ -85,11 +86,14 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             }
 
         }
-        turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                CHOICE_CARDS_TO_ACTIVATE, 1,
-                turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
-                turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
-        ));
+        turn.getMatchController().notifyObservers(
+                new MultipleChoicesMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        CHOICE_CARDS_TO_ACTIVATE,
+                        "Choose the development cards to activate:",
+                        1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
+                        turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
+                ));
     }
 
 

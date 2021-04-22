@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.application.messages;
 
 import it.polimi.ingsw.psp26.application.serialization.GsonConverter;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class Message implements Serializable {
 
     public Message(MessageType messageType, Object... payloads) {
         this.messageType = messageType;
-        objectToJson(payloads);
+        if (payloads.length > 0) objectToJson(payloads);
     }
 
     private void objectToJson(Object... payloads) {
@@ -38,22 +39,26 @@ public class Message implements Serializable {
         return jsonPayloads.size();
     }
 
-    public Object getPayload(int index) {
-        return GsonConverter.getInstance().getGson().fromJson(jsonPayloads.get(index), payloadClass);
+    public Object getPayload(int index) throws EmptyPayloadException {
+        try {
+            return GsonConverter.getInstance().getGson().fromJson(jsonPayloads.get(index), payloadClass);
+        } catch (Exception e) {
+            throw new EmptyPayloadException();
+        }
     }
 
-    public Object getPayload() {
+    public Object getPayload() throws EmptyPayloadException {
         return getPayload(0);
     }
 
-    public List<Object> getListPayloads() {
+    public List<Object> getListPayloads() throws EmptyPayloadException {
         List<Object> objectPayloads = new ArrayList<>();
         for (int i = 0; i < jsonPayloads.size(); i++)
             objectPayloads.add(getPayload(i));
         return objectPayloads;
     }
 
-    public Object[] getArrayPayloads() {
+    public Object[] getArrayPayloads() throws EmptyPayloadException {
         return getListPayloads().toArray();
     }
 

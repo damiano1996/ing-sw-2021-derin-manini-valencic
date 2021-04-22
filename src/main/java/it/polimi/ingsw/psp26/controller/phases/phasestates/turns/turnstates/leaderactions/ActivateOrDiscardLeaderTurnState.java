@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
@@ -22,27 +23,33 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
     public void play(SessionMessage message) {
         super.play(message);
 
-        if (message.getPayload().equals(MessageType.ACTIVATE_LEADER) || message.getPayload().equals(MessageType.DISCARD_LEADER))
-            lastMessage = (MessageType) message.getPayload();
+        try {
 
-        // step: choose which leader to activate/discard
-        // step: activate/discard it
+            if (message.getPayload().equals(MessageType.ACTIVATE_LEADER) || message.getPayload().equals(MessageType.DISCARD_LEADER))
+                lastMessage = (MessageType) message.getPayload();
 
-        if (message.getMessageType().equals(MessageType.CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD)) {
+            // step: choose which leader to activate/discard
+            // step: activate/discard it
 
-            LeaderCard leaderCard = (LeaderCard) message.getPayload();
-            playAction(leaderCard, message);
+            if (message.getMessageType().equals(MessageType.CHOICE_LEADERS)) {
 
-        } else {
+                LeaderCard leaderCard = (LeaderCard) message.getPayload();
+                playAction(leaderCard, message);
 
-            turn.getMatchController().notifyObservers(
-                    new MultipleChoicesMessage(
-                            turn.getTurnPlayer().getSessionToken(),
-                            MessageType.CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD,
-                            1, 1,
-                            turn.getTurnPlayer().getLeaderCards()
-                    )
-            );
+            } else {
+
+                turn.getMatchController().notifyObservers(
+                        new MultipleChoicesMessage(
+                                turn.getTurnPlayer().getSessionToken(),
+                                MessageType.CHOICE_LEADERS,
+                                "Choice the leader " + ((lastMessage.equals(MessageType.ACTIVATE_LEADER)) ? " to activate:" : " to discard:"),
+                                1, 1,
+                                turn.getTurnPlayer().getLeaderCards()
+                        )
+                );
+            }
+        } catch (EmptyPayloadException emptyPayloadException) {
+            emptyPayloadException.printStackTrace();
         }
     }
 

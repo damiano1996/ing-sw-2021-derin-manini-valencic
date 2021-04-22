@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class WaitingScreen implements Runnable {
 
+    private final CliUtils cliUtils;
     //Setting this to true will stop the waiting screen
     private boolean stopWaiting;
-    private final CliUtils cliUtils;
 
 
     public WaitingScreen() {

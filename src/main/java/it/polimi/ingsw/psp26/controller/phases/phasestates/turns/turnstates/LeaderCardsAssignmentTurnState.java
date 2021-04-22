@@ -6,7 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
 import java.util.ArrayList;
@@ -22,11 +22,7 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
         super(turn);
 
         drawnLeaders = new ArrayList<>();
-        try {
-            drawnLeaders.addAll(turn.getMatchController().getMatch().drawLeaders(4));
-        } catch (NegativeNumberOfElementsToGrabException e) {
-            e.printStackTrace();
-        }
+        drawnLeaders.addAll(turn.getMatchController().getMatch().drawLeaders(4));
     }
 
     @Override
@@ -42,19 +38,26 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
 
             if (message.getMessageType().equals(MessageType.CHOICE_LEADERS)) {
 
-                List<LeaderCard> selectedLeaderCards = castElements(LeaderCard.class, message.getListPayloads());
-                // checking if cards are among the drawn.
-                if (selectedLeaderCards.size() > 2 ||
-                        !drawnLeaders.contains(selectedLeaderCards.get(0)) ||
-                        !drawnLeaders.contains(selectedLeaderCards.get(1))) {
+                try {
+
+                    List<LeaderCard> selectedLeaderCards = castElements(LeaderCard.class, message.getListPayloads());
+                    // checking if cards are among the drawn.
+                    if (selectedLeaderCards.size() > 2 ||
+                            !drawnLeaders.contains(selectedLeaderCards.get(0)) ||
+                            !drawnLeaders.contains(selectedLeaderCards.get(1))) {
+                        sendErrorMessage();
+                        sendLeaderCardsChoiceMessage();
+                    } else {
+                        turn.getTurnPlayer().setLeaderCards(selectedLeaderCards);
+
+                        turn.changeState(new BenefitsTurnState(turn));
+                        turn.play(message);
+                    }
+
+                } catch (EmptyPayloadException e) {
                     sendErrorMessage();
                     sendLeaderCardsChoiceMessage();
                 }
-
-                turn.getTurnPlayer().setLeaderCards(selectedLeaderCards);
-
-                turn.changeState(new BenefitsTurnState(turn));
-                turn.play(message);
 
             } else {
 
@@ -68,6 +71,7 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
                 new MultipleChoicesMessage(
                         turn.getTurnPlayer().getSessionToken(),
                         MessageType.CHOICE_LEADERS,
+                        "Choice two leader cards:",
                         2, 2,
                         drawnLeaders.toArray()
                 )

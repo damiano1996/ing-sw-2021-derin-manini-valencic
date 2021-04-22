@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.model;
 
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.actiontokens.BlackCrossActionToken;
@@ -187,10 +186,9 @@ public class Match extends Observable<SessionMessage> {
      *
      * @param numberOfCards number of leader cards to draw
      * @return list containing the drawn leaders
-     * @throws NegativeNumberOfElementsToGrabException if the number of cards to draw is negative
-     * @throws IndexOutOfBoundsException               if the index of the card to draw is out of bounds
+     * @throws IndexOutOfBoundsException if the index of the card to draw is out of bounds
      */
-    public List<LeaderCard> drawLeaders(int numberOfCards) throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
+    public List<LeaderCard> drawLeaders(int numberOfCards) throws IndexOutOfBoundsException {
         return grabElements(leaderDeck, numberOfCards);
     }
 
@@ -199,10 +197,9 @@ public class Match extends Observable<SessionMessage> {
      *
      * @param numberOfTokens number of tokens to draw
      * @return list containing the drawn tokens
-     * @throws NegativeNumberOfElementsToGrabException if the number of cards to draw is negative
-     * @throws IndexOutOfBoundsException               if the index of the card to draw is out of bounds
+     * @throws IndexOutOfBoundsException if the index of the card to draw is out of bounds
      */
-    public List<ActionToken> drawActionTokens(int numberOfTokens) throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
+    public List<ActionToken> drawActionTokens(int numberOfTokens) throws IndexOutOfBoundsException {
         return grabElements(actionTokenStack, numberOfTokens);
     }
 

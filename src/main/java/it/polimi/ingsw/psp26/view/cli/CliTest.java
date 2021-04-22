@@ -59,17 +59,17 @@ public class CliTest {
 
 
     //CLI testing. Only press start to test CLI functionalities
-    public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, DepotOutOfBoundException, CanNotAddResourceToStrongboxException {
+    public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
         try {
             CliTest cliTest = new CliTest(new Client());
             cliTest.testMethod();
 
-        } catch (IOException | NegativeNumberOfElementsToGrabException e) {
+        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException e) {
             e.printStackTrace();
         }
     }
 
-    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException {
+    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException {
 
         //---WAIING-SCREEN-TEST---// press Enter 3 times
 
@@ -78,9 +78,9 @@ public class CliTest {
         Message message = new Message(MessageType.GENERAL_MESSAGE, "Please wait the other players to come");
         String s = "a";
         while (s.equals("a")) {
-        waitingScreenStarter.startWaiting(message);
-        tast.nextLine();
-        waitingScreenStarter.stopWaiting();
+            waitingScreenStarter.startWaiting(message);
+            tast.nextLine();
+            waitingScreenStarter.stopWaiting();
         }
 
         message = new Message(MessageType.GENERAL_MESSAGE, "Please wait the other players to choose the resources");

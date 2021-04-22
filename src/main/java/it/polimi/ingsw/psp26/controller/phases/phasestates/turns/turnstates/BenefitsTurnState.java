@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacer;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.List;
@@ -31,28 +32,31 @@ public class BenefitsTurnState extends TurnState {
 
         } else {
 
-            switch (turn.getTurnNumber()) {
-                case 0:
-                    turn.getTurnPlayer().giveInkwell();
-                    break;
+            try {
+                switch (turn.getTurnNumber()) {
+                    case 0:
+                        turn.getTurnPlayer().giveInkwell();
+                        break;
 
-                case 1:
-                    assignResources(message, 1, false);
-                    break;
+                    case 1:
+                        assignResources(message, 1, false);
+                        break;
 
-                case 2:
-                    assignResources(message, 1, true);
-                    break;
+                    case 2:
+                        assignResources(message, 1, true);
+                        break;
 
-                case 3:
-                    assignResources(message, 2, true);
-                    break;
+                    case 3:
+                        assignResources(message, 2, true);
+                        break;
+                }
+            } catch (EmptyPayloadException ignored) {
             }
         }
 
     }
 
-    public void assignResources(SessionMessage message, int numOfResources, boolean faithPoint) {
+    public void assignResources(SessionMessage message, int numOfResources, boolean faithPoint) throws EmptyPayloadException {
         System.out.println("BenefitsTurnState - assigning resources " + message.toString());
 
         if (message.getMessageType().equals(CHOICE_RESOURCE)) {

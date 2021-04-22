@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendChoiceNormalActionMessage;
 
 public class BuyCardNormalActionTurnState extends TurnState {
     DevelopmentCard boughtCard = null;
@@ -28,44 +29,52 @@ public class BuyCardNormalActionTurnState extends TurnState {
     public void play(SessionMessage message) {
         super.play(message);
 
-        switch (message.getMessageType()) {
-            case BUY_CARD:
-                List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
-                List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
-                List<DevelopmentCard> gettableCards = getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
-                if (gettableCards.size() != 0) {
-                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                            MessageType.CHOICE_CARD_TO_BUY, 1, 1,
-                            gettableCards.toArray(new Object[0])
-                    ));
-                } else {
-                    turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                            CHOICE_NORMAL_ACTION, 1, 1,
-                            ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD));
-                }
-                break;
-            case CARD_TO_BUY_CHOSEN:
-                try {
-                    boughtCard = buyCard((DevelopmentCard) message.getPayload(), turn.getTurnPlayer());
-                } catch (NegativeNumberOfElementsToGrabException e) {
-                    e.printStackTrace();
-                }
-                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        CHOICE_POSITION, 1, 1, positionsForCard().toArray(new Object[0])
-                ));
-                break;
+        try {
+            switch (message.getMessageType()) {
+                case BUY_CARD:
+                    List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
+                    List<DevelopmentCard> playerCards = turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards();
+                    List<DevelopmentCard> gettableCards = getAvailableCard(turn.getMatchController().getMatch(), playerResources, playerCards);
+                    if (gettableCards.size() != 0) {
+                        turn.getMatchController().notifyObservers(
+                                new MultipleChoicesMessage(
+                                        turn.getTurnPlayer().getSessionToken(),
+                                        MessageType.CHOICE_CARD_TO_BUY,
+                                        "Choice card you want to buy:",
+                                        1, 1,
+                                        gettableCards.toArray(new Object[0])
+                                ));
+                    } else {
+                        sendChoiceNormalActionMessage(turn);
+                    }
+                    break;
+                case CARD_TO_BUY_CHOSEN:
+                    try {
+                        boughtCard = buyCard((DevelopmentCard) message.getPayload(), turn.getTurnPlayer());
+                    } catch (NegativeNumberOfElementsToGrabException e) {
+                        e.printStackTrace();
+                    }
+                    turn.getMatchController().notifyObservers(
+                            new MultipleChoicesMessage(
+                                    turn.getTurnPlayer().getSessionToken(),
+                                    CHOICE_POSITION,
+                                    "Choose where to place the new card:",
+                                    1, 1,
+                                    positionsForCard().toArray(new Object[0])
+                            ));
+                    break;
 
-            case POSITION_CHOSEN:
-                placeCard((int) message.getPayload());
-                turn.changeState(new CheckVaticanReportTurnState(turn));
-                turn.play(message);
-                break;
+                case POSITION_CHOSEN:
+                    placeCard((int) message.getPayload());
+                    turn.changeState(new CheckVaticanReportTurnState(turn));
+                    turn.play(message);
+                    break;
 
-            default:
-                turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                        CHOICE_NORMAL_ACTION, 1, 1,
-                        ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD));
-
+                default:
+                    sendChoiceNormalActionMessage(turn);
+            }
+        } catch (EmptyPayloadException ignored) {
+            // TODO: handle exception
         }
     }
 
@@ -121,9 +130,14 @@ public class BuyCardNormalActionTurnState extends TurnState {
             turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
             System.out.println("The position chosen is not correct, choose another one");
-            turn.getMatchController().notifyObservers(new MultipleChoicesMessage(turn.getTurnPlayer().getSessionToken(),
-                    CHOICE_POSITION, 1, 1, positionsForCard().toArray(new Object[0])
-            ));
+            turn.getMatchController().notifyObservers(
+                    new MultipleChoicesMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            CHOICE_POSITION,
+                            "Choose where to place the new card:",
+                            1, 1,
+                            positionsForCard().toArray(new Object[0])
+                    ));
         }
 
     }

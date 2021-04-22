@@ -42,17 +42,15 @@ public class BuyCardNormalActionTurnStateTest {
     }
 
     @Test
-    public void play2() {
-        try {
+    public void play2() throws CanNotAddResourceToStrongboxException {
+
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.COIN);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.COIN);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.SERVANT);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.SERVANT);
-        } catch (CanNotAddResourceToStrongboxException e) {
-            e.printStackTrace();
-        }
+
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), BUY_CARD));
         phase.getMatchController().addObserver(message -> assertEquals(message.getMessageType(), CHOICE_CARD_TO_BUY));
 
@@ -61,6 +59,14 @@ public class BuyCardNormalActionTurnStateTest {
     @Test
     public void play() {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2,2).getFirstCard()));
+        phase.getMatchController().addObserver(message -> assertEquals(message.getMessageType(), CHOICE_CARD_TO_BUY));
+
+    }
+
+    @Test
+    public void play3() {
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2,2).getFirstCard()));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_POSITION, 1));
         phase.getMatchController().addObserver(message -> assertEquals(message.getMessageType(), CHOICE_CARD_TO_BUY));
 
     }

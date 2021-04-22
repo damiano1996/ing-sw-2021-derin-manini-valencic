@@ -64,7 +64,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                             ));
                     break;
 
-                case POSITION_CHOSEN:
+                case CHOICE_POSITION:
                     placeCard((int) message.getPayload());
                     turn.changeState(new CheckVaticanReportTurnState(turn));
                     turn.play(message);

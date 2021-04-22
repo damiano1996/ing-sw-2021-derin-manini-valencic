@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacer;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.Match;
@@ -23,8 +24,7 @@ import java.util.stream.Collectors;
 
 public class MarketResourceNormalActionTurnState extends TurnState {
     List<Resource> tempResources;
-    Resource resourceChosen;
-    MessageType lastMessage;
+
 
     public MarketResourceNormalActionTurnState(Turn turn) {
         super(turn);
@@ -61,29 +61,9 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     break;
 
                 case CHOICE_RESOURCE:
-                    List<Resource> playerResourceChoice = (List<Resource>) message.getPayload();
-                    Warehouse warehouse = turn.getTurnPlayer().getPersonalBoard().getWarehouse();
-                    tempResources.addAll(warehouse.grabAllResources());
-                    int depotNumber = 0;
-                    for (int i = 0; i < playerResourceChoice.size(); i++) {
-                        if (!playerResourceChoice.get(i).equals(Resource.EMPTY) || !tempResources.contains(playerResourceChoice.get(i))) {
-                            for (int j = 0; j < warehouse.getAllDepots().get(i).getMaxNumberOfResources(); j++)
-                                if (tempResources.contains(playerResourceChoice.get(i))) {
-                                    try {
-                                        warehouse.addResourceToDepot(i, playerResourceChoice.get(i));
-                                        tempResources.remove(playerResourceChoice);
-                                    } catch (CanNotAddResourceToDepotException e) {
-                                        turn.changeState(new OneResourceTurnState(turn, this, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots().size()));
-                                        break;
-                                    }
-                                } else {
-                                    j = warehouse.getAllDepots().get(i).getMaxNumberOfResources();
-                                }
-                        }
-                    }
-                    discardResources(turn.getMatchController().getMatch(), turn.getTurnPlayer());
-                    turn.changeState(new CheckVaticanReportTurnState(turn));
-                    turn.play(message);
+                    turn.changeState(new ResourcesWarehousePlacer(turn, tempResources));
+                    play(message);
+
                     break;
             }
         } catch (EmptyPayloadException ignored) {

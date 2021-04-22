@@ -16,12 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.GENERAL_MESSAGE;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class ActivateProductionNormalActionTurnState extends TurnState {
 
     private List<Production> productionActivated = new ArrayList<>();
-    private List<Resource> unknownSwapResources;
+    private List<Resource> unknownCostResources;
+    private List<Resource> unknownProdResources;
     private int numOfUnknownCost;
     private int numOfUnknownProd;
 
@@ -44,7 +46,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                             ));
                     break;
 
-                case CARDS_TO_ACTIVATE_CHOSEN:
+                case CHOICE_CARDS_TO_ACTIVATE:
                     productionActivated = castElements(Production.class, message.getListPayloads());
 
                     for (Production production : productionActivated) {
@@ -53,85 +55,85 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
                             numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
                     }
-
-                    turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd + numOfUnknownCost));
+                    new SessionMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            GENERAL_MESSAGE,
+                            "Choose the resource to pay that replaces the unknown resource in the production:"
+                    );
+                    turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost));
                     break;
 
                 case CHOICE_RESOURCE:
-                    List<Resource> unknownSwapResources = castElements(Resource.class, message.getListPayloads());
-                    activateProduction(message);
+                    if(unknownCostResources.size() == numOfUnknownCost){
+                        unknownProdResources = castElements(Resource.class, message.getListPayloads());
+                        activateProduction(message);
+                    }else {
+                        unknownCostResources = castElements(Resource.class, message.getListPayloads());
+                        new SessionMessage(
+                                turn.getTurnPlayer().getSessionToken(),
+                                GENERAL_MESSAGE,
+                                "Choose the resource that you want back of the unknown resource in the production:"
+                        );
+                        turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
+
+                    }
                     break;
             }
         } catch (EmptyPayloadException ignored) {
         }
     }
 
-    private void takePlayerResourcesSnapShot(List<Resource> strongBoxCopy, List<List<Resource>> depotsCopy, Player player) {
-        strongBoxCopy.addAll(player.getPersonalBoard().getStrongbox());
-        for (Depot depot : player.getPersonalBoard().getWarehouse().getAllDepots()) {
-            List<Resource> depotCopy1 = new ArrayList<>();
-            depotCopy1.addAll(depot.getResources());
-            depotsCopy.add(depotCopy1);
-        }
-    }
-
-
-    private void reverse(List<Resource> strongBoxCopy, List<List<Resource>> depotsCopy, Player player) throws DepotOutOfBoundException, CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
-        player.getPersonalBoard().getStrongbox().clear();
-        player.getPersonalBoard().getStrongbox().addAll(strongBoxCopy);
-        for (int i = 0; i < player.getPersonalBoard().getWarehouse().getAllDepots().size(); i++) {
-            player.getPersonalBoard().getWarehouse().getAllDepots().get(i).grabAllResources();
-            for (int j = 0; j < depotsCopy.get(i).size(); j++) {
-                player.getPersonalBoard().getWarehouse().addResourceToDepot(i, depotsCopy.get(i).get(0));
-            }
-
-        }
-        turn.getMatchController().notifyObservers(
-                new MultipleChoicesMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        CHOICE_CARDS_TO_ACTIVATE,
-                        "Choose the development cards to activate:",
-                        1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
-                        turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
-                ));
-    }
-
-
-    private void activateProduction(SessionMessage message) {
-        List<Resource> playerStrongBoxCopy = new ArrayList<>();
-        List<List<Resource>> playerDepotsCopy = new ArrayList<List<Resource>>();
-        takePlayerResourcesSnapShot(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
+    private boolean isProductionFeasible(){
+        List<Resource> availableResource = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
         for (Production production : productionActivated) {
             for (Resource resource : production.getProductionCost().keySet()) {
                 if (resource == Resource.UNKNOWN) {
                     for (int i = 0; i < production.getProductionCost().get(Resource.UNKNOWN); i++) {
-                        if (turn.getTurnPlayer().getPersonalBoard().grabResourcesFromStrongbox(unknownSwapResources.get(0), 1) != null) {
-                            unknownSwapResources.remove(0);
-                        } else {
-                            try {
-                                reverse(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
-                            } catch (CanNotAddResourceToDepotException | DepotOutOfBoundException | NegativeNumberOfElementsToGrabException e) {
-                                e.printStackTrace();
-                            }
-                            return;
+                        if (!availableResource.remove((unknownCostResources.get(i)))) {
+                            return false;
                         }
                     }
-                } else {
-                    if (turn.getTurnPlayer().getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource, production.getProductionCost().get(resource)).size()
-                            != production.getProductionCost().get(resource)) {
-                        try {
-                            reverse(playerStrongBoxCopy, playerDepotsCopy, turn.getTurnPlayer());
-                        } catch (CanNotAddResourceToDepotException | DepotOutOfBoundException | NegativeNumberOfElementsToGrabException e) {
-                            e.printStackTrace();
-                        }
-                        return;
+                }
+                for(int i = 0; i < production.getProductionCost().get(resource); i++){
+                    if(!availableResource.remove(resource)){
+                        return false;
                     }
                 }
             }
         }
-        collectProduction();
-        turn.changeState(new CheckVaticanReportTurnState(turn));
-        turn.play(message);
+        return true;
+    }
+
+
+    private void activateProduction(SessionMessage message) {
+        if(isProductionFeasible()) {
+            for (Production production : productionActivated) {
+                for (Resource resource : production.getProductionCost().keySet()) {
+                    if (resource == Resource.UNKNOWN) {
+                        for (int i = 0; i < production.getProductionCost().get(Resource.UNKNOWN); i++) {
+                            if (turn.getTurnPlayer().getPersonalBoard().grabResourcesFromStrongbox(unknownCostResources.get(0), 1) != null) {
+                                unknownCostResources.remove(0);
+                            }
+                            turn.getTurnPlayer().getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource,
+                                    production.getProductionCost().get(resource));
+                        }
+                    }
+                }
+            }
+            collectProduction();
+            turn.changeState(new CheckVaticanReportTurnState(turn));
+            turn.play(message);
+        }else{
+            turn.getMatchController().notifyObservers(
+                    new MultipleChoicesMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            CHOICE_CARDS_TO_ACTIVATE,
+                            "Choose the development cards to activate:",
+                            1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
+                            turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
+                    ));
+        }
+
     }
 
 
@@ -144,7 +146,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         resourcesProduced.add(resourceProd);
                 }
             }
-            resourcesProduced.addAll(unknownSwapResources);
+            resourcesProduced.addAll(unknownProdResources);
             try {
                 turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
             } catch (CanNotAddResourceToStrongboxException e) {

@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class DevelopmentGrid extends Observable<SessionMessage> {
     }
 
     public List<DevelopmentCard> getAllVisibleCards() {
-        List<DevelopmentCard> visibleCards = null;
+        List<DevelopmentCard> visibleCards = new ArrayList<>();
         for (int row = 0; row < LEVELS.length; row++) {
             for (int col = 0; col < COLORS.length; col++) {
                 visibleCards.add(getDevelopmentGridCell(row, col).getFirstCard());

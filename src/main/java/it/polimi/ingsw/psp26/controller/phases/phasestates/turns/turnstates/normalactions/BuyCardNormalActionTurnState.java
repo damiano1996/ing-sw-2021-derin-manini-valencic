@@ -40,7 +40,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                 new MultipleChoicesMessage(
                                         turn.getTurnPlayer().getSessionToken(),
                                         MessageType.CHOICE_CARD_TO_BUY,
-                                        "Choice card you want to buy:",
+                                        "Choose the card you want to buy:",
                                         1, 1,
                                         gettableCards.toArray(new Object[0])
                                 ));
@@ -48,7 +48,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                         sendChoiceNormalActionMessage(turn);
                     }
                     break;
-                case CARD_TO_BUY_CHOSEN:
+                case CHOICE_CARD_TO_BUY:
                     try {
                         boughtCard = buyCard((DevelopmentCard) message.getPayload(), turn.getTurnPlayer());
                     } catch (NegativeNumberOfElementsToGrabException e) {
@@ -119,7 +119,9 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     private List<Integer> positionsForCard() {
         List<Integer> CorrectPositions = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        System.out.println(boughtCard.getDevelopmentCardType().getLevel());
+
+        for (int i = 0; i < 3; i++) {
             if (turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard)) CorrectPositions.add(i);
         }
         return CorrectPositions;

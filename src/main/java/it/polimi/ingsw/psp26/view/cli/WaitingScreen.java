@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Assuming there will be only one waiting screen active in a client per time
  */
+@Deprecated
 public class WaitingScreen implements Runnable {
 
     private final CliUtils cliUtils;

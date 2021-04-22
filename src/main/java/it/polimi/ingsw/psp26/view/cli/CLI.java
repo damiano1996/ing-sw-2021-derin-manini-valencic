@@ -62,7 +62,7 @@ public class CLI implements ViewInterface {
 
         pw.print(Color.GREEN.setColor());
         pw.flush();
-        cliUtils.printFigure("MainTitle", 1, 10);
+        cliUtils.printFigure("/titles/MainTitle", 1, 10);
         pw.print(Color.RESET.setColor());
         pw.flush();
     }
@@ -80,7 +80,7 @@ public class CLI implements ViewInterface {
         Scanner in = new Scanner(System.in);
 
         printTitle();
-        cliUtils.printFigure("PressEnterTitle", 20, 76);
+        cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
 
         in.nextLine();
 

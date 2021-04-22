@@ -5,23 +5,20 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Color;
 
 import java.io.PrintWriter;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Use this class to start a new WaitingScreen
+ * Use this class to start a new waiting screen
  */
 public class WaitingScreenStarter {
 
     private static WaitingScreenStarter instance;
     private final CliUtils cliUtils;
-    private WaitingScreen waitingScreen;
-    private Thread waitingThread;
-
-    //Control the ability to start or stop the Waiting Screen
+    private Thread waitingScreenThread;
     private boolean isWaiting;
 
     public WaitingScreenStarter() {
         this.cliUtils = new CliUtils(new PrintWriter(System.out));
-        this.waitingScreen = null;
         isWaiting = false;
     }
 
@@ -38,7 +35,7 @@ public class WaitingScreenStarter {
 
 
     /**
-     * Starts a Waiting Screen by creating a new Waiting Screen
+     * Starts a waiting screen by creating a new Thread
      *
      * @param message A Message containing a String to display on screen
      */
@@ -47,31 +44,48 @@ public class WaitingScreenStarter {
             cliUtils.cls();
             cliUtils.hideCursor();
             cliUtils.pPCS((String) message.getPayload(), Color.WHITE, 25, 90);
-
             isWaiting = true;
-            waitingScreen = new WaitingScreen();
-            waitingThread = new Thread(waitingScreen);
-            waitingThread.start();
+            
+            //The thread cycles the different Frames reproducing a waiting icon
+            //TimeUnit.MILLISECONDS.sleep() is used to give a better viewing experience
+            waitingScreenThread = new Thread(() -> {
+                int frameCounter = 1;
+
+                while (isWaiting) {
+
+                    cliUtils.printFigure("/waitingscreenframes/WaitingScreenFrame" + frameCounter, 10, 101);
+
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    frameCounter++;
+
+                    //10 is the total amount of WaitingScreen's Frames
+                    if (frameCounter > 10) frameCounter = 1;
+                }
+            });
+            waitingScreenThread.start();
         }
     }
 
 
     /**
-     * Stops the executing Waiting Screen
+     * Stops the executing waitingScreenThread
      */
     public void stopWaiting() {
         if (isWaiting) {
-            waitingScreen.stopWaiting();
-
+            isWaiting = false;
             cliUtils.cls();
             cliUtils.showCursor();
 
             try {
-                waitingThread.join();
+                waitingScreenThread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            isWaiting = false;
         }
     }
 

@@ -64,7 +64,7 @@ public class DepotCli {
         cliUtils.cls();
         pw.flush();
 
-        cliUtils.printFigure("WarehouseConfigurationTitle", 1, 21);
+        cliUtils.printFigure("/titles/WarehouseConfigurationTitle", 1, 21);
 
         printWarehouse(warehouse, 7, 74);
 

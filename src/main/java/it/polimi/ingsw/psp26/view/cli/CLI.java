@@ -151,9 +151,11 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
-        //To be completed
+        List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourceToAdd);
+        client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
     }
 
+    
     @Override
     public void displayStrongbox(List<Resource> strongbox) {
         depotCli.displayStrongbox(strongbox, 30, 3);
@@ -181,12 +183,7 @@ public class CLI implements ViewInterface {
     public void displayMarketScreen(MarketTray marketTray) {
         marketCli.displayMarketScreen(marketTray);
     }
-
-
-    public void displayMarketResourcesSelection(Warehouse warehouse, List<Resource> resources) {
-        displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resources);
-    }
-
+    
 
     @Override
     public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {

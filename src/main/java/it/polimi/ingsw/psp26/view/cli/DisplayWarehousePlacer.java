@@ -59,7 +59,7 @@ public class DisplayWarehousePlacer {
 
             while (!resourceAdded) {
 
-                askForInput(resources.get(i).getName().replaceAll("\\s+",""));
+                askForInput(resources.get(i).getName().replaceAll("\\s+", ""));
 
                 while (!correctDepotIndexInserted) {
                     try {
@@ -115,7 +115,7 @@ public class DisplayWarehousePlacer {
         printResources(resourcesLeft, resourceIndex, "Resources left to insert: ", 22, 74);
         printResources(resourcesDiscarded, 0, "Resources discarded: ", 10, 132);
     }
-    
+
 
     /**
      * Prints the given Resources
@@ -146,6 +146,7 @@ public class DisplayWarehousePlacer {
         Scanner in = new Scanner(System.in);
         String depotString = in.nextLine();
 
+        if (depotString.isEmpty()) throw new DepotOutOfBoundException();
         if (depotString.charAt(0) == 'd') throw new SkipResourceException();
         if (depotString.charAt(0) == 'c') throw new ChangeResourcesBetweenDepotsException();
         if (checkAsciiRange(depotString.charAt(0))) throw new DepotOutOfBoundException();
@@ -173,8 +174,8 @@ public class DisplayWarehousePlacer {
         pw.print(cliUtils.hSpace(20) + "Depot number: ");
         pw.flush();
     }
-    
-    
+
+
     /**
      * Checks if the inserted char is a number or a character
      *
@@ -184,7 +185,7 @@ public class DisplayWarehousePlacer {
     private boolean checkAsciiRange(char c) {
         return (48 > (int) c || (int) c > 57);
     }
-    
+
 
     /**
      * Sets the parameters to control the insertion process
@@ -204,9 +205,11 @@ public class DisplayWarehousePlacer {
      * @param warehouse The Warehouse containing the Depots
      */
     private void changeResourcesDepots(Warehouse warehouse) {
-        boolean endingInput = false;
+        cliUtils.clearLine(38, 21);
+
         int sourceDepot = 0;
         int destinationDepot = 0;
+        boolean endingInput = false;
 
         while (!endingInput) {
             try {
@@ -243,13 +246,13 @@ public class DisplayWarehousePlacer {
         Scanner in = new Scanner(System.in);
         cliUtils.pPCS(phrase, Color.WHITE, 40, 21);
 
-        String index = in.nextLine();
+        String depotIndex = in.nextLine();
 
-        if (checkAsciiRange(index.charAt(0))) throw new DepotOutOfBoundException();
-        if ((Integer.parseInt(index) - 1) >= 3 || (Integer.parseInt(index) - 1) < 0)
+        if (depotIndex.isEmpty() || checkAsciiRange(depotIndex.charAt(0))) throw new DepotOutOfBoundException();
+        if ((Integer.parseInt(depotIndex) - 1) >= 3 || (Integer.parseInt(depotIndex) - 1) < 0)
             throw new DepotOutOfBoundException();
 
-        return (Integer.parseInt(index) - 1);
+        return (Integer.parseInt(depotIndex) - 1);
     }
 
 

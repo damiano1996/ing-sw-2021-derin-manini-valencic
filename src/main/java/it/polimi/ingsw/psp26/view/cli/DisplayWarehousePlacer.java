@@ -59,7 +59,7 @@ public class DisplayWarehousePlacer {
 
             while (!resourceAdded) {
 
-                askForInput(resources.get(i).getName());
+                askForInput(resources.get(i).getName().replaceAll("\\s+",""));
 
                 while (!correctDepotIndexInserted) {
                     try {

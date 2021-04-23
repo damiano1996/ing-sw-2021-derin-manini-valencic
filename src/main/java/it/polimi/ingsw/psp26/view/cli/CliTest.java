@@ -123,7 +123,7 @@ public class CliTest {
         resources.add(Resource.COIN);
         resources.add(Resource.SERVANT);
 
-        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
+        cli.displayWarehouseNewResourcesAssignment(p.getWarehouse(), resources);
         in.nextLine();
 
 

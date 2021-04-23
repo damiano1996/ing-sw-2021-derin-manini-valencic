@@ -16,6 +16,7 @@ public class MitmObserver implements Observer<SessionMessage> {
 
     @Override
     public void update(SessionMessage message) {
+        System.out.println("MITM - new message: " + message.toString());
         messages.add(message);
     }
 

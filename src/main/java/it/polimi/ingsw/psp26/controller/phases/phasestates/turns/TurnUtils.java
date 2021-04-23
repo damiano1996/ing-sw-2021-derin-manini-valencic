@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
@@ -56,27 +57,40 @@ public class TurnUtils {
     }
 
     /**
-     * Method to send an error message to the player of the turn.
+     * Method to send a error message to the player of the turn.
+     *
+     * @param turn         turn
+     * @param errorMessage payload of the message
      */
     public static void sendErrorMessage(Turn turn, String errorMessage) {
-        turn.getMatchController().notifyObservers(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        ERROR_MESSAGE,
-                        errorMessage
-                )
-        );
+        System.out.println("ERROR_MESSAGE: " + errorMessage);
+        sendMessageToTurnPlayer(turn, ERROR_MESSAGE, errorMessage);
     }
 
     /**
      * Method to send a general message to the player of the turn.
+     *
+     * @param turn           turn
+     * @param generalMessage payload of the message
      */
     public static void sendGeneralMessage(Turn turn, String generalMessage) {
+        System.out.println("GENERAL_MESSAGE: " + generalMessage);
+        sendMessageToTurnPlayer(turn, GENERAL_MESSAGE, generalMessage);
+    }
+
+    /**
+     * Method to send a message to the player of the turn.
+     *
+     * @param turn        turn
+     * @param messageType type of the message
+     * @param message     payload of the message
+     */
+    private static void sendMessageToTurnPlayer(Turn turn, MessageType messageType, String message) {
         turn.getMatchController().notifyObservers(
                 new SessionMessage(
                         turn.getTurnPlayer().getSessionToken(),
-                        GENERAL_MESSAGE,
-                        generalMessage
+                        messageType,
+                        message
                 )
         );
     }

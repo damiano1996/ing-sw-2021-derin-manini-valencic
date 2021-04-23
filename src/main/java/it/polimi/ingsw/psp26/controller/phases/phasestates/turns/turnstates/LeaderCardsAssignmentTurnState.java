@@ -15,10 +15,18 @@ import java.util.List;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendErrorMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
+/**
+ * Class that models the leader cards assignment.
+ */
 public class LeaderCardsAssignmentTurnState extends TurnState {
 
     private final List<LeaderCard> drawnLeaders;
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn current turn
+     */
     public LeaderCardsAssignmentTurnState(Turn turn) {
         super(turn);
 
@@ -26,6 +34,13 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
         drawnLeaders.addAll(turn.getMatchController().getMatch().drawLeaders(4));
     }
 
+    /**
+     * Method to assign to the player the leader cards.
+     * If this is not the first turn for the turn player,
+     * it changes the state of the turn, going to ChooseLeaderActionTurnState.
+     *
+     * @param message session message
+     */
     @Override
     public void play(SessionMessage message) {
         super.play(message);
@@ -69,6 +84,9 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
         }
     }
 
+    /**
+     * Method sends a message containing the drawn leaders.
+     */
     private void sendLeaderCardsChoiceMessage() {
         turn.getMatchController().notifyObservers(
                 new MultipleChoicesMessage(

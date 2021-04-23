@@ -30,6 +30,7 @@ public class Turn {
         // step 4: leader action (-> check vatican report -> check endgame)
         // step 5: next turn
 
+        turnPhase = TurnPhase.RESOURCE_PLACER_TO_LEADER_ACTION;
         // starting from:
         turnState = new LeaderCardsAssignmentTurnState(this);
     }

@@ -11,14 +11,29 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
+/**
+ * Class to models the state in which player can chose the leader action to perform.
+ */
 public class ChooseLeaderActionTurnState extends TurnState {
 
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn      current turn
+     * @param turnPhase phase of the turn
+     */
     public ChooseLeaderActionTurnState(Turn turn, TurnPhase turnPhase) {
         super(turn);
         turn.setTurnPhase(turnPhase);
     }
 
+    /**
+     * Method to ask to the client which is the leader action to perform.
+     * After having received the response, it forwards the message to the selection option.
+     *
+     * @param message session message
+     */
     @Override
     public void play(SessionMessage message) {
         super.play(message);

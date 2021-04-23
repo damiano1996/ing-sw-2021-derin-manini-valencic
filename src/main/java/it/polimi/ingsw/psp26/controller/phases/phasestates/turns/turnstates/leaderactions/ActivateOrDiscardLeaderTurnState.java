@@ -24,14 +24,29 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendErrorMessage;
 
+/**
+ * Class to handle the leader actions, which are: activate and discard a leader.
+ */
 public class ActivateOrDiscardLeaderTurnState extends TurnState {
 
     private MessageType lastMessage;
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn current turn
+     */
     public ActivateOrDiscardLeaderTurnState(Turn turn) {
         super(turn);
     }
 
+    /**
+     * Method receives the leader action to perform (activate or discard a leader).
+     * It sends to the user the leader cards that can be activated or discarded, and waits for selection.
+     * After that, it checks if the selected leader card can be activated (or discarded) and modify the model consequently.
+     *
+     * @param message session message
+     */
     @Override
     public void play(SessionMessage message) {
         super.play(message);
@@ -41,9 +56,6 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
             // since this state is called by ChooseLeaderActionTurnState, we can assume that the first message has one of the following payloads
             if (message.getPayload().equals(MessageType.ACTIVATE_LEADER) || message.getPayload().equals(MessageType.DISCARD_LEADER))
                 lastMessage = (MessageType) message.getPayload();
-
-            // step: choose which leader to activate/discard
-            // step: activate/discard it
 
             if (message.getMessageType().equals(MessageType.CHOICE_LEADERS)) {
 
@@ -84,7 +96,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
                             MessageType.CHOICE_LEADERS,
                             "Choice the leader " + ((lastMessage.equals(MessageType.ACTIVATE_LEADER)) ? " to activate:" : " to discard:"),
                             1, 1,
-                            playableLeaders
+                            playableLeaders.toArray()
                     )
             );
         }
@@ -137,6 +149,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
                 if (!playerLeaderCard.isActive()) {
                     turn.getTurnPlayer().discardLeaderCard(leaderCard);
                     turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1);
+                    break;
                 } else {
                     throw new LeaderCannotBeDiscardedException();
                 }

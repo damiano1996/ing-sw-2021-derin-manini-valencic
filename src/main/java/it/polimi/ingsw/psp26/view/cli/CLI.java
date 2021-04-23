@@ -231,7 +231,6 @@ public class CLI implements ViewInterface {
                 break;
 
             case CHOICE_LEADERS:
-            case CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD:
                 displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
                 break;
 

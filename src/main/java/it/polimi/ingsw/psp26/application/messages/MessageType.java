@@ -19,35 +19,20 @@ public enum MessageType {
     DISCARD_LEADER, // action
     ACTIVATE_LEADER, // action
     SKIP_LEADER_ACTION,
-    CHOICE_LEADER_TO_ACTIVATE_OR_DISCARD, // to display to the client the leader cards
     LEADER_ACTIVATED, // to display the activated leader
 
     //Normal actions:
     CHOICE_NORMAL_ACTION, // to display to the client the normal action options
 
     ACTIVATE_PRODUCTION, // action
-    CHOICE_RESOURCE_IN_RESOURCE_OUT, //to display to the client the resource to use in base power TO ELIMINATE
     CHOICE_CARDS_TO_ACTIVATE, // to display to the client the card to activate
-    CARDS_TO_ACTIVATE_CHOSEN, // cards chosen to be activated
     MARKET_RESOURCE, // action
 
     BUY_CARD, // action
     CHOICE_CARD_TO_BUY, // to display the cards available to be bought
-    CARD_TO_BUY_CHOSEN, // DevelopmentCard chosen to be bought
     CHOICE_POSITION, // to display the position of the card
-    POSITION_CHOSEN, // position chosen of the bought card
 
     CHOICE_ROW_COLUMN, // to display the column or the row
-    ROW_COLUMN_CHOSEN, // row or column chosen
-    MARKET_NEXT, // move to next turnPhase
-    GRAB_RESOURCES,// Grab all resources from a depot
-    CHOICE_ORGANIZATION_MOVE, // to display the moves possible about the organization
-    RESOURCE_POSITION_CHOSEN_ONE, // resource position chosen
-
-    RESOURCE_CHOSEN, // resource chosen to use in base power
-
-    // Leader action activation:
-    LEADER_CHOSEN,
 
     // End game:
     SEVENTH_CARD_DRAWN,
@@ -61,6 +46,4 @@ public enum MessageType {
     // tmp
     CHOICE_RESOURCE,
     PLACE_IN_WAREHOUSE,
-
-    FIRST_RESOURCE
 }

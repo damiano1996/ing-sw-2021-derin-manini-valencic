@@ -10,6 +10,7 @@ import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,15 +19,53 @@ import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtil
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.MatchUtils.addFaithPointsToPlayers;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
+/**
+ * Class to model the turn state in which players pace resources in the warehouse.
+ */
 public class ResourcesWarehousePlacerTurnState extends TurnState {
 
     private final List<Resource> resourcesToAdd;
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn           current turn
+     * @param resourcesToAdd resources to add in the warehouse
+     */
     public ResourcesWarehousePlacerTurnState(Turn turn, List<Resource> resourcesToAdd) {
         super(turn);
         this.resourcesToAdd = resourcesToAdd;
     }
 
+    /**
+     * Method to place resources to warehouse.
+     * It sends to the player the current warehouse with the list of resources that must be placed in.
+     * As response, it expected a list of resources that indicates the order to fill the warehouse.
+     * <p>
+     * E.g. {COIN, STONE, SHIELD, COIN, STONE} is the received list.
+     * The method has to place in the first row, of the warehouse, the COINs,
+     * in the second the STONEs, in the third the SHIELDs, and so on.
+     * The list does NOT referer to the quantity of the available resources, but only on the order!
+     * If the corresponding depot doesn't have sufficient slots, the resources will be discarded, or placed in the leader depot, if available.
+     * <p>
+     * For user experience purposes, if there is a duplicate (e.g. {COIN, SERVANT, COIN}) between the base depots,
+     * the method notifies the player with an error message, also re-sending the initial message.
+     * <p>
+     * Duplicates, in the received list, are admitted in case of leader depots.
+     * The method has to fill in order the warehouse and then the leader depot.
+     * <p>
+     * E.g.
+     * resourceOrder = {COIN, STONE, SHIELD, COIN, STONE}
+     * 3 base depots and 2 leader depot (COIN and STONE)
+     * All available COINs will be placed filling the first row of the warehouse and then the leader (COIN) depot if there are more than 1 COINs.
+     * All available STONEs will be placed filling the second row of the warehouse and then the leader (STONE) depot if there are more than 2 STONEs.
+     * all available SHIELDs will be placed in the third row of the warehouse.
+     * All un-placeable resources will be discarded. Also in case of resources that the user has, but he decided to not insert in the list.
+     * <p>
+     * After having completed the action, the turn state change to check the vatican report.
+     *
+     * @param message session message
+     */
     @Override
     public void play(SessionMessage message) {
         super.play(message);
@@ -45,6 +84,8 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
                                         turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().size(),
                                         resourceOrder.size())))) {
                     sendErrorMessage(turn, "Each depot of the warehouse must contains different resources.");
+                    sendWarehouseMessage();
+
                 } else {
 
                     int discardedResources = fillWarehouse(resourceOrder);
@@ -73,6 +114,11 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
      * @return number of discarded resources
      */
     private int fillWarehouse(List<Resource> resourceOrder) {
+        // removing duplicates: to avoid to refill two times with the same resource
+        System.out.println(resourceOrder);
+        resourceOrder = removeDuplicates(resourceOrder);
+        System.out.println(resourceOrder);
+
         // collecting all the resources of the player
         List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getWarehouse().grabAllResources();
         playerResources.addAll(resourcesToAdd); // adding the new obtained resources
@@ -99,6 +145,18 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
         }
         int ignoredResources = playerResources.size() - tryToAllocate;
         return discardedResources + ignoredResources;
+    }
+
+    /**
+     * Method removes duplicates from list preserving the order of the elements.
+     *
+     * @param resources list of resources
+     * @return list of resources without duplicates
+     */
+    private List<Resource> removeDuplicates(List<Resource> resources) {
+        List<Resource> newResources = new ArrayList<>();
+        for (Resource resource : resources) if (!newResources.contains(resource)) newResources.add(resource);
+        return newResources;
     }
 
     /**

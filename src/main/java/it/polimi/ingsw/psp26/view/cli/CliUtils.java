@@ -220,11 +220,28 @@ public class CliUtils {
 
 
     /**
-     * Put the cursor visibility back on screen
+     * Puts the cursor visibility back on screen
      */
     public void showCursor() {
         pw.print("\u001b[?25h");
         pw.flush();
     }
+
+
+    /**
+     * Clears a line from the current cursor position to end of line
+     *
+     * @param row    The row of the line to clean
+     * @param column The column of the line to clean
+     */
+    public void clearLine(int row, int column) {
+        setCursorPosition(row, column);
+        pw.println("\u001b[0K");
+        pw.flush();
+        setCursorPosition(row, column);
+    }
+    
+    
+    
 
 }

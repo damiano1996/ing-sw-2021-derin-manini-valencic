@@ -75,5 +75,24 @@ public class DepotTest {
     public void testAddResource_CanNotAddResourceToDepotException_TooMuchResourcesInDepot() throws CanNotAddResourceToDepotException {
         for (int i = 0; i < 4; i++) depot.addResource(Resource.STONE);
     }
+    
+    @Test
+    public void testAddMultipleResources() throws CanNotAddResourceToDepotException {
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.STONE);
+        resources.add(Resource.STONE);
+        
+        depot.addMultipleResources(resources);
+        assertEquals(resources, depot.getResources());
+    }
+    
+    @Test(expected = CanNotAddResourceToDepotException.class)
+    public void testAddMultipleResources_CanNotAddResourcesToDepotException() throws CanNotAddResourceToDepotException {
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.STONE);
+        resources.add(Resource.COIN);
+
+        depot.addMultipleResources(resources);
+    }
 
 }

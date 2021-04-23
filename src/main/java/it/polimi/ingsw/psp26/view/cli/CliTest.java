@@ -110,9 +110,13 @@ public class CliTest {
 
         PersonalBoard p = new PersonalBoard(virtualView, player);
         List<Resource> resources = new ArrayList<>();
+        
+        p.getWarehouse().addLeaderDepot(new LeaderDepot(virtualView, Resource.COIN));
+        p.getWarehouse().addLeaderDepot(new LeaderDepot(virtualView, Resource.SHIELD));
 
-        //p.getWarehouse().addResource(Resource.STONE);
-        //p.getWarehouse().addResource(Resource.SHIELD);
+        p.getWarehouse().addResourceToDepot(1, Resource.STONE);
+        p.getWarehouse().addResourceToDepot(2, Resource.SHIELD);
+        p.getWarehouse().addResourceToDepot(2, Resource.SHIELD);
 
         resources.add(Resource.STONE);
         resources.add(Resource.STONE);

@@ -8,7 +8,6 @@ import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class DepotCli {
@@ -20,7 +19,7 @@ public class DepotCli {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
     }
-
+    
 
     /**
      * Used to print the Strongbox
@@ -50,44 +49,6 @@ public class DepotCli {
         cliUtils.printFigure("Warehouse", startingRow, startingColumn);
         for (int i = 0; i < warehouse.getBaseDepots().size(); i++)
             printDepot(warehouse.getBaseDepots().get(i), startingRow, startingColumn, i + 1);
-    }
-
-
-    /**
-     * Show the screen that appears after getting Resources from the Market
-     *
-     * @param warehouse The Warehouse to print
-     * @param resources The resources get prom the Market to insert into the Warehouse
-     */
-    public void displayMarketResourcesSelection(Warehouse warehouse, List<Resource> resources) { //TODO temporary solution
-        Scanner in = new Scanner(System.in);
-        cliUtils.cls();
-        pw.flush();
-
-        cliUtils.printFigure("/titles/WarehouseConfigurationTitle", 1, 21);
-
-        printWarehouse(warehouse, 7, 74);
-
-        cliUtils.setCursorPosition(22, 74);
-        pw.print("Resources left to insert:");
-        for (Resource resource : resources)
-            pw.print(cliUtils.hSpace(8) + cliUtils.pCS("\u2588\u2588  ", resource.getColor()));
-        pw.flush();
-
-        cliUtils.setCursorPosition(30, 21);
-        pw.println("Please type the ResourceType and the number of the Depot in which you want to store it.");
-        pw.print(cliUtils.hSpace(20) + "The Resources that can't be added to the Warehouse will be discarded.");
-        pw.flush();
-
-        //Possibile soluzione soggetta a futuri cambiamenti
-        cliUtils.vSpace(1);
-        pw.println(cliUtils.hSpace(20) + cliUtils.pCS("[RESOURCETYPE - DEPOTNUMBER]", Color.GREY));
-        cliUtils.vSpace(1);
-        pw.print("\u001b[20C"); //moving cursor right of 20 spaces
-
-        pw.flush();
-
-        in.nextLine(); //temporary solution
     }
 
 

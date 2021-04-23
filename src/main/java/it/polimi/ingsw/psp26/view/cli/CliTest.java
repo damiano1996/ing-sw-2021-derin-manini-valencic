@@ -64,14 +64,14 @@ public class CliTest {
             CliTest cliTest = new CliTest(new Client());
             cliTest.testMethod();
 
-        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException e) {
+        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse e) {
             e.printStackTrace();
         }
     }
 
-    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException {
+    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse {
 
-        //---WAIING-SCREEN-TEST---// press Enter 3 times
+        /*---WAIING-SCREEN-TEST---// press Enter 3 times
 
         WaitingScreenStarter waitingScreenStarter = WaitingScreenStarter.getInstance();
         Scanner tast = new Scanner(System.in);
@@ -91,7 +91,7 @@ public class CliTest {
         message = new Message(MessageType.GENERAL_MESSAGE, "Press Enter to exit");
         waitingScreenStarter.startWaiting(message);
         tast.nextLine();
-        waitingScreenStarter.stopWaiting();
+        waitingScreenStarter.stopWaiting();*/
 
 
         //---OBJECTS-DECLARATION---//
@@ -106,6 +106,24 @@ public class CliTest {
         ResourceSupply resourceSupply = new ResourceSupply();
         Match metch = new Match(virtualView, 0);
         Scanner in = new Scanner(System.in);
+
+
+        //---WAREHOUSE-CONFIGURATION-TEST---// Press Enter 3 times
+
+        PersonalBoard p = new PersonalBoard(virtualView, player);
+        List<Resource> resources = new ArrayList<>();
+
+        //p.getWarehouse().addResource(Resource.STONE);
+        //p.getWarehouse().addResource(Resource.SHIELD);
+
+        resources.add(Resource.STONE);
+        resources.add(Resource.STONE);
+        resources.add(Resource.COIN);
+        resources.add(Resource.SERVANT);
+
+        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
+        in.nextLine();
+        
 
         //FAITH-TRACK-MOVEMENT-TEST---// Press Enter 25 times
 
@@ -241,30 +259,6 @@ public class CliTest {
             developmentGrid.drawCard(Color.GREEN, Level.SECOND);
             developmentGrid.drawCard(Color.GREEN, Level.THIRD);
         }
-
-        //---WAREHOUSE-CONFIGURATION-TEST---// Press Enter 3 times
-
-        PersonalBoard p = new PersonalBoard(virtualView, player);
-        List<Resource> resources = new ArrayList<>();
-        resources.add(Resource.STONE);
-        resources.add(Resource.STONE);
-        resources.add(Resource.COIN);
-        resources.add(Resource.SERVANT);
-        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
-
-        p.getWarehouse().addResourceToDepot(2, Resource.STONE);
-        p.getWarehouse().addResourceToDepot(2, Resource.STONE);
-        resources.remove(0);
-        resources.remove(0);
-        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
-
-        p.getWarehouse().addResourceToDepot(1, Resource.COIN);
-        resources.remove(0);
-        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
-
-        p.getWarehouse().addResourceToDepot(0, Resource.SERVANT);
-        resources.remove(0);
-        cli.displayMarketResourcesSelection(p.getWarehouse(), resources);
 
 
         //---TITLE-SCREEN-TEST---// Press Enter and follow terminal instructions

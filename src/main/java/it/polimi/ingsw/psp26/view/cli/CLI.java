@@ -38,6 +38,7 @@ public class CLI implements ViewInterface {
     private final LeaderCardsCli leaderCardsCli;
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
+    private final DisplayWarehousePlacer displayWarehousePlacer;
 
     public CLI(Client client) {
         this.client = client;
@@ -51,6 +52,7 @@ public class CLI implements ViewInterface {
         this.leaderCardsCli = new LeaderCardsCli(pw);
         this.marketCli = new MarketCli(pw);
         this.personalBoardCli = new PersonalBoardCli(pw);
+        this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
     }
 
     /**
@@ -182,7 +184,7 @@ public class CLI implements ViewInterface {
 
 
     public void displayMarketResourcesSelection(Warehouse warehouse, List<Resource> resources) {
-        depotCli.displayMarketResourcesSelection(warehouse, resources);
+        displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resources);
     }
 
 

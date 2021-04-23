@@ -45,7 +45,7 @@ public class WaitingScreenStarter {
             cliUtils.hideCursor();
             cliUtils.pPCS((String) message.getPayload(), Color.WHITE, 25, 90);
             isWaiting = true;
-            
+
             //The thread cycles the different Frames reproducing a waiting icon
             //TimeUnit.MILLISECONDS.sleep() is used to give a better viewing experience
             waitingScreenThread = new Thread(() -> {

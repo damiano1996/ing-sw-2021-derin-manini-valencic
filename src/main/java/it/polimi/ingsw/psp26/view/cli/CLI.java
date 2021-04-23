@@ -220,9 +220,7 @@ public class CLI implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
 
-        cliUtils.cls();
-        cliUtils.vSpace(1);
-        pw.println(cliUtils.hSpace(3) + question);
+        displayText(question);
 
         switch (messageType) {
 
@@ -332,7 +330,9 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayText(String text) {
-        //To be implemented
+        cliUtils.cls();
+        cliUtils.vSpace(1);
+        pw.println(cliUtils.hSpace(3) + text);
     }
 
     @Override

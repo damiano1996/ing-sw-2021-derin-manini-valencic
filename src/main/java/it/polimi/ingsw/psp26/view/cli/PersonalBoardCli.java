@@ -43,7 +43,7 @@ public class PersonalBoardCli {
 
         faithTrackCli.displayFaithTrack(player.getPersonalBoard().getFaithTrack(), 3, 10, isMultiplayerMode);
 
-        displayInkwell(player.isInkwell(), 5, 190);
+        displayInkwell(player.hasInkwell(), 5, 190);
 
         depotCli.printWarehouse(player.getPersonalBoard().getWarehouse(), 17, 13);
 

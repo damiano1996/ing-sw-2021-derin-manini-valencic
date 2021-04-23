@@ -43,11 +43,11 @@ public class OneResourceTurnState extends TurnState {
                     turn.changeState(nextState);
                     turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE, resources.toArray()));
                 } else {
-                    sendMessage();
+                    sendChoiceResourceMessage();
                 }
 
             } else {
-                sendMessage();
+                sendChoiceResourceMessage();
             }
 
         } catch (EmptyPayloadException ignored) {
@@ -56,7 +56,7 @@ public class OneResourceTurnState extends TurnState {
 
     }
 
-    private void sendMessage() {
+    private void sendChoiceResourceMessage() {
         System.out.println("OneResourceTurnState - sending message to " + turn.getTurnPlayer().getNickname());
 
         turn.getMatchController().notifyObservers(

@@ -67,4 +67,19 @@ public class LeaderCardTest {
     public void testGetAbilityResource() {
         assertEquals(Resource.COIN, leaderCard.getAbilityResource());
     }
+
+    @Test
+    public void testEquals_FirstCase() {
+        assertEquals(leaderCard, leaderCard);
+    }
+
+    @Test
+    public void testEquals_SecondCase() {
+        LeaderCard secondLeader = new LeaderCard(new HashMap<>() {{
+            put(Resource.COIN, 1);
+        }}, new HashMap<>() {{
+            put(new DevelopmentCardType(Color.GREEN, Level.FIRST), 2);
+        }}, 2, new ProductionAbility(Resource.COIN));
+        assertEquals(leaderCard, secondLeader);
+    }
 }

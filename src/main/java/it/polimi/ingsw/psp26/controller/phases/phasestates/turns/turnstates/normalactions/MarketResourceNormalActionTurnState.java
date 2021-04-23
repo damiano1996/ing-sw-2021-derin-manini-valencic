@@ -4,16 +4,13 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacer;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacerTurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -61,7 +58,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     break;
 
                 case CHOICE_RESOURCE:
-                    turn.changeState(new ResourcesWarehousePlacer(turn, tempResources));
+                    turn.changeState(new ResourcesWarehousePlacerTurnState(turn, tempResources));
                     play(message);
 
                     break;

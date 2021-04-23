@@ -13,6 +13,11 @@ public class TurnUtils {
     public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
         switch (turn.getTurnPhase()) {
 
+            case RESOURCE_PLACER_TO_LEADER_ACTION:
+                turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
+                turn.play(message);
+                break;
+
             case LEADER_TO_NORMAL_ACTION:
                 // If first leader action has been played, go to normal action
                 turn.changeState(new ChooseNormalActionTurnState(turn));
@@ -21,7 +26,7 @@ public class TurnUtils {
 
             case NORMAL_TO_LEADER_ACTION:
                 // After normal action, go to leader action
-                turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.NORMAL_TO_LEADER_ACTION));
+                turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_ACTION_TO_END));
                 turn.play(message);
                 break;
 
@@ -46,6 +51,32 @@ public class TurnUtils {
                         "Choice normal action to perform:",
                         1, 1,
                         ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD
+                )
+        );
+    }
+
+    /**
+     * Method to send an error message to the player of the turn.
+     */
+    public static void sendErrorMessage(Turn turn, String errorMessage) {
+        turn.getMatchController().notifyObservers(
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        ERROR_MESSAGE,
+                        errorMessage
+                )
+        );
+    }
+
+    /**
+     * Method to send a general message to the player of the turn.
+     */
+    public static void sendGeneralMessage(Turn turn, String generalMessage) {
+        turn.getMatchController().notifyObservers(
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        GENERAL_MESSAGE,
+                        generalMessage
                 )
         );
     }

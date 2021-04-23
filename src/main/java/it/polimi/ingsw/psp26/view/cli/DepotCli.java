@@ -19,7 +19,7 @@ public class DepotCli {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
     }
-    
+
 
     /**
      * Used to print the Strongbox

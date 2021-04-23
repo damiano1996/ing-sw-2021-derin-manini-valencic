@@ -4,7 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacer;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacerTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -12,6 +12,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class BenefitsTurnState extends TurnState {
@@ -27,15 +28,18 @@ public class BenefitsTurnState extends TurnState {
 
         // skipping if first turn played by all players
         if (turn.getTurnNumber() > turn.getMatchController().getMatch().getPlayers().size() - 1) {
-            turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
-            turn.play(message);
+            goToChooseLeaderAction(message);
 
         } else {
 
             try {
                 switch (turn.getTurnNumber()) {
                     case 0:
+                        sendGeneralMessage(turn, "You are the first player. Catch the inkwell!");
+
                         turn.getTurnPlayer().giveInkwell();
+
+                        goToChooseLeaderAction(message);
                         break;
 
                     case 1:
@@ -56,7 +60,7 @@ public class BenefitsTurnState extends TurnState {
 
     }
 
-    public void assignResources(SessionMessage message, int numOfResources, boolean faithPoint) throws EmptyPayloadException {
+    private void assignResources(SessionMessage message, int numOfResources, boolean faithPoint) throws EmptyPayloadException {
         System.out.println("BenefitsTurnState - assigning resources " + message.toString());
 
         if (message.getMessageType().equals(CHOICE_RESOURCE)) {
@@ -65,12 +69,18 @@ public class BenefitsTurnState extends TurnState {
             if (faithPoint)
                 turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1);
 
-            turn.changeState(new ResourcesWarehousePlacer(turn, resources));
+            sendGeneralMessage(turn, "Choice your benefit resource" + ((numOfResources > 0) ? "s: " : ": "));
+            turn.changeState(new ResourcesWarehousePlacerTurnState(turn, resources));
 
         } else {
             turn.changeState(new OneResourceTurnState(turn, this, numOfResources));
         }
 
+        turn.play(message);
+    }
+
+    private void goToChooseLeaderAction(SessionMessage message) {
+        turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
         turn.play(message);
     }
 

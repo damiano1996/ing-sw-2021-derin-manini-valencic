@@ -54,14 +54,14 @@ public class PlayerTest {
 
     @Test
     public void giveInkwell() {
-        assertFalse(player.isInkwell());
+        assertFalse(player.hasInkwell());
         player.giveInkwell();
-        assertTrue(player.isInkwell());
+        assertTrue(player.hasInkwell());
     }
 
     @Test
     public void isInkwell() {
-        assertFalse(player.isInkwell());
+        assertFalse(player.hasInkwell());
     }
 
 

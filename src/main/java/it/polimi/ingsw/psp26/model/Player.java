@@ -115,7 +115,7 @@ public class Player extends Observable<SessionMessage> {
      *
      * @return true if the player has the inkwell, false otherwise
      */
-    public boolean isInkwell() {
+    public boolean hasInkwell() {
         return inkwell;
     }
 

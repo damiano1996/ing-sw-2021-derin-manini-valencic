@@ -6,11 +6,10 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
-import it.polimi.ingsw.psp26.exceptions.*;
-import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,39 +54,40 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
                             numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
                     }
-                    if(numOfUnknownCost != 0) {
+                    if (numOfUnknownCost != 0) {
                         new SessionMessage(
                                 turn.getTurnPlayer().getSessionToken(),
                                 GENERAL_MESSAGE,
                                 "Choose the resource to pay that replaces the unknown resource in the production:"
                         );
                         turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost));
-                    }else if(numOfUnknownProd != 0){
+                    } else if (numOfUnknownProd != 0) {
                         new SessionMessage(
                                 turn.getTurnPlayer().getSessionToken(),
                                 GENERAL_MESSAGE,
                                 "Choose the resource that you want back of the unknown resource in the production:"
                         );
                         turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
-                    }else{
+                    } else {
                         play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
                     }
                     break;
 
                 case CHOICE_RESOURCE:
-                    if(unknownCostResources.size() == numOfUnknownCost){
-                        if(numOfUnknownProd != 0) unknownProdResources = castElements(Resource.class, message.getListPayloads());
+                    if (unknownCostResources.size() == numOfUnknownCost) {
+                        if (numOfUnknownProd != 0)
+                            unknownProdResources = castElements(Resource.class, message.getListPayloads());
                         activateProduction(message);
-                    }else {
+                    } else {
                         unknownCostResources = castElements(Resource.class, message.getListPayloads());
-                        if(numOfUnknownProd != 0) {
+                        if (numOfUnknownProd != 0) {
                             new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
                                     GENERAL_MESSAGE,
                                     "Choose the resource that you want back of the unknown resource in the production:"
                             );
                             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
-                        }else{
+                        } else {
                             play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
                         }
 
@@ -98,7 +98,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         }
     }
 
-    private boolean isProductionFeasible(){
+    private boolean isProductionFeasible() {
         List<Resource> availableResource = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
         for (Production production : productionActivated) {
             for (Resource resource : production.getProductionCost().keySet()) {
@@ -109,8 +109,8 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         }
                     }
                 }
-                for(int i = 0; i < production.getProductionCost().get(resource); i++){
-                    if(!availableResource.remove(resource)){
+                for (int i = 0; i < production.getProductionCost().get(resource); i++) {
+                    if (!availableResource.remove(resource)) {
                         return false;
                     }
                 }
@@ -121,7 +121,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
 
     private void activateProduction(SessionMessage message) {
-        if(isProductionFeasible()) {
+        if (isProductionFeasible()) {
             for (Production production : productionActivated) {
                 for (Resource resource : production.getProductionCost().keySet()) {
                     if (resource == Resource.UNKNOWN) {
@@ -138,7 +138,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             collectProduction();
             turn.changeState(new CheckVaticanReportTurnState(turn));
             turn.play(message);
-        }else{
+        } else {
             turn.getMatchController().notifyObservers(
                     new MultipleChoicesMessage(
                             turn.getTurnPlayer().getSessionToken(),

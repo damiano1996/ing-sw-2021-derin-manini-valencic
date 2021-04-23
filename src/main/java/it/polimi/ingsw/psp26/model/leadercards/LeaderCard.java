@@ -133,4 +133,8 @@ public class LeaderCard {
                 Objects.equals(specialAbility, that.specialAbility);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(resourcesRequirements, developmentCardRequirements, victoryPoints, specialAbility, active);
+    }
 }

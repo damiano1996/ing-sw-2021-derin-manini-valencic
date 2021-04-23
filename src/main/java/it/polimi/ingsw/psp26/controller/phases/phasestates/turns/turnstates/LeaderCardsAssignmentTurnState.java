@@ -12,6 +12,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendErrorMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class LeaderCardsAssignmentTurnState extends TurnState {
@@ -42,25 +43,27 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
 
                     List<LeaderCard> selectedLeaderCards = castElements(LeaderCard.class, message.getListPayloads());
                     // checking if cards are among the drawn.
-                    if (selectedLeaderCards.size() > 2 ||
+                    if (selectedLeaderCards.size() != 2 ||
                             !drawnLeaders.contains(selectedLeaderCards.get(0)) ||
                             !drawnLeaders.contains(selectedLeaderCards.get(1))) {
-                        sendErrorMessage();
-                        sendLeaderCardsChoiceMessage();
-                    } else {
-                        turn.getTurnPlayer().setLeaderCards(selectedLeaderCards);
 
+                        System.out.println("Error, asking again!");
+                        sendErrorMessage(turn, "You have to choose two different leader cards among those drawn.");
+                        sendLeaderCardsChoiceMessage();
+
+                    } else {
+
+                        turn.getTurnPlayer().setLeaderCards(selectedLeaderCards);
                         turn.changeState(new BenefitsTurnState(turn));
                         turn.play(message);
                     }
 
-                } catch (EmptyPayloadException e) {
-                    sendErrorMessage();
+                } catch (EmptyPayloadException | IndexOutOfBoundsException e) {
+                    sendErrorMessage(turn, "You have to choose two leader cards.");
                     sendLeaderCardsChoiceMessage();
                 }
 
             } else {
-
                 sendLeaderCardsChoiceMessage();
             }
         }
@@ -74,16 +77,6 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
                         "Choice two leader cards:",
                         2, 2,
                         drawnLeaders.toArray()
-                )
-        );
-    }
-
-    private void sendErrorMessage() {
-        turn.getMatchController().notifyObservers(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        MessageType.ERROR_MESSAGE,
-                        "You have to choose two different leader cards among those drawn."
                 )
         );
     }

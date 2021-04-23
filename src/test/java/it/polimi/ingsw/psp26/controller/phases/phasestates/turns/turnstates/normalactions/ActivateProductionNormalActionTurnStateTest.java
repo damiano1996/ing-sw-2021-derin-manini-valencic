@@ -13,8 +13,9 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static org.junit.Assert.*;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE;
+import static org.junit.Assert.assertEquals;
 
 public class ActivateProductionNormalActionTurnStateTest {
 
@@ -47,7 +48,7 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     @Test
     public void play2() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-        turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2,2).getFirstCard());
+        turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard());
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions()));
         phase.getMatchController().addObserver(message -> assertEquals(message.getMessageType(), CHOICE_RESOURCE));
 
@@ -55,7 +56,7 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     @Test
     public void play3() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-        turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2,2).getFirstCard());
+        turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard());
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions()));
         phase.getMatchController().addObserver(message -> assertEquals(message.getMessageType(), CHOICE_RESOURCE));
 

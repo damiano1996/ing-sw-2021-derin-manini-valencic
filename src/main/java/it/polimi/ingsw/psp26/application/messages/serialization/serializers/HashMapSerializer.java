@@ -1,8 +1,8 @@
-package it.polimi.ingsw.psp26.application.serialization.serializers;
+package it.polimi.ingsw.psp26.application.messages.serialization.serializers;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.psp26.application.serialization.GsonConverter;
+import it.polimi.ingsw.psp26.application.messages.serialization.GsonConverter;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

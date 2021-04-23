@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.application.serialization.serializers;
+package it.polimi.ingsw.psp26.application.messages.serialization.serializers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;

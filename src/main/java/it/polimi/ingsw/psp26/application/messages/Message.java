@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.application.messages;
 
-import it.polimi.ingsw.psp26.application.serialization.GsonConverter;
+import it.polimi.ingsw.psp26.application.messages.serialization.GsonConverter;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 
 import java.io.Serializable;
@@ -23,6 +23,7 @@ public class Message implements Serializable {
 
     private void objectToJson(Object... payloads) {
         this.payloadClass = payloads[0].getClass();
+        System.out.println(this.payloadClass);
 
         this.jsonPayloads = new ArrayList<>();
         for (Object payload : payloads)

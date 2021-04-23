@@ -1,10 +1,10 @@
-package it.polimi.ingsw.psp26.application.serialization.serializers;
+package it.polimi.ingsw.psp26.application.messages.serialization.serializers;
 
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-import static it.polimi.ingsw.psp26.application.serialization.serializers.SerializerUtils.typeForName;
+import static it.polimi.ingsw.psp26.application.messages.serialization.serializers.SerializerUtils.typeForName;
 
 /**
  * Class to serialize abstract classes.

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.application.messages.specialpayloads.WarehousePlacerPayload;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -39,7 +39,11 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
 
                 // checking if there is a duplicate in the base depots. If so we send an error message,
                 // otherwise we can fill the warehouse with the given order of resources
-                if (isDuplicate(resourceOrder.subList(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().size()))) {
+                if (isDuplicate(
+                        resourceOrder.subList(0,
+                                Math.min(
+                                        turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().size(),
+                                        resourceOrder.size())))) {
                     sendErrorMessage(turn, "Each depot of the warehouse must contains different resources.");
                 } else {
 
@@ -74,11 +78,15 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
         playerResources.addAll(resourcesToAdd); // adding the new obtained resources
 
         int discardedResources = 0; // counter of the resources that cannot be placed
+        // tryToAllocate: counter of the resources that we tried to allocate.
+        // To check if in the resourceOrder list there are resources completely ignored, but the client has.
+        int tryToAllocate = 0;
 
         // filling the warehouse with the given order
         for (Resource resourceToAdd : resourceOrder) {
             // amount of this resource
             int resourceQuantity = Collections.frequency(playerResources, resourceToAdd);
+            tryToAllocate += resourceQuantity;
 
             // try to add
             for (int j = 0; j < resourceQuantity; j++) {
@@ -89,7 +97,8 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
                 }
             }
         }
-        return discardedResources;
+        int ignoredResources = playerResources.size() - tryToAllocate;
+        return discardedResources + ignoredResources;
     }
 
     /**
@@ -112,14 +121,14 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
     private void sendWarehouseMessage() {
         System.out.println("ResourcesWarehousePlacer - sending message to " + turn.getTurnPlayer().getNickname());
 
-        Message msg1 = new Message(MessageType.PLACE_IN_WAREHOUSE, turn.getTurnPlayer().getPersonalBoard().getWarehouse());
-        Message msg2 = new Message(MessageType.PLACE_IN_WAREHOUSE, resourcesToAdd.toArray());
-
         turn.getMatchController().notifyObservers(
                 new SessionMessage(
                         turn.getTurnPlayer().getSessionToken(),
                         MessageType.PLACE_IN_WAREHOUSE,
-                        msg1, msg2
+                        new WarehousePlacerPayload(
+                                turn.getTurnPlayer().getPersonalBoard().getWarehouse(),
+                                resourcesToAdd
+                        )
                 )
         );
 

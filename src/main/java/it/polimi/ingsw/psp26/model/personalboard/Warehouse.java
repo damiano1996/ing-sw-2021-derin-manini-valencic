@@ -7,10 +7,7 @@ import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -151,4 +148,28 @@ public class Warehouse extends Observable<SessionMessage> {
         depots.add(leaderDepot);
     }
 
+
+    /**
+     * Equals method
+     *
+     * @param o object to be compared
+     * @return true if equals
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Warehouse warehouse = (Warehouse) o;
+        return numberOfBaseDepots == warehouse.numberOfBaseDepots && Objects.equals(depots, warehouse.depots);
+    }
+
+    /**
+     * Hashing method.
+     *
+     * @return hashed object
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(depots, numberOfBaseDepots);
+    }
 }

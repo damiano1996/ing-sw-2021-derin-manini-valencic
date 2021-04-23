@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.network.client;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
+import it.polimi.ingsw.psp26.application.messages.specialpayloads.WarehousePlacerPayload;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
@@ -12,8 +13,6 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
 import java.util.List;
-
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class Client extends Observable<Message> implements Observer<Message> {
 
@@ -64,9 +63,8 @@ public class Client extends Observable<Message> implements Observer<Message> {
                     break;
 
                 case PLACE_IN_WAREHOUSE:
-                    List<Message> messages = castElements(Message.class, message.getListPayloads());
-                    Warehouse warehouse = (Warehouse) messages.get(0).getPayload();
-                    List<Resource> resourcesToAdd = castElements(Resource.class, messages.get(1).getListPayloads());
+                    Warehouse warehouse = ((WarehousePlacerPayload) message.getPayload()).getWarehouse();
+                    List<Resource> resourcesToAdd = ((WarehousePlacerPayload) message.getPayload()).getResourcesToAdd();
                     viewInterface.displayWarehouseNewResourcesAssignment(warehouse, resourcesToAdd);
                     break;
 

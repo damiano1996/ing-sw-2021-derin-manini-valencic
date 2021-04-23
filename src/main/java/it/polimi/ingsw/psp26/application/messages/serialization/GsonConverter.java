@@ -1,10 +1,10 @@
-package it.polimi.ingsw.psp26.application.serialization;
+package it.polimi.ingsw.psp26.application.messages.serialization;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.psp26.application.serialization.serializers.AbstractClassSerializer;
-import it.polimi.ingsw.psp26.application.serialization.serializers.HashMapSerializer;
+import it.polimi.ingsw.psp26.application.messages.serialization.serializers.AbstractClassSerializer;
+import it.polimi.ingsw.psp26.application.messages.serialization.serializers.HashMapSerializer;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;

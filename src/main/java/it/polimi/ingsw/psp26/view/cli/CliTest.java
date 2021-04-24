@@ -91,6 +91,7 @@ public class CliTest {
         
         testMessages();
         
+        //testWarehouseConfiguration();
         testFaithTrackMovement();
         testMarket();
         testActionTokens();

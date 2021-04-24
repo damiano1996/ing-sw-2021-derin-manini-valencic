@@ -318,7 +318,7 @@ public class DisplayWarehousePlacer {
                 resources.add(resourceList.get(i));
 
         }
-        
+
         //Otherwise add the Resources normally
         else {
             for (Resource resource : resourceList) {

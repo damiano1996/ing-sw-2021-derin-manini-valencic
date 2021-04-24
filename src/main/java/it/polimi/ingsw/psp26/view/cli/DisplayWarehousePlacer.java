@@ -65,11 +65,9 @@ public class DisplayWarehousePlacer {
                         discardedResources.add(resources.get(i));
                         setParameters(true);
                     } catch (DepotOutOfBoundException | NumberFormatException e) {
-                        cliUtils.pPCS("WRONG INDEX INSERTED! Insert Depot index again: ", Color.RED, 38, 21);
-                        cliUtils.clearLine(40, 21);
-                        cliUtils.clearLine(38, 69);
+                        executeCatchDepotOutOfBound();
                     } catch (ChangeResourcesBetweenDepotsException e) {
-                        changeResourcesDepots(warehouse);
+                        changeResourcesDepots(warehouse, resources);
                         i--;
                         setParameters(true);
                     }
@@ -80,10 +78,7 @@ public class DisplayWarehousePlacer {
                         warehouse.addResourceToDepot(depotIndex, resources.get(i));
                         resourceAdded = true;
                     } catch (CanNotAddResourceToDepotException e) {
-                        cliUtils.pPCS("RESOURCE CAN'T BE ADDED! Please try again", Color.RED, 38, 21);
-                        cliUtils.clearLine(38, 62);
-                        cliUtils.clearLine(40, 35);
-                        correctDepotIndexInserted = false;
+                        executeCatchCanNotAddResourcesToDepot();
                     }
                 }
 
@@ -92,6 +87,27 @@ public class DisplayWarehousePlacer {
         }
 
         return createListToSend(warehouse);
+    }
+
+
+    /**
+     * Executes the corresponding catch in displayMarketResourcesSelection()
+     */
+    private void executeCatchDepotOutOfBound() {
+        cliUtils.pPCS("WRONG INDEX INSERTED! Insert Depot index again: ", Color.RED, 38, 21);
+        cliUtils.clearLine(40, 21);
+        cliUtils.clearLine(38, 69);
+    }
+
+
+    /**
+     * Executes the corresponding catch displayMarketResourcesSelection()
+     */
+    private void executeCatchCanNotAddResourcesToDepot() {
+        cliUtils.pPCS("RESOURCE CAN'T BE ADDED! Please try again", Color.RED, 38, 21);
+        cliUtils.clearLine(38, 62);
+        cliUtils.clearLine(40, 35);
+        correctDepotIndexInserted = false;
     }
 
 
@@ -201,8 +217,9 @@ public class DisplayWarehousePlacer {
      * Changes the Resources between two depots
      *
      * @param warehouse The Warehouse containing the Depots
+     * @param resources The Resource to insert List
      */
-    private void changeResourcesDepots(Warehouse warehouse) {
+    private void changeResourcesDepots(Warehouse warehouse, List<Resource> resources) {
         cliUtils.clearLine(38, 21);
 
         int sourceDepot = 0;
@@ -225,8 +242,8 @@ public class DisplayWarehousePlacer {
         List<Resource> tempResourcesDestination = warehouse.getAllDepots().get(destinationDepot).grabAllResources();
 
         try {
-            addMultipleResources(warehouse, sourceDepot, tempResourcesDestination);
-            addMultipleResources(warehouse, destinationDepot, tempResourcesSource);
+            resources.addAll(addMultipleResources(warehouse, sourceDepot, tempResourcesDestination));
+            resources.addAll(addMultipleResources(warehouse, destinationDepot, tempResourcesSource));
         } catch (CanNotAddResourceToDepotException e) {
             restoreOriginalSituation(warehouse, sourceDepot, destinationDepot, tempResourcesSource, tempResourcesDestination);
         }
@@ -283,12 +300,33 @@ public class DisplayWarehousePlacer {
      * @param warehouse    The warehouse from where the Depot is taken
      * @param depotIndex   The index of the Depot where the Resources are going to be added
      * @param resourceList The resources to add
+     * @return The Resources to put back in the Resource to insert List
      * @throws CanNotAddResourceToDepotException Thrown if the resources can't be added to the depot
      */
-    private void addMultipleResources(Warehouse warehouse, int depotIndex, List<Resource> resourceList) throws CanNotAddResourceToDepotException {
-        for (Resource resource : resourceList) {
-            warehouse.addResourceToDepot(depotIndex, resource);
+    private List<Resource> addMultipleResources(Warehouse warehouse, int depotIndex, List<Resource> resourceList) throws CanNotAddResourceToDepotException {
+        List<Resource> resources = new ArrayList<>();
+        int maxNumberOfResources = warehouse.getAllDepots().get(depotIndex).getMaxNumberOfResources();
+
+        //If the Resource to insert in a Depot are greater than the maxNumberOfResources the Depot can contain,
+        //puts the remaining Resources in the Resource to insert List
+        if (maxNumberOfResources < resourceList.size()) {
+
+            for (int i = 0; i < maxNumberOfResources; i++)
+                warehouse.addResourceToDepot(depotIndex, resourceList.get(i));
+
+            for (int i = maxNumberOfResources; i < resourceList.size(); i++)
+                resources.add(resourceList.get(i));
+
         }
+        
+        //Otherwise add the Resources normally
+        else {
+            for (Resource resource : resourceList) {
+                warehouse.addResourceToDepot(depotIndex, resource);
+            }
+        }
+
+        return resources;
     }
 
 

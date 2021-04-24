@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
@@ -13,17 +14,19 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendChoiceNormalActionMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class ActivateProductionNormalActionTurnState extends TurnState {
 
     private List<Production> productionActivated = new ArrayList<>();
-    private List<Resource> unknownCostResources;
-    private List<Resource> unknownProdResources;
-    private int numOfUnknownCost;
-    private int numOfUnknownProd;
+    private List<Resource> unknownCostResources = new ArrayList<>() ;
+    private List<Resource> unknownProdResources = new ArrayList<>();
+    private int numOfUnknownCost = 0;
+    private int numOfUnknownProd = 0;
 
     public ActivateProductionNormalActionTurnState(Turn turn) {
         super(turn);
@@ -33,7 +36,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
         try {
             switch (message.getMessageType()) {
-                case ACTIVATE_PRODUCTION:
+                case CHOICE_NORMAL_ACTION:
                     turn.getMatchController().notifyObservers(
                             new MultipleChoicesMessage(
                                     turn.getTurnPlayer().getSessionToken(),
@@ -46,8 +49,6 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                 case CHOICE_CARDS_TO_ACTIVATE:
                     productionActivated = castElements(Production.class, message.getListPayloads());
-                    numOfUnknownCost = 0;
-                    numOfUnknownProd = 0;
                     for (Production production : productionActivated) {
                         if (production.getProductionCost().containsKey(Resource.UNKNOWN))
                             numOfUnknownCost += production.getProductionCost().get(Resource.UNKNOWN);
@@ -61,6 +62,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                                 "Choose the resource to pay that replaces the unknown resource in the production:"
                         );
                         turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost));
+                        turn.play(message);
                     } else if (numOfUnknownProd != 0) {
                         new SessionMessage(
                                 turn.getTurnPlayer().getSessionToken(),
@@ -68,13 +70,14 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                                 "Choose the resource that you want back of the unknown resource in the production:"
                         );
                         turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
+                        turn.play(message);
                     } else {
                         play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
                     }
                     break;
 
                 case CHOICE_RESOURCE:
-                    if (unknownCostResources.size() == numOfUnknownCost) {
+                    if (unknownCostResources == null || unknownCostResources.size() == numOfUnknownCost) {
                         if (numOfUnknownProd != 0)
                             unknownProdResources = castElements(Resource.class, message.getListPayloads());
                         activateProduction(message);
@@ -87,31 +90,35 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                                     "Choose the resource that you want back of the unknown resource in the production:"
                             );
                             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
+                            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE));
                         } else {
                             play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
                         }
 
                     }
                     break;
+                default:
+                    sendChoiceNormalActionMessage(turn);
             }
         } catch (EmptyPayloadException ignored) {
         }
     }
 
     private boolean isProductionFeasible() {
-        List<Resource> availableResource = turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources();
+        List<Resource> availableResource = new ArrayList<>();
+        availableResource.addAll(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
         for (Production production : productionActivated) {
             for (Resource resource : production.getProductionCost().keySet()) {
                 if (resource == Resource.UNKNOWN) {
-                    for (int i = 0; i < production.getProductionCost().get(Resource.UNKNOWN); i++) {
-                        if (!availableResource.remove((unknownCostResources.get(i)))) {
+                    for (int i = 0; i < (production.getProductionCost().get(Resource.UNKNOWN)); i++) {
+                        if (!availableResource.remove((unknownCostResources.get(i))))
+                            return false;
+                    }
+                } else {
+                    for (int i = 0; i < (production.getProductionCost().get(resource)); i++) {
+                        if (!availableResource.remove(resource)) {
                             return false;
                         }
-                    }
-                }
-                for (int i = 0; i < production.getProductionCost().get(resource); i++) {
-                    if (!availableResource.remove(resource)) {
-                        return false;
                     }
                 }
             }
@@ -126,13 +133,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 for (Resource resource : production.getProductionCost().keySet()) {
                     if (resource == Resource.UNKNOWN) {
                         for (int i = 0; i < production.getProductionCost().get(Resource.UNKNOWN); i++) {
-                            if (turn.getTurnPlayer().getPersonalBoard().grabResourcesFromStrongbox(unknownCostResources.get(0), 1) != null) {
+                            if (turn.getTurnPlayer().getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(unknownCostResources.get(0), 1).get(0) != null) {
                                 unknownCostResources.remove(0);
                             }
-                            turn.getTurnPlayer().getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource,
-                                    production.getProductionCost().get(resource));
                         }
                     }
+                    turn.getTurnPlayer().getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource,
+                            production.getProductionCost().get(resource));
                 }
             }
             collectProduction();
@@ -161,9 +168,12 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         resourcesProduced.add(resourceProd);
                 }
             }
-            resourcesProduced.addAll(unknownProdResources);
+            if(unknownProdResources != null) resourcesProduced.addAll(unknownProdResources);
+            resourcesProduced.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
+            resourcesProduced = resourcesProduced.stream().filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
+
             try {
-                turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
+                   turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
             } catch (CanNotAddResourceToStrongboxException e) {
                 e.printStackTrace();
 

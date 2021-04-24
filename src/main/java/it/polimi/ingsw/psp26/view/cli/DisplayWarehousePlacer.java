@@ -19,9 +19,7 @@ public class DisplayWarehousePlacer {
     private final CliUtils cliUtils;
     private final DepotCli depotCli;
     private final PersonalBoardCli personalBoardCli;
-
-    List<Resource> placedResources;
-    List<Resource> discardedResources;
+    private final List<Resource> discardedResources;
 
     //If the Player enters an incorrect index, ask it again
     boolean correctDepotIndexInserted;
@@ -35,8 +33,6 @@ public class DisplayWarehousePlacer {
         this.cliUtils = new CliUtils(pw);
         this.depotCli = new DepotCli(pw);
         this.personalBoardCli = new PersonalBoardCli(pw);
-
-        placedResources = new ArrayList<>();
         discardedResources = new ArrayList<>();
     }
 
@@ -59,16 +55,16 @@ public class DisplayWarehousePlacer {
 
             while (!resourceAdded) {
 
-                askForInput(resources.get(i).getName().replaceAll("\\s+", ""));
+                askForInput(warehouse.getAllDepots().size(), resources.get(i).getName().replaceAll("\\s+", ""));
 
                 while (!correctDepotIndexInserted) {
                     try {
-                        depotIndex = getDepotIndex();
+                        depotIndex = getDepotIndex(warehouse.getAllDepots().size());
                         correctDepotIndexInserted = true;
                     } catch (SkipResourceException e) {
                         discardedResources.add(resources.get(i));
                         setParameters(true);
-                    } catch (DepotOutOfBoundException e) {
+                    } catch (DepotOutOfBoundException | NumberFormatException e) {
                         cliUtils.pPCS("WRONG INDEX INSERTED! Insert Depot index again: ", Color.RED, 38, 21);
                         cliUtils.clearLine(40, 21);
                         cliUtils.clearLine(38, 69);
@@ -82,7 +78,6 @@ public class DisplayWarehousePlacer {
                 if (!discardResource) {
                     try {
                         warehouse.addResourceToDepot(depotIndex, resources.get(i));
-                        placedResources.add(resources.get(i));
                         resourceAdded = true;
                     } catch (CanNotAddResourceToDepotException e) {
                         cliUtils.pPCS("RESOURCE CAN'T BE ADDED! Please try again", Color.RED, 38, 21);
@@ -96,7 +91,7 @@ public class DisplayWarehousePlacer {
 
         }
 
-        return placedResources;
+        return createListToSend(warehouse);
     }
 
 
@@ -112,6 +107,7 @@ public class DisplayWarehousePlacer {
         cliUtils.printFigure("/titles/WarehouseConfigurationTitle", 1, 21);
         depotCli.printWarehouse(warehouse, 7, 74);
         personalBoardCli.printLeaderDepots(warehouse.getLeaderDepots(), 15, 132);
+        printLeaderDepotNumber(warehouse.getLeaderDepots().size());
         printResources(resourcesLeft, resourceIndex, "Resources left to insert: ", 22, 74);
         printResources(resourcesDiscarded, 0, "Resources discarded: ", 10, 132);
     }
@@ -137,12 +133,13 @@ public class DisplayWarehousePlacer {
      * Asks the Player the index where he wants to insert the Resource
      * If the Player enters 'd' skip the current Resource and add it to the discard list
      *
-     * @return The index (an Integer between 0 and 2)
+     * @param warehouseDepotSize The max index the Player can enter
+     * @return The index (an Integer between 0 and 4)
      * @throws DepotOutOfBoundException              The index is not in the correct bounds
      * @throws SkipResourceException                 The player skips this Resource
      * @throws ChangeResourcesBetweenDepotsException The Player wants to change Resources between Depots
      */
-    private int getDepotIndex() throws DepotOutOfBoundException, SkipResourceException, ChangeResourcesBetweenDepotsException {
+    private int getDepotIndex(int warehouseDepotSize) throws DepotOutOfBoundException, SkipResourceException, ChangeResourcesBetweenDepotsException {
         Scanner in = new Scanner(System.in);
         String depotString = in.nextLine();
 
@@ -152,7 +149,7 @@ public class DisplayWarehousePlacer {
         if (checkAsciiRange(depotString.charAt(0))) throw new DepotOutOfBoundException();
 
         int depotIndex = Integer.parseInt(depotString) - 1;
-        if (depotIndex >= 3 || depotIndex < 0) throw new DepotOutOfBoundException();
+        if (depotIndex >= warehouseDepotSize || depotIndex < 0) throw new DepotOutOfBoundException();
         return depotIndex;
     }
 
@@ -160,11 +157,12 @@ public class DisplayWarehousePlacer {
     /**
      * Prints the input phrases on screen
      *
-     * @param resourceName The resource that the Player is currently positioning
+     * @param warehouseDepotSize The max index the Player can enter
+     * @param resourceName       The resource that the Player is currently positioning
      */
-    private void askForInput(String resourceName) {
+    private void askForInput(int warehouseDepotSize, String resourceName) {
         cliUtils.setCursorPosition(30, 21);
-        pw.println("Please type the Depot number where you want to store " + resourceName);
+        pw.println("Please type the Depot number [1;" + warehouseDepotSize + "]  where you want to store " + resourceName + ".");
         pw.println(cliUtils.hSpace(20) + "The Resources that can't be added to the Warehouse will be discarded.");
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(20) + "Press 'd' if you want to discard the current Resource or you can't proceed any further.");
@@ -213,11 +211,11 @@ public class DisplayWarehousePlacer {
 
         while (!endingInput) {
             try {
-                sourceDepot = askForIndicesInChangePhase("Please, insert the source Depot number: ");
+                sourceDepot = askForIndicesInChangePhase(warehouse.getAllDepots().size(), "Please, insert the source Depot number: ");
                 cliUtils.clearLine(38, 21);
-                destinationDepot = askForIndicesInChangePhase("Now insert the destination Depot number: ");
+                destinationDepot = askForIndicesInChangePhase(warehouse.getAllDepots().size(), "Now insert the destination Depot number: ");
                 endingInput = true;
-            } catch (DepotOutOfBoundException e) {
+            } catch (DepotOutOfBoundException | NumberFormatException e) {
                 cliUtils.pPCS("INCORRECT INDICES PLEASE TRY AGAIN", Color.RED, 38, 21);
                 cliUtils.clearLine(40, 61);
             }
@@ -227,8 +225,8 @@ public class DisplayWarehousePlacer {
         List<Resource> tempResourcesDestination = warehouse.getAllDepots().get(destinationDepot).grabAllResources();
 
         try {
-            warehouse.getAllDepots().get(sourceDepot).addMultipleResources(tempResourcesDestination);
-            warehouse.getAllDepots().get(destinationDepot).addMultipleResources(tempResourcesSource);
+            addMultipleResources(warehouse, sourceDepot, tempResourcesDestination);
+            addMultipleResources(warehouse, destinationDepot, tempResourcesSource);
         } catch (CanNotAddResourceToDepotException e) {
             restoreOriginalSituation(warehouse, sourceDepot, destinationDepot, tempResourcesSource, tempResourcesDestination);
         }
@@ -238,18 +236,19 @@ public class DisplayWarehousePlacer {
     /**
      * Asks the indices of the Depots when the Player wants to change Resources between them
      *
-     * @param phrase A phrase that will ask the Depot index
+     * @param warehouseDepotSize The max index the Player can enter
+     * @param phrase             A phrase that will ask the Depot index
      * @return The Depot index
      * @throws DepotOutOfBoundException Thrown if the index is not correct
      */
-    private int askForIndicesInChangePhase(String phrase) throws DepotOutOfBoundException {
+    private int askForIndicesInChangePhase(int warehouseDepotSize, String phrase) throws DepotOutOfBoundException {
         Scanner in = new Scanner(System.in);
         cliUtils.pPCS(phrase, Color.WHITE, 40, 21);
 
         String depotIndex = in.nextLine();
 
         if (depotIndex.isEmpty() || checkAsciiRange(depotIndex.charAt(0))) throw new DepotOutOfBoundException();
-        if ((Integer.parseInt(depotIndex) - 1) >= 3 || (Integer.parseInt(depotIndex) - 1) < 0)
+        if ((Integer.parseInt(depotIndex) - 1) >= warehouseDepotSize || (Integer.parseInt(depotIndex) - 1) < 0)
             throw new DepotOutOfBoundException();
 
         return (Integer.parseInt(depotIndex) - 1);
@@ -270,11 +269,54 @@ public class DisplayWarehousePlacer {
         warehouse.getAllDepots().get(destinationDepot).grabAllResources();
 
         try {
-            warehouse.getAllDepots().get(sourceDepot).addMultipleResources(tempResourcesSource);
-            warehouse.getAllDepots().get(destinationDepot).addMultipleResources(tempResourcesDestination);
+            addMultipleResources(warehouse, sourceDepot, tempResourcesSource);
+            addMultipleResources(warehouse, destinationDepot, tempResourcesDestination);
         } catch (CanNotAddResourceToDepotException e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * Add a list of resources to a depot
+     *
+     * @param warehouse    The warehouse from where the Depot is taken
+     * @param depotIndex   The index of the Depot where the Resources are going to be added
+     * @param resourceList The resources to add
+     * @throws CanNotAddResourceToDepotException Thrown if the resources can't be added to the depot
+     */
+    private void addMultipleResources(Warehouse warehouse, int depotIndex, List<Resource> resourceList) throws CanNotAddResourceToDepotException {
+        for (Resource resource : resourceList) {
+            warehouse.addResourceToDepot(depotIndex, resource);
+        }
+    }
+
+
+    /**
+     * Prints the Depot number the Player has to enter to store a Resource in a LeaderDepot
+     *
+     * @param numberOfLeaderDepots The number of Leder Depots
+     */
+    private void printLeaderDepotNumber(int numberOfLeaderDepots) {
+        cliUtils.setCursorPosition(14, 135);
+        for (int i = 0; i < numberOfLeaderDepots; i++) {
+            pw.print(cliUtils.pCS("Depot  " + (i + 4) + cliUtils.hSpace(10), Color.GREY));
+        }
+    }
+
+
+    /**
+     * Creates the List to send to the Server by taking the Resource's type contained in each Depot
+     *
+     * @param warehouse Resources to insert into the List are taken from here
+     * @return The list to send
+     */
+    private List<Resource> createListToSend(Warehouse warehouse) {
+        List<Resource> resourcesInWarehouse = new ArrayList<>();
+        for (int i = 0; i < warehouse.getAllDepots().size(); i++) {
+            resourcesInWarehouse.add(warehouse.getAllDepots().get(i).getContainedResourceType());
+        }
+        return resourcesInWarehouse;
     }
 
 }

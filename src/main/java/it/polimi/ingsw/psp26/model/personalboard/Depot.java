@@ -110,18 +110,7 @@ public class Depot extends Observable<SessionMessage> {
         if (resources.size() > 0) return resources.get(0);
         else return Resource.EMPTY;
     }
-
-    /**
-     * Add a list of resources to a depot
-     *
-     * @param resourceList The resources to add
-     * @throws CanNotAddResourceToDepotException Thrown if the resources can't be added to the depot
-     */
-    public void addMultipleResources(List<Resource> resourceList) throws CanNotAddResourceToDepotException {
-        for (Resource resource : resourceList) {
-            addResource(resource);
-        }
-    }
+    
 
     /**
      * Equals method.

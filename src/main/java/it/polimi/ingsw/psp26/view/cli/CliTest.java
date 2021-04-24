@@ -121,6 +121,9 @@ public class CliTest {
         resources.add(Resource.STONE);
         resources.add(Resource.STONE);
         resources.add(Resource.COIN);
+        resources.add(Resource.SHIELD);
+        resources.add(Resource.COIN);
+        resources.add(Resource.COIN);
         resources.add(Resource.SERVANT);
 
         cli.displayWarehouseNewResourcesAssignment(p.getWarehouse(), resources);

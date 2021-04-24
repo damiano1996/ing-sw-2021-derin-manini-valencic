@@ -235,7 +235,7 @@ public class CLI implements ViewInterface {
                 displayProductionActivation(castElements(Production.class, choices));
                 break;
 
-            case MARKET_RESOURCE: //TODO Ipotizzando che sia l'azione per scegliere il numero della riga o colonna, andrebbe messo un messaggio per scegliere se fare riga o colonna prima
+            case CHOICE_ROW_COLUMN: //TODO Ipotizzando che sia l'azione per scegliere il numero della riga o colonna, andrebbe messo un messaggio per scegliere se fare riga o colonna prima
                 //MarketTray is the unique element of choices List
                 displayMarketScreen((MarketTray) choices.get(0));
                 //Making space for the question
@@ -256,6 +256,7 @@ public class CLI implements ViewInterface {
             case BUY_CARD:
                 //DevelopmentGrid is the unique element of choices List
                 displayDevelopmentGrid((DevelopmentGrid) choices.get(0));
+                cliUtils.vSpace(20);
 //                //Setting the cursor position for the question
 //                cliUtils.setCursorPosition(33, 132);
 //                pw.print(cliUtils.hSpace(3) + question);

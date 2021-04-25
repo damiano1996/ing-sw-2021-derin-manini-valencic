@@ -10,15 +10,18 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class DevelopmentCardsCli {
 
     private final PrintWriter pw;
     private final CliUtils cliUtils;
+    private final Scanner in;
 
     public DevelopmentCardsCli(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
+        this.in =  new Scanner(System.in);
     }
 
 
@@ -317,5 +320,49 @@ public class DevelopmentCardsCli {
         if (!developmentGridCell.isEmpty())
             printDevelopmentCard(developmentGridCell.getFirstCard(), startingRow, startingColumn, developmentGridCell.getDevelopmentCardsSize());
     }
+
+
+    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid) {
+        String level;
+        String color;
+
+        cliUtils.cls();
+        displayDevelopmentGrid(developmentGrid);
+        
+        level = askForLevelAndColor("Enter the Level [first - second - third] of the card you want: ", 0);
+        System.out.println(level);
+        
+        color = askForLevelAndColor("Enter the Color [green - blue - yellow - purple] of the card you want: ", 1);
+        System.out.println(color);
+        
+        in.nextLine();
+        return null;
+    }
+
+
+    private String askForLevelAndColor(String stringToDisplay, int levelOrColor) {
+        boolean correctInputInserted = false;
+        String input;
+
+        do {
+            cliUtils.pPCS(stringToDisplay, Color.WHITE, 32, 135);
+            input = in.nextLine();
+            
+            if (isInputCorrect(input, levelOrColor)) correctInputInserted = true;
+            else {
+                cliUtils.pPCS("WRONG INPUT INSERTED! Please try again", Color.RED, 30, 135);
+                cliUtils.clearLine(32, 198);
+            }
+        } while (!correctInputInserted);
+        
+        return input;
+    }
+    
+    
+    private boolean isInputCorrect(String input, int levelOrColor) {
+        if (levelOrColor == 0) return (input.equalsIgnoreCase("FIRST") || input.equalsIgnoreCase("SECOND") || input.equalsIgnoreCase("THIRD"));
+        else return (input.equalsIgnoreCase("GREEN") || input.equalsIgnoreCase("BLUE") || input.equalsIgnoreCase("YELLOW") || input.equalsIgnoreCase("PURPLE"));
+    }
+    
 
 }

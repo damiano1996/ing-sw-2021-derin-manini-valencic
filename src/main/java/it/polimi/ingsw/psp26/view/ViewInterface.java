@@ -38,6 +38,9 @@ public interface ViewInterface {
 
     void displayStrongbox(List<Resource> strongbox);
 
+    
+    void displayMarketAction(MarketTray marketTray);
+
 
     void displayFaithTrack(FaithTrack faithTrack);
 

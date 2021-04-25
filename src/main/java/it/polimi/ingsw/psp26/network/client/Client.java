@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
@@ -58,7 +59,6 @@ public class Client extends Observable<Message> {
                 case CHOICE_CARD_TO_BUY:
                 case CHOICE_POSITION:
                 case CHOICE_CARDS_TO_ACTIVATE:
-                case CHOICE_ROW_COLUMN:
                 case CHOICE_LEADERS:
 
                     MultipleChoicesMessage mcm = (MultipleChoicesMessage) message;
@@ -81,6 +81,13 @@ public class Client extends Observable<Message> {
                     // calls the method to display the warehouse with the resources to add
                     viewInterface.displayWarehouseNewResourcesAssignment(warehouse, resourcesToAdd);
                     break;
+                    
+                case CHOICE_ROW_COLUMN:
+                    // Message contains the MarketTray to display
+                    MarketTray marketTray = ((MarketTray) message.getPayload());
+                    viewInterface.displayMarketAction(marketTray);
+                    break;
+                    
 
                 // -------------------------------------
                 // --------- DISPLAY MESSAGES ----------

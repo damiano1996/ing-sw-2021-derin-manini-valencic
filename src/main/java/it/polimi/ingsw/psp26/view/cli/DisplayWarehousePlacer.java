@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.exceptions.SkipResourceException;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
+import it.polimi.ingsw.psp26.utils.ViewUtils;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -162,7 +163,7 @@ public class DisplayWarehousePlacer {
         if (depotString.isEmpty()) throw new DepotOutOfBoundException();
         if (depotString.charAt(0) == 'd') throw new SkipResourceException();
         if (depotString.charAt(0) == 'c') throw new ChangeResourcesBetweenDepotsException();
-        if (checkAsciiRange(depotString.charAt(0))) throw new DepotOutOfBoundException();
+        if (ViewUtils.checkAsciiRange(depotString.charAt(0))) throw new DepotOutOfBoundException();
 
         int depotIndex = Integer.parseInt(depotString) - 1;
         if (depotIndex >= warehouseDepotSize || depotIndex < 0) throw new DepotOutOfBoundException();
@@ -188,18 +189,7 @@ public class DisplayWarehousePlacer {
         pw.print(cliUtils.hSpace(20) + "Depot number: ");
         pw.flush();
     }
-
-
-    /**
-     * Checks if the inserted char is a number or a character
-     *
-     * @param c The char to examine
-     * @return True if c is a number, false if it's not a number
-     */
-    private boolean checkAsciiRange(char c) {
-        return (48 > (int) c || (int) c > 57);
-    }
-
+    
 
     /**
      * Sets the parameters to control the insertion process
@@ -264,7 +254,7 @@ public class DisplayWarehousePlacer {
 
         String depotIndex = in.nextLine();
 
-        if (depotIndex.isEmpty() || checkAsciiRange(depotIndex.charAt(0))) throw new DepotOutOfBoundException();
+        if (depotIndex.isEmpty() || ViewUtils.checkAsciiRange(depotIndex.charAt(0))) throw new DepotOutOfBoundException();
         if ((Integer.parseInt(depotIndex) - 1) >= warehouseDepotSize || (Integer.parseInt(depotIndex) - 1) < 0)
             throw new DepotOutOfBoundException();
 

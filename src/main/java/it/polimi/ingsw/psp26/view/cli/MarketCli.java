@@ -1,9 +1,15 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.exceptions.ChangeResourcesBetweenDepotsException;
+import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
+import it.polimi.ingsw.psp26.exceptions.SkipResourceException;
 import it.polimi.ingsw.psp26.model.MarketTray;
+import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.utils.ViewUtils;
 
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class MarketCli {
 
@@ -81,6 +87,55 @@ public class MarketCli {
         cliUtils.printAndBackWithColor(".d88b.", marketTray.getMarbleOnSlide().getColor());
         cliUtils.printAndBackWithColor("8b88d8", marketTray.getMarbleOnSlide().getColor());
         cliUtils.printAndBackWithColor("`Y88P'", marketTray.getMarbleOnSlide().getColor());
+    }
+
+
+    /**
+     * Displays the Market row/column choice
+     *
+     * @param marketTray The actual state of the Market
+     * @return The selected row or column
+     */
+    public int displayMarketSelection(MarketTray marketTray) {
+        cliUtils.cls();
+        displayMarketScreen(marketTray);
+        cliUtils.pPCS("Choose a number between 0 to 6 where 0-2 refers to rows and 3-6 refers to columns: ", Color.WHITE, 45, 21);
+
+        int marketIndex = 0;
+        boolean indexInserted = false;
+
+        while (!indexInserted) {
+            try {
+                marketIndex = getMarketIndex();
+                indexInserted = true;
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                cliUtils.pPCS("WRONG INDEX INSERTED! Please try again", Color.RED, 43, 21);
+                cliUtils.clearLine(45, 104);
+            }
+        }
+
+        return marketIndex;
+    }
+
+
+    /**
+     * Asks the desired index for Market row/column
+     *
+     * @return An integer between 0 and 6
+     * @throws IndexOutOfBoundsException If the index inserted is not correct
+     */
+    private int getMarketIndex() throws IndexOutOfBoundsException {
+        Scanner in = new Scanner(System.in);
+        String marketString = in.nextLine();
+        int marketIndex;
+
+        if (marketString.isEmpty()) throw new IndexOutOfBoundsException();
+        if (ViewUtils.checkAsciiRange(marketString.charAt(0))) throw new IndexOutOfBoundsException();
+
+        marketIndex = Integer.parseInt(marketString);
+        if (marketIndex < 0 || marketIndex > 6) throw new IndexOutOfBoundsException();
+
+        return marketIndex;
     }
 
 }

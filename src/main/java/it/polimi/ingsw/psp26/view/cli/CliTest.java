@@ -89,8 +89,14 @@ public class CliTest {
 
         //testWarehouseConfiguration();
 
-        testMessages();
+        //testMessages();
 
+        //developmentGrid = new DevelopmentGrid(virtualView);
+        //developmentCardsCli.displayDevelopmentCardSelection(developmentGrid);
+        
+        marketCli.displayMarketSelection(marketTray);
+        
+        
         //testWarehouseConfiguration();
         testFaithTrackMovement();
         testMarket();

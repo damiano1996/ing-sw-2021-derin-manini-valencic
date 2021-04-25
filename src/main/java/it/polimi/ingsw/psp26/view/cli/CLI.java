@@ -207,6 +207,15 @@ public class CLI implements ViewInterface {
     public void displayActionTokens(List<ActionToken> unusedTokens) {
         personalBoardCli.displayActionTokens(unusedTokens);
     }
+    
+    
+    @Override
+    public void displayMarketAction(MarketTray marketTray) {
+        List<Integer> choice = new ArrayList<>();
+        choice.add(marketCli.displayMarketSelection(marketTray));
+        client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
+        displayNext();
+    }
 
 
     @Override
@@ -230,24 +239,6 @@ public class CLI implements ViewInterface {
 
             case CHOICE_CARDS_TO_ACTIVATE:
                 displayProductionActivation(castElements(Production.class, choices));
-                break;
-
-            case CHOICE_ROW_COLUMN: //TODO Ipotizzando che sia l'azione per scegliere il numero della riga o colonna, andrebbe messo un messaggio per scegliere se fare riga o colonna prima
-                //MarketTray is the unique element of choices List
-                displayMarketScreen((MarketTray) choices.get(0));
-                //Making space for the question
-//                cliUtils.vSpace(10);
-//                pw.println(cliUtils.hSpace(3) + question);
-//                cliUtils.vSpace(1);
-//                //selected = Integer
-//                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-//
-//                client.notifyObservers(
-//                        new Message(
-//                                MARKET_RESOURCE,
-//                                selected.toArray(new Object[0]) // to array
-//                        )
-//                );
                 break;
 
             case BUY_CARD:

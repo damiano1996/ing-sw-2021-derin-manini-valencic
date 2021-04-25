@@ -12,6 +12,8 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 public class TurnUtils {
 
     public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
+        System.out.println("goToNextStateAfterLeaderAction - current turn phase: " + turn.getTurnPhase());
+
         switch (turn.getTurnPhase()) {
 
             case RESOURCE_PLACER_TO_LEADER_ACTION:

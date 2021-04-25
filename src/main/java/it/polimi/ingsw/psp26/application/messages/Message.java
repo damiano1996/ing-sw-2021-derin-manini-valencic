@@ -23,7 +23,6 @@ public class Message implements Serializable {
 
     private void objectToJson(Object... payloads) {
         this.payloadClass = payloads[0].getClass();
-        System.out.println(this.payloadClass);
 
         this.jsonPayloads = new ArrayList<>();
         for (Object payload : payloads)
@@ -34,10 +33,6 @@ public class Message implements Serializable {
 
     public MessageType getMessageType() {
         return messageType;
-    }
-
-    public int getNumberOfPayloads() {
-        return jsonPayloads.size();
     }
 
     public Object getPayload(int index) throws EmptyPayloadException {

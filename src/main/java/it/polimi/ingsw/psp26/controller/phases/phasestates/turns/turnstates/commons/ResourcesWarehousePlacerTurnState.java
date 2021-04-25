@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.com
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
-import it.polimi.ingsw.psp26.application.messages.specialpayloads.WarehousePlacerPayload;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -89,9 +88,11 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
                 } else {
 
                     int discardedResources = fillWarehouse(resourceOrder);
+                    System.out.println("ResourcesWarehousePlacerTurnState - resources to discard: " + discardedResources);
                     // adding FP to other players
                     addFaithPointsToPlayers(turn.getMatchController().getMatch(), turn.getTurnPlayer(), discardedResources);
                     // checking vatican report
+                    System.out.println("ResourcesWarehousePlacerTurnState - going to vatican report");
                     turn.changeState(new CheckVaticanReportTurnState(turn));
                     turn.play(message);
                 }
@@ -115,9 +116,7 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
      */
     private int fillWarehouse(List<Resource> resourceOrder) {
         // removing duplicates: to avoid to refill two times with the same resource
-        System.out.println(resourceOrder);
         resourceOrder = removeDuplicates(resourceOrder);
-        System.out.println(resourceOrder);
 
         // collecting all the resources of the player
         List<Resource> playerResources = turn.getTurnPlayer().getPersonalBoard().getWarehouse().grabAllResources();
@@ -172,24 +171,24 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
 
     /**
      * Method to send to the client the warehouse and the list of resource that he has received.
-     * The method sends a session message that contains two sub messages as payload.
-     * The first message contains the warehouse of the turn player,
-     * the second contains the list of new resources.
+     * The method sends two consecutive messages with same message type. the first with warehouse as payload,
+     * the second with the list of resources to add to it.
      */
     private void sendWarehouseMessage() {
         System.out.println("ResourcesWarehousePlacer - sending message to " + turn.getTurnPlayer().getNickname());
-
         turn.getMatchController().notifyObservers(
                 new SessionMessage(
                         turn.getTurnPlayer().getSessionToken(),
                         MessageType.PLACE_IN_WAREHOUSE,
-                        new WarehousePlacerPayload(
-                                turn.getTurnPlayer().getPersonalBoard().getWarehouse(),
-                                resourcesToAdd
-                        )
+                        turn.getTurnPlayer().getPersonalBoard().getWarehouse()
                 )
         );
-
+        turn.getMatchController().notifyObservers(
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        MessageType.PLACE_IN_WAREHOUSE,
+                        resourcesToAdd.toArray()
+                )
+        );
     }
-
 }

@@ -22,15 +22,15 @@ public class NetworkHandler extends Observable<Message> implements Observer<Mess
 
     private String sessionToken;
 
-    public NetworkHandler(Client client) {
+    public NetworkHandler() {
         super();
-        addObserver(client);
+        addObserver(MessageSynchronizedFIFO.getInstance());
     }
 
     @Override
     public void update(Message message) {
         try {
-            System.out.println("NetworkHandler - " + message.toString());
+//            System.out.println("NetworkHandler - " + message.toString());
             sendToServer(new SessionMessage(sessionToken, message.getMessageType(), message.getArrayPayloads()));
         } catch (IOException | EmptyPayloadException e) {
             e.printStackTrace();
@@ -45,17 +45,14 @@ public class NetworkHandler extends Observable<Message> implements Observer<Mess
     }
 
     private void startListening() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Message message = (Message) networkNode.receiveObjectData();
-                        System.out.println("NetworkHandler - new message received: " + message.toString());
-                        notifyObservers(message);
-                    } catch (IOException | ClassNotFoundException e) {
-                        // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
-                    }
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Message message = (Message) networkNode.receiveObjectData();
+//                    System.out.println("NetworkHandler - new message received: " + message.toString());
+                    notifyObservers(message); // adds message to the MessageFIFO
+                } catch (IOException | ClassNotFoundException e) {
+                    // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }
             }
         }).start();

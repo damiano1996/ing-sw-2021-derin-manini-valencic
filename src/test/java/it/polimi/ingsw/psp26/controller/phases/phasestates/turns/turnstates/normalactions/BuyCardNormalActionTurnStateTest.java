@@ -49,7 +49,7 @@ public class BuyCardNormalActionTurnStateTest {
     @Test
     public void testSendPlayBuyCardMessage() throws CanNotAddResourceToStrongboxException {
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), BUY_CARD));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
         assertEquals(MessageType.CHOICE_CARD_TO_BUY, mitm.getMessages().get(0).getMessageType());
 
     }

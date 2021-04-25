@@ -6,10 +6,12 @@ import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
+import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
@@ -17,13 +19,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ActivateProductionNormalActionTurnStateTest {
 
@@ -54,7 +55,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     public void testSendActivateProductionMessage() throws EmptyPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
 
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard());
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.ACTIVATE_PRODUCTION));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
 
         assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
         assertEquals(2, mitm.getMessages().get(0).getListPayloads().size());
@@ -85,14 +86,14 @@ public class ActivateProductionNormalActionTurnStateTest {
     @Test
     public void testSendChoiceCardsToActivateCostUnknown() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE,turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
 
         assertEquals(MessageType.CHOICE_RESOURCE, mitm.getMessages().get(0).getMessageType());
 
-        }
+    }
 
     @Test
-    public void testSendChoiceResourceToActivateCostUnknown() throws  CanNotAddResourceToStrongboxException {
+    public void testSendChoiceResourceToActivateCostUnknown() throws CanNotAddResourceToStrongboxException {
 
 
         List<Resource> resource2 = new ArrayList<>();
@@ -112,17 +113,17 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         playCollection();
 
-        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(3).getMessageType());
+        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(4).getMessageType());
     }
 
-    private void playCollection(){
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE,turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE,Resource.STONE));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE,Resource.STONE));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE,Resource.COIN));
+    private void playCollection() {
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.COIN));
     }
 
-    private List<Resource> getProdResources(DevelopmentCard card){
+    private List<Resource> getProdResources(DevelopmentCard card) {
         List<Resource> resourceProduced = new ArrayList<>();
         for (Resource resource : card.getProduction().getProductionReturn().keySet()) {
             for (int i = 0; i < card.getProduction().getProductionReturn().get(resource); i++) {

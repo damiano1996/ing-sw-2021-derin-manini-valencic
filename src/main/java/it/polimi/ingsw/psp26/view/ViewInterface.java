@@ -27,9 +27,6 @@ public interface ViewInterface {
     void displayInkwell(boolean isPrintable);
 
 
-    void displayInitialResources(List<Resource> resources);
-
-
     void displayPersonalBoard(Player player);
 
 

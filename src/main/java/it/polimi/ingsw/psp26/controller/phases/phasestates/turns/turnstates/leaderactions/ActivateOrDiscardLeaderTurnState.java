@@ -74,7 +74,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
     /**
      * Method to sends, to the player, the leader cards that can be activated or discarded.
      * It collects all the leader cards that can be used in the request action type.
-     * If no leader can be played, it change the turn states and send an error message to the client.
+     * If no leader can be played, it change the turn states, going to next state, and send an error message to the client.
      *
      * @param message message to forward to the next state in case of error
      */
@@ -143,12 +143,14 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
      */
     private void discardLeader(LeaderCard leaderCard) throws LeaderCannotBeDiscardedException {
         // since the leader is just a copy of the original one, we should found the original
+        boolean discarded = false;
         for (LeaderCard playerLeaderCard : turn.getTurnPlayer().getLeaderCards()) {
             if (playerLeaderCard.equals(leaderCard)) {
 
                 if (!playerLeaderCard.isActive()) {
                     turn.getTurnPlayer().discardLeaderCard(leaderCard);
                     turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1);
+                    discarded = true;
                     break;
                 } else {
                     throw new LeaderCannotBeDiscardedException();
@@ -156,7 +158,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
 
             }
         }
-        throw new LeaderCannotBeDiscardedException();
+        if (!discarded) throw new LeaderCannotBeDiscardedException();
     }
 
     /**

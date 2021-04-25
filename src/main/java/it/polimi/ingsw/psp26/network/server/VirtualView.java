@@ -49,7 +49,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
     private void startListening(NetworkNode nodeClient) {
         // it receives message from the communication channel and it has to forward the message to the controller
         new Thread(() -> {
-            System.out.println("Starting to listen client node.");
+            System.out.println("VirtualView - starting to listen client node.");
             while (true) {
                 try {
                     SessionMessage message = (SessionMessage) nodeClient.receiveObjectData();
@@ -72,6 +72,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
     private void sendToClient(SessionMessage message) {
         try {
+            System.out.println("VirtualView - sending message to player: " + message.toString());
             if (nodeClients.get(message.getSessionToken()) != null)
                 nodeClients.get(message.getSessionToken()).sendData(message);
         } catch (IOException e) {

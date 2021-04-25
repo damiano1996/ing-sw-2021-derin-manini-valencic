@@ -80,9 +80,6 @@ public class MessageTest {
         LeaderCard leaderCard = new LeaderCard(resourcesRequirements, developmentCardRequirements, victoryPoints, specialAbility);
 
         message = new Message(MessageType.CHOICE_LEADERS, (Object[]) new LeaderCard[]{leaderCard, leaderCard});
-        assertEquals(leaderCard.getAbilityResource(), ((LeaderCard) message.getPayload(0)).getAbilityResource());
-        assertEquals(leaderCard.getResourcesRequirements(), ((LeaderCard) message.getPayload(0)).getResourcesRequirements());
-        assertEquals(leaderCard.getDevelopmentCardRequirements(), ((LeaderCard) message.getPayload(0)).getDevelopmentCardRequirements());
-        assertEquals(leaderCard.getVictoryPoints(), ((LeaderCard) message.getPayload(0)).getVictoryPoints());
+        assertEquals(leaderCard, message.getPayload());
     }
 }

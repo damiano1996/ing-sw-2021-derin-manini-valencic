@@ -33,9 +33,9 @@ public class ArrayListUtils {
         return indices.stream().map(list::get).collect(Collectors.toList());
     }
 
-    public static <T> List<T> castElements(Class<T> targetClassType, List<Object> objects) {
-        List<T> castedList = new ArrayList<>();
-        for (Object object : objects) castedList.add((T) object);
+    public static <M, N> List<M> castElements(Class<M> targetClassType, List<N> list) {
+        List<M> castedList = new ArrayList<>();
+        for (N item : list) castedList.add((M) item);
         return castedList;
     }
 }

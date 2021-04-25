@@ -38,6 +38,8 @@ public class ChooseLeaderActionTurnState extends TurnState {
     public void play(SessionMessage message) {
         super.play(message);
 
+        System.out.println("ChooseLeaderActionTurnState - message received: " + message.toString());
+
         if (!turn.getTurnPlayer().isLeaderActionPlayable()) {
             // if leader action is not playable we can go directly to the choose normal action state:
             turn.changeState(new ChooseNormalActionTurnState(turn));
@@ -49,6 +51,8 @@ public class ChooseLeaderActionTurnState extends TurnState {
             if (message.getMessageType().equals(CHOICE_LEADER_ACTION)) {
 
                 try {
+                    System.out.println("ChooseLeaderActionTurnState - action selected: " + message.getPayload());
+
                     switch ((MessageType) message.getPayload()) {
 
                         case ACTIVATE_LEADER:
@@ -67,6 +71,8 @@ public class ChooseLeaderActionTurnState extends TurnState {
                 }
 
             } else {
+
+                System.out.println("ChooseLeaderActionTurnState - sending choices to player.");
 
                 // if message type doesn't match with any of previous cases, we have to display the choice to the client!
                 turn.getMatchController().notifyObservers(

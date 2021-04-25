@@ -8,7 +8,6 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 
 import java.io.PrintWriter;
@@ -164,10 +163,10 @@ public class PersonalBoardCli {
      * @param startingRow    The starting row where the Player's Leader Depots are going to be printed
      * @param startingColumn The starting column where the Player's Leader Depots are going to be printed
      */
-    public void printLeaderDepots(List<Depot> leaderDepots, int startingRow, int startingColumn) {
+    public void printLeaderDepots(List<LeaderDepot> leaderDepots, int startingRow, int startingColumn) {
         for (int i = 0; i < leaderDepots.size(); i++) {
             cliUtils.printFigure("LeaderDepot", startingRow, startingColumn + (i * 18));
-            printLeaderDepotResources((LeaderDepot) leaderDepots.get(i), startingRow, startingColumn + (i * 18));
+            printLeaderDepotResources(leaderDepots.get(i), startingRow, startingColumn + (i * 18));
         }
     }
 

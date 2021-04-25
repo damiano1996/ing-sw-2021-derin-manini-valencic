@@ -11,6 +11,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 
 public class OneResourceTurnState extends TurnState {
@@ -43,6 +44,8 @@ public class OneResourceTurnState extends TurnState {
                     turn.changeState(nextState);
                     turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE, resources.toArray()));
                 } else {
+
+                    sendGeneralMessage(turn, "Choose resource:");
                     sendChoiceResourceMessage();
                 }
 

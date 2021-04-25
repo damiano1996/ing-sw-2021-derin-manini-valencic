@@ -36,9 +36,9 @@ public class BenefitsTurnState extends TurnState {
                 switch (turn.getTurnNumber()) {
                     case 0:
                         sendGeneralMessage(turn, "You are the first player. Catch the inkwell!");
-
+                        System.out.println("BenefitsTurnState - assigning the inkwell.");
                         turn.getTurnPlayer().giveInkwell();
-
+                        System.out.println("BenefitsTurnState - going to ChooseLeaderAction.");
                         goToChooseLeaderAction(message);
                         break;
 
@@ -69,10 +69,14 @@ public class BenefitsTurnState extends TurnState {
             if (faithPoint)
                 turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1);
 
-            sendGeneralMessage(turn, "Choice your benefit resource" + ((numOfResources > 0) ? "s: " : ": "));
             turn.changeState(new ResourcesWarehousePlacerTurnState(turn, resources));
 
         } else {
+            sendGeneralMessage(turn,
+                    "You are the player number: " + (turn.getTurnNumber() + 1) + ". " +
+                            ((faithPoint) ? "You get 1 FP. " : "") +
+                            "You can choose " + numOfResources + " resources."
+            );
             turn.changeState(new OneResourceTurnState(turn, this, numOfResources));
         }
 

@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.com
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
-import it.polimi.ingsw.psp26.application.messages.specialpayloads.WarehousePlacerPayload;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
@@ -13,6 +12,7 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialDepotAbility;
+import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
@@ -28,6 +28,7 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.ERROR_MESSA
 import static it.polimi.ingsw.psp26.application.messages.MessageType.PLACE_IN_WAREHOUSE;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.model.enums.Resource.*;
+import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 import static org.junit.Assert.assertEquals;
 
 public class ResourcesWarehousePlacerTurnStateTest {
@@ -35,6 +36,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     private MitmObserver mitm;
     private Phase phase;
     private Turn turn;
+    private Warehouse warehouse;
 
     private List<Resource> resourcesToAdd;
 
@@ -70,13 +72,17 @@ public class ResourcesWarehousePlacerTurnStateTest {
     public void testSendWarehouseMessage() throws EmptyPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
         assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
+        assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(1).getMessageType());
 
-        WarehousePlacerPayload payload = (WarehousePlacerPayload) mitm.getMessages().get(0).getPayload();
-        Warehouse warehouse = payload.getWarehouse();
-        List<Resource> receivedResourcesToAdd = payload.getResourcesToAdd();
+        Warehouse warehouseExpected = turn.getTurnPlayer().getPersonalBoard().getWarehouse();
+        Warehouse warehouseActual = (Warehouse) mitm.getMessages().get(0).getPayload();
+        System.out.println(warehouseExpected.getLeaderDepots());
+        System.out.println(castElements(LeaderDepot.class, warehouseActual.getLeaderDepots()));
 
-        assertEquals(resourcesToAdd, receivedResourcesToAdd);
-        assertEquals(warehouse, warehouse);
+        assertEquals(warehouseExpected.getBaseDepots(), warehouseActual.getBaseDepots());
+        assertEquals(castElements(LeaderDepot.class, warehouseExpected.getLeaderDepots()), castElements(LeaderDepot.class, warehouseActual.getLeaderDepots()));
+        assertEquals(warehouseExpected, warehouseActual);
+        assertEquals(resourcesToAdd, castElements(Resource.class, mitm.getMessages().get(1).getListPayloads()));
     }
 
     @Test
@@ -91,7 +97,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
                 )
         );
 
-        assertEquals(ERROR_MESSAGE, mitm.getMessages().get(1).getMessageType());
+        assertEquals(ERROR_MESSAGE, mitm.getMessages().get(2).getMessageType());
     }
 
     private void sendOrderTypeOne() throws EmptyPayloadException {

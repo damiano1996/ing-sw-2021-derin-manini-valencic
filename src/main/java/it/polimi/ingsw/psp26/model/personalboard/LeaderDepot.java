@@ -3,6 +3,8 @@ package it.polimi.ingsw.psp26.model.personalboard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
+import java.util.Objects;
+
 public class LeaderDepot extends Depot {
 
     private final Resource depotResource;
@@ -45,8 +47,15 @@ public class LeaderDepot extends Depot {
      */
     @Override
     public boolean equals(Object o) {
-        LeaderDepot leaderDepot = (LeaderDepot) o;
-        return super.equals(o) && this.depotResource.equals(leaderDepot.depotResource);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        LeaderDepot that = (LeaderDepot) o;
+        return depotResource == that.depotResource;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), depotResource);
+    }
 }

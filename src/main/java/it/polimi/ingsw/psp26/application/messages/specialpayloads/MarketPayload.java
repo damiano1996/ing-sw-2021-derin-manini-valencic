@@ -1,10 +1,6 @@
 package it.polimi.ingsw.psp26.application.messages.specialpayloads;
 
 import it.polimi.ingsw.psp26.model.MarketTray;
-import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
-
-import java.util.List;
 
 public class MarketPayload {
     private final MarketTray market;

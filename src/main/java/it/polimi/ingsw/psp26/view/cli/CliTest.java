@@ -3,7 +3,7 @@ package it.polimi.ingsw.psp26.view.cli;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.*;
-import it.polimi.ingsw.psp26.model.*;
+import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -42,10 +42,10 @@ public class CliTest {
     private final List<LeaderCard> leaderCards;
     private final PersonalBoard personalBoard;
     private final MarketTray marketTray;
-    private DevelopmentGrid developmentGrid;
     private final ResourceSupply resourceSupply;
     private final Match match;
     private final Scanner in;
+    private DevelopmentGrid developmentGrid;
 
     public CliTest(Client client) {
 
@@ -82,15 +82,15 @@ public class CliTest {
         }
     }
 
-    
+
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse {
 
         //Insert here the name of the methods tou want to test
 
         //testWarehouseConfiguration();
-        
+
         testMessages();
-        
+
         //testWarehouseConfiguration();
         testFaithTrackMovement();
         testMarket();

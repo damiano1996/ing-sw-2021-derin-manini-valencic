@@ -15,5 +15,6 @@ public class CheckVaticanReportTurnState extends TurnState {
 
         // next state is...
         turn.changeState(new EndMatchCheckerTurnState(turn));
+        turn.play(message);
     }
 }

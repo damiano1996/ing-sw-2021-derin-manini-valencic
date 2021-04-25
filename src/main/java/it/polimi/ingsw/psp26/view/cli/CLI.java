@@ -130,16 +130,10 @@ public class CLI implements ViewInterface {
         personalBoardCli.displayInkwell(isPrintable, 5, 190);
     }
 
-
-    @Override
-    public void displayInitialResources(List<Resource> resources) {
-        //To be completed
-    }
-
-
     @Override
     public void displayPersonalBoard(Player player) {
         personalBoardCli.displayPersonalBoard(player, isMultiPlayerMode);
+        displayNext();
     }
 
 
@@ -153,9 +147,10 @@ public class CLI implements ViewInterface {
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
         List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourceToAdd);
         client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
+        displayNext();
     }
 
-    
+
     @Override
     public void displayStrongbox(List<Resource> strongbox) {
         depotCli.displayStrongbox(strongbox, 30, 3);
@@ -183,7 +178,7 @@ public class CLI implements ViewInterface {
     public void displayMarketScreen(MarketTray marketTray) {
         marketCli.displayMarketScreen(marketTray);
     }
-    
+
 
     @Override
     public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
@@ -217,7 +212,9 @@ public class CLI implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
 
-        displayText(question);
+        cliUtils.cls();
+        cliUtils.vSpace(1);
+        pw.println(cliUtils.hSpace(3) + question);
 
         switch (messageType) {
 
@@ -231,7 +228,7 @@ public class CLI implements ViewInterface {
                 displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
                 break;
 
-            case ACTIVATE_PRODUCTION:
+            case CHOICE_CARDS_TO_ACTIVATE:
                 displayProductionActivation(castElements(Production.class, choices));
                 break;
 
@@ -293,6 +290,8 @@ public class CLI implements ViewInterface {
 
         if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE))
             client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
+
+        client.viewNext();
     }
 
     private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices) {
@@ -306,7 +305,7 @@ public class CLI implements ViewInterface {
 
             pw.flush();
             String item = in.nextLine();
-            if (item.equals("q") && choices.size() > minChoices) break;
+            if (item.equals("q") && choices.size() >= minChoices) break;
             int itemInt = Integer.parseInt(item) - 1;
 
             if (!choices.contains(itemInt))
@@ -330,6 +329,8 @@ public class CLI implements ViewInterface {
         cliUtils.cls();
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + text);
+
+        displayNext();
     }
 
     @Override
@@ -351,6 +352,17 @@ public class CLI implements ViewInterface {
         cliUtils.setCursorPosition(26, 81);
         for (int i = 0; i < error.length() + 8; i++) pw.print(cliUtils.pCS("=", Color.RED));
         pw.flush();
+
+        displayNext();
+    }
+
+    private void displayNext() {
+        Scanner in = new Scanner(System.in);
+        cliUtils.vSpace(1);
+        pw.print(cliUtils.hSpace(3) + "Press ENTER to confirm.");
+        pw.flush();
+        in.nextLine();
+        client.viewNext();
     }
 
 }

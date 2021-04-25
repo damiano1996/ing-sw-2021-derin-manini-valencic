@@ -23,7 +23,7 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 public class ActivateProductionNormalActionTurnState extends TurnState {
 
     private List<Production> productionActivated = new ArrayList<>();
-    private List<Resource> unknownCostResources = new ArrayList<>() ;
+    private List<Resource> unknownCostResources = new ArrayList<>();
     private List<Resource> unknownProdResources = new ArrayList<>();
     private int numOfUnknownCost = 0;
     private int numOfUnknownProd = 0;
@@ -168,12 +168,12 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         resourcesProduced.add(resourceProd);
                 }
             }
-            if(unknownProdResources != null) resourcesProduced.addAll(unknownProdResources);
+            if (unknownProdResources != null) resourcesProduced.addAll(unknownProdResources);
             resourcesProduced.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
             resourcesProduced = resourcesProduced.stream().filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
 
             try {
-                   turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
+                turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
             } catch (CanNotAddResourceToStrongboxException e) {
                 e.printStackTrace();
 

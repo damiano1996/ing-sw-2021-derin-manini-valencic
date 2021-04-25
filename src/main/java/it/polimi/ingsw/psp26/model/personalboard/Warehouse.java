@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
  */
 public class Warehouse extends Observable<SessionMessage> {
 
-    private final List<Depot> depots;
-    private int numberOfBaseDepots;
+    private final List<Depot> baseDepots;
+    private final List<LeaderDepot> leaderDepots;
 
     /**
      * Class constructor.
@@ -28,15 +28,18 @@ public class Warehouse extends Observable<SessionMessage> {
         super();
         addObserver(virtualView);
 
-        this.numberOfBaseDepots = numberOfBaseDepots;
-
-        depots = new ArrayList<>();
+        baseDepots = new ArrayList<>();
+        leaderDepots = new ArrayList<>();
+        // creating the base depots
         for (int i = 0; i < numberOfBaseDepots; i++)
-            depots.add(new Depot(virtualView, i + 1));
+            baseDepots.add(new Depot(virtualView, i + 1));
     }
 
     /**
      * Method to add resource to a given depot.
+     * It checks the rule: "no same resource among different base depots".
+     * If depot is of leader type the rule mustn't be considered.
+     * Then tries to add the resource to the warehouse.
      *
      * @param indexDepot index of the depot
      * @param resource   resource to add to the depot
@@ -45,15 +48,28 @@ public class Warehouse extends Observable<SessionMessage> {
      *                                           Or if in the depot there is no more space.
      */
     public void addResourceToDepot(int indexDepot, Resource resource) throws CanNotAddResourceToDepotException {
-        // checking if there is another depot containing this kind of resource
-        for (int i = 0; i < depots.size(); i++)
-            if (depots.get(i).getContainedResourceType().equals(resource) &&
-                    i != indexDepot &&
-                    indexDepot < numberOfBaseDepots &&
-                    i < numberOfBaseDepots)
-                throw new CanNotAddResourceToDepotException();
+        // checking if there is another base depot containing this kind of resource
+        if (indexDepot < baseDepots.size())
+            for (int i = 0; i < baseDepots.size(); i++)
+                if (baseDepots.get(i).getContainedResourceType().equals(resource) && i != indexDepot)
+                    throw new CanNotAddResourceToDepotException();
 
-        depots.get(indexDepot).addResource(resource);
+        getDepotByIndex(indexDepot).addResource(resource);
+    }
+
+    /**
+     * Getter of the depot by index.
+     * Since the base depot list is split by the leader depot list,
+     * this method returns the indexed depot as if the two lists were connected (in order: baseDepots - leaderDepots)
+     *
+     * @param indexDepot index of the depot
+     * @return depot
+     */
+    private Depot getDepotByIndex(int indexDepot) {
+        if (indexDepot < baseDepots.size())
+            return baseDepots.get(indexDepot);
+        else
+            return leaderDepots.get(indexDepot - baseDepots.size());
     }
 
     /**
@@ -65,7 +81,7 @@ public class Warehouse extends Observable<SessionMessage> {
     public void addResource(Resource resource) throws CanNotAddResourceToWarehouse {
         boolean added = false;
 
-        for (int i = 0; i < depots.size(); i++) {
+        for (int i = 0; i < baseDepots.size() + leaderDepots.size(); i++) {
             try {
                 addResourceToDepot(i, resource);
                 added = true;
@@ -82,7 +98,19 @@ public class Warehouse extends Observable<SessionMessage> {
      * @return unmodifiable list of depots
      */
     public List<Depot> getAllDepots() {
-        return Collections.unmodifiableList(depots);
+        return Collections.unmodifiableList(getAllModifiableDepots());
+    }
+
+    /**
+     * Getter of all depots.
+     *
+     * @return modifiable list of depots
+     */
+    private List<Depot> getAllModifiableDepots() {
+        List<Depot> allDepots = new ArrayList<>();
+        allDepots.addAll(baseDepots);
+        allDepots.addAll(leaderDepots);
+        return allDepots;
     }
 
     /**
@@ -91,7 +119,7 @@ public class Warehouse extends Observable<SessionMessage> {
      * @return list of depots
      */
     public List<Depot> getBaseDepots() {
-        return Collections.unmodifiableList(depots.subList(0, numberOfBaseDepots));
+        return Collections.unmodifiableList(baseDepots);
     }
 
     /**
@@ -99,8 +127,8 @@ public class Warehouse extends Observable<SessionMessage> {
      *
      * @return list of leader depots
      */
-    public List<Depot> getLeaderDepots() {
-        return Collections.unmodifiableList(depots.subList(numberOfBaseDepots, depots.size()));
+    public List<LeaderDepot> getLeaderDepots() {
+        return Collections.unmodifiableList(leaderDepots);
     }
 
     /**
@@ -109,7 +137,9 @@ public class Warehouse extends Observable<SessionMessage> {
      * @return list of the resources
      */
     public List<Resource> grabAllResources() {
-        return depots.stream().map(Depot::grabAllResources).flatMap(List::stream).collect(Collectors.toList());
+        List<Resource> grabbedResources = baseDepots.stream().map(Depot::grabAllResources).flatMap(List::stream).collect(Collectors.toList());
+        grabbedResources.addAll(leaderDepots.stream().map(Depot::grabAllResources).flatMap(List::stream).collect(Collectors.toList()));
+        return grabbedResources;
     }
 
     /**
@@ -123,7 +153,7 @@ public class Warehouse extends Observable<SessionMessage> {
     public List<Resource> grabResources(Resource resource, int numberOfResources) {
         List<Resource> grabbedResources = new ArrayList<>();
 
-        for (Depot depot : depots)
+        for (Depot depot : getAllModifiableDepots())
             if (depot.getContainedResourceType().equals(resource))
                 grabbedResources.addAll(depot.grabResources(Math.min(numberOfResources - grabbedResources.size(), depot.getResources().size())));
 
@@ -136,7 +166,7 @@ public class Warehouse extends Observable<SessionMessage> {
      * @return list of resources
      */
     public List<Resource> getResources() {
-        return depots.stream().map(Depot::getResources).flatMap(Collection::stream).collect(Collectors.toUnmodifiableList());
+        return getAllModifiableDepots().stream().map(Depot::getResources).flatMap(Collection::stream).collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -145,9 +175,8 @@ public class Warehouse extends Observable<SessionMessage> {
      * @param leaderDepot leaderDepot to add
      */
     public void addLeaderDepot(LeaderDepot leaderDepot) {
-        depots.add(leaderDepot);
+        leaderDepots.add(leaderDepot);
     }
-
 
     /**
      * Equals method
@@ -160,7 +189,7 @@ public class Warehouse extends Observable<SessionMessage> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Warehouse warehouse = (Warehouse) o;
-        return numberOfBaseDepots == warehouse.numberOfBaseDepots && Objects.equals(depots, warehouse.depots);
+        return Objects.equals(baseDepots, warehouse.baseDepots) && Objects.equals(leaderDepots, warehouse.leaderDepots);
     }
 
     /**
@@ -170,6 +199,6 @@ public class Warehouse extends Observable<SessionMessage> {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(depots, numberOfBaseDepots);
+        return Objects.hash(baseDepots, leaderDepots);
     }
 }

@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class MarketResourceNormalActionTurnStateTest {
     private MitmObserver mitm;
@@ -44,25 +44,25 @@ public class MarketResourceNormalActionTurnStateTest {
     @Test
     public void testSendMarketResourceMessage() {
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_NORMAL_ACTION, MARKET_RESOURCE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, MARKET_RESOURCE));
         assertEquals(MessageType.CHOICE_ROW_COLUMN, mitm.getMessages().get(0).getMessageType());
     }
 
     @Test
     public void playSendChoiceRowColumn() {
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_ROW_COLUMN, 2));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
         assertEquals(MessageType.CHOICE_RESOURCE, mitm.getMessages().get(0).getMessageType());
     }
 
     @Test
     public void playSendToWareHousePlacer() {
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_ROW_COLUMN, 2));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_RESOURCE, Resource.STONE));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_RESOURCE, Resource.COIN));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_RESOURCE, Resource.SHIELD));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.COIN));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.SHIELD));
 
-        assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(3).getMessageType());
+        assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(5).getMessageType());
     }
 }

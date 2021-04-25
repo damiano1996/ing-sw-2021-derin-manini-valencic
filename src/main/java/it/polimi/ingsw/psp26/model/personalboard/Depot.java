@@ -110,7 +110,7 @@ public class Depot extends Observable<SessionMessage> {
         if (resources.size() > 0) return resources.get(0);
         else return Resource.EMPTY;
     }
-    
+
 
     /**
      * Equals method.

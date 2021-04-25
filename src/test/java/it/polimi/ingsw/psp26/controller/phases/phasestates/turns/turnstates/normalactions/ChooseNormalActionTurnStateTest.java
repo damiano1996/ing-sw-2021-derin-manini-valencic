@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ChooseNormalActionTurnStateTest {
 
@@ -40,10 +40,11 @@ public class ChooseNormalActionTurnStateTest {
         turn.changeState(new ChooseNormalActionTurnState(turn));
 
     }
+
     @Test
     public void playActivateProduction() {
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_NORMAL_ACTION, ACTIVATE_PRODUCTION));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, ACTIVATE_PRODUCTION));
         assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
 
     }
@@ -51,21 +52,21 @@ public class ChooseNormalActionTurnStateTest {
     @Test
     public void playBuyCard() {
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_NORMAL_ACTION, BUY_CARD));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
         assertEquals(MessageType.CHOICE_CARD_TO_BUY, mitm.getMessages().get(0).getMessageType());
 
     }
 
     @Test
     public void playMarketResource() {
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_NORMAL_ACTION, MARKET_RESOURCE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, MARKET_RESOURCE));
         assertEquals(MessageType.CHOICE_ROW_COLUMN, mitm.getMessages().get(0).getMessageType());
 
     }
 
     @Test
     public void playEmptyPayload() {
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(),CHOICE_NORMAL_ACTION));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION));
         assertEquals(MessageType.CHOICE_NORMAL_ACTION, mitm.getMessages().get(0).getMessageType());
 
     }

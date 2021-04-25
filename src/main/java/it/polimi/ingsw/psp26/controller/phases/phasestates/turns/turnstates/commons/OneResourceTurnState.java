@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
@@ -20,11 +21,22 @@ public class OneResourceTurnState extends TurnState {
     private final int numOfResources;
     private final List<Resource> resources;
 
+    private final List<Resource> resourcesOptions;
+
+    public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, List<Resource> resourcesOptions) {
+        super(turn);
+        this.nextState = nextState;
+        this.numOfResources = numOfResources;
+        resources = new ArrayList<>();
+        this.resourcesOptions = resourcesOptions;
+    }
+
     public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources) {
         super(turn);
         this.nextState = nextState;
         this.numOfResources = numOfResources;
         resources = new ArrayList<>();
+        this.resourcesOptions = Arrays.asList(RESOURCES_SLOTS);
     }
 
     @Override
@@ -37,15 +49,21 @@ public class OneResourceTurnState extends TurnState {
             if (message.getMessageType().equals(MessageType.CHOICE_RESOURCE)) {
 
                 Resource resource = (Resource) message.getPayload();
-                resources.add(resource);
+                if (resourcesOptions.contains(resource)) {
+                    resources.add(resource);
 
-                if (resources.size() == numOfResources) {
+                    if (resources.size() == numOfResources) {
 
-                    turn.changeState(nextState);
-                    turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE, resources.toArray()));
+                        turn.changeState(nextState);
+                        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE, resources.toArray()));
+
+                    } else {
+
+                        sendGeneralMessage(turn, "Choose resource:");
+                        sendChoiceResourceMessage();
+                    }
                 } else {
-
-                    sendGeneralMessage(turn, "Choose resource:");
+                    sendGeneralMessage(turn, "Resource is not admissible. Choose among: " + resourcesOptions);
                     sendChoiceResourceMessage();
                 }
 
@@ -68,7 +86,7 @@ public class OneResourceTurnState extends TurnState {
                         MessageType.CHOICE_RESOURCE,
                         "Choice resource:",
                         1, 1,
-                        (Object[]) RESOURCES_SLOTS
+                        resourcesOptions
                 )
         );
     }

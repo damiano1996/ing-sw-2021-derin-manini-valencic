@@ -87,7 +87,7 @@ public class CliTest {
 
         //Insert here the name of the methods tou want to test
 
-        //testWarehouseConfiguration();
+        testWarehouseConfiguration();
 
         //testMessages();
 

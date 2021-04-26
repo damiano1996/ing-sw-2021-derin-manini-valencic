@@ -6,10 +6,7 @@ import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
-import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -52,7 +49,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendActivateProductionMessage() throws EmptyPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
+    public void testSendActivateProductionMessage() throws EmptyPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
 
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard());
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
@@ -62,7 +59,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendChoiceCardsToActivateNoUnknownResource() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, EmptyPayloadException, CanNotAddResourceToStrongboxException {
+    public void testSendChoiceCardsToActivateNoUnknownResource() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, EmptyPayloadException, CanNotAddResourceToStrongboxException, InvalidPayloadException {
 
         DevelopmentCard card = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
 
@@ -84,7 +81,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendChoiceCardsToActivateCostUnknown() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
+    public void testSendChoiceCardsToActivateCostUnknown() throws InvalidPayloadException {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
 
@@ -93,7 +90,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendChoiceResourceToActivateCostUnknown() throws CanNotAddResourceToStrongboxException {
+    public void testSendChoiceResourceToActivateCostUnknown() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
 
 
         List<Resource> resource2 = new ArrayList<>();
@@ -107,7 +104,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendChoiceResourceToActivateNotEnoughResources() throws CanNotAddResourceToStrongboxException {
+    public void testSendChoiceResourceToActivateNotEnoughResources() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
 
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
 
@@ -116,7 +113,7 @@ public class ActivateProductionNormalActionTurnStateTest {
         assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(4).getMessageType());
     }
 
-    private void playCollection() {
+    private void playCollection() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));

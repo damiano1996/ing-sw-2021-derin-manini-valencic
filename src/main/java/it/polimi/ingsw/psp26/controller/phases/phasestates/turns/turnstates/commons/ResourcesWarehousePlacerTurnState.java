@@ -6,7 +6,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
@@ -71,33 +71,31 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
 
         if (message.getMessageType().equals(MessageType.PLACE_IN_WAREHOUSE)) {
 
-            try {
-                // by protocol we receive a list of resources which represents the order to fill the warehouse
-                List<Resource> resourceOrder = castElements(Resource.class, message.getListPayloads());
+            // by protocol we receive a list of resources which represents the order to fill the warehouse
+            List<Resource> resourceOrder = castElements(Resource.class, message.getListPayloads());
 
-                // checking if there is a duplicate in the base depots. If so we send an error message,
-                // otherwise we can fill the warehouse with the given order of resources
-                if (isDuplicate(
-                        resourceOrder.subList(0,
-                                Math.min(
-                                        turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().size(),
-                                        resourceOrder.size())))) {
-                    sendErrorMessage(turn, "Each depot of the warehouse must contains different resources.");
-                    sendWarehouseMessage();
+            // checking if there is a duplicate in the base depots. If so we send an error message,
+            // otherwise we can fill the warehouse with the given order of resources
+            if (isDuplicate(
+                    resourceOrder.subList(0,
+                            Math.min(
+                                    turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().size(),
+                                    resourceOrder.size())))) {
+                sendErrorMessage(turn, "Each depot of the warehouse must contains different resources.");
+                sendWarehouseMessage();
 
-                } else {
+            } else {
 
-                    int discardedResources = fillWarehouse(resourceOrder);
-                    System.out.println("ResourcesWarehousePlacerTurnState - resources to discard: " + discardedResources);
-                    // adding FP to other players
-                    addFaithPointsToPlayers(turn.getMatchController().getMatch(), turn.getTurnPlayer(), discardedResources);
-                    // checking vatican report
-                    System.out.println("ResourcesWarehousePlacerTurnState - going to vatican report");
-                    turn.changeState(new CheckVaticanReportTurnState(turn));
-                    turn.play(message);
-                }
-            } catch (EmptyPayloadException ignored) {
+                int discardedResources = fillWarehouse(resourceOrder);
+                System.out.println("ResourcesWarehousePlacerTurnState - resources to discard: " + discardedResources);
+                // adding FP to other players
+                addFaithPointsToPlayers(turn.getMatchController().getMatch(), turn.getTurnPlayer(), discardedResources);
+                // checking vatican report
+                System.out.println("ResourcesWarehousePlacerTurnState - going to vatican report");
+                turn.changeState(new CheckVaticanReportTurnState(turn));
+                turn.play(message);
             }
+
 
         } else {
             sendWarehouseMessage();
@@ -176,19 +174,23 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
      */
     private void sendWarehouseMessage() {
         System.out.println("ResourcesWarehousePlacer - sending message to " + turn.getTurnPlayer().getNickname());
-        turn.getMatchController().notifyObservers(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        MessageType.PLACE_IN_WAREHOUSE,
-                        turn.getTurnPlayer().getPersonalBoard().getWarehouse()
-                )
-        );
-        turn.getMatchController().notifyObservers(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        MessageType.PLACE_IN_WAREHOUSE,
-                        resourcesToAdd.toArray()
-                )
-        );
+        try {
+
+            turn.getMatchController().notifyObservers(
+                    new SessionMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            MessageType.PLACE_IN_WAREHOUSE,
+                            turn.getTurnPlayer().getPersonalBoard().getWarehouse()
+                    )
+            );
+            turn.getMatchController().notifyObservers(
+                    new SessionMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            MessageType.PLACE_IN_WAREHOUSE,
+                            resourcesToAdd.toArray()
+                    )
+            );
+        } catch (InvalidPayloadException ignored) {
+        }
     }
 }

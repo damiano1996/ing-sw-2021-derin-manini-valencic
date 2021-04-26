@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.application.messages;
 
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Color;
@@ -27,13 +28,13 @@ public class MessageTest {
     private Message message;
 
     @Before
-    public void setUp() {
+    public void setUp() throws InvalidPayloadException {
         messageType = MessageType.GENERAL_MESSAGE;
         message = new Message(messageType, COIN, COIN, SHIELD);
     }
 
     @Test(expected = EmptyPayloadException.class)
-    public void testNoPayload() throws EmptyPayloadException {
+    public void testNoPayload() throws EmptyPayloadException, InvalidPayloadException {
         Message message = new Message(MessageType.GENERAL_MESSAGE);
         message.getPayload();
     }
@@ -48,6 +49,12 @@ public class MessageTest {
         assertEquals(COIN, message.getPayload());
     }
 
+    @Test(expected = EmptyPayloadException.class)
+    public void testEmptyPayload() throws EmptyPayloadException, InvalidPayloadException {
+        message = new Message(messageType);
+        message.getPayload();
+    }
+
     @Test
     public void testGetPayloads() throws EmptyPayloadException {
         assertEquals(new ArrayList<>() {{
@@ -58,14 +65,14 @@ public class MessageTest {
     }
 
     @Test
-    public void testGetPayloads_ComplexObject() throws EmptyPayloadException {
+    public void testGetPayloads_ComplexObject() throws EmptyPayloadException, InvalidPayloadException {
         Player player = new Player(new VirtualView(), "nickname", "sessionToken");
         message = new Message(MessageType.PERSONAL_BOARD, player);
         assertEquals(player.getNickname(), ((Player) message.getPayload()).getNickname());
     }
 
     @Test
-    public void testGetPayloads_ComplexObjectTwo() throws EmptyPayloadException {
+    public void testGetPayloads_ComplexObjectTwo() throws EmptyPayloadException, InvalidPayloadException {
         Map<Resource, Integer> resourcesRequirements = new HashMap<>() {{
             put(Resource.COIN, 1);
         }};
@@ -81,5 +88,17 @@ public class MessageTest {
 
         message = new Message(MessageType.CHOICE_LEADERS, (Object[]) new LeaderCard[]{leaderCard, leaderCard});
         assertEquals(leaderCard, message.getPayload());
+    }
+
+    @Test(expected = InvalidPayloadException.class)
+    public void testDifferentPayloadsClassType_ExceptionCase() throws EmptyPayloadException, InvalidPayloadException {
+        message = new Message(MessageType.GENERAL_MESSAGE, 3, COIN, new VirtualView());
+    }
+
+    @Test
+    public void testDifferentPayloadsClassType() throws EmptyPayloadException, InvalidPayloadException {
+        message = new Message(MessageType.GENERAL_MESSAGE, 3, COIN);
+        assertEquals(3, message.getPayload(0));
+        assertEquals(COIN, message.getPayload(1));
     }
 }

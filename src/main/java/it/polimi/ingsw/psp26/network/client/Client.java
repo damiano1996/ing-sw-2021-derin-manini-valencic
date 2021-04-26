@@ -81,13 +81,13 @@ public class Client extends Observable<Message> {
                     // calls the method to display the warehouse with the resources to add
                     viewInterface.displayWarehouseNewResourcesAssignment(warehouse, resourcesToAdd);
                     break;
-                    
+
                 case CHOICE_ROW_COLUMN:
                     // Message contains the MarketTray to display
                     MarketTray marketTray = ((MarketTray) message.getPayload());
                     viewInterface.displayMarketAction(marketTray);
                     break;
-                    
+
 
                 // -------------------------------------
                 // --------- DISPLAY MESSAGES ----------

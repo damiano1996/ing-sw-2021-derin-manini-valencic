@@ -1,8 +1,5 @@
 package it.polimi.ingsw.psp26.view.cli;
 
-import it.polimi.ingsw.psp26.exceptions.ChangeResourcesBetweenDepotsException;
-import it.polimi.ingsw.psp26.exceptions.DepotOutOfBoundException;
-import it.polimi.ingsw.psp26.exceptions.SkipResourceException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;

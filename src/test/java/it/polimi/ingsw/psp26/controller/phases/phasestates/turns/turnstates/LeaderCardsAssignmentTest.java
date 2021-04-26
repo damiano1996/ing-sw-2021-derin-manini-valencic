@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -45,7 +46,7 @@ public class LeaderCardsAssignmentTest {
     }
 
     @Test
-    public void testSendLeaderCardsChoiceMessage() throws EmptyPayloadException {
+    public void testSendLeaderCardsChoiceMessage() throws EmptyPayloadException, InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
 
         assertEquals(MessageType.CHOICE_LEADERS, mitm.getMessages().get(0).getMessageType());
@@ -53,7 +54,7 @@ public class LeaderCardsAssignmentTest {
     }
 
     @Test
-    public void testWrongLeaderCards() throws EmptyPayloadException {
+    public void testWrongLeaderCards() throws EmptyPayloadException, InvalidPayloadException {
         testSendLeaderCardsChoiceMessage();
 
         List<LeaderCard> twoRandomLeaders = phase.getMatchController().getMatch().drawLeaders(2);
@@ -71,7 +72,7 @@ public class LeaderCardsAssignmentTest {
     }
 
     @Test
-    public void testGoodLeaderChoice() throws EmptyPayloadException {
+    public void testGoodLeaderChoice() throws EmptyPayloadException, InvalidPayloadException {
         testSendLeaderCardsChoiceMessage();
 
         List<LeaderCard> selectedLeaders = castElements(LeaderCard.class, mitm.getMessages().get(0).getListPayloads()).subList(0, 2);

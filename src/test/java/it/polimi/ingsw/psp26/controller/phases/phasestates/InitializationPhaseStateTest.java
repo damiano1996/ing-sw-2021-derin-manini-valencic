@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class InitializationPhaseStateTest {
     }
 
     @Test
-    public void testAddPlayer() {
+    public void testAddPlayer() throws InvalidPayloadException {
 
         String nickname = "nickname";
         String sessionToken = "sessionToken";
@@ -38,7 +39,7 @@ public class InitializationPhaseStateTest {
     }
 
     @Test
-    public void testPhaseTransition() {
+    public void testPhaseTransition() throws InvalidPayloadException {
         int numOfPlayers = 1;
         phase.getMatchController().setMaxNumberOfPlayers(numOfPlayers);
         testAddPlayer();

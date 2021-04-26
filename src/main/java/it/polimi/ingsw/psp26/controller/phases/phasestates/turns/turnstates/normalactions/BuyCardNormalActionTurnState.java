@@ -77,7 +77,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 default:
                     sendChoiceNormalActionMessage(turn);
             }
-        } catch (EmptyPayloadException ignored) {
+        } catch (EmptyPayloadException | InvalidPayloadException ignored) {
             // TODO: handle exception
         }
     }
@@ -138,14 +138,18 @@ public class BuyCardNormalActionTurnState extends TurnState {
         try {
             turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
-            turn.getMatchController().notifyObservers(
-                    new MultipleChoicesMessage(
-                            turn.getTurnPlayer().getSessionToken(),
-                            CHOICE_POSITION,
-                            "Choose where to place the new card:",
-                            1, 1,
-                            positionsForCard().toArray(new Object[0])
-                    ));
+            try {
+                turn.getMatchController().notifyObservers(
+                        new MultipleChoicesMessage(
+                                turn.getTurnPlayer().getSessionToken(),
+                                CHOICE_POSITION,
+                                "Choose where to place the new card:",
+                                1, 1,
+                                positionsForCard().toArray(new Object[0])
+                        ));
+            } catch (InvalidPayloadException invalidPayloadException) {
+                invalidPayloadException.printStackTrace();
+            }
         }
 
     }

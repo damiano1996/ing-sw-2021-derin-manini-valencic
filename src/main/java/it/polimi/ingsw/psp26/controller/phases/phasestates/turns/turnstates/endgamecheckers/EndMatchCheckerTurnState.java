@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
@@ -37,12 +38,17 @@ public class EndMatchCheckerTurnState extends TurnState {
      * It checks the conditions and modifies the state of the phase of the match.
      */
     private void checkMultiPlayerEnd() {
-        if (isSeventhCardDrawn())
-            turn.getPlayingPhaseState().goToEndMatchPhaseState(
-                    new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
-        else if (isFinalTilePosition())
-            turn.getPlayingPhaseState().goToEndMatchPhaseState(
-                    new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.FINAL_TILE_POSITION));
+        try {
+            if (isSeventhCardDrawn())
+                turn.getPlayingPhaseState().goToEndMatchPhaseState(
+                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
+            else if (isFinalTilePosition())
+                turn.getPlayingPhaseState().goToEndMatchPhaseState(
+                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.FINAL_TILE_POSITION));
+
+        } catch (InvalidPayloadException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -50,12 +56,18 @@ public class EndMatchCheckerTurnState extends TurnState {
      * It checks the conditions and modifies the state of the phase of the match.
      */
     private void checkSinglePlayerEnd() {
-        if (isNoMoreColumnOfDevelopmentCards())
-            turn.getPlayingPhaseState().goToEndMatchPhaseState(
-                    new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.NO_MORE_COLUMN_DEVELOPMENT_CARDS));
-        else if (isBlackCrossFinalPosition())
-            turn.getPlayingPhaseState().goToEndMatchPhaseState(
-                    new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.BLACK_CROSS_FINAL_POSITION));
+        try {
+            if (isNoMoreColumnOfDevelopmentCards()) {
+                turn.getPlayingPhaseState().goToEndMatchPhaseState(
+                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.NO_MORE_COLUMN_DEVELOPMENT_CARDS));
+
+            } else if (isBlackCrossFinalPosition())
+                turn.getPlayingPhaseState().goToEndMatchPhaseState(
+                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.BLACK_CROSS_FINAL_POSITION));
+
+        } catch (InvalidPayloadException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

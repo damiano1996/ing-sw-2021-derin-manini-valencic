@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -69,7 +70,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testSendWarehouseMessage() throws EmptyPayloadException {
+    public void testSendWarehouseMessage() throws EmptyPayloadException, InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
         assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
         assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(1).getMessageType());
@@ -86,7 +87,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testAskMeToReplace() throws EmptyPayloadException {
+    public void testAskMeToReplace() throws EmptyPayloadException, InvalidPayloadException {
         testSendWarehouseMessage();
 
         turn.play(
@@ -100,7 +101,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
         assertEquals(ERROR_MESSAGE, mitm.getMessages().get(2).getMessageType());
     }
 
-    private void sendOrderTypeOne() throws EmptyPayloadException {
+    private void sendOrderTypeOne() throws EmptyPayloadException, InvalidPayloadException {
         testSendWarehouseMessage();
 
         turn.play(
@@ -126,7 +127,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
 
 
     @Test
-    public void testCorrectlyAllocated() throws EmptyPayloadException {
+    public void testCorrectlyAllocated() throws EmptyPayloadException, InvalidPayloadException {
         List<Resource> initialResources = turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources();
         List<Resource> expectedFinalResources = new ArrayList<>();
         expectedFinalResources.addAll(initialResources);
@@ -138,7 +139,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testDiscardResource() throws EmptyPayloadException {
+    public void testDiscardResource() throws EmptyPayloadException, InvalidPayloadException {
         turn.getMatchController().getMatch().addPlayer(new Player(new VirtualView(), "nickname2", "sessionToken2"));
 
         resourcesToAdd.add(COIN);
@@ -150,7 +151,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testDiscardAvoidedByLeader() throws EmptyPayloadException {
+    public void testDiscardAvoidedByLeader() throws EmptyPayloadException, InvalidPayloadException {
         turn.getMatchController().getMatch().addPlayer(new Player(new VirtualView(), "nickname2", "sessionToken2"));
 
         // Creating a new leader and activate it with coin depot as special ability.

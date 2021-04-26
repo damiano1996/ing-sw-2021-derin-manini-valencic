@@ -11,5 +11,5 @@ public class ViewUtils {
     public static boolean checkAsciiRange(char c) {
         return (48 > (int) c || (int) c > 57);
     }
-    
+
 }

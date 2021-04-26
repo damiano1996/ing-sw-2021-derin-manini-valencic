@@ -77,13 +77,13 @@ public class CliTest {
         try {
             CliTest cliTest = new CliTest(new Client());
             cliTest.testMethod();
-        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse e) {
+        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse | InvalidPayloadException e) {
             e.printStackTrace();
         }
     }
 
 
-    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse {
+    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException {
 
         //Insert here the name of the methods tou want to test
 
@@ -93,10 +93,10 @@ public class CliTest {
 
         //developmentGrid = new DevelopmentGrid(virtualView);
         //developmentCardsCli.displayDevelopmentCardSelection(developmentGrid);
-        
+
         marketCli.displayMarketSelection(marketTray);
-        
-        
+
+
         //testWarehouseConfiguration();
         testFaithTrackMovement();
         testMarket();
@@ -407,7 +407,7 @@ public class CliTest {
     }
 
 
-    private void testWaitingScreen() throws EmptyPayloadException {
+    private void testWaitingScreen() throws EmptyPayloadException, InvalidPayloadException {
 
         //---WAIING-SCREEN-TEST---// press Enter 3 times
 

@@ -68,7 +68,7 @@ public class DevelopmentGrid extends Observable<SessionMessage> {
         List<DevelopmentCard> visibleCards = new ArrayList<>();
         for (int row = 0; row < LEVELS.length; row++) {
             for (int col = 0; col < COLORS.length; col++) {
-                visibleCards.add(getDevelopmentGridCell(row, col).getFirstCard());
+                if (!grid[row][col].isEmpty()) visibleCards.add(getDevelopmentGridCell(row, col).getFirstCard());
             }
         }
         return Collections.unmodifiableList(visibleCards);

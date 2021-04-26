@@ -1,16 +1,16 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
+import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGridCell;
 import it.polimi.ingsw.psp26.model.enums.Color;
+import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DevelopmentCardsCli {
 
@@ -21,7 +21,7 @@ public class DevelopmentCardsCli {
     public DevelopmentCardsCli(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
-        this.in =  new Scanner(System.in);
+        this.in = new Scanner(System.in);
     }
 
 
@@ -322,47 +322,106 @@ public class DevelopmentCardsCli {
     }
 
 
+    /**
+     * Display the Grid selection screen
+     *
+     * @param developmentGrid The Development Grid to display
+     * @return The chosen Development Card
+     */
     public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid) {
-        String level;
-        String color;
+        String level = "";
+        String color = "";
+        boolean isCardChosen = false;
+        boolean printErrorString = false;
 
         cliUtils.cls();
-        displayDevelopmentGrid(developmentGrid);
-        
-        level = askForLevelAndColor("Enter the Level [first - second - third] of the card you want: ", 0);
-        System.out.println(level);
-        
-        color = askForLevelAndColor("Enter the Color [green - blue - yellow - purple] of the card you want: ", 1);
-        System.out.println(color);
-        
-        in.nextLine();
-        return null;
+
+        while (!isCardChosen) {
+
+            displayDevelopmentGrid(developmentGrid);
+
+            if (printErrorString)
+                cliUtils.pPCS("THE DESIRED CARD IS NOT AVAILABLE! Please try again", Color.RED, 30, 135);
+            printErrorString = false;
+
+            level = askForLevelAndColor("Enter the Level [first - second - third] of the card you want: ", true);
+            color = askForLevelAndColor("Enter the Color [green - blue - yellow - purple] of the card you want: ", false);
+
+            isCardChosen = isCardAvailable(developmentGrid, level, color);
+            if (!isCardChosen) {
+                printErrorString = true;
+                cliUtils.clearLine(32, 198);
+            }
+
+        }
+
+        //In Java 8 streams you must use final variables
+        final String cardLevel = level;
+        final String cardColor = color;
+
+        return developmentGrid.getAllVisibleCards().stream().filter(x -> x.getDevelopmentCardType().getColor().getName().equalsIgnoreCase(cardColor))
+                .filter(x -> x.getDevelopmentCardType().getLevel().getLevelName().equalsIgnoreCase(cardLevel)).findFirst().get();
     }
 
 
-    private String askForLevelAndColor(String stringToDisplay, int levelOrColor) {
+    /**
+     * Asks the Player the Level and the Color of the desired Development Card
+     *
+     * @param stringToDisplay A message to inform the Player the String to enter
+     * @param levelOrColor    True if a Level is entered, false if a Color is entered
+     * @return The Level/Color chosen by the Player
+     */
+    private String askForLevelAndColor(String stringToDisplay, boolean levelOrColor) {
         boolean correctInputInserted = false;
         String input;
 
         do {
             cliUtils.pPCS(stringToDisplay, Color.WHITE, 32, 135);
             input = in.nextLine();
-            
+
             if (isInputCorrect(input, levelOrColor)) correctInputInserted = true;
             else {
                 cliUtils.pPCS("WRONG INPUT INSERTED! Please try again", Color.RED, 30, 135);
                 cliUtils.clearLine(32, 198);
             }
         } while (!correctInputInserted);
-        
+
         return input;
     }
-    
-    
-    private boolean isInputCorrect(String input, int levelOrColor) {
-        if (levelOrColor == 0) return (input.equalsIgnoreCase("FIRST") || input.equalsIgnoreCase("SECOND") || input.equalsIgnoreCase("THIRD"));
-        else return (input.equalsIgnoreCase("GREEN") || input.equalsIgnoreCase("BLUE") || input.equalsIgnoreCase("YELLOW") || input.equalsIgnoreCase("PURPLE"));
+
+
+    /**
+     * Checks if the input inserted by the Player is correct in terms of Levels or Colors
+     *
+     * @param input        The String entered by the Player
+     * @param levelOrColor True if Level is checked, false if Color is checked
+     * @return True if the input is correct, false otherwise
+     */
+    private boolean isInputCorrect(String input, boolean levelOrColor) {
+        if (levelOrColor)
+            return (input.equalsIgnoreCase("FIRST") || input.equalsIgnoreCase("SECOND") || input.equalsIgnoreCase("THIRD"));
+        else
+            return (input.equalsIgnoreCase("GREEN") || input.equalsIgnoreCase("BLUE") || input.equalsIgnoreCase("YELLOW") || input.equalsIgnoreCase("PURPLE"));
     }
-    
+
+
+    /**
+     * Checks if the desired Card is available on the Grid
+     *
+     * @param developmentGrid The DevelopmentGrid
+     * @param level           The Level of the desired Card
+     * @param color           The Color of the desired Card
+     * @return True if the card is available, false otherwise
+     */
+    private boolean isCardAvailable(DevelopmentGrid developmentGrid, String level, String color) {
+        Color cardColor = Arrays.stream(Color.values()).filter(x -> x.getName().equalsIgnoreCase(color)).findFirst().get();
+        Level cardLevel = Arrays.stream(Level.values()).filter(x -> x.getLevelName().equalsIgnoreCase(level)).findFirst().get();
+
+        try {
+            return developmentGrid.isAvailable(cardColor, cardLevel);
+        } catch (LevelDoesNotExistException | ColorDoesNotExistException e) {
+            return false;
+        }
+    }
 
 }

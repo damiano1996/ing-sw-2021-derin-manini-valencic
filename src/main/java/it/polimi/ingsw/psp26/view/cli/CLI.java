@@ -130,6 +130,7 @@ public class CLI implements ViewInterface {
         personalBoardCli.displayInkwell(isPrintable, 5, 190);
     }
 
+    
     @Override
     public void displayPersonalBoard(Player player) {
         personalBoardCli.displayPersonalBoard(player, isMultiPlayerMode);
@@ -162,6 +163,7 @@ public class CLI implements ViewInterface {
         faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
     }
 
+    
     @Override
     public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
         personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
@@ -197,12 +199,14 @@ public class CLI implements ViewInterface {
         personalBoardCli.displayProductionActivation(productions);
     }
 
+    
     public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
         cliUtils.cls();
         leaderCardsCli.printMultipleLeaders(leaderCards, 3);
         cliUtils.vSpace(3);
     }
 
+    
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
         personalBoardCli.displayActionTokens(unusedTokens);
@@ -214,6 +218,15 @@ public class CLI implements ViewInterface {
         List<Integer> choice = new ArrayList<>();
         choice.add(marketCli.displayMarketSelection(marketTray));
         client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
+        displayNext();
+    }
+    
+    
+    @Override
+    public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid) {
+        List<DevelopmentCard> choice = new ArrayList<>();
+        choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid));
+        client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
         displayNext();
     }
 
@@ -239,26 +252,6 @@ public class CLI implements ViewInterface {
 
             case CHOICE_CARDS_TO_ACTIVATE:
                 displayProductionActivation(castElements(Production.class, choices));
-                break;
-
-            case BUY_CARD:
-                //DevelopmentGrid is the unique element of choices List
-                displayDevelopmentGrid((DevelopmentGrid) choices.get(0));
-                cliUtils.vSpace(20);
-//                //Setting the cursor position for the question
-//                cliUtils.setCursorPosition(33, 132);
-//                pw.print(cliUtils.hSpace(3) + question);
-//                //Setting the cursor position for displayInputChoice()
-//                cliUtils.setCursorPosition(35, 132);
-//                //TODO selected = dipende se fai la scelta di implementare tramite colore/livello o righe/colonne
-//                selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
-//
-//                client.notifyObservers(
-//                        new Message(
-//                                BUY_CARD,
-//                                selected.toArray(new Object[0]) // to array
-//                        )
-//                );
                 break;
 
             case CHOICE_RESOURCE:

@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.view.ViewInterface;
@@ -56,7 +57,6 @@ public class Client extends Observable<Message> {
                 case CHOICE_RESOURCE:
                 case CHOICE_LEADER_ACTION:
                 case CHOICE_NORMAL_ACTION:
-                case CHOICE_CARD_TO_BUY:
                 case CHOICE_POSITION:
                 case CHOICE_CARDS_TO_ACTIVATE:
                 case CHOICE_LEADERS:
@@ -71,7 +71,7 @@ public class Client extends Observable<Message> {
                     break;
 
                 case PLACE_IN_WAREHOUSE:
-                    // first message contains th warehouse
+                    // first message contains the warehouse
                     Warehouse warehouse = ((Warehouse) message.getPayload());
                     // waiting for second message containing the resources to add
                     Message secondMessage = MessageSynchronizedFIFO.getInstance().getNext();
@@ -87,6 +87,13 @@ public class Client extends Observable<Message> {
                     MarketTray marketTray = ((MarketTray) message.getPayload());
                     viewInterface.displayMarketAction(marketTray);
                     break;
+                    
+                case CHOICE_CARD_TO_BUY:
+                    // Message contains the Development Grid to display
+                    DevelopmentGrid developmentGrid = ((DevelopmentGrid) message.getPayload());
+                    viewInterface.displayDevelopmentCardBuyAction(developmentGrid);
+                    break;
+                    
                     
 
                 // -------------------------------------

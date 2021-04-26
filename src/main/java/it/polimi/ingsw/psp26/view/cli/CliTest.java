@@ -91,10 +91,14 @@ public class CliTest {
 
         //testMessages();
 
-        //developmentGrid = new DevelopmentGrid(virtualView);
-        //developmentCardsCli.displayDevelopmentCardSelection(developmentGrid);
+        developmentGrid = new DevelopmentGrid(virtualView);
+        developmentGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentCardsCli.displayDevelopmentCardSelection(developmentGrid);
         
-        marketCli.displayMarketSelection(marketTray);
+        //marketCli.displayMarketSelection(marketTray);
         
         
         //testWarehouseConfiguration();

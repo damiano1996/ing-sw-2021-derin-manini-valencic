@@ -233,7 +233,10 @@ public class CLI implements ViewInterface {
     public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid) {
         List<DevelopmentCard> choice = new ArrayList<>();
         choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid));
-        client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
+        try {
+            client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
+        } catch (InvalidPayloadException ignored) {
+        }
         displayNext();
     }
 

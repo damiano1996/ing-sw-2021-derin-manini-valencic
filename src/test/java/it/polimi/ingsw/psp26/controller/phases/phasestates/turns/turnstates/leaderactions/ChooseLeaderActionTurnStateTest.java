@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Color;
@@ -62,31 +63,31 @@ public class ChooseLeaderActionTurnStateTest {
     }
 
     @Test
-    public void testChoicesMessage() {
+    public void testChoicesMessage() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
         assertEquals(MessageType.CHOICE_LEADER_ACTION, mitm.getMessages().get(0).getMessageType());
     }
 
-    private void goTo(MessageType messageType) {
+    private void goTo(MessageType messageType) throws InvalidPayloadException {
         testChoicesMessage();
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_LEADER_ACTION, messageType));
     }
 
     @Test
-    public void testGoToDiscard() {
+    public void testGoToDiscard() throws InvalidPayloadException {
         goTo(DISCARD_LEADER);
         assertEquals(MessageType.CHOICE_LEADERS, mitm.getMessages().get(1).getMessageType());
     }
 
     @Test
-    public void testGoToActivate() {
+    public void testGoToActivate() throws InvalidPayloadException {
         goTo(ACTIVATE_LEADER);
         // we will receive an error message since the player doesn't have satisfied requirements.
         assertEquals(ERROR_MESSAGE, mitm.getMessages().get(1).getMessageType());
     }
 
     @Test
-    public void testGoToChooseNormalAction() {
+    public void testGoToChooseNormalAction() throws InvalidPayloadException {
         goTo(SKIP_LEADER_ACTION);
         assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(1).getMessageType());
     }

@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.LeaderCannotBeActivatedException;
 import it.polimi.ingsw.psp26.exceptions.LeaderCannotBeDiscardedException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
@@ -90,15 +91,18 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
             goToNextStateAfterLeaderAction(turn, message);
 
         } else {
-            turn.getMatchController().notifyObservers(
-                    new MultipleChoicesMessage(
-                            turn.getTurnPlayer().getSessionToken(),
-                            MessageType.CHOICE_LEADERS,
-                            "Choice the leader " + ((lastMessage.equals(MessageType.ACTIVATE_LEADER)) ? " to activate:" : " to discard:"),
-                            1, 1,
-                            playableLeaders.toArray()
-                    )
-            );
+            try {
+                turn.getMatchController().notifyObservers(
+                        new MultipleChoicesMessage(
+                                turn.getTurnPlayer().getSessionToken(),
+                                MessageType.CHOICE_LEADERS,
+                                "Choice the leader " + ((lastMessage.equals(MessageType.ACTIVATE_LEADER)) ? " to activate:" : " to discard:"),
+                                1, 1,
+                                playableLeaders.toArray()
+                        )
+                );
+            } catch (InvalidPayloadException ignored) {
+            }
         }
     }
 
@@ -178,13 +182,17 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
 
                     playerLeaderCard.activate(turn.getTurnPlayer());
 
-                    turn.getMatchController().notifyObservers(
-                            new SessionMessage(
-                                    turn.getTurnPlayer().getSessionToken(),
-                                    MessageType.LEADER_ACTIVATED,
-                                    playerLeaderCard
-                            )
-                    );
+                    try {
+                        turn.getMatchController().notifyObservers(
+                                new SessionMessage(
+                                        turn.getTurnPlayer().getSessionToken(),
+                                        MessageType.LEADER_ACTIVATED,
+                                        playerLeaderCard
+                                )
+                        );
+                    } catch (InvalidPayloadException ignored) {
+
+                    }
 
                 } else {
                     throw new LeaderCannotBeActivatedException();

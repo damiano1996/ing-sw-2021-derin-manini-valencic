@@ -6,7 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
                         turn.play(message);
                     }
 
-                } catch (EmptyPayloadException | IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e) {
                     sendErrorMessage(turn, "You have to choose two leader cards.");
                     sendLeaderCardsChoiceMessage();
                 }
@@ -88,15 +88,19 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
      * Method sends a message containing the drawn leaders.
      */
     private void sendLeaderCardsChoiceMessage() {
-        turn.getMatchController().notifyObservers(
-                new MultipleChoicesMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_LEADERS,
-                        "Choice two leader cards:",
-                        2, 2,
-                        drawnLeaders.toArray()
-                )
-        );
+        try {
+            turn.getMatchController().notifyObservers(
+                    new MultipleChoicesMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            MessageType.CHOICE_LEADERS,
+                            "Choice two leader cards:",
+                            2, 2,
+                            drawnLeaders.toArray()
+                    )
+            );
+        } catch (InvalidPayloadException e) {
+            e.printStackTrace();
+        }
     }
 
 }

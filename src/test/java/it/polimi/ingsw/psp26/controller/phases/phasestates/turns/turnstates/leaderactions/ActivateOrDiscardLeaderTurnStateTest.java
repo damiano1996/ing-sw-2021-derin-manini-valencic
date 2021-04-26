@@ -6,10 +6,7 @@ import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
-import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
@@ -67,7 +64,7 @@ public class ActivateOrDiscardLeaderTurnStateTest {
         turn.changeState(new ActivateOrDiscardLeaderTurnState(turn));
     }
 
-    private void choiceLeaders(MessageType action, MessageType expected) {
+    private void choiceLeaders(MessageType action, MessageType expected) throws InvalidPayloadException {
         turn.play(
                 new SessionMessage(
                         turn.getTurnPlayer().getSessionToken(),
@@ -79,12 +76,12 @@ public class ActivateOrDiscardLeaderTurnStateTest {
     }
 
     @Test
-    public void testChoiceLeadersToDiscard() {
+    public void testChoiceLeadersToDiscard() throws InvalidPayloadException {
         choiceLeaders(MessageType.DISCARD_LEADER, MessageType.CHOICE_LEADERS);
     }
 
     @Test
-    public void testDiscardLeader() throws EmptyPayloadException {
+    public void testDiscardLeader() throws EmptyPayloadException, InvalidPayloadException {
         assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getFaithPoints());
 
         choiceLeaders(MessageType.DISCARD_LEADER, MessageType.CHOICE_LEADERS);
@@ -100,12 +97,12 @@ public class ActivateOrDiscardLeaderTurnStateTest {
     }
 
     @Test
-    public void testChoiceLeadersToActivate_NoRequirementsOne() {
+    public void testChoiceLeadersToActivate_NoRequirementsOne() throws InvalidPayloadException {
         choiceLeaders(MessageType.ACTIVATE_LEADER, MessageType.ERROR_MESSAGE);
     }
 
     @Test
-    public void testChoiceLeadersToActivate_NoRequirementsTwo() throws CanNotAddResourceToStrongboxException {
+    public void testChoiceLeadersToActivate_NoRequirementsTwo() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
         // adding resources to satisfy requirements
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.COIN);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.COIN);
@@ -115,7 +112,7 @@ public class ActivateOrDiscardLeaderTurnStateTest {
     }
 
     @Test
-    public void testChoiceLeadersToActivate_WithRequirementsSatisfied() throws CanNotAddResourceToStrongboxException, DevelopmentCardSlotOutOfBoundsException, CanNotAddDevelopmentCardToSlotException {
+    public void testChoiceLeadersToActivate_WithRequirementsSatisfied() throws CanNotAddResourceToStrongboxException, DevelopmentCardSlotOutOfBoundsException, CanNotAddDevelopmentCardToSlotException, InvalidPayloadException {
         // adding resources to satisfy requirements
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.COIN);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.COIN);
@@ -125,7 +122,7 @@ public class ActivateOrDiscardLeaderTurnStateTest {
     }
 
     @Test
-    public void testActivateLeader() throws EmptyPayloadException, DevelopmentCardSlotOutOfBoundsException, CanNotAddDevelopmentCardToSlotException, CanNotAddResourceToStrongboxException {
+    public void testActivateLeader() throws EmptyPayloadException, DevelopmentCardSlotOutOfBoundsException, CanNotAddDevelopmentCardToSlotException, CanNotAddResourceToStrongboxException, InvalidPayloadException {
         assertFalse(turn.getTurnPlayer().getLeaderCards().get(0).isActive());
 
         testChoiceLeadersToActivate_WithRequirementsSatisfied();

@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
@@ -75,15 +76,18 @@ public class ChooseLeaderActionTurnState extends TurnState {
                 System.out.println("ChooseLeaderActionTurnState - sending choices to player.");
 
                 // if message type doesn't match with any of previous cases, we have to display the choice to the client!
-                turn.getMatchController().notifyObservers(
-                        new MultipleChoicesMessage(
-                                turn.getTurnPlayer().getSessionToken(),
-                                CHOICE_LEADER_ACTION,
-                                "Choice leader action to perform:",
-                                1, 1,
-                                ACTIVATE_LEADER, DISCARD_LEADER, SKIP_LEADER_ACTION
-                        )
-                );
+                try {
+                    turn.getMatchController().notifyObservers(
+                            new MultipleChoicesMessage(
+                                    turn.getTurnPlayer().getSessionToken(),
+                                    CHOICE_LEADER_ACTION,
+                                    "Choice leader action to perform:",
+                                    1, 1,
+                                    ACTIVATE_LEADER, DISCARD_LEADER, SKIP_LEADER_ACTION
+                            )
+                    );
+                } catch (InvalidPayloadException ignored) {
+                }
             }
 
 

@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.ArrayList;
@@ -71,8 +72,7 @@ public class OneResourceTurnState extends TurnState {
                 sendChoiceResourceMessage();
             }
 
-        } catch (EmptyPayloadException ignored) {
-
+        } catch (EmptyPayloadException | InvalidPayloadException ignored) {
         }
 
     }
@@ -80,14 +80,17 @@ public class OneResourceTurnState extends TurnState {
     private void sendChoiceResourceMessage() {
         System.out.println("OneResourceTurnState - sending message to " + turn.getTurnPlayer().getNickname());
 
-        turn.getMatchController().notifyObservers(
-                new MultipleChoicesMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_RESOURCE,
-                        "Choice resource:",
-                        1, 1,
-                        resourcesOptions
-                )
-        );
+        try {
+            turn.getMatchController().notifyObservers(
+                    new MultipleChoicesMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            MessageType.CHOICE_RESOURCE,
+                            "Choice resource:",
+                            1, 1,
+                            resourcesOptions
+                    )
+            );
+        } catch (InvalidPayloadException ignored) {
+        }
     }
 }

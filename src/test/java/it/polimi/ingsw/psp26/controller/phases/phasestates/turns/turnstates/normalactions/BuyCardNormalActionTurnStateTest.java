@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -47,7 +48,7 @@ public class BuyCardNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendPlayBuyCardMessage() throws CanNotAddResourceToStrongboxException {
+    public void testSendPlayBuyCardMessage() throws InvalidPayloadException {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
         assertEquals(MessageType.CHOICE_CARD_TO_BUY, mitm.getMessages().get(0).getMessageType());
@@ -55,7 +56,7 @@ public class BuyCardNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendCardToBuyPlay() throws CanNotAddResourceToStrongboxException {
+    public void testSendCardToBuyPlay() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
 
         DevelopmentCard card = buyCardResourceSetter();
 
@@ -65,14 +66,14 @@ public class BuyCardNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendCardToBuyNotEnoughResourcesPlay() {
+    public void testSendCardToBuyNotEnoughResourcesPlay() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard()));
         assertEquals(MessageType.CHOICE_CARD_TO_BUY, mitm.getMessages().get(0).getMessageType());
 
     }
 
     @Test
-    public void testSendCardToBuyAndPlacePlay() throws CanNotAddResourceToStrongboxException {
+    public void testSendCardToBuyAndPlacePlay() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
 
         DevelopmentCard card = buyCardResourceSetter();
 
@@ -84,7 +85,7 @@ public class BuyCardNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendCardToBuyAndPlaceWrongPositionPlay() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
+    public void testSendCardToBuyAndPlaceWrongPositionPlay() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
 
         DevelopmentCard card = buyCardResourceSetter();
 

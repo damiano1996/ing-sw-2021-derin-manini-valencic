@@ -11,12 +11,19 @@ import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbi
 
 import java.util.Map;
 
+/**
+ * Singleton class for serialization.
+ * It manages the Gson object that is in charge of serializing and deserializing the payloads of the messages.
+ */
 public class GsonConverter {
 
     private static GsonConverter instance;
 
     private final Gson gson;
 
+    /**
+     * Private constructor of the class.
+     */
     private GsonConverter() {
         gson = new GsonBuilder()
                 .registerTypeAdapter(SpecialAbility.class, new AbstractClassSerializer<SpecialAbility>())
@@ -27,12 +34,22 @@ public class GsonConverter {
                 .create();
     }
 
+    /**
+     * Getter of the instance.
+     *
+     * @return an instance of the class
+     */
     public static GsonConverter getInstance() {
         if (instance == null)
             instance = new GsonConverter();
         return instance;
     }
 
+    /**
+     * Getter of the gson object.
+     *
+     * @return gson object
+     */
     public Gson getGson() {
         return gson;
     }

@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacerTurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
@@ -66,7 +67,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
                     break;
             }
-        } catch (EmptyPayloadException ignored) {
+        } catch (EmptyPayloadException | InvalidPayloadException ignored) {
         }
     }
 

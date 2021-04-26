@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -147,7 +148,10 @@ public class CLI implements ViewInterface {
     @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
         List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourceToAdd);
-        client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
+        try {
+            client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
+        } catch (InvalidPayloadException ignored) {
+        }
         displayNext();
     }
 
@@ -211,13 +215,16 @@ public class CLI implements ViewInterface {
     public void displayActionTokens(List<ActionToken> unusedTokens) {
         personalBoardCli.displayActionTokens(unusedTokens);
     }
-    
-    
+
+
     @Override
     public void displayMarketAction(MarketTray marketTray) {
         List<Integer> choice = new ArrayList<>();
         choice.add(marketCli.displayMarketSelection(marketTray));
-        client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
+        try {
+            client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
+        } catch (InvalidPayloadException ignored) {
+        }
         displayNext();
     }
     
@@ -268,12 +275,21 @@ public class CLI implements ViewInterface {
         List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
 
         // send to server response
-        client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
+        try {
+            client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
+        } catch (InvalidPayloadException e) {
+            e.printStackTrace();
+        }
 
         pw.flush();
 
-        if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE))
-            client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
+        if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
+            try {
+                client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
+            } catch (InvalidPayloadException e) {
+                e.printStackTrace();
+            }
+        }
 
         client.viewNext();
     }

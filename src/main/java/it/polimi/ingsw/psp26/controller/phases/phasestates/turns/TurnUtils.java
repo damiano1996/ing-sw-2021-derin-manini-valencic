@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
@@ -47,15 +48,18 @@ public class TurnUtils {
     }
 
     public static void sendChoiceNormalActionMessage(Turn turn) {
-        turn.getMatchController().notifyObservers(
-                new MultipleChoicesMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        CHOICE_NORMAL_ACTION,
-                        "Choice normal action to perform:",
-                        1, 1,
-                        ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD
-                )
-        );
+        try {
+            turn.getMatchController().notifyObservers(
+                    new MultipleChoicesMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            CHOICE_NORMAL_ACTION,
+                            "Choice normal action to perform:",
+                            1, 1,
+                            ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD
+                    )
+            );
+        } catch (InvalidPayloadException ignored) {
+        }
     }
 
     /**
@@ -88,12 +92,15 @@ public class TurnUtils {
      * @param message     payload of the message
      */
     private static void sendMessageToTurnPlayer(Turn turn, MessageType messageType, String message) {
-        turn.getMatchController().notifyObservers(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        messageType,
-                        message
-                )
-        );
+        try {
+            turn.getMatchController().notifyObservers(
+                    new SessionMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            messageType,
+                            message
+                    )
+            );
+        } catch (InvalidPayloadException ignored) {
+        }
     }
 }

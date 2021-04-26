@@ -4,7 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class NetworkHandler extends Observable<Message> implements Observer<Mess
         try {
 //            System.out.println("NetworkHandler - " + message.toString());
             sendToServer(new SessionMessage(sessionToken, message.getMessageType(), message.getArrayPayloads()));
-        } catch (IOException | EmptyPayloadException e) {
+        } catch (IOException | InvalidPayloadException e) {
             e.printStackTrace();
         }
     }

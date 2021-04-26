@@ -8,7 +8,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Chec
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
@@ -100,7 +100,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 default:
                     sendChoiceNormalActionMessage(turn);
             }
-        } catch (EmptyPayloadException ignored) {
+        } catch (InvalidPayloadException ignored) {
         }
     }
 
@@ -146,14 +146,17 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             turn.changeState(new CheckVaticanReportTurnState(turn));
             turn.play(message);
         } else {
-            turn.getMatchController().notifyObservers(
-                    new MultipleChoicesMessage(
-                            turn.getTurnPlayer().getSessionToken(),
-                            CHOICE_CARDS_TO_ACTIVATE,
-                            "Choose the development cards to activate:",
-                            1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
-                            turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
-                    ));
+            try {
+                turn.getMatchController().notifyObservers(
+                        new MultipleChoicesMessage(
+                                turn.getTurnPlayer().getSessionToken(),
+                                CHOICE_CARDS_TO_ACTIVATE,
+                                "Choose the development cards to activate:",
+                                1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
+                                turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
+                        ));
+            } catch (InvalidPayloadException ignored) {
+            }
         }
 
     }

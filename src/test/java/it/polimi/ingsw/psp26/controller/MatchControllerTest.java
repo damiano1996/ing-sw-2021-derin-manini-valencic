@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +21,13 @@ public class MatchControllerTest {
     }
 
     @Test
-    public void testAddPlayer() {
+    public void testAddPlayer() throws InvalidPayloadException {
         matchController.update(new SessionMessage("sessionToken", MessageType.ADD_PLAYER, "nickname"));
         assertEquals("sessionToken", matchController.getMatch().getPlayers().get(0).getSessionToken());
     }
 
     @Test
-    public void testIsWaitingForPlayers() {
+    public void testIsWaitingForPlayers() throws InvalidPayloadException {
         matchController.setMaxNumberOfPlayers(1);
         assertTrue(matchController.isWaitingForPlayers());
         testAddPlayer();

@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.model;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -44,7 +45,10 @@ public class Player extends Observable<SessionMessage> {
         leaderCards = new ArrayList<>();
 
         // notifyObservers(new Message());
-        notifyObservers(new SessionMessage(sessionToken, MessageType.PERSONAL_BOARD, this));
+        try {
+            notifyObservers(new SessionMessage(sessionToken, MessageType.PERSONAL_BOARD, this));
+        } catch (InvalidPayloadException ignored) {
+        }
     }
 
     /**

@@ -189,7 +189,7 @@ public class DisplayWarehousePlacer {
         pw.print(cliUtils.hSpace(20) + "Depot number: ");
         pw.flush();
     }
-    
+
 
     /**
      * Sets the parameters to control the insertion process
@@ -254,7 +254,8 @@ public class DisplayWarehousePlacer {
 
         String depotIndex = in.nextLine();
 
-        if (depotIndex.isEmpty() || ViewUtils.checkAsciiRange(depotIndex.charAt(0))) throw new DepotOutOfBoundException();
+        if (depotIndex.isEmpty() || ViewUtils.checkAsciiRange(depotIndex.charAt(0)))
+            throw new DepotOutOfBoundException();
         if ((Integer.parseInt(depotIndex) - 1) >= warehouseDepotSize || (Integer.parseInt(depotIndex) - 1) < 0)
             throw new DepotOutOfBoundException();
 

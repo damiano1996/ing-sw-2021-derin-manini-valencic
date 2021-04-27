@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendChoiceNormalActionMessage;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class ActivateProductionNormalActionTurnState extends TurnState {
@@ -49,55 +50,65 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                 case CHOICE_CARDS_TO_ACTIVATE:
                     productionActivated = castElements(Production.class, message.getListPayloads());
+
                     for (Production production : productionActivated) {
+
                         if (production.getProductionCost().containsKey(Resource.UNKNOWN))
                             numOfUnknownCost += production.getProductionCost().get(Resource.UNKNOWN);
+
                         if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
                             numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
                     }
                     if (numOfUnknownCost != 0) {
-                        new SessionMessage(
-                                turn.getTurnPlayer().getSessionToken(),
-                                GENERAL_MESSAGE,
-                                "Choose the resource to pay that replaces the unknown resource in the production:"
-                        );
+                        sendGeneralMessage(turn, "Choose the resource to pay that replaces the unknown resource in the production:");
+
                         turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost));
                         turn.play(message);
+
                     } else if (numOfUnknownProd != 0) {
-                        new SessionMessage(
-                                turn.getTurnPlayer().getSessionToken(),
-                                GENERAL_MESSAGE,
-                                "Choose the resource that you want back of the unknown resource in the production:"
-                        );
+                        sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
+
                         turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
                         turn.play(message);
+
                     } else {
+
                         play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
+
                     }
                     break;
 
                 case CHOICE_RESOURCE:
+
                     if (unknownCostResources == null || unknownCostResources.size() == numOfUnknownCost) {
-                        if (numOfUnknownProd != 0)
-                            unknownProdResources = castElements(Resource.class, message.getListPayloads());
+
+                        if (numOfUnknownProd != 0) unknownProdResources = castElements(Resource.class, message.getListPayloads());
+
                         activateProduction(message);
+
                     } else {
                         unknownCostResources = castElements(Resource.class, message.getListPayloads());
+
                         if (numOfUnknownProd != 0) {
                             new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
                                     GENERAL_MESSAGE,
                                     "Choose the resource that you want back of the unknown resource in the production:"
                             );
+
                             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
                             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE));
+
                         } else {
+
                             play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
+
                         }
 
                     }
                     break;
                 default:
+
                     sendChoiceNormalActionMessage(turn);
             }
         } catch (InvalidPayloadException ignored) {
@@ -172,8 +183,12 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 }
             }
             if (unknownProdResources != null) resourcesProduced.addAll(unknownProdResources);
-            resourcesProduced.stream().filter(x -> x.equals(Resource.FAITH_MARKER)).forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
-            resourcesProduced = resourcesProduced.stream().filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
+            resourcesProduced.stream()
+                    .filter(x -> x.equals(Resource.FAITH_MARKER))
+                    .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
+            resourcesProduced = resourcesProduced.stream()
+                    .filter(x -> !x.equals(Resource.FAITH_MARKER))
+                    .collect(Collectors.toList());
 
             try {
                 turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);

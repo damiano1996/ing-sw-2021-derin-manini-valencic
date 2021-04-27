@@ -9,7 +9,9 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
 import org.junit.Before;
@@ -85,7 +87,8 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
 
-        assertEquals(MessageType.CHOICE_RESOURCE, mitm.getMessages().get(0).getMessageType());
+        assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
+        assertEquals(MessageType.CHOICE_RESOURCE, mitm.getMessages().get(1).getMessageType());
 
     }
 
@@ -104,13 +107,32 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
+    public void testSendChoiceResourceToActivateCostUnknownLeaderProduction() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
+
+        leaderCardSetter();
+        List<Resource> resource2 = new ArrayList<>();
+        if (turn.getTurnPlayer().getLeaderCards().size() > 0) {
+
+            Resource leaderResource = turn.getTurnPlayer().getLeaderCards().get(0).getAbilityResource();
+            resource2.add(Resource.STONE);
+            turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(leaderResource);
+
+            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(1)));
+            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
+
+            assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
+            assertArrayEquals(resource2.toArray(), turn.getTurnPlayer().getPersonalBoard().getStrongbox().toArray());
+        }
+    }
+
+    @Test
     public void testSendChoiceResourceToActivateNotEnoughResources() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
 
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
 
         playCollection();
 
-        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(4).getMessageType());
+        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(5).getMessageType());
     }
 
     private void playCollection() throws InvalidPayloadException {
@@ -128,6 +150,19 @@ public class ActivateProductionNormalActionTurnStateTest {
             }
         }
         return resourceProduced;
+    }
+
+    private void leaderCardSetter() {
+        List<LeaderCard> leaderCards = new ArrayList<>();
+        List<LeaderCard> leaderCardsAdded = new ArrayList<>();
+
+        leaderCards.addAll(phase.getMatchController().getMatch().drawLeaders(8));
+        leaderCardsAdded.addAll(leaderCards.stream().filter(x -> x.getAbilityToString().contains("ProductionAbility")).collect(Collectors.toList()));
+        if(leaderCardsAdded.size() > 0) {
+            turn.getTurnPlayer().setLeaderCards(leaderCardsAdded.subList(0, 1));
+            turn.getTurnPlayer().getLeaderCards().get(0).activate(turn.getTurnPlayer());
+        }
+
     }
 
 

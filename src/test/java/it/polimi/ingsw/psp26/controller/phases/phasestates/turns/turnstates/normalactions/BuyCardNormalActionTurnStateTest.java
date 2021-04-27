@@ -13,11 +13,16 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static org.junit.Assert.assertEquals;
@@ -98,6 +103,34 @@ public class BuyCardNormalActionTurnStateTest {
 
     }
 
+    @Test
+    public void testSendCardToBuyWithLeadersActive() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
+
+        DevelopmentCard  card = buyCardResourceSetter();
+        leaderCardSetter();
+
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
+        assertEquals(MessageType.CHOICE_POSITION, mitm.getMessages().get(1).getMessageType());
+
+    }
+
+    @Test
+    public void testSendPositionCardBoughtWithLeadersActive() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
+
+        DevelopmentCard  card = buyCardResourceSetter();
+        leaderCardSetter();
+
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_POSITION, 1));
+
+
+        Assert.assertEquals(turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards().get(0), card);
+
+
+    }
+
     private DevelopmentCard buyCardResourceSetter() throws CanNotAddResourceToStrongboxException {
         DevelopmentCard card = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
         for (Resource resource : card.getCost().keySet()) {
@@ -106,5 +139,30 @@ public class BuyCardNormalActionTurnStateTest {
             }
         }
         return card;
+    }
+
+    private void leaderCardSetter(){
+        List<LeaderCard> leaderCards = new ArrayList<>();
+        List<LeaderCard> leaderCardsAdded = new ArrayList<>();
+        List<Resource> resourceToRemove = new ArrayList<>();
+        int modified = 0;
+        leaderCards.addAll(phase.getMatchController().getMatch().drawLeaders(8));
+
+        for(Resource resource : turn.getTurnPlayer().getPersonalBoard().getStrongbox()){
+            modified = leaderCardsAdded.size();
+            leaderCardsAdded.addAll(leaderCards.stream().filter(x -> x.getAbilityResource().equals(resource)).filter(x -> x.getAbilityToString().contains("ResourceDiscountAbility")).collect(Collectors.toList()));
+            if(leaderCardsAdded.size() != modified){
+                resourceToRemove.add(resource);
+            }
+        }
+        if(leaderCardsAdded.size() > 0){
+            turn.getTurnPlayer().setLeaderCards(leaderCardsAdded);
+            for(LeaderCard leaderCard : leaderCardsAdded){
+                turn.getTurnPlayer().getPersonalBoard().grabResourcesFromStrongbox(resourceToRemove.get(0), 1);
+                resourceToRemove.remove(0);
+                leaderCard.activate(turn.getTurnPlayer());
+            }
+        }
+
     }
 }

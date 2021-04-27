@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
@@ -13,7 +15,7 @@ public abstract class SpecialAbility {
         this.resource = resource;
     }
 
-    public void execute(Player player) {
+    public void execute(TurnState turn) {
     }
 
     public void activate(Player player) {

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model.leadercards;
 
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -64,10 +65,10 @@ public class LeaderCard {
     /**
      * Method to execute the special ability.
      *
-     * @param ownerPlayer player that is owner of this leader
+     * @param currentTurnState turnState in which the leader is called
      */
-    public void execute(Player ownerPlayer) {
-        specialAbility.execute(ownerPlayer);
+    public void execute(TurnState currentTurnState) {
+        if(isActive()) specialAbility.execute(currentTurnState);
     }
 
     /**

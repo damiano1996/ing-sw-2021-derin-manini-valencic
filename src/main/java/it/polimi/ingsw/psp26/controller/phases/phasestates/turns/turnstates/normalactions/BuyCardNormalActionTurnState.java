@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtil
 
 public class BuyCardNormalActionTurnState extends TurnState {
     DevelopmentCard boughtCard = null;
+    List<Resource> tempResources = new ArrayList<>();
 
     public BuyCardNormalActionTurnState(Turn turn) {
         super(turn);
@@ -30,6 +32,11 @@ public class BuyCardNormalActionTurnState extends TurnState {
         try {
             switch (message.getMessageType()) {
                 case CHOICE_NORMAL_ACTION:
+
+                    for(LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
+                        leader.execute(this);
+                    }
+
                     turn.getMatchController().notifyObservers(
                             new MultipleChoicesMessage(
                                     turn.getTurnPlayer().getSessionToken(),
@@ -42,11 +49,15 @@ public class BuyCardNormalActionTurnState extends TurnState {
                     break;
                 case CHOICE_CARD_TO_BUY:
                     if (getAvailableCard().contains((DevelopmentCard) message.getPayload())) {
+
                         try {
+
                             boughtCard = buyCard((DevelopmentCard) message.getPayload());
+
                         } catch (NegativeNumberOfElementsToGrabException e) {
                             e.printStackTrace();
                         }
+
                         turn.getMatchController().notifyObservers(
                                 new MultipleChoicesMessage(
                                         turn.getTurnPlayer().getSessionToken(),
@@ -56,6 +67,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                         positionsForCard().toArray(new Object[0])
                                 ));
                     } else {
+
                         turn.getMatchController().notifyObservers(
                                 new MultipleChoicesMessage(
                                         turn.getTurnPlayer().getSessionToken(),
@@ -86,6 +98,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
     private List<DevelopmentCard> getAvailableCard() {
         List<DevelopmentCard> availableCard = new ArrayList<>();
         List<Integer> feasibleLevels = new ArrayList<>();
+
         if (turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards().size() < 3) feasibleLevels.add(1);
         feasibleLevels.addAll(turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards().stream().map(x -> x.getDevelopmentCardType().getLevel().getLevelNumber() + 1).distinct().collect(Collectors.toList()));
 
@@ -93,10 +106,12 @@ public class BuyCardNormalActionTurnState extends TurnState {
         for (DevelopmentCard card : turn.getMatchController().getMatch().getDevelopmentGrid().getAllVisibleCards()) {
             for (Resource resource : card.getCost().keySet()) {
                 if (isAvailable) {
-                    if (turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().stream().filter(x -> x.equals(resource)).count() < card.getCost().get(resource).intValue())
+                    if (turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().stream().filter(x -> x.equals(resource)).count()
+                            < (card.getCost().get(resource).intValue()  - tempResources.stream().filter(x -> x.equals(resource)).count()))
                         isAvailable = false;
                 }
             }
+
             if (isAvailable && feasibleLevels.contains(card.getDevelopmentCardType().getLevel().getLevelNumber()))
                 availableCard.add(card);
             isAvailable = true;
@@ -115,7 +130,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
         } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) {
         }
         for (Resource resource : drawnCard.getCost().keySet()) {
-            numberResources = drawnCard.getCost().get(resource);
+            numberResources = drawnCard.getCost().get(resource) - (int) tempResources.stream().filter(x -> x.equals(resource)).count();
             numberResources -= turn.getTurnPlayer().getPersonalBoard().getWarehouse().grabResources(resource, numberResources).size();
             if (numberResources > 0)
                 turn.getTurnPlayer().getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
@@ -153,6 +168,9 @@ public class BuyCardNormalActionTurnState extends TurnState {
         }
 
     }
+
+    public List<Resource> getTempResources(){ return tempResources; }
+
 
 
 }

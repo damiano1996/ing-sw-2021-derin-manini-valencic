@@ -5,11 +5,21 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 
+/**
+ * Class to collect common method used for serialization purposes.
+ */
 public class SerializerUtils {
 
-    public static Type typeForName(final JsonElement typeElem) {
+    /**
+     * Method that returns the type of a give json element.
+     *
+     * @param jsonElement element type
+     * @return type of the element
+     * @throws JsonParseException if json element can not be parsed
+     */
+    public static Type typeFromJsonElement(JsonElement jsonElement) throws JsonParseException {
         try {
-            return Class.forName(typeElem.getAsString());
+            return Class.forName(jsonElement.getAsString());
         } catch (ClassNotFoundException e) {
             throw new JsonParseException(e);
         }

@@ -4,7 +4,7 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-import static it.polimi.ingsw.psp26.application.messages.serialization.serializers.SerializerUtils.typeForName;
+import static it.polimi.ingsw.psp26.application.messages.serialization.serializers.SerializerUtils.typeFromJsonElement;
 
 /**
  * Class to serialize abstract classes.
@@ -36,11 +36,11 @@ public class AbstractClassSerializer<T> implements JsonSerializer<T>, JsonDeseri
      * Method to deserialize the abstract class.
      * It reads the parameter that is referring to the class type and re-assemble the object.
      *
-     * @param jsonElement                generic object to be serialized
+     * @param jsonElement                json to deserialize
      * @param type                       deserialization type
      * @param jsonDeserializationContext deserialization context
      * @return deserialized object
-     * @throws JsonParseException if class type not found
+     * @throws JsonParseException if class type not found, or if json is not parsed correctly
      */
     @Override
     public T deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
@@ -49,7 +49,7 @@ public class AbstractClassSerializer<T> implements JsonSerializer<T>, JsonDeseri
         JsonElement typeString = jsonObject.get("class");
         JsonElement data = jsonObject.get("data");
 
-        Type actualType = typeForName(typeString);
+        Type actualType = typeFromJsonElement(typeString);
 
         return jsonDeserializationContext.deserialize(data, actualType);
     }

@@ -17,7 +17,7 @@ public enum Level {
     public int getLevelNumber() {
         return levelNumber;
     }
-    
+
     public String getLevelName() {
         return levelName;
     }

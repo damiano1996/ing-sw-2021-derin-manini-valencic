@@ -97,10 +97,10 @@ public class CliTest {
         developmentGrid.drawCard(Color.GREEN, Level.FIRST);
         developmentGrid.drawCard(Color.GREEN, Level.FIRST);
         developmentCardsCli.displayDevelopmentCardSelection(developmentGrid);
-        
+
         //marketCli.displayMarketSelection(marketTray);
-        
-        
+
+
         //testWarehouseConfiguration();
         testFaithTrackMovement();
         testMarket();

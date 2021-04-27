@@ -131,7 +131,7 @@ public class CLI implements ViewInterface {
         personalBoardCli.displayInkwell(isPrintable, 5, 190);
     }
 
-    
+
     @Override
     public void displayPersonalBoard(Player player) {
         personalBoardCli.displayPersonalBoard(player, isMultiPlayerMode);
@@ -167,7 +167,7 @@ public class CLI implements ViewInterface {
         faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
     }
 
-    
+
     @Override
     public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
         personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
@@ -203,14 +203,14 @@ public class CLI implements ViewInterface {
         personalBoardCli.displayProductionActivation(productions);
     }
 
-    
+
     public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
         cliUtils.cls();
         leaderCardsCli.printMultipleLeaders(leaderCards, 3);
         cliUtils.vSpace(3);
     }
 
-    
+
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
         personalBoardCli.displayActionTokens(unusedTokens);
@@ -227,8 +227,8 @@ public class CLI implements ViewInterface {
         }
         displayNext();
     }
-    
-    
+
+
     @Override
     public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid) {
         List<DevelopmentCard> choice = new ArrayList<>();

@@ -3,7 +3,6 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
-import it.polimi.ingsw.psp26.application.messages.specialpayloads.MarketPayload;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
@@ -41,8 +40,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                                     turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_ROW_COLUMN,
                                     "Choose a number between 0 to 6 where 0-2 refers to columns and 3-6 refers to rows",
-                                    1, 1,
-                                    new MarketPayload(turn.getMatchController().getMatch().getMarketTray())
+                                    1, 1
+                                    // new MarketPayload(turn.getMatchController().getMatch().getMarketTray())
                             ));
 
                     break;

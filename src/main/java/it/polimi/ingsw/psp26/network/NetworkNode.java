@@ -3,6 +3,10 @@ package it.polimi.ingsw.psp26.network;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Class to model a node of the network.
+ * It contains input and output streams to receive and send messages over the network.
+ */
 public class NetworkNode {
 
     private final Socket socket;
@@ -18,6 +22,12 @@ public class NetworkNode {
     private final BufferedReader bufferedReader;
     private final ObjectInputStream objectInputStream;
 
+    /**
+     * Constructor of the class.
+     *
+     * @param socket socket to receive and send data
+     * @throws IOException if stream instantiation error
+     */
     public NetworkNode(Socket socket) throws IOException {
         this.socket = socket;
 
@@ -33,22 +43,51 @@ public class NetworkNode {
         objectInputStream = new ObjectInputStream(inputStream);
     }
 
+    /**
+     * Method to send string data.
+     *
+     * @param data data to send
+     */
     public void sendData(String data) {
         printWriter.println(data);
     }
 
+    /**
+     * Method to send data object.
+     *
+     * @param data data to send
+     * @throws IOException if object can not be sent
+     */
     public void sendData(Object data) throws IOException {
         objectOutputStream.writeObject(data);
     }
 
+    /**
+     * Method to receive string data.
+     *
+     * @return string line
+     * @throws IOException if data can not be read
+     */
     public String receiveStringData() throws IOException {
         return bufferedReader.readLine();
     }
 
+    /**
+     * Method to receive an object.
+     *
+     * @return received object
+     * @throws IOException            if object can not be read
+     * @throws ClassNotFoundException if object class not found
+     */
     public Object receiveObjectData() throws IOException, ClassNotFoundException {
         return objectInputStream.readObject();
     }
 
+    /**
+     * Method to close socket connection.
+     *
+     * @throws IOException if connection can not be closed
+     */
     public void closeConnection() throws IOException {
         socket.close();
     }

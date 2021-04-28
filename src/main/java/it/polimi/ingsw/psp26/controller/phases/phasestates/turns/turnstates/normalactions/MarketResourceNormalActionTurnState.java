@@ -3,9 +3,11 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.nor
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacerTurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -95,14 +97,11 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         isRedMarblePresent();
         tempResources = parseResource();
 
-//        turn.getMatchController().notifyObservers(
-//                new SessionMessage(
-//                        turn.getTurnPlayer().getSessionToken(),
-//                        MessageType.CHOICE_ROW_COLUMN,
-//                        tempResources.toArray(new Object[0])
-//                ));
-
-        turn.changeState(new ResourcesWarehousePlacerTurnState(turn, tempResources));
+        if(tempResources.size() > 0) {
+            turn.changeState(new ResourcesWarehousePlacerTurnState(turn, tempResources));
+        }else{
+            turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_ACTION_TO_END));
+        }
         turn.play(message);
     }
 

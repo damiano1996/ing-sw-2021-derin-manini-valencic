@@ -87,7 +87,7 @@ public class OneResourceTurnState extends TurnState {
                             MessageType.CHOICE_RESOURCE,
                             "Choice resource:",
                             1, 1,
-                            resourcesOptions
+                            resourcesOptions.toArray(new Object[0])
                     )
             );
         } catch (InvalidPayloadException ignored) {

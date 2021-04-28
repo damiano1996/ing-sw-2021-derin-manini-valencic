@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.view.cli;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.exceptions.QuitDisplayChoicesException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -16,6 +17,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.utils.ViewUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.PrintWriter;
@@ -115,11 +117,6 @@ public class CLI implements ViewInterface {
     }
 
 
-//    public void displayLeaderChoice(List<LeaderCard> leaderCards) {
-//        leaderCardsCli.displayLeaderSelection(leaderCards);
-//    }
-
-
     @Override
     public void displayLeaderCards(List<LeaderCard> leaderCards) {
         personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
@@ -134,6 +131,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayPersonalBoard(Player player) {
+        cliUtils.cls();
         personalBoardCli.displayPersonalBoard(player, isMultiPlayerMode);
         displayNext();
     }
@@ -201,6 +199,7 @@ public class CLI implements ViewInterface {
     @Override
     public void displayProductionActivation(List<Production> productions) {
         personalBoardCli.displayProductionActivation(productions);
+        cliUtils.vSpace(5);
     }
 
 
@@ -237,6 +236,7 @@ public class CLI implements ViewInterface {
             client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
         } catch (InvalidPayloadException ignored) {
         }
+        cliUtils.setCursorBottomLeft();
         displayNext();
     }
 
@@ -285,8 +285,6 @@ public class CLI implements ViewInterface {
             e.printStackTrace();
         }
 
-        pw.flush();
-
         if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
             try {
                 client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
@@ -298,28 +296,46 @@ public class CLI implements ViewInterface {
         client.viewNext();
     }
 
-    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices) {
-        Scanner in = new Scanner(System.in);
-        List<Integer> choices = new ArrayList<>();
 
+    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices) {
+        List<Integer> choices = new ArrayList<>();
+        int itemInt;
+        
         pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
 
         while (choices.size() < maxChoices) {
             pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'q' - to quit): ");
-
             pw.flush();
-            String item = in.nextLine();
-            if (item.equals("q") && choices.size() >= minChoices) break;
-            int itemInt = Integer.parseInt(item) - 1;
-
-            if (!choices.contains(itemInt))
-                choices.add(itemInt);
+            
+            try {
+                itemInt = getCorrectChoice(choices.size(), minChoices, nChoices);
+                if (!choices.contains(itemInt)) choices.add(itemInt);
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                cliUtils.vSpace(1);
+                pw.print(cliUtils.hSpace(3) + cliUtils.pCS("INCORRECT CHOICE INSERTED", Color.RED));
+                cliUtils.vSpace(3);
+            } catch (QuitDisplayChoicesException e) {
+                break;
+            }
         }
-
-        pw.flush();
 
         return choices;
     }
+
+
+    private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices) throws IndexOutOfBoundsException, QuitDisplayChoicesException {
+        Scanner in = new Scanner(System.in);
+        String item = in.nextLine();
+        
+        if (item.equals("q") && numOfChoices >= minChoices) throw new QuitDisplayChoicesException();
+        if (item.isEmpty() || ViewUtils.checkAsciiRange(item.charAt(0))) throw new IndexOutOfBoundsException();
+        
+        int itemInt = Integer.parseInt(item) - 1;
+        if (itemInt < 0 || itemInt >= nChoices) throw new IndexOutOfBoundsException();
+        
+        return itemInt;
+    }
+
 
     private void displayMultipleStringChoices(List<Object> choices) {
         for (int i = 0; i < choices.size(); i++) {
@@ -327,6 +343,7 @@ public class CLI implements ViewInterface {
             pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + choices.get(i));
         }
     }
+
 
     @Override
     public void displayText(String text) {
@@ -337,10 +354,12 @@ public class CLI implements ViewInterface {
         displayNext();
     }
 
+
     @Override
     public void displayEndGame(HashMap<String, Integer> playersVictoryPoints) {
         //To be implemented
     }
+
 
     @Override
     public void displayError(String error) {
@@ -356,9 +375,11 @@ public class CLI implements ViewInterface {
         cliUtils.setCursorPosition(26, 81);
         for (int i = 0; i < error.length() + 8; i++) pw.print(cliUtils.pCS("=", Color.RED));
         pw.flush();
+        cliUtils.vSpace(5);
 
         displayNext();
     }
+
 
     private void displayNext() {
         Scanner in = new Scanner(System.in);

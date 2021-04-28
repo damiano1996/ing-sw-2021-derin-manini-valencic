@@ -162,8 +162,8 @@ public class DisplayWarehousePlacer {
         String depotString = in.nextLine();
 
         if (depotString.isEmpty()) throw new DepotOutOfBoundException();
-        if (depotString.charAt(0) == 'd') throw new SkipResourceException();
-        if (depotString.charAt(0) == 'c') throw new ChangeResourcesBetweenDepotsException();
+        if (depotString.equals("d")) throw new SkipResourceException();
+        if (depotString.equals("c")) throw new ChangeResourcesBetweenDepotsException();
         if (ViewUtils.checkAsciiRange(depotString.charAt(0))) throw new DepotOutOfBoundException();
 
         int depotIndex = Integer.parseInt(depotString) - 1;

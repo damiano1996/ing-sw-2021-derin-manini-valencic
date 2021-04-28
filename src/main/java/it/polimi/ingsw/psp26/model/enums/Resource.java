@@ -7,7 +7,7 @@ public enum Resource {
     SHIELD("   Shield   ", Color.BLUE),
     FAITH_MARKER("Faith Marker", Color.RED),
     EMPTY("Empty", Color.WHITE),
-    UNKNOWN("Unknown", Color.BLACK);
+    UNKNOWN("Unknown", Color.WHITE);
 
     private final String name;
     private final Color color;

@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 import static org.junit.Assert.assertEquals;
 
 public class MarketResourceNormalActionTurnStateTest {
@@ -110,12 +109,10 @@ public class MarketResourceNormalActionTurnStateTest {
 
 
     private List<Resource> leaderCardSetter(int leaderNumber) {
-        List<LeaderCard> leaderCards = new ArrayList<>();
-        List<LeaderCard> leaderCardsAdded = new ArrayList<>();
         List<Resource> marbleTypeSubstitute = new ArrayList<>();
 
-        leaderCards.addAll(phase.getMatchController().getMatch().drawLeaders(8));
-        leaderCardsAdded.addAll(leaderCards.stream().filter(x -> x.getAbilityToString().contains("WhiteMarbleAbility")).collect(Collectors.toList()));
+        List<LeaderCard> leaderCards = new ArrayList<>(phase.getMatchController().getMatch().drawLeaders(8));
+        List<LeaderCard> leaderCardsAdded = leaderCards.stream().filter(x -> x.getAbilityToString().contains("WhiteMarbleAbility")).collect(Collectors.toList());
 
         if (leaderCardsAdded.size() >= leaderNumber) {
 

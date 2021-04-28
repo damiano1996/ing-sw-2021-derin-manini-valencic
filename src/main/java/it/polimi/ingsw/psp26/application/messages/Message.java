@@ -51,7 +51,6 @@ public class Message implements Serializable {
             payloadsClasses = new ArrayList<>();
 
             for (Object payload : payloads) {
-                System.out.println(payload.getClass());
                 payloadsClasses.add(payload.getClass());
                 jsonPayloads.add(GsonConverter.getInstance().getGson().toJson(payload, payload.getClass()));
             }

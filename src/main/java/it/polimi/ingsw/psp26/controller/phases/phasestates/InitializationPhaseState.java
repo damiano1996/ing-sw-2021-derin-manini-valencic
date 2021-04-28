@@ -1,10 +1,14 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
+
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendSessionMessageToAllPlayers;
 
 public class InitializationPhaseState extends PhaseState {
 
@@ -28,6 +32,11 @@ public class InitializationPhaseState extends PhaseState {
             if (phase.getMatchController().getMatch().getPlayers().size() == phase.getMatchController().getMaxNumberOfPlayers()) {
                 // Communicating to match controller that we reached the maximum number of players.
                 phase.getMatchController().stopWaitingForPlayers();
+                try {
+                    sendSessionMessageToAllPlayers(phase.getMatchController(), new Message(MessageType.GENERAL_MESSAGE, "The match can begin!"));
+                } catch (InvalidPayloadException e) {
+                    e.printStackTrace();
+                }
                 // Updating the state. The match can begin!
                 phase.changeState(new PlayingPhaseState(phase));
                 phase.execute(message);

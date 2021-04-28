@@ -1,8 +1,10 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 
 public class PlayingPhaseState extends PhaseState {
@@ -37,6 +39,10 @@ public class PlayingPhaseState extends PhaseState {
                 phase.getMatchController(),
                 getNextPlayer(),
                 nextTurnNUmber);
+        try {
+            currentTurn.play(new SessionMessage(currentTurn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
+        } catch (InvalidPayloadException ignored) {
+        }
     }
 
     private Player getNextPlayer() {

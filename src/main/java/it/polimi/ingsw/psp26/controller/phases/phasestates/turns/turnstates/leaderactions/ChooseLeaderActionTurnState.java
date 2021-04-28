@@ -6,7 +6,6 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 
@@ -27,6 +26,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
      */
     public ChooseLeaderActionTurnState(Turn turn, TurnPhase turnPhase) {
         super(turn);
+        System.out.println("ChooseLeaderActionTurnState - turn phase:" + turnPhase);
         turn.setTurnPhase(turnPhase);
     }
 
@@ -43,10 +43,6 @@ public class ChooseLeaderActionTurnState extends TurnState {
         System.out.println("ChooseLeaderActionTurnState - message received: " + message.toString());
 
         if (!turn.getTurnPlayer().isLeaderActionPlayable()) {
-            // if leader action is not playable we can go directly to the choose normal action state:
-            //turn.changeState(new ChooseNormalActionTurnState(turn));
-            // and play it directly, forwarding the message:
-            //turn.play(message);
             goToNextStateAfterLeaderAction(turn, message);
 
         } else {
@@ -65,8 +61,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
                             break;
 
                         case SKIP_LEADER_ACTION:
-                            turn.changeState(new ChooseNormalActionTurnState(turn));
-                            turn.play(message);
+                            goToNextStateAfterLeaderAction(turn, message);
                             break;
 
                     }

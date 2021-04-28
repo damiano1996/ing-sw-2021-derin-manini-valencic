@@ -9,7 +9,6 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -158,7 +157,7 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         leaderCards.addAll(phase.getMatchController().getMatch().drawLeaders(8));
         leaderCardsAdded.addAll(leaderCards.stream().filter(x -> x.getAbilityToString().contains("ProductionAbility")).collect(Collectors.toList()));
-        if(leaderCardsAdded.size() > 0) {
+        if (leaderCardsAdded.size() > 0) {
             turn.getTurnPlayer().setLeaderCards(leaderCardsAdded.subList(0, 1));
             turn.getTurnPlayer().getLeaderCards().get(0).activate(turn.getTurnPlayer());
         }

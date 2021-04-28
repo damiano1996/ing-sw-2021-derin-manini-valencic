@@ -253,7 +253,8 @@ public class CLI implements ViewInterface {
             case MULTI_OR_SINGLE_PLAYER_MODE:
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
-                displayMultipleMessageTypeChoices(choices);
+            case CHOICE_POSITION:
+                displayMultipleStringChoices(choices);
                 break;
 
             case CHOICE_LEADERS:
@@ -320,7 +321,7 @@ public class CLI implements ViewInterface {
         return choices;
     }
 
-    private void displayMultipleMessageTypeChoices(List<Object> choices) {
+    private void displayMultipleStringChoices(List<Object> choices) {
         for (int i = 0; i < choices.size(); i++) {
             cliUtils.vSpace(1);
             pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + choices.get(i));

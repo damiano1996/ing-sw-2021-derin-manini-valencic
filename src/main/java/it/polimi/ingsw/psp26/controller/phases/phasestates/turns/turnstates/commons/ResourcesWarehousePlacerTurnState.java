@@ -164,7 +164,8 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
      */
     private boolean isDuplicate(List<Resource> resources) {
         List<Integer> multiplicity = resources.stream().map(x -> Collections.frequency(resources, x)).collect(Collectors.toList());
-        return !multiplicity.stream().allMatch(x -> x == 1);
+        System.out.println(multiplicity);
+        return multiplicity.stream().anyMatch(x -> x != 1);
     }
 
     /**

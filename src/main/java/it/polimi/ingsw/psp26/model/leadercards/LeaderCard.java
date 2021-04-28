@@ -68,7 +68,7 @@ public class LeaderCard {
      * @param currentTurnState turnState in which the leader is called
      */
     public void execute(TurnState currentTurnState) {
-        if(isActive()) specialAbility.execute(currentTurnState);
+        if (isActive()) specialAbility.execute(currentTurnState);
     }
 
     /**

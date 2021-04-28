@@ -33,7 +33,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
             switch (message.getMessageType()) {
                 case CHOICE_NORMAL_ACTION:
 
-                    for(LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
+                    for (LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
                         leader.execute(this);
                     }
 
@@ -107,7 +107,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
             for (Resource resource : card.getCost().keySet()) {
                 if (isAvailable) {
                     if (turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().stream().filter(x -> x.equals(resource)).count()
-                            < (card.getCost().get(resource).intValue()  - tempResources.stream().filter(x -> x.equals(resource)).count()))
+                            < (card.getCost().get(resource).intValue() - tempResources.stream().filter(x -> x.equals(resource)).count()))
                         isAvailable = false;
                 }
             }
@@ -169,8 +169,9 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     }
 
-    public List<Resource> getTempResources(){ return tempResources; }
-
+    public List<Resource> getTempResources() {
+        return tempResources;
+    }
 
 
 }

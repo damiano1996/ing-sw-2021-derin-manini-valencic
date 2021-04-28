@@ -101,19 +101,19 @@ public class MarketResourceNormalActionTurnStateTest {
         List<Resource> marblecolors = leaderCardSetter(2);
         List<Resource> expectedResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow((2)));
         int numberOfEmpty = (int) expectedResources.stream().filter(x -> x.equals(Resource.EMPTY)).count();
-        if(marblecolors.size() == 2 && numberOfEmpty != 0) {
+        if (marblecolors.size() == 2 && numberOfEmpty != 0) {
 
             expectedResources = expectedResources.stream().filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
             expectedResources.replaceAll(r -> r.equals(Resource.EMPTY) ? marblecolors.get(0) : r);
 
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
-            for(int i = 0; i < numberOfEmpty; i++){
+            for (int i = 0; i < numberOfEmpty; i++) {
                 turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, marblecolors.get(0)));
             }
 
             assertEquals(CHOICE_RESOURCE, mitm.getMessages().get(0).getMessageType());
-            assertEquals(CHOICE_ROW_COLUMN, mitm.getMessages().get(1 + (numberOfEmpty - 1)*2).getMessageType());
-           assertEquals(expectedResources, castElements(Resource.class, mitm.getMessages().get(1 + (numberOfEmpty - 1)*2).getListPayloads()));
+            assertEquals(CHOICE_ROW_COLUMN, mitm.getMessages().get(1 + (numberOfEmpty - 1) * 2).getMessageType());
+            assertEquals(expectedResources, castElements(Resource.class, mitm.getMessages().get(1 + (numberOfEmpty - 1) * 2).getListPayloads()));
 
 
         }

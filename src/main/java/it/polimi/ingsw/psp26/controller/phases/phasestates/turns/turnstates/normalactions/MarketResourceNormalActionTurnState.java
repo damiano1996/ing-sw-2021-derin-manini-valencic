@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -9,7 +8,6 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.comm
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.ResourcesWarehousePlacerTurnState;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 
@@ -34,33 +32,30 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         try {
             switch (message.getMessageType()) {
                 case CHOICE_NORMAL_ACTION:
-                    int[] rowColumnInts = {0, 1, 2, 3, 4, 5, 6};
                     turn.getMatchController().notifyObservers(
-                            new MultipleChoicesMessage(
+                            new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_ROW_COLUMN,
-                                    "Choose a number between 0 to 6 where 0-2 refers to columns and 3-6 refers to rows",
-                                    1, 1
-                                    // new MarketPayload(turn.getMatchController().getMatch().getMarketTray())
+                                    turn.getMatchController().getMatch().getMarketTray()
                             ));
 
                     break;
                 case CHOICE_ROW_COLUMN:
                     boolean doubleActivation = false;
                     int RowColumnInt = (int) message.getPayload();
-                    if (RowColumnInt <= 3) {
+                    if (RowColumnInt <= 2) {
 
                         tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow((RowColumnInt)));
                         turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToColumn((RowColumnInt));
 
                     } else {
 
-                        tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnColumn((RowColumnInt - 1) % 3));
-                        turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow((RowColumnInt - 1) % 3);
+                        tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnColumn((RowColumnInt + 1) % 4));
+                        turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow((RowColumnInt + 1) % 4);
 
                     }
 
-                    if(tempResources.contains(Resource.EMPTY)) doubleActivation = applyMarbleLeaderEffect(message);
+                    if (tempResources.contains(Resource.EMPTY)) doubleActivation = applyMarbleLeaderEffect(message);
 
                     if (!doubleActivation) {
                         refactorResourceAndChangeTurn(message);
@@ -71,8 +66,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 case CHOICE_RESOURCE:
                     List<Resource> playerResourceChoice = castElements(Resource.class, message.getListPayloads());
 
-                    for(int i = 0; i < tempResources.size(); i++){
-                        if(tempResources.get(i).equals(Resource.EMPTY)) {
+                    for (int i = 0; i < tempResources.size(); i++) {
+                        if (tempResources.get(i).equals(Resource.EMPTY)) {
                             tempResources.set(i, playerResourceChoice.get(0));
                             playerResourceChoice.remove(0);
                         }
@@ -95,18 +90,17 @@ public class MarketResourceNormalActionTurnState extends TurnState {
     }
 
 
-
     private void refactorResourceAndChangeTurn(SessionMessage message) throws InvalidPayloadException {
 
         isRedMarblePresent();
         tempResources = parseResource();
 
-        turn.getMatchController().notifyObservers(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        MessageType.CHOICE_ROW_COLUMN,
-                        tempResources.toArray(new Object[0])
-                ));
+//        turn.getMatchController().notifyObservers(
+//                new SessionMessage(
+//                        turn.getTurnPlayer().getSessionToken(),
+//                        MessageType.CHOICE_ROW_COLUMN,
+//                        tempResources.toArray(new Object[0])
+//                ));
 
         turn.changeState(new ResourcesWarehousePlacerTurnState(turn, tempResources));
         turn.play(message);
@@ -118,7 +112,9 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    public List<Resource> getTempResources(){ return tempResources; }
+    public List<Resource> getTempResources() {
+        return tempResources;
+    }
 
     private boolean applyMarbleLeaderEffect(SessionMessage message) {
         List<Resource> tempResourceBeforeLeaders = new ArrayList<>();
@@ -138,7 +134,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
             }
         }
 
-        if(tempResourceLeader.size() != 0 && !tempResources.contains(Resource.EMPTY) ){
+        if (tempResourceLeader.size() != 0 && !tempResources.contains(Resource.EMPTY)) {
 
             List<Resource> leaderResources = new ArrayList<>();
             leaderResources.add(tempResources.get(tempResourceBeforeLeaders.indexOf(Resource.EMPTY)));
@@ -153,9 +149,9 @@ public class MarketResourceNormalActionTurnState extends TurnState {
             turn.play(message);
             return true;
 
-        }else{
+        } else {
 
-            if(tempResourceLeader.size() != 0 )  tempResources = tempResourceLeader;
+            if (tempResourceLeader.size() != 0) tempResources = tempResourceLeader;
 
         }
         return false;

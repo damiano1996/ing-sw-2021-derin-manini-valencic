@@ -11,6 +11,7 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
 
 /**
  * Class to models the state in which player can chose the leader action to perform.
@@ -43,9 +44,10 @@ public class ChooseLeaderActionTurnState extends TurnState {
 
         if (!turn.getTurnPlayer().isLeaderActionPlayable()) {
             // if leader action is not playable we can go directly to the choose normal action state:
-            turn.changeState(new ChooseNormalActionTurnState(turn));
+            //turn.changeState(new ChooseNormalActionTurnState(turn));
             // and play it directly, forwarding the message:
-            turn.play(message);
+            //turn.play(message);
+            goToNextStateAfterLeaderAction(turn, message);
 
         } else {
 

@@ -106,7 +106,7 @@ public class BuyCardNormalActionTurnStateTest {
     @Test
     public void testSendCardToBuyWithLeadersActive() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
 
-        DevelopmentCard  card = buyCardResourceSetter();
+        DevelopmentCard card = buyCardResourceSetter();
         leaderCardSetter();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
@@ -118,7 +118,7 @@ public class BuyCardNormalActionTurnStateTest {
     @Test
     public void testSendPositionCardBoughtWithLeadersActive() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
 
-        DevelopmentCard  card = buyCardResourceSetter();
+        DevelopmentCard card = buyCardResourceSetter();
         leaderCardSetter();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
@@ -141,23 +141,23 @@ public class BuyCardNormalActionTurnStateTest {
         return card;
     }
 
-    private void leaderCardSetter(){
+    private void leaderCardSetter() {
         List<LeaderCard> leaderCards = new ArrayList<>();
         List<LeaderCard> leaderCardsAdded = new ArrayList<>();
         List<Resource> resourceToRemove = new ArrayList<>();
         int modified = 0;
         leaderCards.addAll(phase.getMatchController().getMatch().drawLeaders(8));
 
-        for(Resource resource : turn.getTurnPlayer().getPersonalBoard().getStrongbox()){
+        for (Resource resource : turn.getTurnPlayer().getPersonalBoard().getStrongbox()) {
             modified = leaderCardsAdded.size();
             leaderCardsAdded.addAll(leaderCards.stream().filter(x -> x.getAbilityResource().equals(resource)).filter(x -> x.getAbilityToString().contains("ResourceDiscountAbility")).collect(Collectors.toList()));
-            if(leaderCardsAdded.size() != modified){
+            if (leaderCardsAdded.size() != modified) {
                 resourceToRemove.add(resource);
             }
         }
-        if(leaderCardsAdded.size() > 0){
+        if (leaderCardsAdded.size() > 0) {
             turn.getTurnPlayer().setLeaderCards(leaderCardsAdded);
-            for(LeaderCard leaderCard : leaderCardsAdded){
+            for (LeaderCard leaderCard : leaderCardsAdded) {
                 turn.getTurnPlayer().getPersonalBoard().grabResourcesFromStrongbox(resourceToRemove.get(0), 1);
                 resourceToRemove.remove(0);
                 leaderCard.activate(turn.getTurnPlayer());

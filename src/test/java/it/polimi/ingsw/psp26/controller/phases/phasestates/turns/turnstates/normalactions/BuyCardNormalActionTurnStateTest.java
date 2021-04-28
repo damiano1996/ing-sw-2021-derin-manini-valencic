@@ -73,7 +73,7 @@ public class BuyCardNormalActionTurnStateTest {
     @Test
     public void testSendCardToBuyNotEnoughResourcesPlay() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard()));
-        assertEquals(MessageType.CHOICE_CARD_TO_BUY, mitm.getMessages().get(0).getMessageType());
+        assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
 
     }
 

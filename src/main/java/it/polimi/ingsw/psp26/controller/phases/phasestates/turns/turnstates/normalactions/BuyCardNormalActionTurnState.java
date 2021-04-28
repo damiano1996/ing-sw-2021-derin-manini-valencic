@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendChoiceNormalActionMessage;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 
 public class BuyCardNormalActionTurnState extends TurnState {
     DevelopmentCard boughtCard = null;
@@ -48,36 +49,44 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
                     break;
                 case CHOICE_CARD_TO_BUY:
-                    if (getAvailableCard().contains((DevelopmentCard) message.getPayload())) {
+                    if (getAvailableCard().size() > 0) {
+                        if (getAvailableCard().contains((DevelopmentCard) message.getPayload())) {
 
-                        try {
+                            try {
 
-                            boughtCard = buyCard((DevelopmentCard) message.getPayload());
+                                boughtCard = buyCard((DevelopmentCard) message.getPayload());
 
-                        } catch (NegativeNumberOfElementsToGrabException e) {
-                            e.printStackTrace();
+                            } catch (NegativeNumberOfElementsToGrabException e) {
+                                e.printStackTrace();
+                            }
+
+                            turn.getMatchController().notifyObservers(
+                                    new MultipleChoicesMessage(
+                                            turn.getTurnPlayer().getSessionToken(),
+                                            CHOICE_POSITION,
+                                            "Choose where to place the new card:",
+                                            1, 1,
+                                            positionsForCard().toArray(new Object[0])
+                                    ));
+                        } else {
+
+                            turn.getMatchController().notifyObservers(
+                                    new MultipleChoicesMessage(
+                                            turn.getTurnPlayer().getSessionToken(),
+                                            MessageType.CHOICE_CARD_TO_BUY,
+                                            "Choose the card you want to buy:",
+                                            1, 1,
+                                            turn.getMatchController().getMatch().getDevelopmentGrid()
+                                    ));
+
                         }
-
-                        turn.getMatchController().notifyObservers(
-                                new MultipleChoicesMessage(
-                                        turn.getTurnPlayer().getSessionToken(),
-                                        CHOICE_POSITION,
-                                        "Choose where to place the new card:",
-                                        1, 1,
-                                        positionsForCard().toArray(new Object[0])
-                                ));
                     } else {
-
-                        turn.getMatchController().notifyObservers(
-                                new MultipleChoicesMessage(
-                                        turn.getTurnPlayer().getSessionToken(),
-                                        MessageType.CHOICE_CARD_TO_BUY,
-                                        "Choose the card you want to buy:",
-                                        1, 1,
-                                        turn.getMatchController().getMatch().getDevelopmentGrid()
-                                ));
+                        sendGeneralMessage(turn, "No available cards to buy - sending to choose action:");
+                        turn.changeState(new ChooseNormalActionTurnState(turn));
+                        turn.play(message);
 
                     }
+
                     break;
 
                 case CHOICE_POSITION:
@@ -87,7 +96,8 @@ public class BuyCardNormalActionTurnState extends TurnState {
                     break;
 
                 default:
-                    sendChoiceNormalActionMessage(turn);
+                    turn.changeState(new ChooseNormalActionTurnState(turn));
+                    turn.play(message);
             }
         } catch (EmptyPayloadException | InvalidPayloadException ignored) {
             // TODO: handle exception

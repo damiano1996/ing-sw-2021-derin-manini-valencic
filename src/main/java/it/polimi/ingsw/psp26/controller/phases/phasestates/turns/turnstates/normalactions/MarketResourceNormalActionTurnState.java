@@ -83,7 +83,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
     }
 
     private List<Resource> parseResource() {
-        return tempResources.stream()
+        return tempResources = tempResources.stream()
                 .filter(x -> !x.equals(Resource.EMPTY))
                 .filter(x -> !x.equals(Resource.FAITH_MARKER))
                 .collect(Collectors.toList());

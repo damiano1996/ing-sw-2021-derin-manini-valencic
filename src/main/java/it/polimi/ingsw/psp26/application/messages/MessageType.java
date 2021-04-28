@@ -46,4 +46,8 @@ public enum MessageType {
     // tmp
     CHOICE_RESOURCE,
     PLACE_IN_WAREHOUSE,
+    
+    // Waiting screen
+    START_WAITING,
+    STOP_WAITING
 }

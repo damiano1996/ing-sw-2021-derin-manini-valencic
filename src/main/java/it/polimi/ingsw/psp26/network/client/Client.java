@@ -103,6 +103,14 @@ public class Client extends Observable<Message> {
                     Player player = (Player) message.getPayload();
                     viewInterface.displayPersonalBoard(player);
                     break;
+                    
+                case START_WAITING:
+                    viewInterface.startWaiting(message);
+                    break;
+                    
+                case STOP_WAITING:
+                    viewInterface.stopWaiting();
+                    break;
 
                 default:
                     break;

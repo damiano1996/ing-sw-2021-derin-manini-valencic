@@ -46,6 +46,7 @@ public class DisplayWarehousePlacer {
      * @return The Resources placed in the Warehouse
      */
     public List<Resource> displayMarketResourcesSelection(Warehouse warehouse, List<Resource> resources) {
+        discardedResources.clear();
         int depotIndex = 0;
 
         for (int i = 0; i < resources.size(); i++) {

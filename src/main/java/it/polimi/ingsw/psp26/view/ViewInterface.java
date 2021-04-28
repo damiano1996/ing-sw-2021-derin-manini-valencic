@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
@@ -79,4 +80,10 @@ public interface ViewInterface {
 
 
     void displayError(String error);
+
+    
+    void startWaiting(Message message);
+
+
+    void stopWaiting();
 }

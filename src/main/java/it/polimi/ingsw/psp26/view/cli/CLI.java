@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.QuitDisplayChoicesException;
 import it.polimi.ingsw.psp26.model.MarketTray;
@@ -42,6 +43,7 @@ public class CLI implements ViewInterface {
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
     private final DisplayWarehousePlacer displayWarehousePlacer;
+    private final WaitingScreenStarter waitingScreenStarter;
 
     public CLI(Client client) {
         this.client = client;
@@ -56,6 +58,7 @@ public class CLI implements ViewInterface {
         this.marketCli = new MarketCli(pw);
         this.personalBoardCli = new PersonalBoardCli(pw);
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
+        this.waitingScreenStarter = new WaitingScreenStarter();
     }
 
     /**
@@ -387,6 +390,21 @@ public class CLI implements ViewInterface {
         pw.print(cliUtils.hSpace(3) + "Press ENTER to confirm.");
         pw.flush();
         in.nextLine();
+        client.viewNext();
+    }
+    
+    
+    public void startWaiting(Message message) {
+        try {
+            waitingScreenStarter.startWaiting(message);
+        } catch (EmptyPayloadException ignored) {
+        }
+        client.viewNext();
+    }
+    
+    
+    public void stopWaiting() {
+        waitingScreenStarter.stopWaiting();
         client.viewNext();
     }
 

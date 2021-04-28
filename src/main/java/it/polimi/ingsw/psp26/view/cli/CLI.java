@@ -303,13 +303,13 @@ public class CLI implements ViewInterface {
     private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices) {
         List<Integer> choices = new ArrayList<>();
         int itemInt;
-        
+
         pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
 
         while (choices.size() < maxChoices) {
             pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'q' - to quit): ");
             pw.flush();
-            
+
             try {
                 itemInt = getCorrectChoice(choices.size(), minChoices, nChoices);
                 if (!choices.contains(itemInt)) choices.add(itemInt);
@@ -329,13 +329,13 @@ public class CLI implements ViewInterface {
     private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices) throws IndexOutOfBoundsException, QuitDisplayChoicesException {
         Scanner in = new Scanner(System.in);
         String item = in.nextLine();
-        
+
         if (item.equals("q") && numOfChoices >= minChoices) throw new QuitDisplayChoicesException();
         if (item.isEmpty() || ViewUtils.checkAsciiRange(item.charAt(0))) throw new IndexOutOfBoundsException();
-        
+
         int itemInt = Integer.parseInt(item) - 1;
         if (itemInt < 0 || itemInt >= nChoices) throw new IndexOutOfBoundsException();
-        
+
         return itemInt;
     }
 
@@ -392,8 +392,8 @@ public class CLI implements ViewInterface {
         in.nextLine();
         client.viewNext();
     }
-    
-    
+
+
     public void startWaiting(Message message) {
         try {
             waitingScreenStarter.startWaiting(message);
@@ -401,8 +401,8 @@ public class CLI implements ViewInterface {
         }
         client.viewNext();
     }
-    
-    
+
+
     public void stopWaiting() {
         waitingScreenStarter.stopWaiting();
         client.viewNext();

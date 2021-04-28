@@ -8,7 +8,8 @@ public class ServerMain {
 
         try {
             Server server = new Server();
-            server.startListening();
+            while (true)
+                server.listening();
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -81,7 +81,7 @@ public interface ViewInterface {
 
     void displayError(String error);
 
-    
+
     void startWaiting(Message message);
 
 

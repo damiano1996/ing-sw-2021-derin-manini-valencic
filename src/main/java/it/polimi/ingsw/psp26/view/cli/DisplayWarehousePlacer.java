@@ -361,11 +361,11 @@ public class DisplayWarehousePlacer {
      */
     private void showFinalScreen(Warehouse warehouse, List<Resource> resourcesLeft, List<Resource> resourcesDiscarded, int resourceIndex) {
         Scanner in = new Scanner(System.in);
-        
+
         cliUtils.cls();
         printWarehouseAndResources(warehouse, resourcesLeft, resourcesDiscarded, resourceIndex);
         cliUtils.pPCS("This is the final configuration that will be send to Server. Press ENTER to proceed.", Color.WHITE, 25, 21);
-        
+
         in.nextLine();
     }
 

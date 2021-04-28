@@ -4,6 +4,12 @@ import java.util.Random;
 
 public class NetworkUtils {
 
+    /**
+     * Method to generate a random token.
+     *
+     * @param length length of the generated token
+     * @return session token
+     */
     public static String generateSessionToken(int length) {
         Random random = new Random();
         String charSet = "0123456789abcdefghijklmnopqrstuvxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

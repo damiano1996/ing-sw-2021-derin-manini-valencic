@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendChoiceNormalActionMessage;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 
 public class BuyCardNormalActionTurnState extends TurnState {

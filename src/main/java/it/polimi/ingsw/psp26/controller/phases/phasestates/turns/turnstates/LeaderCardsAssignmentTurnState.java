@@ -31,7 +31,6 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
         super(turn);
 
         drawnLeaders = new ArrayList<>();
-        drawnLeaders.addAll(turn.getMatchController().getMatch().drawLeaders(4));
     }
 
     /**
@@ -51,6 +50,9 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
             turn.play(message);
 
         } else {
+
+            if (drawnLeaders.size() == 0)
+                drawnLeaders.addAll(turn.getMatchController().getMatch().drawLeaders(4));
 
             if (message.getMessageType().equals(MessageType.CHOICE_LEADERS)) {
 

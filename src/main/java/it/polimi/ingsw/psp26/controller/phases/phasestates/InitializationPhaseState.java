@@ -38,13 +38,13 @@ public class InitializationPhaseState extends PhaseState {
                     sendSessionMessageToAllPlayers(phase.getMatchController(), new Message(MessageType.STOP_WAITING, "Stop waiting..."));
                 } catch (InvalidPayloadException ignored) {
                 }
-                
+
                 try {
                     sendSessionMessageToAllPlayers(phase.getMatchController(), new Message(MessageType.GENERAL_MESSAGE, "The match can begin!"));
                 } catch (InvalidPayloadException e) {
                     e.printStackTrace();
                 }
-                
+
                 // Updating the state. The match can begin!
                 phase.changeState(new PlayingPhaseState(phase));
                 phase.execute(message);

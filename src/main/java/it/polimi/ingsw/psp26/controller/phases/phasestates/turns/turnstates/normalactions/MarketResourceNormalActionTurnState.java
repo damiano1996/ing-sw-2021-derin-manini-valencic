@@ -97,9 +97,9 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         isRedMarblePresent();
         tempResources = parseResource();
 
-        if(tempResources.size() > 0) {
+        if (tempResources.size() > 0) {
             turn.changeState(new ResourcesWarehousePlacerTurnState(turn, tempResources));
-        }else{
+        } else {
             turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_ACTION_TO_END));
         }
         turn.play(message);

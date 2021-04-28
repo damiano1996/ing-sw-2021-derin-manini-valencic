@@ -189,6 +189,7 @@ public class Match extends Observable<SessionMessage> {
      * @throws IndexOutOfBoundsException if the index of the card to draw is out of bounds
      */
     public List<LeaderCard> drawLeaders(int numberOfCards) throws IndexOutOfBoundsException {
+        System.out.println("leader deck size: " + leaderDeck.size());
         return grabElements(leaderDeck, numberOfCards);
     }
 

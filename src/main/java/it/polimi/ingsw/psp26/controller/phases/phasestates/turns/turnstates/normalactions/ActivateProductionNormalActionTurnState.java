@@ -50,10 +50,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                     break;
 
                 case CHOICE_CARDS_TO_ACTIVATE:
-                    for(Production production : turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions()){
-                        productionActivated.add(production);
 
-                    }
                     productionActivated = castElements(Production.class, message.getListPayloads());
 
                     for (Production production : productionActivated) {

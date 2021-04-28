@@ -62,7 +62,7 @@ public class MarketResourceNormalActionTurnStateTest {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
 
-        assertEquals(MessageType.CHOICE_ROW_COLUMN, mitm.getMessages().get(0).getMessageType());
+        assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
     }
 
     @Test
@@ -82,16 +82,10 @@ public class MarketResourceNormalActionTurnStateTest {
 
         List<Resource> expectedResources = leaderCardSetter(1);
         if (expectedResources.size() > 0) {
-            Resource changedResource = expectedResources.get(0);
-            expectedResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow((2)));
 
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
 
-            expectedResources = expectedResources.stream().filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
-            expectedResources.replaceAll(r -> r.equals(Resource.EMPTY) ? changedResource : r);
-
-            assertEquals(MessageType.CHOICE_ROW_COLUMN, mitm.getMessages().get(0).getMessageType());
-            assertEquals(expectedResources, castElements(Resource.class, mitm.getMessages().get(0).getListPayloads()));
+            assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
         }
     }
 
@@ -103,18 +97,13 @@ public class MarketResourceNormalActionTurnStateTest {
         int numberOfEmpty = (int) expectedResources.stream().filter(x -> x.equals(Resource.EMPTY)).count();
         if (marblecolors.size() == 2 && numberOfEmpty != 0) {
 
-            expectedResources = expectedResources.stream().filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
-            expectedResources.replaceAll(r -> r.equals(Resource.EMPTY) ? marblecolors.get(0) : r);
-
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
             for (int i = 0; i < numberOfEmpty; i++) {
                 turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, marblecolors.get(0)));
             }
 
             assertEquals(CHOICE_RESOURCE, mitm.getMessages().get(0).getMessageType());
-            assertEquals(CHOICE_ROW_COLUMN, mitm.getMessages().get(1 + (numberOfEmpty - 1) * 2).getMessageType());
-            assertEquals(expectedResources, castElements(Resource.class, mitm.getMessages().get(1 + (numberOfEmpty - 1) * 2).getListPayloads()));
-
+            assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(1 + (numberOfEmpty - 1) * 2).getMessageType());
 
         }
     }

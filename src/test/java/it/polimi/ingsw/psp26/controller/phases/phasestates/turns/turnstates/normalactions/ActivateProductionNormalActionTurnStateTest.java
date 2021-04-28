@@ -131,7 +131,7 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         playCollection();
 
-        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(5).getMessageType());
+        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(6).getMessageType());
     }
 
     private void playCollection() throws InvalidPayloadException {

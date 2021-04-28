@@ -87,6 +87,7 @@ public class DisplayWarehousePlacer {
 
         }
 
+        showFinalScreen(warehouse, resources, discardedResources, resources.size());
         return createListToSend(warehouse);
     }
 
@@ -346,6 +347,25 @@ public class DisplayWarehousePlacer {
             resourcesInWarehouse.add(warehouse.getAllDepots().get(i).getContainedResourceType());
         }
         return resourcesInWarehouse;
+    }
+
+
+    /**
+     * Shows the final configuration of the Warehouse that will be send to Server
+     *
+     * @param warehouse          The Player's Warehouse
+     * @param resourcesLeft      The Resources to insert
+     * @param resourcesDiscarded The Player's discarded Resources
+     * @param resourceIndex      The index from where the resources are shown
+     */
+    private void showFinalScreen(Warehouse warehouse, List<Resource> resourcesLeft, List<Resource> resourcesDiscarded, int resourceIndex) {
+        Scanner in = new Scanner(System.in);
+        
+        cliUtils.cls();
+        printWarehouseAndResources(warehouse, resourcesLeft, resourcesDiscarded, resourceIndex);
+        cliUtils.pPCS("This is the final configuration that will be send to Server. Press ENTER to proceed.", Color.WHITE, 25, 21);
+        
+        in.nextLine();
     }
 
 }

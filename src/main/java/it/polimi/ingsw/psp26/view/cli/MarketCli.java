@@ -111,7 +111,7 @@ public class MarketCli {
             }
         }
 
-        return marketIndex;
+        return adjustMarketIndex(marketIndex);
     }
 
 
@@ -133,6 +133,18 @@ public class MarketCli {
         if (marketIndex < 0 || marketIndex > 6) throw new IndexOutOfBoundsException();
 
         return marketIndex;
+    }
+
+
+    /**
+     * Method to get the correct index to send to Server (indexes are inverted in controller)
+     *
+     * @param marketIndex The index to adjust
+     * @return The correct index
+     */
+    private int adjustMarketIndex(int marketIndex) {
+        if (marketIndex <= 2) return (2 - marketIndex);
+        else return (9 - marketIndex);
     }
 
 }

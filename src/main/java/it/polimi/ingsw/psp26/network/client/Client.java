@@ -23,6 +23,7 @@ public class Client extends Observable<Message> {
     private ViewInterface viewInterface;
 
     private String nickname;
+    private MessageType matchModeType;
 
     public Client() throws IOException {
         super();
@@ -34,7 +35,7 @@ public class Client extends Observable<Message> {
         handleMessages(MessageSynchronizedFIFO.getInstance().getNext());
     }
 
-    public void handleMessages(Message message) {
+    private void handleMessages(Message message) {
         try {
             switch (message.getMessageType()) {
 
@@ -105,11 +106,11 @@ public class Client extends Observable<Message> {
                     break;
 
                 case START_WAITING:
-                    viewInterface.startWaiting(message);
+                    viewInterface.displayWaitingScree(message);
                     break;
 
                 case STOP_WAITING:
-                    viewInterface.stopWaiting();
+                    viewInterface.stopDisplayingWaitingScreen();
                     break;
 
                 default:
@@ -140,4 +141,11 @@ public class Client extends Observable<Message> {
         this.viewInterface = viewInterface;
     }
 
+    public MessageType getMatchModeType() {
+        return matchModeType;
+    }
+
+    public void setMatchModeType(MessageType matchModeType) {
+        this.matchModeType = matchModeType;
+    }
 }

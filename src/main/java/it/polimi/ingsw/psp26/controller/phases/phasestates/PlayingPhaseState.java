@@ -33,6 +33,14 @@ public class PlayingPhaseState extends PhaseState {
         );
     }
 
+    public void playFirstTurn(){
+        try {
+            currentTurn.play(new SessionMessage(currentTurn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE)
+            );
+        } catch (InvalidPayloadException ignored) {
+        }
+    }
+
     public void updateCurrentTurn() {
         int nextTurnNUmber = currentTurn.getTurnNumber() + 1;
         currentTurn = new Turn(this,

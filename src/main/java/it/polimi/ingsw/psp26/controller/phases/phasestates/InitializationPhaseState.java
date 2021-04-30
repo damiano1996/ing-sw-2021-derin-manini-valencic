@@ -36,18 +36,16 @@ public class InitializationPhaseState extends PhaseState {
                 System.out.println("Initialization phase - sending stop message");
                 try {
                     sendSessionMessageToAllPlayers(phase.getMatchController(), new Message(MessageType.STOP_WAITING, "Stop waiting..."));
-                } catch (InvalidPayloadException ignored) {
-                }
-
-                try {
-                    sendSessionMessageToAllPlayers(phase.getMatchController(), new Message(MessageType.GENERAL_MESSAGE, "The match can begin!"));
+                    sendSessionMessageToAllPlayers(phase.getMatchController(), new Message(MessageType.GENERAL_MESSAGE, "The match can start!"));
                 } catch (InvalidPayloadException e) {
                     e.printStackTrace();
                 }
 
                 // Updating the state. The match can begin!
-                phase.changeState(new PlayingPhaseState(phase));
-                phase.execute(message);
+                PlayingPhaseState playingPhaseState = new PlayingPhaseState(phase);
+                phase.changeState(playingPhaseState);
+                // phase.execute(message); // is performed by the PlayingPhaseState() at the initialization of the turn
+                playingPhaseState.playFirstTurn();
             }
         }
     }

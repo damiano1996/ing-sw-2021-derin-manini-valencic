@@ -289,6 +289,7 @@ public class CLI implements ViewInterface {
         }
 
         if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
+            client.setMatchModeType((MessageType) selected.get(0));
             try {
                 client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
             } catch (InvalidPayloadException e) {
@@ -394,7 +395,7 @@ public class CLI implements ViewInterface {
     }
 
 
-    public void startWaiting(Message message) {
+    public void displayWaitingScree(Message message) {
         try {
             waitingScreenStarter.startWaiting(message);
         } catch (EmptyPayloadException ignored) {
@@ -403,7 +404,7 @@ public class CLI implements ViewInterface {
     }
 
 
-    public void stopWaiting() {
+    public void stopDisplayingWaitingScreen() {
         waitingScreenStarter.stopWaiting();
         client.viewNext();
     }

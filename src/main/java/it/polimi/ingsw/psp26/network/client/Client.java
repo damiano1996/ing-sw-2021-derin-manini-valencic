@@ -67,7 +67,8 @@ public class Client extends Observable<Message> {
                             mcm.getMessageType(),
                             mcm.getQuestion(),
                             mcm.getListPayloads(),
-                            mcm.getMinChoices(), mcm.getMaxChoices()
+                            mcm.getMinChoices(), mcm.getMaxChoices(),
+                            mcm.getHasQuitOption()
                     );
                     break;
 
@@ -101,8 +102,9 @@ public class Client extends Observable<Message> {
                 // -------------------------------------
 
                 case PERSONAL_BOARD:
+                    boolean isMultiplayerMode = !matchModeType.equals(MessageType.SINGLE_PLAYER_MODE);
                     Player player = (Player) message.getPayload();
-                    viewInterface.displayPersonalBoard(player);
+                    viewInterface.displayPersonalBoard(player, isMultiplayerMode);
                     break;
 
                 case START_WAITING:
@@ -148,4 +150,5 @@ public class Client extends Observable<Message> {
     public void setMatchModeType(MessageType matchModeType) {
         this.matchModeType = matchModeType;
     }
+    
 }

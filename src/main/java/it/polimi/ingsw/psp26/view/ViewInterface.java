@@ -28,7 +28,7 @@ public interface ViewInterface {
     void displayInkwell(boolean isPrintable);
 
 
-    void displayPersonalBoard(Player player);
+    void displayPersonalBoard(Player player, boolean isMultiplayerMode);
 
 
     void displayWarehouseDepots(Warehouse warehouse);
@@ -46,7 +46,7 @@ public interface ViewInterface {
     void displayMarketAction(MarketTray marketTray);
 
 
-    void displayFaithTrack(FaithTrack faithTrack);
+    void displayFaithTrack(FaithTrack faithTrack, boolean isMultiplayerMode);
 
 
     void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots);
@@ -67,7 +67,7 @@ public interface ViewInterface {
     void displayMarketScreen(MarketTray marketTray);
 
 
-    void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices);
+    void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasQuitOption);
 
 
     void displayActionTokens(List<ActionToken> unusedTokens);

@@ -43,6 +43,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                     MessageType.CHOICE_CARD_TO_BUY,
                                     "Choose the card you want to buy:",
                                     1, 1,
+                                    false,
                                     turn.getMatchController().getMatch().getDevelopmentGrid()
                             ));
 
@@ -65,6 +66,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                             CHOICE_POSITION,
                                             "Choose where to place the new card:",
                                             1, 1,
+                                            false,
                                             positionsForCard().toArray(new Object[0])
                                     ));
                         } else {
@@ -75,6 +77,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                             MessageType.CHOICE_CARD_TO_BUY,
                                             "Choose the card you want to buy:",
                                             1, 1,
+                                            false,
                                             turn.getMatchController().getMatch().getDevelopmentGrid()
                                     ));
 
@@ -169,6 +172,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                 CHOICE_POSITION,
                                 "Choose where to place the new card:",
                                 1, 1,
+                                false,
                                 positionsForCard().toArray(new Object[0])
                         ));
             } catch (InvalidPayloadException invalidPayloadException) {

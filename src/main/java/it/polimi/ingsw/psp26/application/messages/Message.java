@@ -100,11 +100,12 @@ public class Message implements Serializable {
      */
     public List<Object> getListPayloads() {
         List<Object> objectPayloads = new ArrayList<>();
-        for (int i = 0; i < jsonPayloads.size(); i++) {
-            try {
+        
+        try {
+            for (int i = 0; i < jsonPayloads.size(); i++) {
                 objectPayloads.add(getPayload(i));
-            } catch (EmptyPayloadException ignored) {
             }
+        } catch (EmptyPayloadException | NullPointerException ignored) {
         }
         return objectPayloads;
     }

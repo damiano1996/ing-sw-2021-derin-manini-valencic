@@ -45,6 +45,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                                     CHOICE_CARDS_TO_ACTIVATE,
                                     "Choose the development cards to activate:",
                                     1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
+                                    true,
                                     turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
                             ));
                     break;
@@ -163,6 +164,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                                 CHOICE_CARDS_TO_ACTIVATE,
                                 "Choose the development cards to activate:",
                                 1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
+                                true,
                                 turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
                         ));
             } catch (InvalidPayloadException ignored) {

@@ -58,6 +58,7 @@ public class TurnUtils {
                             CHOICE_NORMAL_ACTION,
                             "Choice normal action to perform:",
                             1, 1,
+                            false,
                             ACTIVATE_PRODUCTION, MARKET_RESOURCE, BUY_CARD
                     )
             );
@@ -118,4 +119,5 @@ public class TurnUtils {
         } catch (InvalidPayloadException ignored) {
         }
     }
+    
 }

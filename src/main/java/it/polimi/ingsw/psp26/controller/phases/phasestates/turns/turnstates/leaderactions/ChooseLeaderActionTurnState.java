@@ -80,6 +80,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
                                     CHOICE_LEADER_ACTION,
                                     "Choice leader action to perform:",
                                     1, 1,
+                                    false,
                                     ACTIVATE_LEADER, DISCARD_LEADER, SKIP_LEADER_ACTION
                             )
                     );

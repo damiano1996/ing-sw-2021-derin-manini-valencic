@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MultipleChoicesMessageTest {
 
@@ -19,7 +20,7 @@ public class MultipleChoicesMessageTest {
         question = "question";
         min = 1;
         max = 2;
-        multipleChoicesMessage = new MultipleChoicesMessage(sessionToken, MessageType.GENERAL_MESSAGE, question, min, max);
+        multipleChoicesMessage = new MultipleChoicesMessage(sessionToken, MessageType.GENERAL_MESSAGE, question, min, max, true);
     }
 
     @Test
@@ -35,5 +36,10 @@ public class MultipleChoicesMessageTest {
     @Test
     public void testGetMaxChoices() {
         assertEquals(max, multipleChoicesMessage.getMaxChoices());
+    }
+    
+    @Test
+    public void testGetHasQuitOption() {
+        assertTrue(multipleChoicesMessage.getHasQuitOption());
     }
 }

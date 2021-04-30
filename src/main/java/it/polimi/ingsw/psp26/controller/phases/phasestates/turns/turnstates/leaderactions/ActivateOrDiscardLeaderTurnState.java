@@ -98,6 +98,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
                                 MessageType.CHOICE_LEADERS,
                                 "Choice the leader " + ((lastMessage.equals(MessageType.ACTIVATE_LEADER)) ? " to activate:" : " to discard:"),
                                 1, 1,
+                                true,
                                 playableLeaders.toArray()
                         )
                 );

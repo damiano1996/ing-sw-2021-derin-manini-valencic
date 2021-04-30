@@ -154,11 +154,11 @@ public class CliTest {
             if (i == 14) {
                 for (int m = 0; m < 14; m++) {
                     personalBoard.getFaithTrack().moveBlackCrossPosition(1);
-                    cli.displayFaithTrack(personalBoard.getFaithTrack());
+                    cli.displayFaithTrack(personalBoard.getFaithTrack(), true);
                     in.nextLine();
                 }
             }
-            cli.displayFaithTrack(personalBoard.getFaithTrack());
+            cli.displayFaithTrack(personalBoard.getFaithTrack(), true);
             in.nextLine();
             personalBoard.getFaithTrack().moveMarkerPosition(1);
             cliUtils.cls();
@@ -297,7 +297,7 @@ public class CliTest {
         playerCards.add(leaderCardList.get(8));
         playerCards.add(leaderCardList.get(9));
         player.setLeaderCards(playerCards);
-        cli.displayPersonalBoard(player);
+        cli.displayPersonalBoard(player, false);
         List<Resource> strResource = new ArrayList<>();
         in.nextLine();
         cliUtils.cls();
@@ -316,7 +316,7 @@ public class CliTest {
         player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
-        cli.displayPersonalBoard(player);
+        cli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
 
@@ -331,7 +331,7 @@ public class CliTest {
         player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.BLUE, Level.SECOND));
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].activatePopesFavorTile();
-        cli.displayPersonalBoard(player);
+        cli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
 
@@ -345,7 +345,7 @@ public class CliTest {
         player.getPersonalBoard().addResourcesToStrongbox(strResource);
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].activatePopesFavorTile();
-        cli.displayPersonalBoard(player);
+        cli.displayPersonalBoard(player, false);
         in.nextLine();
     }
 
@@ -378,7 +378,7 @@ public class CliTest {
         cliUtils.cls();
 
         player.getLeaderCards().get(0).activate(player);
-        cli.displayPersonalBoard(player);
+        cli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
         cli.displayLeaderCards(player.getLeaderCards());
@@ -386,7 +386,7 @@ public class CliTest {
         cliUtils.cls();
 
         player.getLeaderCards().get(1).activate(player);
-        cli.displayPersonalBoard(player);
+        cli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
         cli.displayLeaderCards(player.getLeaderCards());
@@ -395,7 +395,7 @@ public class CliTest {
         cliUtils.cls();
 
         player.discardLeaderCard(player.getLeaderCards().get(0)); //Simulate a Leader Card discard
-        cli.displayPersonalBoard(player);
+        cli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
         cli.displayLeaderCards(player.getLeaderCards());
@@ -403,7 +403,7 @@ public class CliTest {
         cliUtils.cls();
 
         player.discardLeaderCard(player.getLeaderCards().get(0)); //Simulate a Leader Card discard
-        cli.displayPersonalBoard(player);
+        cli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
         cli.displayLeaderCards(player.getLeaderCards());
@@ -449,7 +449,7 @@ public class CliTest {
         //CHOICE_ROW_COLUMN
         choices = new ArrayList<>();
         choices.add(marketTray);
-        cli.displayChoices(MessageType.CHOICE_ROW_COLUMN, "Insert a value for row or column", choices, 1, 1);   //*/
+        cli.displayChoices(MessageType.CHOICE_ROW_COLUMN, "Insert a value for row or column", choices, 1, 1, true);   //*/
 
         /*CHOICE_NORMAL_ACTION
         choices = new ArrayList<>();

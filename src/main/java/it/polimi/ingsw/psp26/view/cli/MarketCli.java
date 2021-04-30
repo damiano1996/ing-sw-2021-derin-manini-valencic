@@ -96,7 +96,7 @@ public class MarketCli {
     public int displayMarketSelection(MarketTray marketTray) {
         cliUtils.cls();
         displayMarketScreen(marketTray);
-        cliUtils.pPCS("Choose a number between 0 to 6 where 0-2 refers to rows and 3-6 refers to columns: ", Color.WHITE, 45, 21);
+        cliUtils.pPCS("Choose a number between 1 to 7 where 1-3 refers to rows and 4-7 refers to columns: ", Color.WHITE, 45, 21);
 
         int marketIndex = 0;
         boolean indexInserted = false;
@@ -129,7 +129,7 @@ public class MarketCli {
         if (marketString.isEmpty()) throw new IndexOutOfBoundsException();
         if (ViewUtils.checkAsciiRange(marketString.charAt(0))) throw new IndexOutOfBoundsException();
 
-        marketIndex = Integer.parseInt(marketString);
+        marketIndex = Integer.parseInt(marketString) - 1;
         if (marketIndex < 0 || marketIndex > 6) throw new IndexOutOfBoundsException();
 
         return marketIndex;

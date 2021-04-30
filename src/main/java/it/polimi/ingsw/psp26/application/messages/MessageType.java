@@ -49,5 +49,8 @@ public enum MessageType {
 
     // Waiting screen
     START_WAITING,
-    STOP_WAITING
+    STOP_WAITING,
+    
+    // The Player select to undo from the current selection
+    QUIT_OPTION_SELECTED
 }

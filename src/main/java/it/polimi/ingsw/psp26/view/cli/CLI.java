@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.QuitDisplayChoicesException;
+import it.polimi.ingsw.psp26.exceptions.QuitOptionSelectedException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -33,8 +34,6 @@ public class CLI implements ViewInterface {
     private final Client client;
 
     private final PrintWriter pw;
-    private final boolean isMultiPlayerMode;
-
     private final CliUtils cliUtils;
     private final DepotCli depotCli;
     private final DevelopmentCardsCli developmentCardsCli;
@@ -49,7 +48,6 @@ public class CLI implements ViewInterface {
         this.client = client;
 
         this.pw = new PrintWriter(System.out);
-        this.isMultiPlayerMode = false;
         this.cliUtils = new CliUtils(pw);
         this.depotCli = new DepotCli(pw);
         this.developmentCardsCli = new DevelopmentCardsCli(pw);
@@ -113,7 +111,8 @@ public class CLI implements ViewInterface {
                         MULTI_OR_SINGLE_PLAYER_MODE,
                         "Choose the playing mode:",
                         Arrays.asList(new MessageType[]{SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE}),
-                        1, 1
+                        1, 1,
+                        false
                 );
             }
         }
@@ -133,9 +132,9 @@ public class CLI implements ViewInterface {
 
 
     @Override
-    public void displayPersonalBoard(Player player) {
+    public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
         cliUtils.cls();
-        personalBoardCli.displayPersonalBoard(player, isMultiPlayerMode);
+        personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
         displayNext();
     }
 
@@ -164,7 +163,7 @@ public class CLI implements ViewInterface {
 
 
     @Override
-    public void displayFaithTrack(FaithTrack faithTrack) {
+    public void displayFaithTrack(FaithTrack faithTrack, boolean isMultiPlayerMode) {
         faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
     }
 
@@ -245,7 +244,7 @@ public class CLI implements ViewInterface {
 
 
     @Override
-    public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices) {
+    public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasQuitOption) {
 
         cliUtils.cls();
         cliUtils.vSpace(1);
@@ -268,7 +267,7 @@ public class CLI implements ViewInterface {
                 displayProductionActivation(castElements(Production.class, choices));
                 break;
 
-            case CHOICE_RESOURCE:
+            case CHOICE_RESOURCE: //TODO migliora la grafica di questa schermata
                 //ResourceSupply is the unique element of choices List
                 displayResourceSupply(new ResourceSupply());
                 cliUtils.vSpace(10);
@@ -279,7 +278,7 @@ public class CLI implements ViewInterface {
         }
 
         cliUtils.vSpace(1);
-        List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices));
+        List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasQuitOption));
 
         // send to server response
         try {
@@ -301,18 +300,19 @@ public class CLI implements ViewInterface {
     }
 
 
-    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices) {
+    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices, boolean hasQuitOption) {
         List<Integer> choices = new ArrayList<>();
         int itemInt;
 
         pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
 
         while (choices.size() < maxChoices) {
-            pw.print(cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'q' - to quit): ");
+            if (hasQuitOption) pw.print("\n" + cliUtils.hSpace(3) + "Type 'u' to quit from the current selection.");
+            pw.print("\n" + cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'q' - to quit): ");
             pw.flush();
 
             try {
-                itemInt = getCorrectChoice(choices.size(), minChoices, nChoices);
+                itemInt = getCorrectChoice(choices.size(), minChoices, nChoices, hasQuitOption);
                 if (!choices.contains(itemInt)) choices.add(itemInt);
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 cliUtils.vSpace(1);
@@ -320,6 +320,11 @@ public class CLI implements ViewInterface {
                 cliUtils.vSpace(3);
             } catch (QuitDisplayChoicesException e) {
                 break;
+            } catch (QuitOptionSelectedException e) {
+                try {
+                    client.notifyObservers(new Message(QUIT_OPTION_SELECTED)); //TODO forse va generalizzato per le altre parti (tipo il market, la grid, ...)
+                } catch (InvalidPayloadException ignored) {
+                }
             }
         }
 
@@ -327,9 +332,13 @@ public class CLI implements ViewInterface {
     }
 
 
-    private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices) throws IndexOutOfBoundsException, QuitDisplayChoicesException {
+    private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices, boolean hasQuitOption) throws IndexOutOfBoundsException, QuitDisplayChoicesException, QuitOptionSelectedException {
         Scanner in = new Scanner(System.in);
         String item = in.nextLine();
+
+        if (hasQuitOption)
+            if (item.equals("u")) throw new QuitOptionSelectedException();
+
 
         if (item.equals("q") && numOfChoices >= minChoices) throw new QuitDisplayChoicesException();
         if (item.isEmpty() || ViewUtils.checkAsciiRange(item.charAt(0))) throw new IndexOutOfBoundsException();

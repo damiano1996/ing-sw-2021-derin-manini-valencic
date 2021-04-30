@@ -97,6 +97,7 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
                             MessageType.CHOICE_LEADERS,
                             "Choice two leader cards:",
                             2, 2,
+                            false,
                             drawnLeaders.toArray()
                     )
             );

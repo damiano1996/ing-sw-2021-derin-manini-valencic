@@ -13,16 +13,18 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
     private final String question;
     private final int minChoices;
     private final int maxChoices;
+    private final boolean hasQuitOption;
 
     /**
      * Constructor of the class.
      *
-     * @param sessionToken session token
-     * @param messageType  message type
-     * @param question     question to ask to the player
-     * @param minChoices   min number of items to choose
-     * @param maxChoices   max number of items to choose
-     * @param payloads     payloads to send (choices for the players)
+     * @param sessionToken  session token
+     * @param messageType   message type
+     * @param question      question to ask to the player
+     * @param minChoices    min number of items to choose
+     * @param maxChoices    max number of items to choose
+     * @param payloads      payloads to send (choices for the players)
+     * @param hasQuitOption the choices can be undone
      * @throws InvalidPayloadException if payloads are not serializable
      */
     public MultipleChoicesMessage(
@@ -31,12 +33,14 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
             String question,
             int minChoices,
             int maxChoices,
+            boolean hasQuitOption,
             Object... payloads) throws InvalidPayloadException {
 
         super(sessionToken, messageType, payloads);
         this.question = question;
         this.minChoices = minChoices;
         this.maxChoices = maxChoices;
+        this.hasQuitOption = hasQuitOption;
     }
 
     /**
@@ -64,6 +68,15 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
      */
     public int getMaxChoices() {
         return maxChoices;
+    }
+
+    /**
+     * Getter of the boolean that tells if an additional String will be printed for undoing the choice
+     * 
+     * @return hasQuitOption
+     */
+    public boolean getHasQuitOption() {
+        return hasQuitOption;
     }
 
     /**

@@ -4,8 +4,8 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.exceptions.QuitDisplayChoicesException;
-import it.polimi.ingsw.psp26.exceptions.QuitOptionSelectedException;
+import it.polimi.ingsw.psp26.exceptions.ConfirmationException;
+import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -223,7 +223,7 @@ public class CLI implements ViewInterface {
         List<Integer> choice = new ArrayList<>();
         try {
             choice.add(marketCli.displayMarketSelection(marketTray, playerResources));
-        } catch (QuitOptionSelectedException e) {
+        } catch (UndoOptionSelectedException e) {
             client.sendQuitMessage();
         }
         try {
@@ -239,7 +239,7 @@ public class CLI implements ViewInterface {
         List<DevelopmentCard> choice = new ArrayList<>();
         try {
             choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, playerResources));
-        } catch (QuitOptionSelectedException e) {
+        } catch (UndoOptionSelectedException e) {
             client.sendQuitMessage();
         }
         try {
@@ -309,27 +309,24 @@ public class CLI implements ViewInterface {
     }
 
 
-    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices, boolean hasQuitOption) {
+    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices, boolean hasUndoOption) {
         List<Integer> choices = new ArrayList<>();
         int itemInt;
 
         pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
 
         while (choices.size() < maxChoices) {
-            if (hasQuitOption) pw.print("\n" + cliUtils.hSpace(3) + "Type 'u' to quit from the current selection.");
-            pw.print("\n" + cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'q' - to quit): ");
-            pw.flush();
 
             try {
-                itemInt = getCorrectChoice(choices.size(), minChoices, nChoices, hasQuitOption);
+                itemInt = getCorrectChoice(choices.size(), minChoices, nChoices, hasUndoOption);
                 if (!choices.contains(itemInt)) choices.add(itemInt);
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 cliUtils.vSpace(1);
                 pw.print(cliUtils.hSpace(3) + cliUtils.pCS("INCORRECT CHOICE INSERTED", Color.RED));
                 cliUtils.vSpace(3);
-            } catch (QuitDisplayChoicesException e) {
+            } catch (ConfirmationException e) {
                 break;
-            } catch (QuitOptionSelectedException e) {
+            } catch (UndoOptionSelectedException e) {
                 client.sendQuitMessage();
             }
         }
@@ -338,15 +335,18 @@ public class CLI implements ViewInterface {
     }
 
 
-    private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices, boolean hasQuitOption) throws IndexOutOfBoundsException, QuitDisplayChoicesException, QuitOptionSelectedException {
+    private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices, boolean hasUndoOption) throws IndexOutOfBoundsException, ConfirmationException, UndoOptionSelectedException {
+        if (hasUndoOption) pw.print("\n" + cliUtils.hSpace(3) + "Type 'u' to undo operation.");
+        pw.print("\n" + cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'c' - to confirm selections): ");
+        pw.flush();
+
         Scanner in = new Scanner(System.in);
         String item = in.nextLine();
 
-        if (hasQuitOption)
-            if (item.equals("u")) throw new QuitOptionSelectedException();
+        if (hasUndoOption)
+            if (item.equals("u")) throw new UndoOptionSelectedException();
 
-
-        if (item.equals("q") && numOfChoices >= minChoices) throw new QuitDisplayChoicesException();
+        if (item.equals("c") && numOfChoices >= minChoices) throw new ConfirmationException();
         if (item.isEmpty() || ViewUtils.checkAsciiRange(item.charAt(0))) throw new IndexOutOfBoundsException();
 
         int itemInt = Integer.parseInt(item) - 1;

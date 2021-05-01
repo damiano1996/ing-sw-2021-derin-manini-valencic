@@ -79,13 +79,13 @@ public class CliTest {
         try {
             CliTest cliTest = new CliTest(new Client());
             cliTest.testMethod();
-        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse | InvalidPayloadException | QuitOptionSelectedException | NoMoreDevelopmentCardsException | LevelDoesNotExistException | ColorDoesNotExistException | CanNotAddResourceToDepotException | CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException | CanNotAddResourceToStrongboxException e) {
+        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse | InvalidPayloadException | UndoOptionSelectedException | NoMoreDevelopmentCardsException | LevelDoesNotExistException | ColorDoesNotExistException | CanNotAddResourceToDepotException | CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException | CanNotAddResourceToStrongboxException e) {
             e.printStackTrace();
         }
     }
 
 
-    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, QuitOptionSelectedException {
+    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, UndoOptionSelectedException {
 
         //Insert here the name of the methods you want to test
         

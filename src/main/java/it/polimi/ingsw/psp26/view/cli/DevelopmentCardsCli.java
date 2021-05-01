@@ -2,7 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
-import it.polimi.ingsw.psp26.exceptions.QuitOptionSelectedException;
+import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGridCell;
@@ -331,9 +331,9 @@ public class DevelopmentCardsCli {
      * @param developmentGrid The Development Grid to display
      * @param playerResources The Player's Resources
      * @return The chosen Development Card
-     * @throws QuitOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
+     * @throws UndoOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
      */
-    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid, List<Resource> playerResources) throws QuitOptionSelectedException {
+    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid, List<Resource> playerResources) throws UndoOptionSelectedException {
         String level = "";
         String color = "";
         boolean isCardChosen = false;
@@ -376,18 +376,18 @@ public class DevelopmentCardsCli {
      * @param stringToDisplay A message to inform the Player the String to enter
      * @param levelOrColor    True if a Level is entered, false if a Color is entered
      * @return The Level/Color chosen by the Player
-     * @throws QuitOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
+     * @throws UndoOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
      */
-    private String askForLevelAndColor(String stringToDisplay, boolean levelOrColor) throws QuitOptionSelectedException {
+    private String askForLevelAndColor(String stringToDisplay, boolean levelOrColor) throws UndoOptionSelectedException {
         boolean correctInputInserted = false;
         String input;
 
         do {
-            cliUtils.pPCS("Enter 'u' if you want to exit from DevelopmentGrid screen.", Color.WHITE, 32, 135);
+            cliUtils.pPCS("Enter 'u' (undo) if you want to exit from DevelopmentGrid screen.", Color.WHITE, 32, 135);
             cliUtils.pPCS(stringToDisplay, Color.WHITE, 33, 135);
             input = in.nextLine();
 
-            if (input.equals("u")) throw new QuitOptionSelectedException();
+            if (input.equals("u")) throw new UndoOptionSelectedException();
 
             if (isInputCorrect(input, levelOrColor)) correctInputInserted = true;
             else {

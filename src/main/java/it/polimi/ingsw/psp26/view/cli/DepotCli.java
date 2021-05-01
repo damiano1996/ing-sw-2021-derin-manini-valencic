@@ -7,8 +7,8 @@ import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.psp26.utils.ViewUtils.getResourcesNumber;
 
 public class DepotCli {
 
@@ -31,10 +31,10 @@ public class DepotCli {
     public void displayStrongbox(List<Resource> strongbox, int startingRow, int startingColumn) {
         cliUtils.printFigure("Strongbox", startingRow, startingColumn);
 
-        printStrongboxResources(Resource.STONE, getStrongboxResourcesNumber(strongbox, Resource.STONE), startingRow, startingColumn);
-        printStrongboxResources(Resource.SERVANT, getStrongboxResourcesNumber(strongbox, Resource.SERVANT), startingRow, startingColumn);
-        printStrongboxResources(Resource.SHIELD, getStrongboxResourcesNumber(strongbox, Resource.SHIELD), startingRow, startingColumn);
-        printStrongboxResources(Resource.COIN, getStrongboxResourcesNumber(strongbox, Resource.COIN), startingRow, startingColumn);
+        printStrongboxResources(Resource.STONE, getResourcesNumber(strongbox, Resource.STONE), startingRow, startingColumn);
+        printStrongboxResources(Resource.SERVANT, getResourcesNumber(strongbox, Resource.SERVANT), startingRow, startingColumn);
+        printStrongboxResources(Resource.SHIELD, getResourcesNumber(strongbox, Resource.SHIELD), startingRow, startingColumn);
+        printStrongboxResources(Resource.COIN, getResourcesNumber(strongbox, Resource.COIN), startingRow, startingColumn);
     }
 
 
@@ -49,20 +49,6 @@ public class DepotCli {
         cliUtils.printFigure("Warehouse", startingRow, startingColumn);
         for (int i = 0; i < warehouse.getBaseDepots().size(); i++)
             printDepot(warehouse.getBaseDepots().get(i), startingRow, startingColumn, i + 1);
-    }
-
-
-    /**
-     * Used to get the number of the resources stored in the strongbox
-     *
-     * @param resources    The resources in the strongbox
-     * @param resourceType The desired type of resource
-     * @return The number of Resources of resourceType stored in the strongbox
-     */
-    private int getStrongboxResourcesNumber(List<Resource> resources, Resource resourceType) {
-        if (!resources.contains(resourceType)) return 0;
-        Map<Resource, Long> numberOfResources = resources.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-        return numberOfResources.get(resourceType).intValue();
     }
 
 
@@ -127,7 +113,7 @@ public class DepotCli {
             for (Resource resource : resources) s.append(cliUtils.pCS("  \u2588\u2588", resource.getColor()));
             s.append(cliUtils.hSpace(8 - (2 * resources.size())));
 
-            pw.print(s.toString());
+            pw.print(s);
             pw.flush();
         }
     }

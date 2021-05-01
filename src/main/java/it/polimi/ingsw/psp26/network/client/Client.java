@@ -16,7 +16,7 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import java.io.IOException;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.QUIT_OPTION_SELECTED;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class Client extends Observable<Message> {
@@ -77,22 +77,16 @@ public class Client extends Observable<Message> {
                 case PLACE_IN_WAREHOUSE:
                     // first message contains the warehouse
                     Warehouse warehouse = ((Warehouse) message.getPayload());
-                    // waiting for second message containing the resources to add
-                    Message secondMessage = MessageSynchronizedFIFO.getInstance().getNext();
-                    while (!secondMessage.getMessageType().equals(MessageType.PLACE_IN_WAREHOUSE))
-                        secondMessage = MessageSynchronizedFIFO.getInstance().getNext();
-                    List<Resource> resourcesToAdd = castElements(Resource.class, secondMessage.getListPayloads());
-                    // calls the method to display the warehouse with the resources to add
-                    viewInterface.displayWarehouseNewResourcesAssignment(warehouse, resourcesToAdd);
+                    viewInterface.displayWarehouseNewResourcesAssignment(warehouse, getSecondMessageResources(PLACE_IN_WAREHOUSE));
                     break;
 
                 case CHOICE_ROW_COLUMN:
-                    // Message contains the MarketTray to display
+                    // first message contains the MarketTray to display
                     MarketTray marketTray = ((MarketTray) message.getPayload());
-                    viewInterface.displayMarketAction(marketTray);
+                    viewInterface.displayMarketAction(marketTray, getSecondMessageResources(CHOICE_ROW_COLUMN));
                     break;
 
-                case CHOICE_CARD_TO_BUY:
+                case CHOICE_CARD_TO_BUY: //TODO MANCA LA LISTA DI RISORSE
                     // Message contains the Development Grid to display
                     DevelopmentGrid developmentGrid = ((DevelopmentGrid) message.getPayload());
                     viewInterface.displayDevelopmentCardBuyAction(developmentGrid);
@@ -122,6 +116,13 @@ public class Client extends Observable<Message> {
             }
         } catch (EmptyPayloadException ignored) {
         }
+    }
+    
+    private List<Resource> getSecondMessageResources(MessageType messageType) {
+        Message secondMessage = MessageSynchronizedFIFO.getInstance().getNext();
+        while (!secondMessage.getMessageType().equals(messageType))
+            secondMessage = MessageSynchronizedFIFO.getInstance().getNext();
+        return castElements(Resource.class, secondMessage.getListPayloads());
     }
 
     public void initializeNetworkHandler(String serverIP) {

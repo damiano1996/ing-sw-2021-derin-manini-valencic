@@ -219,10 +219,10 @@ public class CLI implements ViewInterface {
 
 
     @Override
-    public void displayMarketAction(MarketTray marketTray) {
+    public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
         List<Integer> choice = new ArrayList<>();
         try {
-            choice.add(marketCli.displayMarketSelection(marketTray));
+            choice.add(marketCli.displayMarketSelection(marketTray, playerResources));
         } catch (QuitOptionSelectedException e) {
             client.sendQuitMessage();
         }
@@ -273,6 +273,7 @@ public class CLI implements ViewInterface {
 
             case CHOICE_CARDS_TO_ACTIVATE:
                 displayProductionActivation(castElements(Production.class, choices));
+                //TODO fai in modo che mostri anche a lista con il nuivo metodo ststico appena cresto
                 break;
 
             case CHOICE_RESOURCE: //TODO migliora la grafica di questa schermata

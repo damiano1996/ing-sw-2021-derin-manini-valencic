@@ -7,7 +7,10 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.utils.ViewUtils;
 
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Scanner;
+
+import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
 public class MarketCli {
 
@@ -91,13 +94,15 @@ public class MarketCli {
     /**
      * Displays the Market row/column choice
      *
-     * @param marketTray The actual state of the Market
+     * @param marketTray      The actual state of the Market
+     * @param playerResources The Player Resources
      * @return The selected row or column
      * @throws QuitOptionSelectedException The Player decided to quit from the Market selection screen
      */
-    public int displayMarketSelection(MarketTray marketTray) throws QuitOptionSelectedException {
+    public int displayMarketSelection(MarketTray marketTray, List<Resource> playerResources) throws QuitOptionSelectedException {
         cliUtils.cls();
         displayMarketScreen(marketTray);
+        printPlayerResources(playerResources, 38, 145);
         cliUtils.pPCS("Enter 'u' if you want to exit from Market screen.", Color.WHITE, 45, 21);
         cliUtils.pPCS("Choose a number between 1 to 7 where 1-3 refers to rows and 4-7 refers to columns: ", Color.WHITE, 46, 21);
 
@@ -122,7 +127,7 @@ public class MarketCli {
      * Asks the desired index for Market row/column
      *
      * @return An integer between 0 and 6
-     * @throws IndexOutOfBoundsException If the index inserted is not correct
+     * @throws IndexOutOfBoundsException   If the index inserted is not correct
      * @throws QuitOptionSelectedException The Player decided to quit from the Market selection screen
      */
     private int getMarketIndex() throws IndexOutOfBoundsException, QuitOptionSelectedException {

@@ -40,6 +40,12 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                                     MessageType.CHOICE_ROW_COLUMN,
                                     turn.getMatchController().getMatch().getMarketTray()
                             ));
+                    turn.getMatchController().notifyObservers(
+                            new SessionMessage(
+                                    turn.getTurnPlayer().getSessionToken(),
+                                    MessageType.CHOICE_ROW_COLUMN,
+                                    turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources()
+                            ));
 
                     break;
                 case CHOICE_ROW_COLUMN:

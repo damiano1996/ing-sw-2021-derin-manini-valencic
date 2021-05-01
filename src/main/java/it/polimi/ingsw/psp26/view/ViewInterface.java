@@ -43,7 +43,7 @@ public interface ViewInterface {
     void displayStrongbox(List<Resource> strongbox);
 
 
-    void displayMarketAction(MarketTray marketTray);
+    void displayMarketAction(MarketTray marketTray, List<Resource> playerResources);
 
 
     void displayFaithTrack(FaithTrack faithTrack, boolean isMultiplayerMode);

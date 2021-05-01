@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
+
 public class CliTest {
 
     private final CLI cli;
@@ -85,7 +87,9 @@ public class CliTest {
 
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, QuitOptionSelectedException {
 
-        //Insert here the name of the methods tou want to test
+        //Insert here the name of the methods you want to test
+        
+        testPrintPlayerResources();
 
         testWarehouseConfiguration();
 
@@ -114,6 +118,26 @@ public class CliTest {
         testActivateProduction();
         testPrintPlayerLeaderCards();
         testWaitingScreen();
+    }
+    
+    
+    private void testPrintPlayerResources() {
+        cliUtils.cls();
+        
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.STONE);
+        resources.add(Resource.COIN);
+        resources.add(Resource.COIN);
+        resources.add(Resource.SHIELD);
+        resources.add(Resource.SHIELD);
+        resources.add(Resource.SERVANT);
+        resources.add(Resource.SHIELD);
+        resources.add(Resource.COIN);
+        resources.add(Resource.STONE);
+        resources.add(Resource.STONE);
+        
+        printPlayerResources(resources, 10, 10);
+        in.nextLine();
     }
 
 

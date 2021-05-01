@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.exceptions.QuitOptionSelectedException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -92,11 +93,13 @@ public class MarketCli {
      *
      * @param marketTray The actual state of the Market
      * @return The selected row or column
+     * @throws QuitOptionSelectedException The Player decided to quit from the Market selection screen
      */
-    public int displayMarketSelection(MarketTray marketTray) {
+    public int displayMarketSelection(MarketTray marketTray) throws QuitOptionSelectedException {
         cliUtils.cls();
         displayMarketScreen(marketTray);
-        cliUtils.pPCS("Choose a number between 1 to 7 where 1-3 refers to rows and 4-7 refers to columns: ", Color.WHITE, 45, 21);
+        cliUtils.pPCS("Enter 'u' if you want to exit from Market screen.", Color.WHITE, 45, 21);
+        cliUtils.pPCS("Choose a number between 1 to 7 where 1-3 refers to rows and 4-7 refers to columns: ", Color.WHITE, 46, 21);
 
         int marketIndex = 0;
         boolean indexInserted = false;
@@ -107,7 +110,7 @@ public class MarketCli {
                 indexInserted = true;
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 cliUtils.pPCS("WRONG INDEX INSERTED! Please try again", Color.RED, 43, 21);
-                cliUtils.clearLine(45, 104);
+                cliUtils.clearLine(46, 104);
             }
         }
 
@@ -120,13 +123,15 @@ public class MarketCli {
      *
      * @return An integer between 0 and 6
      * @throws IndexOutOfBoundsException If the index inserted is not correct
+     * @throws QuitOptionSelectedException The Player decided to quit from the Market selection screen
      */
-    private int getMarketIndex() throws IndexOutOfBoundsException {
+    private int getMarketIndex() throws IndexOutOfBoundsException, QuitOptionSelectedException {
         Scanner in = new Scanner(System.in);
         String marketString = in.nextLine();
         int marketIndex;
 
         if (marketString.isEmpty()) throw new IndexOutOfBoundsException();
+        if (marketString.equals("u")) throw new QuitOptionSelectedException();
         if (ViewUtils.checkAsciiRange(marketString.charAt(0))) throw new IndexOutOfBoundsException();
 
         marketIndex = Integer.parseInt(marketString) - 1;

@@ -82,7 +82,7 @@ public interface ViewInterface {
     void displayError(String error);
 
 
-    void displayWaitingScree(Message message);
+    void displayWaitingScreen(Message message);
 
 
     void stopDisplayingWaitingScreen();

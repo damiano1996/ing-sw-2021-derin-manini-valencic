@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
@@ -15,6 +16,7 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import java.io.IOException;
 import java.util.List;
 
+import static it.polimi.ingsw.psp26.application.messages.MessageType.QUIT_OPTION_SELECTED;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 public class Client extends Observable<Message> {
@@ -108,7 +110,7 @@ public class Client extends Observable<Message> {
                     break;
 
                 case START_WAITING:
-                    viewInterface.displayWaitingScree(message);
+                    viewInterface.displayWaitingScreen(message);
                     break;
 
                 case STOP_WAITING:
@@ -149,6 +151,13 @@ public class Client extends Observable<Message> {
 
     public void setMatchModeType(MessageType matchModeType) {
         this.matchModeType = matchModeType;
+    }
+    
+    public void sendQuitMessage() {
+        try {
+            notifyObservers(new Message(QUIT_OPTION_SELECTED));
+        } catch (InvalidPayloadException ignored) {
+        }
     }
     
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
+import it.polimi.ingsw.psp26.exceptions.QuitOptionSelectedException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGridCell;
@@ -186,7 +187,7 @@ public class DevelopmentCardsCli {
         List<Integer> numberOfRequiredResources = new ArrayList<>();
         List<Integer> numberOfProducedResources = new ArrayList<>();
 
-        for (Map.Entry<Resource, Integer> entry : productionCost.entrySet()) { //TODO magari una gestione miglore delle HashMap
+        for (Map.Entry<Resource, Integer> entry : productionCost.entrySet()) {
             requiredResources.add(entry.getKey());
             numberOfRequiredResources.add(entry.getValue());
         }
@@ -327,8 +328,9 @@ public class DevelopmentCardsCli {
      *
      * @param developmentGrid The Development Grid to display
      * @return The chosen Development Card
+     * @throws QuitOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
      */
-    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid) {
+    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid) throws QuitOptionSelectedException {
         String level = "";
         String color = "";
         boolean isCardChosen = false;
@@ -350,7 +352,7 @@ public class DevelopmentCardsCli {
             isCardChosen = isCardAvailable(developmentGrid, level, color);
             if (!isCardChosen) {
                 printErrorString = true;
-                cliUtils.clearLine(32, 198);
+                cliUtils.clearLine(33, 198);
             }
 
         }
@@ -370,21 +372,28 @@ public class DevelopmentCardsCli {
      * @param stringToDisplay A message to inform the Player the String to enter
      * @param levelOrColor    True if a Level is entered, false if a Color is entered
      * @return The Level/Color chosen by the Player
+     * @throws QuitOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
      */
-    private String askForLevelAndColor(String stringToDisplay, boolean levelOrColor) {
+    private String askForLevelAndColor(String stringToDisplay, boolean levelOrColor) throws QuitOptionSelectedException {
         boolean correctInputInserted = false;
         String input;
 
         do {
-            cliUtils.pPCS(stringToDisplay, Color.WHITE, 32, 135);
+            cliUtils.pPCS("Enter 'u' if you want to exit from DevelopmentGrid screen.", Color.WHITE, 32, 135);
+            cliUtils.pPCS(stringToDisplay, Color.WHITE, 33, 135);
             input = in.nextLine();
+            
+            if (input.equals("u")) throw new QuitOptionSelectedException();
 
             if (isInputCorrect(input, levelOrColor)) correctInputInserted = true;
             else {
                 cliUtils.pPCS("WRONG INPUT INSERTED! Please try again", Color.RED, 30, 135);
-                cliUtils.clearLine(32, 198);
+                cliUtils.clearLine(33, 198);
             }
         } while (!correctInputInserted);
+
+        cliUtils.clearLine(30, 135);
+        cliUtils.setCursorPosition(33, 198);
 
         return input;
     }

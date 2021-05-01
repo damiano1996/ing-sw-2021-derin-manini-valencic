@@ -73,17 +73,17 @@ public class CliTest {
 
 
     //CLI testing. Only press start to test CLI functionalities
-    public static void main(String[] args) throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException {
+    public static void main(String[] args) {
         try {
             CliTest cliTest = new CliTest(new Client());
             cliTest.testMethod();
-        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse | InvalidPayloadException e) {
+        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse | InvalidPayloadException | QuitOptionSelectedException | NoMoreDevelopmentCardsException | LevelDoesNotExistException | ColorDoesNotExistException | CanNotAddResourceToDepotException | CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException | CanNotAddResourceToStrongboxException e) {
             e.printStackTrace();
         }
     }
 
 
-    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException {
+    public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, QuitOptionSelectedException {
 
         //Insert here the name of the methods tou want to test
 

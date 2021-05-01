@@ -221,7 +221,11 @@ public class CLI implements ViewInterface {
     @Override
     public void displayMarketAction(MarketTray marketTray) {
         List<Integer> choice = new ArrayList<>();
-        choice.add(marketCli.displayMarketSelection(marketTray));
+        try {
+            choice.add(marketCli.displayMarketSelection(marketTray));
+        } catch (QuitOptionSelectedException e) {
+            client.sendQuitMessage();
+        }
         try {
             client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
         } catch (InvalidPayloadException ignored) {
@@ -233,7 +237,11 @@ public class CLI implements ViewInterface {
     @Override
     public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid) {
         List<DevelopmentCard> choice = new ArrayList<>();
-        choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid));
+        try {
+            choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid));
+        } catch (QuitOptionSelectedException e) {
+            client.sendQuitMessage();
+        }
         try {
             client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
         } catch (InvalidPayloadException ignored) {
@@ -321,10 +329,7 @@ public class CLI implements ViewInterface {
             } catch (QuitDisplayChoicesException e) {
                 break;
             } catch (QuitOptionSelectedException e) {
-                try {
-                    client.notifyObservers(new Message(QUIT_OPTION_SELECTED)); //TODO forse va generalizzato per le altre parti (tipo il market, la grid, ...)
-                } catch (InvalidPayloadException ignored) {
-                }
+                client.sendQuitMessage();
             }
         }
 
@@ -404,7 +409,7 @@ public class CLI implements ViewInterface {
     }
 
 
-    public void displayWaitingScree(Message message) {
+    public void displayWaitingScreen(Message message) {
         try {
             waitingScreenStarter.startWaiting(message);
         } catch (EmptyPayloadException ignored) {

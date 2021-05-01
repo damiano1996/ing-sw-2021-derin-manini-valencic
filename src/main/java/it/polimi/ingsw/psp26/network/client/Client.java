@@ -86,10 +86,10 @@ public class Client extends Observable<Message> {
                     viewInterface.displayMarketAction(marketTray, getSecondMessageResources(CHOICE_ROW_COLUMN));
                     break;
 
-                case CHOICE_CARD_TO_BUY: //TODO MANCA LA LISTA DI RISORSE
-                    // Message contains the Development Grid to display
+                case CHOICE_CARD_TO_BUY:
+                    // first message contains the Development Grid to display
                     DevelopmentGrid developmentGrid = ((DevelopmentGrid) message.getPayload());
-                    viewInterface.displayDevelopmentCardBuyAction(developmentGrid);
+                    viewInterface.displayDevelopmentCardBuyAction(developmentGrid, getSecondMessageResources(CHOICE_CARD_TO_BUY));
                     break;
 
 

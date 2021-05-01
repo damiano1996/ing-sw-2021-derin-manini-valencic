@@ -235,10 +235,10 @@ public class CLI implements ViewInterface {
 
 
     @Override
-    public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid) {
+    public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources) {
         List<DevelopmentCard> choice = new ArrayList<>();
         try {
-            choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid));
+            choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, playerResources));
         } catch (QuitOptionSelectedException e) {
             client.sendQuitMessage();
         }

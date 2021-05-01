@@ -37,7 +37,7 @@ public interface ViewInterface {
     void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd);
 
 
-    void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid);
+    void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources);
 
 
     void displayStrongbox(List<Resource> strongbox);

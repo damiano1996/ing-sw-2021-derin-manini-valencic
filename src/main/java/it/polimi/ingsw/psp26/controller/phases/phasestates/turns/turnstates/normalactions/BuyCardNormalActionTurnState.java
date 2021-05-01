@@ -38,13 +38,16 @@ public class BuyCardNormalActionTurnState extends TurnState {
                     }
 
                     turn.getMatchController().notifyObservers(
-                            new MultipleChoicesMessage(
+                            new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_CARD_TO_BUY,
-                                    "Choose the card you want to buy:",
-                                    1, 1,
-                                    false,
                                     turn.getMatchController().getMatch().getDevelopmentGrid()
+                            ));
+                    turn.getMatchController().notifyObservers(
+                            new SessionMessage(
+                                    turn.getTurnPlayer().getSessionToken(),
+                                    MessageType.CHOICE_CARD_TO_BUY,
+                                    turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources()
                             ));
 
                     break;
@@ -72,13 +75,16 @@ public class BuyCardNormalActionTurnState extends TurnState {
                         } else {
 
                             turn.getMatchController().notifyObservers(
-                                    new MultipleChoicesMessage(
+                                    new SessionMessage(
                                             turn.getTurnPlayer().getSessionToken(),
                                             MessageType.CHOICE_CARD_TO_BUY,
-                                            "Choose the card you want to buy:",
-                                            1, 1,
-                                            false,
                                             turn.getMatchController().getMatch().getDevelopmentGrid()
+                                    ));
+                            turn.getMatchController().notifyObservers(
+                                    new SessionMessage(
+                                            turn.getTurnPlayer().getSessionToken(),
+                                            MessageType.CHOICE_CARD_TO_BUY,
+                                            turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources()
                                     ));
 
                         }

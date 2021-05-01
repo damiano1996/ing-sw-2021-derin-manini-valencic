@@ -13,6 +13,8 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import java.io.PrintWriter;
 import java.util.*;
 
+import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
+
 public class DevelopmentCardsCli {
 
     private final PrintWriter pw;
@@ -327,10 +329,11 @@ public class DevelopmentCardsCli {
      * Display the Grid selection screen
      *
      * @param developmentGrid The Development Grid to display
+     * @param playerResources The Player's Resources
      * @return The chosen Development Card
      * @throws QuitOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
      */
-    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid) throws QuitOptionSelectedException {
+    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid, List<Resource> playerResources) throws QuitOptionSelectedException {
         String level = "";
         String color = "";
         boolean isCardChosen = false;
@@ -341,6 +344,7 @@ public class DevelopmentCardsCli {
         while (!isCardChosen) {
 
             displayDevelopmentGrid(developmentGrid);
+            printPlayerResources(playerResources, 39, 135);
 
             if (printErrorString)
                 cliUtils.pPCS("THE DESIRED CARD IS NOT AVAILABLE! Please try again", Color.RED, 30, 135);
@@ -382,7 +386,7 @@ public class DevelopmentCardsCli {
             cliUtils.pPCS("Enter 'u' if you want to exit from DevelopmentGrid screen.", Color.WHITE, 32, 135);
             cliUtils.pPCS(stringToDisplay, Color.WHITE, 33, 135);
             input = in.nextLine();
-            
+
             if (input.equals("u")) throw new QuitOptionSelectedException();
 
             if (isInputCorrect(input, levelOrColor)) correctInputInserted = true;

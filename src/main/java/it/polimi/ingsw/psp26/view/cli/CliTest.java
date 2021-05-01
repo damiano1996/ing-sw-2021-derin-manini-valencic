@@ -100,7 +100,7 @@ public class CliTest {
         developmentGrid.drawCard(Color.GREEN, Level.FIRST);
         developmentGrid.drawCard(Color.GREEN, Level.FIRST);
         developmentGrid.drawCard(Color.GREEN, Level.FIRST);
-        developmentCardsCli.displayDevelopmentCardSelection(developmentGrid);
+        developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, new ArrayList<>());
 
         //marketCli.displayMarketSelection(marketTray);
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.network.client;
 
+import it.polimi.ingsw.psp26.application.messages.LiveUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
@@ -23,19 +24,31 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 public class Client extends Observable<Message> {
 
     private final NetworkHandler networkHandler;
+    private final NotificationsFIFO notifications;
     private ViewInterface viewInterface;
-
     private String nickname;
     private MessageType matchModeType;
 
     public Client() throws IOException {
         super();
-        networkHandler = new NetworkHandler();
+        networkHandler = new NetworkHandler(this);
         addObserver(networkHandler);
+
+        notifications = new NotificationsFIFO(10);
     }
 
     public void viewNext() {
         handleMessages(MessageSynchronizedFIFO.getInstance().getNext());
+    }
+
+    public void liveUpdate(LiveUpdateMessage liveUpdateMessage) {
+        try {
+            String notification = (String) liveUpdateMessage.getPayload();
+            notifications.pushNotification(notification);
+            viewInterface.displayNotifications(notifications.getNotifications());
+        } catch (EmptyPayloadException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleMessages(Message message) {
@@ -70,7 +83,7 @@ public class Client extends Observable<Message> {
                             mcm.getQuestion(),
                             mcm.getListPayloads(),
                             mcm.getMinChoices(), mcm.getMaxChoices(),
-                            mcm.getHasQuitOption()
+                            mcm.getHasUndoOption()
                     );
                     break;
 
@@ -123,7 +136,7 @@ public class Client extends Observable<Message> {
         } catch (EmptyPayloadException ignored) {
         }
     }
-    
+
     private List<Resource> getSecondMessageResources(MessageType messageType) {
         Message secondMessage = MessageSynchronizedFIFO.getInstance().getNext();
         while (!secondMessage.getMessageType().equals(messageType))
@@ -166,5 +179,5 @@ public class Client extends Observable<Message> {
         } catch (InvalidPayloadException ignored) {
         }
     }
-    
+
 }

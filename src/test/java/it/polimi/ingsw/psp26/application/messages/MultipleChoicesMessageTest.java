@@ -37,9 +37,9 @@ public class MultipleChoicesMessageTest {
     public void testGetMaxChoices() {
         assertEquals(max, multipleChoicesMessage.getMaxChoices());
     }
-    
+
     @Test
     public void testGetHasQuitOption() {
-        assertTrue(multipleChoicesMessage.getHasQuitOption());
+        assertTrue(multipleChoicesMessage.getHasUndoOption());
     }
 }

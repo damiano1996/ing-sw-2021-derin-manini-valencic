@@ -1,8 +1,9 @@
 package it.polimi.ingsw.psp26.network.client;
 
+import it.polimi.ingsw.psp26.application.messages.LiveUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
-import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
@@ -16,15 +17,15 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.DEFAULT_SERVER
  * This class simulates the match controller from the point of view of the client.
  * It sends messages to the virtual view and receives updates.
  */
-public class NetworkHandler extends Observable<Message> implements Observer<Message> {
+public class NetworkHandler implements Observer<Message> {
 
+    private final Client client;
     private NetworkNode networkNode;
-
     private String sessionToken;
 
-    public NetworkHandler() {
+    public NetworkHandler(Client client) {
         super();
-        addObserver(MessageSynchronizedFIFO.getInstance());
+        this.client = client;
     }
 
     @Override
@@ -48,9 +49,16 @@ public class NetworkHandler extends Observable<Message> implements Observer<Mess
         new Thread(() -> {
             while (true) {
                 try {
+
                     Message message = (Message) networkNode.receiveObjectData();
-//                    System.out.println("NetworkHandler - new message received: " + message.toString());
-                    notifyObservers(message); // adds message to the MessageFIFO
+
+                    // if live update message, we can directly notify the client to display the message
+                    if (message.getMessageType().equals(MessageType.LIVE_UPDATE))
+                        client.liveUpdate((LiveUpdateMessage) message);
+                    else
+                        // otherwise, we can stack the message
+                        MessageSynchronizedFIFO.getInstance().update(message);
+
                 } catch (IOException | ClassNotFoundException e) {
                     // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }

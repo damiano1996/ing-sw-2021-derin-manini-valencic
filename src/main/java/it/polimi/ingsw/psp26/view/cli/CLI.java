@@ -2,9 +2,9 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.exceptions.ConfirmationException;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.exceptions.ConfirmationException;
 import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
@@ -122,6 +122,11 @@ public class CLI implements ViewInterface {
     @Override
     public void displayLeaderCards(List<LeaderCard> leaderCards) {
         personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
+    }
+
+    @Override
+    public void displayNotifications(List<String> notifications) {
+
     }
 
 

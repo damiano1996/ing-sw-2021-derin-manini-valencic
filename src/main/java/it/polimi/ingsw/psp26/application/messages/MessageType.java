@@ -2,6 +2,8 @@ package it.polimi.ingsw.psp26.application.messages;
 
 public enum MessageType {
 
+    LIVE_UPDATE,
+
     GENERAL_MESSAGE,
     ERROR_MESSAGE,
 
@@ -50,7 +52,7 @@ public enum MessageType {
     // Waiting screen
     START_WAITING,
     STOP_WAITING,
-    
+
     // The Player select to undo from the current selection
     QUIT_OPTION_SELECTED
 }

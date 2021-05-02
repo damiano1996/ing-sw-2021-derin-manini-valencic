@@ -20,6 +20,7 @@ import java.util.Map;
 
 import static it.polimi.ingsw.psp26.model.enums.Resource.COIN;
 import static it.polimi.ingsw.psp26.model.enums.Resource.SHIELD;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class MessageTest {
@@ -56,7 +57,19 @@ public class MessageTest {
     }
 
     @Test
-    public void testGetPayloads() throws EmptyPayloadException {
+    public void testEmptyPayloadList() throws InvalidPayloadException {
+        message = new Message(MessageType.GENERAL_MESSAGE);
+        assertEquals(new ArrayList<>(), message.getListPayloads());
+    }
+
+    @Test
+    public void testEmptyPayloadArray() throws InvalidPayloadException {
+        message = new Message(MessageType.GENERAL_MESSAGE);
+        assertArrayEquals(new Object[]{}, message.getArrayPayloads());
+    }
+
+    @Test
+    public void testGetPayloads() {
         assertEquals(new ArrayList<>() {{
             add(COIN);
             add(COIN);
@@ -91,7 +104,7 @@ public class MessageTest {
     }
 
     @Test(expected = InvalidPayloadException.class)
-    public void testDifferentPayloadsClassType_ExceptionCase() throws EmptyPayloadException, InvalidPayloadException {
+    public void testDifferentPayloadsClassType_ExceptionCase() throws InvalidPayloadException {
         message = new Message(MessageType.GENERAL_MESSAGE, 3, COIN, new VirtualView());
     }
 

@@ -13,7 +13,7 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
     private final String question;
     private final int minChoices;
     private final int maxChoices;
-    private final boolean hasQuitOption;
+    private final boolean hasUndoOption;
 
     /**
      * Constructor of the class.
@@ -24,7 +24,7 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
      * @param minChoices    min number of items to choose
      * @param maxChoices    max number of items to choose
      * @param payloads      payloads to send (choices for the players)
-     * @param hasQuitOption the choices can be undone
+     * @param hasUndoOption the choices can be undone
      * @throws InvalidPayloadException if payloads are not serializable
      */
     public MultipleChoicesMessage(
@@ -33,14 +33,14 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
             String question,
             int minChoices,
             int maxChoices,
-            boolean hasQuitOption,
+            boolean hasUndoOption,
             Object... payloads) throws InvalidPayloadException {
 
         super(sessionToken, messageType, payloads);
         this.question = question;
         this.minChoices = minChoices;
         this.maxChoices = maxChoices;
-        this.hasQuitOption = hasQuitOption;
+        this.hasUndoOption = hasUndoOption;
     }
 
     /**
@@ -72,11 +72,11 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
 
     /**
      * Getter of the boolean that tells if an additional String will be printed for undoing the choice
-     * 
+     *
      * @return hasQuitOption
      */
-    public boolean getHasQuitOption() {
-        return hasQuitOption;
+    public boolean getHasUndoOption() {
+        return hasUndoOption;
     }
 
     /**

@@ -33,7 +33,7 @@ public class PlayingPhaseState extends PhaseState {
         );
     }
 
-    public void playFirstTurn(){
+    public void playFirstTurn() {
         try {
             currentTurn.play(new SessionMessage(currentTurn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE)
             );

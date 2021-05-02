@@ -45,9 +45,9 @@ public class ViewUtils {
      */
     public static void printPlayerResources(List<Resource> resources, int startingRow, int startingColumn) {
         CliUtils cliUtils = new CliUtils(new PrintWriter(System.out));
-        
+
         cliUtils.pPCS("Player's Resources:", Color.WHITE, startingRow, startingColumn);
-        
+
         printResourceAndNumber(Resource.SHIELD, getResourcesNumber(resources, Resource.SHIELD), startingRow + 2, startingColumn);
         printResourceAndNumber(Resource.STONE, getResourcesNumber(resources, Resource.STONE), startingRow + 2, startingColumn + 10);
         printResourceAndNumber(Resource.COIN, getResourcesNumber(resources, Resource.COIN), startingRow + 2, startingColumn + 20);

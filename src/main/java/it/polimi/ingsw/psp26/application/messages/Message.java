@@ -18,13 +18,9 @@ import java.util.List;
  */
 public class Message implements Serializable {
 
-    private MessageType messageType;
-    private List<String> jsonPayloads;
-    private List<Class<?>> payloadsClasses;
-
-    // TODO: to be removed
-    public Message() {
-    }
+    private final MessageType messageType;
+    private final List<String> jsonPayloads;
+    private final List<Class<?>> payloadsClasses;
 
     /**
      * Constructor of the class.
@@ -34,6 +30,9 @@ public class Message implements Serializable {
      */
     public Message(MessageType messageType, Object... payloads) throws InvalidPayloadException {
         this.messageType = messageType;
+        jsonPayloads = new ArrayList<>();
+        payloadsClasses = new ArrayList<>();
+
         if (payloads.length > 0) objectToJson(payloads);
     }
 
@@ -47,9 +46,6 @@ public class Message implements Serializable {
      */
     private void objectToJson(Object... payloads) throws InvalidPayloadException {
         try {
-            jsonPayloads = new ArrayList<>();
-            payloadsClasses = new ArrayList<>();
-
             for (Object payload : payloads) {
                 payloadsClasses.add(payload.getClass());
                 jsonPayloads.add(GsonConverter.getInstance().getGson().toJson(payload, payload.getClass()));
@@ -100,12 +96,11 @@ public class Message implements Serializable {
      */
     public List<Object> getListPayloads() {
         List<Object> objectPayloads = new ArrayList<>();
-        
-        try {
-            for (int i = 0; i < jsonPayloads.size(); i++) {
+        for (int i = 0; i < jsonPayloads.size(); i++) {
+            try {
                 objectPayloads.add(getPayload(i));
+            } catch (EmptyPayloadException ignored) {
             }
-        } catch (EmptyPayloadException | NullPointerException ignored) {
         }
         return objectPayloads;
     }

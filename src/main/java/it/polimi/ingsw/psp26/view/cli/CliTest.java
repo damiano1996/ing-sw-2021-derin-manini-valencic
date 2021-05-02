@@ -88,7 +88,7 @@ public class CliTest {
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, UndoOptionSelectedException {
 
         //Insert here the name of the methods you want to test
-        
+
         testPrintPlayerResources();
 
         testWarehouseConfiguration();
@@ -119,11 +119,11 @@ public class CliTest {
         testPrintPlayerLeaderCards();
         testWaitingScreen();
     }
-    
-    
+
+
     private void testPrintPlayerResources() {
         cliUtils.cls();
-        
+
         List<Resource> resources = new ArrayList<>();
         resources.add(Resource.STONE);
         resources.add(Resource.COIN);
@@ -135,7 +135,7 @@ public class CliTest {
         resources.add(Resource.COIN);
         resources.add(Resource.STONE);
         resources.add(Resource.STONE);
-        
+
         printPlayerResources(resources, 10, 10);
         in.nextLine();
     }

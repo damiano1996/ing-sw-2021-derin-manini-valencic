@@ -25,6 +25,9 @@ public interface ViewInterface {
     void displayLeaderCards(List<LeaderCard> leaderCards);
 
 
+    void displayNotifications(List<String> notifications);
+
+
     void displayInkwell(boolean isPrintable);
 
 

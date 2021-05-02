@@ -119,5 +119,5 @@ public class TurnUtils {
         } catch (InvalidPayloadException ignored) {
         }
     }
-    
+
 }

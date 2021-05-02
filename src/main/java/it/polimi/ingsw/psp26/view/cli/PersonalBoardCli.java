@@ -1,17 +1,25 @@
 package it.polimi.ingsw.psp26.view.cli;
 
+import it.polimi.ingsw.psp26.exceptions.ConfirmationException;
 import it.polimi.ingsw.psp26.exceptions.ResourceSupplySlotOutOfBoundsException;
+import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
+import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
+import it.polimi.ingsw.psp26.utils.ViewUtils;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
+import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
 public class PersonalBoardCli {
 
@@ -194,15 +202,91 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Player's available production actions
+     * Prints the Player's available Productions
      *
-     * @param productions The Productions available for the Player
+     * @param productions    The Productions available for the Player
+     * @param playerResource The Player's Resources
+     * @throws UndoOptionSelectedException The Player decides to quit from Production screen
      */
-    public void displayProductionActivation(List<Production> productions) {
+    public List<Integer> displayProductionActivation(List<Production> productions, List<Resource> playerResource) throws UndoOptionSelectedException {
         cliUtils.cls();
+        List<Integer> indexChoices = new ArrayList<>();
 
         cliUtils.printFigure("/titles/ActivateProductionTitle", 1, 18);
+        printPlayerResources(playerResource, 32, 18);
+        printProductionBooks(productions);
 
+        do {
+            printProductionQuestion(indexChoices.size() >= 1);
+
+            try {
+                int choice = getCorrectChoice(productions.size(), indexChoices.size() >= 1);
+                if (!indexChoices.contains(choice)) indexChoices.add(choice);
+                cliUtils.pPCS("Player's choices: " + indexChoices, Color.WHITE, 44, 18);
+                cliUtils.clearLine(38, 18);
+                cliUtils.clearLine(42, 75);
+            } catch (ConfirmationException e) {
+                break;
+            } catch (UndoOptionSelectedException e) {
+                throw new UndoOptionSelectedException();
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                cliUtils.pPCS("INCORRECT INDEX INSERTED!", Color.RED, 38, 18);
+                cliUtils.clearLine(42, 75);
+            }
+
+        } while (indexChoices.size() < productions.size());
+
+        return indexChoices;
+    }
+
+
+    /**
+     * Prints the questions to the Player
+     *
+     * @param printConfirm The Player can confirm the current selections
+     */
+    private void printProductionQuestion(boolean printConfirm) {
+        cliUtils.pPCS("Enter 'u' if you want to exit from the Production selection screen.", Color.WHITE, 40, 18);
+        if (printConfirm)
+            cliUtils.pPCS("Enter 'c' to confirm selections.", Color.WHITE, 41, 18);
+        cliUtils.pPCS("Enter the number of the Production you want to activate: ", Color.WHITE, 42, 18);
+    }
+
+
+    /**
+     * Gets and parse correctly the input of the Player
+     *
+     * @param maxNumberOfChoices The maximum range of the index permitted
+     * @param canConfirm         If there is 1 ore more choice the Player can confirm the actual choices
+     * @return The index selected by the Player
+     * @throws UndoOptionSelectedException The PLayer exits from the Production screen
+     * @throws ConfirmationException       The Player confirm the current List of choices
+     * @throws IndexOutOfBoundsException   The index selected is not correct
+     */
+    private int getCorrectChoice(int maxNumberOfChoices, boolean canConfirm) throws UndoOptionSelectedException, ConfirmationException, IndexOutOfBoundsException {
+        Scanner in = new Scanner(System.in);
+        String choice;
+        choice = in.nextLine();
+
+        if (choice.isEmpty()) throw new IndexOutOfBoundsException();
+        if (choice.equals("u")) throw new UndoOptionSelectedException();
+        if (canConfirm)
+            if (choice.equals("c")) throw new ConfirmationException();
+        if (ViewUtils.checkAsciiRange(choice.charAt(0))) throw new IndexOutOfBoundsException();
+
+        int chosenIndex = Integer.parseInt(choice);
+        if (chosenIndex <= 0 || chosenIndex > maxNumberOfChoices) throw new IndexOutOfBoundsException();
+
+        return chosenIndex;
+    }
+
+
+    /**
+     * Prints the Productions in the form of Production books
+     *
+     * @param productions The productions to print
+     */
+    private void printProductionBooks(List<Production> productions) {
         for (int i = 0; i < productions.size(); i++) {
             cliUtils.printFigure("ProductionBook", 15, 20 + (i * 35));
             developmentCardsCli.printProduction(productions.get(i).getProductionCost(), productions.get(i).getProductionReturn(), 10, 21 + (i * 35));

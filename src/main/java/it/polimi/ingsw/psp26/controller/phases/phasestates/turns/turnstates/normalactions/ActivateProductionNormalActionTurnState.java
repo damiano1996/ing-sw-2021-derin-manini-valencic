@@ -7,8 +7,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
-import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
@@ -40,13 +39,16 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             switch (message.getMessageType()) {
                 case CHOICE_NORMAL_ACTION:
                     turn.getMatchController().notifyObservers(
-                            new MultipleChoicesMessage(
+                            new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
                                     CHOICE_CARDS_TO_ACTIVATE,
-                                    "Choose the development cards to activate:",
-                                    1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
-                                    true,
                                     turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
+                            ));
+                    turn.getMatchController().notifyObservers(
+                            new SessionMessage(
+                                    turn.getTurnPlayer().getSessionToken(),
+                                    CHOICE_CARDS_TO_ACTIVATE,
+                                    turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().toArray(new Object[0])
                             ));
                     break;
 
@@ -159,13 +161,16 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         } else {
             try {
                 turn.getMatchController().notifyObservers(
-                        new MultipleChoicesMessage(
+                        new SessionMessage(
                                 turn.getTurnPlayer().getSessionToken(),
                                 CHOICE_CARDS_TO_ACTIVATE,
-                                "Choose the development cards to activate:",
-                                1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
-                                true,
                                 turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
+                        ));
+                turn.getMatchController().notifyObservers(
+                        new SessionMessage(
+                                turn.getTurnPlayer().getSessionToken(),
+                                CHOICE_CARDS_TO_ACTIVATE,
+                                turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().toArray(new Object[0])
                         ));
             } catch (InvalidPayloadException ignored) {
             }

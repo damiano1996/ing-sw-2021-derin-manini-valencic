@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.view.ViewInterface;
@@ -61,7 +62,6 @@ public class Client extends Observable<Message> {
                 case CHOICE_LEADER_ACTION:
                 case CHOICE_NORMAL_ACTION:
                 case CHOICE_POSITION:
-                case CHOICE_CARDS_TO_ACTIVATE:
                 case CHOICE_LEADERS:
 
                     MultipleChoicesMessage mcm = (MultipleChoicesMessage) message;
@@ -74,6 +74,12 @@ public class Client extends Observable<Message> {
                     );
                     break;
 
+                case CHOICE_CARDS_TO_ACTIVATE:
+                    // first message contains the Player's Productions
+                    List<Production> productions = castElements(Production.class, message.getListPayloads());
+                    viewInterface.displayProductionActivation(productions, getSecondMessageResources(CHOICE_CARDS_TO_ACTIVATE));
+                    break;
+                    
                 case PLACE_IN_WAREHOUSE:
                     // first message contains the warehouse
                     Warehouse warehouse = ((Warehouse) message.getPayload());
@@ -154,7 +160,7 @@ public class Client extends Observable<Message> {
         this.matchModeType = matchModeType;
     }
     
-    public void sendQuitMessage() {
+    public void sendUndoMessage() {
         try {
             notifyObservers(new Message(QUIT_OPTION_SELECTED));
         } catch (InvalidPayloadException ignored) {

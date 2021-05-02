@@ -47,7 +47,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                             new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_CARD_TO_BUY,
-                                    turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources()
+                                    turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().toArray(new Object[0])
                             ));
 
                     break;
@@ -84,7 +84,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                     new SessionMessage(
                                             turn.getTurnPlayer().getSessionToken(),
                                             MessageType.CHOICE_CARD_TO_BUY,
-                                            turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources()
+                                            turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().toArray(new Object[0])
                                     ));
 
                         }

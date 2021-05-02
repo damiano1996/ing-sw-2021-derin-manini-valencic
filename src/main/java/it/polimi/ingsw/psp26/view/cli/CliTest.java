@@ -387,7 +387,7 @@ public class CliTest {
         productions.add(developmentGrid.drawCard(Color.GREEN, Level.FIRST).getProduction());
         productions.add(developmentGrid.drawCard(Color.GREEN, Level.SECOND).getProduction());
         productions.add(developmentGrid.drawCard(Color.GREEN, Level.THIRD).getProduction());
-        cli.displayProductionActivation(productions);
+        cli.displayProductionActivation(productions, new ArrayList<>());
         in.nextLine();
     }
 

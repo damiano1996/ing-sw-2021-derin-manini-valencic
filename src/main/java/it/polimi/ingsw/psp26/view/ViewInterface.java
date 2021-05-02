@@ -61,7 +61,7 @@ public interface ViewInterface {
     void displayResourceSupply(ResourceSupply resourceSupply);
 
 
-    void displayProductionActivation(List<Production> productions);
+    void displayProductionActivation(List<Production> productions, List<Resource> playerResources);
 
 
     void displayMarketScreen(MarketTray marketTray);

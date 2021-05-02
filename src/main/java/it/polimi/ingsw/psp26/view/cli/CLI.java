@@ -199,9 +199,19 @@ public class CLI implements ViewInterface {
 
 
     @Override
-    public void displayProductionActivation(List<Production> productions) {
-        personalBoardCli.displayProductionActivation(productions);
-        cliUtils.vSpace(5);
+    public void displayProductionActivation(List<Production> productions, List<Resource> playerResources) {
+        List<Integer> choices = new ArrayList<>();
+        try {
+            choices.addAll(personalBoardCli.displayProductionActivation(productions, playerResources));
+        } catch (UndoOptionSelectedException e) {
+            client.sendUndoMessage();
+        }
+        try {
+            client.notifyObservers(new Message(CHOICE_CARDS_TO_ACTIVATE, choices.toArray(new Object[0])));
+        } catch (InvalidPayloadException ignored) {
+        }
+        cliUtils.vSpace(3);
+        displayNext();
     }
 
 
@@ -224,7 +234,7 @@ public class CLI implements ViewInterface {
         try {
             choice.add(marketCli.displayMarketSelection(marketTray, playerResources));
         } catch (UndoOptionSelectedException e) {
-            client.sendQuitMessage();
+            client.sendUndoMessage();
         }
         try {
             client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
@@ -240,7 +250,7 @@ public class CLI implements ViewInterface {
         try {
             choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, playerResources));
         } catch (UndoOptionSelectedException e) {
-            client.sendQuitMessage();
+            client.sendUndoMessage();
         }
         try {
             client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
@@ -269,11 +279,6 @@ public class CLI implements ViewInterface {
 
             case CHOICE_LEADERS:
                 displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
-                break;
-
-            case CHOICE_CARDS_TO_ACTIVATE:
-                displayProductionActivation(castElements(Production.class, choices));
-                //TODO fai in modo che mostri anche a lista con il nuivo metodo ststico appena cresto
                 break;
 
             case CHOICE_RESOURCE: //TODO migliora la grafica di questa schermata
@@ -327,7 +332,7 @@ public class CLI implements ViewInterface {
             } catch (ConfirmationException e) {
                 break;
             } catch (UndoOptionSelectedException e) {
-                client.sendQuitMessage();
+                client.sendUndoMessage();
             }
         }
 

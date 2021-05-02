@@ -92,7 +92,7 @@ public class Client extends Observable<Message> {
                     List<Production> productions = castElements(Production.class, message.getListPayloads());
                     viewInterface.displayProductionActivation(productions, getSecondMessageResources(CHOICE_CARDS_TO_ACTIVATE));
                     break;
-                    
+
                 case PLACE_IN_WAREHOUSE:
                     // first message contains the warehouse
                     Warehouse warehouse = ((Warehouse) message.getPayload());
@@ -172,7 +172,7 @@ public class Client extends Observable<Message> {
     public void setMatchModeType(MessageType matchModeType) {
         this.matchModeType = matchModeType;
     }
-    
+
     public void sendUndoMessage() {
         try {
             notifyObservers(new Message(QUIT_OPTION_SELECTED));

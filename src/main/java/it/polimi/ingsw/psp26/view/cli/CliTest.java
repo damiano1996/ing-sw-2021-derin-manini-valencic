@@ -89,10 +89,11 @@ public class CliTest {
 
         //Insert here the name of the methods you want to test
 
+        testMessageStackPrinter();
+        testPersonalBoard();
+
         testPrintPlayerResources();
-
         testWarehouseConfiguration();
-
         //testMessages();
 
         developmentGrid = new DevelopmentGrid(virtualView);
@@ -118,6 +119,33 @@ public class CliTest {
         testActivateProduction();
         testPrintPlayerLeaderCards();
         testWaitingScreen();
+    }
+
+
+    private void testMessageStackPrinter() {
+        NotificationStackPrinter notificationStackPrinter = new NotificationStackPrinter(new PrintWriter(System.out));
+        cliUtils.cls();
+
+        List<String> messages = new ArrayList<>();
+        messages.add("efigwqfqieyifqygfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoi");
+        messages.add("efigwqfqieyifqygfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoi");
+        notificationStackPrinter.printMessageStack(messages, 30, 200);
+        in.nextLine();
+        
+        messages.add("iufyqiueygfiugwefuiqgwefygfqefwrehqoi");
+        messages.add("gfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoiygfqefwrehqoi");
+        messages.add("gfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoirehqoi");
+        messages.add("gfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoiygfqefwrehqoi");
+        notificationStackPrinter.printMessageStack(messages, 30, 200);
+        in.nextLine();
+
+        messages.add("eefwgfwggeffeqq");
+        messages.add("efigwqfqieyifqygfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoi");
+        messages.add("wqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoi");
+        messages.add("ciao");
+        messages.add("ciao");
+        notificationStackPrinter.printMessageStack(messages, 30, 200);
+        in.nextLine();
     }
 
 

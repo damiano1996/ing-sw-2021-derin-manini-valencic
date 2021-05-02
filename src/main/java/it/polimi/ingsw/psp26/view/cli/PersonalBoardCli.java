@@ -50,7 +50,7 @@ public class PersonalBoardCli {
 
         faithTrackCli.displayFaithTrack(player.getPersonalBoard().getFaithTrack(), 3, 10, isMultiplayerMode);
 
-        displayInkwell(player.hasInkwell(), 5, 190);
+        displayInkwell(player.hasInkwell(), 5, 199);
 
         depotCli.printWarehouse(player.getPersonalBoard().getWarehouse(), 17, 13);
 
@@ -58,7 +58,7 @@ public class PersonalBoardCli {
 
         displayDevelopmentCardsSlots(player.getPersonalBoard().getDevelopmentCardsSlots(), 30, 70);
 
-        printLeaderCardsInPersonalBoard(player.getLeaderCards(), 38, 195);
+        printLeaderCardsInPersonalBoard(player.getLeaderCards(), 18, 195);
 
         printLeaderDepots(player.getPersonalBoard().getWarehouse().getLeaderDepots(), 46, 7);
     }

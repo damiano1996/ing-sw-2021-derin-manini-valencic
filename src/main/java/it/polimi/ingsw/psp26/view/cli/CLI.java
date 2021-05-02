@@ -43,6 +43,7 @@ public class CLI implements ViewInterface {
     private final PersonalBoardCli personalBoardCli;
     private final DisplayWarehousePlacer displayWarehousePlacer;
     private final WaitingScreenStarter waitingScreenStarter;
+    private final NotificationStackPrinter notificationStackPrinter;
 
     public CLI(Client client) {
         this.client = client;
@@ -57,6 +58,7 @@ public class CLI implements ViewInterface {
         this.personalBoardCli = new PersonalBoardCli(pw);
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
         this.waitingScreenStarter = new WaitingScreenStarter();
+        this.notificationStackPrinter = new NotificationStackPrinter(pw);
     }
 
     /**
@@ -126,7 +128,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayNotifications(List<String> notifications) {
-
+        notificationStackPrinter.printMessageStack(notifications, 30, 200);
     }
 
 

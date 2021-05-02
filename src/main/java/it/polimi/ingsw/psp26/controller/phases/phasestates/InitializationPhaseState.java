@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
+import it.polimi.ingsw.psp26.application.messages.LiveUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
@@ -59,6 +60,7 @@ public class InitializationPhaseState extends PhaseState {
         System.out.println("Initialization phase  - sending start waiting message");
         try {
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Please wait for other Players to join..."));
+            sendSessionMessageToAllPlayers(phase.getMatchController(), new LiveUpdateMessage(sessionToken, nickname + " joined the game!"));
         } catch (InvalidPayloadException ignored) {
         }
     }

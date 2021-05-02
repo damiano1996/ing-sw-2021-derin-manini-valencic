@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.network.client;
 
-import it.polimi.ingsw.psp26.application.messages.LiveUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
@@ -41,7 +40,7 @@ public class Client extends Observable<Message> {
         handleMessages(MessageSynchronizedFIFO.getInstance().getNext());
     }
 
-    public void liveUpdate(LiveUpdateMessage liveUpdateMessage) {
+    public void liveUpdate(Message liveUpdateMessage) {
         try {
             String notification = (String) liveUpdateMessage.getPayload();
             notifications.pushNotification(notification);

@@ -118,17 +118,6 @@ public class Player extends Observable<SessionMessage> {
     }
 
     /**
-     * To check if the player has leader cards that can be used.
-     *
-     * @return true if the player has leader cards that can be played
-     */
-    public boolean isLeaderActionPlayable() {
-        return leaderCards
-                .stream()
-                .anyMatch(x -> !x.isActive());
-    }
-
-    /**
      * Getter for the virtual view.
      *
      * @return virtual view

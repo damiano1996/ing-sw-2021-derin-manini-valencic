@@ -9,6 +9,9 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
 
@@ -42,7 +45,9 @@ public class ChooseLeaderActionTurnState extends TurnState {
 
         System.out.println("ChooseLeaderActionTurnState - message received: " + message.toString());
 
-        if (!turn.getTurnPlayer().isLeaderActionPlayable()) {
+        List<MessageType> playableLeaderActions = getPlayableLeaderActions();
+
+        if (playableLeaderActions.size() == 0) {
             goToNextStateAfterLeaderAction(turn, message);
 
         } else {
@@ -81,7 +86,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
                                     "Choice leader action to perform:",
                                     1, 1,
                                     false,
-                                    ACTIVATE_LEADER, DISCARD_LEADER, SKIP_LEADER_ACTION
+                                    playableLeaderActions.toArray()
                             )
                     );
                 } catch (InvalidPayloadException ignored) {
@@ -90,5 +95,14 @@ public class ChooseLeaderActionTurnState extends TurnState {
 
 
         }
+    }
+
+    private List<MessageType> getPlayableLeaderActions() {
+        ActivateOrDiscardLeaderTurnState activateOrDiscardLeaderTurnState = new ActivateOrDiscardLeaderTurnState(turn);
+        List<MessageType> choices = new ArrayList<>();
+        if (activateOrDiscardLeaderTurnState.isAtLeastOneLeaderActivatable()) choices.add(ACTIVATE_LEADER);
+        if (activateOrDiscardLeaderTurnState.isAtLeastOneLeaderDiscardable()) choices.add(DISCARD_LEADER);
+        if (choices.size() > 0) choices.add(SKIP_LEADER_ACTION);
+        return choices;
     }
 }

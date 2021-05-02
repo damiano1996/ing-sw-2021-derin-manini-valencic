@@ -269,7 +269,7 @@ public class CLI implements ViewInterface {
 
 
     @Override
-    public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasQuitOption) {
+    public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
         cliUtils.cls();
         cliUtils.vSpace(1);
@@ -299,7 +299,7 @@ public class CLI implements ViewInterface {
         }
 
         cliUtils.vSpace(1);
-        List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasQuitOption));
+        List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasUndoOption));
 
         // send to server response
         try {

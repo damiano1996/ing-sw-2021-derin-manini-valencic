@@ -64,40 +64,4 @@ public class PlayerTest {
         assertFalse(player.hasInkwell());
     }
 
-
-    @Test
-    public void isLeaderActionPlayable_PlayableLeader() {
-        List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new HashMap<>(), new HashMap<>(), 0, new SpecialDepotAbility(Resource.COIN)));
-        }};
-
-        // First case: playable leader
-        player.setLeaderCards(leaderCards);
-        assertTrue(player.isLeaderActionPlayable());
-    }
-
-    @Test
-    public void isLeaderActionPlayable_AlreadyActive() {
-        List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new HashMap<>(), new HashMap<>(), 0, new SpecialDepotAbility(Resource.COIN)));
-        }};
-
-        // Second case: leader already active
-        player.setLeaderCards(leaderCards);
-        player.getLeaderCards().get(0).activate(player);
-        assertFalse(player.isLeaderActionPlayable());
-    }
-
-    @Test
-    public void isLeaderActionPlayable_NoMoreLeaders() {
-        List<LeaderCard> leaderCards = new ArrayList<>() {{
-            add(new LeaderCard(new HashMap<>(), new HashMap<>(), 0, new SpecialDepotAbility(Resource.COIN)));
-        }};
-
-        // Third case: no more leaders
-        player.setLeaderCards(leaderCards);
-        player.discardLeaderCard(leaderCards.get(0));
-
-        assertFalse(player.isLeaderActionPlayable());
-    }
 }

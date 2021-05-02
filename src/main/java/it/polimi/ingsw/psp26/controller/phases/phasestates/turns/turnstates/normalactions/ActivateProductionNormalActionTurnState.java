@@ -1,13 +1,13 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.OneResourceTurnState;
-import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
@@ -118,8 +118,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     }
 
     private boolean isProductionFeasible() {
-        List<Resource> availableResource = new ArrayList<>();
-        availableResource.addAll(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
+        List<Resource> availableResource = new ArrayList<>(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
         for (Production production : productionActivated) {
             for (Resource resource : production.getProductionCost().keySet()) {
                 if (resource == Resource.UNKNOWN) {

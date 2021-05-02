@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.network.client;
 
-import it.polimi.ingsw.psp26.application.messages.LiveUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
@@ -54,7 +53,7 @@ public class NetworkHandler implements Observer<Message> {
 
                     // if live update message, we can directly notify the client to display the message
                     if (message.getMessageType().equals(MessageType.LIVE_UPDATE))
-                        client.liveUpdate((LiveUpdateMessage) message);
+                        client.liveUpdate(message);
                     else
                         // otherwise, we can stack the message
                         MessageSynchronizedFIFO.getInstance().update(message);

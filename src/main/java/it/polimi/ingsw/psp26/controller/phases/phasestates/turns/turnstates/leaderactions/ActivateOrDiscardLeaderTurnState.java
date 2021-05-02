@@ -140,6 +140,30 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
     }
 
     /**
+     * Method to check if there is at least one leader that can be activated.
+     *
+     * @return true if there is, false otherwise
+     */
+    public boolean isAtLeastOneLeaderActivatable() {
+        for (LeaderCard leaderCard : turn.getTurnPlayer().getLeaderCards()) {
+            if (isActivatable(leaderCard)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Method to check if there is at least one leader that can be discarded.
+     *
+     * @return true if there is, false otherwise
+     */
+    public boolean isAtLeastOneLeaderDiscardable() {
+        for (LeaderCard leaderCard : turn.getTurnPlayer().getLeaderCards()) {
+            if (!leaderCard.isActive()) return true;
+        }
+        return false;
+    }
+
+    /**
      * Method to discard a leader card.
      * Given the leader card, it checks if it can be discarded. If so, it discards it.
      *

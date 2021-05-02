@@ -81,7 +81,7 @@ public class ActivateOrDiscardLeaderTurnStateTest {
     }
 
     @Test
-    public void testDiscardLeader() throws EmptyPayloadException, InvalidPayloadException {
+    public void testDiscardLeader() throws InvalidPayloadException {
         assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getFaithPoints());
 
         choiceLeaders(MessageType.DISCARD_LEADER, MessageType.CHOICE_LEADERS);
@@ -135,5 +135,29 @@ public class ActivateOrDiscardLeaderTurnStateTest {
         );
 
         assertTrue(turn.getTurnPlayer().getLeaderCards().get(0).isActive());
+    }
+
+    @Test
+    public void testAtLeastOneLeaderActivatableOrDiscardable() throws DevelopmentCardSlotOutOfBoundsException, CanNotAddDevelopmentCardToSlotException, InvalidPayloadException, CanNotAddResourceToStrongboxException, EmptyPayloadException {
+        ActivateOrDiscardLeaderTurnState activateOrDiscardLeaderTurnState = new ActivateOrDiscardLeaderTurnState(turn);
+        assertFalse(activateOrDiscardLeaderTurnState.isAtLeastOneLeaderActivatable());
+        assertTrue(activateOrDiscardLeaderTurnState.isAtLeastOneLeaderDiscardable());
+
+        // adding requirements
+        testChoiceLeadersToActivate_WithRequirementsSatisfied();
+        assertTrue(activateOrDiscardLeaderTurnState.isAtLeastOneLeaderActivatable());
+
+        // requesting activation
+        turn.play(
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        MessageType.CHOICE_LEADERS,
+                        mitm.getMessages().get(0).getPayload()
+                )
+        );
+
+        // no more activatable, no more discardable
+        assertFalse(activateOrDiscardLeaderTurnState.isAtLeastOneLeaderActivatable());
+        assertFalse(activateOrDiscardLeaderTurnState.isAtLeastOneLeaderDiscardable());
     }
 }

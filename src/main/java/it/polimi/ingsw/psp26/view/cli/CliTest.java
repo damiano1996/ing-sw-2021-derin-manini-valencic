@@ -131,7 +131,7 @@ public class CliTest {
         messages.add("efigwqfqieyifqygfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoi");
         notificationStackPrinter.printMessageStack(messages, 30, 200);
         in.nextLine();
-        
+
         messages.add("iufyqiueygfiugwefuiqgwefygfqefwrehqoi");
         messages.add("gfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoiygfqefwrehqoi");
         messages.add("gfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoirehqoi");

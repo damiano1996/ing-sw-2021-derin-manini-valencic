@@ -4,6 +4,8 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.BuyCardNormalActionTurnState;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
+import java.util.List;
+
 public class ResourceDiscountAbility extends SpecialAbility {
 
     public ResourceDiscountAbility(Resource resource) {
@@ -11,12 +13,12 @@ public class ResourceDiscountAbility extends SpecialAbility {
     }
 
     @Override
-    public void execute(TurnState turn) {
-        super.execute(turn);
+    public void execute(List<Resource> resourceList) {
+        super.execute(resourceList);
 
         try {
 
-            ((BuyCardNormalActionTurnState) turn).getTempResources().add(resource);
+           resourceList.add(resource);
 
         } catch (ClassCastException e) {
         }

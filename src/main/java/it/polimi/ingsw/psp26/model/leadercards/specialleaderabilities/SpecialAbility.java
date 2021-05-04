@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
+import java.util.List;
 import java.util.Objects;
 
 public abstract class SpecialAbility {
@@ -14,7 +15,7 @@ public abstract class SpecialAbility {
         this.resource = resource;
     }
 
-    public void execute(TurnState turn) {
+    public void execute(List<Resource> resourceList) {
     }
 
     public void activate(Player player) {

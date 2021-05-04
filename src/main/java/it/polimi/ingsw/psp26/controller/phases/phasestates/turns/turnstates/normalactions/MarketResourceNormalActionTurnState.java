@@ -49,6 +49,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
                     break;
                 case CHOICE_ROW_COLUMN:
+
                     boolean doubleActivation = false;
                     int RowColumnInt = (int) message.getPayload();
                     if (RowColumnInt <= 2) {
@@ -84,6 +85,12 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     refactorResourceAndChangeTurn(message);
 
                     break;
+
+                default:
+                case QUIT_OPTION_SELECTED:
+                    turn.changeState(new ChooseNormalActionTurnState(turn));
+                    turn.play(message);
+                    break;
             }
         } catch (EmptyPayloadException | InvalidPayloadException ignored) {
 
@@ -91,7 +98,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
     }
 
     private List<Resource> parseResource() {
-        return tempResources = tempResources.stream()
+
+        return tempResources.stream()
                 .filter(x -> !x.equals(Resource.EMPTY))
                 .filter(x -> !x.equals(Resource.FAITH_MARKER))
                 .collect(Collectors.toList());
@@ -104,14 +112,18 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         tempResources = parseResource();
 
         if (tempResources.size() > 0) {
+
             turn.changeState(new ResourcesWarehousePlacerTurnState(turn, tempResources));
+
         } else {
+
             turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_ACTION_TO_END));
         }
         turn.play(message);
     }
 
     private void isRedMarblePresent() {
+
         tempResources.stream()
                 .filter(x -> x.equals(Resource.FAITH_MARKER))
                 .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
@@ -122,15 +134,24 @@ public class MarketResourceNormalActionTurnState extends TurnState {
     }
 
     private boolean applyMarbleLeaderEffect(SessionMessage message) {
+
         List<Resource> tempResourceBeforeLeaders = new ArrayList<>();
         List<Resource> tempResourceLeader = new ArrayList<>();
 
         tempResourceBeforeLeaders.addAll(tempResources);
 
         for (LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
-            leader.execute(this);
+            leader.execute(tempResources);
 
-            if (tempResourceLeader.size() == 0) {
+            if(tempResources.size() != tempResourceBeforeLeaders.size()){
+
+                tempResources = new ArrayList<>();
+
+                tempResources.addAll(tempResourceBeforeLeaders);
+            }
+
+            if (tempResourceLeader.size() == 0 && !tempResources.contains(Resource.EMPTY)) {
+
                 tempResourceLeader.addAll(tempResources);
 
                 tempResources = new ArrayList<>();
@@ -142,6 +163,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         if (tempResourceLeader.size() != 0 && !tempResources.contains(Resource.EMPTY)) {
 
             List<Resource> leaderResources = new ArrayList<>();
+
             leaderResources.add(tempResources.get(tempResourceBeforeLeaders.indexOf(Resource.EMPTY)));
             leaderResources.add(tempResourceLeader.get(tempResourceBeforeLeaders.indexOf(Resource.EMPTY)));
             tempResources = tempResourceBeforeLeaders;
@@ -151,6 +173,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     (int) tempResources.stream().filter(x -> x.equals(Resource.EMPTY)).count(),
                     leaderResources
             ));
+
             turn.play(message);
             return true;
 

@@ -82,7 +82,10 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendChoiceCardsToActivateCostUnknown() throws InvalidPayloadException {
+    public void testSendChoiceCardsToActivateCostUnknown() throws InvalidPayloadException, CanNotAddResourceToStrongboxException {
+
+        turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
+        turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
 
@@ -120,7 +123,8 @@ public class ActivateProductionNormalActionTurnStateTest {
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
 
             assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
-            assertArrayEquals(resource2.toArray(), turn.getTurnPlayer().getPersonalBoard().getStrongbox().toArray());
+            assertEquals(MessageType.CHOICE_RESOURCE, mitm.getMessages().get(1).getMessageType());
+            // assertArrayEquals(resource2.toArray(), turn.getTurnPlayer().getPersonalBoard().getStrongbox().toArray());
         }
     }
 
@@ -129,9 +133,9 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
 
-        playCollection();
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
 
-        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(6).getMessageType());
+        assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
     }
 
     private void playCollection() throws InvalidPayloadException {

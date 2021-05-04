@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -65,10 +66,10 @@ public class LeaderCard {
     /**
      * Method to execute the special ability.
      *
-     * @param currentTurnState turnState in which the leader is called
+     * @param resourceList list of resource the leader power interacts with
      */
-    public void execute(TurnState currentTurnState) {
-        if (isActive()) specialAbility.execute(currentTurnState);
+    public void execute(List<Resource> resourceList) {
+        if (isActive()) specialAbility.execute(resourceList);
     }
 
     /**

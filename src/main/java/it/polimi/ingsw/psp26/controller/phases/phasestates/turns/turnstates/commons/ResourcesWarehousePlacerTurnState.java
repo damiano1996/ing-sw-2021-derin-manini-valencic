@@ -126,7 +126,8 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
         int tryToAllocate = 0;
 
         // filling the warehouse with the given order
-        for (Resource resourceToAdd : resourceOrder) {
+        for (int i = 0; i < resourceOrder.size(); i++) {
+            Resource resourceToAdd = resourceOrder.get(i);
             // amount of this resource
             int resourceQuantity = Collections.frequency(playerResources, resourceToAdd);
             tryToAllocate += resourceQuantity;
@@ -134,7 +135,7 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
             // try to add
             for (int j = 0; j < resourceQuantity; j++) {
                 try {
-                    turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resourceToAdd);
+                    turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resourceToAdd, i);
                 } catch (CanNotAddResourceToWarehouse canNotAddResourceToWarehouse) {
                     discardedResources += 1;
                 }
@@ -146,13 +147,15 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
 
     /**
      * Method removes duplicates from list preserving the order of the elements.
+     * EMPTY resources are not filtered.
      *
      * @param resources list of resources
      * @return list of resources without duplicates
      */
     private List<Resource> removeDuplicates(List<Resource> resources) {
         List<Resource> newResources = new ArrayList<>();
-        for (Resource resource : resources) if (!newResources.contains(resource)) newResources.add(resource);
+        for (Resource resource : resources)
+            if (!newResources.contains(resource) || resource.equals(Resource.EMPTY)) newResources.add(resource);
         return newResources;
     }
 
@@ -163,7 +166,10 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
      * @return true if there is a duplicate, false otherwise
      */
     private boolean isDuplicate(List<Resource> resources) {
-        List<Integer> multiplicity = resources.stream().map(x -> (!x.equals(Resource.EMPTY) ? Collections.frequency(resources, x) : 1)).collect(Collectors.toList());
+        List<Integer> multiplicity = resources
+                .stream()
+                .map(x -> (!x.equals(Resource.EMPTY) ? Collections.frequency(resources, x) : 1))
+                .collect(Collectors.toList());
         System.out.println(multiplicity);
         return multiplicity.stream().anyMatch(x -> x != 1);
     }

@@ -113,6 +113,18 @@ public class ResourcesWarehousePlacerTurnStateTest {
         );
     }
 
+    private void sendOrderTypeTwoEmptyCase() throws EmptyPayloadException, InvalidPayloadException {
+        testSendWarehouseMessage();
+
+        turn.play(
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        PLACE_IN_WAREHOUSE,
+                        EMPTY, EMPTY, COIN
+                )
+        );
+    }
+
 
     private void assertMultiplicity(List<Resource> expectedFinalResources) {
         // for each resource we check if the multiplicity is correct
@@ -123,6 +135,21 @@ public class ResourcesWarehousePlacerTurnStateTest {
                     Collections.frequency(turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources(), resource)
             );
         }
+    }
+
+    @Test
+    public void testCorrectlyAllocatedEmptyCase() throws EmptyPayloadException, InvalidPayloadException {
+        turn.getTurnPlayer().getPersonalBoard().grabAllAvailableResources();
+        assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(0).getResources().size());
+        assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(1).getResources().size());
+        assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(2).getResources().size());
+
+        sendOrderTypeTwoEmptyCase();
+
+        assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(0).getResources().size());
+        assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(1).getResources().size());
+        // two since one COIN is already in the depot
+        assertEquals(1, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(2).getResources().size());
     }
 
 

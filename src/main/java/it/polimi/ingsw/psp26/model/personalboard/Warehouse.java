@@ -79,9 +79,22 @@ public class Warehouse extends Observable<SessionMessage> {
      * @throws CanNotAddResourceToWarehouse if there is no depot to place the resource
      */
     public void addResource(Resource resource) throws CanNotAddResourceToWarehouse {
+        addResource(resource, 0);
+    }
+
+    /**
+     * Method to add a resource to the warehouse starting from a desired depot index.
+     * If the resource can be placed in the requested depot index, it will be placed,
+     * otherwise the resource will be placed in the first available
+     *
+     * @param resource      resource to add to the warehouse
+     * @param startingDepotIndex index of the desired depot
+     * @throws CanNotAddResourceToWarehouse if the resource cannot be placed
+     */
+    public void addResource(Resource resource, int startingDepotIndex) throws CanNotAddResourceToWarehouse {
         boolean added = false;
 
-        for (int i = 0; i < baseDepots.size() + leaderDepots.size(); i++) {
+        for (int i = startingDepotIndex; i < baseDepots.size() + leaderDepots.size(); i++) {
             try {
                 addResourceToDepot(i, resource);
                 added = true;

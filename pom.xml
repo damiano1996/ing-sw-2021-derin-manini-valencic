@@ -61,7 +61,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.6</version>
                 <configuration>
-                    <mainClass>it.polimi.ingsw.psp26.view.gui.Example</mainClass>
+                    <mainClass>it.polimi.ingsw.psp26.view.gui.PlayingPhase</mainClass>
                 </configuration>
             </plugin>
 

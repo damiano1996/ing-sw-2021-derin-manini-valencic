@@ -10,6 +10,7 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendSessionMessageToAllPlayers;
+import static java.lang.Thread.sleep;
 
 public class InitializationPhaseState extends PhaseState {
 
@@ -61,6 +62,18 @@ public class InitializationPhaseState extends PhaseState {
         try {
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Please wait for other Players to join..."));
             sendSessionMessageToAllPlayers(phase.getMatchController(), new LiveUpdateMessage(sessionToken, nickname + " joined the game!"));
+
+//            new Thread(() -> {
+//                while (true) {
+//                    try {
+//                        sendSessionMessageToAllPlayers(phase.getMatchController(), new LiveUpdateMessage(phase.getMatchController().getMatch().getPlayers().get(0).getSessionToken(), "Live update!!"));
+//                        sleep(3000);
+//                    } catch (InvalidPayloadException | InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }).start();
+
         } catch (InvalidPayloadException ignored) {
         }
     }

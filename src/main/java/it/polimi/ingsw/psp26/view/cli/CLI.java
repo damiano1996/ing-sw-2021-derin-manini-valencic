@@ -42,7 +42,7 @@ public class CLI implements ViewInterface {
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
     private final DisplayWarehousePlacer displayWarehousePlacer;
-    private final WaitingScreenStarter waitingScreenStarter;
+    //    private final WaitingScreenStarter waitingScreenStarter;
     private final NotificationStackPrinter notificationStackPrinter;
 
     public CLI(Client client) {
@@ -57,7 +57,7 @@ public class CLI implements ViewInterface {
         this.marketCli = new MarketCli(pw);
         this.personalBoardCli = new PersonalBoardCli(pw);
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
-        this.waitingScreenStarter = new WaitingScreenStarter();
+//        this.waitingScreenStarter = new WaitingScreenStarter();
         this.notificationStackPrinter = new NotificationStackPrinter(pw);
     }
 
@@ -424,7 +424,7 @@ public class CLI implements ViewInterface {
 
     public void displayWaitingScreen(Message message) {
         try {
-            waitingScreenStarter.startWaiting(message);
+            WaitingScreenStarter.getInstance().startWaiting(message);
         } catch (EmptyPayloadException ignored) {
         }
         client.viewNext();
@@ -432,7 +432,7 @@ public class CLI implements ViewInterface {
 
 
     public void stopDisplayingWaitingScreen() {
-        waitingScreenStarter.stopWaiting();
+        WaitingScreenStarter.getInstance().stopWaiting();
         client.viewNext();
     }
 

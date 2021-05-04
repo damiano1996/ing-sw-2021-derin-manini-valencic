@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
@@ -33,11 +34,12 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         super(turn);
     }
 
-    public void play(SessionMessage message) { // TO BE FINISHED
+    public void play(SessionMessage message) {
 
         try {
             switch (message.getMessageType()) {
                 case CHOICE_NORMAL_ACTION:
+
                     turn.getMatchController().notifyObservers(
                             new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
@@ -54,37 +56,45 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                 case CHOICE_CARDS_TO_ACTIVATE:
 
-                    productionActivated = castElements(Production.class, message.getListPayloads());
+                    if(isProductionPlayable()) {
 
-                    for (Production production : productionActivated) {
+                        productionActivated = castElements(Production.class, message.getListPayloads());
 
-                        if (production.getProductionCost().containsKey(Resource.UNKNOWN))
-                            numOfUnknownCost += production.getProductionCost().get(Resource.UNKNOWN);
+                        for (Production production : productionActivated) {
 
-                        if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
-                            numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
-                    }
-                    if (numOfUnknownCost != 0) {
-                        sendGeneralMessage(turn, "Choose the resource to pay that replaces the unknown resource in the production:");
+                            if (production.getProductionCost().containsKey(Resource.UNKNOWN))
+                                numOfUnknownCost += production.getProductionCost().get(Resource.UNKNOWN);
 
-                        turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost));
+                            if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
+                                numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
+                        }
+                        if (numOfUnknownCost != 0) {
+                            sendGeneralMessage(turn, "Choose the resource to pay that replaces the unknown resource in the production:");
+
+                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost));
+                            turn.play(message);
+
+                        } else if (numOfUnknownProd != 0) {
+                            sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
+
+                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
+                            turn.play(message);
+
+                        } else {
+
+                            play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
+
+                        }
+                    }else{
+                        sendGeneralMessage(turn, "No enough resources to activate any card - sending to choose action:");
+                        turn.changeState(new ChooseNormalActionTurnState(turn));
                         turn.play(message);
-
-                    } else if (numOfUnknownProd != 0) {
-                        sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
-
-                        turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
-                        turn.play(message);
-
-                    } else {
-
-                        play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
 
                     }
                     break;
 
                 case CHOICE_RESOURCE:
-
+                    System.out.println(message.getMessageType());
                     if (unknownCostResources == null || unknownCostResources.size() == numOfUnknownCost) {
 
                         if (numOfUnknownProd != 0)
@@ -110,18 +120,25 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                     }
                     break;
                 default:
+                case QUIT_OPTION_SELECTED:
+                    turn.changeState(new ChooseNormalActionTurnState(turn));
+                    turn.play(message);
+                    break;
 
-                    sendChoiceNormalActionMessage(turn);
+
             }
         } catch (InvalidPayloadException ignored) {
         }
     }
 
     private boolean isProductionFeasible() {
-        List<Resource> availableResource = new ArrayList<>(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
+        List<Resource> availableResource = new ArrayList<>();
+
+        availableResource.addAll(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
+
         for (Production production : productionActivated) {
             for (Resource resource : production.getProductionCost().keySet()) {
-                if (resource == Resource.UNKNOWN) {
+                if (resource == Resource.UNKNOWN){
                     for (int i = 0; i < (production.getProductionCost().get(Resource.UNKNOWN)); i++) {
                         if (!availableResource.remove((unknownCostResources.get(i))))
                             return false;
@@ -203,6 +220,23 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             }
         }
     }
+    private boolean isProductionPlayable() {
+        if (turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size() >= 2) {
+            for (int i = 0; i < turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(); i++) {
+
+                productionActivated.add(turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(i));
+                if(!productionActivated.get(0).getProductionCost().containsKey(Resource.UNKNOWN)) {
+                    if (isProductionFeasible()) return true;
+                }
+                productionActivated.remove(0);
+
+            }
+
+        }
+
+        if(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().size() >= 2) return true;
+
+        return false;
+    }
 
 }
-

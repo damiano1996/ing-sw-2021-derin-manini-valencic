@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.endgamecheckers.EndMatchCheckerTurnState;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 
 public class BuyCardNormalActionTurnState extends TurnState {
@@ -34,7 +36,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 case CHOICE_NORMAL_ACTION:
 
                     for (LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
-                        leader.execute(this);
+                        leader.execute(tempResources);
                     }
 
                     turn.getMatchController().notifyObservers(
@@ -43,6 +45,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                     MessageType.CHOICE_CARD_TO_BUY,
                                     turn.getMatchController().getMatch().getDevelopmentGrid()
                             ));
+
                     turn.getMatchController().notifyObservers(
                             new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
@@ -89,6 +92,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
                         }
                     } else {
+
                         sendGeneralMessage(turn, "No available cards to buy - sending to choose action:");
                         turn.changeState(new ChooseNormalActionTurnState(turn));
                         turn.play(message);
@@ -98,14 +102,20 @@ public class BuyCardNormalActionTurnState extends TurnState {
                     break;
 
                 case CHOICE_POSITION:
+
                     placeCard((int) message.getPayload());
-                    turn.changeState(new CheckVaticanReportTurnState(turn));
+                    turn.changeState(new EndMatchCheckerTurnState(turn));
                     turn.play(message);
                     break;
 
+                case QUIT_OPTION_SELECTED:
                 default:
+
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);
+
+                    break;
+
             }
         } catch (EmptyPayloadException | InvalidPayloadException ignored) {
             // TODO: handle exception
@@ -145,13 +155,16 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
         try {
             drawnCard = turn.getMatchController().getMatch().getDevelopmentGrid().drawCard(playerCard.getDevelopmentCardType().getColor(), playerCard.getDevelopmentCardType().getLevel());
-        } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) {
-        }
+
+        } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) { }
+
         for (Resource resource : drawnCard.getCost().keySet()) {
+
             numberResources = drawnCard.getCost().get(resource) - (int) tempResources.stream().filter(x -> x.equals(resource)).count();
             numberResources -= turn.getTurnPlayer().getPersonalBoard().getWarehouse().grabResources(resource, numberResources).size();
             if (numberResources > 0)
                 turn.getTurnPlayer().getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
+
         }
         return drawnCard;
 
@@ -169,8 +182,11 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     private void placeCard(int position) {
         try {
+
             turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
+
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {
+
             try {
                 turn.getMatchController().notifyObservers(
                         new MultipleChoicesMessage(
@@ -181,6 +197,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                 false,
                                 positionsForCard().toArray(new Object[0])
                         ));
+
             } catch (InvalidPayloadException invalidPayloadException) {
                 invalidPayloadException.printStackTrace();
             }

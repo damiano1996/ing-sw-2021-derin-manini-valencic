@@ -5,6 +5,8 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.MarketResourceNormalActionTurnState;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
+import java.util.List;
+
 public class WhiteMarbleAbility extends SpecialAbility {
 
     public WhiteMarbleAbility(Resource resource) {
@@ -12,13 +14,12 @@ public class WhiteMarbleAbility extends SpecialAbility {
     }
 
     @Override
-    public void execute(TurnState turn) {
-        super.execute(turn);
+    public void execute(List<Resource> resourceList) {
+        super.execute(resourceList);
 
         try {
 
-            ((MarketResourceNormalActionTurnState) turn).getTempResources()
-                    .replaceAll(r -> r.equals(Resource.EMPTY) ? resource : r);
+           resourceList.replaceAll(r -> r.equals(Resource.EMPTY) ? resource : r);
 
 
         } catch (ClassCastException e) {

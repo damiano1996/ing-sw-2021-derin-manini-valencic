@@ -24,6 +24,14 @@ public class DevelopmentCardType {
     }
 
     @Override
+    public String toString() {
+        return "DevelopmentCardType{" +
+                "color=" + color.getName() +
+                ", level=" + level +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

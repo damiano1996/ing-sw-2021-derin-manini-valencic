@@ -46,6 +46,14 @@ public class DevelopmentCard {
     }
 
     @Override
+    public String toString() {
+        return "DevelopmentCard{" +
+                "developmentCardType=" + developmentCardType +
+                ", victoryPoints=" + victoryPoints +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

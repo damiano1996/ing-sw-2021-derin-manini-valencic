@@ -10,7 +10,6 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendSessionMessageToAllPlayers;
-import static java.lang.Thread.sleep;
 
 public class InitializationPhaseState extends PhaseState {
 

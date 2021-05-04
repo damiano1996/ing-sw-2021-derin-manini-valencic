@@ -87,7 +87,7 @@ public class Warehouse extends Observable<SessionMessage> {
      * If the resource can be placed in the requested depot index, it will be placed,
      * otherwise the resource will be placed in the first available
      *
-     * @param resource      resource to add to the warehouse
+     * @param resource           resource to add to the warehouse
      * @param startingDepotIndex index of the desired depot
      * @throws CanNotAddResourceToWarehouse if the resource cannot be placed
      */

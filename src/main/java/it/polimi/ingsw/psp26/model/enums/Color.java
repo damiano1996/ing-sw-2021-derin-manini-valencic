@@ -1,15 +1,15 @@
 package it.polimi.ingsw.psp26.model.enums;
 
 public enum Color {
-    GREY("\033[38;5;242m", "Grey"),
-    RED("\u001b[31m", "Red"),
-    WHITE("\u001b[37m", "White"),
-    GREEN("\u001b[32m", "Green"),
-    BLUE("\u001b[34;1m", "Blue"),
-    YELLOW("\u001b[33m", "Yellow"),
-    PURPLE("\u001b[35m", "Purple"),
-    BYELLOW("\u001b[33;1m", "BYellow"),
-    BLACK("\u001b[30m", "Black"),
+    GREY("\033[38;5;242m", "GREY"),
+    RED("\u001b[31m", "RED"),
+    WHITE("\u001b[37m", "WHITE"),
+    GREEN("\u001b[32m", "GREEN"),
+    BLUE("\u001b[34;1m", "BLUE"),
+    YELLOW("\u001b[33m", "YELLOW"),
+    PURPLE("\u001b[35m", "PURPLE"),
+    BYELLOW("\u001b[33;1m", "BYELLOW"),
+    BLACK("\u001b[30m", "BLACK"),
 
     RESET("\u001b[0m", "Reset");
 
@@ -17,8 +17,8 @@ public enum Color {
 
     private final String name;
 
-    Color(String ANSIcode, String name) {
-        this.ANSIcode = ANSIcode;
+    Color(String ANSICode, String name) {
+        this.ANSIcode = ANSICode;
         this.name = name;
     }
 

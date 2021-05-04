@@ -131,7 +131,7 @@ public class DiscardActionTokenTest {
 
     @Test
     public void testGetTokenName() {
-        assertEquals("DiscardActionTokenGreen", discardActionTokenGreen.getTokenName());
+        assertEquals("DiscardActionTokenGREEN", discardActionTokenGreen.getTokenName());
     }
 
 }

@@ -41,7 +41,7 @@ public class WaitingScreenStarter {
      */
     public void startWaiting(Message message) throws EmptyPayloadException {
         if (!isWaiting) {
-            cliUtils.cls();
+            cliUtils.clns();
             cliUtils.hideCursor();
             cliUtils.pPCS((String) message.getPayload(), Color.WHITE, 25, 90);
             isWaiting = true;
@@ -49,6 +49,14 @@ public class WaitingScreenStarter {
             //The thread cycles the different Frames reproducing a waiting icon
             //TimeUnit.MILLISECONDS.sleep() is used to give a better viewing experience
             waitingScreenThread = new Thread(() -> {
+
+                //This wait will display correctly the starting screen
+                try {
+                    TimeUnit.MILLISECONDS.sleep(150);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 int frameCounter = 1;
 
                 while (isWaiting) {
@@ -66,6 +74,7 @@ public class WaitingScreenStarter {
                     //10 is the total amount of WaitingScreen's Frames
                     if (frameCounter > 10) frameCounter = 1;
                 }
+
             });
             waitingScreenThread.start();
         }
@@ -78,11 +87,12 @@ public class WaitingScreenStarter {
     public void stopWaiting() {
         if (isWaiting) {
             isWaiting = false;
-            cliUtils.cls();
+            cliUtils.clns();
             cliUtils.showCursor();
 
             try {
                 waitingScreenThread.join();
+                cliUtils.setCursorPosition(1, 1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

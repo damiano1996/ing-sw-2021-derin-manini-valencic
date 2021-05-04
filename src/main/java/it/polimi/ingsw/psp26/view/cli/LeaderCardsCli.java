@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-public class LeaderCardsCli { //TODO se va bene così il metodo per scegliere i leader elimina le parti commentate sotto
+public class LeaderCardsCli {
 
     private static final int CLI_WIDTH = 237;
     private final PrintWriter pw;
@@ -19,42 +19,6 @@ public class LeaderCardsCli { //TODO se va bene così il metodo per scegliere i 
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
     }
-
-
-    /**
-     * Prints the Leader selection Screen
-     *
-     * @param leaderCards The 4 Leader Cards given to the Player choice
-     */
-//    public void displayLeaderSelection(List<LeaderCard> leaderCards) {
-//        cliUtils.cls();
-//
-//        cliUtils.printFigure("LeaderSelectionTitle", 1, 28);
-//        printMultipleLeaders(leaderCards, 10);
-//
-//        //for (int j = 0; j < leaderCards.size(); j++)
-//        //isLeaderSelected(leaderCards.get(j), selectedLeaders, leaderCards, 30, 40 + (j * 45));
-//
-//        cliUtils.vSpace(5);
-//
-//    }
-
-
-    /**
-     * If a Leader Cards is selected, mark it with a red SELECTED String
-     *
-     * @param leaderCard      The card to check if has been selected
-     * @param selectedLeaders The Leaders selected by the Player
-     * @param leaderCards     The 4 Leader Cards given to the Player's choice
-     * @param startingRow     The starting row where the Leader Card is going to be printed
-     * @param startingColumn  The starting column where the Leader Card is going to be printed
-     */
-//    private void isLeaderSelected(LeaderCard leaderCard, List<LeaderCard> selectedLeaders, List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
-//        cliUtils.setCursorPosition(startingRow, startingColumn);
-//        if (selectedLeaders.contains(leaderCard)) pw.print("\u001b[41m  SELECTED  \u001b[0m");
-//        else pw.print("  Leader " + (leaderCards.indexOf(leaderCard) + 1) + "  ");
-//        pw.flush();
-//    }
 
 
     /**

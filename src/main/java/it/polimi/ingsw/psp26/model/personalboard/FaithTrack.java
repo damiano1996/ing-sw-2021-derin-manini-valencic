@@ -47,6 +47,7 @@ public class FaithTrack extends Observable<SessionMessage> {
      */
     public void addFaithPoints(int points) {
         this.faithPoints += points;
+        this.markerPosition += points; //TODO ANDREBBE IMPLEMENTATO UN CONTROLLO CHE NON FACCIA SUPERARE LA MARKER POSITION OLTRE 24
         // notifyObservers(new Message()); // TODO: to be completed
     }
 

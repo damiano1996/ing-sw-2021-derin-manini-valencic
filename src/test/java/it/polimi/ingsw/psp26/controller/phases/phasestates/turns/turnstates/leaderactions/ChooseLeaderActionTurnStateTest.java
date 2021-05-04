@@ -65,7 +65,7 @@ public class ChooseLeaderActionTurnStateTest {
     @Test
     public void testChoicesMessage() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
-        assertEquals(MessageType.CHOICE_LEADER_ACTION, mitm.getMessages().get(0).getMessageType());
+        assertEquals(MessageType.CHOICE_LEADER_ACTION, mitm.getMessages().get(1).getMessageType());
     }
 
     private void goTo(MessageType messageType) throws InvalidPayloadException {
@@ -76,19 +76,19 @@ public class ChooseLeaderActionTurnStateTest {
     @Test
     public void testGoToDiscard() throws InvalidPayloadException {
         goTo(DISCARD_LEADER);
-        assertEquals(MessageType.CHOICE_LEADERS, mitm.getMessages().get(1).getMessageType());
+        assertEquals(MessageType.CHOICE_LEADERS, mitm.getMessages().get(2).getMessageType());
     }
 
     @Test
     public void testGoToActivate() throws InvalidPayloadException {
         goTo(ACTIVATE_LEADER);
         // we will receive an error message since the player doesn't have satisfied requirements.
-        assertEquals(ERROR_MESSAGE, mitm.getMessages().get(1).getMessageType());
+        assertEquals(ERROR_MESSAGE, mitm.getMessages().get(2).getMessageType());
     }
 
     @Test
     public void testGoToChooseNormalAction() throws InvalidPayloadException {
         goTo(SKIP_LEADER_ACTION);
-        assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(1).getMessageType());
+        assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(3).getMessageType());
     }
 }

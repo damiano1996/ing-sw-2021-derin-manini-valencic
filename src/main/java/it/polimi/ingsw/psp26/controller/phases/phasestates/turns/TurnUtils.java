@@ -51,8 +51,15 @@ public class TurnUtils {
         }
     }
 
-    public static void sendChoiceNormalActionMessage(Turn turn) {
+    public static void sendChoiceNormalActionMessage(Turn turn) { //TODO lasciarla qua anche se viene aggiornata dal model?
         try {
+            turn.getMatchController().notifyObservers(
+                    new SessionMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            PERSONAL_BOARD,
+                            turn.getTurnPlayer()
+                    )
+            );
             turn.getMatchController().notifyObservers(
                     new MultipleChoicesMessage(
                             turn.getTurnPlayer().getSessionToken(),

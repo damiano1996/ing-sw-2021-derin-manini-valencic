@@ -42,7 +42,6 @@ public class CLI implements ViewInterface {
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
     private final DisplayWarehousePlacer displayWarehousePlacer;
-    //    private final WaitingScreenStarter waitingScreenStarter;
     private final NotificationStackPrinter notificationStackPrinter;
 
     public CLI(Client client) {
@@ -57,7 +56,6 @@ public class CLI implements ViewInterface {
         this.marketCli = new MarketCli(pw);
         this.personalBoardCli = new PersonalBoardCli(pw);
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
-//        this.waitingScreenStarter = new WaitingScreenStarter();
         this.notificationStackPrinter = new NotificationStackPrinter(pw);
     }
 
@@ -128,7 +126,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayNotifications(List<String> notifications) {
-        notificationStackPrinter.printMessageStack(notifications, 30, 200);
+        notificationStackPrinter.printMessageStack(notifications);
     }
 
 
@@ -140,9 +138,10 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
-        cliUtils.cls();
+        notificationStackPrinter.restoreStackView();
         personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
-        displayNext();
+        cliUtils.setCursorPosition(47, 1);
+        client.viewNext();
     }
 
 
@@ -154,6 +153,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
+        notificationStackPrinter.hideNotifications();
         List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourceToAdd);
         try {
             client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
@@ -207,6 +207,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayProductionActivation(List<Production> productions, List<Resource> playerResources) {
+        notificationStackPrinter.hideNotifications();
         List<Integer> choices = new ArrayList<>();
         try {
             choices.addAll(personalBoardCli.displayProductionActivation(productions, playerResources));
@@ -223,7 +224,7 @@ public class CLI implements ViewInterface {
 
 
     public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
-        cliUtils.cls();
+        cliUtils.clns();
         leaderCardsCli.printMultipleLeaders(leaderCards, 3);
         cliUtils.vSpace(3);
     }
@@ -237,6 +238,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
+        notificationStackPrinter.hideNotifications();
         List<Integer> choice = new ArrayList<>();
         try {
             choice.add(marketCli.displayMarketSelection(marketTray, playerResources));
@@ -253,6 +255,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources) {
+        notificationStackPrinter.hideNotifications();
         List<DevelopmentCard> choice = new ArrayList<>();
         try {
             choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, playerResources));
@@ -270,25 +273,30 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
-
-        cliUtils.cls();
+        
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + question);
 
         switch (messageType) {
 
             case MULTI_OR_SINGLE_PLAYER_MODE:
+            case CHOICE_POSITION:
+                cliUtils.clns();
+                displayMultipleStringChoices(choices);
+                break;
+
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
-            case CHOICE_POSITION:
                 displayMultipleStringChoices(choices);
                 break;
 
             case CHOICE_LEADERS:
+                cliUtils.clns();
                 displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
                 break;
 
             case CHOICE_RESOURCE: //TODO migliora la grafica di questa schermata
+                cliUtils.clns();
                 //ResourceSupply is the unique element of choices List
                 displayResourceSupply(new ResourceSupply());
                 cliUtils.vSpace(10);
@@ -378,7 +386,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayText(String text) {
-        cliUtils.cls();
+        cliUtils.clns();
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + text);
 
@@ -394,7 +402,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayError(String error) {
-        cliUtils.cls();
+        cliUtils.clns();
         cliUtils.setCursorPosition(20, 81);
         for (int i = 0; i < error.length() + 8; i++) pw.print(cliUtils.pCS("=", Color.RED));
         cliUtils.setCursorPosition(21, 1);

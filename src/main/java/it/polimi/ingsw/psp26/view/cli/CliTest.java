@@ -88,8 +88,14 @@ public class CliTest {
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, UndoOptionSelectedException {
 
         //Insert here the name of the methods you want to test
-
-        testMessageStackPrinter();
+        
+        cliUtils.cls();
+        cliUtils.pPCS("EEEEEEEEEEEEEEEEEEEEEEEEEE", Color.WHITE, 61, 1);
+        in.nextLine();
+        cliUtils.clns();
+        in.nextLine();
+        
+        
         testPersonalBoard();
 
         testPrintPlayerResources();
@@ -129,14 +135,14 @@ public class CliTest {
         List<String> messages = new ArrayList<>();
         messages.add("efigwqfqieyifqygfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoi");
         messages.add("efigwqfqieyifqygfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoi");
-        notificationStackPrinter.printMessageStack(messages, 30, 200);
+        notificationStackPrinter.printMessageStack(messages);
         in.nextLine();
 
         messages.add("iufyqiueygfiugwefuiqgwefygfqefwrehqoi");
         messages.add("gfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoiygfqefwrehqoi");
         messages.add("gfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoirehqoi");
         messages.add("gfqwfqywufgwifqgqfwiefwffewqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoiygfqefwrehqoi");
-        notificationStackPrinter.printMessageStack(messages, 30, 200);
+        notificationStackPrinter.printMessageStack(messages);
         in.nextLine();
 
         messages.add("eefwgfwggeffeqq");
@@ -144,7 +150,7 @@ public class CliTest {
         messages.add("wqfwqwfwqweugfyeiufyqiueygfiugwefuiqgwefygfqefwrehqoi");
         messages.add("ciao");
         messages.add("ciao");
-        notificationStackPrinter.printMessageStack(messages, 30, 200);
+        notificationStackPrinter.printMessageStack(messages);
         in.nextLine();
     }
 
@@ -349,7 +355,7 @@ public class CliTest {
         playerCards.add(leaderCardList.get(8));
         playerCards.add(leaderCardList.get(9));
         player.setLeaderCards(playerCards);
-        cli.displayPersonalBoard(player, false);
+        personalBoardCli.displayPersonalBoard(player, false);
         List<Resource> strResource = new ArrayList<>();
         in.nextLine();
         cliUtils.cls();
@@ -368,7 +374,7 @@ public class CliTest {
         player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
-        cli.displayPersonalBoard(player, false);
+        personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
 
@@ -383,7 +389,7 @@ public class CliTest {
         player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.BLUE, Level.SECOND));
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].activatePopesFavorTile();
-        cli.displayPersonalBoard(player, false);
+        personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
 
@@ -397,7 +403,7 @@ public class CliTest {
         player.getPersonalBoard().addResourcesToStrongbox(strResource);
         player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].activatePopesFavorTile();
-        cli.displayPersonalBoard(player, false);
+        personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
     }
 

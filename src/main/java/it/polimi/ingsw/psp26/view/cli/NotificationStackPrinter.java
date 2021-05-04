@@ -10,41 +10,54 @@ import java.util.List;
 public class NotificationStackPrinter {
 
     private final CliUtils cliUtils;
+    private List<String> notificationCopy;
+    private boolean isStackPrintable;
+
+    private static final int STARTING_ROW = 30;
+    private static final int STARTING_COLUMN = 201;
+    private static final int STACK_HEIGHT = 30;
+    private static final int MAX_NUMBER_OF_STRINGS = 10;
 
     public NotificationStackPrinter(PrintWriter pw) {
         this.cliUtils = new CliUtils(pw);
+        notificationCopy = new ArrayList<>();
+        isStackPrintable = true;
     }
 
 
     /**
      * Prints the given List of notifications in a stack of fixed size
      *
-     * @param notifications  The Strings to print
-     * @param startingRow    The row where the notifications are going to be printed
-     * @param startingColumn The column where the notifications are going to be printed
+     * @param notifications The Strings to print
      */
-    public void printMessageStack(List<String> notifications, int startingRow, int startingColumn) {
-        int delta = 0;
-        int stackHeight = 30;
-        int maxNumberOfStrings = 7;
-        Color stringColor;
+    public void printMessageStack(List<String> notifications) {
+        if (isStackPrintable) {
 
-        cliUtils.printFigure("NotificationStackBorder", startingRow, startingColumn);
+            notificationCopy = notifications;
+            cliUtils.saveCursorPosition();
+            int delta = 0;
+            Color stringColor;
 
-        // Inserts in the stack a maxNumberOfStrings number of Strings in the stack 
-        List<List<String>> parsedMessages = stringParser(notifications.size() >= maxNumberOfStrings ? notifications.subList(0, maxNumberOfStrings) : notifications);
+            cliUtils.printFigure("NotificationStackBorder", STARTING_ROW, STARTING_COLUMN);
 
-        for (List<String> parsedMessage : parsedMessages) {
-            stringColor = randomColorPicker();
+            // Inserts in the stack a maxNumberOfStrings number of Strings in the stack 
+            List<List<String>> parsedMessages = stringParser(notifications.size() >= MAX_NUMBER_OF_STRINGS ? notifications.subList(0, MAX_NUMBER_OF_STRINGS) : notifications);
 
-            for (String string : parsedMessage) {
-                cliUtils.pPCS(string, stringColor, startingRow + delta + 5, startingColumn + 3);
+            for (List<String> parsedMessage : parsedMessages) {
+                stringColor = randomColorPicker();
+
+                for (String string : parsedMessage) {
+                    cliUtils.pPCS(string, stringColor, STARTING_ROW + delta + 5, STARTING_COLUMN + 3);
+                    delta++;
+                    if (delta > STACK_HEIGHT - 9) break;
+                }
+
                 delta++;
-                if (delta > stackHeight - 9) break;
+                if (delta > STACK_HEIGHT - 9) break;
             }
 
-            delta++;
-            if (delta > stackHeight - 9) break;
+            cliUtils.restoreCursorPosition();
+
         }
     }
 
@@ -98,6 +111,25 @@ public class NotificationStackPrinter {
 
         Collections.shuffle(colors);
         return colors.get(0);
+    }
+
+
+    /**
+     * Used to set isStackPrintable attribute to false
+     */
+    public void hideNotifications() {
+        isStackPrintable = false;
+    }
+
+
+    /**
+     * Sets isStackPrintable to true and prints the notification stack
+     */
+    public void restoreStackView() {
+        if (!isStackPrintable) {
+            isStackPrintable = true;
+            printMessageStack(notificationCopy);
+        }
     }
 
 }

@@ -95,18 +95,12 @@ public class DepotCli {
      * @param startingColumn The starting column where the Warehouse is going to be printed
      */
     private void printDepot(Depot depot, int startingRow, int startingColumn, int depotNumber) {
+        cliUtils.pPCS("Depot" + depotNumber, Color.GREY, startingRow + ((3 * depotNumber) - 1), startingColumn + 23);
         cliUtils.setCursorPosition(startingRow + ((3 * depotNumber) - 1), startingColumn + 3);
-
-        cliUtils.saveCursorPosition();
-        cliUtils.moveCursor("rg", 20);
-        pw.print(cliUtils.pCS("Depot " + depotNumber, Color.GREY));
-        pw.flush();
-        cliUtils.restoreCursorPosition();
 
         List<Resource> resources = depot.getResources();
 
         if (resources.size() > 0) {
-
             StringBuilder s = new StringBuilder();
 
             s.append(cliUtils.hSpace(6 - (2 * resources.size())));

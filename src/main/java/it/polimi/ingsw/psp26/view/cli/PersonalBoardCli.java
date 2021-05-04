@@ -47,6 +47,7 @@ public class PersonalBoardCli {
      * @param isMultiplayerMode Tells if the Match is Single or MultiPlayer (used to print the correct FaithTrack)
      */
     public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
+        cliUtils.clns();
 
         faithTrackCli.displayFaithTrack(player.getPersonalBoard().getFaithTrack(), 3, 10, isMultiplayerMode);
 
@@ -60,7 +61,7 @@ public class PersonalBoardCli {
 
         printLeaderCardsInPersonalBoard(player.getLeaderCards(), 18, 195);
 
-        printLeaderDepots(player.getPersonalBoard().getWarehouse().getLeaderDepots(), 46, 7);
+        printLeaderDepots(player.getPersonalBoard().getWarehouse().getLeaderDepots(), 20, 50);
     }
 
 
@@ -138,12 +139,8 @@ public class PersonalBoardCli {
         //print the String ACTIVE or INACTIVE under each LeaderCard
         for (int i = 0; i < leaderCards.size(); i++)
             isLeaderCardActive(leaderCards.get(i), 32, leaderCardsCli.getPrintMultipleLeadersStartingColumn(leaderCards.size()) + 7 + (45 * i));
-
-
-        cliUtils.setCursorBottomLeft();
-        pw.print("Press Enter to exit this view.");
-
-        pw.flush();
+        
+        cliUtils.pPCS("Press Enter to exit this view.", Color.WHITE, 40, startingColumn + 20);
     }
 
 
@@ -175,6 +172,7 @@ public class PersonalBoardCli {
         for (int i = 0; i < leaderDepots.size(); i++) {
             cliUtils.printFigure("LeaderDepot", startingRow, startingColumn + (i * 18));
             printLeaderDepotResources(leaderDepots.get(i), startingRow, startingColumn + (i * 18));
+            cliUtils.pPCS("Leader Depot " + (i + 1), Color.GREY, startingRow + 5, startingColumn + (i * 18));
         }
     }
 
@@ -303,7 +301,7 @@ public class PersonalBoardCli {
      * @param startingColumn The column where the Resource Supply will be printed
      */
     public void displayResourceSupply(ResourceSupply resourceSupply, int startingRow, int startingColumn) {
-        cliUtils.cls();
+        cliUtils.clns();
 
         cliUtils.printFigure("/titles/ResourceSupplyTitle", startingRow, startingColumn);
         cliUtils.printFigure("ResourceSupply", startingRow + 19, startingColumn + 37);
@@ -338,7 +336,7 @@ public class PersonalBoardCli {
      * @param actionTokens The action Tokens to print
      */
     public void displayActionTokens(List<ActionToken> actionTokens) {
-        cliUtils.cls();
+        cliUtils.clns();
 
         cliUtils.printFigure("/titles/ActionTokensTitle", 1, 48);
         cliUtils.printFigure("/actiontokens/" + actionTokens.get(0).getTokenName(), 20, 141);

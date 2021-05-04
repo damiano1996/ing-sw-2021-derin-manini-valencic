@@ -70,7 +70,8 @@ public class Match extends Observable<SessionMessage> {
     /**
      * Initialization of the stack containing the action tokens and shuffling.
      */
-    private void initializeActionTokenStack() {
+    public void initializeActionTokenStack() {
+        actionTokenStack.clear();
         actionTokenStack.add(new BlackCrossActionToken());
         actionTokenStack.add(new BlackCrossActionToken());
         actionTokenStack.add(new BlackCrossShuffleActionToken());

@@ -9,6 +9,8 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 
+import java.util.concurrent.TimeUnit;
+
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendSessionMessageToAllPlayers;
 
 public class InitializationPhaseState extends PhaseState {
@@ -56,23 +58,27 @@ public class InitializationPhaseState extends PhaseState {
         String sessionToken = message.getSessionToken();
         System.out.println("Initialization phase - new player - nickname: " + nickname + " - sessionToken: " + sessionToken);
         phase.getMatchController().getMatch().addPlayer(new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken));
-
         System.out.println("Initialization phase  - sending start waiting message");
         try {
-            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Please wait for other Players to join..."));
             sendSessionMessageToAllPlayers(phase.getMatchController(), new LiveUpdateMessage(sessionToken, nickname + " joined the game!"));
 
-//            new Thread(() -> {
-//                while (true) {
-//                    try {
-//                        sendSessionMessageToAllPlayers(phase.getMatchController(), new LiveUpdateMessage(phase.getMatchController().getMatch().getPlayers().get(0).getSessionToken(), "Live update!!"));
-//                        sleep(3000);
-//                    } catch (InvalidPayloadException | InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }).start();
 
+            //TODO TOGLI STA ROBA
+            // 
+            //new Thread(() -> {
+            //    while (true) {
+            //        try {
+            sendSessionMessageToAllPlayers(phase.getMatchController(), new LiveUpdateMessage(sessionToken, nickname + " live update!!"));
+            //            TimeUnit.MILLISECONDS.sleep(8000);
+            //        } catch (InvalidPayloadException | InterruptedException ignored) {
+            //    }
+            //}
+            //}).start();
+
+            //------------
+
+
+            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Please wait for other Players to join..."));
         } catch (InvalidPayloadException ignored) {
         }
     }

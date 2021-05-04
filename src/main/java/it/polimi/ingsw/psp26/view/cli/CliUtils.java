@@ -130,7 +130,6 @@ public class CliUtils {
      * @param col        The x coordinate
      */
     public void printFigure(String figureName, int row, int col) {
-
         Scanner in = null;
 
         try {
@@ -151,22 +150,17 @@ public class CliUtils {
 
 
     /**
-     * Auxiliary method that prints the specidied ascii figure
+     * Auxiliary method that prints the specified ascii figure
      *
      * @param ascii The figure to print
      * @param row   The y coordinate
      * @param col   The x coordinate
      */
     private void printASCII(String[] ascii, int row, int col) {
-        setCursorPosition(row, col);
-
-        for (String s : ascii) {
-            saveCursorPosition();
-            pw.print(s);
-            restoreCursorPosition();
-            moveCursor("dn", 1);
+        for (int i = 0; i < ascii.length; i++) {
+            setCursorPosition(row + i, col);
+            pw.print(ascii[i]);
         }
-
         pw.flush();
     }
 
@@ -182,14 +176,13 @@ public class CliUtils {
     /**
      * Prints a colored string and set the cursor one line under the first column
      *
-     * @param s     The Strinf to print
+     * @param s     The String to print
      * @param color The color of the printed String
      */
     public void printAndBackWithColor(String s, Color color) {
-        saveCursorPosition();
         pw.print(pCS(s, color));
         pw.flush();
-        restoreCursorPosition();
+        moveCursor("lf", s.length());
         moveCursor("dn", 1);
     }
 
@@ -237,6 +230,30 @@ public class CliUtils {
     public void clearLine(int row, int column) {
         setCursorPosition(row, column);
         pw.println("\u001b[0K");
+        pw.flush();
+        setCursorPosition(row, column);
+    }
+
+
+    /**
+     * Clears the screen without the notification area
+     */
+    public void clns() {
+        for (int i = 1; i < 30; i++) clearLine(i, 1);
+        for (int i = 30; i <= 61; i++) reverseClearLine(i, 200);
+        setCursorPosition(1, 1);
+    }
+
+
+    /**
+     * Clears a line from the current cursor position to start of line
+     *
+     * @param row    The row of the line to clean
+     * @param column The column of the line to clean
+     */
+    public void reverseClearLine(int row, int column) {
+        setCursorPosition(row, column);
+        pw.println("\u001b[1K");
         pw.flush();
         setCursorPosition(row, column);
     }

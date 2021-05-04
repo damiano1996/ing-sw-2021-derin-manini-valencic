@@ -17,7 +17,7 @@ public class WaitingScreenStarter {
     private Thread waitingScreenThread;
     private boolean isWaiting;
 
-    public WaitingScreenStarter() {
+    private WaitingScreenStarter() {
         this.cliUtils = new CliUtils(new PrintWriter(System.out));
         isWaiting = false;
     }

@@ -66,7 +66,7 @@ public class TurnUtils {
         }
     }
 
-    public static void sendSessionMessageToAllPlayers(MatchController matchController, Message message) throws InvalidPayloadException {
+    public synchronized static void sendSessionMessageToAllPlayers(MatchController matchController, Message message) throws InvalidPayloadException {
         for (Player player : matchController.getMatch().getPlayers()) {
             matchController.notifyObservers(
                     new SessionMessage(

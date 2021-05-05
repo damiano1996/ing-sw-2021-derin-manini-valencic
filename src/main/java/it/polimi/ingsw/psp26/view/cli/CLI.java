@@ -17,6 +17,7 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
+import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.utils.ViewUtils;
@@ -177,7 +178,11 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
-        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
+        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 10, 70);
+        cliUtils.pPCS("Slot  1", Color.GREY, 27, 85);
+        cliUtils.pPCS("Slot  2", Color.GREY, 27, 121);
+        cliUtils.pPCS("Slot  3", Color.GREY, 27, 157);
+        cliUtils.vSpace(3);
     }
 
 
@@ -233,6 +238,7 @@ public class CLI implements ViewInterface {
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
         personalBoardCli.displayActionTokens(unusedTokens);
+        displayNext();
     }
 
 
@@ -280,9 +286,14 @@ public class CLI implements ViewInterface {
         switch (messageType) {
 
             case MULTI_OR_SINGLE_PLAYER_MODE:
-            case CHOICE_POSITION:
                 cliUtils.clns();
                 displayMultipleStringChoices(choices);
+                break;
+                
+            case CHOICE_POSITION:
+                cliUtils.cls();
+                displayMultipleStringChoices(choices);
+                displayDevelopmentCardsSlots(client.getPersonalBoardCopy().getDevelopmentCardsSlots());
                 break;
 
             case CHOICE_NORMAL_ACTION:

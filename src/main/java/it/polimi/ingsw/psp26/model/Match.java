@@ -220,6 +220,13 @@ public class Match extends Observable<SessionMessage> {
     }
 
     /**
+     * @return The List of ActionTokens
+     */
+    public List<ActionToken> getActionTokens() {
+        return Collections.unmodifiableList(actionTokenStack);
+    }
+
+    /**
      * Equals method.
      *
      * @param o object to be compared

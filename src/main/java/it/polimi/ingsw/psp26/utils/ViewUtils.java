@@ -31,8 +31,7 @@ public class ViewUtils {
      */
     public static int getResourcesNumber(List<Resource> resources, Resource resourceType) {
         if (!resources.contains(resourceType)) return 0;
-        Map<Resource, Long> numberOfResources = resources.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-        return numberOfResources.get(resourceType).intValue();
+        return (int) resources.stream().filter(x -> x.equals(resourceType)).count();
     }
 
 
@@ -51,7 +50,7 @@ public class ViewUtils {
         printResourceAndNumber(Resource.SHIELD, getResourcesNumber(resources, Resource.SHIELD), startingRow + 2, startingColumn);
         printResourceAndNumber(Resource.STONE, getResourcesNumber(resources, Resource.STONE), startingRow + 2, startingColumn + 10);
         printResourceAndNumber(Resource.COIN, getResourcesNumber(resources, Resource.COIN), startingRow + 2, startingColumn + 20);
-        printResourceAndNumber(Resource.SERVANT, getResourcesNumber(resources, Resource.COIN), startingRow + 2, startingColumn + 30);
+        printResourceAndNumber(Resource.SERVANT, getResourcesNumber(resources, Resource.SERVANT), startingRow + 2, startingColumn + 30);
     }
 
 

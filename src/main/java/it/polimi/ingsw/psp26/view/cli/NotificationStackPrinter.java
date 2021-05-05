@@ -17,6 +17,7 @@ public class NotificationStackPrinter {
     private static final int STARTING_COLUMN = 201;
     private static final int STACK_HEIGHT = 30;
     private static final int MAX_NUMBER_OF_STRINGS = 10;
+    private static final int STACK_WIDTH = 30;
 
     public NotificationStackPrinter(PrintWriter pw) {
         this.cliUtils = new CliUtils(pw);
@@ -31,9 +32,9 @@ public class NotificationStackPrinter {
      * @param notifications The Strings to print
      */
     public void printMessageStack(List<String> notifications) {
+        notificationCopy = notifications;
+        
         if (isStackPrintable) {
-
-            notificationCopy = notifications;
             cliUtils.saveCursorPosition();
             int delta = 0;
             Color stringColor;
@@ -57,7 +58,6 @@ public class NotificationStackPrinter {
             }
 
             cliUtils.restoreCursorPosition();
-
         }
     }
 
@@ -86,10 +86,9 @@ public class NotificationStackPrinter {
      */
     private List<String> splitString(String string) {
         List<String> stringList = new ArrayList<>();
-        int stackWidth = 30;
 
-        for (int i = 0; i < string.length(); i += stackWidth)
-            stringList.add(string.substring(i, Math.min(i + stackWidth, string.length())));
+        for (int i = 0; i < string.length(); i += STACK_WIDTH)
+            stringList.add(string.substring(i, Math.min(i + STACK_WIDTH, string.length())));
 
         return stringList;
     }

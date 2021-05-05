@@ -8,9 +8,11 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
@@ -27,6 +29,8 @@ public class Client extends Observable<Message> {
     private ViewInterface viewInterface;
     private String nickname;
     private MessageType matchModeType;
+    
+    private PersonalBoard personalBoardCopy; //TODO forse una classe container anche per altre cose
 
     public Client() throws IOException {
         super();
@@ -109,6 +113,12 @@ public class Client extends Observable<Message> {
                     DevelopmentGrid developmentGrid = ((DevelopmentGrid) message.getPayload());
                     viewInterface.displayDevelopmentCardBuyAction(developmentGrid, getSecondMessageResources(CHOICE_CARD_TO_BUY));
                     break;
+                    
+                case LORENZO_PLAY:
+                    // message contains the stack od Action Tokens
+                    List<ActionToken> actionTokens = castElements(ActionToken.class, message.getListPayloads());
+                    viewInterface.displayActionTokens(actionTokens);
+                    break;
 
 
                 // -------------------------------------
@@ -118,6 +128,7 @@ public class Client extends Observable<Message> {
                 case PERSONAL_BOARD:
                     boolean isMultiplayerMode = !matchModeType.equals(MessageType.SINGLE_PLAYER_MODE);
                     Player player = (Player) message.getPayload();
+                    personalBoardCopy = player.getPersonalBoard();
                     viewInterface.displayPersonalBoard(player, isMultiplayerMode);
                     break;
 
@@ -134,6 +145,10 @@ public class Client extends Observable<Message> {
             }
         } catch (EmptyPayloadException ignored) {
         }
+    }
+
+    public PersonalBoard getPersonalBoardCopy() {
+        return personalBoardCopy;
     }
 
     private List<Resource> getSecondMessageResources(MessageType messageType) {

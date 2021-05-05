@@ -4,7 +4,6 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.endgamecheckers.EndMatchCheckerTurnState;
 import it.polimi.ingsw.psp26.exceptions.*;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 
 public class BuyCardNormalActionTurnState extends TurnState {
@@ -135,7 +133,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
             for (Resource resource : card.getCost().keySet()) {
                 if (isAvailable) {
                     if (turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().stream().filter(x -> x.equals(resource)).count()
-                            < (card.getCost().get(resource).intValue() - tempResources.stream().filter(x -> x.equals(resource)).count()))
+                            < (card.getCost().get(resource) - tempResources.stream().filter(x -> x.equals(resource)).count()))
                         isAvailable = false;
                 }
             }
@@ -150,14 +148,16 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     private DevelopmentCard buyCard(DevelopmentCard playerCard) throws NegativeNumberOfElementsToGrabException {
         DevelopmentCard drawnCard = null;
-        int numberResources = 0;
+        int numberResources;
         int i = 0;
 
         try {
             drawnCard = turn.getMatchController().getMatch().getDevelopmentGrid().drawCard(playerCard.getDevelopmentCardType().getColor(), playerCard.getDevelopmentCardType().getLevel());
 
-        } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException e) { }
+        } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException ignored) {
+        }
 
+        assert drawnCard != null;
         for (Resource resource : drawnCard.getCost().keySet()) {
 
             numberResources = drawnCard.getCost().get(resource) - (int) tempResources.stream().filter(x -> x.equals(resource)).count();

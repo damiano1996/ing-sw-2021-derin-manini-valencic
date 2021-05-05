@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE;
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendChoiceNormalActionMessage;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
@@ -56,7 +54,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                 case CHOICE_CARDS_TO_ACTIVATE:
 
-                    if(isProductionPlayable()) {
+                    if (isProductionPlayable()) {
 
                         productionActivated = castElements(Production.class, message.getListPayloads());
 
@@ -85,7 +83,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                             play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
 
                         }
-                    }else{
+                    } else {
                         sendGeneralMessage(turn, "No enough resources to activate any card - sending to choose action:");
                         turn.changeState(new ChooseNormalActionTurnState(turn));
                         turn.play(message);
@@ -132,13 +130,12 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     }
 
     private boolean isProductionFeasible() {
-        List<Resource> availableResource = new ArrayList<>();
 
-        availableResource.addAll(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
+        List<Resource> availableResource = new ArrayList<>(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
 
         for (Production production : productionActivated) {
             for (Resource resource : production.getProductionCost().keySet()) {
-                if (resource == Resource.UNKNOWN){
+                if (resource == Resource.UNKNOWN) {
                     for (int i = 0; i < (production.getProductionCost().get(Resource.UNKNOWN)); i++) {
                         if (!availableResource.remove((unknownCostResources.get(i))))
                             return false;
@@ -220,12 +217,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             }
         }
     }
+
     private boolean isProductionPlayable() {
         if (turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size() >= 2) {
             for (int i = 0; i < turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(); i++) {
 
                 productionActivated.add(turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(i));
-                if(!productionActivated.get(0).getProductionCost().containsKey(Resource.UNKNOWN)) {
+                if (!productionActivated.get(0).getProductionCost().containsKey(Resource.UNKNOWN)) {
                     if (isProductionFeasible()) return true;
                 }
                 productionActivated.remove(0);
@@ -234,9 +232,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
         }
 
-        if(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().size() >= 2) return true;
-
-        return false;
+        return turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().size() >= 2;
     }
 
 }

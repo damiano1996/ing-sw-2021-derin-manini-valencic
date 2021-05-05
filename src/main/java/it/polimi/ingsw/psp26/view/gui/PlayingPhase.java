@@ -95,9 +95,8 @@ public class PlayingPhase extends Application {
             personalBoard.getWarehouse().addResource(Resource.SHIELD);
             personalBoard.getWarehouse().addResource(Resource.STONE);
             personalBoard.getWarehouse().addResource(Resource.STONE);
-            personalBoard.getWarehouse().addResource(Resource.STONE);
 
-            int nResourceStrongbox = 50;
+            int nResourceStrongbox = 10;
             for (int i = 0; i < nResourceStrongbox; i++) {
                 personalBoard.addResourceToStrongbox(RESOURCES_SLOTS[new Random().nextInt(RESOURCES_SLOTS.length)]);
             }
@@ -110,6 +109,7 @@ public class PlayingPhase extends Application {
             personalBoard.addDevelopmentCard(0, DevelopmentCardsInitializer.getInstance().getByDevelopmentCardType(new DevelopmentCardType(it.polimi.ingsw.psp26.model.enums.Color.PURPLE, Level.SECOND)).get(0));
 
             personalBoard.addDevelopmentCard(1, DevelopmentCardsInitializer.getInstance().getByDevelopmentCardType(new DevelopmentCardType(it.polimi.ingsw.psp26.model.enums.Color.YELLOW, Level.FIRST)).get(0));
+            personalBoard.addDevelopmentCard(1, DevelopmentCardsInitializer.getInstance().getByDevelopmentCardType(new DevelopmentCardType(it.polimi.ingsw.psp26.model.enums.Color.PURPLE, Level.SECOND)).get(0));
 
             personalBoard.addDevelopmentCard(2, DevelopmentCardsInitializer.getInstance().getByDevelopmentCardType(new DevelopmentCardType(it.polimi.ingsw.psp26.model.enums.Color.GREEN, Level.FIRST)).get(0));
             personalBoard.addDevelopmentCard(2, DevelopmentCardsInitializer.getInstance().getByDevelopmentCardType(new DevelopmentCardType(it.polimi.ingsw.psp26.model.enums.Color.YELLOW, Level.SECOND)).get(0));
@@ -120,9 +120,9 @@ public class PlayingPhase extends Application {
 
         GridPane root = new GridPane();
 
-        root.setOnMouseClicked(event -> {
-            System.out.println("Position: " + event.getSceneX() + ":" + event.getSceneY());
-        });
+//        root.setOnMouseClicked(event -> {
+//            System.out.println("Position: " + event.getSceneX() + ":" + event.getSceneY());
+//        });
 
         root.setAlignment(Pos.TOP_LEFT);
 

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.BuyCardNormalActionTurnState;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.List;
@@ -18,9 +16,9 @@ public class ResourceDiscountAbility extends SpecialAbility {
 
         try {
 
-           resourceList.add(resource);
+            resourceList.add(resource);
 
-        } catch (ClassCastException e) {
+        } catch (ClassCastException ignored) {
         }
 
     }

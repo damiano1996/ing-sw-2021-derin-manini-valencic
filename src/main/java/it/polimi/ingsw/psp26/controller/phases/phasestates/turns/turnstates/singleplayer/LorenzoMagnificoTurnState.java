@@ -4,12 +4,8 @@ import it.polimi.ingsw.psp26.application.messages.LiveUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnPhase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.endgamecheckers.EndMatchCheckerTurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 
@@ -20,21 +16,23 @@ import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtil
 
 public class LorenzoMagnificoTurnState extends TurnState {
 
-    public LorenzoMagnificoTurnState(Turn turn) { super(turn);  }
+    public LorenzoMagnificoTurnState(Turn turn) {
+        super(turn);
+    }
 
     @Override
     public void play(SessionMessage message) {
         super.play(message);
-        
+
         List<ActionToken> allTokens = new ArrayList<>(turn.getMatchController().getMatch().getActionTokens());
         ActionToken actionToken = turn.getMatchController().getMatch().drawActionTokens(1).get(0);
-        
+
         try {
             actionToken.execute(turn.getTurnPlayer().getPersonalBoard().getFaithTrack(),
                     turn.getMatchController().getMatch().getDevelopmentGrid());
-            
+
             afterExecute(allTokens, actionToken.getTokenName());
-        
+
         } catch (ColorDoesNotExistException | LevelDoesNotExistException | LorenzoWinException | InvalidPayloadException e) {
             e.printStackTrace();
         } catch (MustShuffleActionTokenStackException e) {
@@ -48,8 +46,8 @@ public class LorenzoMagnificoTurnState extends TurnState {
         turn.changeState(new CheckVaticanReportTurnState(turn));
         turn.play(message);
     }
-    
-    
+
+
     private void afterExecute(List<ActionToken> allTokens, String tokenPlayed) throws InvalidPayloadException {
         sendSessionMessageToAllPlayers(turn.getMatchController(), new LiveUpdateMessage(turn.getTurnPlayer().getSessionToken(), "Lorenzo played                " + tokenPlayed));
 
@@ -61,6 +59,6 @@ public class LorenzoMagnificoTurnState extends TurnState {
                 )
         );
     }
-    
-    
+
+
 }

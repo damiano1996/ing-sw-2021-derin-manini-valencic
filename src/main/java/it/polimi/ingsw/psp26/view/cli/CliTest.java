@@ -88,7 +88,7 @@ public class CliTest {
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, UndoOptionSelectedException {
 
         //Insert here the name of the methods you want to test
-        
+
         testPersonalBoard();
 
         testPrintPlayerResources();

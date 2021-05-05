@@ -29,7 +29,7 @@ public class Client extends Observable<Message> {
     private ViewInterface viewInterface;
     private String nickname;
     private MessageType matchModeType;
-    
+
     private PersonalBoard personalBoardCopy; //TODO forse una classe container anche per altre cose
 
     public Client() throws IOException {
@@ -113,7 +113,7 @@ public class Client extends Observable<Message> {
                     DevelopmentGrid developmentGrid = ((DevelopmentGrid) message.getPayload());
                     viewInterface.displayDevelopmentCardBuyAction(developmentGrid, getSecondMessageResources(CHOICE_CARD_TO_BUY));
                     break;
-                    
+
                 case LORENZO_PLAY:
                     // message contains the stack od Action Tokens
                     List<ActionToken> actionTokens = castElements(ActionToken.class, message.getListPayloads());

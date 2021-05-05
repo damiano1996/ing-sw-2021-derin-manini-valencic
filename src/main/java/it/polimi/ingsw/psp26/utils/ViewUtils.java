@@ -6,8 +6,6 @@ import it.polimi.ingsw.psp26.view.cli.CliUtils;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ViewUtils {
 

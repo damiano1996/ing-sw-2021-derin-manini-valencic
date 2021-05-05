@@ -275,7 +275,7 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
-        
+
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + question);
 
@@ -285,7 +285,7 @@ public class CLI implements ViewInterface {
                 cliUtils.clns();
                 displayMultipleStringChoices(choices);
                 break;
-                
+
             case CHOICE_POSITION:
                 cliUtils.cls();
                 displayMultipleStringChoices(choices);
@@ -328,14 +328,14 @@ public class CLI implements ViewInterface {
                 }
             }
             client.viewNext();
-            
+
         } catch (InvalidPayloadException e) {
             e.printStackTrace();
         } catch (UndoOptionSelectedException e) { //TODO da fare con i leader
             client.sendUndoMessage();
             client.viewNext();
         }
-        
+
     }
 
 

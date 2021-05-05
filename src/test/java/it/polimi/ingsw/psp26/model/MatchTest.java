@@ -107,13 +107,13 @@ public class MatchTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testDrawLeaders_IndexOutOfBoundsException() throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
+    public void testDrawLeaders_IndexOutOfBoundsException() throws IndexOutOfBoundsException {
         int numberOfCardsToDraw = 1000;
         List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
     }
 
     @Test
-    public void testDrawLeaders_StandardCase() throws NegativeNumberOfElementsToGrabException {
+    public void testDrawLeaders_StandardCase() {
         int numberOfCardsToDraw = 4;
         List<LeaderCard> drawnCards = match.drawLeaders(numberOfCardsToDraw);
         assertEquals(drawnCards.size(), numberOfCardsToDraw);
@@ -121,18 +121,18 @@ public class MatchTest {
 
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testDrawActionTokens_IndexOutOfBoundsException() throws NegativeNumberOfElementsToGrabException, IndexOutOfBoundsException {
+    public void testDrawActionTokens_IndexOutOfBoundsException() throws IndexOutOfBoundsException {
         int numberOfTokensToDraw = 1000;
         List<ActionToken> drawnTokens = match.drawActionTokens(numberOfTokensToDraw);
     }
 
     @Test
-    public void testDrawActionTokens_StandardCase() throws NegativeNumberOfElementsToGrabException {
+    public void testDrawActionTokens_StandardCase() {
         int numberOfTokensToDraw = 1;
         List<ActionToken> drawnTokens = match.drawActionTokens(numberOfTokensToDraw);
         assertEquals(drawnTokens.size(), numberOfTokensToDraw);
     }
-    
+
     @Test
     public void testGetActionTokens() {
         List<ActionToken> actionTokens = new ArrayList<>();
@@ -143,10 +143,10 @@ public class MatchTest {
         actionTokens.add(new DiscardActionToken(Color.YELLOW));
         actionTokens.add(new DiscardActionToken(Color.BLUE));
         actionTokens.add(new DiscardActionToken(Color.PURPLE));
-        
+
         List<String> tokenNames = actionTokens.stream().map(ActionToken::getTokenName).collect(Collectors.toList());
         List<String> matchTokenNames = match.getActionTokens().stream().map(ActionToken::getTokenName).collect(Collectors.toList());
-        
+
         assertTrue(tokenNames.containsAll(matchTokenNames));
     }
 

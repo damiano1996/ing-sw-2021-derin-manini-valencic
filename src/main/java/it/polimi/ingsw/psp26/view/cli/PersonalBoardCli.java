@@ -139,7 +139,7 @@ public class PersonalBoardCli {
         //print the String ACTIVE or INACTIVE under each LeaderCard
         for (int i = 0; i < leaderCards.size(); i++)
             isLeaderCardActive(leaderCards.get(i), 32, leaderCardsCli.getPrintMultipleLeadersStartingColumn(leaderCards.size()) + 7 + (45 * i));
-        
+
         cliUtils.pPCS("Press Enter to exit this view.", Color.WHITE, 40, startingColumn + 20);
     }
 
@@ -241,9 +241,9 @@ public class PersonalBoardCli {
 
     /**
      * Creates a List of Productions selected by the Player
-     * 
+     *
      * @param productions The total Productions received from the Server
-     * @param selections The Production indexes selected by the Player
+     * @param selections  The Production indexes selected by the Player
      * @return The List of selected Productions
      */
     private List<Production> getSelectedProductions(List<Production> productions, List<Integer> selections) {

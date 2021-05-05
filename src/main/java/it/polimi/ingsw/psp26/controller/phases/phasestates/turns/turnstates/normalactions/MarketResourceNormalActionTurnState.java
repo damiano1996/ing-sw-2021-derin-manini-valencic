@@ -84,7 +84,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
                     refactorResourceAndChangeTurn(message);
                     break;
-                    
+
                 case QUIT_OPTION_SELECTED:
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);
@@ -133,15 +133,14 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
     private boolean applyMarbleLeaderEffect(SessionMessage message) {
 
-        List<Resource> tempResourceBeforeLeaders = new ArrayList<>();
         List<Resource> tempResourceLeader = new ArrayList<>();
 
-        tempResourceBeforeLeaders.addAll(tempResources);
+        List<Resource> tempResourceBeforeLeaders = new ArrayList<>(tempResources);
 
         for (LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
             leader.execute(tempResources);
 
-            if(tempResources.size() != tempResourceBeforeLeaders.size()){
+            if (tempResources.size() != tempResourceBeforeLeaders.size()) {
 
                 tempResources = new ArrayList<>();
 

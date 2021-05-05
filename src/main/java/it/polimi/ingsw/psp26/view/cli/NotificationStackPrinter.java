@@ -9,15 +9,14 @@ import java.util.List;
 
 public class NotificationStackPrinter {
 
-    private final CliUtils cliUtils;
-    private List<String> notificationCopy;
-    private boolean isStackPrintable;
-
     private static final int STARTING_ROW = 30;
     private static final int STARTING_COLUMN = 201;
     private static final int STACK_HEIGHT = 30;
     private static final int MAX_NUMBER_OF_STRINGS = 10;
     private static final int STACK_WIDTH = 30;
+    private final CliUtils cliUtils;
+    private List<String> notificationCopy;
+    private boolean isStackPrintable;
 
     public NotificationStackPrinter(PrintWriter pw) {
         this.cliUtils = new CliUtils(pw);
@@ -33,7 +32,7 @@ public class NotificationStackPrinter {
      */
     public void printMessageStack(List<String> notifications) {
         notificationCopy = notifications;
-        
+
         if (isStackPrintable) {
             cliUtils.saveCursorPosition();
             int delta = 0;

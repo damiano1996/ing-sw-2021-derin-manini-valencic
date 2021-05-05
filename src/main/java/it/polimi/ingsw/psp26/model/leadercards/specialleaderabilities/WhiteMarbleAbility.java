@@ -1,8 +1,6 @@
 package it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities;
 
 
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.MarketResourceNormalActionTurnState;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.List;
@@ -19,10 +17,10 @@ public class WhiteMarbleAbility extends SpecialAbility {
 
         try {
 
-           resourceList.replaceAll(r -> r.equals(Resource.EMPTY) ? resource : r);
+            resourceList.replaceAll(r -> r.equals(Resource.EMPTY) ? resource : r);
 
 
-        } catch (ClassCastException e) {
+        } catch (ClassCastException ignored) {
         }
 
     }

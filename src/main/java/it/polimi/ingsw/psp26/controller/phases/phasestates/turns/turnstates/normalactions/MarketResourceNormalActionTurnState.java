@@ -83,10 +83,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     }
 
                     refactorResourceAndChangeTurn(message);
-
                     break;
-
-                default:
+                    
                 case QUIT_OPTION_SELECTED:
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);

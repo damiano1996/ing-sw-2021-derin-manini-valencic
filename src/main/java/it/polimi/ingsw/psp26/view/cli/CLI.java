@@ -17,7 +17,6 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
-import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.utils.ViewUtils;
@@ -178,10 +177,11 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
-        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 10, 70);
-        cliUtils.pPCS("Slot  1", Color.GREY, 27, 85);
-        cliUtils.pPCS("Slot  2", Color.GREY, 27, 121);
-        cliUtils.pPCS("Slot  3", Color.GREY, 27, 157);
+        cliUtils.pPCS("Enter the number of the slot in which you want to put the drawn card", Color.WHITE, 10, 4);
+        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
+        cliUtils.pPCS("Slot  1", Color.GREY, 47, 85);
+        cliUtils.pPCS("Slot  2", Color.GREY, 47, 121);
+        cliUtils.pPCS("Slot  3", Color.GREY, 47, 157);
         cliUtils.vSpace(3);
     }
 
@@ -213,18 +213,16 @@ public class CLI implements ViewInterface {
     @Override
     public void displayProductionActivation(List<Production> productions, List<Resource> playerResources) {
         notificationStackPrinter.hideNotifications();
-        List<Integer> choices = new ArrayList<>();
         try {
-            choices.addAll(personalBoardCli.displayProductionActivation(productions, playerResources));
+            List<Production> choices = new ArrayList<>(personalBoardCli.displayProductionActivation(productions, playerResources));
+            client.notifyObservers(new Message(CHOICE_CARDS_TO_ACTIVATE, choices.toArray(new Object[0])));
+            cliUtils.vSpace(3);
+            displayNext();
         } catch (UndoOptionSelectedException e) {
             client.sendUndoMessage();
-        }
-        try {
-            client.notifyObservers(new Message(CHOICE_CARDS_TO_ACTIVATE, choices.toArray(new Object[0])));
+            client.viewNext();
         } catch (InvalidPayloadException ignored) {
         }
-        cliUtils.vSpace(3);
-        displayNext();
     }
 
 
@@ -248,14 +246,13 @@ public class CLI implements ViewInterface {
         List<Integer> choice = new ArrayList<>();
         try {
             choice.add(marketCli.displayMarketSelection(marketTray, playerResources));
+            client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
+            displayNext();
         } catch (UndoOptionSelectedException e) {
             client.sendUndoMessage();
-        }
-        try {
-            client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
+            client.viewNext();
         } catch (InvalidPayloadException ignored) {
         }
-        displayNext();
     }
 
 
@@ -265,15 +262,14 @@ public class CLI implements ViewInterface {
         List<DevelopmentCard> choice = new ArrayList<>();
         try {
             choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, playerResources));
+            client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
+            cliUtils.setCursorBottomLeft();
+            displayNext();
         } catch (UndoOptionSelectedException e) {
             client.sendUndoMessage();
-        }
-        try {
-            client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
+            client.viewNext();
         } catch (InvalidPayloadException ignored) {
         }
-        cliUtils.setCursorBottomLeft();
-        displayNext();
     }
 
 
@@ -317,30 +313,33 @@ public class CLI implements ViewInterface {
                 break;
         }
 
-        cliUtils.vSpace(1);
-        List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasUndoOption));
-
         // send to server response
         try {
+            cliUtils.vSpace(1);
+            List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasUndoOption));
             client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
+
+            if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
+                client.setMatchModeType((MessageType) selected.get(0));
+                try {
+                    client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
+                } catch (InvalidPayloadException e) {
+                    e.printStackTrace();
+                }
+            }
+            client.viewNext();
+            
         } catch (InvalidPayloadException e) {
             e.printStackTrace();
+        } catch (UndoOptionSelectedException e) { //TODO da fare con i leader
+            client.sendUndoMessage();
+            client.viewNext();
         }
-
-        if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
-            client.setMatchModeType((MessageType) selected.get(0));
-            try {
-                client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
-            } catch (InvalidPayloadException e) {
-                e.printStackTrace();
-            }
-        }
-
-        client.viewNext();
+        
     }
 
 
-    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices, boolean hasUndoOption) {
+    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices, boolean hasUndoOption) throws UndoOptionSelectedException {
         List<Integer> choices = new ArrayList<>();
         int itemInt;
 
@@ -357,8 +356,6 @@ public class CLI implements ViewInterface {
                 cliUtils.vSpace(3);
             } catch (ConfirmationException e) {
                 break;
-            } catch (UndoOptionSelectedException e) {
-                client.sendUndoMessage();
             }
         }
 

@@ -204,9 +204,10 @@ public class PersonalBoardCli {
      *
      * @param productions    The Productions available for the Player
      * @param playerResource The Player's Resources
+     * @return The selected Productions
      * @throws UndoOptionSelectedException The Player decides to quit from Production screen
      */
-    public List<Integer> displayProductionActivation(List<Production> productions, List<Resource> playerResource) throws UndoOptionSelectedException {
+    public List<Production> displayProductionActivation(List<Production> productions, List<Resource> playerResource) throws UndoOptionSelectedException {
         cliUtils.cls();
         List<Integer> indexChoices = new ArrayList<>();
 
@@ -234,7 +235,21 @@ public class PersonalBoardCli {
 
         } while (indexChoices.size() < productions.size());
 
-        return indexChoices;
+        return getSelectedProductions(productions, indexChoices);
+    }
+
+
+    /**
+     * Creates a List of Productions selected by the Player
+     * 
+     * @param productions The total Productions received from the Server
+     * @param selections The Production indexes selected by the Player
+     * @return The List of selected Productions
+     */
+    private List<Production> getSelectedProductions(List<Production> productions, List<Integer> selections) {
+        List<Production> productionsToReturn = new ArrayList<>();
+        for (Integer i : selections) productionsToReturn.add(productions.get(i - 1));
+        return productionsToReturn;
     }
 
 

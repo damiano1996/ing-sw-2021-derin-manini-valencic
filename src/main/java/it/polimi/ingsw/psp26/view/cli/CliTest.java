@@ -89,13 +89,6 @@ public class CliTest {
 
         //Insert here the name of the methods you want to test
         
-        cliUtils.cls();
-        cliUtils.pPCS("EEEEEEEEEEEEEEEEEEEEEEEEEE", Color.WHITE, 61, 1);
-        in.nextLine();
-        cliUtils.clns();
-        in.nextLine();
-        
-        
         testPersonalBoard();
 
         testPrintPlayerResources();

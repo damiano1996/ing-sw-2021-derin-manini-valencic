@@ -19,12 +19,12 @@ public class GUIUtils {
         return new Image(getCompletePath(fileName), width, width, true, true);
     }
 
-    public static Image setRoundedCorners(Image image) {
+    public static Image setRoundedCorners(Image image, float ratio) {
         ImageView imageView = new ImageView(image);
 
         Rectangle clip = new Rectangle(image.getWidth(), image.getHeight());
-        clip.setArcWidth(50);
-        clip.setArcHeight(50);
+        clip.setArcWidth(50 * ratio);
+        clip.setArcHeight(50 * ratio);
         imageView.setClip(clip);
 
         SnapshotParameters snapshotParameters = new SnapshotParameters();

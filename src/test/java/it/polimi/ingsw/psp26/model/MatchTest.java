@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.model;
 
-import it.polimi.ingsw.psp26.exceptions.NegativeNumberOfElementsToGrabException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.actiontokens.BlackCrossActionToken;

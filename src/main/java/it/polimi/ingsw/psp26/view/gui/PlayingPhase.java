@@ -12,10 +12,10 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -30,7 +30,6 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_NAME;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.HEIGHT_RATIO;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WIDTH_RATIO;
-import static it.polimi.ingsw.psp26.view.gui.PersonalBoardDrawer.drawPersonalBoard;
 
 public class PlayingPhase extends Application {
 
@@ -56,21 +55,13 @@ public class PlayingPhase extends Application {
         Application.launch(args);
     }
 
-    public GridPane addTopBar() {
-        GridPane gridPane = new GridPane();
+    public HBox addTopBar(PersonalBoard... personalBoards) {
+        HBox hBox = new HBox();
 
-        int padding = 20;
-        gridPane.setHgap(padding);
-        gridPane.setVgap(padding);
-        gridPane.setPadding(new Insets(padding, padding, padding, padding));
-
-        Text welcome = new Text("Welcome\naaa\naaaa\njjjjjj\nggg\njjj\nuuuuu");
-        welcome.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        welcome.setFill(Color.WHITE);
-        gridPane.getChildren().add(welcome);
-
-        gridPane.setStyle("-fx-background-color: #336699;");
-        return gridPane;
+        for (PersonalBoard personalBoard : personalBoards) {
+            hBox.getChildren().add(new PersonalBoardDrawer(personalBoard, 500).drawPersonalBoard());
+        }
+        return hBox;
     }
 
     public VBox addRightBar() {
@@ -118,6 +109,9 @@ public class PlayingPhase extends Application {
             e.printStackTrace();
         }
 
+        personalBoard.getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
+        personalBoard.getFaithTrack().addFaithPoints(3);
+
         GridPane root = new GridPane();
 
 //        root.setOnMouseClicked(event -> {
@@ -128,9 +122,10 @@ public class PlayingPhase extends Application {
 
         int topBarHeight = (int) (windowHeight * 0.2);
         int mainBoxWidth = (int) (windowWidth * 0.7);
-        root.add(addTopBar(), 0, 0, windowWidth, topBarHeight);
+        System.out.println(mainBoxWidth);
+        root.add(addTopBar(personalBoard, personalBoard, personalBoard), 0, 0, windowWidth, topBarHeight);
         root.add(
-                drawPersonalBoard(personalBoard, mainBoxWidth),
+                new PersonalBoardDrawer(personalBoard, mainBoxWidth).drawPersonalBoard(),
                 0, topBarHeight, mainBoxWidth, windowHeight - topBarHeight
         );
         root.add(addRightBar(), mainBoxWidth, topBarHeight, windowWidth - mainBoxWidth, windowHeight - topBarHeight);

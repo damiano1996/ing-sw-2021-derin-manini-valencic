@@ -5,15 +5,10 @@ import javafx.scene.input.MouseEvent;
 
 public class AnimationEffects {
 
-    public static void addMouseOverAnimation(ImageView imageView) {
-        int shift = 10;
+    public static void addMouseOverAnimation(ImageView imageView, float ratio) {
+        int shift = (int) (10 * ratio);
 
         imageView.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> imageView.setY(imageView.getY() - shift));
-
         imageView.addEventFilter(MouseEvent.MOUSE_EXITED, mouseEvent -> imageView.setY(imageView.getY() + shift));
-    }
-
-    public static void addMouseClickAnimation(ImageView imageView) {
-        new Selectable(imageView);
     }
 }

@@ -8,21 +8,23 @@ import javafx.scene.paint.Color;
 
 public class LightEffects {
 
-    private static DropShadow getPrimaryLightShadow() {
+    private static DropShadow getPrimaryLightShadow(float ratio) {
         DropShadow dropShadow = new DropShadow();
-        dropShadow.setOffsetX(10);
-        dropShadow.setOffsetY(10);
-        dropShadow.setRadius(20);
-        dropShadow.setWidth(40);
+        dropShadow.setOffsetX(10 * ratio);
+        dropShadow.setOffsetY(10 * ratio);
+        dropShadow.setRadius(20 * ratio);
+        dropShadow.setWidth(40 * ratio);
+        dropShadow.setColor(new Color(0, 0, 0, 0.7));
         return dropShadow;
     }
 
-    private static DropShadow getSecondaryLightShadow() {
+    private static DropShadow getSecondaryLightShadow(float ratio) {
         DropShadow dropShadow = new DropShadow();
-        dropShadow.setOffsetX(-2);
-        dropShadow.setOffsetY(-2);
-        dropShadow.setRadius(40);
-        dropShadow.setWidth(10);
+        dropShadow.setOffsetX(-2 * ratio);
+        dropShadow.setOffsetY(-2 * ratio);
+        dropShadow.setRadius(40 * ratio);
+        dropShadow.setWidth(10 * ratio);
+        dropShadow.setColor(new Color(0, 0, 0, 0.4));
         return dropShadow;
     }
 
@@ -35,9 +37,9 @@ public class LightEffects {
         return imageView.snapshot(snapshotParameters, null);
     }
 
-    public static Image addLightEffects(Image image) {
-        image = addShadow(image, getPrimaryLightShadow());
-        image = addShadow(image, getSecondaryLightShadow());
+    public static Image addLightEffects(Image image, float ratio) {
+        image = addShadow(image, getPrimaryLightShadow(ratio));
+        image = addShadow(image, getSecondaryLightShadow(ratio));
         return image;
     }
 

@@ -3,9 +3,9 @@ package it.polimi.ingsw.psp26.view.gui;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
-import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
+import it.polimi.ingsw.psp26.view.gui.effects.Selectable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -18,18 +18,30 @@ import java.util.Random;
 
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
-import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseClickAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
 
 public class PersonalBoardDrawer {
 
-    public static Pane drawPersonalBoard(PersonalBoard personalBoard, int canvasWidth) {
-        Pane pane = new Pane();
+    private static final float WIDTH = 2867;
 
-        Image personalboardImage = loadImage("personalboard.png", canvasWidth);
-        personalboardImage = setRoundedCorners(personalboardImage);
-        personalboardImage = addLightEffects(personalboardImage);
+    private final Pane pane;
+    private final float ratio;
+
+    private final PersonalBoard personalBoard;
+
+    public PersonalBoardDrawer(PersonalBoard personalBoard, int maxWidth) {
+        pane = new Pane();
+        ratio = maxWidth / WIDTH;
+
+        this.personalBoard = personalBoard;
+    }
+
+    public Pane drawPersonalBoard() {
+
+        Image personalboardImage = loadImage("personalboard.png", (int) (WIDTH * ratio));
+        personalboardImage = setRoundedCorners(personalboardImage, ratio);
+        personalboardImage = addLightEffects(personalboardImage, ratio);
 
         Canvas canvas = new Canvas(personalboardImage.getWidth(), personalboardImage.getHeight());
         pane.getChildren().add(canvas);
@@ -37,107 +49,142 @@ public class PersonalBoardDrawer {
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.drawImage(personalboardImage, 0, 0);
 
-        drawWarehouseBaseDepots(pane, personalBoard.getWarehouse().getBaseDepots());
-        drawStrongbox(pane, personalBoard.getStrongbox());
-        drawDevelopmentCards(pane, personalBoard.getDevelopmentCardsSlots());
-        drawFaithTrack(pane, personalBoard.getFaithTrack());
+        drawWarehouseBaseDepots();
+        drawStrongbox();
+        drawDevelopmentCards();
+        drawFaithTrack();
 
         return pane;
     }
 
-    private static void drawWarehouseBaseDepots(Pane pane, List<Depot> baseDepots) {
+    private void drawWarehouseBaseDepots() {
         int[] hOffsets = new int[]{345, 275, 215};
         int vOffsetFirstDepot = 895;
 
+        List<Depot> baseDepots = personalBoard.getWarehouse().getBaseDepots();
         for (int i = 0; i < baseDepots.size(); i++) {
             Depot depot = baseDepots.get(i);
-            Image resourceImage = loadImage("resources/" + depot.getContainedResourceType() + ".png", 100);
-            resourceImage = addLightEffects(resourceImage);
+            Image resourceImage = loadImage("resources/" + depot.getContainedResourceType() + ".png", (int) (100 * ratio));
+            resourceImage = addLightEffects(resourceImage, ratio);
 
             for (int j = 0; j < depot.getResources().size(); j++) {
 
-                ImageView imageView = getImageView(resourceImage, hOffsets[i] + j * 100, vOffsetFirstDepot + i * 180);
-                addMouseOverAnimation(imageView);
+                ImageView imageView = getImageView(resourceImage, (hOffsets[i] + j * 100) * ratio, (vOffsetFirstDepot + i * 180) * ratio);
+                addMouseOverAnimation(imageView, ratio);
+
                 pane.getChildren().add(imageView);
 
             }
         }
     }
 
-    private static void drawStrongbox(Pane pane, List<Resource> resources) {
+    private void drawStrongbox() {
         int[] hOffsets = new int[]{150, 150, 400, 400};
         int[] vOffsets = new int[]{1750, 1600, 1750, 1600};
         int shift = 50;
 
         Random random = new Random();
 
+        List<Resource> resources = personalBoard.getStrongbox();
         for (int i = 0; i < RESOURCES_SLOTS.length; i++) {
             Resource resource = RESOURCES_SLOTS[i];
             int multiplicity = Collections.frequency(resources, resource);
 
-            Image resourceImage = loadImage("resources/" + resource + ".png", 100);
-            resourceImage = addLightEffects(resourceImage);
+            Image resourceImage = loadImage("resources/" + resource + ".png", (int) (100 * ratio));
+            resourceImage = addLightEffects(resourceImage, ratio);
 
             for (int j = 0; j < multiplicity; j++) {
 
                 ImageView imageView = getImageView(
                         resourceImage,
-                        hOffsets[i] + (shift - random.nextInt(2 * shift)),
-                        vOffsets[i] + (shift - random.nextInt(2 * shift))
+                        (hOffsets[i] + (shift - random.nextInt(2 * shift))) * ratio,
+                        (vOffsets[i] + (shift - random.nextInt(2 * shift))) * ratio
                 );
-                addMouseOverAnimation(imageView);
+                addMouseOverAnimation(imageView, ratio);
                 pane.getChildren().add(imageView);
             }
         }
     }
 
-    private static void drawDevelopmentCards(Pane pane, List<List<DevelopmentCard>> developmentCardSlots) {
+    private void drawDevelopmentCards() {
         int[] hOffsets = new int[]{1120, 1665, 2240};
         int vOffset = 800;
         int shift = 200;
 
+        List<List<DevelopmentCard>> developmentCardSlots = personalBoard.getDevelopmentCardsSlots();
         for (int i = 0; i < developmentCardSlots.size(); i++) {
             for (int j = 0; j < developmentCardSlots.get(i).size(); j++) {
 
-                Image developmentCardImage = loadImage("developmentcards/" + developmentCardSlots.get(i).get(j).toString() + ".png", 700);
-                developmentCardImage = setRoundedCorners(developmentCardImage);
-                developmentCardImage = addLightEffects(developmentCardImage);
+                Image developmentCardImage = loadImage("developmentcards/" + developmentCardSlots.get(i).get(j).toString() + ".png", (int) (700 * ratio));
+                developmentCardImage = setRoundedCorners(developmentCardImage, ratio);
+                developmentCardImage = addLightEffects(developmentCardImage, ratio);
 
-                ImageView imageView = getImageView(developmentCardImage, hOffsets[i], vOffset + shift * j);
-                addMouseOverAnimation(imageView);
+                ImageView imageView = getImageView(developmentCardImage, hOffsets[i] * ratio, (vOffset + shift * j) * ratio);
+                addMouseOverAnimation(imageView, ratio);
                 pane.getChildren().add(imageView);
             }
         }
     }
 
-    private static void drawFaithTrack(Pane pane, FaithTrack faithTrack) {
-        drawPopesFavorTiles(pane, faithTrack.getVaticanReportSections());
+    private void drawFaithTrack() {
+        drawPopesFavorTiles();
+        drawFaithMarker();
+        // TODO: add play mode check
+        drawBlackCross();
     }
 
-    private static void drawPopesFavorTiles(Pane pane, VaticanReportSection[] vaticanReportSections) {
+    private void drawFaithMarker() {
+        drawMarker("resources/FAITH_MARKER.png", personalBoard.getFaithTrack().getMarkerPosition());
+    }
+
+    private void drawBlackCross() {
+        drawMarker("faithtrack/BLACK_CROSS.png", personalBoard.getFaithTrack().getBlackCrossPosition());
+    }
+
+    private void drawMarker(String fileName, int position) {
+        int[] hOffsets = new int[]{120, 260, 400, 400, 400, 540, 680, 820, 960, 1100, 1100, 1100, 1240, 1380, 1520, 1660, 1800, 1800, 1800, 1940, 2080, 2220, 2360, 2500, 2640};
+        int[] vOffsets = new int[]{415, 415, 415, 275, 135, 135, 135, 135, 135, 135, 275, 415, 415, 415, 415, 415, 415, 275, 135, 135, 135, 135, 135, 135, 135};
+
+        Image markerImage = loadImage(fileName, (int) (100 * ratio));
+        markerImage = addLightEffects(markerImage, ratio);
+
+        ImageView imageView = getImageView(markerImage,
+                hOffsets[position] * ratio,
+                vOffsets[position] * ratio
+        );
+        addMouseOverAnimation(imageView, ratio);
+
+        pane.getChildren().add(imageView);
+    }
+
+    private void drawPopesFavorTiles() {
         int[] hOffsets = new int[]{705, 1410, 2250};
         int[] vOffsets = new int[]{295, 150, 295};
-        String[] notActiveFiles = new String[]{"not_active_yellow", "not_active_orange", "not_active_red"};
+        String[] notActiveFiles = new String[]{"yellow", "orange", "red"};
 
+        VaticanReportSection[] vaticanReportSections = personalBoard.getFaithTrack().getVaticanReportSections();
         for (int i = 0; i < vaticanReportSections.length; i++) {
 
-            if (vaticanReportSections[i].isPopesFavorTileActive()) {// if active
-                // TODO: cut image
-            } else if (!vaticanReportSections[i].isPopesFavorTileActive()) { // if not active
-                Image tileImage = loadImage("faithtrack/" + notActiveFiles[i] + ".png", 200);
-                tileImage = addLightEffects(tileImage);
+            if (vaticanReportSections[i].isPopesFavorTileActive()) { // if active
+                Image tileImage = loadImage("faithtrack/active_" + notActiveFiles[i] + ".png", (int) (200 * ratio));
+                tileImage = setRoundedCorners(tileImage, ratio);
+                tileImage = addLightEffects(tileImage, ratio);
 
-                ImageView imageView = new ImageView();
-                imageView.setImage(tileImage);
-                imageView.setX(hOffsets[i]);
-                imageView.setY(vOffsets[i]);
+                ImageView imageView = getImageView(tileImage, hOffsets[i] * ratio, vOffsets[i] * ratio);
+                addMouseOverAnimation(imageView, ratio);
+                new Selectable(imageView);
 
                 pane.getChildren().add(imageView);
-                addMouseOverAnimation(imageView);
-                addMouseClickAnimation(imageView);
 
-            } else {
-                // TODO: if no more tile?
+            } else if (!vaticanReportSections[i].isPopesFavorTileActive()) { // if not active
+                Image tileImage = loadImage("faithtrack/not_active_" + notActiveFiles[i] + ".png", (int) (200 * ratio));
+                tileImage = addLightEffects(tileImage, ratio);
+
+                ImageView imageView = getImageView(tileImage, hOffsets[i] * ratio, vOffsets[i] * ratio);
+                addMouseOverAnimation(imageView, ratio);
+                new Selectable(imageView);
+
+                pane.getChildren().add(imageView);
             }
         }
     }

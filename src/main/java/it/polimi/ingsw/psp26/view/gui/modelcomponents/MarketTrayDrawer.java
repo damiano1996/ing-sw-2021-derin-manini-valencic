@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.view.gui.effects.Selectable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -37,6 +38,7 @@ public class MarketTrayDrawer extends RatioDrawer {
         drawMarketTray();
         drawGridMarbles();
         drawSlideMarble();
+        drawArrows();
 
         return pane;
     }
@@ -79,5 +81,45 @@ public class MarketTrayDrawer extends RatioDrawer {
                 pane.getChildren().add(imageView);
             }
         }
+    }
+
+    private void drawArrows() {
+        drawHorizontalArrows();
+        drawVerticalArrows();
+    }
+
+    private void drawHorizontalArrows() {
+        int hOffset = 2040;
+        int vOffset = 530;
+        int shift = 260;
+
+        for (int row = 0; row < marketTray.getMarblesOnColumn(0).length; row++) {
+            ImageView imageView = getImageView(getArrowImage(), hOffset * ratio, (vOffset + row * shift) * ratio);
+            imageView.setRotate(-90);
+            addMouseOverAnimation(imageView, ratio);
+            new Selectable(imageView);
+
+            pane.getChildren().add(imageView);
+        }
+    }
+
+    private void drawVerticalArrows() {
+        int hOffset = 650;
+        int vOffset = 1680;
+        int shift = 255;
+
+        for (int col = 0; col < marketTray.getMarblesOnRow(0).length; col++) {
+            ImageView imageView = getImageView(getArrowImage(), (hOffset + col * shift) * ratio, vOffset * ratio);
+            addMouseOverAnimation(imageView, ratio);
+            new Selectable(imageView);
+
+            pane.getChildren().add(imageView);
+        }
+    }
+
+    private Image getArrowImage(){
+        Image arrowImage = loadImage("market/arrow.png", (int) (450 * ratio));
+        arrowImage = addLightEffects(arrowImage, ratio);
+        return arrowImage;
     }
 }

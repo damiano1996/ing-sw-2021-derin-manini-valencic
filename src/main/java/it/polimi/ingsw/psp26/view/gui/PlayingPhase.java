@@ -17,7 +17,6 @@ import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.PersonalBoardDrawer;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -36,6 +35,7 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_NAME;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.HEIGHT_RATIO;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WIDTH_RATIO;
+import static it.polimi.ingsw.psp26.view.gui.ThumbBox.drawThumbBox;
 
 public class PlayingPhase extends Application {
 
@@ -64,16 +64,18 @@ public class PlayingPhase extends Application {
     public HBox addTopBar(PersonalBoard... personalBoards) {
         HBox hBox = new HBox();
 
-        hBox.setPadding(new Insets(15, 12, 15, 12));
-        hBox.setSpacing(10);
+//        hBox.setPadding(new Insets(15, 12, 15, 12));
+//        hBox.setSpacing(10);
+
+        int boxSize = 300;
 
         // adding market tray
-        hBox.getChildren().add(new MarketTrayDrawer(new MarketTray(new VirtualView()), 500).draw());
+        hBox.getChildren().add(drawThumbBox(new MarketTrayDrawer(new MarketTray(new VirtualView()), boxSize).draw(), boxSize));
         // adding development card grid
-        hBox.getChildren().add(new DevelopmentCardGridDrawer(new DevelopmentGrid(new VirtualView()), 500).draw());
+        hBox.getChildren().add(drawThumbBox(new DevelopmentCardGridDrawer(new DevelopmentGrid(new VirtualView()), boxSize).draw(), boxSize));
 
         for (PersonalBoard personalBoard : personalBoards) {
-            hBox.getChildren().add(new PersonalBoardDrawer(personalBoard, 500).draw());
+            hBox.getChildren().add(drawThumbBox(new PersonalBoardDrawer(personalBoard, boxSize).draw(), boxSize));
         }
         return hBox;
     }
@@ -128,6 +130,7 @@ public class PlayingPhase extends Application {
 
         GridPane root = new GridPane();
 
+
 //        root.setOnMouseClicked(event -> {
 //            System.out.println("Position: " + event.getSceneX() + ":" + event.getSceneY());
 //        });
@@ -139,6 +142,7 @@ public class PlayingPhase extends Application {
         System.out.println(mainBoxWidth);
         root.add(addTopBar(personalBoard, personalBoard, personalBoard), 0, 0, windowWidth, topBarHeight);
         root.add(
+//                new MarketTrayDrawer(new MarketTray(new VirtualView()), (int) (mainBoxWidth*0.8)).draw(),
                 new PersonalBoardDrawer(personalBoard, mainBoxWidth).draw(),
                 0, topBarHeight, mainBoxWidth, windowHeight - topBarHeight
         );

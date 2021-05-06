@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.view.gui;
+package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -20,24 +20,20 @@ import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
+import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getImage;
 
-public class PersonalBoardDrawer {
-
-    private static final float WIDTH = 2867;
-
-    private final Pane pane;
-    private final float ratio;
+public class PersonalBoardDrawer extends RatioDrawer {
 
     private final PersonalBoard personalBoard;
 
     public PersonalBoardDrawer(PersonalBoard personalBoard, int maxWidth) {
-        pane = new Pane();
-        ratio = maxWidth / WIDTH;
+        super(maxWidth);
 
         this.personalBoard = personalBoard;
     }
 
-    public Pane drawPersonalBoard() {
+    @Override
+    public Pane draw() {
 
         Image personalboardImage = loadImage("personalboard.png", (int) (WIDTH * ratio));
         personalboardImage = setRoundedCorners(personalboardImage, ratio);
@@ -115,9 +111,7 @@ public class PersonalBoardDrawer {
         for (int i = 0; i < developmentCardSlots.size(); i++) {
             for (int j = 0; j < developmentCardSlots.get(i).size(); j++) {
 
-                Image developmentCardImage = loadImage("developmentcards/" + developmentCardSlots.get(i).get(j).toString() + ".png", (int) (700 * ratio));
-                developmentCardImage = setRoundedCorners(developmentCardImage, ratio);
-                developmentCardImage = addLightEffects(developmentCardImage, ratio);
+                Image developmentCardImage = getImage(developmentCardSlots.get(i).get(j), ratio);
 
                 ImageView imageView = getImageView(developmentCardImage, hOffsets[i] * ratio, (vOffset + shift * j) * ratio);
                 addMouseOverAnimation(imageView, ratio);
@@ -138,7 +132,7 @@ public class PersonalBoardDrawer {
     }
 
     private void drawBlackCross() {
-        drawMarker("faithtrack/BLACK_CROSS.png", personalBoard.getFaithTrack().getBlackCrossPosition());
+        drawMarker("faith_track/BLACK_CROSS.png", personalBoard.getFaithTrack().getBlackCrossPosition());
     }
 
     private void drawMarker(String fileName, int position) {
@@ -166,7 +160,7 @@ public class PersonalBoardDrawer {
         for (int i = 0; i < vaticanReportSections.length; i++) {
 
             if (vaticanReportSections[i].isPopesFavorTileActive()) { // if active
-                Image tileImage = loadImage("faithtrack/active_" + notActiveFiles[i] + ".png", (int) (200 * ratio));
+                Image tileImage = loadImage("faith_track/active_" + notActiveFiles[i] + ".png", (int) (200 * ratio));
                 tileImage = setRoundedCorners(tileImage, ratio);
                 tileImage = addLightEffects(tileImage, ratio);
 
@@ -177,7 +171,7 @@ public class PersonalBoardDrawer {
                 pane.getChildren().add(imageView);
 
             } else if (!vaticanReportSections[i].isPopesFavorTileActive()) { // if not active
-                Image tileImage = loadImage("faithtrack/not_active_" + notActiveFiles[i] + ".png", (int) (200 * ratio));
+                Image tileImage = loadImage("faith_track/not_active_" + notActiveFiles[i] + ".png", (int) (200 * ratio));
                 tileImage = addLightEffects(tileImage, ratio);
 
                 ImageView imageView = getImageView(tileImage, hOffsets[i] * ratio, vOffsets[i] * ratio);

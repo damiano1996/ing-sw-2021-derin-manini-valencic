@@ -4,14 +4,20 @@ import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
+import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsInitializer;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardGridDrawer;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.PersonalBoardDrawer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -58,8 +64,16 @@ public class PlayingPhase extends Application {
     public HBox addTopBar(PersonalBoard... personalBoards) {
         HBox hBox = new HBox();
 
+        hBox.setPadding(new Insets(15, 12, 15, 12));
+        hBox.setSpacing(10);
+
+        // adding market tray
+        hBox.getChildren().add(new MarketTrayDrawer(new MarketTray(new VirtualView()), 500).draw());
+        // adding development card grid
+        hBox.getChildren().add(new DevelopmentCardGridDrawer(new DevelopmentGrid(new VirtualView()), 500).draw());
+
         for (PersonalBoard personalBoard : personalBoards) {
-            hBox.getChildren().add(new PersonalBoardDrawer(personalBoard, 500).drawPersonalBoard());
+            hBox.getChildren().add(new PersonalBoardDrawer(personalBoard, 500).draw());
         }
         return hBox;
     }
@@ -125,7 +139,7 @@ public class PlayingPhase extends Application {
         System.out.println(mainBoxWidth);
         root.add(addTopBar(personalBoard, personalBoard, personalBoard), 0, 0, windowWidth, topBarHeight);
         root.add(
-                new PersonalBoardDrawer(personalBoard, mainBoxWidth).drawPersonalBoard(),
+                new PersonalBoardDrawer(personalBoard, mainBoxWidth).draw(),
                 0, topBarHeight, mainBoxWidth, windowHeight - topBarHeight
         );
         root.add(addRightBar(), mainBoxWidth, topBarHeight, windowWidth - mainBoxWidth, windowHeight - topBarHeight);

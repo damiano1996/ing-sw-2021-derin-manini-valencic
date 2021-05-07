@@ -6,17 +6,27 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH;
 
 public class GUIUtils {
+
+    private final static Map<String, Image> images = new HashMap<>();
 
     public static String getCompletePath(String fileName) {
         return "file:" + RESOURCES_PATH + "gui/" + fileName;
     }
 
     public static Image loadImage(String fileName, int width) {
+        String imageIdentifier = fileName + "__" + width;
+        if (images.containsKey(imageIdentifier)) return images.get(imageIdentifier);
+
         System.out.println("Loading image: " + fileName);
-        return new Image(getCompletePath(fileName), width, width, true, true);
+        Image image = new Image(getCompletePath(fileName), width, width, true, true);
+        images.put(imageIdentifier, image);
+        return image;
     }
 
     public static Image setRoundedCorners(Image image, float ratio) {

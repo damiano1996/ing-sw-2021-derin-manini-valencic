@@ -138,4 +138,11 @@ public class LeaderCard {
     public int hashCode() {
         return Objects.hash(resourcesRequirements, developmentCardRequirements, victoryPoints, specialAbility, active);
     }
+
+    @Override
+    public String toString() {
+        return "LeaderCard{" +
+                "specialAbility=" + specialAbility +
+                '}';
+    }
 }

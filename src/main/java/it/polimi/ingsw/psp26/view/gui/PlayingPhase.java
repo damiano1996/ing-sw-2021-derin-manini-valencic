@@ -11,16 +11,16 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsInitializer;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.PersonalBoardDrawer;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -37,6 +37,7 @@ import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.HEIGHT_RATIO;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WIDTH_RATIO;
+import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPlayer;
 
 public class PlayingPhase extends Application {
 
@@ -62,21 +63,34 @@ public class PlayingPhase extends Application {
         Application.launch(args);
     }
 
-    public HBox addTopBar(MarketTray marketTray, DevelopmentGrid developmentGrid, PersonalBoard... personalBoards) {
+    public HBox addTopBar(int windowWidth, MarketTray marketTray, DevelopmentGrid developmentGrid, Player... players) {
         HBox hBox = new HBox();
 
-//        hBox.setPadding(new Insets(15, 12, 15, 12));
-//        hBox.setSpacing(10);
+        int boxSize = windowWidth / (3 + players.length);
+        int zoomFactor = 3;
 
-        int boxSize = 300;
-        int zoomFactor = 4;
         // adding market tray
-        hBox.getChildren().add(drawThumbNail(new MarketTrayDrawer(marketTray, boxSize).draw(), new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(), boxSize, zoomFactor * boxSize));
+        hBox.getChildren().add(
+                drawThumbNail(
+                        new MarketTrayDrawer(marketTray, boxSize).draw(),
+                        new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
+                        boxSize, zoomFactor * boxSize)
+        );
         // adding development card grid
-        hBox.getChildren().add(drawThumbNail(new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(), new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(), boxSize, zoomFactor * boxSize));
+        hBox.getChildren().add(
+                drawThumbNail(
+                        new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
+                        new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
+                        boxSize, zoomFactor * boxSize)
+        );
 
-        for (PersonalBoard personalBoard : personalBoards) {
-            hBox.getChildren().add(drawThumbNail(new PersonalBoardDrawer(personalBoard, boxSize).draw(), new PersonalBoardDrawer(personalBoard, zoomFactor * boxSize).draw(), boxSize, zoomFactor * boxSize));
+        for (Player player : players) {
+            hBox.getChildren().add(
+                    drawThumbNail(
+                            drawPlayer(player, boxSize),
+                            drawPlayer(player, zoomFactor * boxSize),
+                            boxSize, zoomFactor * boxSize)
+            );
         }
         return hBox;
     }
@@ -94,9 +108,17 @@ public class PlayingPhase extends Application {
         return vBox;
     }
 
+    public Pane addMainBox(Player player, int width, int height) {
+        return addBackground(drawPlayer(player, width), width, height, false);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
-        PersonalBoard personalBoard = new PersonalBoard(new VirtualView(), new Player(new VirtualView(), "nickname", "sessionToken"));
+        Player player = new Player(new VirtualView(), "nickname", "sessionToken");
+        player.setLeaderCards(LeaderCardsInitializer.getInstance().getLeaderCards().subList(0, 2));
+        player.getLeaderCards().get(0).activate(player);
+
+        PersonalBoard personalBoard = player.getPersonalBoard();
         try {
             personalBoard.getWarehouse().addResource(Resource.COIN);
             personalBoard.getWarehouse().addResource(Resource.SHIELD);
@@ -129,32 +151,19 @@ public class PlayingPhase extends Application {
         personalBoard.getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
         personalBoard.getFaithTrack().addFaithPoints(3);
 
-        GridPane root = new GridPane();
+        windowWidth *= 0.4;
+        windowHeight *= 0.4;
 
+        BorderPane border = new BorderPane();
+        border.setTop(addTopBar(windowWidth, new MarketTray(new VirtualView()), new DevelopmentGrid(new VirtualView()), player, player, player));
+        border.setLeft(addMainBox(player, windowWidth, windowWidth * 9 / 16));
+        border.setRight(addRightBar());
 
-//        root.setOnMouseClicked(event -> {
-//            System.out.println("Position: " + event.getSceneX() + ":" + event.getSceneY());
-//        });
-
-        root.setAlignment(Pos.TOP_LEFT);
-
-        int topBarHeight = (int) (windowHeight * 0.2);
-        int mainBoxWidth = (int) (windowWidth * 0.7);
-        System.out.println(mainBoxWidth);
-        root.add(addTopBar(new MarketTray(new VirtualView()), new DevelopmentGrid(new VirtualView()), personalBoard, personalBoard, personalBoard), 0, 0, windowWidth, topBarHeight);
-        root.add(
-//                new MarketTrayDrawer(new MarketTray(new VirtualView()), (int) (mainBoxWidth*0.8)).draw(),
-                addBackground(new PersonalBoardDrawer(personalBoard, mainBoxWidth).draw(), mainBoxWidth, windowHeight - topBarHeight),
-                0, topBarHeight, mainBoxWidth, windowHeight - topBarHeight
-        );
-        root.add(addRightBar(), mainBoxWidth, topBarHeight, windowWidth - mainBoxWidth, windowHeight - topBarHeight);
-
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(border);
         scene.setFill(Color.WHITE);
 
         stage.setTitle(GAME_NAME);
 
-        stage.setWidth(windowWidth);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.sizeToScene();

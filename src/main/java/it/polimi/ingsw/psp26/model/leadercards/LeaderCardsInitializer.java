@@ -47,6 +47,12 @@ public class LeaderCardsInitializer {
         return instance;
     }
 
+    public static void main(String[] args) {
+        for (LeaderCard leaderCard : LeaderCardsInitializer.getInstance().leaderCards) {
+            System.out.println(leaderCard);
+        }
+    }
+
     /**
      * Getter of the deck containing all the leader cards.
      *

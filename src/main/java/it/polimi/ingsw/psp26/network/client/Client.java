@@ -7,7 +7,6 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
-import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
@@ -125,12 +124,12 @@ public class Client extends Observable<Message> {
                 // --------- DISPLAY MESSAGES ----------
                 // -------------------------------------
 
-                case PERSONAL_BOARD:
-                    boolean isMultiplayerMode = !matchModeType.equals(MessageType.SINGLE_PLAYER_MODE);
-                    Player player = (Player) message.getPayload();
-                    personalBoardCopy = player.getPersonalBoard();
-                    viewInterface.displayPersonalBoard(player, isMultiplayerMode);
-                    break;
+//                case PERSONAL_BOARD:
+//                    boolean isMultiplayerMode = !matchModeType.equals(MessageType.SINGLE_PLAYER_MODE);
+//                    Player player = (Player) message.getPayload();
+//                    personalBoardCopy = player.getPersonalBoard();
+//                    viewInterface.displayPersonalBoard(player, isMultiplayerMode);
+//                    break;
 
                 case START_WAITING:
                     viewInterface.displayWaitingScreen(message);

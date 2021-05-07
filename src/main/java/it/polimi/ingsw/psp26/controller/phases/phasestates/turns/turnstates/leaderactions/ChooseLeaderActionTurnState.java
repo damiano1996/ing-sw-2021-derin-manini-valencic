@@ -82,7 +82,7 @@ public class ChooseLeaderActionTurnState extends TurnState {
                     turn.getMatchController().notifyObservers(
                             new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
-                                    PERSONAL_BOARD,
+                                    PLAYER_MODEL,
                                     turn.getTurnPlayer()
                             )
                     );

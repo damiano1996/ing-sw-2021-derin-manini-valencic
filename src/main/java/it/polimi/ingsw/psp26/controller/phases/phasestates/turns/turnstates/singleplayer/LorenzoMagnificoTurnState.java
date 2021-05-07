@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer;
 
-import it.polimi.ingsw.psp26.application.messages.LiveUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.NotificationUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
@@ -49,7 +49,7 @@ public class LorenzoMagnificoTurnState extends TurnState {
 
 
     private void afterExecute(List<ActionToken> allTokens, String tokenPlayed) throws InvalidPayloadException {
-        sendSessionMessageToAllPlayers(turn.getMatchController(), new LiveUpdateMessage(turn.getTurnPlayer().getSessionToken(), "Lorenzo played                " + tokenPlayed));
+        sendSessionMessageToAllPlayers(turn.getMatchController(), new NotificationUpdateMessage(turn.getTurnPlayer().getSessionToken(), "Lorenzo played                " + tokenPlayed));
 
         turn.getMatchController().notifyObservers(
                 new SessionMessage(

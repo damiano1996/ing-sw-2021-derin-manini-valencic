@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.network.client;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
-import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
@@ -51,12 +50,21 @@ public class NetworkHandler implements Observer<Message> {
 
                     Message message = (Message) networkNode.receiveObjectData();
 
-                    // if live update message, we can directly notify the client to display the message
-                    if (message.getMessageType().equals(MessageType.LIVE_UPDATE))
-                        client.liveUpdate(message);
-                    else
-                        // otherwise, we can stack the message
-                        MessageSynchronizedFIFO.getInstance().update(message);
+                    switch (message.getMessageType()) {
+                        case MODEL_UPDATE:
+                            // TODO: send to container
+                            break;
+
+                        case NOTIFICATION_UPDATE:
+                            // if notification update message, we can directly notify the client to display the message
+                            client.liveUpdate(message);
+                            break;
+
+                        default:
+                            // otherwise, we can stack the message
+                            MessageSynchronizedFIFO.getInstance().update(message);
+                            break;
+                    }
 
                 } catch (IOException | ClassNotFoundException e) {
                     // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.

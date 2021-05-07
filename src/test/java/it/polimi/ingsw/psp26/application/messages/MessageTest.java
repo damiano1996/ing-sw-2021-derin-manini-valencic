@@ -80,7 +80,7 @@ public class MessageTest {
     @Test
     public void testGetPayloads_ComplexObject() throws EmptyPayloadException, InvalidPayloadException {
         Player player = new Player(new VirtualView(), "nickname", "sessionToken");
-        message = new Message(MessageType.PERSONAL_BOARD, player);
+        message = new Message(MessageType.PLAYER_MODEL, player);
         assertEquals(player.getNickname(), ((Player) message.getPayload()).getNickname());
     }
 

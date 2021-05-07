@@ -56,7 +56,7 @@ public class TurnUtils {
             turn.getMatchController().notifyObservers(
                     new SessionMessage(
                             turn.getTurnPlayer().getSessionToken(),
-                            PERSONAL_BOARD,
+                            PLAYER_MODEL,
                             turn.getTurnPlayer()
                     )
             );

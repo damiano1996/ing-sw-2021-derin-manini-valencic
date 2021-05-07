@@ -1,8 +1,8 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
-import it.polimi.ingsw.psp26.application.messages.LiveUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.NotificationUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
@@ -58,7 +58,7 @@ public class InitializationPhaseState extends PhaseState {
         phase.getMatchController().getMatch().addPlayer(new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken));
         System.out.println("Initialization phase  - sending start waiting message");
         try {
-            sendSessionMessageToAllPlayers(phase.getMatchController(), new LiveUpdateMessage(sessionToken, nickname + " joined the game!"));
+            sendSessionMessageToAllPlayers(phase.getMatchController(), new NotificationUpdateMessage(sessionToken, nickname + " joined the game!"));
 
 
             //TODO TOGLI STA ROBA
@@ -66,7 +66,7 @@ public class InitializationPhaseState extends PhaseState {
             //new Thread(() -> {
             //    while (true) {
             //        try {
-            sendSessionMessageToAllPlayers(phase.getMatchController(), new LiveUpdateMessage(sessionToken, nickname + " live update!!"));
+            sendSessionMessageToAllPlayers(phase.getMatchController(), new NotificationUpdateMessage(sessionToken, nickname + " live update!!"));
             //            TimeUnit.MILLISECONDS.sleep(8000);
             //        } catch (InvalidPayloadException | InterruptedException ignored) {
             //    }

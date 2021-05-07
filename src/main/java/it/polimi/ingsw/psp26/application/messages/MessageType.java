@@ -2,7 +2,8 @@ package it.polimi.ingsw.psp26.application.messages;
 
 public enum MessageType {
 
-    LIVE_UPDATE,
+    NOTIFICATION_UPDATE,
+    MODEL_UPDATE,
 
     GENERAL_MESSAGE,
     ERROR_MESSAGE,
@@ -43,7 +44,7 @@ public enum MessageType {
     BLACK_CROSS_FINAL_POSITION,
 
     // Display model components
-    PERSONAL_BOARD,
+    PLAYER_MODEL,
 
     // tmp
     CHOICE_RESOURCE,

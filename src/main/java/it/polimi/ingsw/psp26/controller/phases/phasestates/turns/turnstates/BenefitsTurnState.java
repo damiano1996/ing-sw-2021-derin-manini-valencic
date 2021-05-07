@@ -11,7 +11,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
@@ -63,7 +63,7 @@ public class BenefitsTurnState extends TurnState {
     private void assignResources(SessionMessage message, int numOfResources, boolean faithPoint) throws EmptyPayloadException {
         System.out.println("BenefitsTurnState - assigning resources " + message.toString());
 
-        if (message.getMessageType().equals(CHOICE_RESOURCE)) {
+        if (message.getMessageType().equals(CHOICE_RESOURCE_FROM_WAREHOUSE)) {
             List<Resource> resources = castElements(Resource.class, message.getListPayloads());
 
             if (faithPoint)
@@ -77,7 +77,7 @@ public class BenefitsTurnState extends TurnState {
                             ((faithPoint) ? "You get 1 FP. " : "") +
                             "You can choose " + numOfResources + " resources."
             );
-            turn.changeState(new OneResourceTurnState(turn, this, numOfResources));
+            turn.changeState(new OneResourceTurnState(turn, this, numOfResources, false));
         }
 
         turn.play(message);

@@ -20,24 +20,31 @@ public class OneResourceTurnState extends TurnState {
 
     private final TurnState nextState;
     private final int numOfResources;
+    private final MessageType resourceSource;
     private final List<Resource> resources;
 
     private final List<Resource> resourcesOptions;
 
-    public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, List<Resource> resourcesOptions) {
+    public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, boolean toPay, List<Resource> resourcesOptions) {
         super(turn);
         this.nextState = nextState;
         this.numOfResources = numOfResources;
+        this.resourceSource = getResourceSource(toPay);
         resources = new ArrayList<>();
         this.resourcesOptions = resourcesOptions;
     }
 
-    public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources) {
+    public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, boolean toPay) {
         super(turn);
         this.nextState = nextState;
         this.numOfResources = numOfResources;
+        this.resourceSource = getResourceSource(toPay);
         resources = new ArrayList<>();
         this.resourcesOptions = Arrays.asList(RESOURCES_SLOTS);
+    }
+
+    private MessageType getResourceSource(boolean toPay) {
+        return (toPay) ? MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE : MessageType.CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY;
     }
 
     @Override
@@ -47,7 +54,7 @@ public class OneResourceTurnState extends TurnState {
         try {
             System.out.println("OneResourceTurnState - " + message.toString());
 
-            if (message.getMessageType().equals(MessageType.CHOICE_RESOURCE)) {
+            if (message.getMessageType().equals(this.resourceSource)) {
 
                 Resource resource = (Resource) message.getPayload();
                 if (resourcesOptions.contains(resource)) {
@@ -56,7 +63,7 @@ public class OneResourceTurnState extends TurnState {
                     if (resources.size() == numOfResources) {
 
                         turn.changeState(nextState);
-                        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE, resources.toArray()));
+                        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), this.resourceSource, resources.toArray()));
 
                     } else {
 
@@ -84,7 +91,7 @@ public class OneResourceTurnState extends TurnState {
             turn.getMatchController().notifyObservers(
                     new MultipleChoicesMessage(
                             turn.getTurnPlayer().getSessionToken(),
-                            MessageType.CHOICE_RESOURCE,
+                            this.resourceSource,
                             "Choice resource:",
                             1, 1,
                             false,

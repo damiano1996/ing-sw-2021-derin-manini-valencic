@@ -46,8 +46,8 @@ public enum MessageType {
     // Display model components
     PLAYER_MODEL,
 
-    // tmp
-    CHOICE_RESOURCE,
+    CHOICE_RESOURCE_FROM_WAREHOUSE,
+    CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY,
     PLACE_IN_WAREHOUSE,
 
     // Waiting screen

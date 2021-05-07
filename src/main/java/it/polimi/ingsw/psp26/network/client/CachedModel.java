@@ -19,6 +19,7 @@ public class CachedModel {
     private final Map<String, CachedObject<Player>> opponentsCached;
     private final CachedObject<MarketTray> marketTrayCached;
     private final CachedObject<DevelopmentGrid> developmentGridCached;
+
     public CachedModel(String myNickname) {
         this.myNickname = myNickname;
 

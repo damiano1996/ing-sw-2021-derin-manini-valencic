@@ -302,7 +302,8 @@ public class CLI implements ViewInterface {
                 displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
                 break;
 
-            case CHOICE_RESOURCE: //TODO migliora la grafica di questa schermata
+            case CHOICE_RESOURCE_FROM_WAREHOUSE: //TODO migliora la grafica di questa schermata
+            case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
                 cliUtils.clns();
                 //ResourceSupply is the unique element of choices List
                 displayResourceSupply(new ResourceSupply());

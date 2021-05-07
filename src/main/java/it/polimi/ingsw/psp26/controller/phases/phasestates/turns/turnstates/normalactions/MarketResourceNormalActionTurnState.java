@@ -72,7 +72,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     }
                     break;
 
-                case CHOICE_RESOURCE:
+                case CHOICE_RESOURCE_FROM_WAREHOUSE:
                     List<Resource> playerResourceChoice = castElements(Resource.class, message.getListPayloads());
 
                     for (int i = 0; i < tempResources.size(); i++) {
@@ -165,11 +165,14 @@ public class MarketResourceNormalActionTurnState extends TurnState {
             leaderResources.add(tempResourceLeader.get(tempResourceBeforeLeaders.indexOf(Resource.EMPTY)));
             tempResources = tempResourceBeforeLeaders;
 
-            turn.changeState(new OneResourceTurnState(turn,
-                    this,
-                    (int) tempResources.stream().filter(x -> x.equals(Resource.EMPTY)).count(),
-                    leaderResources
-            ));
+            turn.changeState(
+                    new OneResourceTurnState(turn,
+                            this,
+                            (int) tempResources.stream().filter(x -> x.equals(Resource.EMPTY)).count(),
+                            false,
+                            leaderResources
+                    )
+            );
 
             turn.play(message);
             return true;

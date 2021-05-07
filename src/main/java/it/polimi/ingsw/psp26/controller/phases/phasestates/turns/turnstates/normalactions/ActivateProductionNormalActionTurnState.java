@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
@@ -69,18 +69,18 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         if (numOfUnknownCost != 0) {
                             sendGeneralMessage(turn, "Choose the resource to pay that replaces the unknown resource in the production:");
 
-                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost));
+                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost, true));
                             turn.play(message);
 
                         } else if (numOfUnknownProd != 0) {
                             sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
 
-                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
+                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
                             turn.play(message);
 
                         } else {
 
-                            play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
+                            play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE));
 
                         }
                     } else {
@@ -91,7 +91,9 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                     }
                     break;
 
-                case CHOICE_RESOURCE:
+                case CHOICE_RESOURCE_FROM_WAREHOUSE:
+                case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
+
                     System.out.println(message.getMessageType());
                     if (unknownCostResources == null || unknownCostResources.size() == numOfUnknownCost) {
 
@@ -106,12 +108,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         if (numOfUnknownProd != 0) {
                             sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
 
-                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd));
+                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
                             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE));
 
                         } else {
 
-                            play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE));
+                            // TODO: add error message
+                            play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE));
 
                         }
 

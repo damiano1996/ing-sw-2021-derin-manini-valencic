@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -90,14 +91,12 @@ public class ActivateProductionNormalActionTurnStateTest {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
 
         assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
-        assertEquals(MessageType.CHOICE_RESOURCE, mitm.getMessages().get(1).getMessageType());
+        assertEquals(MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE, mitm.getMessages().get(1).getMessageType());
 
     }
 
     @Test
     public void testSendChoiceResourceToActivateCostUnknown() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
-
-
         List<Resource> resource2 = new ArrayList<>();
         resource2.add(Resource.COIN);
 
@@ -120,10 +119,10 @@ public class ActivateProductionNormalActionTurnStateTest {
             turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(leaderResource);
 
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(1)));
-            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
+            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
 
             assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
-            assertEquals(MessageType.CHOICE_RESOURCE, mitm.getMessages().get(1).getMessageType());
+            assertEquals(MessageType.CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, mitm.getMessages().get(1).getMessageType());
             // assertArrayEquals(resource2.toArray(), turn.getTurnPlayer().getPersonalBoard().getStrongbox().toArray());
         }
     }
@@ -140,9 +139,9 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     private void playCollection() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.STONE));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE, Resource.COIN));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, Resource.COIN));
     }
 
     private List<Resource> getProdResources(DevelopmentCard card) {
@@ -156,11 +155,9 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     private void leaderCardSetter() {
-        List<LeaderCard> leaderCards = new ArrayList<>();
-        List<LeaderCard> leaderCardsAdded = new ArrayList<>();
 
-        leaderCards.addAll(phase.getMatchController().getMatch().drawLeaders(8));
-        leaderCardsAdded.addAll(leaderCards.stream().filter(x -> x.getAbilityToString().contains("ProductionAbility")).collect(Collectors.toList()));
+        List<LeaderCard> leaderCards = new ArrayList<>(phase.getMatchController().getMatch().drawLeaders(8));
+        List<LeaderCard> leaderCardsAdded = leaderCards.stream().filter(x -> x.getAbilityToString().contains("ProductionAbility")).collect(Collectors.toList());
         if (leaderCardsAdded.size() > 0) {
             turn.getTurnPlayer().setLeaderCards(leaderCardsAdded.subList(0, 1));
             turn.getTurnPlayer().getLeaderCards().get(0).activate(turn.getTurnPlayer());

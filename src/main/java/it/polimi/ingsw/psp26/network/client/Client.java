@@ -73,7 +73,8 @@ public class Client extends Observable<Message> {
                 // ----- MULTIPLE CHOICES MESSAGES -----
                 // -------------------------------------
 
-                case CHOICE_RESOURCE:
+                case CHOICE_RESOURCE_FROM_WAREHOUSE:
+                case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
                 case CHOICE_LEADER_ACTION:
                 case CHOICE_NORMAL_ACTION:
                 case CHOICE_POSITION:

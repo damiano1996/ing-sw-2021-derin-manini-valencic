@@ -65,7 +65,7 @@ public class BenefitsTurnStateTest {
 
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
             assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(2 * i).getMessageType());
-            assertEquals(MessageType.CHOICE_RESOURCE, mitm.getMessages().get(2 * i + 1).getMessageType());
+            assertEquals(MessageType.CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, mitm.getMessages().get(2 * i + 1).getMessageType());
         }
     }
 
@@ -82,7 +82,7 @@ public class BenefitsTurnStateTest {
 
         turn.changeState(new BenefitsTurnState(turn));
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE, COIN, SHIELD));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE, COIN, SHIELD));
         assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
     }
 }

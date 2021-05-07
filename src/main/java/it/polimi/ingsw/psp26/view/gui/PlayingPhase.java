@@ -33,9 +33,10 @@ import java.util.Random;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_NAME;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
+import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
+import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.HEIGHT_RATIO;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WIDTH_RATIO;
-import static it.polimi.ingsw.psp26.view.gui.ThumbBox.drawThumbBox;
 
 public class PlayingPhase extends Application {
 
@@ -61,21 +62,21 @@ public class PlayingPhase extends Application {
         Application.launch(args);
     }
 
-    public HBox addTopBar(PersonalBoard... personalBoards) {
+    public HBox addTopBar(MarketTray marketTray, DevelopmentGrid developmentGrid, PersonalBoard... personalBoards) {
         HBox hBox = new HBox();
 
 //        hBox.setPadding(new Insets(15, 12, 15, 12));
 //        hBox.setSpacing(10);
 
         int boxSize = 300;
-
+        int zoomFactor = 4;
         // adding market tray
-        hBox.getChildren().add(drawThumbBox(new MarketTrayDrawer(new MarketTray(new VirtualView()), boxSize).draw(), boxSize));
+        hBox.getChildren().add(drawThumbNail(new MarketTrayDrawer(marketTray, boxSize).draw(), new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(), boxSize, zoomFactor * boxSize));
         // adding development card grid
-        hBox.getChildren().add(drawThumbBox(new DevelopmentCardGridDrawer(new DevelopmentGrid(new VirtualView()), boxSize).draw(), boxSize));
+        hBox.getChildren().add(drawThumbNail(new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(), new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(), boxSize, zoomFactor * boxSize));
 
         for (PersonalBoard personalBoard : personalBoards) {
-            hBox.getChildren().add(drawThumbBox(new PersonalBoardDrawer(personalBoard, boxSize).draw(), boxSize));
+            hBox.getChildren().add(drawThumbNail(new PersonalBoardDrawer(personalBoard, boxSize).draw(), new PersonalBoardDrawer(personalBoard, zoomFactor * boxSize).draw(), boxSize, zoomFactor * boxSize));
         }
         return hBox;
     }
@@ -140,10 +141,10 @@ public class PlayingPhase extends Application {
         int topBarHeight = (int) (windowHeight * 0.2);
         int mainBoxWidth = (int) (windowWidth * 0.7);
         System.out.println(mainBoxWidth);
-        root.add(addTopBar(personalBoard, personalBoard, personalBoard), 0, 0, windowWidth, topBarHeight);
+        root.add(addTopBar(new MarketTray(new VirtualView()), new DevelopmentGrid(new VirtualView()), personalBoard, personalBoard, personalBoard), 0, 0, windowWidth, topBarHeight);
         root.add(
 //                new MarketTrayDrawer(new MarketTray(new VirtualView()), (int) (mainBoxWidth*0.8)).draw(),
-                new PersonalBoardDrawer(personalBoard, mainBoxWidth).draw(),
+                addBackground(new PersonalBoardDrawer(personalBoard, mainBoxWidth).draw(), mainBoxWidth, windowHeight - topBarHeight),
                 0, topBarHeight, mainBoxWidth, windowHeight - topBarHeight
         );
         root.add(addRightBar(), mainBoxWidth, topBarHeight, windowWidth - mainBoxWidth, windowHeight - topBarHeight);

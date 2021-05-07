@@ -117,7 +117,7 @@ public class MarketTrayDrawer extends RatioDrawer {
         }
     }
 
-    private Image getArrowImage(){
+    private Image getArrowImage() {
         Image arrowImage = loadImage("market/arrow.png", (int) (450 * ratio));
         arrowImage = addLightEffects(arrowImage, ratio);
         return arrowImage;

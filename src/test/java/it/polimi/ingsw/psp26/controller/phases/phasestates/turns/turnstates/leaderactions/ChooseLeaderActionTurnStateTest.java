@@ -65,7 +65,7 @@ public class ChooseLeaderActionTurnStateTest {
     @Test
     public void testChoicesMessage() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
-        assertEquals(MessageType.CHOICE_LEADER_ACTION, mitm.getMessages().get(1).getMessageType());
+        assertEquals(MessageType.CHOICE_LEADER_ACTION, mitm.getMessages().get(0).getMessageType());
     }
 
     private void goTo(MessageType messageType) throws InvalidPayloadException {
@@ -76,7 +76,7 @@ public class ChooseLeaderActionTurnStateTest {
     @Test
     public void testGoToDiscard() throws InvalidPayloadException {
         goTo(DISCARD_LEADER);
-        assertEquals(MessageType.CHOICE_LEADERS, mitm.getMessages().get(2).getMessageType());
+        assertEquals(MessageType.CHOICE_LEADERS, mitm.getMessages().get(1).getMessageType());
     }
 
     @Test
@@ -89,6 +89,6 @@ public class ChooseLeaderActionTurnStateTest {
     @Test
     public void testGoToChooseNormalAction() throws InvalidPayloadException {
         goTo(SKIP_LEADER_ACTION);
-        assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(3).getMessageType());
+        assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(1).getMessageType());
     }
 }

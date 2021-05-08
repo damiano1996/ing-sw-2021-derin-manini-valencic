@@ -25,18 +25,20 @@ public class Client extends Observable<Message> {
 
     private final NetworkHandler networkHandler;
     private final NotificationsFIFO notifications;
-    private ViewInterface viewInterface;
+    private final ViewInterface viewInterface;
     private String nickname;
     private MessageType matchModeType;
 
     private PersonalBoard personalBoardCopy; //TODO forse una classe container anche per altre cose
 
-    public Client() throws IOException {
+    public Client(ViewInterface viewInterface) throws IOException {
         super();
         networkHandler = new NetworkHandler(this);
         addObserver(networkHandler);
 
         notifications = new NotificationsFIFO(10);
+
+        this.viewInterface = viewInterface;
     }
 
     public void viewNext() {
@@ -173,10 +175,6 @@ public class Client extends Observable<Message> {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public void setViewInterface(ViewInterface viewInterface) {
-        this.viewInterface = viewInterface;
     }
 
     public MessageType getMatchModeType() {

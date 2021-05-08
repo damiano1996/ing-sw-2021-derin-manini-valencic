@@ -26,7 +26,7 @@ public class MarketTrayDrawer extends RatioDrawer {
     @Override
     public Pane draw() {
 
-        Image marketBoardImage = loadImage("market/market_board.png", (int) (WIDTH * ratio));
+        Image marketBoardImage = loadImage("market/market_board.png", initMaxWidth);
         marketBoardImage = addLightEffects(marketBoardImage, ratio);
 
         Canvas canvas = new Canvas(marketBoardImage.getWidth(), marketBoardImage.getHeight());

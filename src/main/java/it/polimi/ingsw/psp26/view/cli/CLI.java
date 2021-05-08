@@ -22,6 +22,7 @@ import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.utils.ViewUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -30,8 +31,6 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
 
 public class CLI implements ViewInterface {
-
-    private final Client client;
 
     private final PrintWriter pw;
     private final CliUtils cliUtils;
@@ -43,10 +42,9 @@ public class CLI implements ViewInterface {
     private final PersonalBoardCli personalBoardCli;
     private final DisplayWarehousePlacer displayWarehousePlacer;
     private final NotificationStackPrinter notificationStackPrinter;
+    private Client client;
 
-    public CLI(Client client) {
-        this.client = client;
-
+    public CLI() {
         this.pw = new PrintWriter(System.out);
         this.cliUtils = new CliUtils(pw);
         this.depotCli = new DepotCli(pw);
@@ -78,6 +76,18 @@ public class CLI implements ViewInterface {
     //          VIEW INTERFACE METHODS          //
     //------------------------------------------//
 
+
+    @Override
+    public void start() {
+        try {
+
+            this.client = new Client(this);
+            displayLogIn();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Used to ask the Player's credentials

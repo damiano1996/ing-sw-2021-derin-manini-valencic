@@ -16,8 +16,6 @@ import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -26,62 +24,37 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.awt.*;
 import java.util.Random;
 
-import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_NAME;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
-import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.HEIGHT_RATIO;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WIDTH_RATIO;
+import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getWindowWidth;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPlayer;
 
-public class PlayingPhase extends Application {
+public class PlayingPane {
 
-    private final int screenWidth;
-    private final int screenHeight;
-
-    private int windowWidth;
-    private int windowHeight;
-
-    public PlayingPhase() {
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        screenWidth = (int) dimension.getWidth();
-        screenHeight = (int) dimension.getHeight();
-        System.out.println(screenWidth + ":" + screenHeight);
-
-        windowWidth = (int) (WIDTH_RATIO * screenWidth);
-        windowHeight = (int) (HEIGHT_RATIO * screenHeight);
-//
-//        System.out.println(windowWidth + ":" + windowHeight);
-    }
-
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-
-    public HBox addTopBar(int windowWidth, MarketTray marketTray, DevelopmentGrid developmentGrid, Player... players) {
+    private static HBox addTopBar(int windowWidth, MarketTray marketTray, DevelopmentGrid developmentGrid, Player... players) {
         HBox hBox = new HBox();
 
         int boxSize = windowWidth / (3 + players.length);
         int zoomFactor = 3;
+        float ratio = windowWidth / REFERENCE_WIDTH;
 
         // adding market tray
         hBox.getChildren().add(
                 drawThumbNail(
                         new MarketTrayDrawer(marketTray, boxSize).draw(),
                         new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
-                        boxSize, zoomFactor * boxSize)
+                        boxSize, zoomFactor * boxSize, ratio)
         );
         // adding development card grid
         hBox.getChildren().add(
                 drawThumbNail(
                         new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
                         new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
-                        boxSize, zoomFactor * boxSize)
+                        boxSize, zoomFactor * boxSize, ratio)
         );
 
         for (Player player : players) {
@@ -89,13 +62,13 @@ public class PlayingPhase extends Application {
                     drawThumbNail(
                             drawPlayer(player, boxSize),
                             drawPlayer(player, zoomFactor * boxSize),
-                            boxSize, zoomFactor * boxSize)
+                            boxSize, zoomFactor * boxSize, ratio)
             );
         }
         return hBox;
     }
 
-    public VBox addRightBar() {
+    private static VBox addRightBar() {
         VBox vBox = new VBox();
 
         Text welcome = new Text("Welcome");
@@ -108,12 +81,11 @@ public class PlayingPhase extends Application {
         return vBox;
     }
 
-    public Pane addMainBox(Player player, int width, int height) {
-        return addBackground(drawPlayer(player, width), width, height, false);
+    private static Pane addMainBox(Player player, int width) {
+        return drawPlayer(player, width);
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    public static BorderPane getPlayingPane() {
         Player player = new Player(new VirtualView(), "nickname", "sessionToken");
         player.setLeaderCards(LeaderCardsInitializer.getInstance().getLeaderCards().subList(0, 2));
         player.getLeaderCards().get(0).activate(player);
@@ -151,23 +123,27 @@ public class PlayingPhase extends Application {
         personalBoard.getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
         personalBoard.getFaithTrack().addFaithPoints(3);
 
-        windowWidth *= 0.4;
-        windowHeight *= 0.4;
-
+        // ---------------------------------------------------------------------------------------
         BorderPane border = new BorderPane();
-        border.setTop(addTopBar(windowWidth, new MarketTray(new VirtualView()), new DevelopmentGrid(new VirtualView()), player, player, player));
-        border.setLeft(addMainBox(player, windowWidth, windowWidth * 9 / 16));
-        border.setRight(addRightBar());
-
-        Scene scene = new Scene(border);
-        scene.setFill(Color.WHITE);
-
-        stage.setTitle(GAME_NAME);
-
-        stage.setResizable(false);
-        stage.setScene(scene);
-        stage.sizeToScene();
-        stage.show();
-
+        border.setTop(addTopBar(getWindowWidth(), new MarketTray(new VirtualView()), new DevelopmentGrid(new VirtualView()), player, player, player));
+        border.setLeft(addMainBox(player, getWindowWidth()));
+//        border.setRight(addRightBar());
+        return border;
     }
+
+//    @Override
+//    public void start(Stage stage) throws Exception {
+//
+//        BorderPane border = (BorderPane) getPlayingPane();
+//
+//        Scene scene = new Scene(addBackground(border, getWindowWidth(), getWindowWidth() * 3 / 4, 1.2f, getWindowWidth()));
+//
+//        stage.setTitle(GAME_NAME);
+//
+//        stage.setResizable(false);
+//        stage.setScene(scene);
+//        stage.sizeToScene();
+//        stage.show();
+//
+//    }
 }

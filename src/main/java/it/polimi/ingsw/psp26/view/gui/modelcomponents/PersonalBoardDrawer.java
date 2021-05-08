@@ -34,7 +34,7 @@ public class PersonalBoardDrawer extends RatioDrawer {
     @Override
     public Pane draw() {
 
-        Image personalboardImage = loadImage("personalboard.png", (int) (WIDTH * ratio));
+        Image personalboardImage = loadImage("personalboard.png", initMaxWidth);
         personalboardImage = setRoundedCorners(personalboardImage, ratio);
         personalboardImage = addLightEffects(personalboardImage, ratio);
 

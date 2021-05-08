@@ -50,7 +50,6 @@ public class LeaderCardsDrawer extends RatioDrawer {
                 Image backLeaderCardImage = getLeaderBack(ratio);
                 ImageView imageView = getImageView(backLeaderCardImage, hOffset * ratio, (vOffset + vShift * i) * ratio);
                 addTurnCardAnimation(imageView, frontLeaderCardImage, backLeaderCardImage);
-                addMouseOverAnimation(imageView, ratio);
                 pane.getChildren().add(imageView);
 
             }

@@ -22,6 +22,7 @@ import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.utils.ViewUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -32,7 +33,7 @@ import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
 public class CLI implements ViewInterface {
 
-    private final Client client;
+    private Client client;
 
     private final PrintWriter pw;
     private final CliUtils cliUtils;
@@ -47,8 +48,7 @@ public class CLI implements ViewInterface {
 
     private boolean isPersonalBoardPrintable;
 
-    public CLI(Client client) {
-        this.client = client;
+    public CLI() {
         this.isPersonalBoardPrintable = false;
 
         this.pw = new PrintWriter(System.out);
@@ -62,7 +62,7 @@ public class CLI implements ViewInterface {
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
         this.notificationStackPrinter = new NotificationStackPrinter(pw);
     }
-
+    
     /**
      * Prints the Title Screen when the program is launched
      * Used in printTitle() method
@@ -82,6 +82,16 @@ public class CLI implements ViewInterface {
     //          VIEW INTERFACE METHODS          //
     //------------------------------------------//
 
+    @Override
+    public void start() {
+        try {
+            this.client = new Client(this);
+            displayLogIn();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     /**
      * Used to ask the Player's credentials
@@ -121,7 +131,6 @@ public class CLI implements ViewInterface {
             }
         }
     }
-
 
     /**
      * Displays the given Leader Cards

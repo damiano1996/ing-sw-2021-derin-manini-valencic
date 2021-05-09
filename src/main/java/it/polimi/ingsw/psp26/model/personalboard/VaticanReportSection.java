@@ -6,6 +6,8 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.Objects;
 
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updatePlayerMessage;
+
 /**
  * Class modeling the vatican report section.
  */
@@ -15,6 +17,7 @@ public class VaticanReportSection extends Observable<SessionMessage> {
     private final int startSection;
     private final int endSection;
     private boolean popesFavorTileStatus;
+    private final String sessionToken;
 
     /**
      * Constructor of the class.
@@ -23,7 +26,7 @@ public class VaticanReportSection extends Observable<SessionMessage> {
      * @param startSection initial position of the section
      * @param endSection   final position of the section
      */
-    public VaticanReportSection(VirtualView virtualView, int startSection, int endSection, int value) {
+    public VaticanReportSection(VirtualView virtualView, int startSection, int endSection, int value, String sessionToken) {
         super();
         addObserver(virtualView);
 
@@ -31,8 +34,7 @@ public class VaticanReportSection extends Observable<SessionMessage> {
         this.startSection = startSection;
         this.endSection = endSection;
         this.value = value;
-
-        // notifyObservers(new Message()); // TODO: to be completed
+        this.sessionToken = sessionToken;
     }
 
     /**
@@ -49,7 +51,8 @@ public class VaticanReportSection extends Observable<SessionMessage> {
      */
     public void activatePopesFavorTile() {
         popesFavorTileStatus = true;
-        // notifyObservers(new Message()); // TODO: to be completed
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -114,4 +117,5 @@ public class VaticanReportSection extends Observable<SessionMessage> {
     public int hashCode() {
         return Objects.hash(startSection, endSection, popesFavorTileStatus);
     }
+    
 }

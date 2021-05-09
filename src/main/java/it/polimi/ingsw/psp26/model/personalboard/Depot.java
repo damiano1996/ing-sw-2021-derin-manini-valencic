@@ -32,8 +32,6 @@ public class Depot extends Observable<SessionMessage> {
 
         this.maxNumberOfResources = maxNumberOfResources;
         resources = new ArrayList<>();
-
-        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -65,8 +63,6 @@ public class Depot extends Observable<SessionMessage> {
         if (resources.size() == maxNumberOfResources) throw new CanNotAddResourceToDepotException();
         if (isAdmissible(resource)) resources.add(resource);
         else throw new CanNotAddResourceToDepotException();
-
-        // notifyObservers(new Message()); // TODO: to be completed
     }
 
     /**
@@ -135,5 +131,5 @@ public class Depot extends Observable<SessionMessage> {
     public int hashCode() {
         return Objects.hash(maxNumberOfResources, resources);
     }
-
+    
 }

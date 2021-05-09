@@ -38,7 +38,7 @@ public class PersonalBoardTest {
         virtualView = new VirtualView();
 
         developmentGrid = new DevelopmentGrid(virtualView);
-        personalBoard = new PersonalBoard(virtualView, new Player(virtualView, "nickname", "sessionToken"));
+        personalBoard = new PersonalBoard(virtualView, "sessionToken");
 
         developmentCard1 = developmentGrid.drawCard(Color.GREEN, Level.FIRST);
         developmentCard2 = developmentGrid.drawCard(Color.GREEN, Level.SECOND);
@@ -59,7 +59,7 @@ public class PersonalBoardTest {
 
     @Test
     public void testGetFaithTrack() {
-        FaithTrack faithTrack = new FaithTrack(virtualView);
+        FaithTrack faithTrack = new FaithTrack(virtualView, "sessionToken");
         assertEquals(faithTrack, personalBoard.getFaithTrack());
     }
 

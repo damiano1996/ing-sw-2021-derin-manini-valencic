@@ -79,13 +79,13 @@ public class ChooseLeaderActionTurnState extends TurnState {
 
                 // if message type doesn't match with any of previous cases, we have to display the choice to the client!
                 try {
-                    turn.getMatchController().notifyObservers(
-                            new SessionMessage(
-                                    turn.getTurnPlayer().getSessionToken(),
-                                    PLAYER_MODEL,
-                                    turn.getTurnPlayer()
-                            )
-                    );
+//                    turn.getMatchController().notifyObservers(
+//                            new SessionMessage(
+//                                    turn.getTurnPlayer().getSessionToken(),
+//                                    PLAYER_MODEL,
+//                                    turn.getTurnPlayer()
+//                            )
+//                    );
                     turn.getMatchController().notifyObservers(
                             new MultipleChoicesMessage(
                                     turn.getTurnPlayer().getSessionToken(),

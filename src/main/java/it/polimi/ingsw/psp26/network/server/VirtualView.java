@@ -1,9 +1,13 @@
 package it.polimi.ingsw.psp26.network.server;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.ModelUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.MatchController;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
 import java.io.IOException;
@@ -31,7 +35,17 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
      */
     @Override
     public void update(SessionMessage message) {
-        // it receives notification from model/controller and it has to notify the "real" view
+        if (message.getMessageType().equals(MessageType.PLAYER_MODEL)) { //TODO Fare una switch per i casi del MarketTray e della Grid
+            try {
+                message = new ModelUpdateMessage(
+                        message.getSessionToken(),
+                        message.getMessageType(),
+                        matchController.getMatch().getPlayerBySessionToken(message.getSessionToken())
+                );
+            } catch (InvalidPayloadException | PlayerDoesNotExistException e) {
+                e.printStackTrace(); //TODO PlayerDoesNotExistException fa casino nei test
+            }
+        }
         sendToClient(message);
     }
 

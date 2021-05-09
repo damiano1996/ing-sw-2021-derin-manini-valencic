@@ -19,7 +19,7 @@ public class BlackCrossActionTokenTest {
         VirtualView virtualView = new VirtualView();
         developmentGrid = new DevelopmentGrid(virtualView);
         blackCrossActionToken = new BlackCrossActionToken();
-        faithTrack = new FaithTrack(virtualView);
+        faithTrack = new FaithTrack(virtualView, "sessionToken");
     }
 
     @Test

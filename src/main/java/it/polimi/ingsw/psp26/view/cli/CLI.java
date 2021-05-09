@@ -28,6 +28,7 @@ import java.util.*;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
+import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
 public class CLI implements ViewInterface {
 
@@ -44,8 +45,11 @@ public class CLI implements ViewInterface {
     private final DisplayWarehousePlacer displayWarehousePlacer;
     private final NotificationStackPrinter notificationStackPrinter;
 
+    private boolean isPersonalBoardPrintable;
+
     public CLI(Client client) {
         this.client = client;
+        this.isPersonalBoardPrintable = false;
 
         this.pw = new PrintWriter(System.out);
         this.cliUtils = new CliUtils(pw);
@@ -119,41 +123,77 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Displays the given Leader Cards
+     *
+     * @param leaderCards The Leader Cards to display
+     */
     @Override
     public void displayLeaderCards(List<LeaderCard> leaderCards) {
         personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
     }
 
+    /**
+     * Used to print notifications in the Notification Stack printer
+     *
+     * @param notifications The Strings to print in the Notification Stack
+     */
     @Override
     public void displayNotifications(List<String> notifications) {
         notificationStackPrinter.printMessageStack(notifications);
     }
 
 
+    /**
+     * Displays the inkwell
+     *
+     * @param isPrintable If the Player owns the Inkwell, set this parameter to true
+     */
     @Override
     public void displayInkwell(boolean isPrintable) {
         personalBoardCli.displayInkwell(isPrintable, 5, 190);
     }
 
 
+    /**
+     * Dsplays the Player's Personal Board
+     *
+     * @param player            The Player from where to get the Personal Board
+     * @param isMultiplayerMode Used to print Lorenzo's Faith Marker if set to false
+     */
     @Override
     public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
-        notificationStackPrinter.restoreStackView();
-        personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
-        cliUtils.setCursorPosition(47, 1);
+        if (isPersonalBoardPrintable) {
+            notificationStackPrinter.restoreStackView();
+            personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
+            cliUtils.setCursorPosition(47, 1);
+        }
         client.viewNext();
     }
 
 
+    /**
+     * Displays the Depots of a Warehouse
+     *
+     * @param warehouse The Warehouse containing the Depots
+     */
     @Override
     public void displayWarehouseDepots(Warehouse warehouse) {
         depotCli.printWarehouse(warehouse, 17, 13);
     }
 
 
+    /**
+     * Displays the screen where the Player can modify the Depots
+     *
+     * @param warehouse     The Warehouse of the Player
+     * @param resourceToAdd The Resources the Player can add to the Warehouse
+     */
     @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
+        isPersonalBoardPrintable = false;
         notificationStackPrinter.hideNotifications();
+
         List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourceToAdd);
         try {
             client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
@@ -163,20 +203,38 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Displays the given Resources as a Strongbox
+     *
+     * @param strongbox The Resources to display
+     */
     @Override
     public void displayStrongbox(List<Resource> strongbox) {
         depotCli.displayStrongbox(strongbox, 30, 3);
     }
 
 
+    /**
+     * Displays a Faith Track
+     *
+     * @param faithTrack        The Faith Track to display
+     * @param isMultiPlayerMode Used to print Lorenzo's Faith Marker if set to false
+     */
     @Override
     public void displayFaithTrack(FaithTrack faithTrack, boolean isMultiPlayerMode) {
         faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
     }
 
 
+    /**
+     * Displays the List of Development Cards as Development Card Slots
+     *
+     * @param developmentCardsSlots The Cards to display
+     */
     @Override
     public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
+        isPersonalBoardPrintable = false;
+
         cliUtils.pPCS("Enter the number of the slot in which you want to put the drawn card", Color.WHITE, 10, 4);
         personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
         cliUtils.pPCS("Slot  1", Color.GREY, 47, 85);
@@ -186,33 +244,61 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Displays the given Market Tray
+     *
+     * @param marketTray The Market Tray to display
+     */
     @Override
     public void displayMarketTray(MarketTray marketTray) {
         marketCli.displayMarketTray(marketTray, 12, 88);
     }
 
 
+    /**
+     * Displays the Market screen
+     *
+     * @param marketTray The Market Tray to display
+     */
     @Override
     public void displayMarketScreen(MarketTray marketTray) {
         marketCli.displayMarketScreen(marketTray);
     }
 
 
+    /**
+     * Displays the Development Card Grid
+     *
+     * @param developmentGrid The Development Card Grid to display
+     */
     @Override
     public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
         developmentCardsCli.displayDevelopmentGrid(developmentGrid);
     }
 
 
+    /**
+     * Displays the Resource Supply
+     *
+     * @param resourceSupply The Resource Supply to display
+     */
     @Override
     public void displayResourceSupply(ResourceSupply resourceSupply) {
         personalBoardCli.displayResourceSupply(resourceSupply, 1, 37);
     }
 
 
+    /**
+     * Displays the Production Activation screen
+     *
+     * @param productions     The Productions to display
+     * @param playerResources The Player's current resources
+     */
     @Override
     public void displayProductionActivation(List<Production> productions, List<Resource> playerResources) {
+        isPersonalBoardPrintable = false;
         notificationStackPrinter.hideNotifications();
+
         try {
             List<Production> choices = new ArrayList<>(personalBoardCli.displayProductionActivation(productions, playerResources));
             client.notifyObservers(new Message(CHOICE_CARDS_TO_ACTIVATE, choices.toArray(new Object[0])));
@@ -226,23 +312,45 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Displays the Leader Cards activation/discard selection screen
+     *
+     * @param leaderCards The Leader Cards to display
+     */
     public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
+        isPersonalBoardPrintable = false;
+
         cliUtils.clns();
         leaderCardsCli.printMultipleLeaders(leaderCards, 3);
         cliUtils.vSpace(3);
     }
 
 
+    /**
+     * Displays the Action Tokens screen
+     *
+     * @param unusedTokens The Action Tokens to display
+     */
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
+        isPersonalBoardPrintable = false;
+
         personalBoardCli.displayActionTokens(unusedTokens);
         displayNext();
     }
 
 
+    /**
+     * Displays the Market action screen
+     *
+     * @param marketTray      The Market Tray to display
+     * @param playerResources The Player's current Resources
+     */
     @Override
     public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
+        isPersonalBoardPrintable = false;
         notificationStackPrinter.hideNotifications();
+
         List<Integer> choice = new ArrayList<>();
         try {
             choice.add(marketCli.displayMarketSelection(marketTray, playerResources));
@@ -256,9 +364,17 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Displays the Development Card buy action screen
+     *
+     * @param developmentGrid The Development Grid to display
+     * @param playerResources The Player's current Resources
+     */
     @Override
     public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources) {
+        isPersonalBoardPrintable = false;
         notificationStackPrinter.hideNotifications();
+
         List<DevelopmentCard> choice = new ArrayList<>();
         try {
             choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, playerResources));
@@ -273,6 +389,19 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Method used to display choices using the following layout:
+     * Question
+     * Middle block (objects shown here changes when method is called)
+     * Choices
+     *
+     * @param messageType   The Message Type used to get the correct representation of the screen
+     * @param question      The question to ask
+     * @param choices       The choices the Player has
+     * @param minChoices    The minimum number of choices the Player can make
+     * @param maxChoices    The maximum number of choices the Player can make
+     * @param hasUndoOption True if the Player can exit from the choice screen
+     */
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
@@ -289,11 +418,23 @@ public class CLI implements ViewInterface {
             case CHOICE_POSITION:
                 cliUtils.cls();
                 displayMultipleStringChoices(choices);
-                displayDevelopmentCardsSlots(client.getPersonalBoardCopy().getDevelopmentCardsSlots());
+                try {
+                    displayDevelopmentCardsSlots(client.getCachedModel().getObsoleteMyPlayerCached().getPersonalBoard().getDevelopmentCardsSlots());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
+                isPersonalBoardPrintable = true;
+                notificationStackPrinter.restoreStackView();
+                try {
+                    personalBoardCli.displayPersonalBoard(client.getCachedModel().getObsoleteMyPlayerCached(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                cliUtils.setCursorPosition(47, 1);
                 displayMultipleStringChoices(choices);
                 break;
 
@@ -304,9 +445,10 @@ public class CLI implements ViewInterface {
 
             case CHOICE_RESOURCE_FROM_WAREHOUSE: //TODO migliora la grafica di questa schermata
             case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
-                cliUtils.clns();
+                //cliUtils.clns();
                 //ResourceSupply is the unique element of choices List
-                displayResourceSupply(new ResourceSupply());
+                //displayResourceSupply(new ResourceSupply());
+                printPlayerResources(castElements(Resource.class, choices), 12, 10);
                 cliUtils.vSpace(10);
                 break;
 
@@ -332,7 +474,7 @@ public class CLI implements ViewInterface {
 
         } catch (InvalidPayloadException e) {
             e.printStackTrace();
-        } catch (UndoOptionSelectedException e) { //TODO da fare con i leader
+        } catch (UndoOptionSelectedException e) {
             client.sendUndoMessage();
             client.viewNext();
         }
@@ -340,6 +482,16 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Used as an auxiliary method in displayChoices() to display the available choices
+     *
+     * @param nChoices      The number of choices the Player can make
+     * @param minChoices    The minimum number of choices the Player can make
+     * @param maxChoices    The maximum number of choices the Player can make
+     * @param hasUndoOption True if the Player can exit from the choice screen
+     * @return A List containing the Player's choices
+     * @throws UndoOptionSelectedException The Player chooses to exit from the current choice screen
+     */
     private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices, boolean hasUndoOption) throws UndoOptionSelectedException {
         List<Integer> choices = new ArrayList<>();
         int itemInt;
@@ -364,6 +516,17 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Used as an auxiliary method in displayChoices() to get the correct input from the Player
+     *
+     * @param nChoices      The number of choices the Player can make
+     * @param minChoices    The minimum number of choices the Player can make
+     * @param hasUndoOption True if the Player can exit from the choice screen
+     * @return A correct Integer selected by the Player
+     * @throws IndexOutOfBoundsException   The index is greater/less than the maximum/minimum range of possible choices
+     * @throws ConfirmationException       The Player confirms the current choices
+     * @throws UndoOptionSelectedException The Player decides to exit from the current display choices screen
+     */
     private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices, boolean hasUndoOption) throws IndexOutOfBoundsException, ConfirmationException, UndoOptionSelectedException {
         if (hasUndoOption) pw.print("\n" + cliUtils.hSpace(3) + "Type 'u' to undo operation.");
         pw.print("\n" + cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'c' - to confirm selections): ");
@@ -385,6 +548,11 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Used as an auxiliary method in displayChoices() to correctly print the choices
+     *
+     * @param choices The choices to print
+     */
     private void displayMultipleStringChoices(List<Object> choices) {
         for (int i = 0; i < choices.size(); i++) {
             cliUtils.vSpace(1);
@@ -393,6 +561,11 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Displays the given String on screen
+     *
+     * @param text The String to display
+     */
     @Override
     public void displayText(String text) {
         cliUtils.clns();
@@ -409,6 +582,11 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Displays an error popup
+     *
+     * @param error The error String to print on screen
+     */
     @Override
     public void displayError(String error) {
         cliUtils.clns();
@@ -429,6 +607,9 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Used to continue between screens and to get the next Message from MessageSynchronizedFIFO
+     */
     private void displayNext() {
         Scanner in = new Scanner(System.in);
         cliUtils.vSpace(1);
@@ -439,6 +620,11 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Starts a waiting screen
+     *
+     * @param message A String to display during the waiting screen
+     */
     public void displayWaitingScreen(Message message) {
         try {
             WaitingScreenStarter.getInstance().startWaiting(message);
@@ -448,6 +634,9 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Stops the waiting screen
+     */
     public void stopDisplayingWaitingScreen() {
         WaitingScreenStarter.getInstance().stopWaiting();
         client.viewNext();

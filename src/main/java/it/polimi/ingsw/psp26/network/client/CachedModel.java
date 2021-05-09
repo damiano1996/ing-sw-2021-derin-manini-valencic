@@ -58,35 +58,56 @@ public class CachedModel {
         }
     }
 
-    public synchronized Player getMyPlayerCached() throws InterruptedException {
-        return myPlayerCached.getObject();
+    public synchronized Player getUpdatedMyPlayerCached() throws InterruptedException {
+        return myPlayerCached.getUpdatedObject();
     }
 
+    public synchronized Player getObsoleteMyPlayerCached() throws InterruptedException {
+        return myPlayerCached.getObsoleteObject();
+    }
+
+    
+    // TODO fare i metodi doppi updated eobsolete anche di questi
+    
     public synchronized Player getOpponentCached(int index) throws InterruptedException {
-        return opponentsCached.get(new ArrayList<>(opponentsCached.keySet()).get(index)).getObject();
+        return opponentsCached.get(new ArrayList<>(opponentsCached.keySet()).get(index)).getUpdatedObject();
     }
 
     public synchronized MarketTray getMarketTrayCached() throws InterruptedException {
-        return marketTrayCached.getObject();
+        return marketTrayCached.getUpdatedObject();
     }
 
     public synchronized DevelopmentGrid getDevelopmentGridCached() throws InterruptedException {
-        return developmentGridCached.getObject();
+        return developmentGridCached.getUpdatedObject();
     }
 
     private static class CachedObject<T> {
         private T object;
+        private boolean obsolete;
 
+        public CachedObject() {
+            obsolete = true;
+        }
+        
         public synchronized void updateObject(T object) {
             this.object = object;
+            obsolete = false;
             notifyAll();
         }
 
-        public synchronized T getObject() throws InterruptedException {
-            while (object == null) wait();
-            T tmpObject = object;
-            object = null;
-            return tmpObject;
+        public synchronized T getUpdatedObject() throws InterruptedException {
+            while (obsolete) wait();
+            obsolete = true;
+            return object;
         }
+
+        /**
+         * By assumption it will never stop the calling thread
+         */
+        public synchronized T getObsoleteObject() throws InterruptedException {
+            if (object == null) return getUpdatedObject();
+            return object;
+        }
+        
     }
 }

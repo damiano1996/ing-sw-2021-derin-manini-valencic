@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updatePlayerMessage;
+
 /**
  * Class modeling the player.
  */
@@ -38,11 +40,9 @@ public class Player extends Observable<SessionMessage> {
 
         this.nickname = nickname;
         this.sessionToken = sessionToken;
-        personalBoard = new PersonalBoard(virtualView, this);
+        personalBoard = new PersonalBoard(virtualView, sessionToken);
         inkwell = false;
         leaderCards = new ArrayList<>();
-
-        // notifyObservers(new Message());
     }
 
     /**
@@ -88,7 +88,8 @@ public class Player extends Observable<SessionMessage> {
      */
     public void setLeaderCards(List<LeaderCard> leaderCards) {
         this.leaderCards = leaderCards;
-        // notifyObservers(new Message()); // TODO: to be completed
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -98,6 +99,8 @@ public class Player extends Observable<SessionMessage> {
      */
     public void discardLeaderCard(LeaderCard leaderCard) {
         leaderCards.remove(leaderCard);
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -105,7 +108,8 @@ public class Player extends Observable<SessionMessage> {
      */
     public void giveInkwell() {
         inkwell = true;
-        // notifyObservers(new Message()); // TODO: to be completed
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -125,4 +129,5 @@ public class Player extends Observable<SessionMessage> {
     public VirtualView getVirtualView() {
         return virtualView;
     }
+    
 }

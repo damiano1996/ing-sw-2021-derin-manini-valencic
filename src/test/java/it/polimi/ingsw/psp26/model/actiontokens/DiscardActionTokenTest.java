@@ -23,7 +23,7 @@ public class DiscardActionTokenTest {
     @Before
     public void setUp() {
         VirtualView virtualView = new VirtualView();
-        faithTrack = new FaithTrack(virtualView);
+        faithTrack = new FaithTrack(virtualView, "sessionToken");
         developmentGrid = new DevelopmentGrid(virtualView);
         discardActionTokenGreen = new DiscardActionToken(Color.GREEN);
     }

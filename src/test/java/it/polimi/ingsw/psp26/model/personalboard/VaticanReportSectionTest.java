@@ -13,7 +13,7 @@ public class VaticanReportSectionTest {
     @Before
     public void setUp() {
         VirtualView virtualView = new VirtualView();
-        section = new VaticanReportSection(virtualView, 1, 5, 1);
+        section = new VaticanReportSection(virtualView, 1, 5, 1, "sessionToken");
     }
 
     @Test

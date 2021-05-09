@@ -74,7 +74,7 @@ public class DisplayWarehousePlacer {
                         setParameters(true);
                     }
                 }
-
+                
                 if (!discardResource) {
                     try {
                         warehouse.addResourceToDepot(depotIndex, resources.get(i));
@@ -326,7 +326,7 @@ public class DisplayWarehousePlacer {
     /**
      * Prints the Depot number the Player has to enter to store a Resource in a LeaderDepot
      *
-     * @param numberOfLeaderDepots The number of Leder Depots
+     * @param numberOfLeaderDepots The number of Leader Depots
      */
     private void printLeaderDepotNumber(int numberOfLeaderDepots) {
         cliUtils.setCursorPosition(14, 135);

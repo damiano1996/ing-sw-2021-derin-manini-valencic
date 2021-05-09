@@ -7,6 +7,8 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updatePlayerMessage;
+
 /**
  * Class to model the faith track.
  */
@@ -17,6 +19,7 @@ public class FaithTrack extends Observable<SessionMessage> {
     private int markerPosition;
     private int faithPoints;
     private int blackCrossPosition;
+    private final String sessionToken;
 
     /**
      * Constructor of the class.
@@ -24,20 +27,19 @@ public class FaithTrack extends Observable<SessionMessage> {
      *
      * @param virtualView virtual view that must be notified in case of model changes
      */
-    public FaithTrack(VirtualView virtualView) {
+    public FaithTrack(VirtualView virtualView, String sessionToken) {
         super();
         addObserver(virtualView);
 
         this.finalPosition = 24;
         vaticanReportSections = new VaticanReportSection[3];
-        vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2);
-        vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16, 3);
-        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, finalPosition, 4);
+        vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2, sessionToken);
+        vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16, 3, sessionToken);
+        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, finalPosition, 4, sessionToken);
         this.markerPosition = 0;
         this.blackCrossPosition = 0;
         this.faithPoints = 0;
-
-        // notifyObservers(new Message()); // TODO: to be completed
+        this.sessionToken = sessionToken;
     }
 
     /**
@@ -48,7 +50,8 @@ public class FaithTrack extends Observable<SessionMessage> {
     public void addFaithPoints(int points) {
         this.faithPoints += points;
         this.markerPosition += points; //TODO ANDREBBE IMPLEMENTATO UN CONTROLLO CHE NON FACCIA SUPERARE LA MARKER POSITION OLTRE 24
-        // notifyObservers(new Message()); // TODO: to be completed
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -96,7 +99,7 @@ public class FaithTrack extends Observable<SessionMessage> {
         this.markerPosition = this.markerPosition + numberOfSteps;
         this.faithPoints = this.faithPoints + numberOfSteps;
 
-        // notifyObservers(new Message()); // TODO: to be completed
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -107,7 +110,7 @@ public class FaithTrack extends Observable<SessionMessage> {
     public void moveBlackCrossPosition(int numberOfSteps) {
         this.blackCrossPosition = this.blackCrossPosition + numberOfSteps;
 
-        // notifyObservers(new Message()); // TODO: to be completed
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -148,4 +151,5 @@ public class FaithTrack extends Observable<SessionMessage> {
         result = 31 * result + Arrays.hashCode(vaticanReportSections);
         return result;
     }
+    
 }

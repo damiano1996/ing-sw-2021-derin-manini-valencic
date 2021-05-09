@@ -11,7 +11,6 @@ import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
@@ -28,8 +27,7 @@ public class Client extends Observable<Message> {
     private ViewInterface viewInterface;
     private String nickname;
     private MessageType matchModeType;
-
-    private PersonalBoard personalBoardCopy; //TODO forse una classe container anche per altre cose
+    private CachedModel cachedModel;
 
     public Client() throws IOException {
         super();
@@ -125,13 +123,6 @@ public class Client extends Observable<Message> {
                 // --------- DISPLAY MESSAGES ----------
                 // -------------------------------------
 
-//                case PERSONAL_BOARD:
-//                    boolean isMultiplayerMode = !matchModeType.equals(MessageType.SINGLE_PLAYER_MODE);
-//                    Player player = (Player) message.getPayload();
-//                    personalBoardCopy = player.getPersonalBoard();
-//                    viewInterface.displayPersonalBoard(player, isMultiplayerMode);
-//                    break;
-
                 case START_WAITING:
                     viewInterface.displayWaitingScreen(message);
                     break;
@@ -145,10 +136,6 @@ public class Client extends Observable<Message> {
             }
         } catch (EmptyPayloadException ignored) {
         }
-    }
-
-    public PersonalBoard getPersonalBoardCopy() {
-        return personalBoardCopy;
     }
 
     private List<Resource> getSecondMessageResources(MessageType messageType) {
@@ -166,6 +153,10 @@ public class Client extends Observable<Message> {
             viewInterface.displayLogIn();
         }
     }
+    
+    public synchronized CachedModel getCachedModel() {
+        return cachedModel;
+    }
 
     public String getNickname() {
         return nickname;
@@ -173,6 +164,7 @@ public class Client extends Observable<Message> {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+        this.cachedModel = new CachedModel(nickname);
     }
 
     public void setViewInterface(ViewInterface viewInterface) {

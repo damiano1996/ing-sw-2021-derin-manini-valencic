@@ -19,7 +19,7 @@ public class WarehouseTest {
 
     @Before
     public void setUp() {
-        warehouse = new Warehouse(new VirtualView(), 3);
+        warehouse = new Warehouse(new VirtualView(), 3, "sessionToken");
     }
 
     @Test

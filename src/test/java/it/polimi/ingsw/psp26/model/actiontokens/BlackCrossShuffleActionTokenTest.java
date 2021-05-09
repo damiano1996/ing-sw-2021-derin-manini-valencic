@@ -21,7 +21,7 @@ public class BlackCrossShuffleActionTokenTest {
 
         developmentGrid = new DevelopmentGrid(virtualView);
         blackCrossShuffleActionToken = new BlackCrossShuffleActionToken();
-        faithTrack = new FaithTrack(virtualView);
+        faithTrack = new FaithTrack(virtualView, "sessionToken");
     }
 
     @Test(expected = MustShuffleActionTokenStackException.class)

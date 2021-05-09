@@ -34,10 +34,11 @@ public class ActivateProductionNormalActionTurnStateTest {
     @Before
     public void setUp() throws Exception {
         mitm = new MitmObserver();
-        phase = new Phase(new MatchController(new VirtualView(), 0));
+        VirtualView virtualView = new VirtualView();
+        phase = new Phase(virtualView.getMatchController());
         phase.getMatchController().addObserver(mitm);
 
-        phase.getMatchController().getMatch().addPlayer(new Player(new VirtualView(), "nickname", "sessionToken"));
+        phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname", "sessionToken"));
         phase.getMatchController().setMaxNumberOfPlayers(1);
         turn = new Turn(
                 new PlayingPhaseState(phase),

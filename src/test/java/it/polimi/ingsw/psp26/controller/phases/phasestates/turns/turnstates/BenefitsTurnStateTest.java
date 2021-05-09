@@ -26,10 +26,11 @@ public class BenefitsTurnStateTest {
     @Before
     public void setUp() {
         mitm = new MitmObserver();
-        phase = new Phase(new MatchController(new VirtualView(), 0));
+        VirtualView virtualView = new VirtualView();
+        phase = new Phase(virtualView.getMatchController());
         phase.getMatchController().addObserver(mitm);
 
-        phase.getMatchController().getMatch().addPlayer(new Player(new VirtualView(), "nickname", "sessionToken"));
+        phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname", "sessionToken"));
     }
 
     @Test

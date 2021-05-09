@@ -54,28 +54,14 @@ public class InitializationPhaseState extends PhaseState {
     private void addPlayer(SessionMessage message) throws EmptyPayloadException {
         String nickname = (String) message.getPayload();
         String sessionToken = message.getSessionToken();
+        Player newPlayer = new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken);
+        
         System.out.println("Initialization phase - new player - nickname: " + nickname + " - sessionToken: " + sessionToken);
-        phase.getMatchController().getMatch().addPlayer(new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken));
+        phase.getMatchController().getMatch().addPlayer(newPlayer);
+
         System.out.println("Initialization phase  - sending start waiting message");
         try {
             sendSessionMessageToAllPlayers(phase.getMatchController(), new NotificationUpdateMessage(sessionToken, nickname + " joined the game!"));
-
-
-            //TODO TOGLI STA ROBA
-            // 
-            //new Thread(() -> {
-            //    while (true) {
-            //        try {
-            sendSessionMessageToAllPlayers(phase.getMatchController(), new NotificationUpdateMessage(sessionToken, nickname + " live update!!"));
-            //            TimeUnit.MILLISECONDS.sleep(8000);
-            //        } catch (InvalidPayloadException | InterruptedException ignored) {
-            //    }
-            //}
-            //}).start();
-
-            //------------
-
-
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Please wait for other Players to join..."));
         } catch (InvalidPayloadException ignored) {
         }

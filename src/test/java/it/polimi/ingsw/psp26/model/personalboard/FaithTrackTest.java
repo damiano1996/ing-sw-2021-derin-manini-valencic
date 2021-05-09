@@ -17,11 +17,11 @@ public class FaithTrackTest {
         VirtualView virtualView = new VirtualView();
         vaticanReportSections = new VaticanReportSection[3];
 
-        vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2);
-        vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16, 3);
-        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, 24, 4);
+        vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2, "sessionToken");
+        vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16, 3, "sessionToken");
+        vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, 24, 4, "sessionToken");
 
-        faithTrack = new FaithTrack(virtualView);
+        faithTrack = new FaithTrack(virtualView, "sessionToken");
     }
 
     @Test
@@ -77,13 +77,13 @@ public class FaithTrackTest {
 
     @Test
     public void testEquals_TrueCase() {
-        FaithTrack faithTrack1 = new FaithTrack(new VirtualView());
+        FaithTrack faithTrack1 = new FaithTrack(new VirtualView(), "sessionToken");
         assertEquals(faithTrack, faithTrack1);
     }
 
     @Test
     public void testEquals_FalseCase() {
-        FaithTrack faithTrack1 = new FaithTrack(new VirtualView());
+        FaithTrack faithTrack1 = new FaithTrack(new VirtualView(), "sessionToken");
         faithTrack.addFaithPoints(5);
         faithTrack.moveBlackCrossPosition(7);
         assertNotEquals(faithTrack, faithTrack1);

@@ -5,7 +5,6 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToStrongboxException;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
-import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -17,33 +16,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updatePlayerMessage;
+
 /**
  * Class to model the personal board.
  */
 public class PersonalBoard extends Observable<SessionMessage> {
-
-    private transient final Player player; // "transient" doesn't serialize the player. Necessary to avoid recursion in Gson.
 
     private final FaithTrack faithTrack;
     private final Warehouse warehouse;
     private final List<List<DevelopmentCard>> developmentCardsSlots;
     private final List<Production> productions;
     private final List<Resource> strongbox;
+    private final String sessionToken;
 
     /**
      * Constructor of the class.
      * It initializes all the components inside it and notifies the observers.
      *
      * @param virtualView virtual view to be notified on models changes
-     * @param player      player that has this personal board. He is used to get the sessionToken
      */
-    public PersonalBoard(VirtualView virtualView, Player player) {
+    public PersonalBoard(VirtualView virtualView, String sessionToken) {
         super();
         addObserver(virtualView);
 
-        this.player = player;
-
-        faithTrack = new FaithTrack(virtualView);
+        faithTrack = new FaithTrack(virtualView, sessionToken);
         developmentCardsSlots = new ArrayList<>() {{
             add(new ArrayList<>());
             add(new ArrayList<>());
@@ -61,10 +58,9 @@ public class PersonalBoard extends Observable<SessionMessage> {
                     }}));
         }};
 
-        warehouse = new Warehouse(virtualView, 3);
+        this.warehouse = new Warehouse(virtualView, 3, sessionToken);
         strongbox = new ArrayList<>();
-
-//        notifyObservers(new Message(player.getSessionToken(), MessageType.PERSONAL_BOARD, player));
+        this.sessionToken = sessionToken;
     }
 
     /**
@@ -168,6 +164,8 @@ public class PersonalBoard extends Observable<SessionMessage> {
         if (resource.equals(Resource.EMPTY) || resource.equals(Resource.FAITH_MARKER))
             throw new CanNotAddResourceToStrongboxException();
         strongbox.add(resource);
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -177,7 +175,8 @@ public class PersonalBoard extends Observable<SessionMessage> {
      */
     public void addResourcesToStrongbox(List<Resource> resources) throws CanNotAddResourceToStrongboxException {
         for (Resource resource : resources) addResourceToStrongbox(resource);
-        // notifyObservers(new Message()); // TODO: to be completed
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -193,7 +192,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
         if (isCardPlaceable(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
         else throw new CanNotAddDevelopmentCardToSlotException();
 
-        // notifyObservers(new Message()); // TODO: to be completed
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -270,5 +269,5 @@ public class PersonalBoard extends Observable<SessionMessage> {
         resources.addAll(strongbox);
         return Collections.unmodifiableList(resources);
     }
-
+    
 }

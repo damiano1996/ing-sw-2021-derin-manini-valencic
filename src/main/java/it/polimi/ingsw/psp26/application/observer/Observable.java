@@ -12,8 +12,10 @@ public abstract class Observable<T> {
     }
 
     public void notifyObservers(T object) {
-        for (Observer<T> observer : observers)
-            observer.update(object);
+        if (observers != null) {
+            for (Observer<T> observer : observers)
+                if (observer != null) observer.update(object);
+        }
     }
 
     public void addObserver(Observer<T> observer) {
@@ -23,4 +25,5 @@ public abstract class Observable<T> {
     public void removeObserver(Observer<T> observer) {
         observers.remove(observer);
     }
+
 }

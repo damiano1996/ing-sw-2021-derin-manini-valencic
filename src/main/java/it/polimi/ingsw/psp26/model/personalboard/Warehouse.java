@@ -10,6 +10,8 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updatePlayerMessage;
+
 /**
  * Class to manage the depots of the warehouse and the depots added by the leader cards.
  */
@@ -17,6 +19,7 @@ public class Warehouse extends Observable<SessionMessage> {
 
     private final List<Depot> baseDepots;
     private final List<LeaderDepot> leaderDepots;
+    private final String sessionToken;
 
     /**
      * Class constructor.
@@ -24,15 +27,16 @@ public class Warehouse extends Observable<SessionMessage> {
      * @param virtualView        virtual view that must be notified
      * @param numberOfBaseDepots number of base depots
      */
-    public Warehouse(VirtualView virtualView, int numberOfBaseDepots) {
+    public Warehouse(VirtualView virtualView, int numberOfBaseDepots, String sessionToken) {
         super();
         addObserver(virtualView);
-
+        
         baseDepots = new ArrayList<>();
         leaderDepots = new ArrayList<>();
         // creating the base depots
         for (int i = 0; i < numberOfBaseDepots; i++)
             baseDepots.add(new Depot(virtualView, i + 1));
+        this.sessionToken = sessionToken;
     }
 
     /**
@@ -53,8 +57,10 @@ public class Warehouse extends Observable<SessionMessage> {
             for (int i = 0; i < baseDepots.size(); i++)
                 if (baseDepots.get(i).getContainedResourceType().equals(resource) && i != indexDepot)
                     throw new CanNotAddResourceToDepotException();
-
+                
         getDepotByIndex(indexDepot).addResource(resource);
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -80,6 +86,8 @@ public class Warehouse extends Observable<SessionMessage> {
      */
     public void addResource(Resource resource) throws CanNotAddResourceToWarehouse {
         addResource(resource, 0);
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -103,6 +111,8 @@ public class Warehouse extends Observable<SessionMessage> {
             }
         }
         if (!added) throw new CanNotAddResourceToWarehouse();
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -189,6 +199,8 @@ public class Warehouse extends Observable<SessionMessage> {
      */
     public void addLeaderDepot(LeaderDepot leaderDepot) {
         leaderDepots.add(leaderDepot);
+
+        notifyObservers(updatePlayerMessage(sessionToken));
     }
 
     /**
@@ -214,4 +226,5 @@ public class Warehouse extends Observable<SessionMessage> {
     public int hashCode() {
         return Objects.hash(baseDepots, leaderDepots);
     }
+    
 }

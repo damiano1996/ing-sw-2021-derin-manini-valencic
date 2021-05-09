@@ -52,23 +52,30 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
     public void play(SessionMessage message) {
         super.play(message);
 
-        try {
+        if (message.getMessageType().equals(MessageType.QUIT_OPTION_SELECTED)) {
+            turn.changeState(new ChooseLeaderActionTurnState(turn, turn.getTurnPhase()));
+            turn.play(message);
+        }
 
-            // since this state is called by ChooseLeaderActionTurnState, we can assume that the first message has one of the following payloads
-            if (message.getPayload().equals(MessageType.ACTIVATE_LEADER) || message.getPayload().equals(MessageType.DISCARD_LEADER))
-                lastMessage = (MessageType) message.getPayload();
+        else {
+            try {
 
-            if (message.getMessageType().equals(MessageType.CHOICE_LEADERS)) {
+                // since this state is called by ChooseLeaderActionTurnState, we can assume that the first message has one of the following payloads
+                if (message.getPayload().equals(MessageType.ACTIVATE_LEADER) || message.getPayload().equals(MessageType.DISCARD_LEADER))
+                    lastMessage = (MessageType) message.getPayload();
 
-                LeaderCard leaderCard = (LeaderCard) message.getPayload();
-                playAction(leaderCard, message);
+                if (message.getMessageType().equals(MessageType.CHOICE_LEADERS)) {
 
-            } else {
+                    LeaderCard leaderCard = (LeaderCard) message.getPayload();
+                    playAction(leaderCard, message);
+
+                } else {
+                    sendLeaderChoicesMessage(message);
+                }
+
+            } catch (EmptyPayloadException emptyPayloadException) {
                 sendLeaderChoicesMessage(message);
             }
-
-        } catch (EmptyPayloadException emptyPayloadException) {
-            sendLeaderChoicesMessage(message);
         }
     }
 

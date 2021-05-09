@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.network.client;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observer;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
@@ -52,7 +53,8 @@ public class NetworkHandler implements Observer<Message> {
 
                     switch (message.getMessageType()) {
                         case MODEL_UPDATE:
-                            // TODO: send to container
+                            // if model update message, update the cachedModel
+                            client.getCachedModel().updateCachedModel(message);
                             break;
 
                         case NOTIFICATION_UPDATE:
@@ -66,7 +68,7 @@ public class NetworkHandler implements Observer<Message> {
                             break;
                     }
 
-                } catch (IOException | ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException | EmptyPayloadException e) {
                     // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }
             }

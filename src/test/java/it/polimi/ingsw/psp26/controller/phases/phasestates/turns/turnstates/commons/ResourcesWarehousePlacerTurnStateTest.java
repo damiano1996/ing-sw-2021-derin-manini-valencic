@@ -38,17 +38,19 @@ public class ResourcesWarehousePlacerTurnStateTest {
     private Phase phase;
     private Turn turn;
     private Warehouse warehouse;
+    private VirtualView virtualView;
 
     private List<Resource> resourcesToAdd;
-
+    
     @Before
     public void setUp() throws CanNotAddResourceToWarehouse {
+        virtualView = new VirtualView();
         mitm = new MitmObserver();
-        phase = new Phase(new MatchController(new VirtualView(), 0));
+        phase = new Phase(virtualView.getMatchController());
         phase.getMatchController().addObserver(mitm);
+        Player player = new Player(virtualView, "nickname", "sessionToken");
 
-        phase.getMatchController().getMatch().addPlayer(
-                new Player(new VirtualView(), "nickname", "sessionToken"));
+        phase.getMatchController().getMatch().addPlayer(player);
 
         turn = new Turn(
                 new PlayingPhaseState(phase),
@@ -167,7 +169,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
 
     @Test
     public void testDiscardResource() throws EmptyPayloadException, InvalidPayloadException {
-        turn.getMatchController().getMatch().addPlayer(new Player(new VirtualView(), "nickname2", "sessionToken2"));
+        turn.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname2", "sessionToken2"));
 
         resourcesToAdd.add(COIN);
         resourcesToAdd.add(COIN);
@@ -179,7 +181,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
 
     @Test
     public void testDiscardAvoidedByLeader() throws EmptyPayloadException, InvalidPayloadException {
-        turn.getMatchController().getMatch().addPlayer(new Player(new VirtualView(), "nickname2", "sessionToken2"));
+        turn.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname2", "sessionToken2"));
 
         // Creating a new leader and activate it with coin depot as special ability.
         // In this way we can check that the remaining resource will be placed in the leader depot.

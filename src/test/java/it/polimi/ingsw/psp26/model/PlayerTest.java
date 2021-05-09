@@ -21,9 +21,11 @@ public class PlayerTest {
 
     @Before
     public void setUp() {
+        VirtualView virtualView = new VirtualView();
         nickname = "nickname";
         sessionToken = "sessionToken";
-        player = new Player(new VirtualView(), nickname, sessionToken);
+        player = new Player(virtualView, nickname, sessionToken);
+        virtualView.getMatchController().getMatch().addPlayer(player);
     }
 
     @Test

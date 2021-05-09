@@ -96,7 +96,7 @@ public class PlayingPhase extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        PersonalBoard personalBoard = new PersonalBoard(new VirtualView(), new Player(new VirtualView(), "nickname", "sessionToken"));
+        PersonalBoard personalBoard = new PersonalBoard(new VirtualView(), "sessionToken");
         try {
             personalBoard.getWarehouse().addResource(Resource.COIN);
             personalBoard.getWarehouse().addResource(Resource.SHIELD);

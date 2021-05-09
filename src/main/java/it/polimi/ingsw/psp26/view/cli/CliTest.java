@@ -66,7 +66,7 @@ public class CliTest {
         player = new Player(virtualView, "Player", "000000");
         LeaderCardsInitializer leaderCardsInitializer = LeaderCardsInitializer.getInstance();
         leaderCards = leaderCardsInitializer.getLeaderCards();
-        personalBoard = new PersonalBoard(virtualView, player);
+        personalBoard = new PersonalBoard(virtualView, "000");
         marketTray = new MarketTray(virtualView);
         resourceSupply = new ResourceSupply();
         match = new Match(virtualView, 0);
@@ -88,7 +88,6 @@ public class CliTest {
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, UndoOptionSelectedException {
 
         //Insert here the name of the methods you want to test
-
         testPersonalBoard();
 
         testPrintPlayerResources();
@@ -172,7 +171,7 @@ public class CliTest {
 
         //---WAREHOUSE-CONFIGURATION-TEST---// Press Enter 3 times
 
-        PersonalBoard p = new PersonalBoard(virtualView, player);
+        PersonalBoard p = new PersonalBoard(virtualView, "player");
         List<Resource> resources = new ArrayList<>();
 
         p.getWarehouse().addLeaderDepot(new LeaderDepot(virtualView, Resource.COIN));

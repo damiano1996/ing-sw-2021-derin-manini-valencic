@@ -9,7 +9,6 @@ import java.util.Random;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getImage;
 
 public class DevelopmentCardGridDrawer extends RatioDrawer {
 
@@ -23,16 +22,6 @@ public class DevelopmentCardGridDrawer extends RatioDrawer {
 
     @Override
     public Pane draw() {
-
-        // TODO: drawing a cool background
-//        Image marketBoardImage = loadImage("market/market_board.png", (int) (WIDTH * ratio));
-//        marketBoardImage = addLightEffects(marketBoardImage, ratio);
-//
-//        Canvas canvas = new Canvas(marketBoardImage.getWidth(), marketBoardImage.getHeight());
-//        pane.getChildren().add(canvas);
-//
-//        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-//        graphicsContext.drawImage(marketBoardImage, 0, 0);
 
         drawGrid();
 
@@ -54,7 +43,7 @@ public class DevelopmentCardGridDrawer extends RatioDrawer {
 
                 for (int i = 0; i < developmentGrid.getDevelopmentGridCell(row, col).getDevelopmentCardsSize(); i++) { // drawing multiple time the first card to show that there are others below
 
-                    Image developmentCardImage = getImage(developmentGrid.getDevelopmentGridCell(row, col).getFirstCard(), ratio);
+                    Image developmentCardImage = ModelDrawUtils.getCard(developmentGrid.getDevelopmentGridCell(row, col).getFirstCard(), ratio);
 
                     ImageView imageView = getImageView(developmentCardImage, (hOffset + col * hShift) * ratio, (vOffset + row * vShift) * ratio);
                     imageView.setRotate(cellShift - random.nextInt(2 * cellShift));

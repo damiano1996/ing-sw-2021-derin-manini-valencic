@@ -17,10 +17,8 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
-import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +47,7 @@ public class CliTest {
     private final Scanner in;
     private DevelopmentGrid developmentGrid;
 
-    public CliTest(Client client) {
+    public CliTest() {
 
         PrintWriter pw = new PrintWriter(System.out);
         boolean isMultiPlayerMode = true;
@@ -60,7 +58,7 @@ public class CliTest {
         this.leaderCardsCli = new LeaderCardsCli(pw);
         this.marketCli = new MarketCli(pw);
         this.personalBoardCli = new PersonalBoardCli(pw);
-        this.cli = new CLI(client);
+        this.cli = new CLI();
 
         virtualView = new VirtualView();
         player = new Player(virtualView, "Player", "000000");
@@ -77,9 +75,9 @@ public class CliTest {
     //CLI testing. Only press start to test CLI functionalities
     public static void main(String[] args) {
         try {
-            CliTest cliTest = new CliTest(new Client());
+            CliTest cliTest = new CliTest();
             cliTest.testMethod();
-        } catch (IOException | NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse | InvalidPayloadException | UndoOptionSelectedException | NoMoreDevelopmentCardsException | LevelDoesNotExistException | ColorDoesNotExistException | CanNotAddResourceToDepotException | CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException | CanNotAddResourceToStrongboxException e) {
+        } catch (NegativeNumberOfElementsToGrabException | EmptyPayloadException | CanNotAddResourceToWarehouse | InvalidPayloadException | UndoOptionSelectedException | NoMoreDevelopmentCardsException | LevelDoesNotExistException | ColorDoesNotExistException | CanNotAddResourceToDepotException | CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException | CanNotAddResourceToStrongboxException e) {
             e.printStackTrace();
         }
     }

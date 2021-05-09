@@ -20,7 +20,6 @@ import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getImage;
 
 public class PersonalBoardDrawer extends RatioDrawer {
 
@@ -35,7 +34,7 @@ public class PersonalBoardDrawer extends RatioDrawer {
     @Override
     public Pane draw() {
 
-        Image personalboardImage = loadImage("personalboard.png", (int) (WIDTH * ratio));
+        Image personalboardImage = loadImage("personalboard.png", initMaxWidth);
         personalboardImage = setRoundedCorners(personalboardImage, ratio);
         personalboardImage = addLightEffects(personalboardImage, ratio);
 
@@ -111,7 +110,7 @@ public class PersonalBoardDrawer extends RatioDrawer {
         for (int i = 0; i < developmentCardSlots.size(); i++) {
             for (int j = 0; j < developmentCardSlots.get(i).size(); j++) {
 
-                Image developmentCardImage = getImage(developmentCardSlots.get(i).get(j), ratio);
+                Image developmentCardImage = ModelDrawUtils.getCard(developmentCardSlots.get(i).get(j), ratio);
 
                 ImageView imageView = getImageView(developmentCardImage, hOffsets[i] * ratio, (vOffset + shift * j) * ratio);
                 addMouseOverAnimation(imageView, ratio);

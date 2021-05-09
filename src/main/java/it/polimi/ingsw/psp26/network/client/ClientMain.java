@@ -1,22 +1,28 @@
 package it.polimi.ingsw.psp26.network.client;
 
+import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.cli.CLI;
-
-import java.io.IOException;
+import it.polimi.ingsw.psp26.view.gui.GUI;
 
 public class ClientMain {
 
+    // mvn exec:java -Dexec.mainClass="it.polimi.ingsw.psp26.network.client.ClientMain" -Dexec.args="-playingViewMode=cli"
+
     public static void main(String[] args) {
-        try {
-            Client client = new Client();
 
-            CLI cli = new CLI(client);
-            client.setViewInterface(cli);
+        boolean cliMode = false;
 
-            cli.displayLogIn();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (args.length > 0) {
+            for (String arg : args) {
+                if (arg.contains("-playingViewMode")) {
+                    String[] argSplit = arg.split("=");
+                    cliMode = argSplit[1].equals("cli");
+                    break;
+                }
+            }
         }
+
+        ViewInterface viewInterface = (cliMode) ? new CLI() : new GUI();
+        viewInterface.start();
     }
 }

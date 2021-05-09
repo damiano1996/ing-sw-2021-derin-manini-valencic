@@ -28,12 +28,6 @@ public class DevelopmentCardsInitializer {
         return instance;
     }
 
-    public static void main(String[] args) {
-        for (DevelopmentCard developmentCard : DevelopmentCardsInitializer.getInstance().developmentCards) {
-            System.out.println(developmentCard);
-        }
-    }
-
     public List<DevelopmentCard> getByDevelopmentCardType(DevelopmentCardType developmentCardType) {
         return new ArrayList<>(developmentCards
                 .stream()

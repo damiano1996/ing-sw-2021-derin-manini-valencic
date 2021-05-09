@@ -8,31 +8,36 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getCompletePath;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 
 public class FramePane {
 
-    public static StackPane drawThumbNail(Pane content, Pane contentEnhanced, int contentMaxWidth, int contentEnhancedMaxWidth) {
+    public static StackPane drawThumbNail(Pane content, Pane contentEnhanced, int contentMaxWidth, int contentEnhancedMaxWidth, float ratio) {
         float marginFactor = 1.2f;
 
-        StackPane thumbNailStackPane = addCoolFrame(content, contentMaxWidth, marginFactor);
+        //noinspection SuspiciousNameCombination
+        StackPane thumbNailStackPane = addCoolFrame(content, contentMaxWidth, contentMaxWidth, marginFactor, false, 0, ratio);
 
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.initStyle(StageStyle.TRANSPARENT);
         dialog.setAlwaysOnTop(true);
-        StackPane enhancedStackPane = addCoolFrame(contentEnhanced, contentEnhancedMaxWidth, marginFactor);
+        //noinspection SuspiciousNameCombination
+        StackPane enhancedStackPane = addCoolFrame(contentEnhanced, contentEnhancedMaxWidth, contentEnhancedMaxWidth, marginFactor, true, 350, ratio);
         Scene dialogScene = new Scene(enhancedStackPane, marginFactor * contentEnhancedMaxWidth, marginFactor * contentEnhancedMaxWidth);
+        dialogScene.setFill(Color.TRANSPARENT);
+
         dialog.setScene(dialogScene);
 
         thumbNailStackPane.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
-            dialog.setX(mouseEvent.getScreenX() - 200);
-            dialog.setY(mouseEvent.getScreenY() - 200);
+            dialog.setX(mouseEvent.getScreenX() - 300 * ratio);
+            dialog.setY(mouseEvent.getScreenY() - 300 * ratio);
             dialog.show();
         });
 
@@ -41,15 +46,23 @@ public class FramePane {
         return thumbNailStackPane;
     }
 
-    private static StackPane addCoolFrame(Pane content, int contentMaxWidth, float marginFactor) {
-        return addBackground(content, contentMaxWidth, contentMaxWidth, "window_graphics/frame.png", marginFactor);
+    public static StackPane addCoolFrame(Pane content, int contentMaxWidth, int contentMaxHeight, float marginFactor, boolean roundedCorners, int arcSize, float ratio) {
+        return addBackground(content, contentMaxWidth, contentMaxHeight, "window_graphics/frame.png", marginFactor, roundedCorners, arcSize, ratio);
     }
 
-    public static StackPane addBackground(Pane content, int contentMaxWidth, int contentMaxHeight) {
-        return addBackground(content, contentMaxWidth, contentMaxHeight, "window_graphics/background.png", 1.2f);
+    public static StackPane addCoolFrame(Pane content, int contentMaxWidth, int contentMaxHeight, float marginFactor, float ratio) {
+        return addBackground(content, contentMaxWidth, contentMaxHeight, "window_graphics/frame.png", marginFactor, false, 0, ratio);
     }
 
-    private static StackPane addBackground(Pane content, int contentMaxWidth, int contentMaxHeight, String backgroundFileName, float marginFactor) {
+    public static StackPane addBackground(Pane content, int contentMaxWidth, int contentMaxHeight, float marginFactor, boolean roundedCorners, int arcSize, float ratio) {
+        return addBackground(content, contentMaxWidth, contentMaxHeight, "window_graphics/background.png", marginFactor, roundedCorners, arcSize, ratio);
+    }
+
+    public static StackPane addBackground(Pane content, int contentMaxWidth, int contentMaxHeight, float marginFactor, float ratio) {
+        return addBackground(content, contentMaxWidth, contentMaxHeight, "window_graphics/background.png", marginFactor, false, 0, ratio);
+    }
+
+    private static StackPane addBackground(Pane content, int contentMaxWidth, int contentMaxHeight, String backgroundFileName, float marginFactor, boolean roundedCorners, int arcSize, float ratio) {
         StackPane stackPane = new StackPane();
 
         stackPane.setPrefSize(marginFactor * contentMaxWidth, marginFactor * contentMaxHeight);
@@ -60,7 +73,7 @@ public class FramePane {
                 marginFactor * contentMaxHeight,
                 false, true
         );
-//        backgroundImage = setRoundedCorners(backgroundImage,1);
+        if (roundedCorners) backgroundImage = setRoundedCorners(backgroundImage, ratio, arcSize);
 
         ImageView imageView = getImageView(backgroundImage, 0, 0);
         stackPane.getChildren().add(imageView);

@@ -19,6 +19,8 @@ import java.util.List;
 
 public interface ViewInterface {
 
+    void start();
+
     void displayLogIn();
 
 

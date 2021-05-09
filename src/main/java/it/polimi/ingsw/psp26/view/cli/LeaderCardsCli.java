@@ -58,7 +58,7 @@ public class LeaderCardsCli {
      */
     private void printLeader(LeaderCard leaderCard, int startingRow, int startingColumn) {
         cliUtils.printFigure(
-                "leadercards/" + leaderCard.getAbilityToString().split(":")[0],
+                "leadercards/" + leaderCard.getAbilityToString().split("-")[0],
                 startingRow, startingColumn);
         printLeaderRequirements(leaderCard, startingRow, startingColumn);
         //Prints the colored square for the Resource information

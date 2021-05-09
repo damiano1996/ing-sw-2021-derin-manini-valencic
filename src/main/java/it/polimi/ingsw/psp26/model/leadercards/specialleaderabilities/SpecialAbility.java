@@ -26,7 +26,7 @@ public abstract class SpecialAbility {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + ":" + getResource();
+        return getClass().getSimpleName() + "-" + getResource();
     }
 
     @Override

@@ -72,7 +72,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     }
                     break;
 
-                case CHOICE_RESOURCE_FROM_WAREHOUSE:
+                case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
                     List<Resource> playerResourceChoice = castElements(Resource.class, message.getListPayloads());
 
                     for (int i = 0; i < tempResources.size(); i++) {
@@ -135,7 +135,9 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
         List<Resource> tempResourceLeader = new ArrayList<>();
 
-        List<Resource> tempResourceBeforeLeaders = new ArrayList<>(tempResources);
+        List<Resource> tempResourceBeforeLeaders = new ArrayList<>();
+
+        tempResourceBeforeLeaders.addAll(tempResources);
 
         for (LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
             leader.execute(tempResources);
@@ -173,8 +175,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                             leaderResources
                     )
             );
-
             turn.play(message);
+
             return true;
 
         } else {

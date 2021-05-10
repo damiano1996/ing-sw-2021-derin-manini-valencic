@@ -1,10 +1,14 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates;
 
+import it.polimi.ingsw.psp26.application.messages.NotificationUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.endgamecheckers.EndMatchCheckerTurnState;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
+
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendSessionMessageToAllPlayers;
 
 public class CheckVaticanReportTurnState extends TurnState {
     public CheckVaticanReportTurnState(Turn turn) {
@@ -13,10 +17,14 @@ public class CheckVaticanReportTurnState extends TurnState {
 
     @Override
     public void play(SessionMessage message) {
+
         super.play(message);
 
-        activateVaticanReport(turn.getTurnPlayer());
-        // next state is...
+        for(Player player : turn.getMatchController().getMatch().getPlayers()) {
+
+            activateVaticanReport(player);
+
+        }
 
         turn.changeState(new EndMatchCheckerTurnState(turn));
         turn.play(message);
@@ -41,7 +49,14 @@ public class CheckVaticanReportTurnState extends TurnState {
     }
 
     private void activateVaticanReport(Player currentPlayer) {
+
         if (firstPlayerInPopeSpace(currentPlayer) || blackCrossInPopeSpace(currentPlayer)) {
+
+            try {
+                sendSessionMessageToAllPlayers(turn.getMatchController(), new NotificationUpdateMessage(turn.getTurnPlayer().getSessionToken(), "A vatican report has been called" ));
+            } catch (InvalidPayloadException e) {
+                e.printStackTrace();
+            }
 
             int sectionActivated = getFirstActiveSectionIndex();
 
@@ -51,8 +66,23 @@ public class CheckVaticanReportTurnState extends TurnState {
 
                 if (isPlayerInVaticanSection(player, playerSections[sectionActivated]))
                     playerSections[sectionActivated].activatePopesFavorTile();
+
+                sendNotification(player);
             }
         }
+    }
+
+    private void sendNotification(Player player){
+        String reportResult;
+        reportResult = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive() ? "activated" : "deactivated";
+        try {
+            sendSessionMessageToAllPlayers(turn.getMatchController(),
+                    new NotificationUpdateMessage(player.getSessionToken(),
+                            "Faith points: " + player.getPersonalBoard().getFaithTrack().getFaithPoints() +  " so the favor tile is " + reportResult));
+        } catch (InvalidPayloadException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private int getFirstActiveSectionIndex() {

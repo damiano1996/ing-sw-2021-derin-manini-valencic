@@ -18,8 +18,9 @@ import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtil
 
 public class LorenzoMagnificoTurnState extends TurnState {
 
-    public LorenzoMagnificoTurnState(Turn turn) {
+    public LorenzoMagnificoTurnState(Turn turn, TurnPhase turnPhase) {
         super(turn);
+        turn.setTurnPhase(turnPhase);
     }
 
     @Override

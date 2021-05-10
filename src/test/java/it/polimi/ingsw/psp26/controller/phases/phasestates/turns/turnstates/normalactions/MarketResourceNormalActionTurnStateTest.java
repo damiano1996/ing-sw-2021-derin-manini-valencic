@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,26 +88,26 @@ public class MarketResourceNormalActionTurnStateTest {
         }
     }
 
-//    @Test
-//    public void playSendChoiceRowColumn2LeaderActive() throws InvalidPayloadException {
-//
-//        List<Resource> marbleColors = leaderCardSetter(2);
-//        List<Resource> expectedResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2));
-//
-//        int numberOfEmpty = (int) expectedResources.stream().filter(x -> x.equals(Resource.EMPTY)).count();
-//
-//        if (marbleColors.size() == 2 && numberOfEmpty != 0) {
-//
-//            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
-//            for (Resource resource: expectedResources) {
-//                turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, marbleColors.get(0)));
-//            }
-//
-//            assertEquals(CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, mitm.getMessages().get(0).getMessageType());
-//            assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(3).getMessageType());
-//
-//        }
-//    }
+    @Test
+    public void playSendChoiceRowColumn2LeaderActive() throws InvalidPayloadException {
+
+        List<Resource> marbleColors = leaderCardSetter(2);
+        List<Resource> expectedResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2));
+
+        int numberOfEmpty = (int) expectedResources.stream().filter(x -> x.equals(Resource.EMPTY)).count();
+
+        if (marbleColors.size() == 2 && numberOfEmpty != 0) {
+
+            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
+            for (int i =0; i < numberOfEmpty; i++) {
+                turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, marbleColors.get(0)));
+            }
+
+            assertEquals(CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, mitm.getMessages().get(0).getMessageType());
+            assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(1 + (2 * (numberOfEmpty - 1))).getMessageType());
+
+        }
+   }
 
 
     private List<Resource> leaderCardSetter(int leaderNumber) {

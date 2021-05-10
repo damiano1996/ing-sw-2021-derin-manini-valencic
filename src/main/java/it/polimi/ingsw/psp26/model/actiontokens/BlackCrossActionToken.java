@@ -11,10 +11,10 @@ public class BlackCrossActionToken implements ActionToken {
     }
 
     /**
-     * @return The Token's name
+     * Returns the Token's name
      */
     @Override
-    public String getTokenName() {
-        return "BlackCrossActionToken";
+    public String toString() {
+        return getClass().getSimpleName() + "-";
     }
 }

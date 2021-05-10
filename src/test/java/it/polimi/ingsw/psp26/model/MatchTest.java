@@ -143,8 +143,8 @@ public class MatchTest {
         actionTokens.add(new DiscardActionToken(Color.BLUE));
         actionTokens.add(new DiscardActionToken(Color.PURPLE));
 
-        List<String> tokenNames = actionTokens.stream().map(ActionToken::getTokenName).collect(Collectors.toList());
-        List<String> matchTokenNames = match.getActionTokens().stream().map(ActionToken::getTokenName).collect(Collectors.toList());
+        List<String> tokenNames = actionTokens.stream().map(ActionToken::toString).collect(Collectors.toList());
+        List<String> matchTokenNames = match.getActionTokens().stream().map(ActionToken::toString).collect(Collectors.toList());
 
         assertTrue(tokenNames.containsAll(matchTokenNames));
     }

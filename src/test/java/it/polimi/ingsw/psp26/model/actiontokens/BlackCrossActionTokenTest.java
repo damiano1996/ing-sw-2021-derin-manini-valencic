@@ -34,7 +34,7 @@ public class BlackCrossActionTokenTest {
 
     @Test
     public void testGetTokenName() {
-        assertEquals("BlackCrossActionToken", blackCrossActionToken.getTokenName());
+        assertEquals("BlackCrossActionToken-", blackCrossActionToken.toString());
     }
 
 }

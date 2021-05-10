@@ -44,7 +44,7 @@ public class BlackCrossShuffleActionTokenTest {
 
     @Test
     public void testGetTokenName() {
-        assertEquals("BlackCrossShuffleActionToken", blackCrossShuffleActionToken.getTokenName());
+        assertEquals("BlackCrossShuffleActionToken-", blackCrossShuffleActionToken.toString());
     }
 
 }

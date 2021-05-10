@@ -10,9 +10,4 @@ import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 public interface ActionToken {
 
     void execute(FaithTrack faithTrack, DevelopmentGrid developmentGrid) throws MustShuffleActionTokenStackException, ColorDoesNotExistException, LevelDoesNotExistException, LorenzoWinException;
-
-    /**
-     * Returns the Token's name
-     */
-    String getTokenName();
 }

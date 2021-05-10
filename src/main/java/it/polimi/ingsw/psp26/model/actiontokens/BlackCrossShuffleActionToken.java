@@ -13,10 +13,10 @@ public class BlackCrossShuffleActionToken implements ActionToken {
     }
 
     /**
-     * @return The Token's name
+     * Returns the Token's name
      */
     @Override
-    public String getTokenName() {
-        return "BlackCrossShuffleActionToken";
+    public String toString() {
+        return getClass().getSimpleName() + "-";
     }
 }

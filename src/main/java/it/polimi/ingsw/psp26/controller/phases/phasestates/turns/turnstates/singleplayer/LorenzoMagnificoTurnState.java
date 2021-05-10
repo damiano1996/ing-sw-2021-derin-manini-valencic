@@ -33,13 +33,13 @@ public class LorenzoMagnificoTurnState extends TurnState {
             actionToken.execute(turn.getTurnPlayer().getPersonalBoard().getFaithTrack(),
                     turn.getMatchController().getMatch().getDevelopmentGrid());
 
-            afterExecute(allTokens, actionToken.getTokenName());
+            afterExecute(allTokens, actionToken.toString());
 
         } catch (ColorDoesNotExistException | LevelDoesNotExistException | LorenzoWinException | InvalidPayloadException e) {
             e.printStackTrace();
         } catch (MustShuffleActionTokenStackException e) {
             try {
-                afterExecute(allTokens, actionToken.getTokenName());
+                afterExecute(allTokens, actionToken.toString());
             } catch (InvalidPayloadException ignored) {
             }
             turn.getMatchController().getMatch().initializeActionTokenStack();

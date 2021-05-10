@@ -354,7 +354,7 @@ public class PersonalBoardCli {
         cliUtils.clns();
 
         cliUtils.printFigure("/titles/ActionTokensTitle", 1, 48);
-        cliUtils.printFigure("/actiontokens/" + actionTokens.get(0).getTokenName(), 20, 141);
+        cliUtils.printFigure("/actiontokens/" + actionTokens.get(0).toString(), 20, 141);
         cliUtils.pPCS("ACTIVATED  TOKEN", Color.WHITE, 34, 148);
         printTokenStack(actionTokens.size());
     }

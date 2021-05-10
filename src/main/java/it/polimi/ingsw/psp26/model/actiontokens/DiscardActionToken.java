@@ -81,10 +81,10 @@ public class DiscardActionToken implements ActionToken {
     }
 
     /**
-     * @return The Token's name with the Color of the Cards to discard
+     * Returns the Token's name
      */
     @Override
-    public String getTokenName() {
-        return "DiscardActionToken" + colorToDiscard.getName();
+    public String toString() {
+        return getClass().getSimpleName() + "-" + colorToDiscard.getName();
     }
 }

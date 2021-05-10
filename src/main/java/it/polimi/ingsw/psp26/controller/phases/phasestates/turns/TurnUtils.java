@@ -43,9 +43,13 @@ public class TurnUtils {
                     turn.getPlayingPhaseState().updateCurrentTurn();
                 } else {
                     // After the second leader action, go to Lorenzo action
-                    turn.changeState(new LorenzoMagnificoTurnState(turn));
+                    turn.changeState(new LorenzoMagnificoTurnState(turn, TurnPhase.LORENZO_TO_END));
                     turn.play(message);
                 }
+                break;
+            case LORENZO_TO_END:
+                //After Lorenzo action, go to next turn
+                turn.getPlayingPhaseState().updateCurrentTurn();
                 break;
             // TODO: case Lorenzo
         }

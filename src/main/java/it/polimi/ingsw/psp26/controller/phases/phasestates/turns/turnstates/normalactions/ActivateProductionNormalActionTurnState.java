@@ -113,7 +113,6 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                         } else {
 
-                            // TODO: add error message
                             play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE));
 
                         }

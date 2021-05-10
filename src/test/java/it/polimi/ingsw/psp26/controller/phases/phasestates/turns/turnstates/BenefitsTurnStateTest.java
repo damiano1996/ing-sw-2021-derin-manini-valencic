@@ -82,7 +82,7 @@ public class BenefitsTurnStateTest {
 
         turn.changeState(new BenefitsTurnState(turn));
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE, COIN, SHIELD));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, COIN, SHIELD));
         assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
     }
 }

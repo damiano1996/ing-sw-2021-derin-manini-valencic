@@ -425,6 +425,9 @@ public class CLI implements ViewInterface {
 
             case CHOICE_POSITION:
                 cliUtils.cls();
+                cliUtils.printFigure("/titles/DevelopmentCardSlotSelection", 1, 11);
+                cliUtils.vSpace(10);
+                cliUtils.pPCS("Slots numbering convention:", Color.WHITE, 12, 4);
                 displayMultipleStringChoices(choices);
                 try {
                     displayDevelopmentCardsSlots(client.getCachedModel().getObsoleteMyPlayerCached().getPersonalBoard().getDevelopmentCardsSlots());
@@ -452,12 +455,16 @@ public class CLI implements ViewInterface {
                 break;
 
             case CHOICE_RESOURCE_FROM_WAREHOUSE: //TODO migliora la grafica di questa schermata
-            case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
-                //cliUtils.clns();
-                //ResourceSupply is the unique element of choices List
-                //displayResourceSupply(new ResourceSupply());
+                cliUtils.clns();
+                cliUtils.printFigure("/titles/ChooseResourceFromWarehouse", 1, 8);
                 printPlayerResources(castElements(Resource.class, choices), 12, 10);
                 cliUtils.vSpace(10);
+                break;
+                
+            case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
+                displayResourceSupply(new ResourceSupply());
+                cliUtils.vSpace(10);
+                cliUtils.pPCS("Please insert the number of the Resource you want.", Color.WHITE, 38, 4);
                 break;
 
             default:

@@ -46,7 +46,6 @@ public class LorenzoMagnificoTurnState extends TurnState {
         }
 
         turn.changeState(new CheckVaticanReportTurnState(turn));
-        //turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
         turn.play(message);
     }
 

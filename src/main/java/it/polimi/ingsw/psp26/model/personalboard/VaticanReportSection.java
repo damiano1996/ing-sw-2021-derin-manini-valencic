@@ -16,8 +16,8 @@ public class VaticanReportSection extends Observable<SessionMessage> {
     private final int value;
     private final int startSection;
     private final int endSection;
-    private boolean popesFavorTileStatus;
     private final String sessionToken;
+    private boolean popesFavorTileStatus;
 
     /**
      * Constructor of the class.
@@ -117,5 +117,5 @@ public class VaticanReportSection extends Observable<SessionMessage> {
     public int hashCode() {
         return Objects.hash(startSection, endSection, popesFavorTileStatus);
     }
-    
+
 }

@@ -131,5 +131,5 @@ public class Depot extends Observable<SessionMessage> {
     public int hashCode() {
         return Objects.hash(maxNumberOfResources, resources);
     }
-    
+
 }

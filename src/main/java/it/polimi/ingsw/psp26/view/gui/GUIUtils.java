@@ -1,10 +1,17 @@
 package it.polimi.ingsw.psp26.view.gui;
 
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -17,18 +24,22 @@ public class GUIUtils {
 
     private final static Map<String, Image> images = new HashMap<>();
 
-    public static int getWindowWidth() {
+    public static int getScreenWidth() {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) dimension.getWidth();
+        return (int) dimension.getWidth();
+    }
 
-        return (int) (WIDTH_RATIO * screenWidth);
+    public static int getScreenHeight() {
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        return (int) dimension.getHeight();
+    }
+
+    public static int getWindowWidth() {
+        return (int) (WIDTH_RATIO * getScreenWidth());
     }
 
     public static int getWindowHeight() {
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenHeight = (int) dimension.getHeight();
-
-        return (int) (WIDTH_RATIO * screenHeight);
+        return (int) (WIDTH_RATIO * getScreenHeight());
     }
 
     public static String getCompletePath(String fileName) {
@@ -68,4 +79,16 @@ public class GUIUtils {
         imageView.setY(yPosition);
         return imageView;
     }
+
+    public static Scene setTransparentBackground(Pane pane) {
+        pane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        Scene scene = new Scene(pane);
+        scene.setFill(Color.TRANSPARENT);
+        return scene;
+    }
+
+    public static Font getFont(int size, float ratio) {
+        return Font.loadFont("file:" + RESOURCES_PATH + "gui/font/DancingScript-VariableFont_wght.ttf", size * ratio);
+    }
+
 }

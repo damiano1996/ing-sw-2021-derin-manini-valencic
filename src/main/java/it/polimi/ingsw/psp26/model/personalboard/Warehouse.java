@@ -30,7 +30,7 @@ public class Warehouse extends Observable<SessionMessage> {
     public Warehouse(VirtualView virtualView, int numberOfBaseDepots, String sessionToken) {
         super();
         addObserver(virtualView);
-        
+
         baseDepots = new ArrayList<>();
         leaderDepots = new ArrayList<>();
         // creating the base depots
@@ -57,7 +57,7 @@ public class Warehouse extends Observable<SessionMessage> {
             for (int i = 0; i < baseDepots.size(); i++)
                 if (baseDepots.get(i).getContainedResourceType().equals(resource) && i != indexDepot)
                     throw new CanNotAddResourceToDepotException();
-                
+
         getDepotByIndex(indexDepot).addResource(resource);
 
         notifyObservers(updatePlayerMessage(sessionToken));
@@ -226,5 +226,5 @@ public class Warehouse extends Observable<SessionMessage> {
     public int hashCode() {
         return Objects.hash(baseDepots, leaderDepots);
     }
-    
+
 }

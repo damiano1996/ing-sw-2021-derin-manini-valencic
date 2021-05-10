@@ -55,9 +55,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
         if (message.getMessageType().equals(MessageType.QUIT_OPTION_SELECTED)) {
             turn.changeState(new ChooseLeaderActionTurnState(turn, turn.getTurnPhase()));
             turn.play(message);
-        }
-
-        else {
+        } else {
             try {
 
                 // since this state is called by ChooseLeaderActionTurnState, we can assume that the first message has one of the following payloads

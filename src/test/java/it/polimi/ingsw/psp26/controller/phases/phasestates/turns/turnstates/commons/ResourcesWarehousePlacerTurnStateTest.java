@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.com
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
-import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
@@ -41,7 +40,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     private VirtualView virtualView;
 
     private List<Resource> resourcesToAdd;
-    
+
     @Before
     public void setUp() throws CanNotAddResourceToWarehouse {
         virtualView = new VirtualView();

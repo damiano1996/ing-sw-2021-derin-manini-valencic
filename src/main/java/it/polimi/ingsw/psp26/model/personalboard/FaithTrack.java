@@ -16,10 +16,10 @@ public class FaithTrack extends Observable<SessionMessage> {
 
     private final int finalPosition;
     private final VaticanReportSection[] vaticanReportSections;
+    private final String sessionToken;
     private int markerPosition;
     private int faithPoints;
     private int blackCrossPosition;
-    private final String sessionToken;
 
     /**
      * Constructor of the class.
@@ -151,5 +151,5 @@ public class FaithTrack extends Observable<SessionMessage> {
         result = 31 * result + Arrays.hashCode(vaticanReportSections);
         return result;
     }
-    
+
 }

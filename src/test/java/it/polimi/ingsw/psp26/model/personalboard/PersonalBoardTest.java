@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.exceptions.*;
-import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;

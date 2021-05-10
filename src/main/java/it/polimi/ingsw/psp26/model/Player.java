@@ -129,5 +129,5 @@ public class Player extends Observable<SessionMessage> {
     public VirtualView getVirtualView() {
         return virtualView;
     }
-    
+
 }

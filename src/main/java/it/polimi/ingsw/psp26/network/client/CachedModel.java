@@ -66,9 +66,9 @@ public class CachedModel {
         return myPlayerCached.getObsoleteObject();
     }
 
-    
+
     // TODO fare i metodi doppi updated eobsolete anche di questi
-    
+
     public synchronized Player getOpponentCached(int index) throws InterruptedException {
         return opponentsCached.get(new ArrayList<>(opponentsCached.keySet()).get(index)).getUpdatedObject();
     }
@@ -88,7 +88,7 @@ public class CachedModel {
         public CachedObject() {
             obsolete = true;
         }
-        
+
         public synchronized void updateObject(T object) {
             this.object = object;
             obsolete = false;
@@ -108,6 +108,6 @@ public class CachedModel {
             if (object == null) return getUpdatedObject();
             return object;
         }
-        
+
     }
 }

@@ -55,7 +55,7 @@ public class InitializationPhaseState extends PhaseState {
         String nickname = (String) message.getPayload();
         String sessionToken = message.getSessionToken();
         Player newPlayer = new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken);
-        
+
         System.out.println("Initialization phase - new player - nickname: " + nickname + " - sessionToken: " + sessionToken);
         phase.getMatchController().getMatch().addPlayer(newPlayer);
 

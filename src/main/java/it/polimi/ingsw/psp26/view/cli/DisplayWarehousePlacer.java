@@ -74,7 +74,7 @@ public class DisplayWarehousePlacer {
                         setParameters(true);
                     }
                 }
-                
+
                 if (!discardResource) {
                     try {
                         warehouse.addResourceToDepot(depotIndex, resources.get(i));

@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
@@ -147,15 +148,15 @@ public class Client extends Observable<Message> {
         return castElements(Resource.class, secondMessage.getListPayloads());
     }
 
-    public void initializeNetworkHandler(String serverIP) {
+    public void initializeNetworkHandler(String serverIP) throws ServerIsNotReachableException {
         try {
             networkHandler.initializeNetworkNode(serverIP);
         } catch (IOException e) {
             System.out.println("Server IP is unreachable...");
-            viewInterface.displayLogIn();
+            throw new ServerIsNotReachableException();
         }
     }
-    
+
     public synchronized CachedModel getCachedModel() {
         return cachedModel;
     }

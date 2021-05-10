@@ -72,7 +72,7 @@ public interface ViewInterface {
     void displayMarketScreen(MarketTray marketTray);
 
 
-    void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasQuitOption);
+    void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption);
 
 
     void displayActionTokens(List<ActionToken> unusedTokens);

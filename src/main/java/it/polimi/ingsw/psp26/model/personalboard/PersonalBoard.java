@@ -269,5 +269,5 @@ public class PersonalBoard extends Observable<SessionMessage> {
         resources.addAll(strongbox);
         return Collections.unmodifiableList(resources);
     }
-    
+
 }

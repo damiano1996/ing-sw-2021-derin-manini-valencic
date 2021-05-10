@@ -20,10 +20,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 import java.util.Random;
 
@@ -60,8 +56,8 @@ public class PlayingPane {
         for (Player player : players) {
             hBox.getChildren().add(
                     drawThumbNail(
-                            drawPlayer(player, boxSize),
-                            drawPlayer(player, zoomFactor * boxSize),
+                            drawPlayer(player, boxSize, ratio),
+                            drawPlayer(player, zoomFactor * boxSize, ratio),
                             boxSize, zoomFactor * boxSize, ratio)
             );
         }
@@ -71,24 +67,18 @@ public class PlayingPane {
     private static VBox addRightBar() {
         VBox vBox = new VBox();
 
-        Text welcome = new Text("Welcome");
-        welcome.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        welcome.setFill(Color.WHITE);
-        vBox.getChildren().add(welcome);
-
-        vBox.setStyle("-fx-background-color: #993350;");
-
         return vBox;
     }
 
-    private static Pane addMainBox(Player player, int width) {
-        return drawPlayer(player, width);
+    private static Pane addMainBox(Player player, int width, float ratio) {
+        return drawPlayer(player, width, ratio);
     }
 
     public static BorderPane getPlayingPane() {
         Player player = new Player(new VirtualView(), "nickname", "sessionToken");
         player.setLeaderCards(LeaderCardsInitializer.getInstance().getLeaderCards().subList(0, 2));
         player.getLeaderCards().get(0).activate(player);
+        player.giveInkwell();
 
         PersonalBoard personalBoard = player.getPersonalBoard();
         try {
@@ -124,26 +114,16 @@ public class PlayingPane {
         personalBoard.getFaithTrack().addFaithPoints(3);
 
         // ---------------------------------------------------------------------------------------
+
         BorderPane border = new BorderPane();
         border.setTop(addTopBar(getWindowWidth(), new MarketTray(new VirtualView()), new DevelopmentGrid(new VirtualView()), player, player, player));
-        border.setLeft(addMainBox(player, getWindowWidth()));
-//        border.setRight(addRightBar());
+
+        HBox hBox = new HBox();
+        hBox.getChildren().add(addMainBox(player, getWindowWidth(), getWindowWidth() / REFERENCE_WIDTH));
+        hBox.getChildren().add(addRightBar());
+
+        border.setLeft(hBox);
         return border;
     }
 
-//    @Override
-//    public void start(Stage stage) throws Exception {
-//
-//        BorderPane border = (BorderPane) getPlayingPane();
-//
-//        Scene scene = new Scene(addBackground(border, getWindowWidth(), getWindowWidth() * 3 / 4, 1.2f, getWindowWidth()));
-//
-//        stage.setTitle(GAME_NAME);
-//
-//        stage.setResizable(false);
-//        stage.setScene(scene);
-//        stage.sizeToScene();
-//        stage.show();
-//
-//    }
 }

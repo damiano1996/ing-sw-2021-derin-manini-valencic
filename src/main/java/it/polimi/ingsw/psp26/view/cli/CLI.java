@@ -2,10 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.exceptions.ConfirmationException;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
-import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
+import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -33,8 +30,6 @@ import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
 public class CLI implements ViewInterface {
 
-    private Client client;
-
     private final PrintWriter pw;
     private final CliUtils cliUtils;
     private final DepotCli depotCli;
@@ -45,7 +40,7 @@ public class CLI implements ViewInterface {
     private final PersonalBoardCli personalBoardCli;
     private final DisplayWarehousePlacer displayWarehousePlacer;
     private final NotificationStackPrinter notificationStackPrinter;
-
+    private Client client;
     private boolean isPersonalBoardPrintable;
 
     public CLI() {
@@ -62,7 +57,7 @@ public class CLI implements ViewInterface {
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
         this.notificationStackPrinter = new NotificationStackPrinter(pw);
     }
-    
+
     /**
      * Prints the Title Screen when the program is launched
      * Used in printTitle() method
@@ -91,44 +86,48 @@ public class CLI implements ViewInterface {
             e.printStackTrace();
         }
     }
-    
+
 
     /**
      * Used to ask the Player's credentials
      */
     public void displayLogIn() {
-        Scanner in = new Scanner(System.in);
+        try {
+            Scanner in = new Scanner(System.in);
 
-        printTitle();
-        cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
-
-        in.nextLine();
-
-        for (int i = 0; i < 2; i++) {
             printTitle();
-            cliUtils.vSpace(4);
-            if (i == 0) {
-                pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
-                pw.flush();
-                String nickname = in.nextLine();
-                client.setNickname(nickname);
-            } else {
-                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
-                pw.flush();
-                cliUtils.vSpace(2);
-                pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
-                pw.flush();
-                String serverIP = in.nextLine();
-                client.initializeNetworkHandler(serverIP);
-                // go to Multi/single player choice
-                displayChoices(
-                        MULTI_OR_SINGLE_PLAYER_MODE,
-                        "Choose the playing mode:",
-                        Arrays.asList(new MessageType[]{SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE}),
-                        1, 1,
-                        false
-                );
+            cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
+
+            in.nextLine();
+
+            for (int i = 0; i < 2; i++) {
+                printTitle();
+                cliUtils.vSpace(4);
+                if (i == 0) {
+                    pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
+                    pw.flush();
+                    String nickname = in.nextLine();
+                    client.setNickname(nickname);
+                } else {
+                    pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
+                    pw.flush();
+                    cliUtils.vSpace(2);
+                    pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
+                    pw.flush();
+                    String serverIP = in.nextLine();
+                    client.initializeNetworkHandler(serverIP);
+                    // go to Multi/single player choice
+                    displayChoices(
+                            MULTI_OR_SINGLE_PLAYER_MODE,
+                            "Choose the playing mode:",
+                            Arrays.asList(new MessageType[]{SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE}),
+                            1, 1,
+                            false
+                    );
+                }
             }
+        } catch (ServerIsNotReachableException serverIsNotReachableException) {
+            displayLogIn();
         }
     }
 

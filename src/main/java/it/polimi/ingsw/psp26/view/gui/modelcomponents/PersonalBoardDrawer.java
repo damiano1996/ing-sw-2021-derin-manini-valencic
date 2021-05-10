@@ -24,11 +24,13 @@ import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffect
 public class PersonalBoardDrawer extends RatioDrawer {
 
     private final PersonalBoard personalBoard;
+    private final boolean hasInkwell;
 
-    public PersonalBoardDrawer(PersonalBoard personalBoard, int maxWidth) {
+    public PersonalBoardDrawer(PersonalBoard personalBoard, int maxWidth, boolean hasInkwell) {
         super(maxWidth);
 
         this.personalBoard = personalBoard;
+        this.hasInkwell = hasInkwell;
     }
 
     @Override
@@ -44,12 +46,26 @@ public class PersonalBoardDrawer extends RatioDrawer {
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.drawImage(personalboardImage, 0, 0);
 
+        drawInkwell();
         drawWarehouseBaseDepots();
         drawStrongbox();
         drawDevelopmentCards();
         drawFaithTrack();
 
         return pane;
+    }
+
+    private void drawInkwell() {
+        int hOffset = 50;
+        int vOffset = 50;
+
+        if (hasInkwell) {
+
+            Image imageInkwell = loadImage("inkwell.png", (int) (300 * ratio));
+            imageInkwell = addLightEffects(imageInkwell, ratio);
+            ImageView imageView = getImageView(imageInkwell, hOffset * ratio, vOffset * ratio);
+            pane.getChildren().add(imageView);
+        }
     }
 
     private void drawWarehouseBaseDepots() {

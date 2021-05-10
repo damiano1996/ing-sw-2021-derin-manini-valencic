@@ -5,7 +5,6 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ActivateProductionNormalActionTurnState;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -13,8 +12,6 @@ import it.polimi.ingsw.psp26.testutils.MitmObserver;
 import org.junit.Before;
 import org.junit.Test;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY;
-import static it.polimi.ingsw.psp26.application.messages.MessageType.NOTIFICATION_UPDATE;
 import static org.junit.Assert.*;
 
 public class CheckVaticanReportTurnStateTest {
@@ -52,7 +49,7 @@ public class CheckVaticanReportTurnStateTest {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
 
-        assertEquals(tileBeforeTurn, false);
+        assertFalse(tileBeforeTurn);
         assertTrue(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
     }
 
@@ -65,7 +62,7 @@ public class CheckVaticanReportTurnStateTest {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
 
-        assertEquals(tileBeforeTurn, false);
+        assertFalse(tileBeforeTurn);
         assertEquals(tileBeforeTurn, turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
     }
 
@@ -85,7 +82,7 @@ public class CheckVaticanReportTurnStateTest {
         turn.changeState(new CheckVaticanReportTurnState(turn));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
 
-        assertTrue(!turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
+        assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
 
     }
 }

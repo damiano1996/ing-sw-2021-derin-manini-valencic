@@ -20,7 +20,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
         super.play(message);
 
-        for(Player player : turn.getMatchController().getMatch().getPlayers()) {
+        for (Player player : turn.getMatchController().getMatch().getPlayers()) {
 
             activateVaticanReport(player);
 
@@ -53,7 +53,7 @@ public class CheckVaticanReportTurnState extends TurnState {
         if (firstPlayerInPopeSpace(currentPlayer) || blackCrossInPopeSpace(currentPlayer)) {
 
             try {
-                sendSessionMessageToAllPlayers(turn.getMatchController(), new NotificationUpdateMessage(turn.getTurnPlayer().getSessionToken(), "A vatican report has been called" ));
+                sendSessionMessageToAllPlayers(turn.getMatchController(), new NotificationUpdateMessage(turn.getTurnPlayer().getSessionToken(), "A vatican report has been called"));
             } catch (InvalidPayloadException e) {
                 e.printStackTrace();
             }
@@ -72,13 +72,13 @@ public class CheckVaticanReportTurnState extends TurnState {
         }
     }
 
-    private void sendNotification(Player player){
+    private void sendNotification(Player player) {
         String reportResult;
         reportResult = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive() ? "activated" : "deactivated";
         try {
             sendSessionMessageToAllPlayers(turn.getMatchController(),
                     new NotificationUpdateMessage(player.getSessionToken(),
-                            "Faith points: " + player.getPersonalBoard().getFaithTrack().getFaithPoints() +  " so the favor tile is " + reportResult));
+                            "Faith points: " + player.getPersonalBoard().getFaithTrack().getFaithPoints() + " so the favor tile is " + reportResult));
         } catch (InvalidPayloadException e) {
             e.printStackTrace();
         }

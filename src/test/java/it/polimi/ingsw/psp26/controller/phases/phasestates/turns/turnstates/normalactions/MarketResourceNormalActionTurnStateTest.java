@@ -99,7 +99,7 @@ public class MarketResourceNormalActionTurnStateTest {
         if (marbleColors.size() == 2 && numberOfEmpty != 0) {
 
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
-            for (int i =0; i < numberOfEmpty; i++) {
+            for (int i = 0; i < numberOfEmpty; i++) {
                 turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, marbleColors.get(0)));
             }
 
@@ -107,7 +107,7 @@ public class MarketResourceNormalActionTurnStateTest {
             assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(1 + (2 * (numberOfEmpty - 1))).getMessageType());
 
         }
-   }
+    }
 
 
     private List<Resource> leaderCardSetter(int leaderNumber) {

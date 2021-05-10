@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,8 @@ public class FaithTrackTest {
     @Before
     public void setUp() {
         VirtualView virtualView = new VirtualView();
+        Player player = new Player(virtualView, "nickname", "sessionToken");
+        virtualView.getMatchController().getMatch().addPlayer(player);
         vaticanReportSections = new VaticanReportSection[3];
 
         vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2, "sessionToken");

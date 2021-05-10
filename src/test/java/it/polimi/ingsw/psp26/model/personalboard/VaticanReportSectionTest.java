@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,8 @@ public class VaticanReportSectionTest {
     @Before
     public void setUp() {
         VirtualView virtualView = new VirtualView();
+        Player player = new Player(virtualView, "nickname", "sessionToken");
+        virtualView.getMatchController().getMatch().addPlayer(player);
         section = new VaticanReportSection(virtualView, 1, 5, 1, "sessionToken");
     }
 

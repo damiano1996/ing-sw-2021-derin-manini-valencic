@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
@@ -16,10 +17,14 @@ import static org.junit.Assert.assertEquals;
 public class WarehouseTest {
 
     private Warehouse warehouse;
-
+    private VirtualView virtualView;
+    
     @Before
     public void setUp() {
-        warehouse = new Warehouse(new VirtualView(), 3, "sessionToken");
+        virtualView = new VirtualView();
+        Player player = new Player(virtualView, "nickname", "sessionToken");
+        virtualView.getMatchController().getMatch().addPlayer(player);
+        warehouse = new Warehouse(virtualView, 3, "sessionToken");
     }
 
     @Test

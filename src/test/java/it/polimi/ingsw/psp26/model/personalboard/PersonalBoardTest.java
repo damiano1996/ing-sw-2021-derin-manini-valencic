@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
 import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
@@ -35,6 +36,8 @@ public class PersonalBoardTest {
     @Before
     public void setUp() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
         virtualView = new VirtualView();
+        Player player = new Player(virtualView, "nickname", "sessionToken");
+        virtualView.getMatchController().getMatch().addPlayer(player);
 
         developmentGrid = new DevelopmentGrid(virtualView);
         personalBoard = new PersonalBoard(virtualView, "sessionToken");

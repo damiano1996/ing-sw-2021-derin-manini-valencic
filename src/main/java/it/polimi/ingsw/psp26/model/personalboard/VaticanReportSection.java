@@ -1,13 +1,12 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
-import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.Objects;
 
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.getPlayerModelUpdateMessage;
 
 /**
  * Class modeling the vatican report section.
@@ -53,7 +52,7 @@ public class VaticanReportSection extends Observable<SessionMessage> {
     public void activatePopesFavorTile() {
         popesFavorTileStatus = true;
 
-        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
+        notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }
 
     /**

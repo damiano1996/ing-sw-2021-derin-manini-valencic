@@ -10,6 +10,7 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.NetworkNode;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,44 +37,8 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
      */
     @Override
     public void update(SessionMessage message) {
-        switch (message.getMessageType()) {
-
-            case PLAYER_MODEL:
-                try {
-                    message = new ModelUpdateMessage(
-                            message.getSessionToken(),
-                            message.getMessageType(),
-                            matchController.getMatch().getPlayerBySessionToken(message.getSessionToken())
-                    );
-                    sendToClient(message);
-                } catch (InvalidPayloadException | PlayerDoesNotExistException e) {
-                    e.printStackTrace();
-                }
-                break;
-                
-                
-            case MARKET_MODEL:
-            case GRID_MODEL:
-                for (Player player : matchController.getMatch().getPlayers()) {
-                    try {
-                        message = new ModelUpdateMessage(
-                                player.getSessionToken(),
-                                message.getMessageType(),
-                                message.getMessageType().equals(MessageType.MARKET_MODEL) ? matchController.getMatch().getMarketTray() : matchController.getMatch().getDevelopmentGrid()
-                        );
-                        sendToClient(message);
-                    } catch (InvalidPayloadException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-                
-
-            default:
-                sendToClient(message);
-                break;
-                
-        }
+        message = filterModelUpdateMessage(message);
+        sendToClient(message);
     }
 
     public void addNetworkNodeClient(String sessionToken, NetworkNode nodeClient) {
@@ -114,10 +79,51 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
     private void sendToClient(SessionMessage message) {
         try {
             System.out.println("VirtualView - sending message to player: " + message.toString());
-            if (nodeClients.get(message.getSessionToken()) != null)
-                nodeClients.get(message.getSessionToken()).sendData(message);
+
+            // broadcast branch
+            if (message.getSessionToken().equals(SpecialToken.BROADCAST.getToken())) {
+
+                for (Player player : matchController.getMatch().getPlayers()) {
+                    message.setSessionToken(player.getSessionToken());
+                    if (nodeClients.get(message.getSessionToken()) != null)
+                        nodeClients.get(player.getSessionToken()).sendData(message);
+                }
+
+            } else {
+                // send message to the specified player
+                if (nodeClients.get(message.getSessionToken()) != null)
+                    nodeClients.get(message.getSessionToken()).sendData(message);
+
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private SessionMessage filterModelUpdateMessage(SessionMessage message) {
+        try {
+
+            if (message.getMessageType().equals(MessageType.PLAYER_MODEL)) {
+
+                Object payload = matchController.getMatch().getPlayerBySessionToken(message.getSessionToken());
+                return new ModelUpdateMessage(SpecialToken.BROADCAST.getToken(), message.getMessageType(), payload);
+
+            } else if (message.getMessageType().equals(MessageType.MARKET_TRAY_MODEL)) {
+
+                Object payload = matchController.getMatch().getMarketTray();
+                return new ModelUpdateMessage(SpecialToken.BROADCAST.getToken(), message.getMessageType(), payload);
+
+            } else if (message.getMessageType().equals(MessageType.DEVELOPMENT_GRID_MODEL)) {
+
+                Object payload = matchController.getMatch().getDevelopmentGrid();
+                return new ModelUpdateMessage(SpecialToken.BROADCAST.getToken(), message.getMessageType(), payload);
+
+            }
+
+        } catch (InvalidPayloadException | PlayerDoesNotExistException ignored) {
+        }
+
+        return message;
     }
 }

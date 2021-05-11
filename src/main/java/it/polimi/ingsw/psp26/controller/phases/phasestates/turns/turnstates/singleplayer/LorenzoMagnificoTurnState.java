@@ -9,11 +9,11 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Chec
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendSessionMessageToAllPlayers;
 
 public class LorenzoMagnificoTurnState extends TurnState {
 
@@ -51,7 +51,7 @@ public class LorenzoMagnificoTurnState extends TurnState {
 
 
     private void afterExecute(List<ActionToken> allTokens, String tokenPlayed) throws InvalidPayloadException {
-        sendSessionMessageToAllPlayers(turn.getMatchController(), new NotificationUpdateMessage(turn.getTurnPlayer().getSessionToken(), "Lorenzo played                " + tokenPlayed));
+        turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "Lorenzo played " + tokenPlayed));
 
         turn.getMatchController().notifyObservers(
                 new SessionMessage(

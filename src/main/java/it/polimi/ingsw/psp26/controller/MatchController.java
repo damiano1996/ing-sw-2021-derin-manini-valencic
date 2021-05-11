@@ -1,14 +1,11 @@
 package it.polimi.ingsw.psp26.controller;
 
-import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
-
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
 
 
 public class MatchController extends Observable<SessionMessage> implements Observer<SessionMessage> {
@@ -25,19 +22,11 @@ public class MatchController extends Observable<SessionMessage> implements Obser
         addObserver(virtualView);
         this.virtualView = virtualView;
 
-        System.out.println("New match controller has been created.");
+        System.out.println("MatchController - new match controller has been created.");
         this.isWaitingForPlayers = true;
 
         initializeMatch(matchId);
         phase = new Phase(this);
-    }
-
-    public void notifyMarketCreation() {
-        notifyObservers(updateModelMessage("", MessageType.MARKET_MODEL));
-    }
-    
-    public void notifyDevelopmentGridCreation() {
-        notifyObservers(updateModelMessage("", MessageType.GRID_MODEL));
     }
 
     @Override
@@ -71,6 +60,6 @@ public class MatchController extends Observable<SessionMessage> implements Obser
 
     public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
         this.maxNumberOfPlayers = maxNumberOfPlayers;
-        System.out.println("Number of players: " + this.maxNumberOfPlayers);
+        System.out.println("MatchController - number of players: " + this.maxNumberOfPlayers);
     }
 }

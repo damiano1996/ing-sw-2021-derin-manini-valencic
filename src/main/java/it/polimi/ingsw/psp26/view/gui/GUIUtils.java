@@ -88,7 +88,11 @@ public class GUIUtils {
     }
 
     public static Font getFont(int size, float ratio) {
-        return Font.loadFont("file:" + RESOURCES_PATH + "gui/font/DancingScript-VariableFont_wght.ttf", size * ratio);
+        return Font.loadFont(getCompletePath("font/DancingScript-VariableFont_wght.ttf"), size * ratio);
+    }
+
+    public static void addStylesheet(Scene scene) {
+        scene.getStylesheets().add(getCompletePath("stylesheets/stylesheet.css"));
     }
 
 }

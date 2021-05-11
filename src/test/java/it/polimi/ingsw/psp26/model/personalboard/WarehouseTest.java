@@ -18,7 +18,7 @@ public class WarehouseTest {
 
     private Warehouse warehouse;
     private VirtualView virtualView;
-    
+
     @Before
     public void setUp() {
         virtualView = new VirtualView();

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.NotificationUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
@@ -8,8 +7,11 @@ import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendSessionMessageToAllPlayers;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.getDevelopmentGridModelUpdateMessage;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.getMarketTrayModelUpdateMessage;
+
 
 public class InitializationPhaseState extends PhaseState {
 
@@ -36,12 +38,12 @@ public class InitializationPhaseState extends PhaseState {
 
                 System.out.println("Initialization phase - sending stop message");
                 try {
-                    sendSessionMessageToAllPlayers(phase.getMatchController(), new Message(MessageType.STOP_WAITING, "Stop waiting..."));
-                    sendSessionMessageToAllPlayers(phase.getMatchController(), new Message(MessageType.GENERAL_MESSAGE, "The match can start!"));
+                    phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.STOP_WAITING, "Stop waiting..."));
+                    phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.GENERAL_MESSAGE, "The match can start!"));
                 } catch (InvalidPayloadException e) {
                     e.printStackTrace();
                 }
-                
+
                 // Send the initial version of the Market and Development Grid to all Players
                 notifyMarketAndGridCreation();
 
@@ -64,7 +66,7 @@ public class InitializationPhaseState extends PhaseState {
 
         System.out.println("Initialization phase  - sending start waiting message");
         try {
-            sendSessionMessageToAllPlayers(phase.getMatchController(), new NotificationUpdateMessage(sessionToken, nickname + " joined the game!"));
+            phase.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), nickname + " joined the game!"));
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Please wait for other Players to join..."));
         } catch (InvalidPayloadException ignored) {
         }
@@ -74,8 +76,8 @@ public class InitializationPhaseState extends PhaseState {
      * Used to send the first version of the Market and Development Grid to all Players
      */
     private void notifyMarketAndGridCreation() {
-        phase.getMatchController().notifyMarketCreation();
-        phase.getMatchController().notifyDevelopmentGridCreation();
+        phase.getMatchController().notifyObservers(getMarketTrayModelUpdateMessage());
+        phase.getMatchController().notifyObservers(getDevelopmentGridModelUpdateMessage());
     }
 
 }

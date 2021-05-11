@@ -13,21 +13,20 @@ public enum Color {
 
     RESET("\u001b[0m", "Reset");
 
-    private final String ANSIcode;
-
+    private final String ANSICode;
     private final String name;
 
     Color(String ANSICode, String name) {
-        this.ANSIcode = ANSICode;
+        this.ANSICode = ANSICode;
         this.name = name;
     }
 
     public String setColor() {
-        return ANSIcode;
+        return ANSICode;
     }
 
     public String toString() {
-        return ANSIcode;
+        return ANSICode;
     }
 
     public String getName() {

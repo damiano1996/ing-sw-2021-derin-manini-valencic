@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui;
 
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
@@ -7,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addCoolFrame;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.setTransparentBackground;
 
 public class DialogStage {
@@ -21,7 +23,9 @@ public class DialogStage {
 
         StackPane stackPane = addCoolFrame(content, maxContentWidth, maxContentHeight, marginFactor, roundedCorners, arcSize, ratio);
 
-        dialog.setScene(setTransparentBackground(stackPane));
+        Scene scene = setTransparentBackground(stackPane);
+        addStylesheet(scene);
+        dialog.setScene(scene);
         return dialog;
     }
 

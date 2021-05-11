@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.model.developmentgrid;
 
-import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.getDevelopmentGridModelUpdateMessage;
 
 public class DevelopmentGrid extends Observable<SessionMessage> {
 
@@ -58,8 +57,11 @@ public class DevelopmentGrid extends Observable<SessionMessage> {
         int row = getRow(level);
         int col = getColumn(color);
 
-        notifyObservers(updateModelMessage("", MessageType.GRID_MODEL));
-        return grid[row][col].drawCard();
+        DevelopmentCard developmentCard = grid[row][col].drawCard();
+
+        notifyObservers(getDevelopmentGridModelUpdateMessage());
+
+        return developmentCard;
     }
 
     public boolean isAvailable(Color color, Level level) throws LevelDoesNotExistException, ColorDoesNotExistException {
@@ -78,7 +80,6 @@ public class DevelopmentGrid extends Observable<SessionMessage> {
         return Collections.unmodifiableList(visibleCards);
     }
 
-    //rep exposed?
     public DevelopmentGridCell getDevelopmentGridCell(int row, int col) {
         return grid[row][col];
     }

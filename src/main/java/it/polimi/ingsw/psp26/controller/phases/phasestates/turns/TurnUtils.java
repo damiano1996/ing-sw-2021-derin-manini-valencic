@@ -1,15 +1,12 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
-import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.leaderactions.ChooseLeaderActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.model.Player;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
@@ -69,18 +66,6 @@ public class TurnUtils {
                     )
             );
         } catch (InvalidPayloadException ignored) {
-        }
-    }
-
-    public synchronized static void sendSessionMessageToAllPlayers(MatchController matchController, Message message) throws InvalidPayloadException {
-        for (Player player : matchController.getMatch().getPlayers()) {
-            matchController.notifyObservers(
-                    new SessionMessage(
-                            player.getSessionToken(),
-                            message.getMessageType(),
-                            message.getArrayPayloads()
-                    )
-            );
         }
     }
 

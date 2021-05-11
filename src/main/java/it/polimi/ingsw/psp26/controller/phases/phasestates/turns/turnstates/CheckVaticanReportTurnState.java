@@ -7,8 +7,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.endg
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
-
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendSessionMessageToAllPlayers;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
 public class CheckVaticanReportTurnState extends TurnState {
     public CheckVaticanReportTurnState(Turn turn) {
@@ -53,7 +52,7 @@ public class CheckVaticanReportTurnState extends TurnState {
         if (firstPlayerInPopeSpace(currentPlayer) || blackCrossInPopeSpace(currentPlayer)) {
 
             try {
-                sendSessionMessageToAllPlayers(turn.getMatchController(), new NotificationUpdateMessage(turn.getTurnPlayer().getSessionToken(), "A vatican report has been called"));
+                turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "A vatican report has been called"));
             } catch (InvalidPayloadException e) {
                 e.printStackTrace();
             }
@@ -76,9 +75,11 @@ public class CheckVaticanReportTurnState extends TurnState {
         String reportResult;
         reportResult = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive() ? "activated" : "deactivated";
         try {
-            sendSessionMessageToAllPlayers(turn.getMatchController(),
-                    new NotificationUpdateMessage(player.getSessionToken(),
-                            "Faith points: " + player.getPersonalBoard().getFaithTrack().getFaithPoints() + " so the favor tile is " + reportResult));
+            turn.getMatchController().notifyObservers(
+                    new NotificationUpdateMessage(
+                            SpecialToken.BROADCAST.getToken(),
+                            "Faith points: " + player.getPersonalBoard().getFaithTrack().getFaithPoints() + " so the favor tile is " + reportResult)
+            );
         } catch (InvalidPayloadException e) {
             e.printStackTrace();
         }

@@ -67,7 +67,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                             positionsForCard().toArray(new Object[0])
                                     ));
                         } else {
-                            
+
                             turn.getMatchController().notifyObservers(
                                     new SessionMessage(
                                             turn.getTurnPlayer().getSessionToken(),

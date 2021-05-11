@@ -1,0 +1,57 @@
+@font-face {
+    font-family: DancingScript;
+    src: url('/gui/font/DancingScript-VariableFont_wght.ttf');
+}
+
+.root {
+    -fx-font-size: 35px;
+    -fx-font-family: 'Dancing Script Regular';
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 5, 5);
+}
+
+.button {
+    -fx-text-fill: #000000;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, #a77700 0%, #cda005 50%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 5, 5);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+    -fx-pref-width: 400px;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, #eca400 0%, #f1c012 50%);
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, #785702 0%, #977604 50%);
+}
+
+#confirm-button {
+
+}
+
+#undo-button {
+
+}
+
+#choice-button {
+}
+
+#title {
+    -fx-font-size: 100px;
+    -fx-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 5, 5);
+}
+
+#label {
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 5, 5);
+}
+
+HBox, VBox {
+    -fx-alignment: center;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}

@@ -35,11 +35,11 @@ public class CachedModel {
 
     /**
      * Updates the local Objects copies when receiving a ModelUpdateMessage
-     * 
+     *
      * @param message The message containing the Object copy
      * @throws EmptyPayloadException The message doesn't have a payload
      */
-    public synchronized void updateCachedModel(Message message) throws EmptyPayloadException {
+    public void updateCachedModel(Message message) throws EmptyPayloadException {
         if (message.getMessageType().equals(MessageType.MODEL_UPDATE)) {
             ModelUpdateMessage modelUpdateMessage = (ModelUpdateMessage) message;
 
@@ -60,35 +60,35 @@ public class CachedModel {
                         }
                     }
                     break;
-                    
-                    
-                case MARKET_MODEL:
+
+
+                case MARKET_TRAY_MODEL:
                     MarketTray marketTray = (MarketTray) modelUpdateMessage.getModelPayload();
                     marketTrayCached.updateObject(marketTray);
                     break;
-                    
-                    
-                case GRID_MODEL:
+
+
+                case DEVELOPMENT_GRID_MODEL:
                     DevelopmentGrid developmentGrid = (DevelopmentGrid) modelUpdateMessage.getModelPayload();
                     developmentGridCached.updateObject(developmentGrid);
                     break;
-                    
-                    
+
                 default:
                     break;
-                    
+
             }
+
         }
     }
 
 
     /**
      * Getter of the myPlayerCached attribute. Returns its updated version
-     * 
+     *
      * @return An updated version of myPlayerCached
      * @throws InterruptedException If myPlayerCached is null, calls wait() on the current thread
      */
-    public synchronized Player getUpdatedMyPlayerCached() throws InterruptedException {
+    public Player getUpdatedMyPlayerCached() throws InterruptedException {
         return myPlayerCached.getUpdatedObject();
     }
 
@@ -99,7 +99,7 @@ public class CachedModel {
      * @return An obsolete version of myPlayerCached
      * @throws InterruptedException If myPlayerCached is null, calls wait() on the current thread
      */
-    public synchronized Player getObsoleteMyPlayerCached() throws InterruptedException {
+    public Player getObsoleteMyPlayerCached() throws InterruptedException {
         return myPlayerCached.getObsoleteObject();
     }
 
@@ -111,7 +111,8 @@ public class CachedModel {
      * @return An updated version of a Player contained in this List
      * @throws InterruptedException If the Player is null, calls wait() on the current thread
      */
-    public synchronized Player getUpdatedOpponentCached(int index) throws InterruptedException {
+    public Player getUpdatedOpponentCached(int index) throws InterruptedException {
+        if (index > opponentsCached.size()) wait();
         return opponentsCached.get(new ArrayList<>(opponentsCached.keySet()).get(index)).getUpdatedObject();
     }
 
@@ -123,7 +124,8 @@ public class CachedModel {
      * @return An obsolete version of a Player contained in this List
      * @throws InterruptedException If the Player is null, calls wait() on the current thread
      */
-    public synchronized Player getObsoleteOpponentCached(int index) throws InterruptedException {
+    public Player getObsoleteOpponentCached(int index) throws InterruptedException {
+        if (index > opponentsCached.size()) wait();
         return opponentsCached.get(new ArrayList<>(opponentsCached.keySet()).get(index)).getObsoleteObject();
     }
 
@@ -134,7 +136,7 @@ public class CachedModel {
      * @return An updated version of marketTrayCached
      * @throws InterruptedException If marketTrayCached is null, calls wait() on the current thread
      */
-    public synchronized MarketTray getUpdatedMarketTrayCached() throws InterruptedException {
+    public MarketTray getUpdatedMarketTrayCached() throws InterruptedException {
         return marketTrayCached.getUpdatedObject();
     }
 
@@ -145,7 +147,7 @@ public class CachedModel {
      * @return An obsolete version of marketTrayCached
      * @throws InterruptedException If marketTrayCached is null, calls wait() on the current thread
      */
-    public synchronized MarketTray getObsoleteMarketTrayCached() throws InterruptedException {
+    public MarketTray getObsoleteMarketTrayCached() throws InterruptedException {
         return marketTrayCached.getObsoleteObject();
     }
 
@@ -156,7 +158,7 @@ public class CachedModel {
      * @return An updated version of developmentGridCached
      * @throws InterruptedException If developmentGridCached is null, calls wait() on the current thread
      */
-    public synchronized DevelopmentGrid getUpdatedDevelopmentGridCached() throws InterruptedException {
+    public DevelopmentGrid getUpdatedDevelopmentGridCached() throws InterruptedException {
         return developmentGridCached.getUpdatedObject();
     }
 
@@ -167,7 +169,7 @@ public class CachedModel {
      * @return An obsolete version of developmentGridCached
      * @throws InterruptedException If developmentGridCached is null, calls wait() on the current thread
      */
-    public synchronized DevelopmentGrid getObsoleteDevelopmentGridCached() throws InterruptedException {
+    public DevelopmentGrid getObsoleteDevelopmentGridCached() throws InterruptedException {
         return developmentGridCached.getObsoleteObject();
     }
 
@@ -183,10 +185,10 @@ public class CachedModel {
             obsolete = true;
         }
 
-        
+
         /**
          * When receiving a new Object from the Model, change the current object value with the new one
-         * 
+         *
          * @param object The new Object version
          */
         public synchronized void updateObject(T object) {
@@ -198,7 +200,7 @@ public class CachedModel {
 
         /**
          * Getter of an updated version of object
-         * 
+         *
          * @return An updated version of object
          * @throws InterruptedException If object is null, calls wait() on the current thread
          */
@@ -208,7 +210,7 @@ public class CachedModel {
             return object;
         }
 
-        
+
         /**
          * Getter of an updated version of object
          * By assumption it will never stop the calling thread
@@ -217,10 +219,10 @@ public class CachedModel {
          * @throws InterruptedException If object is null, calls wait() on the current thread
          */
         public synchronized T getObsoleteObject() throws InterruptedException {
-            if (object == null) return getUpdatedObject();
+//            if (object == null) return getUpdatedObject();
             return object;
         }
 
     }
-    
+
 }

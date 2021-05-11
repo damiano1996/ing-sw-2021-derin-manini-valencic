@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
-import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddDevelopmentCardToSlotException;
@@ -17,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.getPlayerModelUpdateMessage;
 
 /**
  * Class to model the personal board.
@@ -166,7 +165,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
             throw new CanNotAddResourceToStrongboxException();
         strongbox.add(resource);
 
-        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
+        notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }
 
     /**
@@ -177,7 +176,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
     public void addResourcesToStrongbox(List<Resource> resources) throws CanNotAddResourceToStrongboxException {
         for (Resource resource : resources) addResourceToStrongbox(resource);
 
-        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
+        notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }
 
     /**
@@ -193,7 +192,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
         if (isCardPlaceable(indexSlot, developmentCard)) developmentCardsSlots.get(indexSlot).add(developmentCard);
         else throw new CanNotAddDevelopmentCardToSlotException();
 
-        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
+        notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }
 
     /**

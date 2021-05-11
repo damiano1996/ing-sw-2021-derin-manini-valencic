@@ -5,7 +5,6 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
-import it.polimi.ingsw.psp26.view.gui.effects.Selectable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -64,6 +63,7 @@ public class PersonalBoardDrawer extends RatioDrawer {
             Image imageInkwell = loadImage("inkwell.png", (int) (300 * ratio));
             imageInkwell = addLightEffects(imageInkwell, ratio);
             ImageView imageView = getImageView(imageInkwell, hOffset * ratio, vOffset * ratio);
+            addMouseOverAnimation(imageView, ratio);
             pane.getChildren().add(imageView);
         }
     }
@@ -181,7 +181,6 @@ public class PersonalBoardDrawer extends RatioDrawer {
 
                 ImageView imageView = getImageView(tileImage, hOffsets[i] * ratio, vOffsets[i] * ratio);
                 addMouseOverAnimation(imageView, ratio);
-                new Selectable(imageView);
 
                 pane.getChildren().add(imageView);
 
@@ -191,7 +190,6 @@ public class PersonalBoardDrawer extends RatioDrawer {
 
                 ImageView imageView = getImageView(tileImage, hOffsets[i] * ratio, vOffsets[i] * ratio);
                 addMouseOverAnimation(imageView, ratio);
-                new Selectable(imageView);
 
                 pane.getChildren().add(imageView);
             }

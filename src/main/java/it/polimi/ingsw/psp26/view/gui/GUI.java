@@ -21,10 +21,12 @@ import it.polimi.ingsw.psp26.view.gui.choices.ChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choices.LeaderCardChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choices.MessageTypeChoicesDrawer;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -39,18 +41,21 @@ import java.util.List;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_NAME;
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
+import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addCoolFrame;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
+import static it.polimi.ingsw.psp26.view.gui.PlayingPane.getPlayingPane;
 
 public class GUI extends Application implements ViewInterface {
 
+    //    private FXMLLoader fxmlLoader;
     private Client client;
     private Stage stage;
 
     private float ratio;
 
-    public GUI() { // only to run the GUI without active server
+    public GUI() {
     }
 
     public static void main(String[] args) {
@@ -65,13 +70,12 @@ public class GUI extends Application implements ViewInterface {
         ratio = getWindowWidth() / REFERENCE_WIDTH;
 
         this.stage = stage;
-//        this.stage.setTitle(GAME_NAME);
         this.stage.initStyle(StageStyle.UNDECORATED);
         this.stage.initStyle(StageStyle.TRANSPARENT);
 
-//        this.stage.setMaximized(true);
+        this.stage.setMaximized(true);
         this.stage.setResizable(false);
-//        this.stage.setFullScreen(true);
+        this.stage.setFullScreen(true);
         this.stage.sizeToScene();
 
         displayLogIn();
@@ -84,29 +88,30 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayLogIn() {
-        VBox loginBox = new VBox();
+        VBox loginBox = new VBox(20 * ratio);
 
         // temporary
         Text title = new Text(GAME_NAME);
-        title.setFont(getFont(50, ratio));
+        title.setId("title");
         loginBox.getChildren().add(title);
 
         Label nicknameLabel = new Label("Nickname:");
-        nicknameLabel.setFont(getFont(50, ratio));
+        nicknameLabel.setId("label");
         loginBox.getChildren().add(nicknameLabel);
         TextField nicknameTextField = new TextField();
-        nicknameTextField.setFont(getFont(50, ratio));
+        nicknameTextField.setId("text-field");
         loginBox.getChildren().add(nicknameTextField);
 
         Label serverIPLabel = new Label("Server IP:");
-        serverIPLabel.setFont(getFont(50, ratio));
+        serverIPLabel.setId("label");
         loginBox.getChildren().add(serverIPLabel);
         TextField serverIPTextField = new TextField();
-        serverIPTextField.setFont(getFont(50, ratio));
+        serverIPTextField.setId("text-field");
         loginBox.getChildren().add(serverIPTextField);
 
         Button connectButton = new Button("Connect");
-        connectButton.setFont(getFont(50, ratio));
+        connectButton.setId("confirm-button");
+
 
         connectButton.setOnAction(event -> {
 
@@ -130,17 +135,26 @@ public class GUI extends Application implements ViewInterface {
                 serverIsNotReachableException.printStackTrace();
             }
 
-//            Pane pane = addBackground(getPlayingPane(), getScreenWidth(), getScreenHeight(), 1.2f, getWindowWidth());
-//            this.stage.setScene(setTransparentBackground(pane));
-//            this.stage.setFullScreen(true);
-//            this.stage.show();
         });
 
         loginBox.getChildren().add(connectButton);
 
         // getDialogStage(loginBox, 1000, 1000, 1.2f, getWindowWidth() / REFERENCE_WIDTH)
         Pane pane = addCoolFrame(loginBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, true, (int) (350 * ratio), ratio);
-        this.stage.setScene(setTransparentBackground(pane));
+
+//        fxmlLoader = new FXMLLoader();
+//        fxmlLoader.setLocation(getClass().getResource("/gui/fxml/demo.fxml"));
+//        Scene scene;
+//        try {
+//            scene = new Scene(fxmlLoader.load());
+//        } catch (IOException e) {
+//            scene = new Scene(new Label("error"));
+//        }
+
+        Scene scene = setTransparentBackground(pane);
+        addStylesheet(scene);
+
+        this.stage.setScene(scene);
         this.stage.centerOnScreen();
         this.stage.show();
     }
@@ -228,56 +242,72 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
-        VBox vBox = new VBox();
+        VBox choicesBox = new VBox(20 * ratio);
+        Stage dialog = getDialog(choicesBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, true, (int) (350 * ratio), ratio);
 
         Text title = new Text(question);
-        title.setFont(getFont(50, ratio));
-        vBox.getChildren().add(title);
+        title.setId("title");
+        choicesBox.getChildren().add(title);
+
+        Pane contentBox;
+        ChoicesDrawer choicesDrawer;
 
         switch (messageType) {
 
             case MULTI_OR_SINGLE_PLAYER_MODE:
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
-                buttonOrRadio(vBox, new MessageTypeChoicesDrawer(), messageType, choices, minChoices, maxChoices);
+                contentBox = new VBox(20 * ratio);
+                choicesDrawer = new MessageTypeChoicesDrawer();
                 break;
 
             case CHOICE_LEADERS:
-                buttonOrRadio(vBox, new LeaderCardChoicesDrawer(), messageType, choices, minChoices, maxChoices);
+                contentBox = new HBox(5 * ratio);
+                choicesDrawer = new LeaderCardChoicesDrawer();
                 break;
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + messageType);
         }
+
+        choicesBox.getChildren().add(contentBox);
+        buttonOrRadio(contentBox, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
 
         if (hasUndoOption) {
             Button undoOptionButton = new Button("UNDO");
+            undoOptionButton.setId("undo-button");
             undoOptionButton.setOnAction(actionEvent -> {
                 client.sendUndoMessage();
                 client.viewNext();
             });
-            vBox.getChildren().add(undoOptionButton);
+            choicesBox.getChildren().add(undoOptionButton);
         }
 
-        Pane pane = addCoolFrame(vBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, true, (int) (350 * ratio), ratio);
-        this.stage.setScene(setTransparentBackground(pane));
-        this.stage.centerOnScreen();
-        this.stage.show();
+        dialog.show();
     }
 
-    private void buttonOrRadio(Pane pane, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+    private void buttonOrRadio(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
         if (minChoices == 1 && maxChoices == 1) {
-            buttonMultipleChoices(pane, choicesDrawer, messageType, choices);
+            buttonMultipleChoices(pane, dialog, choicesDrawer, messageType, choices);
         } else {
-            checkBoxMultipleChoices(pane, choicesDrawer, messageType, choices, minChoices, maxChoices);
+            checkBoxMultipleChoices(pane, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
         }
     }
 
-    private void buttonMultipleChoices(Pane pane, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices) {
+    private void buttonMultipleChoices(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices) {
+
+        List<Button> groupButtons = new ArrayList<>();
 
         for (int i = 0; i < choices.size(); i++) {
 
             Button button = choicesDrawer.decorateButton(new Button(), choices.get(i));
+            groupButtons.add(button);
 
             int finalI = i;
             button.setOnAction(event -> {
+                // disabling all buttons
+                for (Button button1 : groupButtons) button1.setDisable(true);
+
                 try {
                     client.notifyObservers(new Message(messageType, choices.get(finalI)));
                 } catch (InvalidPayloadException ignored) {
@@ -292,6 +322,7 @@ public class GUI extends Application implements ViewInterface {
                     }
                 }
 
+                dialog.close();
                 client.viewNext();
 
             });
@@ -299,7 +330,7 @@ public class GUI extends Application implements ViewInterface {
         }
     }
 
-    private void checkBoxMultipleChoices(Pane pane, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+    private void checkBoxMultipleChoices(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
 
         List<CheckBoxContainer> checkBoxContainers = new ArrayList<>();
 
@@ -323,6 +354,7 @@ public class GUI extends Application implements ViewInterface {
                     client.notifyObservers(
                             new Message(messageType, selected.toArray()));
 
+                    dialog.close();
                     client.viewNext();
 
                 } catch (InvalidPayloadException ignored) {
@@ -342,14 +374,14 @@ public class GUI extends Application implements ViewInterface {
         VBox vBox = new VBox();
 
         Text text1 = new Text(text);
-        text1.setFont(getFont(50, ratio));
+        text1.setId("title");
         vBox.getChildren().add(text1);
 
         Button confirmationButton = new Button("OK");
-        confirmationButton.setFont(getFont(50, ratio));
+        confirmationButton.setId("confirm-button");
         vBox.getChildren().add(confirmationButton);
 
-        Stage dialog = getDialog(vBox, (int) (500 * ratio), (int) (500 * ratio), 1.2f, true, (int) (350 * ratio), ratio);
+        Stage dialog = getDialog(vBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, ratio);
         confirmationButton.setOnAction(actionEvent -> {
             client.viewNext();
             dialog.close();
@@ -370,12 +402,26 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayWaitingScreen(Message message) {
-
+        client.viewNext();
     }
 
     @Override
     public void stopDisplayingWaitingScreen() {
 
+        Pane pane = addBackground(getPlayingPane(client), getScreenWidth(), getScreenHeight(), 1.2f, getWindowWidth());
+        Scene scene = setTransparentBackground(pane);
+        addStylesheet(scene);
+
+        this.stage.setScene(scene);
+
+        this.stage.setMaximized(true);
+        this.stage.setResizable(false);
+        this.stage.setFullScreen(true);
+        this.stage.sizeToScene();
+
+        this.stage.show();
+
+        client.viewNext();
     }
 
 }

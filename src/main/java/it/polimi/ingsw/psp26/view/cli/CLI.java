@@ -461,7 +461,7 @@ public class CLI implements ViewInterface {
                 printPlayerResources(castElements(Resource.class, choices), 12, 10);
                 cliUtils.vSpace(10);
                 break;
-                
+
             case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
                 displayResourceSupply(new ResourceSupply());
                 cliUtils.vSpace(10);

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -7,7 +8,7 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.updatePlayerMessage;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
 
 /**
  * Class to model the faith track.
@@ -51,7 +52,7 @@ public class FaithTrack extends Observable<SessionMessage> {
         this.faithPoints += points;
         this.markerPosition += points; //TODO ANDREBBE IMPLEMENTATO UN CONTROLLO CHE NON FACCIA SUPERARE LA MARKER POSITION OLTRE 24
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**
@@ -99,7 +100,7 @@ public class FaithTrack extends Observable<SessionMessage> {
         this.markerPosition = this.markerPosition + numberOfSteps;
         this.faithPoints = this.faithPoints + numberOfSteps;
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**
@@ -110,7 +111,7 @@ public class FaithTrack extends Observable<SessionMessage> {
     public void moveBlackCrossPosition(int numberOfSteps) {
         this.blackCrossPosition = this.blackCrossPosition + numberOfSteps;
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**

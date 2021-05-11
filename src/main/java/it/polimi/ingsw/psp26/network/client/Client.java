@@ -7,9 +7,7 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
-import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
@@ -104,15 +102,21 @@ public class Client extends Observable<Message> {
                     break;
 
                 case CHOICE_ROW_COLUMN:
-                    // first message contains the MarketTray to display
-                    MarketTray marketTray = ((MarketTray) message.getPayload());
-                    viewInterface.displayMarketAction(marketTray, getSecondMessageResources(CHOICE_ROW_COLUMN));
+                    // message contains the Player's Resources
+                    try {
+                        viewInterface.displayMarketAction(cachedModel.getObsoleteMarketTrayCached(), castElements(Resource.class, message.getListPayloads()));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 case CHOICE_CARD_TO_BUY:
-                    // first message contains the Development Grid to display
-                    DevelopmentGrid developmentGrid = ((DevelopmentGrid) message.getPayload());
-                    viewInterface.displayDevelopmentCardBuyAction(developmentGrid, getSecondMessageResources(CHOICE_CARD_TO_BUY));
+                    // message contains the Player's Resources
+                    try {
+                        viewInterface.displayDevelopmentCardBuyAction(cachedModel.getObsoleteDevelopmentGridCached(), castElements(Resource.class, message.getListPayloads()));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 case LORENZO_PLAY:

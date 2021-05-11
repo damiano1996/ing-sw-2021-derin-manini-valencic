@@ -111,7 +111,7 @@ public class BuyCardNormalActionTurnStateTest {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
-        assertEquals(MessageType.CHOICE_POSITION, mitm.getMessages().get(2).getMessageType());
+        assertEquals(MessageType.CHOICE_POSITION, mitm.getMessages().get(1).getMessageType());
 
     }
 

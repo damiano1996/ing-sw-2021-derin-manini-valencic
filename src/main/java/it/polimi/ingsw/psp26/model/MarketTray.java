@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
 
 /**
  * Class to model the market tray.
@@ -40,8 +43,6 @@ public class MarketTray extends Observable<SessionMessage> {
                 marketMarbles[j][i] = MarblesList.get(j + i * marketMarbles.length);
             }
         }
-
-        // notifyObservers(new Message()); // TODO: to be completed
     }
 
 
@@ -87,7 +88,6 @@ public class MarketTray extends Observable<SessionMessage> {
      * @param row row of the market
      */
     public void pushMarbleFromSlideToRow(int row) {
-
         Resource marbleTemp = marbleOnSlide;
         marbleOnSlide = marketMarbles[row][marketMarbles[0].length - 1];
         for (int i = 0; i < marketMarbles[0].length - 1; i++) {
@@ -95,7 +95,7 @@ public class MarketTray extends Observable<SessionMessage> {
         }
         marketMarbles[row][0] = marbleTemp;
 
-        // notifyObservers(new Message()); // TODO: to be completed
+        notifyObservers(updateModelMessage("", MessageType.MARKET_MODEL));
     }
 
     /**
@@ -110,6 +110,7 @@ public class MarketTray extends Observable<SessionMessage> {
             marketMarbles[marketMarbles.length - i - 1][column] = marketMarbles[marketMarbles.length - i - 2][column];
         marketMarbles[0][column] = marbleTemp;
 
-        // notifyObservers(new Message()); // TODO: to be completed
+        notifyObservers(updateModelMessage("", MessageType.MARKET_MODEL));
     }
+    
 }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
 import java.io.IOException;
@@ -35,18 +36,44 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
      */
     @Override
     public void update(SessionMessage message) {
-        if (message.getMessageType().equals(MessageType.PLAYER_MODEL)) { //TODO Fare una switch per i casi del MarketTray e della Grid
-            try {
-                message = new ModelUpdateMessage(
-                        message.getSessionToken(),
-                        message.getMessageType(),
-                        matchController.getMatch().getPlayerBySessionToken(message.getSessionToken())
-                );
-            } catch (InvalidPayloadException | PlayerDoesNotExistException e) {
-                e.printStackTrace(); //TODO PlayerDoesNotExistException fa casino nei test
-            }
+        switch (message.getMessageType()) {
+
+            case PLAYER_MODEL:
+                try {
+                    message = new ModelUpdateMessage(
+                            message.getSessionToken(),
+                            message.getMessageType(),
+                            matchController.getMatch().getPlayerBySessionToken(message.getSessionToken())
+                    );
+                    sendToClient(message);
+                } catch (InvalidPayloadException | PlayerDoesNotExistException e) {
+                    e.printStackTrace();
+                }
+                break;
+                
+                
+            case MARKET_MODEL:
+            case GRID_MODEL:
+                for (Player player : matchController.getMatch().getPlayers()) {
+                    try {
+                        message = new ModelUpdateMessage(
+                                player.getSessionToken(),
+                                message.getMessageType(),
+                                message.getMessageType().equals(MessageType.MARKET_MODEL) ? matchController.getMatch().getMarketTray() : matchController.getMatch().getDevelopmentGrid()
+                        );
+                        sendToClient(message);
+                    } catch (InvalidPayloadException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+                
+
+            default:
+                sendToClient(message);
+                break;
+                
         }
-        sendToClient(message);
     }
 
     public void addNetworkNodeClient(String sessionToken, NetworkNode nodeClient) {

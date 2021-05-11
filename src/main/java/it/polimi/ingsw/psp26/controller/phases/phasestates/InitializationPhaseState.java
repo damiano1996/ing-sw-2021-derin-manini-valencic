@@ -41,6 +41,9 @@ public class InitializationPhaseState extends PhaseState {
                 } catch (InvalidPayloadException e) {
                     e.printStackTrace();
                 }
+                
+                // Send the initial version of the Market and Development Grid to all Players
+                notifyMarketAndGridCreation();
 
                 // Updating the state. The match can begin!
                 PlayingPhaseState playingPhaseState = new PlayingPhaseState(phase);
@@ -65,6 +68,14 @@ public class InitializationPhaseState extends PhaseState {
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Please wait for other Players to join..."));
         } catch (InvalidPayloadException ignored) {
         }
+    }
+
+    /**
+     * Used to send the first version of the Market and Development Grid to all Players
+     */
+    private void notifyMarketAndGridCreation() {
+        phase.getMatchController().notifyMarketCreation();
+        phase.getMatchController().notifyDevelopmentGridCreation();
     }
 
 }

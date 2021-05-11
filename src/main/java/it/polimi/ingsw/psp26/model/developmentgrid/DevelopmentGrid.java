@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model.developmentgrid;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
@@ -12,6 +13,8 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
 
 public class DevelopmentGrid extends Observable<SessionMessage> {
 
@@ -27,7 +30,6 @@ public class DevelopmentGrid extends Observable<SessionMessage> {
         grid = new DevelopmentGridCell[LEVELS.length][COLORS.length];
 
         initializeGrid();
-
     }
 
     private void initializeGrid() {
@@ -55,6 +57,8 @@ public class DevelopmentGrid extends Observable<SessionMessage> {
     public DevelopmentCard drawCard(Color color, Level level) throws LevelDoesNotExistException, ColorDoesNotExistException, NoMoreDevelopmentCardsException {
         int row = getRow(level);
         int col = getColumn(color);
+
+        notifyObservers(updateModelMessage("", MessageType.GRID_MODEL));
         return grid[row][col].drawCard();
     }
 

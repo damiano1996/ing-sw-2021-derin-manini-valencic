@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.updatePlayerMessage;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
 
 /**
  * Class modeling the player.
@@ -89,7 +90,7 @@ public class Player extends Observable<SessionMessage> {
     public void setLeaderCards(List<LeaderCard> leaderCards) {
         this.leaderCards = leaderCards;
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**
@@ -100,7 +101,7 @@ public class Player extends Observable<SessionMessage> {
     public void discardLeaderCard(LeaderCard leaderCard) {
         leaderCards.remove(leaderCard);
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**
@@ -109,7 +110,7 @@ public class Player extends Observable<SessionMessage> {
     public void giveInkwell() {
         inkwell = true;
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**

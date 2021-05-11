@@ -60,6 +60,23 @@ public class CachedModel {
                         }
                     }
                     break;
+                    
+                    
+                case MARKET_MODEL:
+                    MarketTray marketTray = (MarketTray) modelUpdateMessage.getModelPayload();
+                    marketTrayCached.updateObject(marketTray);
+                    break;
+                    
+                    
+                case GRID_MODEL:
+                    DevelopmentGrid developmentGrid = (DevelopmentGrid) modelUpdateMessage.getModelPayload();
+                    developmentGridCached.updateObject(developmentGrid);
+                    break;
+                    
+                    
+                default:
+                    break;
+                    
             }
         }
     }

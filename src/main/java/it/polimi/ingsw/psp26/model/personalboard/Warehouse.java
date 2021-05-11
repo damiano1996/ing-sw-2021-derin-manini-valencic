@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.model.personalboard;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
@@ -10,7 +11,7 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.updatePlayerMessage;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
 
 /**
  * Class to manage the depots of the warehouse and the depots added by the leader cards.
@@ -60,7 +61,7 @@ public class Warehouse extends Observable<SessionMessage> {
 
         getDepotByIndex(indexDepot).addResource(resource);
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**
@@ -87,7 +88,7 @@ public class Warehouse extends Observable<SessionMessage> {
     public void addResource(Resource resource) throws CanNotAddResourceToWarehouse {
         addResource(resource, 0);
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**
@@ -112,7 +113,7 @@ public class Warehouse extends Observable<SessionMessage> {
         }
         if (!added) throw new CanNotAddResourceToWarehouse();
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**
@@ -200,7 +201,7 @@ public class Warehouse extends Observable<SessionMessage> {
     public void addLeaderDepot(LeaderDepot leaderDepot) {
         leaderDepots.add(leaderDepot);
 
-        notifyObservers(updatePlayerMessage(sessionToken));
+        notifyObservers(updateModelMessage(sessionToken, MessageType.PLAYER_MODEL));
     }
 
     /**

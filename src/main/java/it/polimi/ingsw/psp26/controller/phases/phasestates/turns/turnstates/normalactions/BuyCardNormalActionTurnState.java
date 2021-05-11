@@ -41,13 +41,6 @@ public class BuyCardNormalActionTurnState extends TurnState {
                             new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
                                     MessageType.CHOICE_CARD_TO_BUY,
-                                    turn.getMatchController().getMatch().getDevelopmentGrid()
-                            ));
-
-                    turn.getMatchController().notifyObservers(
-                            new SessionMessage(
-                                    turn.getTurnPlayer().getSessionToken(),
-                                    MessageType.CHOICE_CARD_TO_BUY,
                                     turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().toArray(new Object[0])
                             ));
 
@@ -74,13 +67,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                             positionsForCard().toArray(new Object[0])
                                     ));
                         } else {
-
-                            turn.getMatchController().notifyObservers(
-                                    new SessionMessage(
-                                            turn.getTurnPlayer().getSessionToken(),
-                                            MessageType.CHOICE_CARD_TO_BUY,
-                                            turn.getMatchController().getMatch().getDevelopmentGrid()
-                                    ));
+                            
                             turn.getMatchController().notifyObservers(
                                     new SessionMessage(
                                             turn.getTurnPlayer().getSessionToken(),

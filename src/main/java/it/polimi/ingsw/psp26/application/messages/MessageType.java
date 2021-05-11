@@ -45,6 +45,8 @@ public enum MessageType {
 
     // Display model components
     PLAYER_MODEL,
+    MARKET_MODEL,
+    GRID_MODEL,
 
     CHOICE_RESOURCE_FROM_WAREHOUSE,
     CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY,

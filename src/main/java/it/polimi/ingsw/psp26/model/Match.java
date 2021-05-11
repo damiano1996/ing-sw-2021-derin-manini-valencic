@@ -54,8 +54,6 @@ public class Match extends Observable<SessionMessage> {
 
         initializeLeaderDeck();
         initializeActionTokenStack();
-
-        // notifyObservers(new Message()); // TODO: to be completed properly
     }
 
     /**

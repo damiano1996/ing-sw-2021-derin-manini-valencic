@@ -428,6 +428,7 @@ public class CLI implements ViewInterface {
                 cliUtils.printFigure("/titles/DevelopmentCardSlotSelection", 1, 11);
                 cliUtils.vSpace(10);
                 cliUtils.pPCS("Slots numbering convention:", Color.WHITE, 12, 4);
+                cliUtils.vSpace(1);
                 displayMultipleStringChoices(choices);
                 try {
                     displayDevelopmentCardsSlots(client.getCachedModel().getObsoleteMyPlayerCached().getPersonalBoard().getDevelopmentCardsSlots());

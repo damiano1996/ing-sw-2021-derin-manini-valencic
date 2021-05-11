@@ -1,11 +1,14 @@
 package it.polimi.ingsw.psp26.controller;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
+
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.updateModelMessage;
 
 
 public class MatchController extends Observable<SessionMessage> implements Observer<SessionMessage> {
@@ -27,6 +30,14 @@ public class MatchController extends Observable<SessionMessage> implements Obser
 
         initializeMatch(matchId);
         phase = new Phase(this);
+    }
+
+    public void notifyMarketCreation() {
+        notifyObservers(updateModelMessage("", MessageType.MARKET_MODEL));
+    }
+    
+    public void notifyDevelopmentGridCreation() {
+        notifyObservers(updateModelMessage("", MessageType.GRID_MODEL));
     }
 
     @Override

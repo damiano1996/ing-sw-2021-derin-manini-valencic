@@ -21,6 +21,7 @@ public interface ViewInterface {
 
     void start();
 
+
     void displayLogIn();
 
 
@@ -30,22 +31,13 @@ public interface ViewInterface {
     void displayNotifications(List<String> notifications);
 
 
-    void displayInkwell(boolean isPrintable);
-
-
     void displayPersonalBoard(Player player, boolean isMultiplayerMode);
-
-
-    void displayWarehouseDepots(Warehouse warehouse);
 
 
     void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd);
 
 
     void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources);
-
-
-    void displayStrongbox(List<Resource> strongbox);
 
 
     void displayMarketAction(MarketTray marketTray, List<Resource> playerResources);
@@ -55,9 +47,6 @@ public interface ViewInterface {
 
 
     void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots);
-
-
-    void displayMarketTray(MarketTray marketTray);
 
 
     void displayDevelopmentGrid(DevelopmentGrid developmentGrid);

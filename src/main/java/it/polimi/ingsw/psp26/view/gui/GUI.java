@@ -169,20 +169,12 @@ public class GUI extends Application implements ViewInterface {
 
     }
 
-    @Override
-    public void displayInkwell(boolean isPrintable) {
-
-    }
 
     @Override
     public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
 
     }
 
-    @Override
-    public void displayWarehouseDepots(Warehouse warehouse) {
-
-    }
 
     @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
@@ -194,10 +186,6 @@ public class GUI extends Application implements ViewInterface {
 
     }
 
-    @Override
-    public void displayStrongbox(List<Resource> strongbox) {
-
-    }
 
     @Override
     public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
@@ -214,10 +202,6 @@ public class GUI extends Application implements ViewInterface {
 
     }
 
-    @Override
-    public void displayMarketTray(MarketTray marketTray) {
-
-    }
 
     @Override
     public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
@@ -271,12 +255,13 @@ public class GUI extends Application implements ViewInterface {
         }
 
         choicesBox.getChildren().add(contentBox);
-        buttonOrRadio(contentBox, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
+        buttonOrCheckBox(contentBox, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
 
         if (hasUndoOption) {
             Button undoOptionButton = new Button("UNDO");
             undoOptionButton.setId("undo-button");
             undoOptionButton.setOnAction(actionEvent -> {
+                dialog.close();
                 client.sendUndoMessage();
                 client.viewNext();
             });
@@ -286,7 +271,7 @@ public class GUI extends Application implements ViewInterface {
         dialog.show();
     }
 
-    private void buttonOrRadio(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+    private void buttonOrCheckBox(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
         if (minChoices == 1 && maxChoices == 1) {
             buttonMultipleChoices(pane, dialog, choicesDrawer, messageType, choices);
         } else {

@@ -153,17 +153,6 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Displays the inkwell
-     *
-     * @param isPrintable If the Player owns the Inkwell, set this parameter to true
-     */
-    @Override
-    public void displayInkwell(boolean isPrintable) {
-        personalBoardCli.displayInkwell(isPrintable, 5, 190);
-    }
-
-
-    /**
      * Dsplays the Player's Personal Board
      *
      * @param player            The Player from where to get the Personal Board
@@ -177,17 +166,6 @@ public class CLI implements ViewInterface {
             cliUtils.setCursorPosition(47, 1);
         }
         client.viewNext();
-    }
-
-
-    /**
-     * Displays the Depots of a Warehouse
-     *
-     * @param warehouse The Warehouse containing the Depots
-     */
-    @Override
-    public void displayWarehouseDepots(Warehouse warehouse) {
-        depotCli.printWarehouse(warehouse, 17, 13);
     }
 
 
@@ -210,16 +188,6 @@ public class CLI implements ViewInterface {
         displayNext();
     }
 
-
-    /**
-     * Displays the given Resources as a Strongbox
-     *
-     * @param strongbox The Resources to display
-     */
-    @Override
-    public void displayStrongbox(List<Resource> strongbox) {
-        depotCli.displayStrongbox(strongbox, 30, 3);
-    }
 
 
     /**
@@ -249,17 +217,6 @@ public class CLI implements ViewInterface {
         cliUtils.pPCS("Slot  2", Color.GREY, 47, 121);
         cliUtils.pPCS("Slot  3", Color.GREY, 47, 157);
         cliUtils.vSpace(3);
-    }
-
-
-    /**
-     * Displays the given Market Tray
-     *
-     * @param marketTray The Market Tray to display
-     */
-    @Override
-    public void displayMarketTray(MarketTray marketTray) {
-        marketCli.displayMarketTray(marketTray, 12, 88);
     }
 
 
@@ -458,7 +415,8 @@ public class CLI implements ViewInterface {
             case CHOICE_RESOURCE_FROM_WAREHOUSE: //TODO migliora la grafica di questa schermata
                 cliUtils.clns();
                 cliUtils.printFigure("/titles/ChooseResourceFromWarehouse", 1, 8);
-                printPlayerResources(castElements(Resource.class, choices), 12, 10);
+                displayMultipleStringChoices(choices);
+                // printPlayerResources(castElements(Resource.class, choices), 12, 10);
                 cliUtils.vSpace(10);
                 break;
 

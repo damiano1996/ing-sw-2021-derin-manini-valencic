@@ -9,9 +9,7 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
@@ -23,7 +21,7 @@ public class OneResourceTurnState extends TurnState {
     private final MessageType resourceSource;
     private final List<Resource> resources;
 
-    private final List<Resource> resourcesOptions;
+    private List<Resource> resourcesOptions;
 
     public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, boolean toPay, List<Resource> resourcesOptions) {
         super(turn);
@@ -87,11 +85,15 @@ public class OneResourceTurnState extends TurnState {
     private void sendChoiceResourceMessage() {
         System.out.println("OneResourceTurnState - sending message to " + turn.getTurnPlayer().getNickname());
 
+        if (resourceSource.equals(MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE)) {
+            resourcesOptions = getAvailableResources();
+        }
+
         try {
             turn.getMatchController().notifyObservers(
                     new MultipleChoicesMessage(
                             turn.getTurnPlayer().getSessionToken(),
-                            this.resourceSource,
+                            resourceSource,
                             "Choice resource:",
                             1, 1,
                             false,
@@ -100,5 +102,35 @@ public class OneResourceTurnState extends TurnState {
             );
         } catch (InvalidPayloadException ignored) {
         }
+    }
+
+    private Map<Resource, Integer> getResourcesMultiplicity() {
+
+        Map<Resource, Integer> multiplicity = new HashMap<>();
+        for (Resource resource : turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources()) {
+
+            if (multiplicity.containsKey(resource)) {
+                multiplicity.put(resource, multiplicity.get(resource) + 1);
+            } else {
+                multiplicity.put(resource, 1);
+            }
+        }
+
+        return multiplicity;
+    }
+
+    private List<Resource> getAvailableResources() {
+        Map<Resource, Integer> multiplicity = getResourcesMultiplicity();
+        for (Resource resource : resources) {
+            if (multiplicity.containsKey(resource))
+                multiplicity.put(resource, multiplicity.get(resource) - 1);
+        }
+
+        List<Resource> availableResources = new ArrayList<>();
+        for (Resource resource : multiplicity.keySet()) {
+            if (multiplicity.get(resource) > 0) availableResources.add(resource);
+        }
+
+        return availableResources;
     }
 }

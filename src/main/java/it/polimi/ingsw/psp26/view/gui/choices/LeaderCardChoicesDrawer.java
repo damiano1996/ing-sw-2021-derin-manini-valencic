@@ -16,7 +16,6 @@ public class LeaderCardChoicesDrawer implements ChoicesDrawer<LeaderCard> {
 
     @Override
     public Button decorateButton(Button button, LeaderCard choice) {
-        button.setId("choice-button");
         button.setGraphic(getCardImageView(choice));
         return button;
     }

@@ -52,7 +52,7 @@ public interface ViewInterface {
     void displayDevelopmentGrid(DevelopmentGrid developmentGrid);
 
 
-    void displayResourceSupply(ResourceSupply resourceSupply);
+    void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes);
 
 
     void displayProductionActivation(List<Production> productions, List<Resource> playerResources);

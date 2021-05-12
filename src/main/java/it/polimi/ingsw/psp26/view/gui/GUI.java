@@ -209,7 +209,7 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void displayResourceSupply(ResourceSupply resourceSupply) {
+    public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes) {
 
     }
 

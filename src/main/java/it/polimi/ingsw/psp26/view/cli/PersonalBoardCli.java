@@ -311,20 +311,28 @@ public class PersonalBoardCli {
     /**
      * Prints the Resource Supply on screen
      *
-     * @param resourceSupply The Resource Supply
-     * @param startingRow    The row where the Resource Supply will be printed
-     * @param startingColumn The column where the Resource Supply will be printed
+     * @param resourceSupply   The Resource Supply
+     * @param resourcesToPrint The Resources to print in the Resource Supply
+     * @param startingRow      The row where the Resource Supply will be printed
+     * @param startingColumn   The column where the Resource Supply will be printed
      */
-    public void displayResourceSupply(ResourceSupply resourceSupply, int startingRow, int startingColumn) {
+    public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesToPrint, int startingRow, int startingColumn) {
         cliUtils.clns();
 
         cliUtils.printFigure("/titles/ResourceSupplyTitle", startingRow, startingColumn);
         cliUtils.printFigure("ResourceSupply", startingRow + 19, startingColumn + 37);
+
         try {
-            for (int i = 0; i <= 3; i++)
-                printResourceSupplyResources(resourceSupply.grabResources(i, 1).get(0).getColor(), startingRow, startingColumn + (i * 22));
-        } catch (ResourceSupplySlotOutOfBoundsException e) {
-            e.printStackTrace();
+            int slotNumber = 1;
+            for (int i = 0; i <= 3; i++) {
+                Resource resourceSlotType = resourceSupply.grabResources(i, 1).get(0);
+                if (resourcesToPrint.contains(resourceSlotType)) {
+                    printResourceSupplyResources(resourceSlotType.getColor(), startingRow, startingColumn + (i * 22));
+                    cliUtils.pPCS("SLOT " + slotNumber, Color.WHITE, startingRow + 33, startingColumn + 45 + (i * 22));
+                    slotNumber++;
+                }
+            }
+        } catch (ResourceSupplySlotOutOfBoundsException ignored) {
         }
     }
 

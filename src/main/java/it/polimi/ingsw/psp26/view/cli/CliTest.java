@@ -249,7 +249,7 @@ public class CliTest {
 
         //--RESOURCE-SUPPLY-TEST---// Press enter 1 time
 
-        cli.displayResourceSupply(resourceSupply);
+        cli.displayResourceSupply(resourceSupply, new ArrayList<>());
         in.nextLine();
     }
 

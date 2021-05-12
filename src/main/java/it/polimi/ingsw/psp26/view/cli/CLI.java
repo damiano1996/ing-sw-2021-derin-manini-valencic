@@ -26,13 +26,11 @@ import java.util.*;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
-import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
 public class CLI implements ViewInterface {
 
     private final PrintWriter pw;
     private final CliUtils cliUtils;
-    private final DepotCli depotCli;
     private final DevelopmentCardsCli developmentCardsCli;
     private final FaithTrackCli faithTrackCli;
     private final LeaderCardsCli leaderCardsCli;
@@ -48,7 +46,6 @@ public class CLI implements ViewInterface {
 
         this.pw = new PrintWriter(System.out);
         this.cliUtils = new CliUtils(pw);
-        this.depotCli = new DepotCli(pw);
         this.developmentCardsCli = new DevelopmentCardsCli(pw);
         this.faithTrackCli = new FaithTrackCli(pw);
         this.leaderCardsCli = new LeaderCardsCli(pw);
@@ -153,7 +150,7 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Dsplays the Player's Personal Board
+     * Displays the Player's Personal Board
      *
      * @param player            The Player from where to get the Personal Board
      * @param isMultiplayerMode Used to print Lorenzo's Faith Marker if set to false
@@ -187,7 +184,6 @@ public class CLI implements ViewInterface {
         }
         displayNext();
     }
-
 
 
     /**
@@ -246,10 +242,11 @@ public class CLI implements ViewInterface {
      * Displays the Resource Supply
      *
      * @param resourceSupply The Resource Supply to display
+     * @param resourcesTypes The Resource types contained in the Resource Supply
      */
     @Override
-    public void displayResourceSupply(ResourceSupply resourceSupply) {
-        personalBoardCli.displayResourceSupply(resourceSupply, 1, 37);
+    public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes) {
+        personalBoardCli.displayResourceSupply(resourceSupply, resourcesTypes, 1, 37);
     }
 
 
@@ -381,30 +378,12 @@ public class CLI implements ViewInterface {
                 break;
 
             case CHOICE_POSITION:
-                cliUtils.cls();
-                cliUtils.printFigure("/titles/DevelopmentCardSlotSelection", 1, 11);
-                cliUtils.vSpace(10);
-                cliUtils.pPCS("Slots numbering convention:", Color.WHITE, 12, 4);
-                cliUtils.vSpace(1);
-                displayMultipleStringChoices(choices);
-                try {
-                    displayDevelopmentCardsSlots(client.getCachedModel().getObsoleteMyPlayerCached().getPersonalBoard().getDevelopmentCardsSlots());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                choicePositionExecute(choices);
                 break;
 
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
-                isPersonalBoardPrintable = true;
-                notificationStackPrinter.restoreStackView();
-                try {
-                    personalBoardCli.displayPersonalBoard(client.getCachedModel().getObsoleteMyPlayerCached(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                cliUtils.setCursorPosition(47, 1);
-                displayMultipleStringChoices(choices);
+                choiceNormalLeaderActionExecute(choices);
                 break;
 
             case CHOICE_LEADERS:
@@ -412,18 +391,14 @@ public class CLI implements ViewInterface {
                 displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
                 break;
 
-            case CHOICE_RESOURCE_FROM_WAREHOUSE: //TODO migliora la grafica di questa schermata
-                cliUtils.clns();
-                cliUtils.printFigure("/titles/ChooseResourceFromWarehouse", 1, 8);
-                displayMultipleStringChoices(choices);
-                // printPlayerResources(castElements(Resource.class, choices), 12, 10);
-                cliUtils.vSpace(10);
+            case CHOICE_RESOURCE_FROM_WAREHOUSE:
+                choiceResourceFromWarehouseExecute(choices);
                 break;
 
             case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
-                displayResourceSupply(new ResourceSupply());
+                displayResourceSupply(new ResourceSupply(), castElements(Resource.class, choices));
                 cliUtils.vSpace(10);
-                cliUtils.pPCS("Please insert the number of the Resource you want.", Color.WHITE, 38, 4);
+                cliUtils.pPCS("Please insert the number of the Resource slot you want.", Color.WHITE, 38, 4);
                 break;
 
             default:
@@ -453,6 +428,61 @@ public class CLI implements ViewInterface {
             client.viewNext();
         }
 
+    }
+
+
+    /**
+     * Executes the corresponding switch case in displayChoices()
+     * 
+     * @param choices The choices to display
+     */
+    private void choicePositionExecute(List<Object> choices) {
+        cliUtils.cls();
+        cliUtils.printFigure("/titles/DevelopmentCardSlotSelection", 1, 11);
+        cliUtils.vSpace(10);
+        cliUtils.pPCS("Slots numbering convention:", Color.WHITE, 12, 4);
+        cliUtils.vSpace(1);
+        displayMultipleStringChoices(choices);
+        try {
+            displayDevelopmentCardsSlots(client.getCachedModel().getObsoleteMyPlayerCached().getPersonalBoard().getDevelopmentCardsSlots());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Executes the corresponding switch case in displayChoices()
+     *
+     * @param choices The choices to display
+     */
+    private void choiceNormalLeaderActionExecute(List<Object> choices) {
+        isPersonalBoardPrintable = true;
+        notificationStackPrinter.restoreStackView();
+        try {
+            personalBoardCli.displayPersonalBoard(client.getCachedModel().getObsoleteMyPlayerCached(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        cliUtils.setCursorPosition(47, 1);
+        displayMultipleStringChoices(choices);
+    }
+
+
+    /**
+     * Executes the corresponding switch case in displayChoices()
+     *
+     * @param choices The choices to display
+     */
+    private void choiceResourceFromWarehouseExecute(List<Object> choices) {
+        cliUtils.clns();
+        cliUtils.printFigure("/titles/ChooseResourceFromWarehouse", 1, 8);
+        cliUtils.vSpace(3);
+        pw.println(cliUtils.hSpace(3) + "Please type the number of the corresponding Resource you want to give");
+        cliUtils.vSpace(3);
+        pw.flush();
+        displayMultipleStringChoices(choices);
+        cliUtils.vSpace(10);
     }
 
 

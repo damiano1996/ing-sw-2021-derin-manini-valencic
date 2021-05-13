@@ -20,12 +20,14 @@ public class DialogStage {
         dialog.initStyle(StageStyle.UNDECORATED);
         dialog.initStyle(StageStyle.TRANSPARENT);
         dialog.setAlwaysOnTop(true);
+        dialog.centerOnScreen();
 
         StackPane stackPane = addCoolFrame(content, maxContentWidth, maxContentHeight, marginFactor, roundedCorners, arcSize, ratio);
 
         Scene scene = setTransparentBackground(stackPane);
         addStylesheet(scene);
         dialog.setScene(scene);
+
         return dialog;
     }
 

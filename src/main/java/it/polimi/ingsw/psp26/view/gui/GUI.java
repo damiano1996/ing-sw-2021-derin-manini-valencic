@@ -17,9 +17,9 @@ import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.view.ViewInterface;
-import it.polimi.ingsw.psp26.view.gui.choices.ChoicesDrawer;
-import it.polimi.ingsw.psp26.view.gui.choices.LeaderCardChoicesDrawer;
-import it.polimi.ingsw.psp26.view.gui.choices.MessageTypeChoicesDrawer;
+import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoicesDrawer;
+import it.polimi.ingsw.psp26.view.gui.choicesdrawers.LeaderCardChoicesDrawer;
+import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -31,24 +31,25 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_NAME;
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
-import static it.polimi.ingsw.psp26.view.gui.FramePane.addCoolFrame;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.PlayingPane.getPlayingPane;
 
 public class GUI extends Application implements ViewInterface {
 
-    //    private FXMLLoader fxmlLoader;
     private Client client;
     private Stage stage;
+    private Pane root;
 
     private float ratio;
 
@@ -59,21 +60,29 @@ public class GUI extends Application implements ViewInterface {
         Application.launch(args);
     }
 
+    private void setStageWindowProperties(Stage stage) {
+        stage.setMaximized(true);
+        stage.setResizable(false);
+        stage.setFullScreen(true);
+        stage.sizeToScene();
+    }
+
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
 
         client = new Client(this);
 
         ratio = getWindowWidth() / REFERENCE_WIDTH;
 
-        this.stage = stage;
-        this.stage.initStyle(StageStyle.UNDECORATED);
-        this.stage.initStyle(StageStyle.TRANSPARENT);
+        root = addBackground(new Pane(), getScreenWidth(), getScreenHeight(), 1.0f, 1.0f);
 
-        this.stage.setMaximized(true);
-        this.stage.setResizable(false);
-        this.stage.setFullScreen(true);
-        this.stage.sizeToScene();
+        Scene scene = new Scene(root);
+        addStylesheet(scene);
+
+        this.stage = primaryStage;
+        this.stage.setScene(scene);
+        setStageWindowProperties(this.stage);
+        this.stage.show();
 
         displayLogIn();
     }
@@ -87,7 +96,8 @@ public class GUI extends Application implements ViewInterface {
     public void displayLogIn() {
         VBox loginBox = new VBox(20 * ratio);
 
-        // temporary
+        Stage dialog = getDialog(loginBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, true, (int) (350 * ratio), ratio);
+
         Text title = new Text(GAME_NAME);
         title.setId("title");
         loginBox.getChildren().add(title);
@@ -106,13 +116,17 @@ public class GUI extends Application implements ViewInterface {
         serverIPTextField.setId("text-field");
         loginBox.getChildren().add(serverIPTextField);
 
+        Text errorMessage = new Text("Server is not reachable!");
+        errorMessage.setId("error");
+        errorMessage.setVisible(false);
+        loginBox.getChildren().add(errorMessage);
+
         Button connectButton = new Button("Connect");
         connectButton.setId("confirm-button");
 
-
         connectButton.setOnAction(event -> {
 
-            connectButton.setVisible(false);
+            connectButton.setDisable(true);
 
             String nickname = nicknameTextField.getText();
             String serverIP = serverIPTextField.getText();
@@ -128,32 +142,17 @@ public class GUI extends Application implements ViewInterface {
                         1, 1,
                         false
                 );
+                dialog.close();
             } catch (ServerIsNotReachableException serverIsNotReachableException) {
-                serverIsNotReachableException.printStackTrace();
+                errorMessage.setVisible(true);
+                connectButton.setDisable(false);
             }
 
         });
 
         loginBox.getChildren().add(connectButton);
 
-        // getDialogStage(loginBox, 1000, 1000, 1.2f, getWindowWidth() / REFERENCE_WIDTH)
-        Pane pane = addCoolFrame(loginBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, true, (int) (350 * ratio), ratio);
-
-//        fxmlLoader = new FXMLLoader();
-//        fxmlLoader.setLocation(getClass().getResource("/gui/fxml/demo.fxml"));
-//        Scene scene;
-//        try {
-//            scene = new Scene(fxmlLoader.load());
-//        } catch (IOException e) {
-//            scene = new Scene(new Label("error"));
-//        }
-
-        Scene scene = setTransparentBackground(pane);
-        addStylesheet(scene);
-
-        this.stage.setScene(scene);
-        this.stage.centerOnScreen();
-        this.stage.show();
+        dialog.show();
     }
 
     @Override
@@ -391,17 +390,11 @@ public class GUI extends Application implements ViewInterface {
     public void stopDisplayingWaitingScreen() {
 
         Pane pane = addBackground(getPlayingPane(client), getScreenWidth(), getScreenHeight(), 1.2f, getWindowWidth());
-        Scene scene = setTransparentBackground(pane);
-        addStylesheet(scene);
+        stage.getScene().setRoot(pane);
 
-        this.stage.setScene(scene);
-
-        this.stage.setMaximized(true);
-        this.stage.setResizable(false);
-        this.stage.setFullScreen(true);
-        this.stage.sizeToScene();
-
-        this.stage.show();
+//        Scene scene = setTransparentBackground(pane);
+//        this.stage.setScene(scene);
+//        this.stage.centerOnScreen();
 
         client.viewNext();
     }

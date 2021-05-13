@@ -5,10 +5,9 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
+import it.polimi.ingsw.psp26.view.gui.asynchronousupdates.AsynchronousUpdateDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.scene.layout.*;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
@@ -29,80 +28,58 @@ public class PlayingPane {
         // adding market tray
         hBox.getChildren().add(new Pane());
 
-        Task marketTrayTask = new Task() {
-            @Override
-            protected Void call() {
-                Platform.runLater(() -> {
-                    try {
-                        MarketTray marketTray = client.getCachedModel().getObsoleteMarketTrayCached();
-                        hBox.getChildren().set(
-                                0,
-                                drawThumbNail(
-                                        new MarketTrayDrawer(marketTray, boxSize).draw(),
-                                        new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
-                                        boxSize, zoomFactor * boxSize, ratio)
-                        );
-                    } catch (InterruptedException ignored) {
-                    }
-                });
-                return null;
-            }
-        };
-
-        new Thread(() -> {
-            while (true) {
-                try {
-                    client.getCachedModel().getUpdatedMarketTrayCached();
-                    marketTrayTask.run();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        new AsynchronousUpdateDrawer(
+                () -> client.getCachedModel().getMarketTrayCached().getUpdatedObject(),
+                () -> {
+                    MarketTray marketTray = client.getCachedModel().getMarketTrayCached().getObsoleteObject();
+                    hBox.getChildren().set(
+                            0,
+                            drawThumbNail(
+                                    new MarketTrayDrawer(marketTray, boxSize).draw(),
+                                    new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
+                                    boxSize, zoomFactor * boxSize, ratio)
+                    );
                 }
-            }
-        }).start();
+        ).start();
 
         // adding development card grid
         hBox.getChildren().add(new Pane());
 
-        Task developmentGridTask = new Task() {
-            @Override
-            protected Void call() {
-                Platform.runLater(() -> {
-                    try {
-                        DevelopmentGrid developmentGrid = client.getCachedModel().getObsoleteDevelopmentGridCached();
+        new AsynchronousUpdateDrawer(
+                () -> client.getCachedModel().getDevelopmentGridCached().getUpdatedObject(),
+                () -> {
+                    DevelopmentGrid developmentGrid = client.getCachedModel().getDevelopmentGridCached().getObsoleteObject();
+                    hBox.getChildren().set(
+                            1,
+                            drawThumbNail(
+                                    new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
+                                    new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
+                                    boxSize, zoomFactor * boxSize, ratio)
+                    );
+                }
+        ).start();
+
+        // adding opponents
+        for (int i = 0; i < 3; i++) {
+            int finalI = i;
+
+            hBox.getChildren().add(new Pane());
+
+            new AsynchronousUpdateDrawer(
+                    () -> client.getCachedModel().getOpponentCached(finalI).getUpdatedObject(),
+                    () -> {
+                        Player player = client.getCachedModel().getOpponentCached(finalI).getObsoleteObject();
                         hBox.getChildren().set(
-                                1,
+                                2 + finalI,
                                 drawThumbNail(
-                                        new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
-                                        new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
+                                        drawPlayer(player, boxSize, ratio),
+                                        drawPlayer(player, zoomFactor * boxSize, ratio),
                                         boxSize, zoomFactor * boxSize, ratio)
                         );
-                    } catch (InterruptedException ignored) {
                     }
-                });
-                return null;
-            }
-        };
+            ).start();
+        }
 
-        new Thread(() -> {
-            while (true) {
-                try {
-                    client.getCachedModel().getObsoleteDevelopmentGridCached();
-                    developmentGridTask.run();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-
-//        for (Player player : players) {
-//            hBox.getChildren().add(
-//                    drawThumbNail(
-//                            drawPlayer(player, boxSize, ratio),
-//                            drawPlayer(player, zoomFactor * boxSize, ratio),
-//                            boxSize, zoomFactor * boxSize, ratio)
-//            );
-//        }
         return hBox;
     }
 
@@ -119,32 +96,13 @@ public class PlayingPane {
         Pane content = drawPlayer(new Player(new VirtualView(), client.getNickname(), ""), width, ratio);
         root.getChildren().add(content);
 
-        Task task = new Task<Void>() {
-            @Override
-            protected Void call() {
-                Platform.runLater(() -> {
-                    try {
-                        Player player = client.getCachedModel().getObsoleteMyPlayerCached();
-                        root.getChildren().set(0, drawPlayer(player, width, ratio));
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-                return null;
-            }
-        };
-
-        new Thread(() -> {
-            while (true) {
-                try {
-                    client.getCachedModel().getUpdatedMyPlayerCached();
-                    task.run();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        new AsynchronousUpdateDrawer(
+                () -> client.getCachedModel().getMyPlayerCached().getUpdatedObject(),
+                () -> {
+                    Player player = client.getCachedModel().getMyPlayerCached().getObsoleteObject();
+                    root.getChildren().set(0, drawPlayer(player, width, ratio));
                 }
-            }
-        }).start();
+        ).start();
 
         return root;
     }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.view.gui.choices;
+package it.polimi.ingsw.psp26.view.gui.choicesdrawers;
 
 import it.polimi.ingsw.psp26.view.gui.CheckBoxContainer;
 import javafx.scene.control.Button;

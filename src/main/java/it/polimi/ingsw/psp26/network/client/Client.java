@@ -11,6 +11,7 @@ import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
+import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
@@ -104,7 +105,7 @@ public class Client extends Observable<Message> {
                 case CHOICE_ROW_COLUMN:
                     // message contains the Player's Resources
                     try {
-                        viewInterface.displayMarketAction(cachedModel.getObsoleteMarketTrayCached(), castElements(Resource.class, message.getListPayloads()));
+                        viewInterface.displayMarketAction(cachedModel.getMarketTrayCached().getObsoleteObject(), castElements(Resource.class, message.getListPayloads()));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -113,7 +114,7 @@ public class Client extends Observable<Message> {
                 case CHOICE_CARD_TO_BUY:
                     // message contains the Player's Resources
                     try {
-                        viewInterface.displayDevelopmentCardBuyAction(cachedModel.getObsoleteDevelopmentGridCached(), castElements(Resource.class, message.getListPayloads()));
+                        viewInterface.displayDevelopmentCardBuyAction(cachedModel.getDevelopmentGridCached().getObsoleteObject(), castElements(Resource.class, message.getListPayloads()));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

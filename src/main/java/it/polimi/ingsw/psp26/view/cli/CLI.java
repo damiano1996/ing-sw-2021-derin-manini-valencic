@@ -149,7 +149,7 @@ public class CLI implements ViewInterface {
         cliUtils.vSpace(1);
         displayMultipleStringChoices(choices);
         try {
-            displayDevelopmentCardsSlots(client.getCachedModel().getObsoleteMyPlayerCached().getPersonalBoard().getDevelopmentCardsSlots());
+            displayDevelopmentCardsSlots(client.getCachedModel().getMyPlayerCached().getObsoleteObject().getPersonalBoard().getDevelopmentCardsSlots());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -165,7 +165,7 @@ public class CLI implements ViewInterface {
         isPersonalBoardPrintable = true;
         notificationStackPrinter.restoreStackView();
         try {
-            personalBoardCli.displayPersonalBoard(client.getCachedModel().getObsoleteMyPlayerCached(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
+            personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObsoleteObject(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -57,6 +57,12 @@ public class CLI implements ViewInterface {
         this.commonScreensCli = new CommonScreensCli(pw);
     }
 
+
+    //-------------------------------//
+    //          CLI METHODS          //
+    //-------------------------------//
+
+
     /**
      * Prints the Title Screen when the program is launched
      * Used in printTitle() method
@@ -69,21 +75,6 @@ public class CLI implements ViewInterface {
         cliUtils.printFigure("/titles/MainTitle", 1, 10);
         pw.print(Color.RESET.setColor());
         pw.flush();
-    }
-
-
-    //------------------------------------------//
-    //          VIEW INTERFACE METHODS          //
-    //------------------------------------------//
-
-    @Override
-    public void start() {
-        try {
-            this.client = new Client(this);
-            displayLogIn();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -130,6 +121,206 @@ public class CLI implements ViewInterface {
         }
     }
 
+
+    /**
+     * Displays the Leader Cards activation/discard selection screen
+     *
+     * @param leaderCards The Leader Cards to display
+     */
+    public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
+        isPersonalBoardPrintable = false;
+
+        cliUtils.clns();
+        leaderCardsCli.printMultipleLeaders(leaderCards, 3);
+        cliUtils.vSpace(3);
+    }
+
+
+    /**
+     * Executes the corresponding switch case in displayChoices()
+     *
+     * @param choices The choices to display
+     */
+    private void choicePositionExecute(List<Object> choices) {
+        cliUtils.cls();
+        cliUtils.printFigure("/titles/DevelopmentCardSlotSelection", 1, 11);
+        cliUtils.vSpace(10);
+        cliUtils.pPCS("Slots numbering convention:", Color.WHITE, 12, 4);
+        cliUtils.vSpace(1);
+        displayMultipleStringChoices(choices);
+        try {
+            displayDevelopmentCardsSlots(client.getCachedModel().getObsoleteMyPlayerCached().getPersonalBoard().getDevelopmentCardsSlots());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Executes the corresponding switch case in displayChoices()
+     *
+     * @param choices The choices to display
+     */
+    private void choiceNormalLeaderActionExecute(List<Object> choices) {
+        isPersonalBoardPrintable = true;
+        notificationStackPrinter.restoreStackView();
+        try {
+            personalBoardCli.displayPersonalBoard(client.getCachedModel().getObsoleteMyPlayerCached(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        cliUtils.setCursorPosition(47, 1);
+        displayMultipleStringChoices(choices);
+    }
+
+
+    /**
+     * Executes the corresponding switch case in displayChoices()
+     *
+     * @param choices The choices to display
+     */
+    private void choiceResourceFromWarehouseExecute(List<Object> choices) {
+        cliUtils.clns();
+        cliUtils.printFigure("/titles/ChooseResourceFromWarehouse", 1, 8);
+        cliUtils.vSpace(3);
+        pw.println(cliUtils.hSpace(3) + "Please type the number of the corresponding Resource you want to give");
+        cliUtils.vSpace(3);
+        pw.flush();
+        displayMultipleStringChoices(choices);
+        cliUtils.vSpace(10);
+    }
+
+
+    /**
+     * Used as an auxiliary method in displayChoices() to display the available choices
+     *
+     * @param nChoices      The number of choices the Player can make
+     * @param minChoices    The minimum number of choices the Player can make
+     * @param maxChoices    The maximum number of choices the Player can make
+     * @param hasUndoOption True if the Player can exit from the choice screen
+     * @return A List containing the Player's choices
+     * @throws UndoOptionSelectedException The Player chooses to exit from the current choice screen
+     */
+    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices, boolean hasUndoOption) throws UndoOptionSelectedException {
+        List<Integer> choices = new ArrayList<>();
+        int itemInt;
+
+        pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
+
+        while (choices.size() < maxChoices) {
+
+            try {
+                itemInt = getCorrectChoice(choices.size(), minChoices, nChoices, hasUndoOption);
+                if (!choices.contains(itemInt)) choices.add(itemInt);
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                cliUtils.vSpace(1);
+                pw.print(cliUtils.hSpace(3) + cliUtils.pCS("INCORRECT CHOICE INSERTED", Color.RED));
+                cliUtils.vSpace(3);
+            } catch (ConfirmationException e) {
+                break;
+            }
+        }
+
+        return choices;
+    }
+
+
+    /**
+     * Used as an auxiliary method in displayChoices() to get the correct input from the Player
+     *
+     * @param nChoices      The number of choices the Player can make
+     * @param minChoices    The minimum number of choices the Player can make
+     * @param hasUndoOption True if the Player can exit from the choice screen
+     * @return A correct Integer selected by the Player
+     * @throws IndexOutOfBoundsException   The index is greater/less than the maximum/minimum range of possible choices
+     * @throws ConfirmationException       The Player confirms the current choices
+     * @throws UndoOptionSelectedException The Player decides to exit from the current display choices screen
+     */
+    private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices, boolean hasUndoOption) throws IndexOutOfBoundsException, ConfirmationException, UndoOptionSelectedException {
+        if (hasUndoOption) pw.print("\n" + cliUtils.hSpace(3) + "Type 'u' to undo operation.");
+        pw.print("\n" + cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'c' - to confirm selections): ");
+        pw.flush();
+
+        Scanner in = new Scanner(System.in);
+        String item = in.nextLine();
+
+        if (hasUndoOption)
+            if (item.equals("u")) throw new UndoOptionSelectedException();
+
+        if (item.equals("c") && numOfChoices >= minChoices) throw new ConfirmationException();
+        if (item.isEmpty() || ViewUtils.checkAsciiRange(item.charAt(0))) throw new IndexOutOfBoundsException();
+
+        int itemInt = Integer.parseInt(item) - 1;
+        if (itemInt < 0 || itemInt >= nChoices) throw new IndexOutOfBoundsException();
+
+        return itemInt;
+    }
+
+
+    /**
+     * Used as an auxiliary method in displayChoices() to correctly print the choices
+     *
+     * @param choices The choices to print
+     */
+    private void displayMultipleStringChoices(List<Object> choices) {
+        for (int i = 0; i < choices.size(); i++) {
+            cliUtils.vSpace(1);
+            pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + choices.get(i));
+        }
+    }
+
+
+    /**
+     * Used to continue between screens and to get the next Message from MessageSynchronizedFIFO
+     */
+    private void displayNext() {
+        Scanner in = new Scanner(System.in);
+        cliUtils.vSpace(1);
+        pw.print(cliUtils.hSpace(3) + "Press ENTER to confirm.");
+        pw.flush();
+        in.nextLine();
+        client.viewNext();
+    }
+
+
+    /**
+     * Starts a waiting screen
+     *
+     * @param message A String to display during the waiting screen
+     */
+    public void displayWaitingScreen(Message message) {
+        try {
+            WaitingScreenStarter.getInstance().startWaiting(message);
+        } catch (EmptyPayloadException ignored) {
+        }
+        client.viewNext();
+    }
+
+
+    /**
+     * Stops the waiting screen
+     */
+    public void stopDisplayingWaitingScreen() {
+        WaitingScreenStarter.getInstance().stopWaiting();
+        client.viewNext();
+    }
+
+
+    //------------------------------------------//
+    //          VIEW INTERFACE METHODS          //
+    //------------------------------------------//
+
+    @Override
+    public void start() {
+        try {
+            this.client = new Client(this);
+            displayLogIn();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     /**
      * Displays the given Leader Cards
      *
@@ -139,6 +330,7 @@ public class CLI implements ViewInterface {
     public void displayLeaderCards(List<LeaderCard> leaderCards) {
         personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
     }
+
 
     /**
      * Used to print notifications in the Notification Stack printer
@@ -273,20 +465,6 @@ public class CLI implements ViewInterface {
             client.viewNext();
         } catch (InvalidPayloadException ignored) {
         }
-    }
-
-
-    /**
-     * Displays the Leader Cards activation/discard selection screen
-     *
-     * @param leaderCards The Leader Cards to display
-     */
-    public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
-        isPersonalBoardPrintable = false;
-
-        cliUtils.clns();
-        leaderCardsCli.printMultipleLeaders(leaderCards, 3);
-        cliUtils.vSpace(3);
     }
 
 
@@ -434,140 +612,6 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Executes the corresponding switch case in displayChoices()
-     *
-     * @param choices The choices to display
-     */
-    private void choicePositionExecute(List<Object> choices) {
-        cliUtils.cls();
-        cliUtils.printFigure("/titles/DevelopmentCardSlotSelection", 1, 11);
-        cliUtils.vSpace(10);
-        cliUtils.pPCS("Slots numbering convention:", Color.WHITE, 12, 4);
-        cliUtils.vSpace(1);
-        displayMultipleStringChoices(choices);
-        try {
-            displayDevelopmentCardsSlots(client.getCachedModel().getObsoleteMyPlayerCached().getPersonalBoard().getDevelopmentCardsSlots());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * Executes the corresponding switch case in displayChoices()
-     *
-     * @param choices The choices to display
-     */
-    private void choiceNormalLeaderActionExecute(List<Object> choices) {
-        isPersonalBoardPrintable = true;
-        notificationStackPrinter.restoreStackView();
-        try {
-            personalBoardCli.displayPersonalBoard(client.getCachedModel().getObsoleteMyPlayerCached(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        cliUtils.setCursorPosition(47, 1);
-        displayMultipleStringChoices(choices);
-    }
-
-
-    /**
-     * Executes the corresponding switch case in displayChoices()
-     *
-     * @param choices The choices to display
-     */
-    private void choiceResourceFromWarehouseExecute(List<Object> choices) {
-        cliUtils.clns();
-        cliUtils.printFigure("/titles/ChooseResourceFromWarehouse", 1, 8);
-        cliUtils.vSpace(3);
-        pw.println(cliUtils.hSpace(3) + "Please type the number of the corresponding Resource you want to give");
-        cliUtils.vSpace(3);
-        pw.flush();
-        displayMultipleStringChoices(choices);
-        cliUtils.vSpace(10);
-    }
-
-
-    /**
-     * Used as an auxiliary method in displayChoices() to display the available choices
-     *
-     * @param nChoices      The number of choices the Player can make
-     * @param minChoices    The minimum number of choices the Player can make
-     * @param maxChoices    The maximum number of choices the Player can make
-     * @param hasUndoOption True if the Player can exit from the choice screen
-     * @return A List containing the Player's choices
-     * @throws UndoOptionSelectedException The Player chooses to exit from the current choice screen
-     */
-    private List<Integer> displayInputChoice(int nChoices, int minChoices, int maxChoices, boolean hasUndoOption) throws UndoOptionSelectedException {
-        List<Integer> choices = new ArrayList<>();
-        int itemInt;
-
-        pw.print(cliUtils.hSpace(3) + "Select at least " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
-
-        while (choices.size() < maxChoices) {
-
-            try {
-                itemInt = getCorrectChoice(choices.size(), minChoices, nChoices, hasUndoOption);
-                if (!choices.contains(itemInt)) choices.add(itemInt);
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                cliUtils.vSpace(1);
-                pw.print(cliUtils.hSpace(3) + cliUtils.pCS("INCORRECT CHOICE INSERTED", Color.RED));
-                cliUtils.vSpace(3);
-            } catch (ConfirmationException e) {
-                break;
-            }
-        }
-
-        return choices;
-    }
-
-
-    /**
-     * Used as an auxiliary method in displayChoices() to get the correct input from the Player
-     *
-     * @param nChoices      The number of choices the Player can make
-     * @param minChoices    The minimum number of choices the Player can make
-     * @param hasUndoOption True if the Player can exit from the choice screen
-     * @return A correct Integer selected by the Player
-     * @throws IndexOutOfBoundsException   The index is greater/less than the maximum/minimum range of possible choices
-     * @throws ConfirmationException       The Player confirms the current choices
-     * @throws UndoOptionSelectedException The Player decides to exit from the current display choices screen
-     */
-    private int getCorrectChoice(int numOfChoices, int minChoices, int nChoices, boolean hasUndoOption) throws IndexOutOfBoundsException, ConfirmationException, UndoOptionSelectedException {
-        if (hasUndoOption) pw.print("\n" + cliUtils.hSpace(3) + "Type 'u' to undo operation.");
-        pw.print("\n" + cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'c' - to confirm selections): ");
-        pw.flush();
-
-        Scanner in = new Scanner(System.in);
-        String item = in.nextLine();
-
-        if (hasUndoOption)
-            if (item.equals("u")) throw new UndoOptionSelectedException();
-
-        if (item.equals("c") && numOfChoices >= minChoices) throw new ConfirmationException();
-        if (item.isEmpty() || ViewUtils.checkAsciiRange(item.charAt(0))) throw new IndexOutOfBoundsException();
-
-        int itemInt = Integer.parseInt(item) - 1;
-        if (itemInt < 0 || itemInt >= nChoices) throw new IndexOutOfBoundsException();
-
-        return itemInt;
-    }
-
-
-    /**
-     * Used as an auxiliary method in displayChoices() to correctly print the choices
-     *
-     * @param choices The choices to print
-     */
-    private void displayMultipleStringChoices(List<Object> choices) {
-        for (int i = 0; i < choices.size(); i++) {
-            cliUtils.vSpace(1);
-            pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + choices.get(i));
-        }
-    }
-
-
-    /**
      * Displays the given String on screen
      *
      * @param text The String to display
@@ -583,7 +627,7 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Dispays the screen that appears when the Match stops
+     * Displays the screen that appears when the Match stops
      *
      * @param leaderboard It contains the Players nicknames and the points they achieved during the Match
      */
@@ -631,42 +675,6 @@ public class CLI implements ViewInterface {
         cliUtils.vSpace(5);
 
         displayNext();
-    }
-
-
-    /**
-     * Used to continue between screens and to get the next Message from MessageSynchronizedFIFO
-     */
-    private void displayNext() {
-        Scanner in = new Scanner(System.in);
-        cliUtils.vSpace(1);
-        pw.print(cliUtils.hSpace(3) + "Press ENTER to confirm.");
-        pw.flush();
-        in.nextLine();
-        client.viewNext();
-    }
-
-
-    /**
-     * Starts a waiting screen
-     *
-     * @param message A String to display during the waiting screen
-     */
-    public void displayWaitingScreen(Message message) {
-        try {
-            WaitingScreenStarter.getInstance().startWaiting(message);
-        } catch (EmptyPayloadException ignored) {
-        }
-        client.viewNext();
-    }
-
-
-    /**
-     * Stops the waiting screen
-     */
-    public void stopDisplayingWaitingScreen() {
-        WaitingScreenStarter.getInstance().stopWaiting();
-        client.viewNext();
     }
 
 }

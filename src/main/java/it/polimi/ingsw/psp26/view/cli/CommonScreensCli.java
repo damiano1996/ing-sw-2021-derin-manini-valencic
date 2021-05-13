@@ -17,9 +17,9 @@ public class CommonScreensCli {
     }
 
 
-    //---------------------//
-    //   END GAME SCREEN   //
-    //---------------------//    
+    //-----------------------------------//
+    //          END GAME SCREEN          //
+    //-----------------------------------//    
 
     /**
      * Displays the end game screen

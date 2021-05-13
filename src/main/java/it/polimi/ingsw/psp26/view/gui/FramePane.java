@@ -14,14 +14,14 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 
 public class FramePane {
 
-    public static StackPane drawThumbNail(Pane content, Pane contentEnhanced, int contentMaxWidth, int contentEnhancedMaxWidth, float ratio) {
+    public static StackPane drawThumbNail(Stage primaryStage, Pane content, Pane contentEnhanced, int contentMaxWidth, int contentEnhancedMaxWidth, float ratio) {
         float marginFactor = 1.2f;
 
         @SuppressWarnings("SuspiciousNameCombination")
         StackPane thumbNailStackPane = addCoolFrame(content, contentMaxWidth, contentMaxWidth, marginFactor, false, 0, ratio);
 
         @SuppressWarnings("SuspiciousNameCombination")
-        Stage dialog = getDialog(contentEnhanced, contentEnhancedMaxWidth, contentEnhancedMaxWidth, marginFactor, ratio);
+        Stage dialog = getDialog(primaryStage, contentEnhanced, contentEnhancedMaxWidth, contentEnhancedMaxWidth, ratio);
 
         thumbNailStackPane.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
             dialog.setX(mouseEvent.getScreenX() - 300 * ratio);
@@ -53,12 +53,12 @@ public class FramePane {
     private static StackPane addBackground(Pane content, int contentMaxWidth, int contentMaxHeight, String backgroundFileName, float marginFactor, boolean roundedCorners, int arcSize, float ratio) {
         StackPane stackPane = new StackPane();
 
-        stackPane.setPrefSize(marginFactor * contentMaxWidth, marginFactor * contentMaxHeight);
+        stackPane.setPrefSize(marginFactor * ratio * contentMaxWidth, marginFactor * ratio * contentMaxHeight);
 
         Image backgroundImage = new Image(
                 getCompletePath(backgroundFileName),
-                marginFactor * contentMaxWidth,
-                marginFactor * contentMaxHeight,
+                marginFactor * ratio * contentMaxWidth,
+                marginFactor * ratio * contentMaxHeight,
                 false, true
         );
         if (roundedCorners) backgroundImage = setRoundedCorners(backgroundImage, ratio, arcSize);

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      id="VBox"
+      alignment="CENTER">
+
+    <Text text="Masters of Renaissance" textAlignment="CENTER" id="title"/>
+
+    <Label text="Nickname" id="label"/>
+    <TextField fx:id="nicknameTextField" id="text-field"/>
+
+    <Label text="ServerIP" id="label"/>
+    <TextField fx:id="serverIPTextField" id="text-field"/>
+
+    <Text text="The server is not reachable!" visible="false" fx:id="errorConnection" id="error"/>
+
+    <Button text="Connect" fx:id="connectionButton"/>
+
+</VBox>

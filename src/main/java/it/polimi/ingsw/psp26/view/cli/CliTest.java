@@ -21,7 +21,6 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
@@ -515,7 +514,7 @@ public class CliTest {
         }
         pw.print(Color.RESET.setColor());
         pw.flush();
-        
+
         cliUtils.pPCS("Press Enter to go back to the main screen", Color.WHITE, 50, 4);
 
         in.nextLine();

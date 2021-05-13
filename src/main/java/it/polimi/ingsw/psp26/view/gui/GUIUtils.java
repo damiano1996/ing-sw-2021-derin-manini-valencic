@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH;
+import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WIDTH_RATIO;
 
 public class GUIUtils {
@@ -40,6 +41,10 @@ public class GUIUtils {
 
     public static int getWindowHeight() {
         return (int) (WIDTH_RATIO * getScreenHeight());
+    }
+
+    public static float getGeneralRatio() {
+        return getWindowWidth() / REFERENCE_WIDTH;
     }
 
     public static String getCompletePath(String fileName) {
@@ -80,7 +85,7 @@ public class GUIUtils {
         return imageView;
     }
 
-    public static Scene setTransparentBackground(Pane pane) {
+    public static Scene setTransparentBackground(Pane pane, int sceneWidth, int sceneHeight) {
         pane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         Scene scene = new Scene(pane);
         scene.setFill(Color.TRANSPARENT);

@@ -13,10 +13,15 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.setTransparentBackground;
 
 public class DialogStage {
 
-    public static Stage getDialog(Pane content, int maxContentWidth, int maxContentHeight, float marginFactor, boolean roundedCorners, int arcSize, float ratio) {
+    public static Stage getDialog(Stage primaryStage, Pane content, int maxContentWidth, int maxContentHeight, float ratio) {
+        return getDialog(primaryStage, content, maxContentWidth, maxContentHeight, 1.2f, true, 350, ratio);
+    }
+
+    private static Stage getDialog(Stage primaryStage, Pane content, int maxContentWidth, int maxContentHeight, float marginFactor, boolean roundedCorners, int arcSize, float ratio) {
 
         Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(primaryStage);
         dialog.initStyle(StageStyle.UNDECORATED);
         dialog.initStyle(StageStyle.TRANSPARENT);
         dialog.setAlwaysOnTop(true);
@@ -24,14 +29,10 @@ public class DialogStage {
 
         StackPane stackPane = addCoolFrame(content, maxContentWidth, maxContentHeight, marginFactor, roundedCorners, arcSize, ratio);
 
-        Scene scene = setTransparentBackground(stackPane);
+        Scene scene = setTransparentBackground(stackPane, maxContentWidth, maxContentHeight);
         addStylesheet(scene);
         dialog.setScene(scene);
 
         return dialog;
-    }
-
-    public static Stage getDialog(Pane content, int maxContentWidth, int maxContentHeight, float marginFactor, float ratio) {
-        return getDialog(content, maxContentWidth, maxContentHeight, marginFactor, true, 350, ratio);
     }
 }

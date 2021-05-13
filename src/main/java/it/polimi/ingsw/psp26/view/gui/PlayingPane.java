@@ -9,19 +9,20 @@ import it.polimi.ingsw.psp26.view.gui.asynchronousupdates.AsynchronousUpdateDraw
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getWindowWidth;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPlayer;
 
 public class PlayingPane {
 
-    private static HBox addTopBar(int windowWidth, Client client) { // TODO: temporary implementation, just to test asynchronous updates
+    private static HBox addTopBar(Stage primaryStage, int windowWidth, Client client) {
 
-        int boxSize = windowWidth / (2 + 4); // 2 are for market tray and development grid, 4 are for the players
+        int boxSize = windowWidth / (2 + 3); // 2 are for market tray and development grid, 3 are for the opponent players
         int zoomFactor = 3;
-        float ratio = windowWidth / REFERENCE_WIDTH;
+        float ratio = windowWidth / getWindowWidth();
 
         HBox hBox = new HBox(10 * ratio);
 
@@ -35,6 +36,7 @@ public class PlayingPane {
                     hBox.getChildren().set(
                             0,
                             drawThumbNail(
+                                    primaryStage,
                                     new MarketTrayDrawer(marketTray, boxSize).draw(),
                                     new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
                                     boxSize, zoomFactor * boxSize, ratio)
@@ -52,6 +54,7 @@ public class PlayingPane {
                     hBox.getChildren().set(
                             1,
                             drawThumbNail(
+                                    primaryStage,
                                     new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
                                     new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
                                     boxSize, zoomFactor * boxSize, ratio)
@@ -72,6 +75,7 @@ public class PlayingPane {
                         hBox.getChildren().set(
                                 2 + finalI,
                                 drawThumbNail(
+                                        primaryStage,
                                         drawPlayer(player, boxSize, ratio),
                                         drawPlayer(player, zoomFactor * boxSize, ratio),
                                         boxSize, zoomFactor * boxSize, ratio)
@@ -107,13 +111,13 @@ public class PlayingPane {
         return root;
     }
 
-    public static BorderPane getPlayingPane(Client client) {
+    public static BorderPane getPlayingPane(Stage primaryStage, Client client) {
 
         BorderPane border = new BorderPane();
-        border.setTop(addTopBar(getWindowWidth(), client));
+        border.setTop(addTopBar(primaryStage, getWindowWidth(), client));
 
         HBox hBox = new HBox();
-        hBox.getChildren().add(addMainBox(client, getWindowWidth(), getWindowWidth() / REFERENCE_WIDTH));
+        hBox.getChildren().add(addMainBox(client, (int) (getWindowWidth() * 0.7), getGeneralRatio()));
         hBox.getChildren().add(addRightBar());
 
         border.setLeft(hBox);

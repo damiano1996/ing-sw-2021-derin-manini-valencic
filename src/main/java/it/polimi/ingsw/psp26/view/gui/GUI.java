@@ -21,10 +21,10 @@ import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.LeaderCardChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -32,26 +32,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_NAME;
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.PlayingPane.getPlayingPane;
 
 public class GUI extends Application implements ViewInterface {
 
     private Client client;
-    private Stage stage;
+    private Stage primaryStage;
     private Pane root;
-
-    private float ratio;
 
     public GUI() {
     }
@@ -64,6 +61,7 @@ public class GUI extends Application implements ViewInterface {
         stage.setMaximized(true);
         stage.setResizable(false);
         stage.setFullScreen(true);
+        stage.setAlwaysOnTop(true);
         stage.sizeToScene();
     }
 
@@ -72,17 +70,15 @@ public class GUI extends Application implements ViewInterface {
 
         client = new Client(this);
 
-        ratio = getWindowWidth() / REFERENCE_WIDTH;
-
-        root = addBackground(new Pane(), getScreenWidth(), getScreenHeight(), 1.0f, 1.0f);
+        root = addBackground(new Pane(), getScreenWidth(), getScreenHeight(), 1, 1);
 
         Scene scene = new Scene(root);
         addStylesheet(scene);
 
-        this.stage = primaryStage;
-        this.stage.setScene(scene);
-        setStageWindowProperties(this.stage);
-        this.stage.show();
+        this.primaryStage = primaryStage;
+        this.primaryStage.setScene(scene);
+        setStageWindowProperties(this.primaryStage);
+        this.primaryStage.show();
 
         displayLogIn();
     }
@@ -94,65 +90,48 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayLogIn() {
-        VBox loginBox = new VBox(20 * ratio);
 
-        Stage dialog = getDialog(loginBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, true, (int) (350 * ratio), ratio);
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/gui/fxml/login.fxml"));
+            VBox loginPane = fxmlLoader.load();
 
-        Text title = new Text(GAME_NAME);
-        title.setId("title");
-        loginBox.getChildren().add(title);
+            Stage dialog = getDialog(primaryStage, loginPane, 1000, 1000, getGeneralRatio());
 
-        Label nicknameLabel = new Label("Nickname:");
-        nicknameLabel.setId("label");
-        loginBox.getChildren().add(nicknameLabel);
-        TextField nicknameTextField = new TextField();
-        nicknameTextField.setId("text-field");
-        loginBox.getChildren().add(nicknameTextField);
+            Button connectionButton = (Button) fxmlLoader.getNamespace().get("connectionButton");
+            connectionButton.setOnAction(event -> {
 
-        Label serverIPLabel = new Label("Server IP:");
-        serverIPLabel.setId("label");
-        loginBox.getChildren().add(serverIPLabel);
-        TextField serverIPTextField = new TextField();
-        serverIPTextField.setId("text-field");
-        loginBox.getChildren().add(serverIPTextField);
+                connectionButton.setDisable(true);
 
-        Text errorMessage = new Text("Server is not reachable!");
-        errorMessage.setId("error");
-        errorMessage.setVisible(false);
-        loginBox.getChildren().add(errorMessage);
+                String nickname = ((TextField) fxmlLoader.getNamespace().get("nicknameTextField")).getText();
+                String serverIP = ((TextField) fxmlLoader.getNamespace().get("serverIPTextField")).getText();
 
-        Button connectButton = new Button("Connect");
-        connectButton.setId("confirm-button");
+                client.setNickname(nickname);
+                try {
+                    client.initializeNetworkHandler(serverIP);
 
-        connectButton.setOnAction(event -> {
+                    displayChoices(
+                            MULTI_OR_SINGLE_PLAYER_MODE,
+                            "Choose the playing mode:",
+                            Arrays.asList(new MessageType[]{SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE}),
+                            1, 1,
+                            false
+                    );
 
-            connectButton.setDisable(true);
+                    dialog.close();
 
-            String nickname = nicknameTextField.getText();
-            String serverIP = serverIPTextField.getText();
+                } catch (ServerIsNotReachableException serverIsNotReachableException) {
+                    ((Text) fxmlLoader.getNamespace().get("errorConnection")).setVisible(true);
+                    connectionButton.setDisable(false);
+                }
 
-            client.setNickname(nickname);
-            try {
-                client.initializeNetworkHandler(serverIP);
+            });
 
-                displayChoices(
-                        MULTI_OR_SINGLE_PLAYER_MODE,
-                        "Choose the playing mode:",
-                        Arrays.asList(new MessageType[]{SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE}),
-                        1, 1,
-                        false
-                );
-                dialog.close();
-            } catch (ServerIsNotReachableException serverIsNotReachableException) {
-                errorMessage.setVisible(true);
-                connectButton.setDisable(false);
-            }
+            dialog.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        });
-
-        loginBox.getChildren().add(connectButton);
-
-        dialog.show();
     }
 
     @Override
@@ -222,8 +201,8 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
-        VBox choicesBox = new VBox(20 * ratio);
-        Stage dialog = getDialog(choicesBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, true, (int) (350 * ratio), ratio);
+        VBox choicesBox = new VBox(10 * getGeneralRatio());
+        Stage dialog = getDialog(primaryStage, choicesBox, 1000, 1000, getGeneralRatio());
 
         Text title = new Text(question);
         title.setId("title");
@@ -237,12 +216,12 @@ public class GUI extends Application implements ViewInterface {
             case MULTI_OR_SINGLE_PLAYER_MODE:
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
-                contentBox = new VBox(20 * ratio);
+                contentBox = new VBox(20 * getGeneralRatio());
                 choicesDrawer = new MessageTypeChoicesDrawer();
                 break;
 
             case CHOICE_LEADERS:
-                contentBox = new HBox(5 * ratio);
+                contentBox = new HBox(5 * getGeneralRatio());
                 choicesDrawer = new LeaderCardChoicesDrawer();
                 break;
 
@@ -362,7 +341,7 @@ public class GUI extends Application implements ViewInterface {
         confirmationButton.setId("confirm-button");
         vBox.getChildren().add(confirmationButton);
 
-        Stage dialog = getDialog(vBox, (int) (1000 * ratio), (int) (1000 * ratio), 1.2f, ratio);
+        Stage dialog = getDialog(primaryStage, vBox, 1000, 1000, getGeneralRatio());
         confirmationButton.setOnAction(actionEvent -> {
             client.viewNext();
             dialog.close();
@@ -389,12 +368,8 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void stopDisplayingWaitingScreen() {
 
-        Pane pane = addBackground(getPlayingPane(client), getScreenWidth(), getScreenHeight(), 1.2f, getWindowWidth());
-        stage.getScene().setRoot(pane);
-
-//        Scene scene = setTransparentBackground(pane);
-//        this.stage.setScene(scene);
-//        this.stage.centerOnScreen();
+        Pane pane = addBackground(getPlayingPane(primaryStage, client), getScreenWidth(), getScreenHeight(), 1.2f, 1);
+        primaryStage.getScene().setRoot(pane);
 
         client.viewNext();
     }

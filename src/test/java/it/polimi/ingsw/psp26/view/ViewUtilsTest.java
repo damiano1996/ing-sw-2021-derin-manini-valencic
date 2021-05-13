@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static it.polimi.ingsw.psp26.view.ViewUtils.beautifyMessageType;
 import static it.polimi.ingsw.psp26.view.ViewUtils.toTitleStyle;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ViewUtilsTest {
 

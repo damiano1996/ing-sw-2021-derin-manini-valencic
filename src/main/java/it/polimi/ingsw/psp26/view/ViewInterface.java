@@ -14,8 +14,8 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface ViewInterface {
 
@@ -70,7 +70,7 @@ public interface ViewInterface {
     void displayText(String text);
 
 
-    void displayEndGame(HashMap<String, Integer> playersVictoryPoints);
+    void displayEndGame(Map<String, Integer> leaderboard);
 
 
     void displayError(String error);

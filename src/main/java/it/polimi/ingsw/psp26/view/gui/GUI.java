@@ -33,10 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_NAME;
@@ -376,7 +373,7 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void displayEndGame(HashMap<String, Integer> playersVictoryPoints) {
+    public void displayEndGame(Map<String, Integer> leaderboard) {
 
     }
 

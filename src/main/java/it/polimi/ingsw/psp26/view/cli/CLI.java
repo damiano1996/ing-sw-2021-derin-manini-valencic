@@ -38,6 +38,7 @@ public class CLI implements ViewInterface {
     private final PersonalBoardCli personalBoardCli;
     private final DisplayWarehousePlacer displayWarehousePlacer;
     private final NotificationStackPrinter notificationStackPrinter;
+    private final CommonScreensCli commonScreensCli;
     private Client client;
     private boolean isPersonalBoardPrintable;
 
@@ -53,6 +54,7 @@ public class CLI implements ViewInterface {
         this.personalBoardCli = new PersonalBoardCli(pw);
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
         this.notificationStackPrinter = new NotificationStackPrinter(pw);
+        this.commonScreensCli = new CommonScreensCli(pw);
     }
 
     /**
@@ -433,7 +435,7 @@ public class CLI implements ViewInterface {
 
     /**
      * Executes the corresponding switch case in displayChoices()
-     * 
+     *
      * @param choices The choices to display
      */
     private void choicePositionExecute(List<Object> choices) {
@@ -580,9 +582,30 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Dispays the screen that appears when the Match stops
+     *
+     * @param leaderboard It contains the Players nicknames and the points they achieved during the Match
+     */
     @Override
-    public void displayEndGame(HashMap<String, Integer> playersVictoryPoints) {
-        //To be implemented
+    public void displayEndGame(Map<String, Integer> leaderboard) {
+        String myName = commonScreensCli.displayFinalScreen(leaderboard);
+
+        if (client.getNickname().equals(myName)) {
+            pw.print(Color.GREEN.setColor());
+            pw.flush();
+            cliUtils.printFigure("/titles/YouWonTitle", 37, 89);
+        } else {
+            pw.print(Color.RED.setColor());
+            pw.flush();
+            cliUtils.printFigure("/titles/YouLostTitle", 37, 85);
+        }
+        pw.print(Color.RESET.setColor());
+        pw.flush();
+
+        cliUtils.pPCS("Press Enter to go back to the main screen", Color.WHITE, 50, 4);
+
+        displayNext();
     }
 
 

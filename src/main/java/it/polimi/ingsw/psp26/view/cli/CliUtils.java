@@ -204,6 +204,18 @@ public class CliUtils {
 
 
     /**
+     * Centers a String in the given space
+     *
+     * @param rowSize The size of the row where the String will be printed
+     * @param string  The String to print
+     */
+    public String centerString(int rowSize, String string) {
+        if (rowSize >= string.length()) return hSpace((rowSize - string.length()) / 2) + string;
+        return "";
+    }
+
+
+    /**
      * Hides the cursor from screen
      */
     public void hideCursor() {

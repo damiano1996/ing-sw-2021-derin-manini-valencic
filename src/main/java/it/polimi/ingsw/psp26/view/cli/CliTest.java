@@ -20,9 +20,8 @@ import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
@@ -36,6 +35,7 @@ public class CliTest {
     private final LeaderCardsCli leaderCardsCli;
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
+    private final CommonScreensCli commonScreensCli;
 
     private final VirtualView virtualView;
     private final Player player;
@@ -59,6 +59,7 @@ public class CliTest {
         this.marketCli = new MarketCli(pw);
         this.personalBoardCli = new PersonalBoardCli(pw);
         this.cli = new CLI();
+        this.commonScreensCli = new CommonScreensCli(pw);
 
         virtualView = new VirtualView();
         player = new Player(virtualView, "Player", "000000");
@@ -86,6 +87,9 @@ public class CliTest {
     public void testMethod() throws NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException, CanNotAddResourceToDepotException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, NegativeNumberOfElementsToGrabException, EmptyPayloadException, CanNotAddResourceToWarehouse, InvalidPayloadException, UndoOptionSelectedException {
 
         //Insert here the name of the methods you want to test
+
+        testFinalScreen();
+
         testPersonalBoard();
 
         testPrintPlayerResources();
@@ -249,7 +253,12 @@ public class CliTest {
 
         //--RESOURCE-SUPPLY-TEST---// Press enter 1 time
 
-        cli.displayResourceSupply(resourceSupply, new ArrayList<>());
+        List<Resource> resources = new ArrayList<>();
+        resources.add(Resource.COIN);
+        resources.add(Resource.STONE);
+        resources.add(Resource.SERVANT);
+
+        cli.displayResourceSupply(resourceSupply, resources);
         in.nextLine();
     }
 
@@ -480,6 +489,36 @@ public class CliTest {
         waitingScreenStarter.startWaiting(message);
         tast.nextLine();
         waitingScreenStarter.stopWaiting();
+    }
+
+
+    private void testFinalScreen() {
+        PrintWriter pw = new PrintWriter(System.out);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Damiano", 10);
+        map.put("Jas", 30);
+        map.put("Player", 0);
+        map.put("Andrea", 20);
+
+        String myName = "Jas";
+
+        String name = commonScreensCli.displayFinalScreen(map);
+
+        if (name.equals(myName)) {
+            pw.print(Color.GREEN.setColor());
+            pw.flush();
+            cliUtils.printFigure("/titles/YouWonTitle", 37, 89);
+        } else {
+            pw.print(Color.RED.setColor());
+            pw.flush();
+            cliUtils.printFigure("/titles/YouLostTitle", 37, 85);
+        }
+        pw.print(Color.RESET.setColor());
+        pw.flush();
+        
+        cliUtils.pPCS("Press Enter to go back to the main screen", Color.WHITE, 50, 4);
+
+        in.nextLine();
     }
 
 

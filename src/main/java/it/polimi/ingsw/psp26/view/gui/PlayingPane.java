@@ -35,8 +35,8 @@ public class PlayingPane {
                             0,
                             drawThumbNail(
                                     primaryStage,
-                                    new MarketTrayDrawer(marketTray, (int) (boxSize * 0.8f)).draw(),
-                                    new MarketTrayDrawer(marketTray, zoomFactor * (int) (boxSize * 0.8f)).draw(),
+                                    new MarketTrayDrawer(marketTray, (int) (boxSize * 0.7f)).draw(),
+                                    new MarketTrayDrawer(marketTray, zoomFactor * (int) (boxSize * 0.7f)).draw(),
                                     boxSize, zoomFactor * boxSize, getGeneralRatio())
                     );
                 }
@@ -52,8 +52,8 @@ public class PlayingPane {
                             1,
                             drawThumbNail(
                                     primaryStage,
-                                    new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
-                                    new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
+                                    new DevelopmentCardGridDrawer(developmentGrid, (int) (boxSize * 0.7f)).draw(),
+                                    new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * (int) (boxSize * 0.7f)).draw(),
                                     boxSize, zoomFactor * boxSize, getGeneralRatio())
                     );
                 }

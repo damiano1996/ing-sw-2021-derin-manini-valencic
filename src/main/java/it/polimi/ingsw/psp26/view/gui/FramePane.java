@@ -19,7 +19,7 @@ public class FramePane {
         @SuppressWarnings("SuspiciousNameCombination")
         StackPane thumbNailStackPane = addCoolFrame(content, contentMaxWidth, contentMaxWidth, marginFactor, false, 0, ratio);
 
-        Stage dialog = getDialog(primaryStage, contentEnhanced, (int) (contentEnhancedMaxWidth * marginFactor), (int) (contentEnhancedMaxWidth * marginFactor), ratio);
+        Stage dialog = getDialog(primaryStage, contentEnhanced);
 
         thumbNailStackPane.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
             dialog.show();

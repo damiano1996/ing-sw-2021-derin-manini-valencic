@@ -7,8 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getWindowWidth;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addSelectionShadow;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getCard;
 

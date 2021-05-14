@@ -15,17 +15,13 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 public class FramePane {
 
     public static StackPane drawThumbNail(Stage primaryStage, Pane content, Pane contentEnhanced, int contentMaxWidth, int contentEnhancedMaxWidth, float ratio) {
-        float marginFactor = 1.2f;
-
+        float marginFactor = 1.5f;
         @SuppressWarnings("SuspiciousNameCombination")
         StackPane thumbNailStackPane = addCoolFrame(content, contentMaxWidth, contentMaxWidth, marginFactor, false, 0, ratio);
 
-        @SuppressWarnings("SuspiciousNameCombination")
-        Stage dialog = getDialog(primaryStage, contentEnhanced, contentEnhancedMaxWidth, contentEnhancedMaxWidth, ratio);
+        Stage dialog = getDialog(primaryStage, contentEnhanced, (int) (contentEnhancedMaxWidth * marginFactor), (int) (contentEnhancedMaxWidth * marginFactor), ratio);
 
         thumbNailStackPane.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
-            dialog.setX(mouseEvent.getScreenX() - 300 * ratio);
-            dialog.setY(mouseEvent.getScreenY() - 300 * ratio);
             dialog.show();
         });
 
@@ -53,7 +49,7 @@ public class FramePane {
     private static StackPane addBackground(Pane content, int contentMaxWidth, int contentMaxHeight, String backgroundFileName, float marginFactor, boolean roundedCorners, int arcSize, float ratio) {
         StackPane stackPane = new StackPane();
 
-        stackPane.setPrefSize(marginFactor * ratio * contentMaxWidth, marginFactor * ratio * contentMaxHeight);
+//        stackPane.setPrefSize(marginFactor * ratio * contentMaxWidth, marginFactor * ratio * contentMaxHeight);
 
         Image backgroundImage = new Image(
                 getCompletePath(backgroundFileName),

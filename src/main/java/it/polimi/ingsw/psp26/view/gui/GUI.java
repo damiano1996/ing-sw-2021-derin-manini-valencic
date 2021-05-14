@@ -25,6 +25,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -61,7 +62,7 @@ public class GUI extends Application implements ViewInterface {
         stage.setMaximized(true);
         stage.setResizable(false);
         stage.setFullScreen(true);
-        stage.setAlwaysOnTop(true);
+        // stage.setAlwaysOnTop(true);
         stage.sizeToScene();
     }
 
@@ -204,9 +205,10 @@ public class GUI extends Application implements ViewInterface {
         VBox choicesBox = new VBox(10 * getGeneralRatio());
         Stage dialog = getDialog(primaryStage, choicesBox, 1000, 1000, getGeneralRatio());
 
-        Text title = new Text(question);
-        title.setId("title");
-        choicesBox.getChildren().add(title);
+        Label label = new Label(question);
+        label.setId("label");
+        label.setWrapText(true);
+        choicesBox.getChildren().add(label);
 
         Pane contentBox;
         ChoicesDrawer choicesDrawer;
@@ -331,11 +333,12 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayText(String text) {
-        VBox vBox = new VBox();
+        VBox vBox = new VBox(20 * getGeneralRatio());
 
-        Text text1 = new Text(text);
-        text1.setId("title");
-        vBox.getChildren().add(text1);
+        Label label = new Label(text);
+        label.setId("label");
+        label.setWrapText(true);
+        vBox.getChildren().add(label);
 
         Button confirmationButton = new Button("OK");
         confirmationButton.setId("confirm-button");
@@ -346,6 +349,7 @@ public class GUI extends Application implements ViewInterface {
             client.viewNext();
             dialog.close();
         });
+
 
         dialog.show();
     }
@@ -368,7 +372,7 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void stopDisplayingWaitingScreen() {
 
-        Pane pane = addBackground(getPlayingPane(primaryStage, client), getScreenWidth(), getScreenHeight(), 1.2f, 1);
+        Pane pane = addBackground(getPlayingPane(primaryStage, client), getScreenWidth(), getScreenHeight(), 1, 1);
         primaryStage.getScene().setRoot(pane);
 
         client.viewNext();

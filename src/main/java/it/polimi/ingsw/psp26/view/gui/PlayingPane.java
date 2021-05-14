@@ -21,14 +21,12 @@ public class PlayingPane {
     private static HBox addTopBar(Stage primaryStage, int windowWidth, Client client) {
 
         int boxSize = windowWidth / (2 + 3); // 2 are for market tray and development grid, 3 are for the opponent players
-        int zoomFactor = 3;
-        float ratio = windowWidth / getWindowWidth();
+        int zoomFactor = 2;
 
-        HBox hBox = new HBox(10 * ratio);
+        HBox hBox = new HBox();
 
         // adding market tray
         hBox.getChildren().add(new Pane());
-
         new AsynchronousUpdateDrawer(
                 () -> client.getCachedModel().getMarketTrayCached().getUpdatedObject(),
                 () -> {
@@ -37,16 +35,15 @@ public class PlayingPane {
                             0,
                             drawThumbNail(
                                     primaryStage,
-                                    new MarketTrayDrawer(marketTray, boxSize).draw(),
-                                    new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
-                                    boxSize, zoomFactor * boxSize, ratio)
+                                    new MarketTrayDrawer(marketTray, (int) (boxSize * 0.8f)).draw(),
+                                    new MarketTrayDrawer(marketTray, zoomFactor * (int) (boxSize * 0.8f)).draw(),
+                                    boxSize, zoomFactor * boxSize, getGeneralRatio())
                     );
                 }
         ).start();
 
         // adding development card grid
         hBox.getChildren().add(new Pane());
-
         new AsynchronousUpdateDrawer(
                 () -> client.getCachedModel().getDevelopmentGridCached().getUpdatedObject(),
                 () -> {
@@ -57,7 +54,7 @@ public class PlayingPane {
                                     primaryStage,
                                     new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
                                     new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
-                                    boxSize, zoomFactor * boxSize, ratio)
+                                    boxSize, zoomFactor * boxSize, getGeneralRatio())
                     );
                 }
         ).start();
@@ -65,9 +62,7 @@ public class PlayingPane {
         // adding opponents
         for (int i = 0; i < 3; i++) {
             int finalI = i;
-
             hBox.getChildren().add(new Pane());
-
             new AsynchronousUpdateDrawer(
                     () -> client.getCachedModel().getOpponentCached(finalI).getUpdatedObject(),
                     () -> {
@@ -76,9 +71,9 @@ public class PlayingPane {
                                 2 + finalI,
                                 drawThumbNail(
                                         primaryStage,
-                                        drawPlayer(player, boxSize, ratio),
-                                        drawPlayer(player, zoomFactor * boxSize, ratio),
-                                        boxSize, zoomFactor * boxSize, ratio)
+                                        drawPlayer(player, boxSize, getGeneralRatio()),
+                                        drawPlayer(player, zoomFactor * boxSize, getGeneralRatio()),
+                                        boxSize, zoomFactor * boxSize, getGeneralRatio())
                         );
                     }
             ).start();
@@ -93,18 +88,18 @@ public class PlayingPane {
         return vBox;
     }
 
-    private static Pane addMainBox(Client client, int width, float ratio) {
+    private static Pane addMainBox(Client client, int width) {
 
         StackPane root = new StackPane();
 
-        Pane content = drawPlayer(new Player(new VirtualView(), client.getNickname(), ""), width, ratio);
+        Pane content = drawPlayer(new Player(new VirtualView(), client.getNickname(), ""), width, getGeneralRatio());
         root.getChildren().add(content);
 
         new AsynchronousUpdateDrawer(
                 () -> client.getCachedModel().getMyPlayerCached().getUpdatedObject(),
                 () -> {
                     Player player = client.getCachedModel().getMyPlayerCached().getObsoleteObject();
-                    root.getChildren().set(0, drawPlayer(player, width, ratio));
+                    root.getChildren().set(0, drawPlayer(player, width, getGeneralRatio()));
                 }
         ).start();
 
@@ -117,7 +112,7 @@ public class PlayingPane {
         border.setTop(addTopBar(primaryStage, getWindowWidth(), client));
 
         HBox hBox = new HBox();
-        hBox.getChildren().add(addMainBox(client, (int) (getWindowWidth() * 0.7), getGeneralRatio()));
+        hBox.getChildren().add(addMainBox(client, getWindowWidth()));
         hBox.getChildren().add(addRightBar());
 
         border.setLeft(hBox);

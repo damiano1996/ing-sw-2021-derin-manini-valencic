@@ -85,7 +85,7 @@ public class GUIUtils {
         return imageView;
     }
 
-    public static Scene setTransparentBackground(Pane pane, int sceneWidth, int sceneHeight) {
+    public static Scene setTransparentBackground(Pane pane) {
         pane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         Scene scene = new Scene(pane);
         scene.setFill(Color.TRANSPARENT);

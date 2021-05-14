@@ -59,5 +59,6 @@ public enum MessageType {
     // The Player select to undo from the current selection
     QUIT_OPTION_SELECTED,
 
+    OPPONENT_TURN,
     LORENZO_PLAY
 }

@@ -677,4 +677,120 @@ public class CLI implements ViewInterface {
         displayNext();
     }
 
+
+    /**
+     * Method used to do some actions while opponents are playing
+     */
+    @Override
+    public void waitForYourTurn() {
+        Scanner in = new Scanner(System.in);
+
+        while (true) {
+
+            // At each iteration the current Player Personal Board will be printed
+            try {
+                personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObsoleteObject(), !(client.getMatchModeType().equals(SINGLE_PLAYER_MODE)));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            printOpponentViewScreenInformation();
+            printOpponentsPersonalBoardList();
+
+            // If there are opponents to display, the Player can choose which one to see the Personal Board
+            if (client.getCachedModel().getNumberOfOpponents() > 0) {
+                try {
+                    displayOpponentPersonalBoard();
+                    in.nextLine();
+                } catch (FinishedViewingOpponentsException e) {
+                    break;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
+                }
+            } else {
+                cliUtils.vSpace(2);
+                pw.print("Press Enter to continue with your turn.");
+                pw.flush();
+                in.nextLine();
+                break;
+            }
+
+        }
+
+        displayNext();
+    }
+
+
+    /**
+     * Prints the instructions of the opponent viewing screen
+     */
+    private void printOpponentViewScreenInformation() {
+        cliUtils.pPCS("OPPONENTS TURN!", Color.WHITE, 48, 5);
+        cliUtils.pPCS("Select the number of the opponents Board you want to see.", Color.WHITE, 49, 5);
+        cliUtils.pPCS("Enter 'done' when you want to continue with your turn.", Color.WHITE, 50, 5);
+        cliUtils.pPCS("After entering 'done' if nothing happens don't worry: the opponents are still playing their turn!", Color.WHITE, 51, 5);
+    }
+
+
+    /**
+     * Displays the chosen opponent Personal Board
+     *
+     * @throws FinishedViewingOpponentsException The Player enters 'done' and continues with it's turn
+     * @throws InterruptedException              The thread is interrupted
+     */
+    private void displayOpponentPersonalBoard() throws FinishedViewingOpponentsException, InterruptedException {
+        cliUtils.vSpace(2);
+        pw.print(cliUtils.hSpace(4) + "Your choice: ");
+        pw.flush();
+        int opponentNumber = getCorrectOpponentNumber(client.getCachedModel().getNumberOfOpponents());
+        Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObsoleteObject();
+
+        personalBoardCli.displayPersonalBoard(opponent, !(client.getMatchModeType().equals(SINGLE_PLAYER_MODE)));
+        cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board", Color.WHITE, 50, 5);
+        cliUtils.pPCS("Press Enter to go back to your Personal Board view.", Color.WHITE, 52, 5);
+    }
+
+
+    /**
+     * Used to get the correct opponent number for displaying the opponent Personal Board
+     *
+     * @param numberOfOpponents The total amount of opponents from which choose the Personal Board
+     * @return The opponent number
+     * @throws FinishedViewingOpponentsException The Player enters 'done' and continues with it's turn
+     * @throws IndexOutOfBoundsException         The opponent's number chosen exceeds the admissible bounds
+     */
+    private int getCorrectOpponentNumber(int numberOfOpponents) throws FinishedViewingOpponentsException, IndexOutOfBoundsException {
+        Scanner in = new Scanner(System.in);
+        String input;
+
+        input = in.nextLine();
+        if (input.equalsIgnoreCase("done")) throw new FinishedViewingOpponentsException();
+
+        int opponentNumber = Integer.parseInt(input) - 1;
+        if (opponentNumber >= numberOfOpponents || opponentNumber < 0) throw new IndexOutOfBoundsException();
+
+        return opponentNumber;
+    }
+
+
+    /**
+     * Prints the List of the cached opponents nicknames
+     */
+    private void printOpponentsPersonalBoardList() {
+        if (client.getCachedModel().getNumberOfOpponents() == 0) {
+            cliUtils.pPCS("No opponent registered yet.", Color.WHITE, 54, 5);
+        } else {
+            cliUtils.vSpace(2);
+            for (int i = 0; i < client.getCachedModel().getNumberOfOpponents(); i++) {
+                try {
+                    pw.print(cliUtils.hSpace(4) + (i + 1) + " - " + client.getCachedModel().getOpponentCached(i).getObsoleteObject().getNickname());
+                    cliUtils.vSpace(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

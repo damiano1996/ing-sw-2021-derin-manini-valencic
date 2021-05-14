@@ -126,10 +126,14 @@ public class Client extends Observable<Message> {
                     viewInterface.displayActionTokens(actionTokens);
                     break;
 
-
+                    
                 // -------------------------------------
                 // --------- DISPLAY MESSAGES ----------
                 // -------------------------------------
+
+                case OPPONENT_TURN:
+                    viewInterface.waitForYourTurn();
+                    break;
 
                 case START_WAITING:
                     viewInterface.displayWaitingScreen(message);

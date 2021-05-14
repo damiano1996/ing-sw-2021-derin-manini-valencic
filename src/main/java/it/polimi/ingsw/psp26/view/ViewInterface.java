@@ -80,4 +80,8 @@ public interface ViewInterface {
 
 
     void stopDisplayingWaitingScreen();
+    
+    
+    void waitForYourTurn();
+            
 }

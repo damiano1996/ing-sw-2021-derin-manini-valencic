@@ -200,6 +200,11 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
+    public void waitForYourTurn() {
+        
+    }
+
+    @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
         VBox choicesBox = new VBox(10 * getGeneralRatio());

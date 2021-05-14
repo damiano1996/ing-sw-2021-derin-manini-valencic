@@ -119,4 +119,11 @@ public class CachedModel {
     public synchronized CachedObject<DevelopmentGrid> getDevelopmentGridCached() {
         return developmentGridCached;
     }
+
+    /**
+     * @return The number of cached opponents
+     */
+    public synchronized int getNumberOfOpponents() {
+        return opponentsCached.keySet().size();
+    }
 }

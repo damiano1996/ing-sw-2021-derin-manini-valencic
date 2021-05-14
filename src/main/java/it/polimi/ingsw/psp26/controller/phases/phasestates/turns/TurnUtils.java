@@ -36,6 +36,8 @@ public class TurnUtils {
 
             case LEADER_ACTION_TO_END:
                 if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
+                    // Notifying the current Player that it's turn is over
+                    sendMessageToTurnPlayer(turn, OPPONENT_TURN, "Opponent turn");
                     // After the second leader action, go to next player turn
                     turn.getPlayingPhaseState().updateCurrentTurn();
                 } else {

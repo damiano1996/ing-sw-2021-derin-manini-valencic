@@ -126,6 +126,13 @@ public class Client extends Observable<Message> {
                     viewInterface.displayActionTokens(actionTokens);
                     break;
 
+                case ENDGAME_RESULT:
+                    //message contains the nickname of the player that won
+                    String winner = (String) message.getPayload();
+                    //viewInterface.displayEndGame(winner);
+
+                    break;
+
                     
                 // -------------------------------------
                 // --------- DISPLAY MESSAGES ----------

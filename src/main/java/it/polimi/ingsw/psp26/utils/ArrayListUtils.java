@@ -17,7 +17,9 @@ public class ArrayListUtils {
      */
     public static <T> List<T> grabElements(List<T> list, int numberOfElements) throws IndexOutOfBoundsException {
         List<T> drawnElements = new ArrayList<>(list.subList(0, numberOfElements));
-        list.removeAll(drawnElements);
+        for(T elem : drawnElements) {
+            list.remove(elem);
+        }
         return drawnElements;
     }
 

@@ -52,8 +52,8 @@ public class DepotTest {
     public void testRemoveVariableNumberOfResource() throws CanNotAddResourceToDepotException, NegativeNumberOfElementsToGrabException {
         depot.addResource(Resource.STONE);
         depot.addResource(Resource.STONE);
-       // depot.addResource(Resource.STONE);
-       // resourceList.add(Resource.STONE);
+        depot.addResource(Resource.STONE);
+        resourceList.add(Resource.STONE);
         depot.grabResources(2);
 
         assertEquals(resourceList, depot.getResources());

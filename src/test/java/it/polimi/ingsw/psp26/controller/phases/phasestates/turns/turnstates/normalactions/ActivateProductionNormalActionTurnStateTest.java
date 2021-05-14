@@ -107,7 +107,7 @@ public class ActivateProductionNormalActionTurnStateTest {
         assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
         assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(1).getMessageType());
         assertEquals(resourcesProduced, turn.getTurnPlayer().getPersonalBoard().getStrongbox());
-//        assertEquals(warehouseExtraResources, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources());
+        assertEquals(warehouseExtraResources, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources());
 
     }
 

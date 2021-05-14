@@ -125,7 +125,9 @@ public class WarehouseTest {
         warehouse.addResourceToDepot(0, Resource.SHIELD);
         warehouse.addResourceToDepot(2, COIN);
         warehouse.addResourceToDepot(2, COIN);
+        warehouse.addResourceToDepot(2, COIN);
         assertEquals(2, warehouse.grabResources(COIN, 2).size());
+//        assertEquals(1, warehouse.getBaseDepots().get(2).getResources().size());
     }
 
     @Test

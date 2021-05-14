@@ -18,7 +18,7 @@ public class VaticanReportSection extends Observable<SessionMessage> {
     private final int endSection;
     private final String sessionToken;
     private boolean popesFavorTileStatus;
-
+    private boolean popesFavorTileDiscarded;
     /**
      * Constructor of the class.
      *
@@ -31,6 +31,7 @@ public class VaticanReportSection extends Observable<SessionMessage> {
         addObserver(virtualView);
 
         this.popesFavorTileStatus = false;
+        this.popesFavorTileDiscarded = false;
         this.startSection = startSection;
         this.endSection = endSection;
         this.value = value;
@@ -47,10 +48,28 @@ public class VaticanReportSection extends Observable<SessionMessage> {
     }
 
     /**
+     * Checks if favor tile is discarded.
+     *
+     * @return true if active, false otherwise
+     */
+    public boolean isPopesFavorTileDiscarded() {
+        return popesFavorTileDiscarded;
+    }
+
+    /**
      * Method to activate the favor tile.
      */
     public void activatePopesFavorTile() {
         popesFavorTileStatus = true;
+
+        notifyObservers(getPlayerModelUpdateMessage(sessionToken));
+    }
+
+    /**
+     * Method to discard the favor tile.
+     */
+    public void discardPopesFavorTile() {
+        popesFavorTileDiscarded = true;
 
         notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }

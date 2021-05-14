@@ -22,7 +22,7 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 
 public class MarketResourceNormalActionTurnState extends TurnState {
-    List<Resource> tempResources;
+    private List<Resource> tempResources;
 
 
     public MarketResourceNormalActionTurnState(Turn turn) {

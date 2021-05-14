@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.model;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Singleton class to keep a leaderboard among all the matches served by the system.
@@ -10,12 +11,12 @@ public class LeaderBoard {
 
     private static LeaderBoard instance;
 
-    private final HashMap<Player, Integer> leaderboard;
+    private final HashMap<String, Integer> leaderboard;
 
     /**
-     * Private constructor.
+     * Constructor of the class.
      */
-    private LeaderBoard() {
+    public LeaderBoard() {
         leaderboard = new HashMap<>();
     }
 
@@ -36,8 +37,8 @@ public class LeaderBoard {
      *
      * @return leaderboard (hashmap) containing scores in the following format <player, victory points>
      */
-    public HashMap<Player, Integer> getLeaderboard() {
-        return (HashMap<Player, Integer>) Collections.unmodifiableMap(leaderboard);
+    public Map<String, Integer> getLeaderboard() {
+        return Collections.unmodifiableMap(leaderboard);
     }
 
     /**
@@ -46,7 +47,7 @@ public class LeaderBoard {
      * @param player        player that has obtained a new score
      * @param victoryPoints obtained victory points
      */
-    public void addPlayerVictoryPoints(Player player, int victoryPoints) {
+    public void addPlayerVictoryPoints(String player, int victoryPoints) {
         leaderboard.put(player, victoryPoints);
     }
 }

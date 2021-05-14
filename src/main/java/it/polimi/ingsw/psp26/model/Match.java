@@ -13,10 +13,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
 
@@ -32,6 +29,7 @@ public class Match extends Observable<SessionMessage> {
     private final MarketTray marketTray;
     private final List<LeaderCard> leaderDeck;
     private final List<ActionToken> actionTokenStack;
+    private final LeaderBoard leaderBoard;
 
     /**
      * Class constructor.
@@ -51,6 +49,7 @@ public class Match extends Observable<SessionMessage> {
         marketTray = new MarketTray(virtualView);
         leaderDeck = new ArrayList<>();
         actionTokenStack = new ArrayList<>();
+        leaderBoard = new LeaderBoard();
 
         initializeLeaderDeck();
         initializeActionTokenStack();
@@ -223,6 +222,16 @@ public class Match extends Observable<SessionMessage> {
     public List<ActionToken> getActionTokens() {
         return Collections.unmodifiableList(actionTokenStack);
     }
+
+    /**
+     * Getter of the leader board object.
+     *
+     * @return the leader board object
+     */
+    public LeaderBoard getLeaderboard() {
+        return leaderBoard;
+    }
+
 
     /**
      * Equals method.

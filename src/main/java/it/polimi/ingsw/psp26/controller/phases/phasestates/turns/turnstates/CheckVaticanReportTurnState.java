@@ -30,7 +30,7 @@ public class CheckVaticanReportTurnState extends TurnState {
     }
 
 
-    private boolean isPlayerInVaticanSection(Player player, VaticanReportSection section) {
+    private boolean isPlayerInVaticanSectionOrOver(Player player, VaticanReportSection section) {
 
         return player.getPersonalBoard().getFaithTrack().getFaithPoints() > section.getStartSection();
     }
@@ -41,7 +41,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
     }
 
-    private boolean blackCrossInPopeSpace(Player player) {
+    private boolean isBlackCrossInPopeSpaceOrOver(Player player) {
         return player.getPersonalBoard().getFaithTrack().getBlackCrossPosition() >=
                 player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[getFirstActiveSectionIndex()].getEndSection();
 
@@ -49,10 +49,12 @@ public class CheckVaticanReportTurnState extends TurnState {
 
     private void activateVaticanReport(Player currentPlayer) {
 
-        if (firstPlayerInPopeSpace(currentPlayer) || blackCrossInPopeSpace(currentPlayer)) {
+        if (firstPlayerInPopeSpace(currentPlayer) || isBlackCrossInPopeSpaceOrOver(currentPlayer)) {
 
             try {
+
                 turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "A vatican report has been called"));
+
             } catch (InvalidPayloadException e) {
                 e.printStackTrace();
             }
@@ -63,8 +65,15 @@ public class CheckVaticanReportTurnState extends TurnState {
 
                 VaticanReportSection[] playerSections = player.getPersonalBoard().getFaithTrack().getVaticanReportSections();
 
-                if (isPlayerInVaticanSection(player, playerSections[sectionActivated]))
+                if (isPlayerInVaticanSectionOrOver(player, playerSections[sectionActivated])) {
+
                     playerSections[sectionActivated].activatePopesFavorTile();
+
+                }else{
+
+                    playerSections[sectionActivated].discardPopesFavorTile();
+
+                }
 
                 sendNotification(player);
             }
@@ -89,22 +98,17 @@ public class CheckVaticanReportTurnState extends TurnState {
     private int getFirstActiveSectionIndex() {
 
         int sectionNumber = 0;
-        VaticanReportSection activeSection = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[sectionNumber];
 
-        for (Player player : turn.getMatchController().getMatch().getPlayers()) {
-            for (int i = 0; i < player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length; i++) {
-                if (player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[i].isPopesFavorTileActive()
-                        && player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[i].getStartSection()
-                        > activeSection.getStartSection()) {
+        for (int i = 0; i < turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections().length; i++) {
+            if (turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[i].isPopesFavorTileActive()
+                    || turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[i].isPopesFavorTileDiscarded()) {
 
-                    activeSection = player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[i];
-                    sectionNumber = i + 1;
-                }
+                sectionNumber = i + 1;
 
             }
         }
 
-        return Math.max(sectionNumber, getBlackCrossSectionIndex());
+        return sectionNumber;
 
     }
 

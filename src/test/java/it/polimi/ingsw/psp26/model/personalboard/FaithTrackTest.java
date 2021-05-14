@@ -74,6 +74,12 @@ public class FaithTrackTest {
     }
 
     @Test
+    public void testGetVictoryPoints() {
+        faithTrack.addFaithPoints(17);
+        assertEquals(9, faithTrack.getVictoryPoints());
+    }
+
+    @Test
     public void testGetFinalPosition() {
         assertEquals(24, faithTrack.getFinalPosition());
     }

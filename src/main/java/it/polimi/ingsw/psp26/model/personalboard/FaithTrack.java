@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getPlayerModelUpdateMessage;
@@ -17,6 +18,7 @@ public class FaithTrack extends Observable<SessionMessage> {
     private final int finalPosition;
     private final VaticanReportSection[] vaticanReportSections;
     private final String sessionToken;
+    private final int[] victoryPoints;
     private int markerPosition;
     private int faithPoints;
     private int blackCrossPosition;
@@ -40,6 +42,7 @@ public class FaithTrack extends Observable<SessionMessage> {
         this.blackCrossPosition = 0;
         this.faithPoints = 0;
         this.sessionToken = sessionToken;
+        this.victoryPoints = new int[]{0, 1, 2, 4, 6, 9, 12, 16, 20};
     }
 
     /**
@@ -121,6 +124,16 @@ public class FaithTrack extends Observable<SessionMessage> {
     public int getFinalPosition() {
         return finalPosition;
     }
+
+    /**
+     * Getter of the victory points.
+     *
+     * @return final position of the track
+     */
+    public int getVictoryPoints() {
+        return victoryPoints[(int) faithPoints/3];
+    }
+
 
     /**
      * Equals method.

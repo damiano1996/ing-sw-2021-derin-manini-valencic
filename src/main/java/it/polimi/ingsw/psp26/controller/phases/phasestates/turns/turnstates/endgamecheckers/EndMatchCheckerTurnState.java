@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.endgamecheckers;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.NotificationUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.COLORS
 import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.LEVELS;
 
 public class EndMatchCheckerTurnState extends TurnState {
+
 
     public EndMatchCheckerTurnState(Turn turn) {
         super(turn);
@@ -39,12 +42,22 @@ public class EndMatchCheckerTurnState extends TurnState {
      */
     private void checkMultiPlayerEnd() {
         try {
-            if (isSeventhCardDrawn())
-                turn.getPlayingPhaseState().goToEndMatchPhaseState(
-                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
-            else if (isFinalTilePosition())
-                turn.getPlayingPhaseState().goToEndMatchPhaseState(
-                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.FINAL_TILE_POSITION));
+            if (isSeventhCardDrawn()) {
+                turn.getMatchController().notifyObservers(
+                        new NotificationUpdateMessage(
+                                SpecialToken.BROADCAST.getToken(),
+                                turn.getTurnPlayer() + " activated the endgame by drawing the seventh card" )
+                );
+                turn.getPlayingPhaseState().setLastTurn();
+            }
+            else if (isFinalTilePosition()) {
+                turn.getMatchController().notifyObservers(
+                        new NotificationUpdateMessage(
+                                SpecialToken.BROADCAST.getToken(),
+                                turn.getTurnPlayer() + " activated the endgame by reaching the final tile in the faith track")
+                );
+                turn.getPlayingPhaseState().setLastTurn();
+            }
 
         } catch (InvalidPayloadException e) {
             e.printStackTrace();
@@ -58,12 +71,27 @@ public class EndMatchCheckerTurnState extends TurnState {
     private void checkSinglePlayerEnd() {
         try {
             if (isNoMoreColumnOfDevelopmentCards()) {
+
+                turn.getMatchController().notifyObservers(
+                        new NotificationUpdateMessage(
+                                SpecialToken.BROADCAST.getToken(),
+                                "Lorenzo activated the endgame by removing a column of development cards")
+                );
+
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
                         new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.NO_MORE_COLUMN_DEVELOPMENT_CARDS));
 
-            } else if (isBlackCrossFinalPosition())
+            } else if (isBlackCrossFinalPosition()){
+
+                turn.getMatchController().notifyObservers(
+                        new NotificationUpdateMessage(
+                                SpecialToken.BROADCAST.getToken(),
+                                "Lorenzo activated the endgame by reaching the final the final tile in the faith track")
+                );
+
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
                         new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.BLACK_CROSS_FINAL_POSITION));
+            }
 
         } catch (InvalidPayloadException e) {
             e.printStackTrace();

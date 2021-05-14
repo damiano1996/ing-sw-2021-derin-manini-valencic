@@ -19,8 +19,8 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSI
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 
 public class BuyCardNormalActionTurnState extends TurnState {
-    DevelopmentCard boughtCard = null;
-    List<Resource> tempResources = new ArrayList<>();
+    private DevelopmentCard boughtCard = null;
+    private List<Resource> tempResources = new ArrayList<>();
 
     public BuyCardNormalActionTurnState(Turn turn) {
         super(turn);
@@ -158,11 +158,11 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     }
 
-    private List<Integer> positionsForCard() {
-        List<Integer> CorrectPositions = new ArrayList<>();
+    private List<String> positionsForCard() {
+        List<String> CorrectPositions = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            if (turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard)) CorrectPositions.add(i);
+            if (turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard)) CorrectPositions.add("Slot " + i);
         }
         return CorrectPositions;
     }
@@ -191,10 +191,5 @@ public class BuyCardNormalActionTurnState extends TurnState {
         }
 
     }
-
-    public List<Resource> getTempResources() {
-        return tempResources;
-    }
-
 
 }

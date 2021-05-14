@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE;
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendErrorMessage;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
@@ -78,12 +79,14 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
                             turn.play(message);
 
+
                         } else {
 
                             play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE));
 
                         }
                     } else {
+
                         sendGeneralMessage(turn, "No enough resources to activate any card - sending to choose action:");
                         turn.changeState(new ChooseNormalActionTurnState(turn));
                         turn.play(message);
@@ -113,6 +116,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                         } else {
 
+                            sendErrorMessage(turn, "Error in the choice of resources");
                             play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE));
 
                         }
@@ -167,8 +171,10 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                             }
                         }
                     }
+                    System.out.println(turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources());
                     turn.getTurnPlayer().getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource,
                             production.getProductionCost().get(resource));
+                    System.out.println(turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources());
                 }
             }
             collectProduction();
@@ -205,9 +211,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 }
             }
             if (unknownProdResources != null) resourcesProduced.addAll(unknownProdResources);
+
             resourcesProduced.stream()
                     .filter(x -> x.equals(Resource.FAITH_MARKER))
                     .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
+
             resourcesProduced = resourcesProduced.stream()
                     .filter(x -> !x.equals(Resource.FAITH_MARKER))
                     .collect(Collectors.toList());

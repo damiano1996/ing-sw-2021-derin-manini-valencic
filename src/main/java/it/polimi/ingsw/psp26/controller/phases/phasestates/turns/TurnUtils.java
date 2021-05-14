@@ -14,43 +14,53 @@ public class TurnUtils {
 
     public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
         System.out.println("goToNextStateAfterLeaderAction - current turn phase: " + turn.getTurnPhase());
+        if (turn.getPlayingPhaseState().isLastTurn() && turn.getTurnPlayer().hasInkwell()) {
 
-        switch (turn.getTurnPhase()) {
+            try {
+                turn.getPlayingPhaseState().goToEndMatchPhaseState(
+                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
+            } catch (InvalidPayloadException e) {
+                e.printStackTrace();
+            }
 
-            case RESOURCE_PLACER_TO_LEADER_ACTION:
-                turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
-                turn.play(message);
-                break;
+        } else {
 
-            case LEADER_TO_NORMAL_ACTION:
-                // If first leader action has been played, go to normal action
-                turn.changeState(new ChooseNormalActionTurnState(turn));
-                turn.play(message);
-                break;
+            switch (turn.getTurnPhase()) {
 
-            case NORMAL_TO_LEADER_ACTION:
-                // After normal action, go to leader action
-                turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_ACTION_TO_END));
-                turn.play(message);
-                break;
-
-            case LEADER_ACTION_TO_END:
-                if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
-                    // Notifying the current Player that it's turn is over
-                    sendMessageToTurnPlayer(turn, OPPONENT_TURN, "Opponent turn");
-                    // After the second leader action, go to next player turn
-                    turn.getPlayingPhaseState().updateCurrentTurn();
-                } else {
-                    // After the second leader action, go to Lorenzo action
-                    turn.changeState(new LorenzoMagnificoTurnState(turn, TurnPhase.LORENZO_TO_END));
+                case RESOURCE_PLACER_TO_LEADER_ACTION:
+                    turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
                     turn.play(message);
-                }
-                break;
-            case LORENZO_TO_END:
-                //After Lorenzo action, go to next turn
-                turn.getPlayingPhaseState().updateCurrentTurn();
-                break;
-            // TODO: case Lorenzo
+                    break;
+
+                case LEADER_TO_NORMAL_ACTION:
+                    // If first leader action has been played, go to normal action
+                    turn.changeState(new ChooseNormalActionTurnState(turn));
+                    turn.play(message);
+                    break;
+
+                case NORMAL_TO_LEADER_ACTION:
+                    // After normal action, go to leader action
+                    turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_ACTION_TO_END));
+                    turn.play(message);
+                    break;
+
+                case LEADER_ACTION_TO_END:
+                    if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
+                        // Notifying the current Player that it's turn is over
+                        sendMessageToTurnPlayer(turn, OPPONENT_TURN, "Opponent turn");
+                        // After the second leader action, go to next player turn
+                        turn.getPlayingPhaseState().updateCurrentTurn();
+                    } else {
+                        // After the second leader action, go to Lorenzo action
+                        turn.changeState(new LorenzoMagnificoTurnState(turn, TurnPhase.LORENZO_TO_END));
+                        turn.play(message);
+                    }
+                    break;
+                case LORENZO_TO_END:
+                    //After Lorenzo action, go to next turn
+                    turn.getPlayingPhaseState().updateCurrentTurn();
+                    break;
+            }
         }
     }
 

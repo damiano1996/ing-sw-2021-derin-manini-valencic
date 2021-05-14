@@ -10,6 +10,7 @@ import it.polimi.ingsw.psp26.model.Player;
 public class PlayingPhaseState extends PhaseState {
 
     private Turn currentTurn;
+    private boolean lastTurn;
 
     public PlayingPhaseState(Phase phase) {
         super(phase);
@@ -31,6 +32,7 @@ public class PlayingPhaseState extends PhaseState {
                 phase.getMatchController().getMatch().getPlayers().get(0),
                 0
         );
+        lastTurn = false;
     }
 
     public void playFirstTurn() {
@@ -63,5 +65,9 @@ public class PlayingPhaseState extends PhaseState {
         phase.changeState(new EndMatchPhaseState(phase));
         phase.execute(message);
     }
+
+    public boolean isLastTurn(){return  lastTurn;}
+
+    public void setLastTurn(){lastTurn = true;}
 
 }

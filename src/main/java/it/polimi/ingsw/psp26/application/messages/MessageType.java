@@ -60,5 +60,8 @@ public enum MessageType {
     QUIT_OPTION_SELECTED,
 
     OPPONENT_TURN,
-    LORENZO_PLAY
+    LORENZO_PLAY,
+
+    //EndGame Result
+    ENDGAME_RESULT
 }

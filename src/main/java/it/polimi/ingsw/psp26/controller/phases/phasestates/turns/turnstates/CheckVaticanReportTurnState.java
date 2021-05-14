@@ -69,7 +69,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
                     playerSections[sectionActivated].activatePopesFavorTile();
 
-                }else{
+                } else {
 
                     playerSections[sectionActivated].discardPopesFavorTile();
 

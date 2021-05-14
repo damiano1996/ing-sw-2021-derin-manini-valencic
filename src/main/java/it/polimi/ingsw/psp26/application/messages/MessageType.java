@@ -33,7 +33,7 @@ public enum MessageType {
 
     BUY_CARD, // action
     CHOICE_CARD_TO_BUY, // to display the cards available to be bought
-    CHOICE_POSITION, // to display the position of the card
+    CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, // to display the position of the card
 
     CHOICE_ROW_COLUMN, // to display the column or the row
 

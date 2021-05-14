@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import javafx.scene.image.Image;
 
@@ -27,5 +28,11 @@ public class ModelDrawUtils {
         image = setRoundedCorners(image, ratio);
         image = addLightEffects(image, ratio);
         return image;
+    }
+
+    public static Image getResource(Resource resource, float ratio) {
+        Image resourceImage = loadImage("resources/" + resource + ".png", (int) (100 * ratio));
+        resourceImage = addLightEffects(resourceImage, ratio);
+        return resourceImage;
     }
 }

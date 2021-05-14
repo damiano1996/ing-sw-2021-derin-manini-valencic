@@ -46,16 +46,20 @@
     -fx-font-size: 42px;
     -fx-fill: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 5, 5);
+    -fx-text-alignment: center;
 }
 
 #error {
     -fx-fill: #efa405;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 5, 5);
+    -fx-text-alignment: center;
+
 }
 
 #label {
     -fx-text-fill: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 5, 5);
+    -fx-text-alignment: center;
 }
 
 HBox, VBox {

@@ -16,7 +16,8 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class EndMatchPhaseStateTest {
 
@@ -24,7 +25,7 @@ public class EndMatchPhaseStateTest {
     private Phase phase;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         mitm = new MitmObserver();
         VirtualView virtualView = new VirtualView();
         phase = new Phase(virtualView.getMatchController());
@@ -43,7 +44,7 @@ public class EndMatchPhaseStateTest {
         Player player = phase.getMatchController().getMatch().getPlayers().get(0);
         Integer expectedVictoryPoints = 0;
 
-        for(int i = 0; i < 13 ; i++) {
+        for (int i = 0; i < 13; i++) {
             player.getPersonalBoard().addResourceToStrongbox(Resource.STONE);
         }
         expectedVictoryPoints += 2;
@@ -70,8 +71,8 @@ public class EndMatchPhaseStateTest {
 
         assertEquals(MessageType.ENDGAME_RESULT, mitm.getMessages().get(0).getMessageType());
         LeaderBoard leaderboard = (LeaderBoard) mitm.getMessages().get(0).getPayload();
-        assertTrue( leaderboard.getLeaderboard().containsKey(player.getNickname()));
-        assertEquals( expectedVictoryPoints, leaderboard.getLeaderboard().get(player.getNickname()));
+        assertTrue(leaderboard.getLeaderboard().containsKey(player.getNickname()));
+        assertEquals(expectedVictoryPoints, leaderboard.getLeaderboard().get(player.getNickname()));
 
 
     }

@@ -77,7 +77,7 @@ public class Client extends Observable<Message> {
                 case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
                 case CHOICE_LEADER_ACTION:
                 case CHOICE_NORMAL_ACTION:
-                case CHOICE_POSITION:
+                case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
                 case CHOICE_LEADERS:
 
                     MultipleChoicesMessage mcm = (MultipleChoicesMessage) message;
@@ -133,7 +133,7 @@ public class Client extends Observable<Message> {
 
                     break;
 
-                    
+
                 // -------------------------------------
                 // --------- DISPLAY MESSAGES ----------
                 // -------------------------------------

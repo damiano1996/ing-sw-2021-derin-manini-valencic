@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.gui;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
 import it.polimi.ingsw.psp26.model.MarketTray;
@@ -20,6 +21,7 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.LeaderCardChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
+import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ResourceChoicesDrawer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,7 +29,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -204,7 +205,7 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void waitForYourTurn() {
-        
+
     }
 
     @Override
@@ -233,6 +234,12 @@ public class GUI extends Application implements ViewInterface {
             case CHOICE_LEADERS:
                 contentBox = new HBox(5 * getGeneralRatio());
                 choicesDrawer = new LeaderCardChoicesDrawer();
+                break;
+
+            case CHOICE_RESOURCE_FROM_WAREHOUSE:
+            case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
+                contentBox = new HBox(5 * getGeneralRatio());
+                choicesDrawer = new ResourceChoicesDrawer();
                 break;
 
             default:
@@ -339,14 +346,13 @@ public class GUI extends Application implements ViewInterface {
 
     }
 
-    @Override
-    public void displayText(String text) {
+    public void displayTextDialog(String text, String textId) {
         VBox vBox = new VBox(20 * getGeneralRatio());
 
-        Label label = new Label(text);
-        label.setId("label");
-        label.setWrapText(true);
-        vBox.getChildren().add(label);
+        Text text1 = new Text(text);
+        text1.setId(textId);
+        // text1.setWrapText(true);
+        vBox.getChildren().add(text1);
 
         Button confirmationButton = new Button("OK");
         confirmationButton.setId("confirm-button");
@@ -363,23 +369,37 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void displayEndGame(Map<String, Integer> leaderboard) {
+    public void displayText(String text) {
+        displayTextDialog(text, "text-field");
+    }
 
+    @Override
+    public void displayEndGame(Map<String, Integer> leaderboard) {
     }
 
     @Override
     public void displayError(String error) {
-
+        displayTextDialog(error, "error");
     }
 
     @Override
     public void displayWaitingScreen(Message message) {
-        client.viewNext();
+        try {
+            WaitingScreen.getInstance(root).startWaiting((String) message.getPayload());
+        } catch (EmptyPayloadException e) {
+            e.printStackTrace();
+        }
+        System.out.println("1111");
+        //client.viewNext();
+        System.out.println("22222");
     }
 
     @Override
     public void stopDisplayingWaitingScreen() {
+        System.out.println("33333");
+        WaitingScreen.getInstance(root).stopWaiting();
 
+        System.out.println("44444");
         Pane pane = addBackground(getPlayingPane(primaryStage, client), getScreenWidth(), getScreenHeight(), 1, 1);
         primaryStage.getScene().setRoot(pane);
 

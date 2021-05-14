@@ -19,6 +19,7 @@ public class VaticanReportSection extends Observable<SessionMessage> {
     private final String sessionToken;
     private boolean popesFavorTileStatus;
     private boolean popesFavorTileDiscarded;
+
     /**
      * Constructor of the class.
      *

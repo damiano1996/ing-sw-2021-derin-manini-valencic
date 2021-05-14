@@ -557,7 +557,7 @@ public class CLI implements ViewInterface {
                 displayMultipleStringChoices(choices);
                 break;
 
-            case CHOICE_POSITION:
+            case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
                 choicePositionExecute(choices);
                 break;
 

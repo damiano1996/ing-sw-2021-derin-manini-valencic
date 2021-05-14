@@ -66,8 +66,12 @@ public class PlayingPhaseState extends PhaseState {
         phase.execute(message);
     }
 
-    public boolean isLastTurn(){return  lastTurn;}
+    public boolean isLastTurn() {
+        return lastTurn;
+    }
 
-    public void setLastTurn(){lastTurn = true;}
+    public void setLastTurn() {
+        lastTurn = true;
+    }
 
 }

@@ -13,7 +13,10 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
 

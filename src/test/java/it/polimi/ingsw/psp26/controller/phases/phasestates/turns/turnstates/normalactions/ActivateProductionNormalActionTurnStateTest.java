@@ -71,16 +71,16 @@ public class ActivateProductionNormalActionTurnStateTest {
         List<Resource> warehouseExtraResources = new ArrayList<>();
         int depotIndex = 2;
 
-        for(Resource resource : chosenCard.getProduction().getProductionCost().keySet()){
+        for (Resource resource : chosenCard.getProduction().getProductionCost().keySet()) {
             System.out.println(resource);
             System.out.println(chosenCard.getProduction().getProductionCost().get(resource));
-            if(chosenCard.getProduction().getProductionCost().get(resource) == 1) {
-                    turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resource);
+            if (chosenCard.getProduction().getProductionCost().get(resource) == 1) {
+                turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resource);
 
-            }else{
-                for(int j = 0; j < turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots().get(depotIndex).getMaxNumberOfResources(); j++) {
+            } else {
+                for (int j = 0; j < turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots().get(depotIndex).getMaxNumberOfResources(); j++) {
                     turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(depotIndex, resource);
-                    if(j >= chosenCard.getProduction().getProductionCost().get(resource))
+                    if (j >= chosenCard.getProduction().getProductionCost().get(resource))
                         warehouseExtraResources.add(resource);
                 }
 
@@ -88,14 +88,14 @@ public class ActivateProductionNormalActionTurnStateTest {
 
             }
         }
-        for(Depot depot : turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots()){
+        for (Depot depot : turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots()) {
             System.out.println(depot.getResources());
         }
 
-        for(Resource resource : chosenCard.getProduction().getProductionReturn().keySet()){
-            for(int j=0; j < chosenCard.getProduction().getProductionReturn().get(resource); j++) {
+        for (Resource resource : chosenCard.getProduction().getProductionReturn().keySet()) {
+            for (int j = 0; j < chosenCard.getProduction().getProductionReturn().get(resource); j++) {
                 System.out.println(resource);
-                if(resource != Resource.FAITH_MARKER)
+                if (resource != Resource.FAITH_MARKER)
                     resourcesProduced.add(resource);
             }
 

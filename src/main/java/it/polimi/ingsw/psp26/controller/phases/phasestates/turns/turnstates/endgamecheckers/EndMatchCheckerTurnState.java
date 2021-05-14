@@ -46,11 +46,10 @@ public class EndMatchCheckerTurnState extends TurnState {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
-                                turn.getTurnPlayer() + " activated the endgame by drawing the seventh card" )
+                                turn.getTurnPlayer() + " activated the endgame by drawing the seventh card")
                 );
                 turn.getPlayingPhaseState().setLastTurn();
-            }
-            else if (isFinalTilePosition()) {
+            } else if (isFinalTilePosition()) {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
@@ -81,7 +80,7 @@ public class EndMatchCheckerTurnState extends TurnState {
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
                         new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.NO_MORE_COLUMN_DEVELOPMENT_CARDS));
 
-            } else if (isBlackCrossFinalPosition()){
+            } else if (isBlackCrossFinalPosition()) {
 
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(

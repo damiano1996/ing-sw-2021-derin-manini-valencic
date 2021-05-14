@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_POSITION;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_DEVELOPMENT_CARD_SLOT_POSITION;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 
 public class BuyCardNormalActionTurnState extends TurnState {
@@ -60,7 +60,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                             turn.getMatchController().notifyObservers(
                                     new MultipleChoicesMessage(
                                             turn.getTurnPlayer().getSessionToken(),
-                                            CHOICE_POSITION,
+                                            CHOICE_DEVELOPMENT_CARD_SLOT_POSITION,
                                             "Choose where to place the new card:",
                                             1, 1,
                                             false,
@@ -86,7 +86,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
                     break;
 
-                case CHOICE_POSITION:
+                case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
 
                     placeCard((int) message.getPayload());
                     turn.changeState(new EndMatchCheckerTurnState(turn));
@@ -162,7 +162,8 @@ public class BuyCardNormalActionTurnState extends TurnState {
         List<String> CorrectPositions = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            if (turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard)) CorrectPositions.add("Slot " + i);
+            if (turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard))
+                CorrectPositions.add("Slot " + i);
         }
         return CorrectPositions;
     }
@@ -178,7 +179,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                 turn.getMatchController().notifyObservers(
                         new MultipleChoicesMessage(
                                 turn.getTurnPlayer().getSessionToken(),
-                                CHOICE_POSITION,
+                                CHOICE_DEVELOPMENT_CARD_SLOT_POSITION,
                                 "Choose where to place the new card:",
                                 1, 1,
                                 false,

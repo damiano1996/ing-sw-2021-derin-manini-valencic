@@ -5,7 +5,6 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getPlayerModelUpdateMessage;
@@ -131,7 +130,7 @@ public class FaithTrack extends Observable<SessionMessage> {
      * @return final position of the track
      */
     public int getVictoryPoints() {
-        return victoryPoints[(int) faithPoints/3];
+        return victoryPoints[(int) faithPoints / 3];
     }
 
 

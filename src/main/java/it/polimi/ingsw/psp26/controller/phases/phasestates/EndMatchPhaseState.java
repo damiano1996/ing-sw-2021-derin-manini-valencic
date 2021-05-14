@@ -4,33 +4,32 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.model.LeaderBoard;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 
-import java.util.HashMap;
-
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 public class EndMatchPhaseState extends PhaseState {
-    public EndMatchPhaseState(Phase phase) { super(phase); }
+    public EndMatchPhaseState(Phase phase) {
+        super(phase);
+    }
 
     @Override
     public void execute(SessionMessage message) {
         super.execute(message);
-        if(message.getMessageType() == SEVENTH_CARD_DRAWN || message.getMessageType() == FINAL_TILE_POSITION)
+        if (message.getMessageType() == SEVENTH_CARD_DRAWN || message.getMessageType() == FINAL_TILE_POSITION)
             showEndGameResult();
-            //else
-            //showLoseScreen();
+        //else
+        //showLoseScreen();
     }
 
     private void showEndGameResult() {
 
         computePlayersPoints();
 
-        for(Player player : phase.getMatchController().getMatch().getPlayers()) {
+        for (Player player : phase.getMatchController().getMatch().getPlayers()) {
             try {
                 phase.getMatchController().notifyObservers(
                         new SessionMessage(
@@ -55,7 +54,7 @@ public class EndMatchPhaseState extends PhaseState {
 
             playerPoints += computeDevelopmentCardPoints(player);
             playerPoints += player.getPersonalBoard().getFaithTrack().getVictoryPoints();
-            playerPoints += player.getPersonalBoard().getAllAvailableResources().size()/5;
+            playerPoints += player.getPersonalBoard().getAllAvailableResources().size() / 5;
             playerPoints += computeLeaderPoints(player);
             playerPoints += computePopeFavorTilePoints(player);
 
@@ -77,28 +76,28 @@ public class EndMatchPhaseState extends PhaseState {
 
                 }
             }
-            } catch(DevelopmentCardSlotOutOfBoundsException e){
-                e.printStackTrace();
-            }
+        } catch (DevelopmentCardSlotOutOfBoundsException e) {
+            e.printStackTrace();
+        }
 
         return developmentCardVictoryPoints;
     }
 
-    private int computeLeaderPoints(Player player){
+    private int computeLeaderPoints(Player player) {
         int leaderPoints = 0;
-        for(LeaderCard leaderCard : player.getLeaderCards()){
-            if(leaderCard.isActive())
+        for (LeaderCard leaderCard : player.getLeaderCards()) {
+            if (leaderCard.isActive())
                 leaderPoints += leaderCard.getVictoryPoints();
         }
         return leaderPoints;
     }
 
-    private int computePopeFavorTilePoints(Player player){
+    private int computePopeFavorTilePoints(Player player) {
         int popeFavorTilePoints = 0;
 
-        for(VaticanReportSection section : player.getPersonalBoard().getFaithTrack().getVaticanReportSections()){
+        for (VaticanReportSection section : player.getPersonalBoard().getFaithTrack().getVaticanReportSections()) {
 
-            if(section.isPopesFavorTileActive())
+            if (section.isPopesFavorTileActive())
                 popeFavorTilePoints += section.getValue();
 
         }

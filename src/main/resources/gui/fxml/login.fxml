@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" id="VBox" alignment="CENTER" stylesheets="@../stylesheets/stylesheet.css"
+      xmlns="http://javafx.com/javafx/11.0.1">
 
-<VBox id="VBox" alignment="CENTER" stylesheets="@../stylesheets/stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <Text id="title" text="Masters of Renaissance" textAlignment="CENTER"/>
 
-    <Text id="title" text="Masters of Renaissance" textAlignment="CENTER" />
+    <Label id="label" text="Nickname"/>
+    <TextField id="text-field" fx:id="nicknameTextField"/>
 
-    <Label id="label" text="Nickname" />
-    <TextField id="text-field" fx:id="nicknameTextField" />
+    <Label id="label" text="ServerIP"/>
+    <TextField id="text-field" fx:id="serverIPTextField"/>
 
-    <Label id="label" text="ServerIP" />
-    <TextField id="text-field" fx:id="serverIPTextField" />
+    <Text id="error" fx:id="errorConnection" text="The server is not reachable!" visible="false"/>
 
-    <Text id="error" fx:id="errorConnection" text="The server is not reachable!" visible="false" />
-
-    <Button fx:id="connectionButton" text="Connect" />
+    <Button fx:id="connectionButton" text="Connect"/>
 
 </VBox>

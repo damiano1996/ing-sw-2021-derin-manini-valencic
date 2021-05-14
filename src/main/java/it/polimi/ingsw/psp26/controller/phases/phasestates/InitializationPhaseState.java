@@ -67,7 +67,7 @@ public class InitializationPhaseState extends PhaseState {
         System.out.println("Initialization phase  - sending start waiting message");
         try {
             phase.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), nickname + " joined the game!"));
-            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Please wait for other Players to join..."));
+            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Waiting for opponents to connect..."));
         } catch (InvalidPayloadException ignored) {
         }
     }

@@ -27,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -93,11 +94,12 @@ public class GUI extends Application implements ViewInterface {
     public void displayLogIn() {
 
         try {
+
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/gui/fxml/login.fxml"));
-            VBox loginPane = fxmlLoader.load();
+            VBox loginVBox = fxmlLoader.load();
 
-            Stage dialog = getDialog(primaryStage, loginPane, 1000, 1000, getGeneralRatio());
+            Stage dialog = getDialog(primaryStage, loginVBox);
 
             Button connectionButton = (Button) fxmlLoader.getNamespace().get("connectionButton");
             connectionButton.setOnAction(event -> {
@@ -129,6 +131,7 @@ public class GUI extends Application implements ViewInterface {
             });
 
             dialog.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -208,7 +211,7 @@ public class GUI extends Application implements ViewInterface {
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
         VBox choicesBox = new VBox(10 * getGeneralRatio());
-        Stage dialog = getDialog(primaryStage, choicesBox, 1000, 1000, getGeneralRatio());
+        Stage dialog = getDialog(primaryStage, choicesBox);
 
         Label label = new Label(question);
         label.setId("label");
@@ -349,7 +352,7 @@ public class GUI extends Application implements ViewInterface {
         confirmationButton.setId("confirm-button");
         vBox.getChildren().add(confirmationButton);
 
-        Stage dialog = getDialog(primaryStage, vBox, 1000, 1000, getGeneralRatio());
+        Stage dialog = getDialog(primaryStage, vBox);
         confirmationButton.setOnAction(actionEvent -> {
             client.viewNext();
             dialog.close();

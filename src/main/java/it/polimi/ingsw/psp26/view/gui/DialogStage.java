@@ -1,23 +1,22 @@
 package it.polimi.ingsw.psp26.view.gui;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import static it.polimi.ingsw.psp26.view.gui.FramePane.addCoolFrame;
+import java.io.IOException;
+
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.setTransparentBackground;
 
 public class DialogStage {
 
-    public static Stage getDialog(Stage primaryStage, Pane content, int maxContentWidth, int maxContentHeight, float ratio) {
-        return getDialog(primaryStage, content, maxContentWidth, maxContentHeight, 1.2f, true, 350, ratio);
-    }
 
-    private static Stage getDialog(Stage primaryStage, Pane content, int maxContentWidth, int maxContentHeight, float marginFactor, boolean roundedCorners, int arcSize, float ratio) {
+    public static Stage getDialog(Stage primaryStage, Pane content) {
 
         Stage dialog = new Stage();
         dialog.initModality(Modality.WINDOW_MODAL);
@@ -27,11 +26,22 @@ public class DialogStage {
         // dialog.setAlwaysOnTop(true);
         dialog.centerOnScreen();
 
-        StackPane stackPane = addCoolFrame(content, maxContentWidth, maxContentHeight, marginFactor, roundedCorners, arcSize, ratio);
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(DialogStage.class.getResource("/gui/fxml/dialog.fxml"));
+        try {
+            AnchorPane anchorPane = fxmlLoader.load();
 
-        Scene scene = setTransparentBackground(stackPane);
-        addStylesheet(scene);
-        dialog.setScene(scene);
+            StackPane stackPane = (StackPane) fxmlLoader.getNamespace().get("container");
+            stackPane.getChildren().add(content);
+
+            // Scene scene = setTransparentBackground(content);
+            Scene scene = new Scene(anchorPane);
+            addStylesheet(scene);
+            dialog.setScene(scene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return dialog;
     }

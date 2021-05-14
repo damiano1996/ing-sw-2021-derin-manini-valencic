@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="700.0" stylesheets="@../stylesheets/stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fitHeight="700.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="@../window_graphics/frame.png" />
+            </image>
+        </ImageView>
+        <StackPane fx:id="container" alignment="CENTER" layoutX="49.0" layoutY="46.0" prefHeight="608.0" prefWidth="603.0" />
+    </children>
+</AnchorPane>

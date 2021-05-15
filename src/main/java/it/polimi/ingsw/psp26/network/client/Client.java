@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -15,10 +16,13 @@ import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.view.ViewUtils.createLeaderboard;
+import static it.polimi.ingsw.psp26.view.ViewUtils.createPlayersList;
 
 public class Client extends Observable<Message> {
 
@@ -127,10 +131,9 @@ public class Client extends Observable<Message> {
                     break;
 
                 case ENDGAME_RESULT:
-                    //message contains the nickname of the player that won
+                    // message contains the nickname of the player that won
                     String winner = (String) message.getPayload();
-                    //viewInterface.displayEndGame(winner);
-
+                    viewInterface.displayEndGame(createLeaderboard(createPlayersList(cachedModel)), winner);
                     break;
 
 

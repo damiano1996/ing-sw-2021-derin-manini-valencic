@@ -500,8 +500,9 @@ public class CliTest {
         map.put("Andrea", 20);
 
         String myName = "Jas";
+        String name = "Damiano";
 
-        String name = commonScreensCli.displayFinalScreen(map);
+        commonScreensCli.displayFinalScreen(map);
 
         if (name.equals(myName)) {
             pw.print(Color.GREEN.setColor());

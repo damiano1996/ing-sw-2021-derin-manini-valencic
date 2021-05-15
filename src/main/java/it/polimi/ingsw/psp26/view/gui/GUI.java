@@ -384,7 +384,7 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void displayEndGame(Map<String, Integer> leaderboard) {
+    public void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer) {
     }
 
     @Override

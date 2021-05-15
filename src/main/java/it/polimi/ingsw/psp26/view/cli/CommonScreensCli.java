@@ -25,15 +25,12 @@ public class CommonScreensCli {
      * Displays the end game screen
      *
      * @param leaderboard It contains the Players nicknames and the points they achieved during the Match
-     * @return The nickname of the winner
      */
-    public String displayFinalScreen(Map<String, Integer> leaderboard) {
+    public void displayFinalScreen(Map<String, Integer> leaderboard) {
         cliUtils.cls();
         cliUtils.printFigure("/titles/LeaderboardTitle", 1, 53);
         cliUtils.printFigure("FinalLeaderboard", 15, 89);
         printLeaderboardContent(leaderboard, getOrderedPlayersList(leaderboard));
-
-        return getOrderedPlayersList(leaderboard).get(0);
     }
 
 

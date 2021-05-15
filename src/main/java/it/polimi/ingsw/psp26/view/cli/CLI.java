@@ -629,13 +629,14 @@ public class CLI implements ViewInterface {
     /**
      * Displays the screen that appears when the Match stops
      *
-     * @param leaderboard It contains the Players nicknames and the points they achieved during the Match
+     * @param leaderboard   It contains the Players nicknames and the points they achieved during the Match
+     * @param winningPlayer The nickname of the winning Player
      */
     @Override
-    public void displayEndGame(Map<String, Integer> leaderboard) {
-        String myName = commonScreensCli.displayFinalScreen(leaderboard);
+    public void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer) {
+        commonScreensCli.displayFinalScreen(leaderboard);
 
-        if (client.getNickname().equals(myName)) {
+        if (client.getNickname().equals(winningPlayer)) {
             pw.print(Color.GREEN.setColor());
             pw.flush();
             cliUtils.printFigure("/titles/YouWonTitle", 37, 89);

@@ -70,7 +70,7 @@ public interface ViewInterface {
     void displayText(String text);
 
 
-    void displayEndGame(Map<String, Integer> leaderboard);
+    void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer);
 
 
     void displayError(String error);

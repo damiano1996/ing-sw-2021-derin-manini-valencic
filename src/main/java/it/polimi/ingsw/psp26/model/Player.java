@@ -22,6 +22,7 @@ public class Player extends Observable<SessionMessage> {
     private final String nickname;
     private transient final String sessionToken;
     private final PersonalBoard personalBoard;
+    private int points;
 
     private boolean inkwell;
     private List<LeaderCard> leaderCards;
@@ -43,6 +44,7 @@ public class Player extends Observable<SessionMessage> {
         personalBoard = new PersonalBoard(virtualView, sessionToken);
         inkwell = false;
         leaderCards = new ArrayList<>();
+        points = 0;
     }
 
     /**
@@ -130,4 +132,11 @@ public class Player extends Observable<SessionMessage> {
         return virtualView;
     }
 
+    /**
+     * @return The points the Player scored in the Match
+     */
+    public int getPoints() {
+        return points;
+    }
+    
 }

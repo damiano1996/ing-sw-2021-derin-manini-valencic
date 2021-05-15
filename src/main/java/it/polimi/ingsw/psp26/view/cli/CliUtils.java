@@ -208,10 +208,11 @@ public class CliUtils {
      *
      * @param rowSize The size of the row where the String will be printed
      * @param string  The String to print
+     * @return A String centered in the rowSize space
      */
     public String centerString(int rowSize, String string) {
         if (rowSize >= string.length()) return hSpace((rowSize - string.length()) / 2) + string;
-        return "";
+        else return string.substring(0, rowSize);
     }
 
 

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static it.polimi.ingsw.psp26.view.ViewUtils.*;
+
 public class DisplayWarehousePlacer {
 
     private final PrintWriter pw;
@@ -230,15 +232,7 @@ public class DisplayWarehousePlacer {
             }
         }
 
-        List<Resource> tempResourcesSource = warehouse.getAllDepots().get(sourceDepot).grabAllResources();
-        List<Resource> tempResourcesDestination = warehouse.getAllDepots().get(destinationDepot).grabAllResources();
-
-        try {
-            resources.addAll(addMultipleResources(warehouse, sourceDepot, tempResourcesDestination));
-            resources.addAll(addMultipleResources(warehouse, destinationDepot, tempResourcesSource));
-        } catch (CanNotAddResourceToDepotException e) {
-            restoreOriginalSituation(warehouse, sourceDepot, destinationDepot, tempResourcesSource, tempResourcesDestination);
-        }
+        changePosition(warehouse, resources, sourceDepot, destinationDepot);
     }
 
 
@@ -266,64 +260,6 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * If it's not possible to change Resources between two Depots, restores the original situation
-     *
-     * @param warehouse                The Warehouse that contains the depots
-     * @param sourceDepot              The source Depot for the change
-     * @param destinationDepot         The destination Depot for the change
-     * @param tempResourcesSource      A temporary List of the source Depot's Resources
-     * @param tempResourcesDestination A temporary List of the destination Depot's Resources
-     */
-    private void restoreOriginalSituation(Warehouse warehouse, int sourceDepot, int destinationDepot, List<Resource> tempResourcesSource, List<Resource> tempResourcesDestination) {
-        warehouse.getAllDepots().get(sourceDepot).grabAllResources();
-        warehouse.getAllDepots().get(destinationDepot).grabAllResources();
-
-        try {
-            addMultipleResources(warehouse, sourceDepot, tempResourcesSource);
-            addMultipleResources(warehouse, destinationDepot, tempResourcesDestination);
-        } catch (CanNotAddResourceToDepotException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * Add a list of resources to a depot
-     *
-     * @param warehouse    The warehouse from where the Depot is taken
-     * @param depotIndex   The index of the Depot where the Resources are going to be added
-     * @param resourceList The resources to add
-     * @return The Resources to put back in the Resource to insert List
-     * @throws CanNotAddResourceToDepotException Thrown if the resources can't be added to the depot
-     */
-    private List<Resource> addMultipleResources(Warehouse warehouse, int depotIndex, List<Resource> resourceList) throws CanNotAddResourceToDepotException {
-        List<Resource> resources = new ArrayList<>();
-        int maxNumberOfResources = warehouse.getAllDepots().get(depotIndex).getMaxNumberOfResources();
-
-        //If the Resource to insert in a Depot are greater than the maxNumberOfResources the Depot can contain,
-        //puts the remaining Resources in the Resource to insert List
-        if (maxNumberOfResources < resourceList.size()) {
-
-            for (int i = 0; i < maxNumberOfResources; i++)
-                warehouse.addResourceToDepot(depotIndex, resourceList.get(i));
-
-            for (int i = maxNumberOfResources; i < resourceList.size(); i++)
-                resources.add(resourceList.get(i));
-
-        }
-
-        //Otherwise add the Resources normally
-        else {
-            for (Resource resource : resourceList) {
-                warehouse.addResourceToDepot(depotIndex, resource);
-            }
-        }
-
-        return resources;
-    }
-
-
-    /**
      * Prints the Depot number the Player has to enter to store a Resource in a LeaderDepot
      *
      * @param numberOfLeaderDepots The number of Leader Depots
@@ -333,21 +269,6 @@ public class DisplayWarehousePlacer {
         for (int i = 0; i < numberOfLeaderDepots; i++) {
             pw.print(cliUtils.pCS("Depot  " + (i + 4) + cliUtils.hSpace(10), Color.GREY));
         }
-    }
-
-
-    /**
-     * Creates the List to send to the Server by taking the Resource's type contained in each Depot
-     *
-     * @param warehouse Resources to insert into the List are taken from here
-     * @return The list to send
-     */
-    private List<Resource> createListToSend(Warehouse warehouse) {
-        List<Resource> resourcesInWarehouse = new ArrayList<>();
-        for (int i = 0; i < warehouse.getAllDepots().size(); i++) {
-            resourcesInWarehouse.add(warehouse.getAllDepots().get(i).getContainedResourceType());
-        }
-        return resourcesInWarehouse;
     }
 
 

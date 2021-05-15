@@ -145,11 +145,13 @@ public class FaithTrackCli {
      * If the Vatican Report Tile is active returns it's value
      *
      * @param vaticanReportSection The section to print
-     * @return X if the Section isn't active, the Section's value if it's active
+     * @return X if the Section isn't active, a blank space if the Section is discarded, the Section's value if it's active
      */
     private String isVaticanReportSectionActive(VaticanReportSection vaticanReportSection) {
         if (vaticanReportSection.isPopesFavorTileActive())
             return "\u2551   \u001b[38;5;209m" + vaticanReportSection.getValue() + "\u001b[0m   \u2551";
+        else if (vaticanReportSection.isPopesFavorTileDiscarded())
+            return "\u2551       \u2551";
         else return "\u2551   X   \u2551";
     }
 

@@ -138,5 +138,5 @@ public class Player extends Observable<SessionMessage> {
     public int getPoints() {
         return points;
     }
-    
+
 }

@@ -50,7 +50,7 @@ public class NetworkHandler implements Observer<Message> {
                 try {
 
                     Message message = (Message) networkNode.receiveObjectData();
-//                    System.out.println("NetworkHandler - message received: " + message.toString());
+                    System.out.println("NetworkHandler - message received: " + message.toString());
 
                     switch (message.getMessageType()) {
                         case MODEL_UPDATE:

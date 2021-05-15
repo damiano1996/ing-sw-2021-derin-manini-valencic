@@ -327,6 +327,9 @@ public class GUI extends Application implements ViewInterface {
             j += i % 2;
         }
 
+        Text errorText = new Text("Select " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
+        errorText.setId("error");
+        errorText.setVisible(false);
         Button confirmationButton = new Button("SELECT");
 
         confirmationButton.setOnAction(event -> {
@@ -337,18 +340,18 @@ public class GUI extends Application implements ViewInterface {
 
             if (selected.size() >= minChoices && selected.size() <= maxChoices) {
                 try {
-                    client.notifyObservers(
-                            new Message(messageType, selected.toArray()));
-
+                    client.notifyObservers(new Message(messageType, selected.toArray()));
                     dialog.close();
                     client.viewNext();
-
                 } catch (InvalidPayloadException ignored) {
                 }
+            } else {
+                errorText.setVisible(true);
             }
         });
 
-        container.add(new VBox(confirmationButton), 0, container.getRowCount() + 1, container.getColumnCount(), 1);
+        container.add(new VBox(errorText), 0, container.getRowCount() + 1, container.getColumnCount(), 1);
+        container.add(new VBox(confirmationButton), 0, container.getRowCount() + 2, container.getColumnCount(), 1);
     }
 
     @Override
@@ -374,7 +377,6 @@ public class GUI extends Application implements ViewInterface {
             dialog.close();
         });
 
-
         dialog.show();
     }
 
@@ -395,18 +397,26 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void displayWaitingScreen(Message message) {
 //        try {
-//            WaitingScreen.getInstance(root).startWaiting((String) message.getPayload());
-//        } catch (EmptyPayloadException e) {
-//            e.printStackTrace();
+//            Task task = new Task<>() {
+//                @Override
+//                protected Void call() {
+//                    client.viewNext();
+//                    return null;
+//                }
+//            };
+//
+//            WaitingScreen.getInstance(root).startWaiting(task, (String) message.getPayload());
+//        } catch (EmptyPayloadException emptyPayloadException) {
+//            emptyPayloadException.printStackTrace();
 //        }
+
         client.viewNext();
     }
 
     @Override
     public void stopDisplayingWaitingScreen() {
-        // WaitingScreen.getInstance(root).stopWaiting();
 
-        Pane pane = addBackground(getPlayingPane(primaryStage, client, (int) (WINDOW_WIDTH * 0.5)), WINDOW_WIDTH, WINDOW_HEIGHT);
+        Pane pane = addBackground(getPlayingPane(primaryStage, client, (int) (WINDOW_WIDTH * 0.9)), WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.getScene().setRoot(pane);
 
         client.viewNext();

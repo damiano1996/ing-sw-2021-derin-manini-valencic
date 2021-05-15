@@ -28,7 +28,7 @@ public class ViewUtils {
         return newString.toString();
     }
 
-    
+
     //-----------------------------------------//
     //          ENDING SCREEN METHODS          //
     //-----------------------------------------//    

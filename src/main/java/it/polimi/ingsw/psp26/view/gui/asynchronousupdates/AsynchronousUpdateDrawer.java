@@ -8,13 +8,12 @@ public class AsynchronousUpdateDrawer {
     private final LoopListener loopListener;
     private final RunLater runLater;
 
-    private final Task task;
+    private Task task;
 
     public AsynchronousUpdateDrawer(LoopListener loopListener, RunLater runLater) {
         this.loopListener = loopListener;
         this.runLater = runLater;
 
-        task = createTask();
     }
 
     private Task createTask() {
@@ -24,6 +23,7 @@ public class AsynchronousUpdateDrawer {
                 Platform.runLater(() -> {
                     try {
                         runLater.execute();
+                        System.out.println("TASK HAS BEEN EXECUTED!");
                     } catch (InterruptedException ignored) {
                     }
                 });
@@ -37,7 +37,8 @@ public class AsynchronousUpdateDrawer {
             while (true) {
                 try {
                     loopListener.lookingFor();
-                    task.run();
+                    System.out.println("STARTING TASK");
+                    createTask().run();
                 } catch (InterruptedException ignored) {
                 }
             }

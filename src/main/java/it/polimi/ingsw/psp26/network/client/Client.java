@@ -7,7 +7,6 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
-import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -16,7 +15,6 @@ import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;

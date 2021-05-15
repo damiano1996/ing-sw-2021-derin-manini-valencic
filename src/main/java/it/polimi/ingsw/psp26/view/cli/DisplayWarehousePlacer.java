@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static it.polimi.ingsw.psp26.view.ViewUtils.*;
+import static it.polimi.ingsw.psp26.view.ViewUtils.changePosition;
+import static it.polimi.ingsw.psp26.view.ViewUtils.createListToSend;
 
 public class DisplayWarehousePlacer {
 

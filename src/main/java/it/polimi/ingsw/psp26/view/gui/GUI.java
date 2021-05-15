@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.view.gui;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
 import it.polimi.ingsw.psp26.model.MarketTray;
@@ -26,7 +25,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -44,7 +42,10 @@ import java.util.Map;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
+import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_HEIGHT;
+import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_WIDTH;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.PlayingPane.getPlayingPane;
 
 public class GUI extends Application implements ViewInterface {
@@ -61,9 +62,9 @@ public class GUI extends Application implements ViewInterface {
     }
 
     private void setStageWindowProperties(Stage stage) {
-        stage.setMaximized(true);
+//        stage.setMaximized(true);
         stage.setResizable(false);
-        stage.setFullScreen(true);
+//        stage.setFullScreen(true);
         // stage.setAlwaysOnTop(true);
         stage.sizeToScene();
     }
@@ -73,7 +74,7 @@ public class GUI extends Application implements ViewInterface {
 
         client = new Client(this);
 
-        root = addBackground(new Pane(), getScreenWidth(), getScreenHeight(), 1, 1);
+        root = addBackground(new Pane(), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         Scene scene = new Scene(root);
         addStylesheet(scene);
@@ -273,20 +274,20 @@ public class GUI extends Application implements ViewInterface {
 
     private void buttonMultipleChoices(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices) {
 
-        List<Button> groupButtons = new ArrayList<>();
+        List<ButtonContainer> buttonContainers = new ArrayList<>();
 
         for (int i = 0; i < choices.size(); i++) {
 
-            Button button = choicesDrawer.decorateButton(new Button(), choices.get(i));
-            groupButtons.add(button);
+            ButtonContainer buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
+            buttonContainers.add(buttonContainer);
 
             int finalI = i;
-            button.setOnAction(event -> {
+            buttonContainer.setOnAction(event -> {
                 // disabling all buttons
-                for (Button button1 : groupButtons) button1.setDisable(true);
+                for (Button button1 : buttonContainers) button1.setDisable(true);
 
                 try {
-                    client.notifyObservers(new Message(messageType, choices.get(finalI)));
+                    client.notifyObservers(new Message(messageType, buttonContainer.getContainedObject()));
                 } catch (InvalidPayloadException ignored) {
                 }
 
@@ -303,28 +304,28 @@ public class GUI extends Application implements ViewInterface {
                 client.viewNext();
 
             });
-            pane.getChildren().add(button);
+            pane.getChildren().add(buttonContainer);
         }
     }
 
     private void checkBoxMultipleChoices(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
 
-        List<CheckBoxContainer> checkBoxContainers = new ArrayList<>();
+        List<ButtonContainer> buttonContainers = new ArrayList<>();
 
         for (Object choice : choices) {
 
-            CheckBoxContainer checkBox = new CheckBoxContainer<>(choice);
-            checkBox = choicesDrawer.decorateCheckBoxContainer(checkBox, choice);
-            checkBoxContainers.add(checkBox);
-            pane.getChildren().add(checkBox);
+            ButtonContainer buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choice));
+            buttonContainers.add(buttonContainer);
+            pane.getChildren().add(buttonContainer);
         }
 
         Button confirmationButton = new Button("SELECT");
+
         confirmationButton.setOnAction(event -> {
             List<Object> selected = new ArrayList<>();
-            for (CheckBox checkBox : checkBoxContainers)
-                if (checkBox.isSelected())
-                    selected.add(((CheckBoxContainer) checkBox).getContainedObject());
+            for (ButtonContainer buttonContainer : buttonContainers)
+                if (buttonContainer.isClicked())
+                    selected.add(buttonContainer.getContainedObject());
 
             if (selected.size() >= minChoices && selected.size() <= maxChoices) {
                 try {
@@ -338,6 +339,7 @@ public class GUI extends Application implements ViewInterface {
                 }
             }
         });
+
         pane.getChildren().add(confirmationButton);
     }
 
@@ -384,23 +386,19 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayWaitingScreen(Message message) {
-        try {
-            WaitingScreen.getInstance(root).startWaiting((String) message.getPayload());
-        } catch (EmptyPayloadException e) {
-            e.printStackTrace();
-        }
-        System.out.println("1111");
-        //client.viewNext();
-        System.out.println("22222");
+//        try {
+//            WaitingScreen.getInstance(root).startWaiting((String) message.getPayload());
+//        } catch (EmptyPayloadException e) {
+//            e.printStackTrace();
+//        }
+        client.viewNext();
     }
 
     @Override
     public void stopDisplayingWaitingScreen() {
-        System.out.println("33333");
-        WaitingScreen.getInstance(root).stopWaiting();
+        // WaitingScreen.getInstance(root).stopWaiting();
 
-        System.out.println("44444");
-        Pane pane = addBackground(getPlayingPane(primaryStage, client), getScreenWidth(), getScreenHeight(), 1, 1);
+        Pane pane = addBackground(getPlayingPane(primaryStage, client), WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.getScene().setRoot(pane);
 
         client.viewNext();

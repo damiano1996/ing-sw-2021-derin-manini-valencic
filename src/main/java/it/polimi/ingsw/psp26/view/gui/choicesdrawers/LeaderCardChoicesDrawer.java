@@ -1,40 +1,27 @@
 package it.polimi.ingsw.psp26.view.gui.choicesdrawers;
 
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.view.gui.CheckBoxContainer;
-import javafx.scene.control.Button;
+import it.polimi.ingsw.psp26.view.gui.ButtonContainer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
-import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addSelectionShadow;
+import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getCard;
 
 public class LeaderCardChoicesDrawer implements ChoicesDrawer<LeaderCard> {
 
     @Override
-    public Button decorateButton(Button button, LeaderCard choice) {
-        button.setGraphic(getCardImageView(choice));
-        return button;
-    }
-
-    @Override
-    public CheckBoxContainer decorateCheckBoxContainer(CheckBoxContainer checkBoxContainer, LeaderCard choice) {
-        checkBoxContainer.setGraphic(getCardImageView(choice));
-
-        checkBoxContainer.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (checkBoxContainer.isSelected()) {
-                ImageView imageView = getCardImageView(choice);
-                Image image = imageView.getImage();
-                image = addSelectionShadow(image);
-                imageView.setImage(image);
-                checkBoxContainer.setGraphic(imageView);
-            } else {
-                checkBoxContainer.setGraphic(getCardImageView(choice));
-            }
-        });
-        return checkBoxContainer;
+    public ButtonContainer<LeaderCard> decorateButtonContainer(ButtonContainer<LeaderCard> leaderCardButtonContainer) {
+        leaderCardButtonContainer.setGraphic(getCardImageView(leaderCardButtonContainer.getContainedObject()));
+        addSelectionListener(
+                leaderCardButtonContainer,
+                getCardImageView(leaderCardButtonContainer.getContainedObject()),
+                getCard(leaderCardButtonContainer.getContainedObject(), getGeneralRatio())
+        );
+        leaderCardButtonContainer.setStyle("-fx-background-color: transparent;");
+        return leaderCardButtonContainer;
     }
 
     private ImageView getCardImageView(LeaderCard leaderCard) {

@@ -12,8 +12,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
+import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getWindowWidth;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPlayer;
 
 public class PlayingPane {
@@ -21,7 +21,7 @@ public class PlayingPane {
     private static HBox addTopBar(Stage primaryStage, int windowWidth, Client client) {
 
         int boxSize = windowWidth / (2 + 3); // 2 are for market tray and development grid, 3 are for the opponent players
-        int zoomFactor = 2;
+        int zoomFactor = 3;
 
         HBox hBox = new HBox();
 
@@ -35,9 +35,9 @@ public class PlayingPane {
                             0,
                             drawThumbNail(
                                     primaryStage,
-                                    new MarketTrayDrawer(marketTray, (int) (boxSize * 0.7f)).draw(),
-                                    new MarketTrayDrawer(marketTray, zoomFactor * (int) (boxSize * 0.7f)).draw(),
-                                    boxSize, zoomFactor * boxSize, getGeneralRatio())
+                                    new MarketTrayDrawer(marketTray, boxSize).draw(),
+                                    new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
+                                    boxSize, boxSize)
                     );
                 }
         ).start();
@@ -52,9 +52,9 @@ public class PlayingPane {
                             1,
                             drawThumbNail(
                                     primaryStage,
-                                    new DevelopmentCardGridDrawer(developmentGrid, (int) (boxSize * 0.7f)).draw(),
-                                    new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * (int) (boxSize * 0.7f)).draw(),
-                                    boxSize, zoomFactor * boxSize, getGeneralRatio())
+                                    new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
+                                    new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
+                                    boxSize, boxSize)
                     );
                 }
         ).start();
@@ -73,7 +73,7 @@ public class PlayingPane {
                                         primaryStage,
                                         drawPlayer(player, boxSize, getGeneralRatio()),
                                         drawPlayer(player, zoomFactor * boxSize, getGeneralRatio()),
-                                        boxSize, zoomFactor * boxSize, getGeneralRatio())
+                                        boxSize, boxSize)
                         );
                     }
             ).start();
@@ -83,9 +83,7 @@ public class PlayingPane {
     }
 
     private static VBox addRightBar() {
-        VBox vBox = new VBox();
-
-        return vBox;
+        return new VBox();
     }
 
     private static Pane addMainBox(Client client, int width) {
@@ -109,10 +107,10 @@ public class PlayingPane {
     public static BorderPane getPlayingPane(Stage primaryStage, Client client) {
 
         BorderPane border = new BorderPane();
-        border.setTop(addTopBar(primaryStage, getWindowWidth(), client));
+        border.setTop(addTopBar(primaryStage, (int) (WINDOW_WIDTH * 0.5), client));
 
         HBox hBox = new HBox();
-        hBox.getChildren().add(addMainBox(client, getWindowWidth()));
+        hBox.getChildren().add(addMainBox(client, (int) (WINDOW_WIDTH * 0.5)));
         hBox.getChildren().add(addRightBar());
 
         border.setLeft(hBox);

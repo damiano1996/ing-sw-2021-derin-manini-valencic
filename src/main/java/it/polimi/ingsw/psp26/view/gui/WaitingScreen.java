@@ -10,7 +10,9 @@ import javafx.scene.text.Text;
 
 import java.util.concurrent.TimeUnit;
 
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
+import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_WIDTH;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResource;
 
 public class WaitingScreen {
@@ -49,8 +51,8 @@ public class WaitingScreen {
 
             Image resourceImage = getResource(resource, getGeneralRatio() * 3);
             ImageView imageView = getImageView(resourceImage,
-                    (int) (getScreenWidth() * 0.5 - 200 * getGeneralRatio()),
-                    (int) (getScreenHeight() * 0.5 - 300 * getGeneralRatio()));
+                    (int) (WINDOW_WIDTH * 0.5 - 200 * getGeneralRatio()),
+                    (int) (WINDOW_WIDTH * 0.5 - 300 * getGeneralRatio()));
             animationContainer.getChildren().add(imageView);
         }
 

@@ -3,13 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" id="VBox" alignment="CENTER" stylesheets="@../stylesheets/stylesheet.css"
-      xmlns="http://javafx.com/javafx/11.0.1">
+<VBox xmlns:fx="http://javafx.com/fxml/1" id="VBox" alignment="CENTER" prefHeight="176.0" prefWidth="200.0"
+      stylesheets="@../stylesheets/stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1">
 
     <Text id="title" text="Masters of Renaissance" textAlignment="CENTER"/>
 
     <Label id="label" text="Nickname"/>
-    <TextField id="text-field" fx:id="nicknameTextField"/>
+    <TextField id="text-field" fx:id="nicknameTextField" prefHeight="26.0" prefWidth="155.0"/>
 
     <Label id="label" text="ServerIP"/>
     <TextField id="text-field" fx:id="serverIPTextField"/>

@@ -1,11 +1,8 @@
 package it.polimi.ingsw.psp26.view.gui.choicesdrawers;
 
-import it.polimi.ingsw.psp26.view.gui.CheckBoxContainer;
-import javafx.scene.control.Button;
+import it.polimi.ingsw.psp26.view.gui.ButtonContainer;
 
 public interface ChoicesDrawer<T> {
 
-    Button decorateButton(Button button, T choice);
-
-    CheckBoxContainer decorateCheckBoxContainer(CheckBoxContainer checkBoxContainer, T choice);
+    ButtonContainer<T> decorateButtonContainer(ButtonContainer<T> tButtonContainer);
 }

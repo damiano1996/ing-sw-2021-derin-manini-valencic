@@ -1,22 +1,16 @@
 package it.polimi.ingsw.psp26.view.gui.choicesdrawers;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.view.gui.CheckBoxContainer;
-import javafx.scene.control.Button;
+import it.polimi.ingsw.psp26.view.gui.ButtonContainer;
 
 import static it.polimi.ingsw.psp26.view.ViewUtils.beautifyMessageType;
 
 public class MessageTypeChoicesDrawer implements ChoicesDrawer<MessageType> {
 
     @Override
-    public Button decorateButton(Button button, MessageType choice) {
-        button.setText(beautifyMessageType(choice));
-        return button;
+    public ButtonContainer<MessageType> decorateButtonContainer(ButtonContainer<MessageType> messageTypeButtonContainer) {
+        messageTypeButtonContainer.setText(beautifyMessageType(messageTypeButtonContainer.getContainedObject()));
+        return messageTypeButtonContainer;
     }
 
-    @Override
-    public CheckBoxContainer decorateCheckBoxContainer(CheckBoxContainer checkBoxContainer, MessageType choice) {
-        checkBoxContainer.setText(beautifyMessageType(choice));
-        return checkBoxContainer;
-    }
 }

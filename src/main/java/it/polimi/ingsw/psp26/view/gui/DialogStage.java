@@ -1,17 +1,14 @@
 package it.polimi.ingsw.psp26.view.gui;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
-
+import static it.polimi.ingsw.psp26.view.gui.FramePane.addCoolFrame;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.setTransparentBackground;
 
 public class DialogStage {
 
@@ -26,22 +23,11 @@ public class DialogStage {
         // dialog.setAlwaysOnTop(true);
         dialog.centerOnScreen();
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(DialogStage.class.getResource("/gui/fxml/dialog.fxml"));
-        try {
-            AnchorPane anchorPane = fxmlLoader.load();
+        Pane stackPane = addCoolFrame(content);
 
-            StackPane stackPane = (StackPane) fxmlLoader.getNamespace().get("container");
-            stackPane.getChildren().add(content);
-
-            // Scene scene = setTransparentBackground(content);
-            Scene scene = new Scene(anchorPane);
-            addStylesheet(scene);
-            dialog.setScene(scene);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Scene scene = setTransparentBackground(stackPane);
+        addStylesheet(scene);
+        dialog.setScene(scene);
 
         return dialog;
     }

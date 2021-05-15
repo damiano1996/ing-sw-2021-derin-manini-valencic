@@ -13,38 +13,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH;
 import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WIDTH_RATIO;
+import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_WIDTH;
 
 public class GUIUtils {
 
     private final static Map<String, Image> images = new HashMap<>();
 
-    public static int getScreenWidth() {
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        return (int) dimension.getWidth();
-    }
-
-    public static int getScreenHeight() {
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        return (int) dimension.getHeight();
-    }
-
-    public static int getWindowWidth() {
-        return (int) (WIDTH_RATIO * getScreenWidth());
-    }
-
-    public static int getWindowHeight() {
-        return (int) (WIDTH_RATIO * getScreenHeight());
-    }
-
     public static float getGeneralRatio() {
-        return getWindowWidth() / REFERENCE_WIDTH;
+        return WINDOW_WIDTH / REFERENCE_WIDTH;
     }
 
     public static String getCompletePath(String fileName) {

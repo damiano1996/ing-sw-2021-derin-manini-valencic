@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.view.gui.effects.Selectable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -97,7 +96,6 @@ public class MarketTrayDrawer extends RatioDrawer {
             ImageView imageView = getImageView(getArrowImage(), hOffset * ratio, (vOffset + row * shift) * ratio);
             imageView.setRotate(-90);
             addMouseOverAnimation(imageView, ratio);
-            new Selectable(imageView);
 
             pane.getChildren().add(imageView);
         }
@@ -111,7 +109,6 @@ public class MarketTrayDrawer extends RatioDrawer {
         for (int col = 0; col < marketTray.getMarblesOnRow(0).length; col++) {
             ImageView imageView = getImageView(getArrowImage(), (hOffset + col * shift) * ratio, vOffset * ratio);
             addMouseOverAnimation(imageView, ratio);
-            new Selectable(imageView);
 
             pane.getChildren().add(imageView);
         }

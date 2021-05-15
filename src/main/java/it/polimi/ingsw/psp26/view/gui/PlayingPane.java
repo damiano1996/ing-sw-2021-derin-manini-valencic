@@ -12,7 +12,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPlayer;
 
@@ -104,13 +103,13 @@ public class PlayingPane {
         return root;
     }
 
-    public static BorderPane getPlayingPane(Stage primaryStage, Client client) {
+    public static BorderPane getPlayingPane(Stage primaryStage, Client client, int width) {
 
         BorderPane border = new BorderPane();
-        border.setTop(addTopBar(primaryStage, (int) (WINDOW_WIDTH * 0.5), client));
+        border.setTop(addTopBar(primaryStage, width, client));
 
         HBox hBox = new HBox();
-        hBox.getChildren().add(addMainBox(client, (int) (WINDOW_WIDTH * 0.5)));
+        hBox.getChildren().add(addMainBox(client, width));
         hBox.getChildren().add(addRightBar());
 
         border.setLeft(hBox);

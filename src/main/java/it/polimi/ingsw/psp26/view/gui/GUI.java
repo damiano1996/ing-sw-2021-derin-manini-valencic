@@ -27,7 +27,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -212,15 +212,14 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
-        VBox choicesBox = new VBox(10 * getGeneralRatio());
-        Stage dialog = getDialog(primaryStage, choicesBox);
+        VBox mainContainer = new VBox(10 * getGeneralRatio());
+        Stage dialog = getDialog(primaryStage, mainContainer);
 
         Label label = new Label(question);
         label.setId("label");
         label.setWrapText(true);
-        choicesBox.getChildren().add(label);
+        mainContainer.getChildren().add(label);
 
-        Pane contentBox;
         ChoicesDrawer choicesDrawer;
 
         switch (messageType) {
@@ -228,18 +227,15 @@ public class GUI extends Application implements ViewInterface {
             case MULTI_OR_SINGLE_PLAYER_MODE:
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
-                contentBox = new VBox(20 * getGeneralRatio());
                 choicesDrawer = new MessageTypeChoicesDrawer();
                 break;
 
             case CHOICE_LEADERS:
-                contentBox = new HBox(5 * getGeneralRatio());
                 choicesDrawer = new LeaderCardChoicesDrawer();
                 break;
 
             case CHOICE_RESOURCE_FROM_WAREHOUSE:
             case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
-                contentBox = new HBox(5 * getGeneralRatio());
                 choicesDrawer = new ResourceChoicesDrawer();
                 break;
 
@@ -247,8 +243,11 @@ public class GUI extends Application implements ViewInterface {
                 throw new IllegalStateException("Unexpected value: " + messageType);
         }
 
-        choicesBox.getChildren().add(contentBox);
-        buttonOrCheckBox(contentBox, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
+        GridPane contentPane = new GridPane();
+        contentPane.setHgap(10 * getGeneralRatio());
+        contentPane.setVgap(10 * getGeneralRatio());
+        mainContainer.getChildren().add(contentPane);
+        buttonOrCheckBox(contentPane, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
 
         if (hasUndoOption) {
             Button undoOptionButton = new Button("UNDO");
@@ -258,24 +257,25 @@ public class GUI extends Application implements ViewInterface {
                 client.sendUndoMessage();
                 client.viewNext();
             });
-            choicesBox.getChildren().add(undoOptionButton);
+            mainContainer.getChildren().add(undoOptionButton);
         }
 
         dialog.show();
     }
 
-    private void buttonOrCheckBox(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+    private void buttonOrCheckBox(GridPane container, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
         if (minChoices == 1 && maxChoices == 1) {
-            buttonMultipleChoices(pane, dialog, choicesDrawer, messageType, choices);
+            buttonMultipleChoices(container, dialog, choicesDrawer, messageType, choices);
         } else {
-            checkBoxMultipleChoices(pane, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
+            checkBoxMultipleChoices(container, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
         }
     }
 
-    private void buttonMultipleChoices(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices) {
+    private void buttonMultipleChoices(GridPane container, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices) {
 
         List<ButtonContainer> buttonContainers = new ArrayList<>();
 
+        int j = 0;
         for (int i = 0; i < choices.size(); i++) {
 
             ButtonContainer buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
@@ -304,19 +304,27 @@ public class GUI extends Application implements ViewInterface {
                 client.viewNext();
 
             });
-            pane.getChildren().add(buttonContainer);
+            if (choices.size() % 2 != 0 && i == choices.size() - 1)
+                container.add(new VBox(buttonContainer), 0, container.getRowCount() + 1, container.getColumnCount(), 1);
+            else container.add(buttonContainer, i % 2, j % 2, 1, 1);
+            j += i % 2;
         }
     }
 
-    private void checkBoxMultipleChoices(Pane pane, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+    private void checkBoxMultipleChoices(GridPane container, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
 
         List<ButtonContainer> buttonContainers = new ArrayList<>();
 
-        for (Object choice : choices) {
+        int j = 0;
+        for (int i = 0; i < choices.size(); i++) {
 
-            ButtonContainer buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choice));
+            ButtonContainer buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
             buttonContainers.add(buttonContainer);
-            pane.getChildren().add(buttonContainer);
+
+            if (choices.size() % 2 != 0 && i == choices.size() - 1)
+                container.add(new VBox(buttonContainer), 0, container.getRowCount() + 1, container.getColumnCount(), 1);
+            else container.add(buttonContainer, i % 2, j % 2, 1, 1);
+            j += i % 2;
         }
 
         Button confirmationButton = new Button("SELECT");
@@ -340,7 +348,7 @@ public class GUI extends Application implements ViewInterface {
             }
         });
 
-        pane.getChildren().add(confirmationButton);
+        container.add(new VBox(confirmationButton), 0, container.getRowCount() + 1, container.getColumnCount(), 1);
     }
 
     @Override
@@ -398,7 +406,7 @@ public class GUI extends Application implements ViewInterface {
     public void stopDisplayingWaitingScreen() {
         // WaitingScreen.getInstance(root).stopWaiting();
 
-        Pane pane = addBackground(getPlayingPane(primaryStage, client), WINDOW_WIDTH, WINDOW_HEIGHT);
+        Pane pane = addBackground(getPlayingPane(primaryStage, client, (int) (WINDOW_WIDTH * 0.5)), WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.getScene().setRoot(pane);
 
         client.viewNext();

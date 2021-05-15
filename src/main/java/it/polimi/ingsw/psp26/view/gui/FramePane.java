@@ -37,7 +37,7 @@ public class FramePane {
     }
 
     public static StackPane addCoolFrame(Pane content, int contentWidth, int contentHeight) {
-        return addBackground(content, "window_graphics/frame.png", false, true, contentWidth, contentHeight);
+        return addBackground(content, "window_graphics/frame.png", true, true, contentWidth, contentHeight);
     }
 
     public static StackPane addBackground(Pane content, int contentWidth, int contentHeight) {

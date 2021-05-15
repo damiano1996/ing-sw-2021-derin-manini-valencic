@@ -18,14 +18,14 @@ public class LeaderCardChoicesDrawer implements ChoicesDrawer<LeaderCard> {
         addSelectionListener(
                 leaderCardButtonContainer,
                 getCardImageView(leaderCardButtonContainer.getContainedObject()),
-                getCard(leaderCardButtonContainer.getContainedObject(), getGeneralRatio())
+                getCard(leaderCardButtonContainer.getContainedObject(), (float) (getGeneralRatio() * 0.5))
         );
         leaderCardButtonContainer.setStyle("-fx-background-color: transparent;");
         return leaderCardButtonContainer;
     }
 
     private ImageView getCardImageView(LeaderCard leaderCard) {
-        Image leaderCardImage = getCard(leaderCard, getGeneralRatio());
+        Image leaderCardImage = getCard(leaderCard, (float) (getGeneralRatio() * 0.5));
         return getImageView(leaderCardImage, 0, 0);
     }
 }

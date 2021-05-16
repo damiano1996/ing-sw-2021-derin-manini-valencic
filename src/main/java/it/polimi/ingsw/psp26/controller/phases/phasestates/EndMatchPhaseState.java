@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.model.LeaderBoard;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -12,6 +13,9 @@ import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 public class EndMatchPhaseState extends PhaseState {
+
+    private String winnerName;
+
     public EndMatchPhaseState(Phase phase) {
         super(phase);
     }
@@ -19,15 +23,18 @@ public class EndMatchPhaseState extends PhaseState {
     @Override
     public void execute(SessionMessage message) {
         super.execute(message);
-        if (message.getMessageType() == SEVENTH_CARD_DRAWN || message.getMessageType() == FINAL_TILE_POSITION)
-            showEndGameResult();
-        //else
-        //showLoseScreen();
+
+        if (message.getMessageType() == BLACK_CROSS_FINAL_POSITION || message.getMessageType() == NO_MORE_COLUMN_DEVELOPMENT_CARDS){
+            winnerName = "Lorenzo il Magnifico";
+        }
+
+        showEndGameResult();
     }
 
     private void showEndGameResult() {
 
-        computePlayersPoints();
+        if(winnerName != "Lorenzo il Magnifico" )
+            computePlayersPoints();
 
         for (Player player : phase.getMatchController().getMatch().getPlayers()) {
             try {
@@ -35,7 +42,7 @@ public class EndMatchPhaseState extends PhaseState {
                         new SessionMessage(
                                 player.getSessionToken(),
                                 ENDGAME_RESULT,
-                                phase.getMatchController().getMatch().getLeaderboard()
+                                winnerName
                         ));
             } catch (InvalidPayloadException e) {
                 e.printStackTrace();
@@ -44,9 +51,11 @@ public class EndMatchPhaseState extends PhaseState {
 
     }
 
-    private void computePlayersPoints() {
+    private String computePlayersPoints() {
 
         int playerPoints;
+        int winnerPoints = 0;
+        LeaderBoard leaderboard = LeaderBoard.getInstance();
 
         for (Player player : phase.getMatchController().getMatch().getPlayers()) {
 
@@ -58,9 +67,17 @@ public class EndMatchPhaseState extends PhaseState {
             playerPoints += computeLeaderPoints(player);
             playerPoints += computePopeFavorTilePoints(player);
 
-            phase.getMatchController().getMatch().getLeaderboard().addPlayerVictoryPoints(player.getNickname(), playerPoints);
+           player.addPoints(playerPoints);
+
+           winnerPoints = Math.max(winnerPoints, playerPoints);
+
+            leaderboard.addPlayerVictoryPoints(player.getNickname(), playerPoints);
+
+           if(winnerPoints == playerPoints)
+               winnerName = player.getNickname();
 
         }
+        return winnerName;
     }
 
 

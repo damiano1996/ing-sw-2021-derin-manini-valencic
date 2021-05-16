@@ -139,4 +139,13 @@ public class Player extends Observable<SessionMessage> {
         return points;
     }
 
+    /**
+     *  Method to add victory points to the player
+     *
+     *  @param victoryPoints victory points to be added to the player
+     */
+    public void addPoints(int victoryPoints) {
+        this.points += victoryPoints;
+    }
+
 }

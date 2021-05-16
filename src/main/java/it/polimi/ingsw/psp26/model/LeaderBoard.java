@@ -16,7 +16,7 @@ public class LeaderBoard {
     /**
      * Constructor of the class.
      */
-    public LeaderBoard() {
+    private LeaderBoard() {
         leaderboard = new HashMap<>();
     }
 

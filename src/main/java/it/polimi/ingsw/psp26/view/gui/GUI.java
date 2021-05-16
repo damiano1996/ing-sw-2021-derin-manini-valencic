@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.gui;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
 import it.polimi.ingsw.psp26.model.MarketTray;
@@ -16,11 +17,13 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.network.client.MessageSynchronizedFIFO;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.LeaderCardChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ResourceChoicesDrawer;
+import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -373,8 +376,8 @@ public class GUI extends Application implements ViewInterface {
 
         Stage dialog = getDialog(primaryStage, vBox);
         confirmationButton.setOnAction(actionEvent -> {
-            client.viewNext();
             dialog.close();
+            client.viewNext();
         });
 
         dialog.show();
@@ -396,26 +399,21 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayWaitingScreen(Message message) {
-//        try {
-//            Task task = new Task<>() {
-//                @Override
-//                protected Void call() {
-//                    client.viewNext();
-//                    return null;
-//                }
-//            };
-//
-//            WaitingScreen.getInstance(root).startWaiting(task, (String) message.getPayload());
-//        } catch (EmptyPayloadException emptyPayloadException) {
-//            emptyPayloadException.printStackTrace();
-//        }
+        try {
+            new WaitingScreen(
+                    root,
+                    () -> MessageSynchronizedFIFO.getInstance().getNext(),
+                    this::stopDisplayingWaitingScreen,
+                    (String) message.getPayload()
+            ).start();
+        } catch (EmptyPayloadException emptyPayloadException) {
+            emptyPayloadException.printStackTrace();
+        }
 
-        client.viewNext();
     }
 
     @Override
     public void stopDisplayingWaitingScreen() {
-
         Pane pane = addBackground(getPlayingPane(primaryStage, client, (int) (WINDOW_WIDTH * 0.9)), WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.getScene().setRoot(pane);
 

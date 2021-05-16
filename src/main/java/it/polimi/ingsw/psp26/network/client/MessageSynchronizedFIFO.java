@@ -11,9 +11,11 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
 
     private static MessageSynchronizedFIFO instance;
     private final List<Message> messages;
+    private boolean newMessage;
 
     private MessageSynchronizedFIFO() {
         messages = new ArrayList<>();
+        newMessage = false;
     }
 
     public static MessageSynchronizedFIFO getInstance() {
@@ -25,6 +27,7 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
     @Override
     public synchronized void update(Message message) {
         messages.add(message);
+        newMessage = true;
         notifyAll();
     }
 
@@ -35,6 +38,16 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
             } catch (InterruptedException ignored) {
             }
         }
+        newMessage = false;
         return messages.remove(0);
+    }
+
+    public synchronized void lookingForNext() {
+        while (!newMessage) {
+            try {
+                wait();
+            } catch (InterruptedException ignored) {
+            }
+        }
     }
 }

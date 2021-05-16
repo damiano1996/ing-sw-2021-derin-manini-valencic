@@ -148,11 +148,8 @@ public class CLI implements ViewInterface {
         cliUtils.pPCS("Slots numbering convention:", Color.WHITE, 12, 4);
         cliUtils.vSpace(1);
         displayMultipleStringChoices(choices);
-        try {
-            displayDevelopmentCardsSlots(client.getCachedModel().getMyPlayerCached().getObsoleteObject().getPersonalBoard().getDevelopmentCardsSlots());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        displayDevelopmentCardsSlots(client.getCachedModel().getMyPlayerCached().getObject().getPersonalBoard().getDevelopmentCardsSlots());
+
     }
 
 
@@ -164,11 +161,8 @@ public class CLI implements ViewInterface {
     private void choiceNormalLeaderActionExecute(List<Object> choices) {
         isPersonalBoardPrintable = true;
         notificationStackPrinter.restoreStackView();
-        try {
-            personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObsoleteObject(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
+
         cliUtils.setCursorPosition(47, 1);
         displayMultipleStringChoices(choices);
     }
@@ -689,11 +683,7 @@ public class CLI implements ViewInterface {
         while (true) {
 
             // At each iteration the current Player Personal Board will be printed
-            try {
-                personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObsoleteObject(), !(client.getMatchModeType().equals(SINGLE_PLAYER_MODE)));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), !(client.getMatchModeType().equals(SINGLE_PLAYER_MODE)));
 
             printOpponentViewScreenInformation();
             printOpponentsPersonalBoardList();
@@ -745,7 +735,7 @@ public class CLI implements ViewInterface {
         pw.print(cliUtils.hSpace(4) + "Your choice: ");
         pw.flush();
         int opponentNumber = getCorrectOpponentNumber(client.getCachedModel().getNumberOfOpponents());
-        Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObsoleteObject();
+        Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObject();
 
         personalBoardCli.displayPersonalBoard(opponent, !(client.getMatchModeType().equals(SINGLE_PLAYER_MODE)));
         cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board", Color.WHITE, 50, 5);
@@ -785,7 +775,7 @@ public class CLI implements ViewInterface {
             cliUtils.vSpace(2);
             for (int i = 0; i < client.getCachedModel().getNumberOfOpponents(); i++) {
                 try {
-                    pw.print(cliUtils.hSpace(4) + (i + 1) + " - " + client.getCachedModel().getOpponentCached(i).getObsoleteObject().getNickname());
+                    pw.print(cliUtils.hSpace(4) + (i + 1) + " - " + client.getCachedModel().getOpponentCached(i).getObject().getNickname());
                     cliUtils.vSpace(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

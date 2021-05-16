@@ -56,9 +56,9 @@ public class ViewUtils {
         List<Player> players = new ArrayList<>();
         try {
             for (int i = 0; i < cachedModel.getNumberOfOpponents(); i++) {
-                players.add(cachedModel.getOpponentCached(i).getObsoleteObject());
+                players.add(cachedModel.getOpponentCached(i).getObject());
             }
-            players.add(cachedModel.getMyPlayerCached().getObsoleteObject());
+            players.add(cachedModel.getMyPlayerCached().getObject());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

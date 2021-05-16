@@ -2,8 +2,10 @@ package it.polimi.ingsw.psp26.view.gui.loading;
 
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
+import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.DelayedJob;
+import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.JobListener;
 import javafx.animation.AnimationTimer;
-import javafx.concurrent.Task;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -19,26 +21,23 @@ import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getR
 
 public class WaitingScreen {
 
-    private static WaitingScreen instance;
-
     private final Pane parent;
-    private Pane animationContainer;
-    private AnimationTimer animationTimer;
-    private Thread thread;
+    private final JobListener jobListener;
+    private final DelayedJob delayedJob;
+    private final String waitingMessage;
+
     private boolean runningAnimation;
+    private AnimationTimer animationTimer;
 
-    private WaitingScreen(Pane parent) {
+    public WaitingScreen(Pane parent, JobListener jobListener, DelayedJob delayedJob, String waitingMessage) {
         this.parent = parent;
+        this.jobListener = jobListener;
+        this.delayedJob = delayedJob;
+        this.waitingMessage = waitingMessage;
     }
 
-    public static WaitingScreen getInstance(Pane parent) {
-        if (instance == null) instance = new WaitingScreen(parent);
-        return instance;
-    }
-
-    public void startWaiting(Task<Void> task, String message) {
-
-        animationContainer = new VBox();
+    private void initializeWaitingScreen() {
+        VBox animationContainer = new VBox();
         parent.getChildren().add(animationContainer);
 
         Canvas canvas = new Canvas(500 * getGeneralRatio(), 500 * getGeneralRatio());
@@ -52,6 +51,10 @@ public class WaitingScreen {
 
         final long startNanoTime = System.nanoTime();
         double phaseShift = 2 * Math.PI / images.size();
+
+        Text text = new Text(waitingMessage);
+        text.setId("title");
+        animationContainer.getChildren().add(text);
 
         runningAnimation = true;
 
@@ -75,14 +78,21 @@ public class WaitingScreen {
                 }
             }
         };
+    }
+
+    public void start() {
+        initializeWaitingScreen();
 
         animationTimer.start();
 
-        Text text = new Text(message);
-        text.setId("title");
-        animationContainer.getChildren().add(text);
-
-        // TODO: to be solved
-        task.run();
+        new AsynchronousDrawer(
+                jobListener,
+                () -> {
+                    runningAnimation = false;
+                    animationTimer.stop();
+                    delayedJob.execute();
+                },
+                false
+        ).start();
     }
 }

@@ -106,20 +106,12 @@ public class Client extends Observable<Message> {
 
                 case CHOICE_ROW_COLUMN:
                     // message contains the Player's Resources
-                    try {
-                        viewInterface.displayMarketAction(cachedModel.getMarketTrayCached().getObsoleteObject(), castElements(Resource.class, message.getListPayloads()));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    viewInterface.displayMarketAction(cachedModel.getMarketTrayCached().getObject(), castElements(Resource.class, message.getListPayloads()));
                     break;
 
                 case CHOICE_CARD_TO_BUY:
                     // message contains the Player's Resources
-                    try {
-                        viewInterface.displayDevelopmentCardBuyAction(cachedModel.getDevelopmentGridCached().getObsoleteObject(), castElements(Resource.class, message.getListPayloads()));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    viewInterface.displayDevelopmentCardBuyAction(cachedModel.getDevelopmentGridCached().getObject(), castElements(Resource.class, message.getListPayloads()));
                     break;
 
                 case LORENZO_PLAY:

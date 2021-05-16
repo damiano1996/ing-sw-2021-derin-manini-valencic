@@ -15,7 +15,7 @@ public class CachedObject<T> {
 
 
     /**
-     * When receiving a new Object from the Model, change the current object value with the new one
+     * When receiving a new Object from the Model, change the current object value with the new one.
      *
      * @param object The new Object version
      */
@@ -27,27 +27,22 @@ public class CachedObject<T> {
 
 
     /**
-     * Getter of an updated version of object
+     * Method that stops the calling thread until the contained object will be updated.
      *
-     * @return An updated version of object
-     * @throws InterruptedException If object is null, calls wait() on the current thread
+     * @throws InterruptedException If unable to wait the calling thread
      */
-    public synchronized T getUpdatedObject() throws InterruptedException {
+    public synchronized void lookingForUpdate() throws InterruptedException {
         while (obsolete) wait();
         obsolete = true;
-        return object;
     }
 
 
     /**
-     * Getter of an updated version of object
-     * By assumption it will never stop the calling thread
+     * Getter of the contained object.
      *
-     * @return An obsolete version of object
-     * @throws InterruptedException If object is null, calls wait() on the current thread
+     * @return Object contained
      */
-    public synchronized T getObsoleteObject() throws InterruptedException {
-//            if (object == null) return getUpdatedObject();
+    public synchronized T getObject() {
         return object;
     }
 

@@ -5,7 +5,7 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
-import it.polimi.ingsw.psp26.view.gui.asynchronousupdates.AsynchronousUpdateDrawer;
+import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
 import javafx.scene.layout.*;
@@ -26,10 +26,10 @@ public class PlayingPane {
 
         // adding market tray
         hBox.getChildren().add(new Pane());
-        new AsynchronousUpdateDrawer(
-                () -> client.getCachedModel().getMarketTrayCached().getUpdatedObject(),
+        new AsynchronousDrawer(
+                () -> client.getCachedModel().getMarketTrayCached().lookingForUpdate(),
                 () -> {
-                    MarketTray marketTray = client.getCachedModel().getMarketTrayCached().getObsoleteObject();
+                    MarketTray marketTray = client.getCachedModel().getMarketTrayCached().getObject();
                     hBox.getChildren().set(
                             0,
                             drawThumbNail(
@@ -38,15 +38,16 @@ public class PlayingPane {
                                     new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
                                     boxSize, boxSize)
                     );
-                }
+                },
+                true
         ).start();
 
         // adding development card grid
         hBox.getChildren().add(new Pane());
-        new AsynchronousUpdateDrawer(
-                () -> client.getCachedModel().getDevelopmentGridCached().getUpdatedObject(),
+        new AsynchronousDrawer(
+                () -> client.getCachedModel().getDevelopmentGridCached().lookingForUpdate(),
                 () -> {
-                    DevelopmentGrid developmentGrid = client.getCachedModel().getDevelopmentGridCached().getObsoleteObject();
+                    DevelopmentGrid developmentGrid = client.getCachedModel().getDevelopmentGridCached().getObject();
                     hBox.getChildren().set(
                             1,
                             drawThumbNail(
@@ -55,17 +56,18 @@ public class PlayingPane {
                                     new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
                                     boxSize, boxSize)
                     );
-                }
+                },
+                true
         ).start();
 
         // adding opponents
         for (int i = 0; i < 3; i++) {
             int finalI = i;
             hBox.getChildren().add(new Pane());
-            new AsynchronousUpdateDrawer(
-                    () -> client.getCachedModel().getOpponentCached(finalI).getUpdatedObject(),
+            new AsynchronousDrawer(
+                    () -> client.getCachedModel().getOpponentCached(finalI).lookingForUpdate(),
                     () -> {
-                        Player player = client.getCachedModel().getOpponentCached(finalI).getObsoleteObject();
+                        Player player = client.getCachedModel().getOpponentCached(finalI).getObject();
                         hBox.getChildren().set(
                                 2 + finalI,
                                 drawThumbNail(
@@ -74,7 +76,8 @@ public class PlayingPane {
                                         drawPlayer(player, zoomFactor * boxSize, getGeneralRatio()),
                                         boxSize, boxSize)
                         );
-                    }
+                    },
+                    true
             ).start();
         }
 
@@ -92,12 +95,13 @@ public class PlayingPane {
         Pane content = drawPlayer(new Player(new VirtualView(), client.getNickname(), ""), width, getGeneralRatio());
         root.getChildren().add(content);
 
-        new AsynchronousUpdateDrawer(
-                () -> client.getCachedModel().getMyPlayerCached().getUpdatedObject(),
+        new AsynchronousDrawer(
+                () -> client.getCachedModel().getMyPlayerCached().lookingForUpdate(),
                 () -> {
-                    Player player = client.getCachedModel().getMyPlayerCached().getObsoleteObject();
+                    Player player = client.getCachedModel().getMyPlayerCached().getObject();
                     root.getChildren().set(0, drawPlayer(player, width, getGeneralRatio()));
-                }
+                },
+                true
         ).start();
 
         return root;

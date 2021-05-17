@@ -45,10 +45,8 @@ import java.util.Map;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_HEIGHT;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
 import static it.polimi.ingsw.psp26.view.gui.PlayingPane.getPlayingPane;
 
 public class GUI extends Application implements ViewInterface {
@@ -66,10 +64,10 @@ public class GUI extends Application implements ViewInterface {
 
     private void setStageWindowProperties(Stage stage) {
 //        stage.setMaximized(true);
-        stage.setResizable(false);
+//        stage.setResizable(true);
 //        stage.setFullScreen(true);
-        // stage.setAlwaysOnTop(true);
-        stage.sizeToScene();
+//        stage.setAlwaysOnTop(true);
+//        stage.sizeToScene();
     }
 
     @Override
@@ -77,7 +75,7 @@ public class GUI extends Application implements ViewInterface {
 
         client = new Client(this);
 
-        root = addBackground(new Pane(), WINDOW_WIDTH, WINDOW_HEIGHT);
+        root = addBackground(new Pane(), getWindowWidth(), getWindowHeight());
 
         Scene scene = new Scene(root);
         addStylesheet(scene);
@@ -414,7 +412,11 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void stopDisplayingWaitingScreen() {
-        Pane pane = addBackground(getPlayingPane(primaryStage, client, (int) (WINDOW_WIDTH * 0.9)), WINDOW_WIDTH, WINDOW_HEIGHT);
+        Pane pane = addBackground(
+                getPlayingPane(primaryStage, client, getWindowWidth()),
+                getWindowWidth(),
+                getWindowHeight()
+        );
         primaryStage.getScene().setRoot(pane);
 
         client.viewNext();

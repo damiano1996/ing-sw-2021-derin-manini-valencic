@@ -7,10 +7,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addCoolFrame;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_HEIGHT;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.setTransparentBackground;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getScreenHeight;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getScreenWidth;
 
 public class DialogStage {
 
@@ -28,7 +28,7 @@ public class DialogStage {
         primaryStage.xProperty().addListener((obs, oldVal, newVal) -> dialog.setX(primaryStage.getX() + primaryStage.getWidth() / 2 - dialog.getWidth() / 2));
         primaryStage.yProperty().addListener((obs, oldVal, newVal) -> dialog.setY(primaryStage.getY() + primaryStage.getHeight() / 2 - dialog.getHeight() / 2));
 
-        int sideSize = Math.min(WINDOW_WIDTH, WINDOW_HEIGHT);
+        int sideSize = Math.min(getScreenWidth(), getScreenHeight());
         dialog.setWidth(sideSize);
         dialog.setHeight(sideSize);
         dialog.setX(primaryStage.getX() + primaryStage.getWidth() / 2 - dialog.getWidth() / 2);

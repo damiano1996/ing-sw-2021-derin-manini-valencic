@@ -24,7 +24,7 @@ public class EndMatchPhaseState extends PhaseState {
     public void execute(SessionMessage message) {
         super.execute(message);
 
-        if (message.getMessageType() == BLACK_CROSS_FINAL_POSITION || message.getMessageType() == NO_MORE_COLUMN_DEVELOPMENT_CARDS){
+        if (message.getMessageType() == BLACK_CROSS_FINAL_POSITION || message.getMessageType() == NO_MORE_COLUMN_DEVELOPMENT_CARDS) {
             winnerName = "Lorenzo il Magnifico";
         }
 
@@ -33,7 +33,7 @@ public class EndMatchPhaseState extends PhaseState {
 
     private void showEndGameResult() {
 
-        if(winnerName != "Lorenzo il Magnifico" )
+        if (winnerName != "Lorenzo il Magnifico")
             computePlayersPoints();
 
         for (Player player : phase.getMatchController().getMatch().getPlayers()) {
@@ -67,14 +67,14 @@ public class EndMatchPhaseState extends PhaseState {
             playerPoints += computeLeaderPoints(player);
             playerPoints += computePopeFavorTilePoints(player);
 
-           player.addPoints(playerPoints);
+            player.addPoints(playerPoints);
 
-           winnerPoints = Math.max(winnerPoints, playerPoints);
+            winnerPoints = Math.max(winnerPoints, playerPoints);
 
             leaderboard.addPlayerVictoryPoints(player.getNickname(), playerPoints);
 
-           if(winnerPoints == playerPoints)
-               winnerName = player.getNickname();
+            if (winnerPoints == playerPoints)
+                winnerName = player.getNickname();
 
         }
         return winnerName;

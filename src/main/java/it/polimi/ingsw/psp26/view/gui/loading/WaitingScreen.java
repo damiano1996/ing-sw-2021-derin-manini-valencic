@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResource;
 
 public class WaitingScreen {

@@ -4,8 +4,8 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.view.gui.ButtonContainer;
 import javafx.scene.image.ImageView;
 
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResource;
 

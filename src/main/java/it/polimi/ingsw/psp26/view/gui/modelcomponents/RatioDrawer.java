@@ -2,7 +2,7 @@ package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
 import javafx.scene.layout.Pane;
 
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_WIDTH;
 
 public abstract class RatioDrawer {
 

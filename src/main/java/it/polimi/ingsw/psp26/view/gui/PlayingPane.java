@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
@@ -12,53 +13,16 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getGeneralRatio;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPlayer;
 
 public class PlayingPane {
 
-    private static HBox addTopBar(Stage primaryStage, int windowWidth, Client client) {
+    private static HBox addOpponents(Stage primaryStage, int thumbnailSize, Client client) {
 
-        int boxSize = windowWidth / (2 + 3); // 2 are for market tray and development grid, 3 are for the opponent players
         int zoomFactor = 3;
 
         HBox hBox = new HBox();
-
-        // adding market tray
-        hBox.getChildren().add(new Pane());
-        new AsynchronousDrawer(
-                () -> client.getCachedModel().getMarketTrayCached().lookingForUpdate(),
-                () -> {
-                    MarketTray marketTray = client.getCachedModel().getMarketTrayCached().getObject();
-                    hBox.getChildren().set(
-                            0,
-                            drawThumbNail(
-                                    primaryStage,
-                                    new MarketTrayDrawer(marketTray, boxSize).draw(),
-                                    new MarketTrayDrawer(marketTray, zoomFactor * boxSize).draw(),
-                                    boxSize, boxSize)
-                    );
-                },
-                true
-        ).start();
-
-        // adding development card grid
-        hBox.getChildren().add(new Pane());
-        new AsynchronousDrawer(
-                () -> client.getCachedModel().getDevelopmentGridCached().lookingForUpdate(),
-                () -> {
-                    DevelopmentGrid developmentGrid = client.getCachedModel().getDevelopmentGridCached().getObject();
-                    hBox.getChildren().set(
-                            1,
-                            drawThumbNail(
-                                    primaryStage,
-                                    new DevelopmentCardGridDrawer(developmentGrid, boxSize).draw(),
-                                    new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * boxSize).draw(),
-                                    boxSize, boxSize)
-                    );
-                },
-                true
-        ).start();
 
         // adding opponents
         for (int i = 0; i < 3; i++) {
@@ -69,12 +33,12 @@ public class PlayingPane {
                     () -> {
                         Player player = client.getCachedModel().getOpponentCached(finalI).getObject();
                         hBox.getChildren().set(
-                                2 + finalI,
+                                finalI,
                                 drawThumbNail(
                                         primaryStage,
-                                        drawPlayer(player, boxSize, getGeneralRatio()),
-                                        drawPlayer(player, zoomFactor * boxSize, getGeneralRatio()),
-                                        boxSize, boxSize)
+                                        drawPlayer(player, thumbnailSize, getGeneralRatio()),
+                                        drawPlayer(player, zoomFactor * thumbnailSize, getGeneralRatio()),
+                                        thumbnailSize, thumbnailSize)
                         );
                     },
                     true
@@ -82,6 +46,51 @@ public class PlayingPane {
         }
 
         return hBox;
+    }
+
+    private static VBox addMatchComponents(Stage primaryStage, int thumbnailSize, Client client) {
+
+        int zoomFactor = 3;
+
+        VBox vBox = new VBox();
+
+        // adding market tray
+        vBox.getChildren().add(new Pane());
+        new AsynchronousDrawer(
+                () -> client.getCachedModel().getMarketTrayCached().lookingForUpdate(),
+                () -> {
+                    MarketTray marketTray = client.getCachedModel().getMarketTrayCached().getObject();
+                    vBox.getChildren().set(
+                            0,
+                            drawThumbNail(
+                                    primaryStage,
+                                    new MarketTrayDrawer(marketTray, thumbnailSize).draw(),
+                                    new MarketTrayDrawer(marketTray, zoomFactor * thumbnailSize).draw(),
+                                    thumbnailSize, thumbnailSize)
+                    );
+                },
+                true
+        ).start();
+
+        // adding development card grid
+        vBox.getChildren().add(new Pane());
+        new AsynchronousDrawer(
+                () -> client.getCachedModel().getDevelopmentGridCached().lookingForUpdate(),
+                () -> {
+                    DevelopmentGrid developmentGrid = client.getCachedModel().getDevelopmentGridCached().getObject();
+                    vBox.getChildren().set(
+                            1,
+                            drawThumbNail(
+                                    primaryStage,
+                                    new DevelopmentCardGridDrawer(developmentGrid, thumbnailSize).draw(),
+                                    new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * thumbnailSize).draw(),
+                                    thumbnailSize, thumbnailSize)
+                    );
+                },
+                true
+        ).start();
+
+        return vBox;
     }
 
     private static VBox addRightBar() {
@@ -110,13 +119,20 @@ public class PlayingPane {
     public static BorderPane getPlayingPane(Stage primaryStage, Client client, int width) {
 
         BorderPane border = new BorderPane();
-        border.setTop(addTopBar(primaryStage, width, client));
 
-        HBox hBox = new HBox();
-        hBox.getChildren().add(addMainBox(client, width));
-        hBox.getChildren().add(addRightBar());
+        int thumbnailSize = (int) (width * 0.1);
 
-        border.setLeft(hBox);
+        boolean multiPlayer = !client.getMatchModeType().equals(MessageType.SINGLE_PLAYER_MODE);
+
+        if (multiPlayer) border.setTop(addOpponents(primaryStage, thumbnailSize, client));
+
+        border.setLeft(addMatchComponents(primaryStage, thumbnailSize, client));
+
+        float resizeMainBlockFactor = (multiPlayer) ? 0.6f : 0.8f;
+        border.setCenter(addMainBox(client, (int) (width * resizeMainBlockFactor)));
+
+        border.setRight(addRightBar());
+
         return border;
     }
 

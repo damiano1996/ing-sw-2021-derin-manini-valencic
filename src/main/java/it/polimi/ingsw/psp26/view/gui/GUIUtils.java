@@ -17,16 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.REFERENCE_WIDTH;
-import static it.polimi.ingsw.psp26.view.gui.GUIConfigurations.WINDOW_WIDTH;
 
 public class GUIUtils {
 
     private final static Map<String, Image> images = new HashMap<>();
-
-    public static float getGeneralRatio() {
-        return WINDOW_WIDTH / REFERENCE_WIDTH;
-    }
 
     public static String getCompletePath(String fileName) {
         return "file:" + RESOURCES_PATH + "gui/" + fileName;

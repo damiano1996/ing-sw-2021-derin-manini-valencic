@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.view.gui;
 
-import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
@@ -36,8 +35,8 @@ public class PlayingPane {
                                 finalI,
                                 drawThumbNail(
                                         primaryStage,
-                                        drawPlayer(player, thumbnailSize, getGeneralRatio()),
-                                        drawPlayer(player, zoomFactor * thumbnailSize, getGeneralRatio()),
+                                        drawPlayer(player, thumbnailSize, getGeneralRatio(), true, client.isMultiplayerMode()),
+                                        drawPlayer(player, zoomFactor * thumbnailSize, getGeneralRatio(), true, client.isMultiplayerMode()),
                                         thumbnailSize, thumbnailSize)
                         );
                     },
@@ -101,14 +100,20 @@ public class PlayingPane {
 
         StackPane root = new StackPane();
 
-        Pane content = drawPlayer(new Player(new VirtualView(), client.getNickname(), ""), width, getGeneralRatio());
+        Pane content = drawPlayer(
+                new Player(new VirtualView(), client.getNickname(), ""),
+                width,
+                getGeneralRatio(),
+                false,
+                client.isMultiplayerMode()
+        );
         root.getChildren().add(content);
 
         new AsynchronousDrawer(
                 () -> client.getCachedModel().getMyPlayerCached().lookingForUpdate(),
                 () -> {
                     Player player = client.getCachedModel().getMyPlayerCached().getObject();
-                    root.getChildren().set(0, drawPlayer(player, width, getGeneralRatio()));
+                    root.getChildren().set(0, drawPlayer(player, width, getGeneralRatio(), false, client.isMultiplayerMode()));
                 },
                 true
         ).start();
@@ -122,13 +127,11 @@ public class PlayingPane {
 
         int thumbnailSize = (int) (width * 0.1);
 
-        boolean multiPlayer = !client.getMatchModeType().equals(MessageType.SINGLE_PLAYER_MODE);
-
-        if (multiPlayer) border.setTop(addOpponents(primaryStage, thumbnailSize, client));
+        if (client.isMultiplayerMode()) border.setTop(addOpponents(primaryStage, thumbnailSize, client));
 
         border.setLeft(addMatchComponents(primaryStage, thumbnailSize, client));
 
-        float resizeMainBlockFactor = (multiPlayer) ? 0.6f : 0.8f;
+        float resizeMainBlockFactor = (client.isMultiplayerMode()) ? 0.7f : 0.8f;
         border.setCenter(addMainBox(client, (int) (width * resizeMainBlockFactor)));
 
         border.setRight(addRightBar());

@@ -24,12 +24,14 @@ public class PersonalBoardDrawer extends RatioDrawer {
 
     private final PersonalBoard personalBoard;
     private final boolean hasInkwell;
+    private final boolean hideBlackCross;
 
-    public PersonalBoardDrawer(PersonalBoard personalBoard, int maxWidth, boolean hasInkwell) {
+    public PersonalBoardDrawer(PersonalBoard personalBoard, int maxWidth, boolean hasInkwell, boolean hideBlackCross) {
         super(maxWidth);
 
         this.personalBoard = personalBoard;
         this.hasInkwell = hasInkwell;
+        this.hideBlackCross = hideBlackCross;
     }
 
     @Override
@@ -138,8 +140,7 @@ public class PersonalBoardDrawer extends RatioDrawer {
     private void drawFaithTrack() {
         drawPopesFavorTiles();
         drawFaithMarker();
-        // TODO: add play mode check
-        drawBlackCross();
+        if (!hideBlackCross) drawBlackCross();
     }
 
     private void drawFaithMarker() {

@@ -16,11 +16,13 @@ import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getL
 public class LeaderCardsDrawer extends RatioDrawer {
 
     private final List<LeaderCard> leaderCards;
+    private final boolean hideNotActiveLeaderCards;
 
-    public LeaderCardsDrawer(List<LeaderCard> leaderCards, int maxWidth) {
+    public LeaderCardsDrawer(List<LeaderCard> leaderCards, int maxWidth, boolean hideNotActiveLeaderCards) {
         super(maxWidth);
 
         this.leaderCards = leaderCards;
+        this.hideNotActiveLeaderCards = hideNotActiveLeaderCards;
     }
 
     @Override
@@ -49,7 +51,8 @@ public class LeaderCardsDrawer extends RatioDrawer {
                 Image frontLeaderCardImage = getCard(leaderCards.get(i), ratio);
                 Image backLeaderCardImage = getLeaderBack(ratio);
                 ImageView imageView = getImageView(backLeaderCardImage, hOffset * ratio, (vOffset + vShift * i) * ratio);
-                addTurnCardAnimation(imageView, frontLeaderCardImage, backLeaderCardImage);
+                if (!hideNotActiveLeaderCards)
+                    addTurnCardAnimation(imageView, frontLeaderCardImage, backLeaderCardImage);
                 pane.getChildren().add(imageView);
 
             }

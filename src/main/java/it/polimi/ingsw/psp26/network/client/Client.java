@@ -179,8 +179,8 @@ public class Client extends Observable<Message> {
         this.cachedModel = new CachedModel(nickname);
     }
 
-    public MessageType getMatchModeType() {
-        return matchModeType;
+    public boolean isMultiplayerMode() {
+        return !matchModeType.equals(SINGLE_PLAYER_MODE);
     }
 
     public void setMatchModeType(MessageType matchModeType) {

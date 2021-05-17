@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
 public class PlayingPhaseState extends PhaseState {
 
@@ -37,7 +38,9 @@ public class PlayingPhaseState extends PhaseState {
 
     public void playFirstTurn() {
         try {
-            currentTurn.play(new SessionMessage(currentTurn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE)
+            sendNotificationMessageNewTurn();
+            currentTurn.play(
+                    new SessionMessage(currentTurn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE)
             );
         } catch (InvalidPayloadException ignored) {
         }
@@ -50,6 +53,7 @@ public class PlayingPhaseState extends PhaseState {
                 getNextPlayer(),
                 nextTurnNUmber);
         try {
+            sendNotificationMessageNewTurn();
             currentTurn.play(new SessionMessage(currentTurn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
         } catch (InvalidPayloadException ignored) {
         }
@@ -72,6 +76,19 @@ public class PlayingPhaseState extends PhaseState {
 
     public void setLastTurn() {
         lastTurn = true;
+    }
+
+    private void sendNotificationMessageNewTurn() {
+        try {
+            phase.getMatchController().notifyObservers(
+                    new SessionMessage(
+                            SpecialToken.BROADCAST.getToken(),
+                            MessageType.GENERAL_MESSAGE, "Turn of " + currentTurn.getTurnPlayer().getNickname()
+                    )
+            );
+        } catch (InvalidPayloadException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -9,7 +9,7 @@ public class GUIWindowConfigurations {
     private static final int WINDOW_HEIGHT = 1080;
 
     public static float getGeneralRatio() {
-        return (float) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / REFERENCE_WIDTH);
+        return getWindowWidth() / REFERENCE_WIDTH;
     }
 
     public static int getScreenWidth() {

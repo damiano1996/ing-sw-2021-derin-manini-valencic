@@ -10,7 +10,7 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getFont;
 
 public class PlayerDrawer {
 
-    public static BorderPane drawPlayer(Player player, int maxWidth, float ratio) {
+    public static BorderPane drawPlayer(Player player, int maxWidth, float ratio, boolean hideNotActiveLeaderCards, boolean hideBlackCross) {
         BorderPane borderPane = new BorderPane();
 
         Text nickname = new Text(toTitleStyle(player.getNickname()));
@@ -18,8 +18,8 @@ public class PlayerDrawer {
         nickname.setFill(Color.WHITE);
         borderPane.setTop(nickname);
 
-        borderPane.setLeft(new PersonalBoardDrawer(player.getPersonalBoard(), (int) (maxWidth * 0.8), player.hasInkwell()).draw());
-        borderPane.setRight(new LeaderCardsDrawer(player.getLeaderCards(), (int) (maxWidth * 0.8)).draw());
+        borderPane.setLeft(new PersonalBoardDrawer(player.getPersonalBoard(), (int) (maxWidth * 0.8), player.hasInkwell(), hideBlackCross).draw());
+        borderPane.setRight(new LeaderCardsDrawer(player.getLeaderCards(), (int) (maxWidth * 0.8), hideNotActiveLeaderCards).draw());
 
         return borderPane;
     }

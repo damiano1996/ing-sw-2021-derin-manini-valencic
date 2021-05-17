@@ -161,7 +161,7 @@ public class CLI implements ViewInterface {
     private void choiceNormalLeaderActionExecute(List<Object> choices) {
         isPersonalBoardPrintable = true;
         notificationStackPrinter.restoreStackView();
-        personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), !client.getMatchModeType().equals(SINGLE_PLAYER_MODE));
+        personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
 
         cliUtils.setCursorPosition(47, 1);
         displayMultipleStringChoices(choices);
@@ -683,7 +683,7 @@ public class CLI implements ViewInterface {
         while (true) {
 
             // At each iteration the current Player Personal Board will be printed
-            personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), !(client.getMatchModeType().equals(SINGLE_PLAYER_MODE)));
+            personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
 
             printOpponentViewScreenInformation();
             printOpponentsPersonalBoardList();
@@ -737,7 +737,7 @@ public class CLI implements ViewInterface {
         int opponentNumber = getCorrectOpponentNumber(client.getCachedModel().getNumberOfOpponents());
         Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObject();
 
-        personalBoardCli.displayPersonalBoard(opponent, !(client.getMatchModeType().equals(SINGLE_PLAYER_MODE)));
+        personalBoardCli.displayPersonalBoard(opponent, client.isMultiplayerMode());
         cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board", Color.WHITE, 50, 5);
         cliUtils.pPCS("Press Enter to go back to your Personal Board view.", Color.WHITE, 52, 5);
     }

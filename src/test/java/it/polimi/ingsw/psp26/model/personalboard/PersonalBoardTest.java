@@ -44,7 +44,7 @@ public class PersonalBoardTest {
 
         developmentCard1 = developmentGrid.drawCard(Color.GREEN, Level.FIRST);
         developmentCard2 = developmentGrid.drawCard(Color.GREEN, Level.SECOND);
-        developmentCard3 = developmentGrid.drawCard(Color.GREEN, Level.THIRD);
+        developmentCard3 = developmentGrid.drawCard(Color.GREEN, Level.FIRST);
 
         cardSlots = new ArrayList<>();
         for (int i = 0; i < 3; i++) cardSlots.add(new ArrayList<>());
@@ -99,6 +99,12 @@ public class PersonalBoardTest {
     public void testAddDevelopmentCard_DevelopmentCardSlotOutOfBoundsException() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException {
         DevelopmentCard developmentCard = developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
         personalBoard.addDevelopmentCard(4, developmentCard);
+    }
+
+    @Test(expected = CanNotAddDevelopmentCardToSlotException.class)
+    public void testAddDevelopmentCard_CanNotAddDevelopmentCardToSlotException_LevelTwoInEmptySlot() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException {
+        DevelopmentCard developmentCard = developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
+        personalBoard.addDevelopmentCard(1, developmentCard);
     }
 
     @Test

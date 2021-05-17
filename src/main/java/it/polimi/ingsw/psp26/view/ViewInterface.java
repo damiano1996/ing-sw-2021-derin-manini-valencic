@@ -22,6 +22,9 @@ public interface ViewInterface {
     void start();
 
 
+    void startLiveUpdate();
+    
+    
     void displayLogIn();
 
 

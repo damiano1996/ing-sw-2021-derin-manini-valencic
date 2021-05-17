@@ -203,15 +203,27 @@ public class PersonalBoard extends Observable<SessionMessage> {
      * @return true if the card can be placed, false otherwise
      */
     public boolean isCardPlaceable(int indexSlot, DevelopmentCard developmentCard) {
-        return (developmentCardsSlots.get(indexSlot).size() == 0 ||
-                developmentCardsSlots
-                        .get(indexSlot)
-                        .get(developmentCardsSlots.get(indexSlot).size() - 1)
-                        .getDevelopmentCardType().getLevel().getLevelNumber() <
-                        developmentCard
-                                .getDevelopmentCardType()
-                                .getLevel()
-                                .getLevelNumber());
+        boolean isCardPlaceable;
+
+        if (developmentCardsSlots.get(indexSlot).size() == 0) {
+            isCardPlaceable = (developmentCardsSlots
+                    .get(indexSlot)
+                    .size() == 0 &&
+                    developmentCard
+                            .getDevelopmentCardType()
+                            .getLevel()
+                            .getLevelNumber() == 1);
+        } else {
+            isCardPlaceable = (developmentCardsSlots
+                    .get(indexSlot)
+                    .get(developmentCardsSlots.get(indexSlot).size() - 1)
+                    .getDevelopmentCardType().getLevel().getLevelNumber() <
+                    developmentCard
+                            .getDevelopmentCardType()
+                            .getLevel()
+                            .getLevelNumber());
+        }
+        return isCardPlaceable;
     }
 
     /**

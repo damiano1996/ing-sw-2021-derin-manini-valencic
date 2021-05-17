@@ -54,13 +54,13 @@ public class NetworkHandler implements Observer<Message> {
 
                     switch (message.getMessageType()) {
                         case MODEL_UPDATE:
-                            // if model update message, update the cachedModel
+                            // if MODEL_UPDATE message or NOTIFICATION_UPDATE message, update the cachedModel
                             client.getCachedModel().updateCachedModel(message);
                             break;
 
                         case NOTIFICATION_UPDATE:
                             // if notification update message, we can directly notify the client to display the message
-                            client.liveUpdate(message);
+                            NotificationsFIFO.getInstance().pushNotification((String) message.getPayload());
                             break;
 
                         default:

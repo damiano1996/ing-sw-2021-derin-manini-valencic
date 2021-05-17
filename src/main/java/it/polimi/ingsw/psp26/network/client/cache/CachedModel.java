@@ -73,12 +73,14 @@ public class CachedModel {
                     developmentGridCached.updateObject(developmentGrid);
                     break;
 
+
                 default:
                     break;
 
             }
-            notifyAll();
         }
+
+        notifyAll();
     }
 
     /**

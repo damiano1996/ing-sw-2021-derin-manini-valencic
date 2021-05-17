@@ -92,6 +92,11 @@ public class GUI extends Application implements ViewInterface {
     public void start() {
         launch();
     }
+    
+    @Override
+    public void startLiveUpdate(){
+        
+    }
 
     @Override
     public void displayLogIn() {

@@ -88,7 +88,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
                 case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
 
-                    placeCard((int) message.getPayload());
+                    placeCard((String) message.getPayload());
                     turn.changeState(new EndMatchCheckerTurnState(turn));
                     turn.play(message);
                     break;
@@ -163,14 +163,14 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
         for (int i = 0; i < 3; i++) {
             if (turn.getTurnPlayer().getPersonalBoard().isCardPlaceable(i, boughtCard))
-                CorrectPositions.add("Slot " + i);
+                CorrectPositions.add("Slot " + (i + 1));
         }
         return CorrectPositions;
     }
 
-    private void placeCard(int position) {
+    private void placeCard(String slotIndex) {
         try {
-
+            int position = Integer.parseInt(slotIndex.substring(5,6)) - 1;
             turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
 
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {

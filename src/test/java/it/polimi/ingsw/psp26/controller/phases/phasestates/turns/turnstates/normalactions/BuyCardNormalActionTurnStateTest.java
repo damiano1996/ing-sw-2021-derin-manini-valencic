@@ -83,17 +83,18 @@ public class BuyCardNormalActionTurnStateTest {
         DevelopmentCard card = buyCardResourceSetter();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, 1));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, "Slot 2"));
 
         Assert.assertEquals(turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards().get(0), card);
 
     }
 
-    @Test
+    @Test (expected = CanNotAddDevelopmentCardToSlotException.class)
     public void testSendCardToBuyAndPlaceWrongPositionPlay() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
 
         DevelopmentCard card = buyCardResourceSetter();
 
+        // An Exception will be raised here
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(1, 2).getFirstCard());
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, 1));
@@ -123,7 +124,7 @@ public class BuyCardNormalActionTurnStateTest {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, 1));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, "Slot 2"));
 
 
         Assert.assertEquals(turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards().get(0), card);

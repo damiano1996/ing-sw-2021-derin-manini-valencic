@@ -212,17 +212,17 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
 
                     playerLeaderCard.activate(turn.getTurnPlayer());
 
-                    try {
-                        turn.getMatchController().notifyObservers(
-                                new SessionMessage(
-                                        turn.getTurnPlayer().getSessionToken(),
-                                        MessageType.LEADER_ACTIVATED,
-                                        playerLeaderCard
-                                )
-                        );
-                    } catch (InvalidPayloadException ignored) {
-
-                    }
+//                    try {
+//                        turn.getMatchController().notifyObservers(
+//                                new SessionMessage(
+//                                        turn.getTurnPlayer().getSessionToken(),
+//                                        MessageType.LEADER_ACTIVATED,
+//                                        playerLeaderCard
+//                                )
+//                        );
+//                    } catch (InvalidPayloadException ignored) {
+//
+//                    }
 
                 } else {
                     throw new LeaderCannotBeActivatedException();

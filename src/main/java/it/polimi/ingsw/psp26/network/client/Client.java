@@ -25,7 +25,6 @@ import static it.polimi.ingsw.psp26.view.ViewUtils.createPlayersList;
 public class Client extends Observable<Message> {
 
     private final NetworkHandler networkHandler;
-    private final NotificationsFIFO notifications;
     private final ViewInterface viewInterface;
     private String nickname;
     private MessageType matchModeType;
@@ -35,24 +34,11 @@ public class Client extends Observable<Message> {
         super();
         networkHandler = new NetworkHandler(this);
         addObserver(networkHandler);
-
-        notifications = new NotificationsFIFO(10);
-
         this.viewInterface = viewInterface;
     }
 
     public void viewNext() {
         handleMessages(MessageSynchronizedFIFO.getInstance().getNext());
-    }
-
-    public void liveUpdate(Message liveUpdateMessage) {
-        try {
-            String notification = (String) liveUpdateMessage.getPayload();
-            notifications.pushNotification(notification);
-            viewInterface.displayNotifications(notifications.getNotifications());
-        } catch (EmptyPayloadException e) {
-            e.printStackTrace();
-        }
     }
 
     private void handleMessages(Message message) {

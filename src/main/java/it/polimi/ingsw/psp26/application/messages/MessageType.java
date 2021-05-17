@@ -22,7 +22,7 @@ public enum MessageType {
     DISCARD_LEADER, // action
     ACTIVATE_LEADER, // action
     SKIP_LEADER_ACTION,
-    LEADER_ACTIVATED, // to display the activated leader
+    //LEADER_ACTIVATED, // to display the activated leader
 
     //Normal actions:
     CHOICE_NORMAL_ACTION, // to display to the client the normal action options

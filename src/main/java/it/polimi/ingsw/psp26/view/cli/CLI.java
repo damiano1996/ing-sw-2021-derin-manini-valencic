@@ -16,6 +16,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.utils.ViewUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
@@ -679,6 +680,8 @@ public class CLI implements ViewInterface {
     @Override
     public void waitForYourTurn() {
         Scanner in = new Scanner(System.in);
+
+        client.getCachedModel().getMyPlayerCached().updateObject(new Player(new VirtualView(), "", ""));
 
         while (true) {
 

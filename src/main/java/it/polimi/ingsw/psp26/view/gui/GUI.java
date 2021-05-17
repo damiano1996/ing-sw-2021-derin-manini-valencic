@@ -206,11 +206,6 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void waitForYourTurn() {
-
-    }
-
-    @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
         VBox mainContainer = new VBox(10 * getGeneralRatio());
@@ -420,6 +415,11 @@ public class GUI extends Application implements ViewInterface {
         primaryStage.getScene().setRoot(pane);
 
         client.viewNext();
+    }
+
+    @Override
+    public void waitForYourTurn() {
+
     }
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
@@ -7,6 +8,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.lead
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions.ChooseNormalActionTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.model.Player;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
@@ -46,8 +48,6 @@ public class TurnUtils {
 
                 case LEADER_ACTION_TO_END:
                     if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
-                        // Notifying the current Player that it's turn is over
-                        sendMessageToTurnPlayer(turn, OPPONENT_TURN, "Opponent turn");
                         // After the second leader action, go to next player turn
                         turn.getPlayingPhaseState().updateCurrentTurn();
                     } else {
@@ -60,6 +60,24 @@ public class TurnUtils {
                     //After Lorenzo action, go to next turn
                     turn.getPlayingPhaseState().updateCurrentTurn();
                     break;
+            }
+        }
+    }
+
+    public static void sendMessageToAllPlayerExceptOne(Turn turn, Player playerToAvoid, Message message) {
+        for (Player player : turn.getMatchController().getMatch().getPlayers()) {
+            if (!player.getSessionToken().equals(playerToAvoid.getSessionToken())) {
+                try {
+                    turn.getMatchController().notifyObservers(
+                            new SessionMessage(
+                                    player.getSessionToken(),
+                                    message.getMessageType(),
+                                    message.getArrayPayloads()
+                            )
+                    );
+                } catch (InvalidPayloadException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

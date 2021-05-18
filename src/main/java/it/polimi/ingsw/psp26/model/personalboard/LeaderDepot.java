@@ -58,4 +58,11 @@ public class LeaderDepot extends Depot {
     public int hashCode() {
         return Objects.hash(super.hashCode(), depotResource);
     }
+
+    @Override
+    public String toString() {
+        return "LeaderDepot{" +
+                "depotResource=" + depotResource +
+                "}";
+    }
 }

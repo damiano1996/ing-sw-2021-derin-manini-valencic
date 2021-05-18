@@ -170,7 +170,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     private void placeCard(String slotIndex) {
         try {
-            int position = Integer.parseInt(slotIndex.substring(5,6)) - 1;
+            int position = Integer.parseInt(slotIndex.substring(5, 6)) - 1;
             turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(position, boughtCard);
 
         } catch (CanNotAddDevelopmentCardToSlotException | DevelopmentCardSlotOutOfBoundsException e) {

@@ -67,7 +67,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.6</version>
                 <configuration>
-                    <mainClass>it.polimi.ingsw.psp26.view.gui.GUI</mainClass>
+                    <mainClass>it.polimi.ingsw.psp26.view.gui.manualtesting.WarehousePlacerDrawerTest</mainClass>
                 </configuration>
             </plugin>
 

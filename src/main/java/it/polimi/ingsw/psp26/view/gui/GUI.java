@@ -19,11 +19,13 @@ import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.MessageSynchronizedFIFO;
 import it.polimi.ingsw.psp26.view.ViewInterface;
+import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.LeaderCardChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ResourceChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.WarehousePlacerDrawer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -73,6 +75,8 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        // System.out.println("GUI - MAIN THREAD ID: " + Thread.currentThread().getId());
+
         client = new Client(this);
 
         root = addBackground(new Pane(), getWindowWidth(), getWindowHeight());
@@ -92,11 +96,7 @@ public class GUI extends Application implements ViewInterface {
     public void start() {
         launch();
     }
-    
-    @Override
-    public void startLiveUpdate(){
-        
-    }
+
 
     @Override
     public void displayLogIn() {
@@ -164,8 +164,9 @@ public class GUI extends Application implements ViewInterface {
 
 
     @Override
-    public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
-
+    public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd) {
+        Stage dialog = getDialog(primaryStage, new WarehousePlacerDrawer(client, warehouse, resourcesToAdd, getWindowWidth()).draw());
+        dialog.show();
     }
 
     @Override
@@ -417,14 +418,19 @@ public class GUI extends Application implements ViewInterface {
                 getWindowWidth(),
                 getWindowHeight()
         );
+        primaryStage.hide();
         primaryStage.getScene().setRoot(pane);
-
+        primaryStage.show();
         client.viewNext();
     }
 
     @Override
     public void waitForYourTurn() {
-
+        new AsynchronousDrawer(
+                () -> MessageSynchronizedFIFO.getInstance().getNext(),
+                () -> client.viewNext(),
+                false
+        ).start();
     }
 
 }

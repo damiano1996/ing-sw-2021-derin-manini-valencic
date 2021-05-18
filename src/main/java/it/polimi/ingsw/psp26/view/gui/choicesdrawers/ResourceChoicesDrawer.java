@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResource;
+import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
 
 public class ResourceChoicesDrawer implements ChoicesDrawer<Resource> {
 
@@ -17,13 +17,13 @@ public class ResourceChoicesDrawer implements ChoicesDrawer<Resource> {
         addSelectionListener(
                 resourceButtonContainer,
                 getResourceImageView(resourceButtonContainer.getContainedObject()),
-                getResource(resourceButtonContainer.getContainedObject(), getGeneralRatio())
+                getResourceImage(resourceButtonContainer.getContainedObject(), getGeneralRatio())
         );
         resourceButtonContainer.setStyle("-fx-background-color: transparent;");
         return resourceButtonContainer;
     }
 
     private ImageView getResourceImageView(Resource resource) {
-        return getImageView(getResource(resource, getGeneralRatio()), 0, 0);
+        return getImageView(getResourceImage(resource, getGeneralRatio()), 0, 0);
     }
 }

@@ -19,6 +19,7 @@ import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
+import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
 
 public class PersonalBoardDrawer extends RatioDrawer {
 
@@ -77,8 +78,9 @@ public class PersonalBoardDrawer extends RatioDrawer {
         List<Depot> baseDepots = personalBoard.getWarehouse().getBaseDepots();
         for (int i = 0; i < baseDepots.size(); i++) {
             Depot depot = baseDepots.get(i);
-            Image resourceImage = loadImage("resources/" + depot.getContainedResourceType() + ".png", (int) (100 * ratio));
-            resourceImage = addLightEffects(resourceImage, ratio);
+//            Image resourceImage = loadImage("resources/" + depot.getContainedResourceType() + ".png", (int) (100 * ratio));
+            Image resourceImage = getResourceImage(depot.getContainedResourceType(), ratio);
+//            resourceImage = addLightEffects(resourceImage, ratio);
 
             for (int j = 0; j < depot.getResources().size(); j++) {
 
@@ -103,8 +105,9 @@ public class PersonalBoardDrawer extends RatioDrawer {
             Resource resource = RESOURCES_SLOTS[i];
             int multiplicity = Collections.frequency(resources, resource);
 
-            Image resourceImage = loadImage("resources/" + resource + ".png", (int) (100 * ratio));
-            resourceImage = addLightEffects(resourceImage, ratio);
+//            Image resourceImage = loadImage("resources/" + depot.getContainedResourceType() + ".png", (int) (100 * ratio));
+            Image resourceImage = getResourceImage(resource, ratio);
+//            resourceImage = addLightEffects(resourceImage, ratio);
 
             for (int j = 0; j < multiplicity; j++) {
 

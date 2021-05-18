@@ -89,7 +89,7 @@ public class BuyCardNormalActionTurnStateTest {
 
     }
 
-    @Test (expected = CanNotAddDevelopmentCardToSlotException.class)
+    @Test(expected = CanNotAddDevelopmentCardToSlotException.class)
     public void testSendCardToBuyAndPlaceWrongPositionPlay() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
 
         DevelopmentCard card = buyCardResourceSetter();

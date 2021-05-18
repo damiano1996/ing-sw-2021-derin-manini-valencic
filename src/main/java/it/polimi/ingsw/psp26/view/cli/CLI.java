@@ -324,8 +324,7 @@ public class CLI implements ViewInterface {
     /**
      * Creates a new Thread that checks if there are new notifications
      */
-    @Override
-    public void startLiveUpdate() {
+    private void startLiveUpdate() {
         new Thread(() -> {
             while (true) {
                 // Only one call to the get method, otherwise it will freeze
@@ -394,14 +393,14 @@ public class CLI implements ViewInterface {
     /**
      * Displays the screen where the Player can modify the Depots
      *
-     * @param warehouse     The Warehouse of the Player
-     * @param resourceToAdd The Resources the Player can add to the Warehouse
+     * @param warehouse      The Warehouse of the Player
+     * @param resourcesToAdd The Resources the Player can add to the Warehouse
      */
     @Override
-    public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
+    public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd) {
         notificationStackPrinter.hideNotifications();
 
-        List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourceToAdd);
+        List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourcesToAdd);
         try {
             client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
         } catch (InvalidPayloadException ignored) {
@@ -735,7 +734,7 @@ public class CLI implements ViewInterface {
     @Override
     public void waitForYourTurn() {
         Scanner in = new Scanner(System.in);
-        
+
         // A dummy Player used when there are no Players contained in the CachedModel
         client.getCachedModel().getMyPlayerCached().updateObject(new Player(null, "", ""));
 
@@ -799,7 +798,7 @@ public class CLI implements ViewInterface {
         Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObject();
 
         executingTask = true;
-        
+
         personalBoardCli.displayPersonalBoard(opponent, client.isMultiplayerMode());
         cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board", Color.WHITE, 50, 5);
         cliUtils.pPCS("Press Enter to go back to your Personal Board view.", Color.WHITE, 52, 5);

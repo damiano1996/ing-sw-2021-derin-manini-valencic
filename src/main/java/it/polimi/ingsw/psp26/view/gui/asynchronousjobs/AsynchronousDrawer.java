@@ -22,6 +22,7 @@ public class AsynchronousDrawer {
             @Override
             protected Object call() {
                 Platform.runLater(() -> {
+                    // System.out.println("AsynchronousDrawer - RUN LATER THREAD ID: " + Thread.currentThread().getId());
                     try {
                         System.out.println("AsynchronousDrawer - STARTING TASK!");
                         delayedJob.execute();
@@ -39,6 +40,7 @@ public class AsynchronousDrawer {
             while (loop || firstExecution) {
                 firstExecution = false;
                 try {
+                    // System.out.println("AsynchronousDrawer - LOOKING FOR THREAD ID: " + Thread.currentThread().getId());
                     System.out.println("AsynchronousDrawer - LOOKING FOR UPDATES!");
                     jobListener.lookingFor();
                     System.out.println("AsynchronousDrawer - UPDATE RECEIVED!");

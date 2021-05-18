@@ -93,7 +93,7 @@ public class NotificationStackPrinter {
             for (int i = 0; i < string.length(); i += STACK_WIDTH)
                 stringList.add(string.substring(i, Math.min(i + STACK_WIDTH, string.length())));
         }
-        
+
         return stringList;
     }
 

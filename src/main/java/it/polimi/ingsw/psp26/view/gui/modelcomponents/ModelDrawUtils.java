@@ -30,7 +30,7 @@ public class ModelDrawUtils {
         return image;
     }
 
-    public static Image getResource(Resource resource, float ratio) {
+    public static Image getResourceImage(Resource resource, float ratio) {
         Image resourceImage = loadImage("resources/" + resource + ".png", (int) (100 * ratio));
         resourceImage = addLightEffects(resourceImage, ratio);
         return resourceImage;

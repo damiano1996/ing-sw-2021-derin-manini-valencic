@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResource;
+import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
 
 public class WaitingScreen {
 
@@ -47,7 +47,7 @@ public class WaitingScreen {
 
         List<Image> images = new ArrayList<>();
         for (Resource resource : ResourceSupply.RESOURCES_SLOTS)
-            images.add(getResource(resource, getGeneralRatio()));
+            images.add(getResourceImage(resource, getGeneralRatio()));
 
         final long startNanoTime = System.nanoTime();
         double phaseShift = 2 * Math.PI / images.size();

@@ -22,9 +22,6 @@ public interface ViewInterface {
     void start();
 
 
-    void startLiveUpdate();
-    
-    
     void displayLogIn();
 
 
@@ -37,7 +34,7 @@ public interface ViewInterface {
     void displayPersonalBoard(Player player, boolean isMultiplayerMode);
 
 
-    void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd);
+    void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd);
 
 
     void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources);

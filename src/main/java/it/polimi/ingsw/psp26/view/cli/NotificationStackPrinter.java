@@ -86,9 +86,14 @@ public class NotificationStackPrinter {
     private List<String> splitString(String string) {
         List<String> stringList = new ArrayList<>();
 
-        for (int i = 0; i < string.length(); i += STACK_WIDTH)
-            stringList.add(string.substring(i, Math.min(i + STACK_WIDTH, string.length())));
-
+        if (string.startsWith("Lorenzo played")) {
+            stringList.add(string.substring(0, 14));
+            stringList.add(string.substring(15));
+        } else {
+            for (int i = 0; i < string.length(); i += STACK_WIDTH)
+                stringList.add(string.substring(i, Math.min(i + STACK_WIDTH, string.length())));
+        }
+        
         return stringList;
     }
 
@@ -102,7 +107,6 @@ public class NotificationStackPrinter {
         List<Color> colors = new ArrayList<>();
 
         colors.add(Color.GREEN);
-        colors.add(Color.GREY);
         colors.add(Color.PURPLE);
         colors.add(Color.BLUE);
         colors.add(Color.YELLOW);

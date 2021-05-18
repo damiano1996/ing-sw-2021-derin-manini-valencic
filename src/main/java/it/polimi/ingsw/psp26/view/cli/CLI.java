@@ -16,13 +16,14 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.network.server.VirtualView;
+import it.polimi.ingsw.psp26.network.client.NotificationsFIFO;
 import it.polimi.ingsw.psp26.utils.ViewUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
@@ -41,11 +42,11 @@ public class CLI implements ViewInterface {
     private final NotificationStackPrinter notificationStackPrinter;
     private final CommonScreensCli commonScreensCli;
     private Client client;
-    private boolean isPersonalBoardPrintable;
+
+    // If true, the Thread printing notifications will wait until other cli's elements are printed
+    private volatile boolean executingTask;
 
     public CLI() {
-        this.isPersonalBoardPrintable = false;
-
         this.pw = new PrintWriter(System.out);
         this.cliUtils = new CliUtils(pw);
         this.developmentCardsCli = new DevelopmentCardsCli(pw);
@@ -106,6 +107,10 @@ public class CLI implements ViewInterface {
                     pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                     pw.flush();
                     String serverIP = in.nextLine();
+
+                    // Starting the Thread to print notifications
+                    startLiveUpdate();
+
                     client.initializeNetworkHandler(serverIP);
                     // go to Multi/single player choice
                     displayChoices(
@@ -129,8 +134,6 @@ public class CLI implements ViewInterface {
      * @param leaderCards The Leader Cards to display
      */
     public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
-        isPersonalBoardPrintable = false;
-
         cliUtils.clns();
         leaderCardsCli.printMultipleLeaders(leaderCards, 3);
         cliUtils.vSpace(3);
@@ -150,7 +153,6 @@ public class CLI implements ViewInterface {
         cliUtils.vSpace(1);
         displayMultipleStringChoices(choices);
         displayDevelopmentCardsSlots(client.getCachedModel().getMyPlayerCached().getObject().getPersonalBoard().getDevelopmentCardsSlots());
-
     }
 
 
@@ -160,10 +162,9 @@ public class CLI implements ViewInterface {
      * @param choices The choices to display
      */
     private void choiceNormalLeaderActionExecute(List<Object> choices) {
-        isPersonalBoardPrintable = true;
         notificationStackPrinter.restoreStackView();
-        personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
 
+        personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
         cliUtils.setCursorPosition(47, 1);
         displayMultipleStringChoices(choices);
     }
@@ -305,6 +306,10 @@ public class CLI implements ViewInterface {
     //          VIEW INTERFACE METHODS          //
     //------------------------------------------//
 
+
+    /**
+     * Starts a new Client, a new Thread for the notifications and displays the login screen
+     */
     @Override
     public void start() {
         try {
@@ -317,13 +322,25 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Displays the given Leader Cards
-     *
-     * @param leaderCards The Leader Cards to display
+     * Creates a new Thread that checks if there are new notifications
      */
     @Override
-    public void displayLeaderCards(List<LeaderCard> leaderCards) {
-        personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
+    public void startLiveUpdate() {
+        new Thread(() -> {
+            while (true) {
+                // Only one call to the get method, otherwise it will freeze
+                List<String> notifications = NotificationsFIFO.getInstance().getNotifications();
+
+                // If you don't give time the cursor may be in the wrong position when printing
+                try {
+                    TimeUnit.MILLISECONDS.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                displayNotifications(notifications);
+            }
+        }).start();
     }
 
 
@@ -333,8 +350,25 @@ public class CLI implements ViewInterface {
      * @param notifications The Strings to print in the Notification Stack
      */
     @Override
-    public void displayNotifications(List<String> notifications) {
+    public synchronized void displayNotifications(List<String> notifications) {
+        while (executingTask) {
+            // Using onSpinWait() not to call notifyAll() from other cli's methods
+            Thread.onSpinWait();
+        }
         notificationStackPrinter.printMessageStack(notifications);
+    }
+
+
+    /**
+     * Displays the given Leader Cards
+     *
+     * @param leaderCards The Leader Cards to display
+     */
+    @Override
+    public void displayLeaderCards(List<LeaderCard> leaderCards) { // never used
+        executingTask = true;
+        personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
+        executingTask = false;
     }
 
 
@@ -345,12 +379,14 @@ public class CLI implements ViewInterface {
      * @param isMultiplayerMode Used to print Lorenzo's Faith Marker if set to false
      */
     @Override
-    public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
-        if (isPersonalBoardPrintable) {
-            notificationStackPrinter.restoreStackView();
-            personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
-            cliUtils.setCursorPosition(47, 1);
-        }
+    public void displayPersonalBoard(Player player, boolean isMultiplayerMode) { // never used
+        executingTask = true;
+
+        notificationStackPrinter.restoreStackView();
+        personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
+        cliUtils.setCursorPosition(47, 1);
+
+        executingTask = false;
         client.viewNext();
     }
 
@@ -363,7 +399,6 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourceToAdd) {
-        isPersonalBoardPrintable = false;
         notificationStackPrinter.hideNotifications();
 
         List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourceToAdd);
@@ -371,6 +406,7 @@ public class CLI implements ViewInterface {
             client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
         } catch (InvalidPayloadException ignored) {
         }
+
         displayNext();
     }
 
@@ -382,8 +418,10 @@ public class CLI implements ViewInterface {
      * @param isMultiPlayerMode Used to print Lorenzo's Faith Marker if set to false
      */
     @Override
-    public void displayFaithTrack(FaithTrack faithTrack, boolean isMultiPlayerMode) {
+    public void displayFaithTrack(FaithTrack faithTrack, boolean isMultiPlayerMode) { // never used
+        executingTask = true;
         faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
+        executingTask = false;
     }
 
 
@@ -394,8 +432,6 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
-        isPersonalBoardPrintable = false;
-
         cliUtils.pPCS("Enter the number of the slot in which you want to put the drawn card", Color.WHITE, 10, 4);
         personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
         cliUtils.pPCS("Slot  1", Color.GREY, 47, 85);
@@ -411,8 +447,10 @@ public class CLI implements ViewInterface {
      * @param marketTray The Market Tray to display
      */
     @Override
-    public void displayMarketScreen(MarketTray marketTray) {
+    public void displayMarketScreen(MarketTray marketTray) { // never used
+        executingTask = true;
         marketCli.displayMarketScreen(marketTray);
+        executingTask = false;
     }
 
 
@@ -422,8 +460,10 @@ public class CLI implements ViewInterface {
      * @param developmentGrid The Development Card Grid to display
      */
     @Override
-    public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
+    public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) { // never used
+        executingTask = true;
         developmentCardsCli.displayDevelopmentGrid(developmentGrid);
+        executingTask = false;
     }
 
 
@@ -435,7 +475,9 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes) {
+        executingTask = true;
         personalBoardCli.displayResourceSupply(resourceSupply, resourcesTypes, 1, 37);
+        executingTask = false;
     }
 
 
@@ -447,7 +489,6 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayProductionActivation(List<Production> productions, List<Resource> playerResources) {
-        isPersonalBoardPrintable = false;
         notificationStackPrinter.hideNotifications();
 
         try {
@@ -470,9 +511,11 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
-        isPersonalBoardPrintable = false;
+        executingTask = true;
 
         personalBoardCli.displayActionTokens(unusedTokens);
+
+        executingTask = false;
         displayNext();
     }
 
@@ -485,7 +528,6 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
-        isPersonalBoardPrintable = false;
         notificationStackPrinter.hideNotifications();
 
         List<Integer> choice = new ArrayList<>();
@@ -509,7 +551,6 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources) {
-        isPersonalBoardPrintable = false;
         notificationStackPrinter.hideNotifications();
 
         List<DevelopmentCard> choice = new ArrayList<>();
@@ -541,6 +582,8 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
+        // Starts blocking the notifications printing
+        executingTask = true;
 
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + question);
@@ -580,6 +623,9 @@ public class CLI implements ViewInterface {
                 break;
         }
 
+        // Stops blocking the notification printing
+        executingTask = false;
+
         // send to server response
         try {
             cliUtils.vSpace(1);
@@ -613,10 +659,13 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayText(String text) {
+        executingTask = true;
+
         cliUtils.clns();
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + text);
 
+        executingTask = false;
         displayNext();
     }
 
@@ -629,6 +678,8 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer) {
+        executingTask = true;
+
         commonScreensCli.displayFinalScreen(leaderboard);
 
         if (client.getNickname().equals(winningPlayer)) {
@@ -645,6 +696,7 @@ public class CLI implements ViewInterface {
 
         cliUtils.pPCS("Press Enter to go back to the main screen", Color.WHITE, 50, 4);
 
+        executingTask = false;
         displayNext();
     }
 
@@ -656,6 +708,8 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayError(String error) {
+        executingTask = true;
+
         cliUtils.clns();
         cliUtils.setCursorPosition(20, 81);
         for (int i = 0; i < error.length() + 8; i++) pw.print(cliUtils.pCS("=", Color.RED));
@@ -670,6 +724,7 @@ public class CLI implements ViewInterface {
         pw.flush();
         cliUtils.vSpace(5);
 
+        executingTask = false;
         displayNext();
     }
 
@@ -680,11 +735,11 @@ public class CLI implements ViewInterface {
     @Override
     public void waitForYourTurn() {
         Scanner in = new Scanner(System.in);
-
-        client.getCachedModel().getMyPlayerCached().updateObject(new Player(new VirtualView(), "", ""));
+        
+        // A dummy Player used when there are no Players contained in the CachedModel
+        client.getCachedModel().getMyPlayerCached().updateObject(new Player(null, "", ""));
 
         while (true) {
-
             // At each iteration the current Player Personal Board will be printed
             personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
 
@@ -704,12 +759,11 @@ public class CLI implements ViewInterface {
                 }
             } else {
                 cliUtils.vSpace(2);
-                pw.print("Press Enter to continue with your turn.");
+                pw.print(cliUtils.hSpace(4) + "Press Enter to continue with your turn.");
                 pw.flush();
                 in.nextLine();
                 break;
             }
-
         }
 
         displayNext();
@@ -720,10 +774,14 @@ public class CLI implements ViewInterface {
      * Prints the instructions of the opponent viewing screen
      */
     private void printOpponentViewScreenInformation() {
+        executingTask = true;
+
         cliUtils.pPCS("OPPONENTS TURN!", Color.WHITE, 48, 5);
         cliUtils.pPCS("Select the number of the opponents Board you want to see.", Color.WHITE, 49, 5);
         cliUtils.pPCS("Enter 'done' when you want to continue with your turn.", Color.WHITE, 50, 5);
         cliUtils.pPCS("After entering 'done' if nothing happens don't worry: the opponents are still playing their turn!", Color.WHITE, 51, 5);
+
+        executingTask = false;
     }
 
 
@@ -740,9 +798,13 @@ public class CLI implements ViewInterface {
         int opponentNumber = getCorrectOpponentNumber(client.getCachedModel().getNumberOfOpponents());
         Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObject();
 
+        executingTask = true;
+        
         personalBoardCli.displayPersonalBoard(opponent, client.isMultiplayerMode());
         cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board", Color.WHITE, 50, 5);
         cliUtils.pPCS("Press Enter to go back to your Personal Board view.", Color.WHITE, 52, 5);
+
+        executingTask = false;
     }
 
 
@@ -772,6 +834,8 @@ public class CLI implements ViewInterface {
      * Prints the List of the cached opponents nicknames
      */
     private void printOpponentsPersonalBoardList() {
+        executingTask = true;
+
         if (client.getCachedModel().getNumberOfOpponents() == 0) {
             cliUtils.pPCS("No opponent registered yet.", Color.WHITE, 54, 5);
         } else {
@@ -785,6 +849,8 @@ public class CLI implements ViewInterface {
                 }
             }
         }
+
+        executingTask = false;
     }
 
 }

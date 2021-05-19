@@ -25,6 +25,7 @@ import it.polimi.ingsw.psp26.view.gui.choicesdrawers.LeaderCardChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ResourceChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.MarketTrayDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.WarehousePlacerDrawer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -64,13 +65,13 @@ public class GUI extends Application implements ViewInterface {
         Application.launch(args);
     }
 
-    private void setStageWindowProperties(Stage stage) {
+//    private void setStageWindowProperties(Stage stage) {
 //        stage.setMaximized(true);
 //        stage.setResizable(true);
 //        stage.setFullScreen(true);
 //        stage.setAlwaysOnTop(true);
 //        stage.sizeToScene();
-    }
+//    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -86,7 +87,7 @@ public class GUI extends Application implements ViewInterface {
 
         this.primaryStage = primaryStage;
         this.primaryStage.setScene(scene);
-        setStageWindowProperties(this.primaryStage);
+//        setStageWindowProperties(this.primaryStage);
         this.primaryStage.show();
 
         displayLogIn();
@@ -177,7 +178,8 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
-
+        Stage dialog = getDialog(primaryStage, new MarketTrayDialogDrawer(client, marketTray, getWindowWidth()).draw());
+        dialog.show();
     }
 
     @Override
@@ -222,7 +224,7 @@ public class GUI extends Application implements ViewInterface {
         label.setWrapText(true);
         mainContainer.getChildren().add(label);
 
-        ChoicesDrawer choicesDrawer;
+        ChoicesDrawer<?> choicesDrawer;
 
         switch (messageType) {
 
@@ -252,7 +254,7 @@ public class GUI extends Application implements ViewInterface {
         buttonOrCheckBox(contentPane, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
 
         if (hasUndoOption) {
-            Button undoOptionButton = new Button("UNDO");
+            Button undoOptionButton = new Button("Undo");
             undoOptionButton.setId("undo-button");
             undoOptionButton.setOnAction(actionEvent -> {
                 dialog.close();
@@ -265,7 +267,7 @@ public class GUI extends Application implements ViewInterface {
         dialog.show();
     }
 
-    private void buttonOrCheckBox(GridPane container, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+    private void buttonOrCheckBox(GridPane container, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
         if (minChoices == 1 && maxChoices == 1) {
             buttonMultipleChoices(container, dialog, choicesDrawer, messageType, choices);
         } else {
@@ -273,14 +275,14 @@ public class GUI extends Application implements ViewInterface {
         }
     }
 
-    private void buttonMultipleChoices(GridPane container, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices) {
+    private void buttonMultipleChoices(GridPane container, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices) {
 
-        List<ButtonContainer> buttonContainers = new ArrayList<>();
+        List<ButtonContainer<?>> buttonContainers = new ArrayList<>();
 
         int j = 0;
         for (int i = 0; i < choices.size(); i++) {
 
-            ButtonContainer buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
+            ButtonContainer<?> buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
             buttonContainers.add(buttonContainer);
 
             int finalI = i;
@@ -306,37 +308,40 @@ public class GUI extends Application implements ViewInterface {
                 client.viewNext();
 
             });
-            if (choices.size() % 2 != 0 && i == choices.size() - 1)
-                container.add(new VBox(buttonContainer), 0, container.getRowCount() + 1, container.getColumnCount(), 1);
-            else container.add(buttonContainer, i % 2, j % 2, 1, 1);
-            j += i % 2;
+            j = setGridPanePosition(container, choices, j, i, buttonContainer);
         }
     }
 
-    private void checkBoxMultipleChoices(GridPane container, Stage dialog, ChoicesDrawer choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+    private int setGridPanePosition(GridPane container, List<Object> choices, int j, int i, ButtonContainer<?> buttonContainer) {
+        if (choices.size() % 2 != 0 && i == choices.size() - 1)
+            container.add(new VBox(buttonContainer), 0, container.getRowCount() + 1, (container.getColumnCount() == 0) ? 1 : container.getColumnCount(), 1);
+        else container.add(buttonContainer, i % 2, j % 2, 1, 1);
+        j += i % 2;
+        return j;
+    }
 
-        List<ButtonContainer> buttonContainers = new ArrayList<>();
+    private void checkBoxMultipleChoices(GridPane container, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+
+        List<ButtonContainer<?>> buttonContainers = new ArrayList<>();
 
         int j = 0;
         for (int i = 0; i < choices.size(); i++) {
 
-            ButtonContainer buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
+            ButtonContainer<?> buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
             buttonContainers.add(buttonContainer);
 
-            if (choices.size() % 2 != 0 && i == choices.size() - 1)
-                container.add(new VBox(buttonContainer), 0, container.getRowCount() + 1, container.getColumnCount(), 1);
-            else container.add(buttonContainer, i % 2, j % 2, 1, 1);
-            j += i % 2;
+            j = setGridPanePosition(container, choices, j, i, buttonContainer);
         }
 
         Text errorText = new Text("Select " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
         errorText.setId("error");
         errorText.setVisible(false);
-        Button confirmationButton = new Button("SELECT");
+        Button confirmationButton = new Button("Confirm");
+        confirmationButton.setId("confirm-button");
 
         confirmationButton.setOnAction(event -> {
             List<Object> selected = new ArrayList<>();
-            for (ButtonContainer buttonContainer : buttonContainers)
+            for (ButtonContainer<?> buttonContainer : buttonContainers)
                 if (buttonContainer.isClicked())
                     selected.add(buttonContainer.getContainedObject());
 

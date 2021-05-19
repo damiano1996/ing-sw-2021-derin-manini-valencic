@@ -91,6 +91,8 @@ public class WarehousePlacerDrawer extends RatioDrawer {
                                 createListToSend(warehouse).toArray()
                         )
                 );
+                closeParentStageOfActionEvent(actionEvent);
+                client.viewNext();
             } catch (InvalidPayloadException ignored) {
 
             }

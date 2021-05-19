@@ -1,7 +1,11 @@
 package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.network.client.Client;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,9 +20,16 @@ public class MarketTrayDrawer extends RatioDrawer {
 
     private final MarketTray marketTray;
 
+    private Client client;
+
     public MarketTrayDrawer(MarketTray marketTray, int maxWidth) {
         super(maxWidth);
+        this.marketTray = marketTray;
+    }
 
+    public MarketTrayDrawer(Client client, MarketTray marketTray, int maxWidth) {
+        super(maxWidth);
+        this.client = client;
         this.marketTray = marketTray;
     }
 
@@ -96,6 +107,7 @@ public class MarketTrayDrawer extends RatioDrawer {
             ImageView imageView = getImageView(getArrowImage(), hOffset * ratio, (vOffset + row * shift) * ratio);
             imageView.setRotate(-90);
             addMouseOverAnimation(imageView, ratio);
+            addArrowClickEvent(imageView, row);
 
             pane.getChildren().add(imageView);
         }
@@ -109,6 +121,7 @@ public class MarketTrayDrawer extends RatioDrawer {
         for (int col = 0; col < marketTray.getMarblesOnRow(0).length; col++) {
             ImageView imageView = getImageView(getArrowImage(), (hOffset + col * shift) * ratio, vOffset * ratio);
             addMouseOverAnimation(imageView, ratio);
+            addArrowClickEvent(imageView, col + 3);
 
             pane.getChildren().add(imageView);
         }
@@ -118,5 +131,19 @@ public class MarketTrayDrawer extends RatioDrawer {
         Image arrowImage = loadImage("market/arrow.png", (int) (450 * ratio));
         arrowImage = addLightEffects(arrowImage, ratio);
         return arrowImage;
+    }
+
+    private void addArrowClickEvent(ImageView arrowImageView, int numToSend) {
+        if (client != null) {
+            arrowImageView.setOnMouseClicked(mouseEvent -> {
+                try {
+                    client.notifyObservers(new Message(MessageType.CHOICE_ROW_COLUMN, numToSend));
+                    closeParentStageOfActionEvent(mouseEvent);
+                    client.viewNext();
+                } catch (InvalidPayloadException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }

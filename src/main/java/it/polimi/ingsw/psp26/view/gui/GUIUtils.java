@@ -1,6 +1,8 @@
 package it.polimi.ingsw.psp26.view.gui;
 
+import javafx.event.Event;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -12,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +76,12 @@ public class GUIUtils {
 
     public static void addStylesheet(Scene scene) {
         scene.getStylesheets().add(getCompletePath("stylesheets/stylesheet.css"));
+    }
+
+    public static void closeParentStageOfActionEvent(Event actionEvent) {
+        Node source = (Node) actionEvent.getSource();
+        Stage dialog = (Stage) source.getScene().getWindow();
+        dialog.close();
     }
 
 }

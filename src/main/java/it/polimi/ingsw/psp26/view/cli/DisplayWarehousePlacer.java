@@ -130,7 +130,7 @@ public class DisplayWarehousePlacer {
         depotCli.printWarehouse(warehouse, 7, 74);
         personalBoardCli.printLeaderDepots(warehouse.getLeaderDepots(), 15, 132);
         printLeaderDepotNumber(warehouse.getLeaderDepots().size());
-        printResources(resourcesLeft, resourceIndex, "Resources left to insert: ", 22, 74);
+        printResources(resourcesLeft, resourceIndex, "Resources left to insert: ", 23, 74);
         printResources(resourcesDiscarded, 0, "Resources discarded: ", 10, 132);
     }
 

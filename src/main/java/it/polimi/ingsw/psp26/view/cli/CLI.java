@@ -31,6 +31,7 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
 
 public class CLI implements ViewInterface {
 
+    private final Scanner in;
     private final PrintWriter pw;
     private final CliUtils cliUtils;
     private final DevelopmentCardsCli developmentCardsCli;
@@ -47,6 +48,7 @@ public class CLI implements ViewInterface {
     private volatile boolean executingTask;
 
     public CLI() {
+        this.in = new Scanner(System.in);
         this.pw = new PrintWriter(System.out);
         this.cliUtils = new CliUtils(pw);
         this.developmentCardsCli = new DevelopmentCardsCli(pw);
@@ -85,8 +87,6 @@ public class CLI implements ViewInterface {
      */
     public void displayLogIn() {
         try {
-            Scanner in = new Scanner(System.in);
-
             printTitle();
             cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
 
@@ -237,7 +237,6 @@ public class CLI implements ViewInterface {
         pw.print("\n" + cliUtils.hSpace(3) + "Enter the number of the corresponding item [" + 1 + ", " + nChoices + "] (type 'c' - to confirm selections): ");
         pw.flush();
 
-        Scanner in = new Scanner(System.in);
         String item = in.nextLine();
 
         if (hasUndoOption)
@@ -270,7 +269,6 @@ public class CLI implements ViewInterface {
      * Used to continue between screens and to get the next Message from MessageSynchronizedFIFO
      */
     private void displayNext() {
-        Scanner in = new Scanner(System.in);
         cliUtils.vSpace(1);
         pw.print(cliUtils.hSpace(3) + "Press ENTER to confirm.");
         pw.flush();
@@ -314,6 +312,8 @@ public class CLI implements ViewInterface {
     public void start() {
         try {
             this.client = new Client(this);
+            //TODO controlla che questa cosa abbia senso: se crei un nuovo match facendo partire il metodo start devi in qualoche modo creare una nuova notificationsFIFO
+            NotificationsFIFO.getInstance().resetFIFO();
             displayLogIn();
         } catch (IOException e) {
             e.printStackTrace();
@@ -512,6 +512,7 @@ public class CLI implements ViewInterface {
     public void displayActionTokens(List<ActionToken> unusedTokens) {
         executingTask = true;
 
+        notificationStackPrinter.restoreStackView();
         personalBoardCli.displayActionTokens(unusedTokens);
 
         executingTask = false;
@@ -696,7 +697,11 @@ public class CLI implements ViewInterface {
         cliUtils.pPCS("Press Enter to go back to the main screen", Color.WHITE, 50, 4);
 
         executingTask = false;
-        displayNext();
+
+        in.nextLine();
+        
+        //TODO Controllare lato server cosa fare del vecchio Match
+        start();
     }
 
 
@@ -733,10 +738,9 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void waitForYourTurn() {
-        Scanner in = new Scanner(System.in);
-
         // A dummy Player used when there are no Players contained in the CachedModel
-        client.getCachedModel().getMyPlayerCached().updateObject(new Player(null, "", ""));
+        if (client.getCachedModel().getMyPlayerCached().getObject() == null)
+            client.getCachedModel().getMyPlayerCached().updateObject(new Player(null, "", ""));
 
         while (true) {
             // At each iteration the current Player Personal Board will be printed
@@ -816,7 +820,6 @@ public class CLI implements ViewInterface {
      * @throws IndexOutOfBoundsException         The opponent's number chosen exceeds the admissible bounds
      */
     private int getCorrectOpponentNumber(int numberOfOpponents) throws FinishedViewingOpponentsException, IndexOutOfBoundsException {
-        Scanner in = new Scanner(System.in);
         String input;
 
         input = in.nextLine();

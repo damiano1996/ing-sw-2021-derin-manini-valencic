@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
+import static it.polimi.ingsw.psp26.view.ViewUtils.getSelectedDevelopmentCard;
 
 public class DevelopmentCardsCli {
 
@@ -334,8 +335,8 @@ public class DevelopmentCardsCli {
      * @throws UndoOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
      */
     public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid, List<Resource> playerResources) throws UndoOptionSelectedException {
-        String level = "";
-        String color = "";
+        String cardLevel = "";
+        String cardColor = "";
         boolean isCardChosen = false;
         boolean printErrorString = false;
 
@@ -350,10 +351,10 @@ public class DevelopmentCardsCli {
                 cliUtils.pPCS("THE DESIRED CARD IS NOT AVAILABLE! Please try again", Color.RED, 30, 135);
             printErrorString = false;
 
-            level = askForLevelAndColor("Enter the Level [first - second - third] of the card you want: ", true);
-            color = askForLevelAndColor("Enter the Color [green - blue - yellow - purple] of the card you want: ", false);
+            cardLevel = askForLevelAndColor("Enter the Level [first - second - third] of the card you want: ", true);
+            cardColor = askForLevelAndColor("Enter the Color [green - blue - yellow - purple] of the card you want: ", false);
 
-            isCardChosen = isCardAvailable(developmentGrid, level, color);
+            isCardChosen = isCardAvailable(developmentGrid, cardLevel, cardColor);
             if (!isCardChosen) {
                 printErrorString = true;
                 cliUtils.clearLine(33, 198);
@@ -361,12 +362,7 @@ public class DevelopmentCardsCli {
 
         }
 
-        //In Java 8 streams you must use final variables
-        final String cardLevel = level;
-        final String cardColor = color;
-
-        return developmentGrid.getAllVisibleCards().stream().filter(x -> x.getDevelopmentCardType().getColor().getName().equalsIgnoreCase(cardColor))
-                .filter(x -> x.getDevelopmentCardType().getLevel().getLevelName().equalsIgnoreCase(cardLevel)).findFirst().get();
+        return getSelectedDevelopmentCard(developmentGrid, cardLevel, cardColor);
     }
 
 

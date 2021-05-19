@@ -32,16 +32,16 @@ public class FaithTrack extends Observable<SessionMessage> {
         super();
         addObserver(virtualView);
 
-        this.finalPosition = 24;
+        finalPosition = 24;
         vaticanReportSections = new VaticanReportSection[3];
         vaticanReportSections[0] = new VaticanReportSection(virtualView, 5, 8, 2, sessionToken);
         vaticanReportSections[1] = new VaticanReportSection(virtualView, 12, 16, 3, sessionToken);
         vaticanReportSections[2] = new VaticanReportSection(virtualView, 19, finalPosition, 4, sessionToken);
-        this.markerPosition = 0;
-        this.blackCrossPosition = 0;
-        this.faithPoints = 0;
+        markerPosition = 0;
+        blackCrossPosition = 0;
+        faithPoints = 0;
         this.sessionToken = sessionToken;
-        this.victoryPoints = new int[]{0, 1, 2, 4, 6, 9, 12, 16, 20};
+        victoryPoints = new int[]{0, 1, 2, 4, 6, 9, 12, 16, 20};
     }
 
     /**
@@ -50,8 +50,9 @@ public class FaithTrack extends Observable<SessionMessage> {
      * @param points points to add
      */
     public void addFaithPoints(int points) {
-        this.faithPoints += points;
-        this.markerPosition += points; //TODO ANDREBBE IMPLEMENTATO UN CONTROLLO CHE NON FACCIA SUPERARE LA MARKER POSITION OLTRE 24
+        faithPoints += points;
+        markerPosition += points;
+        if (markerPosition > finalPosition) markerPosition = finalPosition;
 
         notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }
@@ -98,8 +99,9 @@ public class FaithTrack extends Observable<SessionMessage> {
      * @param numberOfSteps number of steps
      */
     public void moveMarkerPosition(int numberOfSteps) {
-        this.markerPosition = this.markerPosition + numberOfSteps;
-        this.faithPoints = this.faithPoints + numberOfSteps;
+        markerPosition += numberOfSteps;
+        faithPoints += numberOfSteps;
+        if (markerPosition > finalPosition) markerPosition = finalPosition;
 
         notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }
@@ -110,7 +112,8 @@ public class FaithTrack extends Observable<SessionMessage> {
      * @param numberOfSteps number of steps
      */
     public void moveBlackCrossPosition(int numberOfSteps) {
-        this.blackCrossPosition = this.blackCrossPosition + numberOfSteps;
+        blackCrossPosition += numberOfSteps;
+        if (blackCrossPosition > finalPosition) blackCrossPosition = finalPosition;
 
         notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }
@@ -130,7 +133,7 @@ public class FaithTrack extends Observable<SessionMessage> {
      * @return final position of the track
      */
     public int getVictoryPoints() {
-        return victoryPoints[(int) faithPoints / 3];
+        return victoryPoints[faithPoints / 3];
     }
 
 

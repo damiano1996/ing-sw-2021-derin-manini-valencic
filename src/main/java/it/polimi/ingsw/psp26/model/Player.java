@@ -145,7 +145,9 @@ public class Player extends Observable<SessionMessage> {
      * @param victoryPoints victory points to be added to the player
      */
     public void addPoints(int victoryPoints) {
-        this.points += victoryPoints;
+        points += victoryPoints;
+
+        notifyObservers(getPlayerModelUpdateMessage(sessionToken));
     }
 
 }

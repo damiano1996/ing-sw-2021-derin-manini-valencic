@@ -20,4 +20,7 @@ public abstract class RatioDrawer {
         return pane;
     }
 
+    public float getRatio() {
+        return ratio;
+    }
 }

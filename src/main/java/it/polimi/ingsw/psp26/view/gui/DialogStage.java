@@ -23,6 +23,7 @@ public class DialogStage {
         dialog.initStyle(StageStyle.UNDECORATED);
         dialog.initStyle(StageStyle.TRANSPARENT);
         // dialog.setAlwaysOnTop(true);
+//        dialog.sizeToScene();
         dialog.centerOnScreen();
 
         primaryStage.xProperty().addListener((obs, oldVal, newVal) -> dialog.setX(primaryStage.getX() + primaryStage.getWidth() / 2 - dialog.getWidth() / 2));

@@ -44,14 +44,22 @@ public class LightEffects {
     }
 
     private static DropShadow getSelectionShadow() {
+        return getSelectionShadow(Color.YELLOW);
+    }
+
+    private static DropShadow getSelectionShadow(Color color) {
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(0);
-        dropShadow.setColor(Color.YELLOW);
+        dropShadow.setColor(color);
         return dropShadow;
     }
 
     public static Image addSelectionShadow(Image image) {
         return addShadow(image, getSelectionShadow());
+    }
+
+    public static Image addSelectionShadow(Image image, Color color) {
+        return addShadow(image, getSelectionShadow(color));
     }
 
 }

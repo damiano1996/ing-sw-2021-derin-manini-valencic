@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.drag.targetstrategies;
 
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import javafx.scene.layout.Pane;
@@ -18,14 +18,20 @@ public class DepotTargetContainer extends TargetContainer<Resource> {
 
     @Override
     public boolean place(Resource resource) {
+
         try {
-            System.out.println("DepotTargetContainer - trying to place the resource.");
-            warehouse.addResource(resource, depotIndex);
-            System.out.println("DepotTargetContainer - resource has been placed.");
+
+            System.out.println("DepotTargetContainer - Trying to place the resource.");
+            warehouse.addResourceToDepot(depotIndex, resource);
+            System.out.println("DepotTargetContainer - Resource has been placed successfully.");
             return true;
-        } catch (CanNotAddResourceToWarehouse canNotAddResourceToWarehouse) {
-            System.out.println("DepotTargetContainer - resource cannot be placed");
+
+        } catch (CanNotAddResourceToDepotException e) {
+
+            System.out.println("DepotTargetContainer - Resource cannot be placed.");
             return false;
+
         }
+
     }
 }

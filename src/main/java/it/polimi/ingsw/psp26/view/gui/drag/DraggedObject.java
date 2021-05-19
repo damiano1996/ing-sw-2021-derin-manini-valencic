@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.view.gui.drag;
 
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.TargetContainer;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
@@ -80,7 +81,11 @@ public class DraggedObject<T> {
         });
 
         imageView.addEventFilter(MouseDragEvent.MOUSE_DRAGGED, mouseEvent -> {
-            if (mouseEvent.isPrimaryButtonDown() && selected) {
+            int margin = 100;
+            if (mouseEvent.isPrimaryButtonDown() && selected &&
+                    sourcePane.contains(new Point2D(mouseEvent.getX() + margin, mouseEvent.getY() + margin)) &&
+                    sourcePane.contains(new Point2D(mouseEvent.getX() - margin, mouseEvent.getY() - margin))) {
+                System.out.println("mouse position: " + mouseEvent.getX() + ":" + mouseEvent.getY() + " --- " + sourcePane.localToScene(sourcePane.getBoundsInLocal()));
                 imageView.setX(mouseEvent.getX() - imageView.getImage().getWidth() / 2);
                 imageView.setY(mouseEvent.getY() - imageView.getImage().getHeight() / 2);
             }

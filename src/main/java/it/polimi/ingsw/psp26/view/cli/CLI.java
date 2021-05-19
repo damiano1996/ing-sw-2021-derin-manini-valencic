@@ -699,7 +699,7 @@ public class CLI implements ViewInterface {
         executingTask = false;
 
         in.nextLine();
-        
+
         //TODO Controllare lato server cosa fare del vecchio Match
         start();
     }

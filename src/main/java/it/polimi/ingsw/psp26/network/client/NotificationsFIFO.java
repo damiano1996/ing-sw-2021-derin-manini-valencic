@@ -40,7 +40,7 @@ public class NotificationsFIFO {
         updated = false;
         return Collections.unmodifiableList(notifications);
     }
-    
+
     public synchronized void resetFIFO() {
         instance = new NotificationsFIFO(10);
     }

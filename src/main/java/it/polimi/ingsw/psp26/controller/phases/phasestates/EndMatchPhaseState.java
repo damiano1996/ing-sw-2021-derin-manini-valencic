@@ -14,7 +14,7 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 public class EndMatchPhaseState extends PhaseState {
 
-    private String winnerName;
+    private String winnerName = "";
 
     public EndMatchPhaseState(Phase phase) {
         super(phase);
@@ -33,7 +33,7 @@ public class EndMatchPhaseState extends PhaseState {
 
     private void showEndGameResult() {
 
-        if (winnerName != "Lorenzo il Magnifico")
+        if (!winnerName.equals("Lorenzo il Magnifico"))
             computePlayersPoints();
 
         for (Player player : phase.getMatchController().getMatch().getPlayers()) {

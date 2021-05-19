@@ -317,7 +317,7 @@ public class PersonalBoardCli {
      * @param startingColumn   The column where the Resource Supply will be printed
      */
     public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesToPrint, int startingRow, int startingColumn) {
-        cliUtils.clns();
+        cliUtils.cls();
 
         cliUtils.printFigure("/titles/ResourceSupplyTitle", startingRow, startingColumn);
         cliUtils.printFigure("ResourceSupply", startingRow + 19, startingColumn + 37);

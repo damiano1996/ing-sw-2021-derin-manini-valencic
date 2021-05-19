@@ -3,6 +3,8 @@ package it.polimi.ingsw.psp26.view;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
@@ -161,6 +163,24 @@ public class ViewUtils {
         } catch (CanNotAddResourceToDepotException e) {
             restoreOriginalSituation(warehouse, sourceDepot, destinationDepot, tempResourcesSource, tempResourcesDestination);
         }
+    }
+
+
+    //--------------------------------------------------------//
+    //          DEVELOPMENT CARD BUY SCREEN  METHODS          //
+    //--------------------------------------------------------//
+
+    /**
+     * Returns the desired Development Card without drawing it from the Development Grid
+     *
+     * @param developmentGrid The Grid from where to get the Development Card
+     * @param cardLevel       The desired Development Card Level
+     * @param cardColor       The desired Development Card Color
+     * @return The desired Development Card
+     */
+    public static DevelopmentCard getSelectedDevelopmentCard(DevelopmentGrid developmentGrid, String cardLevel, String cardColor) {
+        return developmentGrid.getAllVisibleCards().stream().filter(x -> x.getDevelopmentCardType().getColor().getName().equalsIgnoreCase(cardColor))
+                .filter(x -> x.getDevelopmentCardType().getLevel().getLevelName().equalsIgnoreCase(cardLevel)).findFirst().get();
     }
 
 }

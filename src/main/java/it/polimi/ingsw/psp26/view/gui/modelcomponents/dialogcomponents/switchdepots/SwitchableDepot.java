@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchde
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addSelectionShadow;
@@ -12,14 +13,14 @@ public class SwitchableDepot {
     private final Pane imageViewContainer;
     private final Depot depot;
     private final ImageView depotImageView;
-    private final Pane resourcesContainer;
+    private final GridPane resourcesContainer;
     private final Image originalImage;
     private final Image sourceSwitchImage;
     private SwitchableGroup switchableGroup;
     private boolean isSource;
     private boolean isTarget;
 
-    public SwitchableDepot(Depot depot, SwitchableGroup switchableGroup, Pane imageViewContainer, ImageView depotImageView, Pane resourcesContainer) {
+    public SwitchableDepot(Depot depot, SwitchableGroup switchableGroup, Pane imageViewContainer, ImageView depotImageView, GridPane resourcesContainer) {
         this.depot = depot;
 
         this.switchableGroup = switchableGroup;
@@ -89,7 +90,7 @@ public class SwitchableDepot {
         return imageViewContainer;
     }
 
-    public Pane getResourcesContainer() {
+    public GridPane getResourcesContainer() {
         return resourcesContainer;
     }
 }

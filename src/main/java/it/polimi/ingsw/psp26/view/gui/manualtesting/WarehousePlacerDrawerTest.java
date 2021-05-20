@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.manualtesting;
 
-import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
@@ -29,14 +29,11 @@ public class WarehousePlacerDrawerTest extends Application {
         warehouse.addLeaderDepot(new LeaderDepot(new VirtualView(), Resource.SERVANT));
 
         try {
-            warehouse.addResource(Resource.STONE);
-            warehouse.addResource(Resource.SHIELD);
-            warehouse.addResource(Resource.SHIELD);
-            warehouse.addResource(Resource.COIN);
-            warehouse.addResource(Resource.COIN);
-            warehouse.addResource(Resource.SERVANT);
-            warehouse.addResource(Resource.SERVANT);
-        } catch (CanNotAddResourceToWarehouse canNotAddResourceToWarehouse) {
+            warehouse.addResourceToDepot(0, Resource.SHIELD);
+//            warehouse.addResourceToDepot(1, Resource.STONE);
+            warehouse.addResourceToDepot(2, Resource.COIN);
+            warehouse.addResourceToDepot(2, Resource.COIN);
+        } catch (CanNotAddResourceToDepotException canNotAddResourceToWarehouse) {
             canNotAddResourceToWarehouse.printStackTrace();
         }
 
@@ -46,6 +43,8 @@ public class WarehousePlacerDrawerTest extends Application {
             add(Resource.STONE);
             add(Resource.COIN);
             add(Resource.SERVANT);
+            add(Resource.SERVANT);
+            add(Resource.SHIELD);
             add(Resource.SHIELD);
         }};
 

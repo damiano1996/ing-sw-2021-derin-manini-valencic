@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.view.gui.drag.targetstrategies;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 public class DepotTargetContainer extends TargetContainer<Resource> {
@@ -10,8 +11,8 @@ public class DepotTargetContainer extends TargetContainer<Resource> {
     private final Warehouse warehouse;
     private final int depotIndex;
 
-    public DepotTargetContainer(Pane pane, Warehouse warehouse, int depotIndex) {
-        super(pane);
+    public DepotTargetContainer(GridPane resourcesContainerGridPane, Pane resourceTargetPane, Warehouse warehouse, int depotIndex) {
+        super(resourcesContainerGridPane, resourceTargetPane);
         this.warehouse = warehouse;
         this.depotIndex = depotIndex;
     }

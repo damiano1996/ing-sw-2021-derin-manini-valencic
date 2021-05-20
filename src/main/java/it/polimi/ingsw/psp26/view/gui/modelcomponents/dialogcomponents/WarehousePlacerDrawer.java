@@ -14,11 +14,12 @@ import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.TargetContainer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.RatioDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots.SwitchableDepot;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots.SwitchableGroup;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -107,7 +108,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
     private Pane drawResourcesToAdd(List<Pane> panesToDraw) {
 
-        int componentWidth = 550;
+        int componentWidth = 600;
 
         for (int i = 0; i < panesToDraw.size(); i++) {
             Pane paneToDraw = panesToDraw.get(i);
@@ -122,7 +123,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
     public void placeResourceToAdd(Resource resource) {
         int maxHeight = 400;
-        int componentWidth = 550;
+        int componentWidth = 600;
 
         Random random = new Random();
 
@@ -136,35 +137,58 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         resourcesToAdd.add(resource);
     }
 
+
     private Pane getWarehousePane() {
 
-        VBox vBox = new VBox();
+        int[] leftOffsets = new int[]{220, 160, 80};
+        int[] topOffsets = new int[]{0, 0, 0};
+        int[] bottomOffsets = new int[]{0, 0, 0};
+
+        StackPane warehousePane = new StackPane();
+
+        Image warehouseImage = loadImage("warehouse/warehouse.png", (int) (650 * ratio));
+        warehouseImage = setRoundedCorners(warehouseImage, ratio);
+        warehouseImage = addLightEffects(warehouseImage, ratio);
+        ImageView warehouseImageView = getImageView(warehouseImage, 0, 0);
+        warehousePane.getChildren().add(warehouseImageView);
+
+        VBox vBox = new VBox(0);
 
         for (Depot baseDepot : warehouse.getBaseDepots()) {
-            Image baseDepotImage = loadImage("warehouse/warehouse_" + warehouse.getBaseDepots().indexOf(baseDepot) + ".png", (int) (500 * ratio));
+            int depotIndex = warehouse.getBaseDepots().indexOf(baseDepot);
+
+            // Opacity zero image view. It is used to keep distance between depot-targets even if no resources are in the depots
+            Image baseDepotImage = loadImage("warehouse/warehouse_" + depotIndex + ".png", (int) (warehouseImage.getWidth() - 50 * ratio));
             baseDepotImage = setRoundedCorners(baseDepotImage, ratio);
-            baseDepotImage = addLightEffects(baseDepotImage, ratio);
+            ImageView baseDepotImageView = getImageView(baseDepotImage, 0, 0);
+            baseDepotImageView.setOpacity(0.1);
+            StackPane imageStack = new StackPane(baseDepotImageView);
 
-            ImageView imageView = getImageView(baseDepotImage, 0, 0);
-            StackPane imageStack = new StackPane(imageView);
+            GridPane resourcesGridPane = new GridPane();
+            resourcesGridPane.setVgap(0 * ratio);
+            resourcesGridPane.setHgap(-10 * ratio);
+            resourcesGridPane.setPadding(new Insets(topOffsets[depotIndex] * ratio, 0, bottomOffsets[depotIndex] * ratio, leftOffsets[depotIndex] * ratio)); // top / right / bottom / left
+            drawResources(vBox, baseDepot, imageStack, resourcesGridPane);
 
-            HBox resourcesBox = new HBox();
-            for (Resource resource : baseDepot.getResources())
-                resourcesBox.getChildren().add(getImageView(getResourceImage(resource, ratio), 0, 0));
-
-            resourcesBox.setAlignment(Pos.CENTER);
-            imageStack.getChildren().add(resourcesBox);
-            vBox.getChildren().add(imageStack);
-
-            System.out.println("WarehousePlacerDrawer - index: " + warehouse.getAllDepots().indexOf(baseDepot));
-            DepotTargetContainer depotTargetContainer = new DepotTargetContainer(resourcesBox, warehouse, warehouse.getAllDepots().indexOf(baseDepot));
-            SwitchableDepot switchableDepot = new SwitchableDepot(baseDepot, switchableGroup, imageStack, imageView, resourcesBox);
+            System.out.println("WarehousePlacerDrawer - index: " + depotIndex);
+            DepotTargetContainer depotTargetContainer = new DepotTargetContainer(resourcesGridPane, imageStack, warehouse, depotIndex);
+            SwitchableDepot switchableDepot = new SwitchableDepot(baseDepot, switchableGroup, imageStack, baseDepotImageView, resourcesGridPane);
             switchableGroup.addSwitchableDepot(switchableDepot);
             targets.add(depotTargetContainer);
 
         }
 
-        return vBox;
+        warehousePane.getChildren().add(vBox);
+        return warehousePane;
+    }
+
+    private void drawResources(VBox vBox, Depot baseDepot, StackPane imageStack, GridPane resourcesGridPane) {
+        for (int i = 0; i < baseDepot.getResources().size(); i++)
+            resourcesGridPane.add(getImageView(getResourceImage(baseDepot.getResources().get(i), ratio), 0, 0), i, 1, 1, 1);
+
+        resourcesGridPane.setAlignment(Pos.CENTER_LEFT);
+        imageStack.getChildren().add(resourcesGridPane);
+        vBox.getChildren().add(imageStack);
     }
 
     private Pane getLeaderDepotsPane() {
@@ -179,16 +203,13 @@ public class WarehousePlacerDrawer extends RatioDrawer {
             ImageView imageView = getImageView(leaderImage, 0, 0);
             StackPane imageStack = new StackPane(imageView);
 
-            HBox resourcesBox = new HBox(50 * ratio);
-            for (Resource resource : leaderDepot.getResources())
-                resourcesBox.getChildren().add(getImageView(getResourceImage(resource, ratio), 0, 0));
-
-            resourcesBox.setAlignment(Pos.CENTER);
-            imageStack.getChildren().add(resourcesBox);
-            vBox.getChildren().add(imageStack);
+            GridPane resourcesGridPane = new GridPane();
+            resourcesGridPane.setPadding(new Insets(0, 0, 0, 30 * ratio)); // top / right / bottom / left
+            resourcesGridPane.setHgap(30 * ratio);
+            drawResources(vBox, leaderDepot, imageStack, resourcesGridPane);
 
             System.out.println("WarehousePlacerDrawer - index: " + warehouse.getAllDepots().indexOf(leaderDepot));
-            DepotTargetContainer depotTargetContainer = new DepotTargetContainer(resourcesBox, warehouse, warehouse.getAllDepots().indexOf(leaderDepot));
+            DepotTargetContainer depotTargetContainer = new DepotTargetContainer(resourcesGridPane, imageStack, warehouse, warehouse.getAllDepots().indexOf(leaderDepot));
             targets.add(depotTargetContainer);
 
         }

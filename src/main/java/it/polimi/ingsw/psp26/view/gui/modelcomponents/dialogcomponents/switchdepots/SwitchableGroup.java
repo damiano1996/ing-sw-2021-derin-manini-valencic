@@ -72,7 +72,9 @@ public class SwitchableGroup {
             try {
                 warehouse.addResourceToDepot(targetDepotIndex, sourceDepotResource);
                 // If everything works as expected, we can draw the resource in the target
-                targetSelectedDepot.getResourcesContainer().getChildren().add(getImageView(getResourceImage(sourceDepotResource, warehousePlacerDrawer.getRatio()), 0, 0));
+                targetSelectedDepot.getResourcesContainer().add(
+                        getImageView(getResourceImage(sourceDepotResource, warehousePlacerDrawer.getRatio()), 0, 0),
+                        targetSelectedDepot.getResourcesContainer().getColumnCount() + 1, 1, 1, 1);
             } catch (CanNotAddResourceToDepotException e) {
                 // otherwise we should put the resource between the resources to add
                 warehousePlacerDrawer.placeResourceToAdd(sourceDepotResource);

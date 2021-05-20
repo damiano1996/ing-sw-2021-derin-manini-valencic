@@ -58,15 +58,16 @@ public class DraggedObject<T> {
             boolean movedSuccessfully = false;
             for (TargetContainer<T> tTargetContainer : targetContainers) {
 
-                System.out.println("DraggedObject - width:" + tTargetContainer.getPane().getWidth() + " - x: " + tTargetContainer.getPane().localToScene(tTargetContainer.getPane().getBoundsInLocal()));
+                // System.out.println("DraggedObject - width:" + tTargetContainer.getPane().getWidth() + " - x: " + tTargetContainer.getPane().localToScene(tTargetContainer.getPane().getBoundsInLocal()));
 
-                if (imageView.localToScene(imageView.getBoundsInLocal()).intersects(tTargetContainer.getPane().localToScene(tTargetContainer.getPane().getBoundsInLocal()))) {
+                if (imageView.localToScene(imageView.getBoundsInLocal()).intersects(
+                        tTargetContainer.getTargetContainerPane().localToScene(tTargetContainer.getTargetContainerPane().getBoundsInLocal()))) {
 
                     if (tTargetContainer.place(object)) {
                         movedSuccessfully = true;
                         sourcePane.getChildren().remove(imageView);
-                        if (!tTargetContainer.getPane().getChildren().contains(imageView))
-                            tTargetContainer.getPane().getChildren().add(imageView);
+                        if (!tTargetContainer.getDraggableObjectsContainer().getChildren().contains(imageView))
+                            tTargetContainer.getDraggableObjectsContainer().add(imageView, tTargetContainer.getDraggableObjectsContainer().getColumnCount() + 1, 1, 1, 1);
                     }
                     break;
                 }
@@ -85,7 +86,7 @@ public class DraggedObject<T> {
             if (mouseEvent.isPrimaryButtonDown() && selected &&
                     sourcePane.contains(new Point2D(mouseEvent.getX() + margin, mouseEvent.getY() + margin)) &&
                     sourcePane.contains(new Point2D(mouseEvent.getX() - margin, mouseEvent.getY() - margin))) {
-                System.out.println("mouse position: " + mouseEvent.getX() + ":" + mouseEvent.getY() + " --- " + sourcePane.localToScene(sourcePane.getBoundsInLocal()));
+                // System.out.println("mouse position: " + mouseEvent.getX() + ":" + mouseEvent.getY() + " --- " + sourcePane.localToScene(sourcePane.getBoundsInLocal()));
                 imageView.setX(mouseEvent.getX() - imageView.getImage().getWidth() / 2);
                 imageView.setY(mouseEvent.getY() - imageView.getImage().getHeight() / 2);
             }

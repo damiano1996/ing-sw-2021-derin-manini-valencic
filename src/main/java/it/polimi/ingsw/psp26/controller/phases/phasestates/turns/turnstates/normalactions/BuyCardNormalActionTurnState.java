@@ -78,7 +78,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                         }
                     } else {
 
-                        sendGeneralMessage(turn, "No available cards to buy - sending to choose action:");
+                        sendGeneralMessage(turn, "The selected card cannot be bought...");
                         turn.changeState(new ChooseNormalActionTurnState(turn));
                         turn.play(message);
 

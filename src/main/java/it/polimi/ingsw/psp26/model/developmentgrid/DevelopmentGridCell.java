@@ -34,7 +34,6 @@ public class DevelopmentGridCell {
         return developmentCardType;
     }
 
-    //rep exposed?
     public DevelopmentCard getFirstCard() {
         return developmentCards.get(0);
     }

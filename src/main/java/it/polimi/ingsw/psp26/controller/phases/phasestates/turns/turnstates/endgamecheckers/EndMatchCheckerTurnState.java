@@ -15,8 +15,8 @@ import it.polimi.ingsw.psp26.network.SpecialToken;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.goToNextStateAfterLeaderAction;
-import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.COLORS;
-import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.LEVELS;
+import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid.COLORS;
+import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid.LEVELS;
 
 public class EndMatchCheckerTurnState extends TurnState {
 

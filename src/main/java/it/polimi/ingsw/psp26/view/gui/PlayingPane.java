@@ -2,11 +2,11 @@ package it.polimi.ingsw.psp26.view.gui;
 
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardGridDrawer;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardsGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -76,13 +76,13 @@ public class PlayingPane {
         new AsynchronousDrawer(
                 () -> client.getCachedModel().getDevelopmentGridCached().lookingForUpdate(),
                 () -> {
-                    DevelopmentGrid developmentGrid = client.getCachedModel().getDevelopmentGridCached().getObject();
+                    DevelopmentCardsGrid developmentCardsGrid = client.getCachedModel().getDevelopmentGridCached().getObject();
                     vBox.getChildren().set(
                             1,
                             drawThumbNail(
                                     primaryStage,
-                                    new DevelopmentCardGridDrawer(developmentGrid, thumbnailSize).draw(),
-                                    new DevelopmentCardGridDrawer(developmentGrid, zoomFactor * thumbnailSize).draw(),
+                                    new DevelopmentCardsGridDrawer(developmentCardsGrid, thumbnailSize).draw(),
+                                    new DevelopmentCardsGridDrawer(developmentCardsGrid, zoomFactor * thumbnailSize).draw(),
                                     thumbnailSize, thumbnailSize)
                     );
                 },

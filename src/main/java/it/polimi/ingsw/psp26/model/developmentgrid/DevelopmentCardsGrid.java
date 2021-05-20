@@ -15,14 +15,14 @@ import java.util.List;
 
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getDevelopmentGridModelUpdateMessage;
 
-public class DevelopmentGrid extends Observable<SessionMessage> {
+public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
     public static final Color[] COLORS = new Color[]{Color.GREEN, Color.BLUE, Color.YELLOW, Color.PURPLE};
     public static final Level[] LEVELS = new Level[]{Level.THIRD, Level.SECOND, Level.FIRST};
 
     private final DevelopmentGridCell[][] grid;
 
-    public DevelopmentGrid(VirtualView virtualView) {
+    public DevelopmentCardsGrid(VirtualView virtualView) {
         super();
         addObserver(virtualView);
 

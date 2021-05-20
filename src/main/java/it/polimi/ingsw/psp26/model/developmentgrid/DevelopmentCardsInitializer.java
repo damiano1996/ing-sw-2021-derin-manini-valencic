@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid.COLORS;
+import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid.COLORS;
 import static it.polimi.ingsw.psp26.model.enums.Resource.*;
 
 public class DevelopmentCardsInitializer {
@@ -29,10 +29,9 @@ public class DevelopmentCardsInitializer {
     }
 
     public List<DevelopmentCard> getByDevelopmentCardType(DevelopmentCardType developmentCardType) {
-        return new ArrayList<>(developmentCards
+        return developmentCards
                 .stream()
-                .filter(x -> x.getDevelopmentCardType().equals(developmentCardType))
-                .collect(Collectors.toList()));
+                .filter(x -> x.getDevelopmentCardType().equals(developmentCardType)).collect(Collectors.toList());
     }
 
     private List<DevelopmentCard> createDevelopmentCards() {

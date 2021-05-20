@@ -4,7 +4,7 @@ import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGridCell;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
@@ -32,14 +32,14 @@ public class DevelopmentCardsCli {
     /**
      * Prints the Development Card Grid
      *
-     * @param developmentGrid The Development Grid to print
+     * @param developmentCardsGrid The Development Grid to print
      */
-    public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
+    public void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid) {
         for (int i = 0; i < 3; i++) {
-            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 0), 2 + (19 * i), 5);
-            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 1), 2 + (19 * i), 36);
-            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 2), 2 + (19 * i), 67);
-            printDevelopmentGridCard(developmentGrid.getDevelopmentGridCell(i, 3), 2 + (19 * i), 98);
+            printDevelopmentGridCard(developmentCardsGrid.getDevelopmentGridCell(i, 0), 2 + (19 * i), 5);
+            printDevelopmentGridCard(developmentCardsGrid.getDevelopmentGridCell(i, 1), 2 + (19 * i), 36);
+            printDevelopmentGridCard(developmentCardsGrid.getDevelopmentGridCell(i, 2), 2 + (19 * i), 67);
+            printDevelopmentGridCard(developmentCardsGrid.getDevelopmentGridCell(i, 3), 2 + (19 * i), 98);
         }
 
         cliUtils.printFigure("/titles/GridTitle", 10, 135);
@@ -329,12 +329,12 @@ public class DevelopmentCardsCli {
     /**
      * Display the Grid selection screen
      *
-     * @param developmentGrid The Development Grid to display
-     * @param playerResources The Player's Resources
+     * @param developmentCardsGrid The Development Grid to display
+     * @param playerResources      The Player's Resources
      * @return The chosen Development Card
      * @throws UndoOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
      */
-    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentGrid developmentGrid, List<Resource> playerResources) throws UndoOptionSelectedException {
+    public DevelopmentCard displayDevelopmentCardSelection(DevelopmentCardsGrid developmentCardsGrid, List<Resource> playerResources) throws UndoOptionSelectedException {
         String cardLevel = "";
         String cardColor = "";
         boolean isCardChosen = false;
@@ -344,7 +344,7 @@ public class DevelopmentCardsCli {
 
         while (!isCardChosen) {
 
-            displayDevelopmentGrid(developmentGrid);
+            displayDevelopmentGrid(developmentCardsGrid);
             printPlayerResources(playerResources, 39, 135);
 
             if (printErrorString)
@@ -354,7 +354,7 @@ public class DevelopmentCardsCli {
             cardLevel = askForLevelAndColor("Enter the Level [first - second - third] of the card you want: ", true);
             cardColor = askForLevelAndColor("Enter the Color [green - blue - yellow - purple] of the card you want: ", false);
 
-            isCardChosen = isCardAvailable(developmentGrid, cardLevel, cardColor);
+            isCardChosen = isCardAvailable(developmentCardsGrid, cardLevel, cardColor);
             if (!isCardChosen) {
                 printErrorString = true;
                 cliUtils.clearLine(33, 198);
@@ -362,7 +362,7 @@ public class DevelopmentCardsCli {
 
         }
 
-        return getSelectedDevelopmentCard(developmentGrid, cardLevel, cardColor);
+        return getSelectedDevelopmentCard(developmentCardsGrid, cardLevel, cardColor);
     }
 
 
@@ -417,17 +417,17 @@ public class DevelopmentCardsCli {
     /**
      * Checks if the desired Card is available on the Grid
      *
-     * @param developmentGrid The DevelopmentGrid
-     * @param level           The Level of the desired Card
-     * @param color           The Color of the desired Card
+     * @param developmentCardsGrid The DevelopmentGrid
+     * @param level                The Level of the desired Card
+     * @param color                The Color of the desired Card
      * @return True if the card is available, false otherwise
      */
-    private boolean isCardAvailable(DevelopmentGrid developmentGrid, String level, String color) {
+    private boolean isCardAvailable(DevelopmentCardsGrid developmentCardsGrid, String level, String color) {
         Color cardColor = Arrays.stream(Color.values()).filter(x -> x.getName().equalsIgnoreCase(color)).findFirst().get();
         Level cardLevel = Arrays.stream(Level.values()).filter(x -> x.getLevelName().equalsIgnoreCase(level)).findFirst().get();
 
         try {
-            return developmentGrid.isAvailable(cardColor, cardLevel);
+            return developmentCardsGrid.isAvailable(cardColor, cardLevel);
         } catch (LevelDoesNotExistException | ColorDoesNotExistException e) {
             return false;
         }

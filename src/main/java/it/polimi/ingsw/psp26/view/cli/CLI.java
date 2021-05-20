@@ -8,7 +8,7 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
@@ -456,12 +456,12 @@ public class CLI implements ViewInterface {
     /**
      * Displays the Development Card Grid
      *
-     * @param developmentGrid The Development Card Grid to display
+     * @param developmentCardsGrid The Development Card Grid to display
      */
     @Override
-    public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) { // never used
+    public void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid) { // never used
         executingTask = true;
-        developmentCardsCli.displayDevelopmentGrid(developmentGrid);
+        developmentCardsCli.displayDevelopmentGrid(developmentCardsGrid);
         executingTask = false;
     }
 
@@ -546,16 +546,16 @@ public class CLI implements ViewInterface {
     /**
      * Displays the Development Card buy action screen
      *
-     * @param developmentGrid The Development Grid to display
-     * @param playerResources The Player's current Resources
+     * @param developmentCardsGrid The Development Grid to display
+     * @param playerResources      The Player's current Resources
      */
     @Override
-    public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources) {
+    public void displayDevelopmentCardBuyAction(DevelopmentCardsGrid developmentCardsGrid, List<Resource> playerResources) {
         notificationStackPrinter.hideNotifications();
 
         List<DevelopmentCard> choice = new ArrayList<>();
         try {
-            choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, playerResources));
+            choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentCardsGrid, playerResources));
             client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
             cliUtils.setCursorBottomLeft();
             displayNext();

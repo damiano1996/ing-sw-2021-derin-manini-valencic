@@ -8,7 +8,7 @@ import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
@@ -44,7 +44,7 @@ public class CliTest {
     private final ResourceSupply resourceSupply;
     private final Match match;
     private final Scanner in;
-    private DevelopmentGrid developmentGrid;
+    private DevelopmentCardsGrid developmentCardsGrid;
 
     public CliTest() {
 
@@ -95,12 +95,12 @@ public class CliTest {
         testWarehouseConfiguration();
         //testMessages();
 
-        developmentGrid = new DevelopmentGrid(virtualView);
-        developmentGrid.drawCard(Color.GREEN, Level.FIRST);
-        developmentGrid.drawCard(Color.GREEN, Level.FIRST);
-        developmentGrid.drawCard(Color.GREEN, Level.FIRST);
-        developmentGrid.drawCard(Color.GREEN, Level.FIRST);
-        developmentCardsCli.displayDevelopmentCardSelection(developmentGrid, new ArrayList<>());
+        developmentCardsGrid = new DevelopmentCardsGrid(virtualView);
+        developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentCardsCli.displayDevelopmentCardSelection(developmentCardsGrid, new ArrayList<>());
 
         //marketCli.displayMarketSelection(marketTray);
 
@@ -275,24 +275,24 @@ public class CliTest {
 
         //---DEVELOPMENT-GRID-SHOW-ALL-CARDS-TEST---// Press Enter 4 times
 
-        developmentGrid = new DevelopmentGrid(virtualView);
+        developmentCardsGrid = new DevelopmentCardsGrid(virtualView);
 
         for (int i = 0; i < 4; i++) {
             cliUtils.cls();
-            cli.displayDevelopmentGrid(developmentGrid);
+            cli.displayDevelopmentGrid(developmentCardsGrid);
             in.nextLine();
-            developmentGrid.drawCard(Color.PURPLE, Level.FIRST);
-            developmentGrid.drawCard(Color.PURPLE, Level.SECOND);
-            developmentGrid.drawCard(Color.PURPLE, Level.THIRD);
-            developmentGrid.drawCard(Color.BLUE, Level.FIRST);
-            developmentGrid.drawCard(Color.BLUE, Level.SECOND);
-            developmentGrid.drawCard(Color.BLUE, Level.THIRD);
-            developmentGrid.drawCard(Color.YELLOW, Level.FIRST);
-            developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
-            developmentGrid.drawCard(Color.YELLOW, Level.THIRD);
-            developmentGrid.drawCard(Color.GREEN, Level.FIRST);
-            developmentGrid.drawCard(Color.GREEN, Level.SECOND);
-            developmentGrid.drawCard(Color.GREEN, Level.THIRD);
+            developmentCardsGrid.drawCard(Color.PURPLE, Level.FIRST);
+            developmentCardsGrid.drawCard(Color.PURPLE, Level.SECOND);
+            developmentCardsGrid.drawCard(Color.PURPLE, Level.THIRD);
+            developmentCardsGrid.drawCard(Color.BLUE, Level.FIRST);
+            developmentCardsGrid.drawCard(Color.BLUE, Level.SECOND);
+            developmentCardsGrid.drawCard(Color.BLUE, Level.THIRD);
+            developmentCardsGrid.drawCard(Color.YELLOW, Level.FIRST);
+            developmentCardsGrid.drawCard(Color.YELLOW, Level.SECOND);
+            developmentCardsGrid.drawCard(Color.YELLOW, Level.THIRD);
+            developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST);
+            developmentCardsGrid.drawCard(Color.GREEN, Level.SECOND);
+            developmentCardsGrid.drawCard(Color.GREEN, Level.THIRD);
         }
     }
 
@@ -358,7 +358,7 @@ public class CliTest {
         in.nextLine();
         cliUtils.cls();
 
-        developmentGrid = new DevelopmentGrid(virtualView);
+        developmentCardsGrid = new DevelopmentCardsGrid(virtualView);
 
         player.getPersonalBoard().getWarehouse().addLeaderDepot(coinDepot);
         player.getPersonalBoard().getWarehouse().addLeaderDepot(servantDepot);
@@ -368,9 +368,9 @@ public class CliTest {
         strResource.add(Resource.STONE);
         strResource.add(Resource.SERVANT);
         player.getPersonalBoard().addResourcesToStrongbox(strResource);
-        player.getPersonalBoard().addDevelopmentCard(0, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
-        player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.GREEN, Level.FIRST));
-        player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.YELLOW, Level.FIRST));
+        player.getPersonalBoard().addDevelopmentCard(0, developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST));
+        player.getPersonalBoard().addDevelopmentCard(1, developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST));
+        player.getPersonalBoard().addDevelopmentCard(2, developmentCardsGrid.drawCard(Color.YELLOW, Level.FIRST));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].activatePopesFavorTile();
         personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
@@ -384,8 +384,8 @@ public class CliTest {
         strResource.add(Resource.STONE);
         strResource.add(Resource.SHIELD);
         player.getPersonalBoard().addResourcesToStrongbox(strResource);
-        player.getPersonalBoard().addDevelopmentCard(1, developmentGrid.drawCard(Color.BLUE, Level.SECOND));
-        player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.PURPLE, Level.SECOND));
+        player.getPersonalBoard().addDevelopmentCard(1, developmentCardsGrid.drawCard(Color.BLUE, Level.SECOND));
+        player.getPersonalBoard().addDevelopmentCard(2, developmentCardsGrid.drawCard(Color.PURPLE, Level.SECOND));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].activatePopesFavorTile();
         personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
@@ -399,7 +399,7 @@ public class CliTest {
         strResource.add(Resource.SERVANT);
         strResource.add(Resource.COIN);
         player.getPersonalBoard().addResourcesToStrongbox(strResource);
-        player.getPersonalBoard().addDevelopmentCard(2, developmentGrid.drawCard(Color.GREEN, Level.THIRD));
+        player.getPersonalBoard().addDevelopmentCard(2, developmentCardsGrid.drawCard(Color.GREEN, Level.THIRD));
         player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].activatePopesFavorTile();
         personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
@@ -411,14 +411,14 @@ public class CliTest {
         //---ACTIVATE-PRODUCTION-TEST---// Press enter 1 time
 
         cliUtils.cls();
-        developmentGrid = new DevelopmentGrid(virtualView);
+        developmentCardsGrid = new DevelopmentCardsGrid(virtualView);
         List<Production> productions = new ArrayList<>();
-        productions.add(developmentGrid.drawCard(Color.GREEN, Level.FIRST).getProduction());
-        productions.add(developmentGrid.drawCard(Color.GREEN, Level.SECOND).getProduction());
-        productions.add(developmentGrid.drawCard(Color.GREEN, Level.THIRD).getProduction());
-        productions.add(developmentGrid.drawCard(Color.GREEN, Level.FIRST).getProduction());
-        productions.add(developmentGrid.drawCard(Color.GREEN, Level.SECOND).getProduction());
-        productions.add(developmentGrid.drawCard(Color.GREEN, Level.THIRD).getProduction());
+        productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST).getProduction());
+        productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.SECOND).getProduction());
+        productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.THIRD).getProduction());
+        productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST).getProduction());
+        productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.SECOND).getProduction());
+        productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.THIRD).getProduction());
         cli.displayProductionActivation(productions, new ArrayList<>());
         in.nextLine();
     }

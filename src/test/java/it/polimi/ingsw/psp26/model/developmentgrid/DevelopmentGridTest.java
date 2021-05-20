@@ -13,11 +13,11 @@ import static org.junit.Assert.*;
 
 public class DevelopmentGridTest {
 
-    private DevelopmentGrid developmentGrid;
+    private DevelopmentCardsGrid developmentCardsGrid;
 
     @Before
     public void setUp() {
-        developmentGrid = new DevelopmentGrid(new VirtualView());
+        developmentCardsGrid = new DevelopmentCardsGrid(new VirtualView());
     }
 
     @Test
@@ -25,7 +25,7 @@ public class DevelopmentGridTest {
         Color color = Color.GREEN;
         Level level = Level.THIRD;
 
-        DevelopmentCard developmentCard = developmentGrid.drawCard(color, level);
+        DevelopmentCard developmentCard = developmentCardsGrid.drawCard(color, level);
         assertEquals(color, developmentCard.getDevelopmentCardType().getColor());
         assertEquals(level, developmentCard.getDevelopmentCardType().getLevel());
     }
@@ -36,11 +36,11 @@ public class DevelopmentGridTest {
         Level level = Level.THIRD;
 
         // drawing all the cards
-        while (developmentGrid.isAvailable(color, level))
-            developmentGrid.drawCard(color, level);
+        while (developmentCardsGrid.isAvailable(color, level))
+            developmentCardsGrid.drawCard(color, level);
 
         // drawing one more to cause exception
-        developmentGrid.drawCard(color, level);
+        developmentCardsGrid.drawCard(color, level);
     }
 
     @Test
@@ -48,16 +48,16 @@ public class DevelopmentGridTest {
         Color color = Color.GREEN;
         Level level = Level.THIRD;
 
-        assertTrue(developmentGrid.isAvailable(color, level));
+        assertTrue(developmentCardsGrid.isAvailable(color, level));
 
         int numberOfCardsToDraw = 1000;
         try {
 
             for (int i = 0; i < numberOfCardsToDraw; i++)
-                developmentGrid.drawCard(color, level);
+                developmentCardsGrid.drawCard(color, level);
 
         } catch (NoMoreDevelopmentCardsException e) {
-            assertFalse(developmentGrid.isAvailable(color, level));
+            assertFalse(developmentCardsGrid.isAvailable(color, level));
         }
     }
 }

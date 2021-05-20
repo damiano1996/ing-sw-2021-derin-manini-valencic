@@ -6,7 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.ModelUpdateMessage;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class CachedModel {
     private final CachedObject<Player> myPlayerCached;
     private final Map<String, CachedObject<Player>> opponentsCached;
     private final CachedObject<MarketTray> marketTrayCached;
-    private final CachedObject<DevelopmentGrid> developmentGridCached;
+    private final CachedObject<DevelopmentCardsGrid> developmentGridCached;
 
     public CachedModel(String myNickname) {
         this.myNickname = myNickname;
@@ -69,8 +69,8 @@ public class CachedModel {
 
 
                 case DEVELOPMENT_GRID_MODEL:
-                    DevelopmentGrid developmentGrid = (DevelopmentGrid) modelUpdateMessage.getModelPayload();
-                    developmentGridCached.updateObject(developmentGrid);
+                    DevelopmentCardsGrid developmentCardsGrid = (DevelopmentCardsGrid) modelUpdateMessage.getModelPayload();
+                    developmentGridCached.updateObject(developmentCardsGrid);
                     break;
 
 
@@ -118,7 +118,7 @@ public class CachedModel {
      *
      * @return cached object containing the development grid
      */
-    public synchronized CachedObject<DevelopmentGrid> getDevelopmentGridCached() {
+    public synchronized CachedObject<DevelopmentCardsGrid> getDevelopmentGridCached() {
         return developmentGridCached;
     }
 

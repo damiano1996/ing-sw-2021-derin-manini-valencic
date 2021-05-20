@@ -10,7 +10,7 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -20,12 +20,10 @@ import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.MessageSynchronizedFIFO;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
-import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoicesDrawer;
-import it.polimi.ingsw.psp26.view.gui.choicesdrawers.LeaderCardChoicesDrawer;
-import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
-import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ResourceChoicesDrawer;
+import it.polimi.ingsw.psp26.view.gui.choicesdrawers.*;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.MarketTrayDialogDrawer;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.DevelopmentCardsGridDialogDrawer;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.MarketDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.WarehousePlacerDrawer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -171,14 +169,15 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources) {
-
+    public void displayDevelopmentCardBuyAction(DevelopmentCardsGrid developmentCardsGrid, List<Resource> playerResources) {
+        Stage dialog = getDialog(primaryStage, new DevelopmentCardsGridDialogDrawer(client, developmentCardsGrid, getWindowWidth()).draw());
+        dialog.show();
     }
 
 
     @Override
     public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
-        Stage dialog = getDialog(primaryStage, new MarketTrayDialogDrawer(client, marketTray, getWindowWidth()).draw());
+        Stage dialog = getDialog(primaryStage, new MarketDialogDrawer(client, marketTray, getWindowWidth()).draw());
         dialog.show();
     }
 
@@ -194,7 +193,7 @@ public class GUI extends Application implements ViewInterface {
 
 
     @Override
-    public void displayDevelopmentGrid(DevelopmentGrid developmentGrid) {
+    public void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid) {
 
     }
 
@@ -241,6 +240,10 @@ public class GUI extends Application implements ViewInterface {
             case CHOICE_RESOURCE_FROM_WAREHOUSE:
             case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
                 choicesDrawer = new ResourceChoicesDrawer();
+                break;
+
+            case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
+                choicesDrawer = new SlotsChoicesDrawer();
                 break;
 
             default:

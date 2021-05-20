@@ -41,6 +41,10 @@ public class FramePane {
         return addBackground(content, "window_graphics/frame.png", lightEffects, lightRatio, true, contentWidth, contentHeight);
     }
 
+    public static StackPane addBackground(Pane content) {
+        return addBackground(content, "window_graphics/background.png", false, false, 0, 0);
+    }
+
     public static StackPane addBackground(Pane content, int contentWidth, int contentHeight) {
         return addBackground(content, "window_graphics/background.png", false, true, contentWidth, contentHeight);
     }

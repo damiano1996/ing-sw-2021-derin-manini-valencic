@@ -7,7 +7,7 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -37,7 +37,7 @@ public interface ViewInterface {
     void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd);
 
 
-    void displayDevelopmentCardBuyAction(DevelopmentGrid developmentGrid, List<Resource> playerResources);
+    void displayDevelopmentCardBuyAction(DevelopmentCardsGrid developmentCardsGrid, List<Resource> playerResources);
 
 
     void displayMarketAction(MarketTray marketTray, List<Resource> playerResources);
@@ -49,7 +49,7 @@ public interface ViewInterface {
     void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots);
 
 
-    void displayDevelopmentGrid(DevelopmentGrid developmentGrid);
+    void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid);
 
 
     void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes);

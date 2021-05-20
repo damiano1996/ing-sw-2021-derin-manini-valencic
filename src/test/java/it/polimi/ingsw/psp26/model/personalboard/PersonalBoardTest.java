@@ -3,7 +3,7 @@ package it.polimi.ingsw.psp26.model.personalboard;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
@@ -25,7 +25,7 @@ public class PersonalBoardTest {
     DevelopmentCard developmentCard2;
     DevelopmentCard developmentCard3;
 
-    DevelopmentGrid developmentGrid;
+    DevelopmentCardsGrid developmentCardsGrid;
 
     PersonalBoard personalBoard;
 
@@ -39,12 +39,12 @@ public class PersonalBoardTest {
         Player player = new Player(virtualView, "nickname", "sessionToken");
         virtualView.getMatchController().getMatch().addPlayer(player);
 
-        developmentGrid = new DevelopmentGrid(virtualView);
+        developmentCardsGrid = new DevelopmentCardsGrid(virtualView);
         personalBoard = new PersonalBoard(virtualView, "sessionToken");
 
-        developmentCard1 = developmentGrid.drawCard(Color.GREEN, Level.FIRST);
-        developmentCard2 = developmentGrid.drawCard(Color.GREEN, Level.SECOND);
-        developmentCard3 = developmentGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentCard1 = developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST);
+        developmentCard2 = developmentCardsGrid.drawCard(Color.GREEN, Level.SECOND);
+        developmentCard3 = developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST);
 
         cardSlots = new ArrayList<>();
         for (int i = 0; i < 3; i++) cardSlots.add(new ArrayList<>());
@@ -91,19 +91,19 @@ public class PersonalBoardTest {
 
     @Test(expected = CanNotAddDevelopmentCardToSlotException.class)
     public void testAddDevelopmentCard_CanNotAddDevelopmentCardToSlotException() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException {
-        DevelopmentCard developmentCard = developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
+        DevelopmentCard developmentCard = developmentCardsGrid.drawCard(Color.YELLOW, Level.SECOND);
         personalBoard.addDevelopmentCard(0, developmentCard);
     }
 
     @Test(expected = DevelopmentCardSlotOutOfBoundsException.class)
     public void testAddDevelopmentCard_DevelopmentCardSlotOutOfBoundsException() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, NoMoreDevelopmentCardsException, LevelDoesNotExistException, ColorDoesNotExistException {
-        DevelopmentCard developmentCard = developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
+        DevelopmentCard developmentCard = developmentCardsGrid.drawCard(Color.YELLOW, Level.SECOND);
         personalBoard.addDevelopmentCard(4, developmentCard);
     }
 
     @Test(expected = CanNotAddDevelopmentCardToSlotException.class)
     public void testAddDevelopmentCard_CanNotAddDevelopmentCardToSlotException_LevelTwoInEmptySlot() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException {
-        DevelopmentCard developmentCard = developmentGrid.drawCard(Color.YELLOW, Level.SECOND);
+        DevelopmentCard developmentCard = developmentCardsGrid.drawCard(Color.YELLOW, Level.SECOND);
         personalBoard.addDevelopmentCard(1, developmentCard);
     }
 

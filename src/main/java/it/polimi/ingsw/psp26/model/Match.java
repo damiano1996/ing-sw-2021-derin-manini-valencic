@@ -7,7 +7,7 @@ import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.actiontokens.BlackCrossActionToken;
 import it.polimi.ingsw.psp26.model.actiontokens.BlackCrossShuffleActionToken;
 import it.polimi.ingsw.psp26.model.actiontokens.DiscardActionToken;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCardsInitializer;
@@ -28,7 +28,7 @@ public class Match extends Observable<SessionMessage> {
     private final int id;
     private final List<Player> players;
     private final ResourceSupply resourceSupply;
-    private final DevelopmentGrid developmentGrid;
+    private final DevelopmentCardsGrid developmentCardsGrid;
     private final MarketTray marketTray;
     private final List<LeaderCard> leaderDeck;
     private final List<ActionToken> actionTokenStack;
@@ -48,7 +48,7 @@ public class Match extends Observable<SessionMessage> {
         this.id = id;
         this.players = new ArrayList<>();
         resourceSupply = new ResourceSupply();
-        developmentGrid = new DevelopmentGrid(virtualView);
+        developmentCardsGrid = new DevelopmentCardsGrid(virtualView);
         marketTray = new MarketTray(virtualView);
         leaderDeck = new ArrayList<>();
         actionTokenStack = new ArrayList<>();
@@ -168,8 +168,8 @@ public class Match extends Observable<SessionMessage> {
      *
      * @return the development grid object
      */
-    public DevelopmentGrid getDevelopmentGrid() {
-        return developmentGrid;
+    public DevelopmentCardsGrid getDevelopmentGrid() {
+        return developmentCardsGrid;
     }
 
     /**
@@ -239,7 +239,7 @@ public class Match extends Observable<SessionMessage> {
         return id == match.id &&
                 Objects.equals(players, match.players) &&
                 Objects.equals(resourceSupply, match.resourceSupply) &&
-                Objects.equals(developmentGrid, match.developmentGrid) &&
+                Objects.equals(developmentCardsGrid, match.developmentCardsGrid) &&
                 Objects.equals(marketTray, match.marketTray) &&
                 Objects.equals(leaderDeck, match.leaderDeck) &&
                 Objects.equals(actionTokenStack, match.actionTokenStack);
@@ -252,6 +252,6 @@ public class Match extends Observable<SessionMessage> {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, players, resourceSupply, developmentGrid, marketTray, leaderDeck, actionTokenStack);
+        return Objects.hash(id, players, resourceSupply, developmentCardsGrid, marketTray, leaderDeck, actionTokenStack);
     }
 }

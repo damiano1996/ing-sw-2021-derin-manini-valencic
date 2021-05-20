@@ -6,28 +6,31 @@ import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.RatioDrawer;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
-public class MarketTrayDialogDrawer extends RatioDrawer {
+public class MarketDialogDrawer extends RatioDrawer {
 
     private final Client client;
     private final MarketTrayDrawer marketTrayDrawer;
 
-    public MarketTrayDialogDrawer(Client client, MarketTray marketTray, int maxWidth) {
+    public MarketDialogDrawer(Client client, MarketTray marketTray, int maxWidth) {
         super(maxWidth);
 
         this.client = client;
-        marketTrayDrawer = new MarketTrayDrawer(client, marketTray, initMaxWidth / 2);
+        marketTrayDrawer = new MarketTrayDrawer(client, marketTray, initMaxWidth / 3);
     }
 
     @Override
     public Pane draw() {
 
         VBox rootPane = new VBox(10 * ratio);
+        rootPane.setAlignment(Pos.CENTER);
+
         Text text = new Text("Market");
         text.setId("title");
         rootPane.getChildren().add(text);
@@ -38,7 +41,7 @@ public class MarketTrayDialogDrawer extends RatioDrawer {
         description.setStyle("-fx-font-size: " + 40 * ratio + ";");
         rootPane.getChildren().add(description);
 
-        rootPane.getChildren().add(marketTrayDrawer.draw());
+        rootPane.getChildren().add(new HBox(marketTrayDrawer.draw()));
 
         Button confirmationButton = new Button("Undo");
         confirmationButton.setId("undo-button");
@@ -49,9 +52,6 @@ public class MarketTrayDialogDrawer extends RatioDrawer {
         });
 
         rootPane.getChildren().add(confirmationButton);
-
-        rootPane.setAlignment(Pos.CENTER);
-
         return rootPane;
     }
 

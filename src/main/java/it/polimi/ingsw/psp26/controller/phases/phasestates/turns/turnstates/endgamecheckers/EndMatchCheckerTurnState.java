@@ -46,14 +46,14 @@ public class EndMatchCheckerTurnState extends TurnState {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
-                                turn.getTurnPlayer() + " activated the endgame by drawing the seventh card")
+                                turn.getTurnPlayer() + " activated the endgame by drawing the seventh card.")
                 );
                 turn.getPlayingPhaseState().setLastTurn();
             } else if (isFinalTilePosition()) {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
-                                turn.getTurnPlayer() + " activated the endgame by reaching the final tile in the faith track")
+                                turn.getTurnPlayer() + " activated the endgame by reaching the final tile in the faith track.")
                 );
                 turn.getPlayingPhaseState().setLastTurn();
             }
@@ -74,7 +74,7 @@ public class EndMatchCheckerTurnState extends TurnState {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
-                                "Lorenzo activated the endgame by removing a column of development cards")
+                                "Lorenzo activated the endgame by removing a column of development cards.")
                 );
 
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
@@ -85,7 +85,7 @@ public class EndMatchCheckerTurnState extends TurnState {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
-                                "Lorenzo activated the endgame by reaching the final the final tile in the faith track")
+                                "Lorenzo activated the endgame by reaching the final the final tile in the faith track.")
                 );
 
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(

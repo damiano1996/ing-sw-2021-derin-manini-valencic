@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.normalactions;
 
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.CheckVaticanReportTurnState;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_CARDS_TO_ACTIVATE;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendErrorMessage;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
@@ -39,21 +40,10 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             switch (message.getMessageType()) {
                 case CHOICE_NORMAL_ACTION:
 
-                    turn.getMatchController().notifyObservers(
-                            new SessionMessage(
-                                    turn.getTurnPlayer().getSessionToken(),
-                                    CHOICE_CARDS_TO_ACTIVATE,
-                                    turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
-                            ));
-                    turn.getMatchController().notifyObservers(
-                            new SessionMessage(
-                                    turn.getTurnPlayer().getSessionToken(),
-                                    CHOICE_CARDS_TO_ACTIVATE,
-                                    turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().toArray(new Object[0])
-                            ));
+                    sendProductionMultipleChoiceMessage();
                     break;
 
-                case CHOICE_CARDS_TO_ACTIVATE:
+                case CHOICE_PRODUCTIONS_TO_ACTIVATE:
 
                     if (isProductionPlayable()) {
 
@@ -112,7 +102,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                             sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
 
                             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
-                            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE));
+                            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE));
 
                         } else {
 
@@ -181,23 +171,25 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             turn.changeState(new CheckVaticanReportTurnState(turn));
             turn.play(message);
         } else {
-            try {
-                turn.getMatchController().notifyObservers(
-                        new SessionMessage(
-                                turn.getTurnPlayer().getSessionToken(),
-                                CHOICE_CARDS_TO_ACTIVATE,
-                                turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
-                        ));
-                turn.getMatchController().notifyObservers(
-                        new SessionMessage(
-                                turn.getTurnPlayer().getSessionToken(),
-                                CHOICE_CARDS_TO_ACTIVATE,
-                                turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().toArray(new Object[0])
-                        ));
-            } catch (InvalidPayloadException ignored) {
-            }
+
+            sendProductionMultipleChoiceMessage();
         }
 
+    }
+
+    private void sendProductionMultipleChoiceMessage() {
+        try {
+            turn.getMatchController().notifyObservers(
+                    new MultipleChoicesMessage(
+                            turn.getTurnPlayer().getSessionToken(),
+                            CHOICE_PRODUCTIONS_TO_ACTIVATE,
+                            "Choose the production that you want to activate:",
+                            1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
+                            true,
+                            turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray()
+                    ));
+        } catch (InvalidPayloadException ignored) {
+        }
     }
 
 

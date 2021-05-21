@@ -23,8 +23,8 @@ public class MultipleChoicesMessage extends SessionMessage implements Serializab
      * @param question      question to ask to the player
      * @param minChoices    min number of items to choose
      * @param maxChoices    max number of items to choose
-     * @param payloads      payloads to send (choices for the players)
      * @param hasUndoOption the choices can be undone
+     * @param payloads      payloads to send (choices for the players)
      * @throws InvalidPayloadException if payloads are not serializable
      */
     public MultipleChoicesMessage(

@@ -29,7 +29,7 @@ public enum MessageType {
     CHOICE_NORMAL_ACTION, // to display to the client the normal action options
 
     ACTIVATE_PRODUCTION, // action
-    CHOICE_CARDS_TO_ACTIVATE, // to display to the client the card to activate
+    CHOICE_PRODUCTIONS_TO_ACTIVATE, // to display to the client the card to activate
     MARKET_RESOURCE, // action
 
     BUY_CARD, // action

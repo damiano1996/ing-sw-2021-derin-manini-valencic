@@ -95,7 +95,7 @@ public class LeaderCardsAssignmentTurnState extends TurnState {
                     new MultipleChoicesMessage(
                             turn.getTurnPlayer().getSessionToken(),
                             MessageType.CHOICE_LEADERS,
-                            "Choice two leader cards:",
+                            "Choose two leader cards:",
                             2, 2,
                             false,
                             drawnLeaders.toArray()

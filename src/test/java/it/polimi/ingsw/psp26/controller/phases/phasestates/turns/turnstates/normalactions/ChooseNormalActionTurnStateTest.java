@@ -45,7 +45,7 @@ public class ChooseNormalActionTurnStateTest {
     @Test
     public void playActivateProduction() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, ACTIVATE_PRODUCTION));
-        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
+        assertEquals(MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
     }
 
     @Test

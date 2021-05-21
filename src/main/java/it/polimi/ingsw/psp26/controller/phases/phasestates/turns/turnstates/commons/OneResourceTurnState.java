@@ -94,7 +94,7 @@ public class OneResourceTurnState extends TurnState {
                     new MultipleChoicesMessage(
                             turn.getTurnPlayer().getSessionToken(),
                             resourceSource,
-                            "Choice resource:",
+                            "Choose resource:",
                             1, 1,
                             false,
                             resourcesOptions.toArray(new Object[0])

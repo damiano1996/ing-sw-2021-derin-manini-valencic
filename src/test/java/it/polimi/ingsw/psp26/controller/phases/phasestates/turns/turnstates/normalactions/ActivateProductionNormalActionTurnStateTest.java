@@ -57,7 +57,7 @@ public class ActivateProductionNormalActionTurnStateTest {
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard());
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
 
-        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
+        assertEquals(MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
         assertEquals(2, mitm.getMessages().get(0).getListPayloads().size());
     }
 
@@ -102,10 +102,9 @@ public class ActivateProductionNormalActionTurnStateTest {
         }
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, chosenCard.getProduction()));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, chosenCard.getProduction()));
 
-        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
-        assertEquals(MessageType.CHOICE_CARDS_TO_ACTIVATE, mitm.getMessages().get(1).getMessageType());
+        assertEquals(MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
         assertEquals(resourcesProduced, turn.getTurnPlayer().getPersonalBoard().getStrongbox());
         assertEquals(warehouseExtraResources, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources());
 
@@ -124,7 +123,7 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, card);
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, card.getProduction()));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, card.getProduction()));
 
         List<Resource> resourceProduced = getProdResources(card);
 
@@ -139,7 +138,7 @@ public class ActivateProductionNormalActionTurnStateTest {
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
 
         assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
         assertEquals(MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE, mitm.getMessages().get(1).getMessageType());
@@ -171,7 +170,7 @@ public class ActivateProductionNormalActionTurnStateTest {
             resource2.add(leaderResource);
             turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(leaderResource);
 
-            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(1)));
+            turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(1)));
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
 
             assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
@@ -185,13 +184,13 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
 
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
 
         assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
     }
 
     private void playCollection() throws InvalidPayloadException {
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARDS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, Resource.COIN));

@@ -53,7 +53,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
             try {
 
-                turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "A vatican report has been called"));
+                turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "A vatican report has been called."));
 
             } catch (InvalidPayloadException e) {
                 e.printStackTrace();
@@ -87,7 +87,7 @@ public class CheckVaticanReportTurnState extends TurnState {
             turn.getMatchController().notifyObservers(
                     new NotificationUpdateMessage(
                             SpecialToken.BROADCAST.getToken(),
-                            "Faith points: " + player.getPersonalBoard().getFaithTrack().getFaithPoints() + " so the favor tile is " + reportResult)
+                            "Faith points: " + player.getPersonalBoard().getFaithTrack().getFaithPoints() + " so the favor tile is " + reportResult + ".")
             );
         } catch (InvalidPayloadException e) {
             e.printStackTrace();

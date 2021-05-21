@@ -419,7 +419,7 @@ public class CliTest {
         productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.FIRST).getProduction());
         productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.SECOND).getProduction());
         productions.add(developmentCardsGrid.drawCard(Color.GREEN, Level.THIRD).getProduction());
-        cli.displayProductionActivation(productions, new ArrayList<>());
+//        cli.displayProductionActivation(productions, new ArrayList<>());
         in.nextLine();
     }
 

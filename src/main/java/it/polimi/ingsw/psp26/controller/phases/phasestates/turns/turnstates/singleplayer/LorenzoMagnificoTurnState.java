@@ -51,7 +51,7 @@ public class LorenzoMagnificoTurnState extends TurnState {
 
 
     private void afterExecute(List<ActionToken> allTokens, String tokenPlayed) throws InvalidPayloadException {
-        turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "Lorenzo played " + tokenPlayed));
+        turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "Lorenzo played " + tokenPlayed + "."));
 
         turn.getMatchController().notifyObservers(
                 new SessionMessage(

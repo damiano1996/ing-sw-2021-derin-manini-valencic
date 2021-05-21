@@ -8,7 +8,6 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
-import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
@@ -72,6 +71,7 @@ public class Client extends Observable<Message> {
                 case CHOICE_NORMAL_ACTION:
                 case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
                 case CHOICE_LEADERS:
+                case CHOICE_PRODUCTIONS_TO_ACTIVATE:
 
                     MultipleChoicesMessage mcm = (MultipleChoicesMessage) message;
                     viewInterface.displayChoices(
@@ -81,12 +81,6 @@ public class Client extends Observable<Message> {
                             mcm.getMinChoices(), mcm.getMaxChoices(),
                             mcm.getHasUndoOption()
                     );
-                    break;
-
-                case CHOICE_CARDS_TO_ACTIVATE:
-                    // first message contains the Player's Productions
-                    List<Production> productions = castElements(Production.class, message.getListPayloads());
-                    viewInterface.displayProductionActivation(productions, getSecondMessageResources(CHOICE_CARDS_TO_ACTIVATE));
                     break;
 
                 case PLACE_IN_WAREHOUSE:

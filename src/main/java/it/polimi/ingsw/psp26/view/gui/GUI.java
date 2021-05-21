@@ -11,7 +11,6 @@ import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
-import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
@@ -202,10 +201,6 @@ public class GUI extends Application implements ViewInterface {
 
     }
 
-    @Override
-    public void displayProductionActivation(List<Production> productions, List<Resource> playerResources) {
-
-    }
 
     @Override
     public void displayMarketScreen(MarketTray marketTray) {
@@ -244,6 +239,10 @@ public class GUI extends Application implements ViewInterface {
 
             case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
                 choicesDrawer = new StringChoicesDrawer();
+                break;
+
+            case CHOICE_PRODUCTIONS_TO_ACTIVATE:
+                choicesDrawer = new ProductionChoicesDrawer(client);
                 break;
 
             default:
@@ -366,7 +365,7 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
-
+        client.viewNext();
     }
 
     public void displayTextDialog(String text, String textId) {

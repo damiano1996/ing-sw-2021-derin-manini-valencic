@@ -7,7 +7,7 @@ public class MatchUtils {
 
 
     /**
-     * Method to add faith points to player except the looser one.
+     * Method to add faith points to players (and Lorenzo), except the looser one.
      *
      * @param match        match in which the looserPlayer is playing
      * @param looserPlayer player that discarded the resources (the one that is not obtaining points)
@@ -18,5 +18,8 @@ public class MatchUtils {
             if (!player.getSessionToken().equals(looserPlayer.getSessionToken()))
                 player.getPersonalBoard().getFaithTrack().addFaithPoints(faithPoints);
         }
+
+        if (!match.isMultiPlayerMode())
+            looserPlayer.getPersonalBoard().getFaithTrack().moveBlackCrossPosition(faithPoints);
     }
 }

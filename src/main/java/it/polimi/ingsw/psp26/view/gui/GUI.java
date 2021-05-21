@@ -243,7 +243,7 @@ public class GUI extends Application implements ViewInterface {
                 break;
 
             case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
-                choicesDrawer = new SlotsChoicesDrawer();
+                choicesDrawer = new StringChoicesDrawer();
                 break;
 
             default:

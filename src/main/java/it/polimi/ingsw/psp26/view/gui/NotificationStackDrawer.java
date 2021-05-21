@@ -1,15 +1,14 @@
 package it.polimi.ingsw.psp26.view.gui;
 
 
+import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 
 
 public class NotificationStackDrawer {
@@ -34,7 +33,7 @@ public class NotificationStackDrawer {
      */
     public BorderPane getNotificationBox(int width) {
         BorderPane borderPane = new BorderPane();
-        
+
 
         // Making title of the NotificationsStack
         Text notificationTitle = new Text("Notification Stack");
@@ -46,16 +45,13 @@ public class NotificationStackDrawer {
 
         // Creating the VBox containing the notifications
         VBox notificationBox = new VBox();
-        notificationBox.setId("NotificationBox");
-        notificationBox.getStylesheets().add(getCompletePath("stylesheets/stylesheet.css"));
-        notificationBox.setSpacing(10);
+        notificationBox.setSpacing(20);
 
         // Making text elements of the NotificationsStack
         int notificationStackSize = 10;
         for (int i = 0; i < notificationStackSize; i++) {
             Text text = new Text("");
-            text.setFill(Color.BLACK);
-            text.setStyle("-fx-font-size: " + 23);
+            text.setId("notification-text");
             text.setWrappingWidth(width);
 
             notificationsToShow.add(text);
@@ -65,18 +61,18 @@ public class NotificationStackDrawer {
 
         // Creating a scrollable version of the NotificationStack
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.getStylesheets().add(getCompletePath("stylesheets/stylesheet.css"));
         scrollPane.setMaxHeight(800);
         scrollPane.setMaxWidth(width + 40);
-        scrollPane.setStyle("-fx-font-size: 3px;"); // Changing the scroll bar to a smaller size
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHvalue(0.5); // Centering the scrollPane x position
         scrollPane.setContent(notificationBox);
-        
-        
+
         // Adding scrollPane at the center
         borderPane.setCenter(scrollPane);
-        
+        BorderPane.setMargin(scrollPane, new Insets(20));
+
+
         return borderPane;
     }
 

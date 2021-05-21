@@ -15,6 +15,7 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.loadImage;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
+import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getCard;
 
 public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
@@ -34,6 +35,7 @@ public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
             image = getCard(developmentCard, (float) (getGeneralRatio() * 0.5));
         } catch (PlayerHasNotDevelopmentCardProduction playerHasNotDevelopmentCardProduction) {
             image = loadImage("production/base_production.png", (int) (200 * getGeneralRatio()));
+            image = addLightEffects(image, (float) (getGeneralRatio() * 0.5));
         }
 
         ImageView productionImageView = getImageView(image, 0, 0);

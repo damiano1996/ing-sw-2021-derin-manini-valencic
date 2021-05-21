@@ -70,8 +70,8 @@ public class NotificationStackPrinter {
     private List<List<String>> stringParser(List<String> strings) {
         List<List<String>> parsedStrings = new ArrayList<>();
 
-        for (String string : strings)
-            parsedStrings.add(splitString(string));
+        for (int i = 0; i < strings.size(); i++)
+            parsedStrings.add(splitString(strings.get(strings.size() - 1 - i)));
 
         return parsedStrings;
     }

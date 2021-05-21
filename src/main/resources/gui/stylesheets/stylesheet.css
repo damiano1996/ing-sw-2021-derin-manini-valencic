@@ -68,3 +68,93 @@ HBox, VBox {
     -fx-border-insets: 10px;
     -fx-background-insets: 5px;
 }
+
+
+
+
+
+
+
+
+.scroll-bar {
+    -fx-background-color: transparent;
+    -fx-background-radius: 2em;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-padding: 2px !important;
+    -fx-start-margin: 3px !important;
+    -fx-end-margin: 3px !important;
+}
+
+.scroll-bar:vertical:focused {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:vertical .track-background {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 2em;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-padding: 0.0 10.0 0.0 0.0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0.15em 0.0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0.0 0.15em;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #ff9d69;
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #c16618;
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #c16618;
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+
+
+
+.scroll-pane {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, #fdd06e 0%, #ffe6a3 50%);
+    -fx-border-color: linear-gradient(from 0% 0% to 100% 200%, repeat, #fa863a 0%, #ffbe20 50%);
+    -fx-background-radius: 30px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 5px;
+}
+
+/* Removes the rectangle around the ScrollPane */
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+#NotificationBox {
+    -fx-background-color: transparent;
+}

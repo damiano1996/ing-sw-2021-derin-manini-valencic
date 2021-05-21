@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.network.client.NotificationsFIFO;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardsGridDrawer;
@@ -92,8 +93,16 @@ public class PlayingPane {
         return vBox;
     }
 
-    private static VBox addRightBar() {
-        return new VBox();
+    private static BorderPane addRightBar(int width) {
+        NotificationStackDrawer notificationStackDrawer = new NotificationStackDrawer();
+
+        new AsynchronousDrawer(
+                () -> notificationStackDrawer.setReceivedNotifications(NotificationsFIFO.getInstance().getNotifications()),
+                notificationStackDrawer::displayNotifications,
+                true
+        ).start();
+
+        return notificationStackDrawer.getNotificationBox(width);
     }
 
     private static Pane addMainBox(Client client, int width) {
@@ -134,7 +143,7 @@ public class PlayingPane {
         float resizeMainBlockFactor = (client.isMultiplayerMode()) ? 0.7f : 0.8f;
         border.setCenter(addMainBox(client, (int) (width * resizeMainBlockFactor)));
 
-        border.setRight(addRightBar());
+        border.setRight(addRightBar((int) (width * (0.9 - resizeMainBlockFactor))));
 
         return border;
     }

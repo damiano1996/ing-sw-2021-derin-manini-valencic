@@ -11,6 +11,7 @@ import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getDevelopmentGridModelUpdateMessage;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getMarketTrayModelUpdateMessage;
+import static it.polimi.ingsw.psp26.view.ViewUtils.toTitleStyle;
 
 
 public class InitializationPhaseState extends PhaseState {
@@ -58,6 +59,7 @@ public class InitializationPhaseState extends PhaseState {
 
     private void addPlayer(SessionMessage message) throws EmptyPayloadException {
         String nickname = (String) message.getPayload();
+        nickname = getFilteredNickname(nickname);
         String sessionToken = message.getSessionToken();
         Player newPlayer = new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken);
 
@@ -66,6 +68,7 @@ public class InitializationPhaseState extends PhaseState {
 
         System.out.println("Initialization phase  - sending start waiting message");
         try {
+            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.SET_NICKNAME, nickname));
             phase.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), nickname + " joined the game!"));
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Waiting for opponents to connect..."));
         } catch (InvalidPayloadException ignored) {
@@ -78,6 +81,29 @@ public class InitializationPhaseState extends PhaseState {
     private void notifyMarketAndGridCreation() {
         phase.getMatchController().notifyObservers(getMarketTrayModelUpdateMessage());
         phase.getMatchController().notifyObservers(getDevelopmentGridModelUpdateMessage());
+    }
+
+    /**
+     * Method to filter the nicknames
+     *
+     * @param nickname nickname that must be filtered
+     * @return new nickname
+     */
+    private String getFilteredNickname(String nickname) {
+        nickname = nickname.replace(" ", "").replace("_", "-");
+        nickname = toTitleStyle(nickname);
+        int maxLength = 8;
+        nickname = nickname.substring(0, Math.min(maxLength, nickname.length()));
+
+        int equalPrefix = 0;
+        for (Player opponentPlayer : phase.getMatchController().getMatch().getPlayers()) {
+            if (opponentPlayer.getNickname().equals(nickname)) equalPrefix += 1;
+            else if (opponentPlayer.getNickname().startsWith(nickname) && opponentPlayer.getNickname().charAt(maxLength) == '_')
+                equalPrefix += 1;
+        }
+        if (equalPrefix > 0) nickname += "_" + (equalPrefix + 1);
+
+        return nickname;
     }
 
 }

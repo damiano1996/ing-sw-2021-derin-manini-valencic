@@ -9,6 +9,7 @@ public enum MessageType {
     ERROR_MESSAGE,
 
     // Initialize game:
+    SET_NICKNAME,
     MULTI_OR_SINGLE_PLAYER_MODE,
     SINGLE_PLAYER_MODE,
     TWO_PLAYERS_MODE,

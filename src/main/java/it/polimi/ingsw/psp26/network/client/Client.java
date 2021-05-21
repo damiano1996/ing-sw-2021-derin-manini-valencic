@@ -57,6 +57,11 @@ public class Client extends Observable<Message> {
                     viewInterface.displayError((String) message.getPayload());
                     break;
 
+                case SET_NICKNAME:
+                    setNickname((String) message.getPayload());
+                    viewNext();
+                    break;
+
                 // -------------------------------------
                 // ----- MULTIPLE CHOICES MESSAGES -----
                 // -------------------------------------

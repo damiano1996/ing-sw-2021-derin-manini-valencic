@@ -220,15 +220,15 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
     private boolean isAdmissibleSwitch(List<Resource> resourceFillOrder) {
         for (Depot sourceDepot : turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots()) {
             if (!sourceDepot.getContainedResourceType().equals(Resource.EMPTY)) {
-                for (Resource resource : resourceFillOrder.subList(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().size())) {
-                    List<Depot> targetDepots = turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().stream().filter(x -> x.getContainedResourceType().equals(resource)).collect(Collectors.toList());
 
-                    for (Depot targetDepot : targetDepots) {
-                        if (sourceDepot.getResources().size() > targetDepot.getMaxNumberOfResources() ||
-                                targetDepot.getResources().size() > sourceDepot.getMaxNumberOfResources())
-                            return false;
-                    }
-                }
+                Depot targetDepot = turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(
+                        resourceFillOrder.subList(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().size())
+                                .indexOf(sourceDepot.getContainedResourceType())
+                );
+
+                if (sourceDepot.getResources().size() > targetDepot.getMaxNumberOfResources() ||
+                        targetDepot.getResources().size() > sourceDepot.getMaxNumberOfResources())
+                    return false;
             }
 
         }

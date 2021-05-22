@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
@@ -24,8 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.ERROR_MESSAGE;
-import static it.polimi.ingsw.psp26.application.messages.MessageType.PLACE_IN_WAREHOUSE;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.model.enums.Resource.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
@@ -126,6 +126,18 @@ public class ResourcesWarehousePlacerTurnStateTest {
         );
     }
 
+    private void sendOrderTypeThreeSwitchCase() throws EmptyPayloadException, InvalidPayloadException {
+        testSendWarehouseMessage();
+
+        turn.play(
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        PLACE_IN_WAREHOUSE,
+                        SHIELD, SERVANT, COIN
+                )
+        );
+    }
+
 
     private void assertMultiplicity(List<Resource> expectedFinalResources) {
         // for each resource we check if the multiplicity is correct
@@ -202,6 +214,24 @@ public class ResourcesWarehousePlacerTurnStateTest {
         sendOrderTypeOne();
 
         assertMultiplicity(expectedFinalResources);
+    }
+
+    @Test
+    public void testBadSwitch() throws CanNotAddResourceToDepotException, EmptyPayloadException, InvalidPayloadException {
+        // adding one SHIELD to cause the error
+        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(1, SHIELD);
+
+        sendOrderTypeThreeSwitchCase();
+
+        System.out.println(mitm.getMessages().get(2));
+        assertEquals(ERROR_MESSAGE, mitm.getMessages().get(2).getMessageType());
+    }
+
+    @Test
+    public void testGoodSwitch() throws EmptyPayloadException, InvalidPayloadException {
+        sendOrderTypeThreeSwitchCase();
+
+        assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(2).getMessageType());
     }
 
 }

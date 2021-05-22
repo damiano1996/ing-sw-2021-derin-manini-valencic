@@ -18,18 +18,15 @@ public class DialogStage {
     public static Stage getDialog(Stage primaryStage, Pane content) {
 
         Stage dialog = new Stage();
-        dialog.initModality(Modality.WINDOW_MODAL);
         dialog.initOwner(primaryStage);
-        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.initModality(Modality.WINDOW_MODAL);
         dialog.initStyle(StageStyle.TRANSPARENT);
-        // dialog.setAlwaysOnTop(true);
-//        dialog.sizeToScene();
         dialog.centerOnScreen();
 
         primaryStage.xProperty().addListener((obs, oldVal, newVal) -> dialog.setX(primaryStage.getX() + primaryStage.getWidth() / 2 - dialog.getWidth() / 2));
         primaryStage.yProperty().addListener((obs, oldVal, newVal) -> dialog.setY(primaryStage.getY() + primaryStage.getHeight() / 2 - dialog.getHeight() / 2));
 
-        int sideSize = Math.max(getWindowWidth(), getWindowHeight());
+        int sideSize = Math.min(getWindowWidth(), getWindowHeight());
         dialog.setWidth(sideSize);
         dialog.setHeight(sideSize);
         dialog.setX(primaryStage.getX() + primaryStage.getWidth() / 2 - dialog.getWidth() / 2);

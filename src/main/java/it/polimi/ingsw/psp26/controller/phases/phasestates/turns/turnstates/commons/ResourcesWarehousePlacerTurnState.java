@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToWarehouse;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
+import it.polimi.ingsw.psp26.model.personalboard.Depot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,14 +87,22 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
 
             } else {
 
-                int discardedResources = fillWarehouse(resourceOrder);
-                System.out.println("ResourcesWarehousePlacerTurnState - resources to discard: " + discardedResources);
-                // adding FP to other players
-                addFaithPointsToPlayers(turn.getMatchController().getMatch(), turn.getTurnPlayer(), discardedResources);
-                // checking vatican report
-                System.out.println("ResourcesWarehousePlacerTurnState - going to vatican report");
-                turn.changeState(new CheckVaticanReportTurnState(turn));
-                turn.play(message);
+                // Checking if player has switched resource between depots and if switch was admissible given the constrains of the rules
+                if (isAdmissibleSwitch(removeDuplicates(resourceOrder))) {
+
+                    int discardedResources = fillWarehouse(resourceOrder);
+                    System.out.println("ResourcesWarehousePlacerTurnState - resources to discard: " + discardedResources);
+                    // adding FP to other players
+                    addFaithPointsToPlayers(turn.getMatchController().getMatch(), turn.getTurnPlayer(), discardedResources);
+                    // checking vatican report
+                    System.out.println("ResourcesWarehousePlacerTurnState - going to vatican report");
+                    turn.changeState(new CheckVaticanReportTurnState(turn));
+                    turn.play(message);
+                } else {
+
+                    sendErrorMessage(turn, "Bad depots switch. Fill the warehouse again.");
+                    sendWarehouseMessage();
+                }
             }
 
 
@@ -199,5 +208,30 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
             );
         } catch (InvalidPayloadException ignored) {
         }
+    }
+
+    /**
+     * Method to check if the new resource order, to fill the warehouse,
+     * is admissible under the constraints imposed by the rules in case of switch between resources of different depots
+     *
+     * @param resourceFillOrder list of resources
+     * @return true if constraints are satisfied, false otherwise
+     */
+    private boolean isAdmissibleSwitch(List<Resource> resourceFillOrder) {
+        for (Depot sourceDepot : turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots()) {
+            if (!sourceDepot.getContainedResourceType().equals(Resource.EMPTY)) {
+                for (Resource resource : resourceFillOrder.subList(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().size())) {
+                    List<Depot> targetDepots = turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().stream().filter(x -> x.getContainedResourceType().equals(resource)).collect(Collectors.toList());
+
+                    for (Depot targetDepot : targetDepots) {
+                        if (sourceDepot.getResources().size() > targetDepot.getMaxNumberOfResources() ||
+                                targetDepot.getResources().size() > sourceDepot.getMaxNumberOfResources())
+                            return false;
+                    }
+                }
+            }
+
+        }
+        return true;
     }
 }

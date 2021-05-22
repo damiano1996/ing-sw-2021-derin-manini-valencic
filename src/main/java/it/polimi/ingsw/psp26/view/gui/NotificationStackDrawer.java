@@ -32,6 +32,7 @@ public class NotificationStackDrawer {
      * @return The so created Notification Stack
      */
     public BorderPane getNotificationBox(int width) {
+        width = width - 40;
         BorderPane borderPane = new BorderPane();
 
 

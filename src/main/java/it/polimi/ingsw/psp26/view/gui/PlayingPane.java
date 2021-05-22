@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardsGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
+import javafx.scene.CacheHint;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -23,6 +24,8 @@ public class PlayingPane {
         int zoomFactor = 3;
 
         HBox hBox = new HBox();
+        hBox.setCache(true);
+        hBox.setCacheHint(CacheHint.SPEED);
 
         // adding opponents
         for (int i = 0; i < 3; i++) {
@@ -53,6 +56,8 @@ public class PlayingPane {
         int zoomFactor = 3;
 
         VBox vBox = new VBox();
+        vBox.setCache(true);
+        vBox.setCacheHint(CacheHint.SPEED);
 
         // adding market tray
         vBox.getChildren().add(new Pane());
@@ -108,15 +113,17 @@ public class PlayingPane {
     private static Pane addMainBox(Client client, int width) {
 
         StackPane root = new StackPane();
+        root.setCache(true);
+        root.setCacheHint(CacheHint.SPEED);
 
-        Pane content = drawPlayer(
-                new Player(new VirtualView(), client.getNickname(), ""),
-                width,
-                getGeneralRatio(),
-                false,
-                client.isMultiplayerMode()
-        );
-        root.getChildren().add(content);
+        root.getChildren().add(
+                drawPlayer(
+                        new Player(new VirtualView(), client.getNickname(), ""),
+                        width,
+                        getGeneralRatio(),
+                        false,
+                        client.isMultiplayerMode()
+                ));
 
         new AsynchronousDrawer(
                 () -> client.getCachedModel().getMyPlayerCached().lookingForUpdate(),
@@ -133,6 +140,8 @@ public class PlayingPane {
     public static BorderPane getPlayingPane(Stage primaryStage, Client client, int width) {
 
         BorderPane border = new BorderPane();
+        border.setCache(true);
+        border.setCacheHint(CacheHint.SPEED);
 
         int thumbnailSize = (int) (width * 0.1);
 

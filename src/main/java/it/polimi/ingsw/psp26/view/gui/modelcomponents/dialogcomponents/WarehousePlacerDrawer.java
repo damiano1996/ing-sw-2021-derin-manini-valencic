@@ -12,8 +12,8 @@ import it.polimi.ingsw.psp26.view.gui.drag.DraggedObject;
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.DepotTargetContainer;
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.TargetContainer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.RatioDrawer;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots.DepotsSwitchableGroup;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots.SwitchableDepot;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots.SwitchableGroup;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -42,8 +42,8 @@ public class WarehousePlacerDrawer extends RatioDrawer {
     private final List<TargetContainer<Resource>> targets;
 
     private final Pane resourcesToAddPane;
-
-    private final SwitchableGroup switchableGroup;
+    private final DepotsSwitchableGroup switchableGroup;
+    private Text errorMessage;
 
     public WarehousePlacerDrawer(Client client, Warehouse warehouse, List<Resource> resourcesToAdd, int maxWidth) {
         super(maxWidth);
@@ -54,7 +54,14 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         targets = new ArrayList<>();
 
         resourcesToAddPane = new Pane();
-        switchableGroup = new SwitchableGroup(warehouse, this);
+        switchableGroup = new DepotsSwitchableGroup(this);
+
+        errorMessage = new Text();
+        errorMessage.setId("error");
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
     }
 
     @Override
@@ -81,6 +88,9 @@ public class WarehousePlacerDrawer extends RatioDrawer {
                     add(leaderDepotPane);
                 }}
         ));
+
+        errorMessage.setVisible(false);
+        rootPane.getChildren().add(errorMessage);
 
         Button confirmationButton = new Button("Done");
         confirmationButton.setId("confirm-button");
@@ -133,11 +143,6 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         resourcesToAddPane.getChildren().add(imageView);
     }
 
-    public void addResourceToAdd(Resource resource) {
-        resourcesToAdd.add(resource);
-    }
-
-
     private Pane getWarehousePane() {
 
         int[] leftOffsets = new int[]{220, 160, 80};
@@ -172,7 +177,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
             System.out.println("WarehousePlacerDrawer - index: " + depotIndex);
             DepotTargetContainer depotTargetContainer = new DepotTargetContainer(resourcesGridPane, imageStack, warehouse, depotIndex);
-            SwitchableDepot switchableDepot = new SwitchableDepot(baseDepot, switchableGroup, imageStack, baseDepotImageView, resourcesGridPane);
+            SwitchableDepot switchableDepot = new SwitchableDepot(depotIndex, switchableGroup, imageStack, baseDepotImageView, resourcesGridPane);
             switchableGroup.addSwitchableDepot(switchableDepot);
             targets.add(depotTargetContainer);
 
@@ -215,5 +220,14 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         }
 
         return vBox;
+    }
+
+    public void showMessage(String error) {
+        errorMessage.setText(error);
+        errorMessage.setVisible(true);
+    }
+
+    public void hideMessage() {
+        errorMessage.setVisible(false);
     }
 }

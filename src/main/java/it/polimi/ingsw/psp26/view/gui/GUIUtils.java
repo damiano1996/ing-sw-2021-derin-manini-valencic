@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.gui;
 
 import javafx.event.Event;
 import javafx.geometry.Insets;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
@@ -58,6 +59,8 @@ public class GUIUtils {
 
     public static ImageView getImageView(Image image, float xPosition, float yPosition) {
         ImageView imageView = new ImageView(image);
+        imageView.setCache(true);
+        imageView.setCacheHint(CacheHint.SPEED);
         imageView.setX(xPosition);
         imageView.setY(yPosition);
         return imageView;

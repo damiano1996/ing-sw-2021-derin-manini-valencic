@@ -95,6 +95,8 @@ public class InitializationPhaseState extends PhaseState {
         int maxLength = 8;
         nickname = nickname.substring(0, Math.min(maxLength, nickname.length()));
 
+        if (nickname.length() == 0) nickname = "Player";
+
         int equalPrefix = 0;
         for (Player opponentPlayer : phase.getMatchController().getMatch().getPlayers()) {
             if (opponentPlayer.getNickname().equals(nickname)) equalPrefix += 1;

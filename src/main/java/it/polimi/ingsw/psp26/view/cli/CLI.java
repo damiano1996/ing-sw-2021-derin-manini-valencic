@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -183,6 +184,18 @@ public class CLI implements ViewInterface {
         pw.flush();
         displayMultipleStringChoices(choices);
         cliUtils.vSpace(10);
+    }
+
+
+    /**
+     * Displays the Production Activation screen
+     *
+     * @param productions The Productions to display
+     */
+    public void displayProductionSelection(List<Production> productions) {
+        List<Resource> playerResources = client.getCachedModel().getMyPlayerCached().getObject().getPersonalBoard().getAllAvailableResources();
+        personalBoardCli.displayProductionActivation(productions, playerResources);
+        cliUtils.moveCursor("dn", 10);
     }
 
 
@@ -479,29 +492,6 @@ public class CLI implements ViewInterface {
     }
 
 
-//    /**
-//     * Displays the Production Activation screen
-//     *
-//     * @param productions     The Productions to display
-//     * @param playerResources The Player's current resources
-//     */
-//    @Override
-//    public void displayProductionActivation(List<Production> productions, List<Resource> playerResources) {
-//        notificationStackPrinter.hideNotifications();
-//
-//        try {
-//            List<Production> choices = new ArrayList<>(personalBoardCli.displayProductionActivation(productions, playerResources));
-//            client.notifyObservers(new Message(CHOICE_PRODUCTIONS_TO_ACTIVATE, choices.toArray(new Object[0])));
-//            cliUtils.vSpace(3);
-//            displayNext();
-//        } catch (UndoOptionSelectedException e) {
-//            client.sendUndoMessage();
-//            client.viewNext();
-//        } catch (InvalidPayloadException ignored) {
-//        }
-//    }
-
-
     /**
      * Displays the Action Tokens screen
      *
@@ -610,6 +600,10 @@ public class CLI implements ViewInterface {
 
             case CHOICE_RESOURCE_FROM_WAREHOUSE:
                 choiceResourceFromWarehouseExecute(choices);
+                break;
+
+            case CHOICE_PRODUCTIONS_TO_ACTIVATE:
+                displayProductionSelection(castElements(Production.class, choices));
                 break;
 
             case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:

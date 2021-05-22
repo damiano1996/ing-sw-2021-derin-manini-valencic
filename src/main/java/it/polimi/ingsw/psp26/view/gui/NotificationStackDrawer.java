@@ -38,6 +38,9 @@ public class NotificationStackDrawer {
         // Making title of the NotificationsStack
         Text notificationTitle = new Text("Notification Stack");
         notificationTitle.setId("title");
+        
+        //TODO messo perchè altrimenti nel mio schermo sfora le dimensioni
+        notificationTitle.setWrappingWidth(width);
 
         // Adding title at the top
         borderPane.setTop(notificationTitle);
@@ -70,8 +73,9 @@ public class NotificationStackDrawer {
 
         // Adding scrollPane at the center
         borderPane.setCenter(scrollPane);
+        
+        // Setting panes margins
         BorderPane.setMargin(scrollPane, new Insets(20));
-
 
         return borderPane;
     }

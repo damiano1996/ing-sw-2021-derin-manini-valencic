@@ -1,8 +1,6 @@
 package it.polimi.ingsw.psp26.view.cli;
 
-import it.polimi.ingsw.psp26.exceptions.ConfirmationException;
 import it.polimi.ingsw.psp26.exceptions.ResourceSupplySlotOutOfBoundsException;
-import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
@@ -12,12 +10,9 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
-import it.polimi.ingsw.psp26.utils.ViewUtils;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
@@ -204,93 +199,13 @@ public class PersonalBoardCli {
      *
      * @param productions    The Productions available for the Player
      * @param playerResource The Player's Resources
-     * @return The selected Productions
-     * @throws UndoOptionSelectedException The Player decides to quit from Production screen
      */
-    public List<Production> displayProductionActivation(List<Production> productions, List<Resource> playerResource) throws UndoOptionSelectedException {
-        cliUtils.cls();
-        List<Integer> indexChoices = new ArrayList<>();
+    public void displayProductionActivation(List<Production> productions, List<Resource> playerResource) {
+        cliUtils.clns();
 
         cliUtils.printFigure("/titles/ActivateProductionTitle", 1, 18);
-        printPlayerResources(playerResource, 32, 18);
+        printPlayerResources(playerResource, 29, 18);
         printProductionBooks(productions);
-
-        do {
-            printProductionQuestion(indexChoices.size() >= 1);
-
-            try {
-                int choice = getCorrectChoice(productions.size(), indexChoices.size() >= 1);
-                if (!indexChoices.contains(choice)) indexChoices.add(choice);
-                cliUtils.pPCS("Player's choices: " + indexChoices, Color.WHITE, 44, 18);
-                cliUtils.clearLine(38, 18);
-                cliUtils.clearLine(42, 75);
-            } catch (ConfirmationException e) {
-                break;
-            } catch (UndoOptionSelectedException e) {
-                throw new UndoOptionSelectedException();
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                cliUtils.pPCS("INCORRECT INDEX INSERTED!", Color.RED, 38, 18);
-                cliUtils.clearLine(42, 75);
-            }
-
-        } while (indexChoices.size() < productions.size());
-
-        return getSelectedProductions(productions, indexChoices);
-    }
-
-
-    /**
-     * Creates a List of Productions selected by the Player
-     *
-     * @param productions The total Productions received from the Server
-     * @param selections  The Production indexes selected by the Player
-     * @return The List of selected Productions
-     */
-    private List<Production> getSelectedProductions(List<Production> productions, List<Integer> selections) {
-        List<Production> productionsToReturn = new ArrayList<>();
-        for (Integer i : selections) productionsToReturn.add(productions.get(i - 1));
-        return productionsToReturn;
-    }
-
-
-    /**
-     * Prints the questions to the Player
-     *
-     * @param printConfirm The Player can confirm the current selections
-     */
-    private void printProductionQuestion(boolean printConfirm) {
-        cliUtils.pPCS("Enter 'u' if you want to exit from the Production selection screen.", Color.WHITE, 40, 18);
-        if (printConfirm)
-            cliUtils.pPCS("Enter 'c' to confirm selections.", Color.WHITE, 41, 18);
-        cliUtils.pPCS("Enter the number of the Production you want to activate: ", Color.WHITE, 42, 18);
-    }
-
-
-    /**
-     * Gets and parse correctly the input of the Player
-     *
-     * @param maxNumberOfChoices The maximum range of the index permitted
-     * @param canConfirm         If there is 1 ore more choice the Player can confirm the actual choices
-     * @return The index selected by the Player
-     * @throws UndoOptionSelectedException The PLayer exits from the Production screen
-     * @throws ConfirmationException       The Player confirm the current List of choices
-     * @throws IndexOutOfBoundsException   The index selected is not correct
-     */
-    private int getCorrectChoice(int maxNumberOfChoices, boolean canConfirm) throws UndoOptionSelectedException, ConfirmationException, IndexOutOfBoundsException {
-        Scanner in = new Scanner(System.in);
-        String choice;
-        choice = in.nextLine();
-
-        if (choice.isEmpty()) throw new IndexOutOfBoundsException();
-        if (choice.equals("u")) throw new UndoOptionSelectedException();
-        if (canConfirm)
-            if (choice.equals("c")) throw new ConfirmationException();
-        if (ViewUtils.checkAsciiRange(choice.charAt(0))) throw new IndexOutOfBoundsException();
-
-        int chosenIndex = Integer.parseInt(choice);
-        if (chosenIndex <= 0 || chosenIndex > maxNumberOfChoices) throw new IndexOutOfBoundsException();
-
-        return chosenIndex;
     }
 
 
@@ -317,10 +232,10 @@ public class PersonalBoardCli {
      * @param startingColumn   The column where the Resource Supply will be printed
      */
     public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesToPrint, int startingRow, int startingColumn) {
-        cliUtils.cls();
+        cliUtils.clns();
 
         cliUtils.printFigure("/titles/ResourceSupplyTitle", startingRow, startingColumn);
-        cliUtils.printFigure("ResourceSupply", startingRow + 19, startingColumn + 37);
+        cliUtils.printFigure("ResourceSupply", startingRow + 13, startingColumn + 37);
 
         try {
             int slotNumber = 1;
@@ -328,7 +243,7 @@ public class PersonalBoardCli {
                 Resource resourceSlotType = resourceSupply.grabResources(i, 1).get(0);
                 if (resourcesToPrint.contains(resourceSlotType)) {
                     printResourceSupplyResources(resourceSlotType.getColor(), startingRow, startingColumn + (i * 22));
-                    cliUtils.pPCS("SLOT " + slotNumber, Color.WHITE, startingRow + 33, startingColumn + 45 + (i * 22));
+                    cliUtils.pPCS("SLOT " + slotNumber, Color.WHITE, startingRow + 27, startingColumn + 45 + (i * 22));
                     slotNumber++;
                 }
             }
@@ -346,10 +261,10 @@ public class PersonalBoardCli {
      * @param startingColumn The column where the Resource Supply Slot Resources will be printed
      */
     private void printResourceSupplyResources(Color color, int startingRow, int startingColumn) {
-        for (int i = 0; i < 3; i++) cliUtils.pPCS("\u25A0", color, startingRow + 22, startingColumn + 41 + (i * 6));
-        for (int i = 0; i < 3; i++) cliUtils.pPCS("\u25A0", color, startingRow + 24, startingColumn + 41 + (i * 6));
-        for (int i = 0; i < 6; i++) cliUtils.pPCS("\u25A0", color, startingRow + 26, startingColumn + 41 + (i * 3));
-        for (int i = 0; i < 4; i++) cliUtils.pPCS("\u25A0", color, startingRow + 28, startingColumn + 41 + (i * 5));
+        for (int i = 0; i < 3; i++) cliUtils.pPCS("\u25A0", color, startingRow + 16, startingColumn + 41 + (i * 6));
+        for (int i = 0; i < 3; i++) cliUtils.pPCS("\u25A0", color, startingRow + 18, startingColumn + 41 + (i * 6));
+        for (int i = 0; i < 6; i++) cliUtils.pPCS("\u25A0", color, startingRow + 20, startingColumn + 41 + (i * 3));
+        for (int i = 0; i < 4; i++) cliUtils.pPCS("\u25A0", color, startingRow + 22, startingColumn + 41 + (i * 5));
     }
 
 

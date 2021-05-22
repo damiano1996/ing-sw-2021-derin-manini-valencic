@@ -21,6 +21,7 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.*;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.ActionTokenDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.DevelopmentCardsGridDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.MarketDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.WarehousePlacerDrawer;
@@ -365,7 +366,8 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
-        client.viewNext();
+        Stage dialog = getDialog(primaryStage, new ActionTokenDialogDrawer(client, unusedTokens, getWindowWidth()).draw());
+        dialog.show();
     }
 
     public void displayTextDialog(String text, String textId) {

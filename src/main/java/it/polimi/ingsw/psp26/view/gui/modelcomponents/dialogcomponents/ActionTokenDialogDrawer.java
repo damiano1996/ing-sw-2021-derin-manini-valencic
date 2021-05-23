@@ -44,7 +44,7 @@ public class ActionTokenDialogDrawer extends RatioDrawer {
         HBox titleBox = new HBox();
         titleBox.setAlignment(Pos.CENTER);
 
-        Text actionTokenTitle = new Text("Lorenzo play!");
+        Text actionTokenTitle = new Text("Lorenzo plays!");
         actionTokenTitle.setId("title");
         titleBox.getChildren().add(actionTokenTitle);
 

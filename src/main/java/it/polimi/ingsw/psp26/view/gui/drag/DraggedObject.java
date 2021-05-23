@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 
 import java.util.List;
 
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addSelectionShadow;
 
 public class DraggedObject<T> {
@@ -82,7 +83,7 @@ public class DraggedObject<T> {
         });
 
         imageView.addEventFilter(MouseDragEvent.MOUSE_DRAGGED, mouseEvent -> {
-            int margin = 100;
+            int margin = (int) (100 * getGeneralRatio());
             if (mouseEvent.isPrimaryButtonDown() && selected &&
                     sourcePane.contains(new Point2D(mouseEvent.getX() + margin, mouseEvent.getY() + margin)) &&
                     sourcePane.contains(new Point2D(mouseEvent.getX() - margin, mouseEvent.getY() - margin))) {

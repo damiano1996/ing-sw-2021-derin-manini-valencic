@@ -1,9 +1,10 @@
-package it.polimi.ingsw.psp26.view.gui;
+package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NotificationStackDrawer {
+public class NotificationStackDrawer extends RatioDrawer {
 
     // The notifications displayed on screen
     private final List<Text> notificationsToShow;
@@ -19,44 +20,37 @@ public class NotificationStackDrawer {
     // The updated notifications received from the Server
     private List<String> receivedNotifications;
 
-    public NotificationStackDrawer() {
+    public NotificationStackDrawer(int maxWidth) {
+        super(maxWidth);
         notificationsToShow = new ArrayList<>();
         receivedNotifications = new ArrayList<>();
     }
 
+    @Override
+    public Pane draw() {
 
-    /**
-     * Creates a Notifications Stack
-     *
-     * @param width The width of the stack to create
-     * @return The so created Notification Stack
-     */
-    public BorderPane getNotificationBox(int width) {
-        width = width - 40;
         BorderPane borderPane = new BorderPane();
-
 
         // Making title of the NotificationsStack
         Text notificationTitle = new Text("Notification Stack");
         notificationTitle.setId("title");
-
-        //TODO messo perchè altrimenti nel mio schermo sfora le dimensioni
-        notificationTitle.setWrappingWidth(width);
+        notificationTitle.setStyle("-fx-font-size: " + 500 * ratio + ";");
+        //notificationTitle.setWrappingWidth(initMaxWidth * ratio);
 
         // Adding title at the top
         borderPane.setTop(notificationTitle);
 
 
         // Creating the VBox containing the notifications
-        VBox notificationBox = new VBox();
-        notificationBox.setSpacing(20);
+        VBox notificationBox = new VBox(400 * ratio);
 
         // Making text elements of the NotificationsStack
         int notificationStackSize = 10;
         for (int i = 0; i < notificationStackSize; i++) {
             Text text = new Text("");
             text.setId("notification-text");
-            text.setWrappingWidth(width);
+            text.setStyle("-fx-font-size: " + 350 * ratio + ";");
+            text.setWrappingWidth(initMaxWidth - 350 * ratio);
 
             notificationsToShow.add(text);
             notificationBox.getChildren().add(text);
@@ -65,8 +59,8 @@ public class NotificationStackDrawer {
 
         // Creating a scrollable version of the NotificationStack
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setMaxHeight(800);
-        scrollPane.setMaxWidth(width + 40);
+        scrollPane.setMaxHeight(initMaxWidth * 4.5);
+        scrollPane.setMaxWidth(initMaxWidth);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHvalue(0.5); // Centering the scrollPane x position
@@ -76,7 +70,7 @@ public class NotificationStackDrawer {
         borderPane.setCenter(scrollPane);
 
         // Setting panes margins
-        BorderPane.setMargin(scrollPane, new Insets(20));
+        BorderPane.setMargin(scrollPane, new Insets(20 * ratio));
 
         return borderPane;
     }

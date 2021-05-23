@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardsGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.NotificationStackDrawer;
 import javafx.scene.CacheHint;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -98,8 +99,8 @@ public class PlayingPane {
         return vBox;
     }
 
-    private static BorderPane addRightBar(int width) {
-        NotificationStackDrawer notificationStackDrawer = new NotificationStackDrawer();
+    private static Pane addRightBar(int width) {
+        NotificationStackDrawer notificationStackDrawer = new NotificationStackDrawer(width);
 
         new AsynchronousDrawer(
                 () -> notificationStackDrawer.setReceivedNotifications(NotificationsFIFO.getInstance().getNotifications()),
@@ -107,7 +108,7 @@ public class PlayingPane {
                 true
         ).start();
 
-        return notificationStackDrawer.getNotificationBox(width);
+        return notificationStackDrawer.draw();
     }
 
     private static Pane addMainBox(Client client, int width) {

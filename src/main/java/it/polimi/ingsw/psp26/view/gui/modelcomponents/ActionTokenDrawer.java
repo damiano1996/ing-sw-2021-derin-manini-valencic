@@ -54,7 +54,7 @@ public class ActionTokenDrawer extends RatioDrawer {
             ImageView backTokenImageView = GUIUtils.getImageView(backTokenImage, 0, 0);
             tokenStack.getChildren().add(backTokenImageView);
         }
-        
+
         return tokenStack;
     }
 

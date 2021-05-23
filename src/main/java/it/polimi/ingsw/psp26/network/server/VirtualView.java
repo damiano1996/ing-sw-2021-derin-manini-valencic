@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.ModelUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
+import it.polimi.ingsw.psp26.controller.HeartbeatController;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
@@ -44,6 +45,13 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
     public void addNetworkNodeClient(String sessionToken, NetworkNode nodeClient) {
         System.out.println("VirtualView - new client has been added.");
         nodeClients.put(sessionToken, nodeClient);
+
+        // Starting to monitor the heartbeat of this network node
+        HeartbeatController heartbeatController = new HeartbeatController(sessionToken, matchController);
+        heartbeatController.startMonitoringHeartbeat();
+        addObserver(heartbeatController);
+
+        // Start to listen the messages
         startListening(nodeClient);
     }
 
@@ -77,28 +85,30 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
     }
 
     private void sendToClient(SessionMessage message) {
-        try {
-            System.out.println("VirtualView - sending message to player: " + message.toString());
 
-            // broadcast branch
-            if (message.getSessionToken().equals(SpecialToken.BROADCAST.getToken())) {
+        // broadcast branch
+        if (message.getSessionToken().equals(SpecialToken.BROADCAST.getToken())) {
 
-                for (Player player : matchController.getMatch().getPlayers()) {
-                    message.setSessionToken(player.getSessionToken());
-                    if (nodeClients.get(message.getSessionToken()) != null)
-                        nodeClients.get(player.getSessionToken()).sendData(message);
-                }
-
-            } else {
-                // send message to the specified player
+            for (Player player : matchController.getMatch().getPlayers()) {
+                message.setSessionToken(player.getSessionToken());
                 if (nodeClients.get(message.getSessionToken()) != null)
-                    nodeClients.get(message.getSessionToken()).sendData(message);
-
+                    try {
+                        nodeClients.get(player.getSessionToken()).sendData(message);
+                        System.out.println("VirtualView - sending message to player: " + message);
+                    } catch (Exception ignored) {
+                    }
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            // send message to the specified player
+            if (nodeClients.get(message.getSessionToken()) != null)
+                try {
+                    nodeClients.get(message.getSessionToken()).sendData(message);
+                    System.out.println("VirtualView - sending message to player: " + message);
+                } catch (Exception ignored) {
+                }
         }
+
     }
 
     private SessionMessage filterModelUpdateMessage(SessionMessage message) {

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.network.client;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.DEFAULT_SERVER_PORT;
+import static java.lang.Thread.sleep;
 
 /**
  * This class simulates the match controller from the point of view of the client.
@@ -30,7 +32,7 @@ public class NetworkHandler implements Observer<Message> {
     @Override
     public void update(Message message) {
         try {
-//            System.out.println("NetworkHandler - " + message.toString());
+            System.out.println("NetworkHandler - " + message.toString());
             sendToServer(new SessionMessage(sessionToken, message.getMessageType(), message.getArrayPayloads()));
         } catch (IOException | InvalidPayloadException e) {
             e.printStackTrace();
@@ -42,6 +44,19 @@ public class NetworkHandler implements Observer<Message> {
         sessionToken = networkNode.receiveStringData();
 
         startListening();
+        startHeartbeat();
+    }
+
+    private void startHeartbeat() {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    sendToServer(new SessionMessage(sessionToken, MessageType.HEARTBEAT));
+                    sleep(1000);
+                } catch (IOException | InvalidPayloadException | InterruptedException ignored) {
+                }
+            }
+        }).start();
     }
 
     private void startListening() {

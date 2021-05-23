@@ -4,6 +4,8 @@ public enum MessageType {
 
     NOTIFICATION_UPDATE,
     MODEL_UPDATE,
+    HEARTBEAT,
+    DEATH,
 
     GENERAL_MESSAGE,
     ERROR_MESSAGE,

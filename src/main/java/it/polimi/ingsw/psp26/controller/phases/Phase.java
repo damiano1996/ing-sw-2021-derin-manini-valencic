@@ -28,6 +28,10 @@ public class Phase {
         phaseState = newPhaseState;
     }
 
+    public PhaseState getPhaseState() {
+        return phaseState;
+    }
+
     public MatchController getMatchController() {
         return matchController;
     }

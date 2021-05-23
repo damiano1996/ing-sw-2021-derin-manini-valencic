@@ -409,7 +409,7 @@ public class GUI extends Application implements ViewInterface {
     public void displayWaitingScreen(Message message) {
         try {
             new WaitingScreen(
-                    root,
+                    primaryStage,
                     () -> MessageSynchronizedFIFO.getInstance().getNext(),
                     this::stopDisplayingWaitingScreen,
                     (String) message.getPayload()

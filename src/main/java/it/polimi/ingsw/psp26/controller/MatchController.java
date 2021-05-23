@@ -1,9 +1,11 @@
 package it.polimi.ingsw.psp26.controller;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.DisconnectionPhaseState;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
@@ -31,7 +33,13 @@ public class MatchController extends Observable<SessionMessage> implements Obser
 
     @Override
     public void update(SessionMessage message) {
-        phase.execute(message);
+        if (!message.getMessageType().equals(MessageType.HEARTBEAT)) {
+
+            if (message.getMessageType().equals(MessageType.DEATH))
+                phase.changeState(new DisconnectionPhaseState(phase, phase.getPhaseState()));
+
+            phase.execute(message);
+        }
     }
 
     private void initializeMatch(int id) {

@@ -83,6 +83,8 @@ public class Server {
             client.sendData(sessionToken);
             // step: receive player mode message
             SessionMessage message = (SessionMessage) client.receiveObjectData();
+            while (!message.getMessageType().equals(MessageType.MULTI_OR_SINGLE_PLAYER_MODE))
+                message = (SessionMessage) client.receiveObjectData();
             // step: assign player to a virtual view
             handlePlayerModeMessage(client, message);
 
@@ -103,22 +105,24 @@ public class Server {
      * @throws EmptyPayloadException if message payload is empty
      */
     private void handlePlayerModeMessage(NetworkNode clientNode, SessionMessage message) throws EmptyPayloadException {
-        System.out.println("Server - playing mode: " + message.getPayload());
+        if (message.getMessageType().equals(MessageType.MULTI_OR_SINGLE_PLAYER_MODE)) {
+            System.out.println("Server - playing mode: " + message.getPayload());
 
-        switch ((MessageType) message.getPayload()) {
+            switch ((MessageType) message.getPayload()) {
 
-            case SINGLE_PLAYER_MODE:
-                assignNodeToVirtualView(1, message.getSessionToken(), clientNode);
-                break;
-            case TWO_PLAYERS_MODE:
-                assignNodeToVirtualView(2, message.getSessionToken(), clientNode);
-                break;
-            case THREE_PLAYERS_MODE:
-                assignNodeToVirtualView(3, message.getSessionToken(), clientNode);
-                break;
-            case FOUR_PLAYERS_MODE:
-                assignNodeToVirtualView(4, message.getSessionToken(), clientNode);
-                break;
+                case SINGLE_PLAYER_MODE:
+                    assignNodeToVirtualView(1, message.getSessionToken(), clientNode);
+                    break;
+                case TWO_PLAYERS_MODE:
+                    assignNodeToVirtualView(2, message.getSessionToken(), clientNode);
+                    break;
+                case THREE_PLAYERS_MODE:
+                    assignNodeToVirtualView(3, message.getSessionToken(), clientNode);
+                    break;
+                case FOUR_PLAYERS_MODE:
+                    assignNodeToVirtualView(4, message.getSessionToken(), clientNode);
+                    break;
+            }
         }
     }
 

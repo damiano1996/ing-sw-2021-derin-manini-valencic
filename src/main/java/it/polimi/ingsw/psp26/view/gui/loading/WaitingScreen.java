@@ -9,28 +9,30 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
 
 public class WaitingScreen {
 
-    private final Pane parent;
+    private final Stage primaryStage;
     private final JobListener jobListener;
     private final DelayedJob delayedJob;
     private final String waitingMessage;
 
+    private Stage dialog;
     private boolean runningAnimation;
     private AnimationTimer animationTimer;
 
-    public WaitingScreen(Pane parent, JobListener jobListener, DelayedJob delayedJob, String waitingMessage) {
-        this.parent = parent;
+    public WaitingScreen(Stage primaryStage, JobListener jobListener, DelayedJob delayedJob, String waitingMessage) {
+        this.primaryStage = primaryStage;
         this.jobListener = jobListener;
         this.delayedJob = delayedJob;
         this.waitingMessage = waitingMessage;
@@ -38,7 +40,6 @@ public class WaitingScreen {
 
     private void initializeWaitingScreen() {
         VBox animationContainer = new VBox();
-        parent.getChildren().add(animationContainer);
 
         Canvas canvas = new Canvas(500 * getGeneralRatio(), 500 * getGeneralRatio());
         animationContainer.getChildren().add(canvas);
@@ -54,6 +55,7 @@ public class WaitingScreen {
 
         Text text = new Text(waitingMessage);
         text.setId("title");
+        text.setWrappingWidth(1000 * getGeneralRatio());
         animationContainer.getChildren().add(text);
 
         runningAnimation = true;
@@ -78,6 +80,9 @@ public class WaitingScreen {
                 }
             }
         };
+
+        dialog = getDialog(primaryStage, animationContainer);
+        dialog.show();
     }
 
     public void start() {
@@ -90,6 +95,7 @@ public class WaitingScreen {
                 () -> {
                     runningAnimation = false;
                     animationTimer.stop();
+                    dialog.close();
                     delayedJob.execute();
                 },
                 false

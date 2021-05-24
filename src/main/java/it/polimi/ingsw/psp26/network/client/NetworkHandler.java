@@ -32,7 +32,7 @@ public class NetworkHandler implements Observer<Message> {
     @Override
     public void update(Message message) {
         try {
-            System.out.println("NetworkHandler - " + message.toString());
+//            System.out.println("NetworkHandler - " + message.toString());
             sendToServer(new SessionMessage(sessionToken, message.getMessageType(), message.getArrayPayloads()));
         } catch (IOException | InvalidPayloadException e) {
             e.printStackTrace();

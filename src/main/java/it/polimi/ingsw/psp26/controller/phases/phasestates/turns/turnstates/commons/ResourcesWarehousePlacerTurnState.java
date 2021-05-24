@@ -226,8 +226,7 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
                                 .indexOf(sourceDepot.getContainedResourceType())
                 );
 
-                if (sourceDepot.getResources().size() > targetDepot.getMaxNumberOfResources() ||
-                        targetDepot.getResources().size() > sourceDepot.getMaxNumberOfResources())
+                if (sourceDepot.getResources().size() > targetDepot.getMaxNumberOfResources())
                     return false;
             }
 

@@ -87,55 +87,22 @@ public class ResourcesWarehousePlacerTurnStateTest {
         assertEquals(resourcesToAdd, castElements(Resource.class, mitm.getMessages().get(1).getListPayloads()));
     }
 
+    private void sendResources(Resource... resources) throws EmptyPayloadException, InvalidPayloadException {
+        testSendWarehouseMessage();
+
+        turn.play(
+                new SessionMessage(
+                        turn.getTurnPlayer().getSessionToken(),
+                        PLACE_IN_WAREHOUSE,
+                        (Object[]) resources
+                )
+        );
+    }
+
     @Test
     public void testAskMeToReplace() throws EmptyPayloadException, InvalidPayloadException {
-        testSendWarehouseMessage();
-
-        turn.play(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        PLACE_IN_WAREHOUSE,
-                        Resource.COIN, SERVANT, Resource.COIN
-                )
-        );
-
+        sendResources(COIN, SERVANT, COIN);
         assertEquals(ERROR_MESSAGE, mitm.getMessages().get(2).getMessageType());
-    }
-
-    private void sendOrderTypeOne() throws EmptyPayloadException, InvalidPayloadException {
-        testSendWarehouseMessage();
-
-        turn.play(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        PLACE_IN_WAREHOUSE,
-                        SERVANT, SHIELD, COIN
-                )
-        );
-    }
-
-    private void sendOrderTypeTwoEmptyCase() throws EmptyPayloadException, InvalidPayloadException {
-        testSendWarehouseMessage();
-
-        turn.play(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        PLACE_IN_WAREHOUSE,
-                        EMPTY, EMPTY, COIN
-                )
-        );
-    }
-
-    private void sendOrderTypeThreeSwitchCase() throws EmptyPayloadException, InvalidPayloadException {
-        testSendWarehouseMessage();
-
-        turn.play(
-                new SessionMessage(
-                        turn.getTurnPlayer().getSessionToken(),
-                        PLACE_IN_WAREHOUSE,
-                        SHIELD, SERVANT, COIN
-                )
-        );
     }
 
 
@@ -157,7 +124,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
         assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(1).getResources().size());
         assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(2).getResources().size());
 
-        sendOrderTypeTwoEmptyCase();
+        sendResources(EMPTY, EMPTY, COIN);
 
         assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(0).getResources().size());
         assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(1).getResources().size());
@@ -173,7 +140,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
         expectedFinalResources.addAll(initialResources);
         expectedFinalResources.addAll(resourcesToAdd);
 
-        sendOrderTypeOne();
+        sendResources(SERVANT, SHIELD, COIN);
 
         assertMultiplicity(expectedFinalResources);
     }
@@ -185,7 +152,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
         resourcesToAdd.add(COIN);
         resourcesToAdd.add(COIN);
 
-        sendOrderTypeOne();
+        sendResources(SERVANT, SHIELD, COIN);
 
         assertEquals(1, turn.getMatchController().getMatch().getPlayers().get(1).getPersonalBoard().getFaithTrack().getFaithPoints());
     }
@@ -211,7 +178,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
         expectedFinalResources.addAll(initialResources);
         expectedFinalResources.addAll(resourcesToAdd);
 
-        sendOrderTypeOne();
+        sendResources(SERVANT, SHIELD, COIN);
 
         assertMultiplicity(expectedFinalResources);
     }
@@ -221,7 +188,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
         // adding one SHIELD to cause the error
         turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(1, SHIELD);
 
-        sendOrderTypeThreeSwitchCase();
+        sendResources(SHIELD, SERVANT, COIN);
 
         System.out.println(mitm.getMessages().get(2));
         assertEquals(ERROR_MESSAGE, mitm.getMessages().get(2).getMessageType());
@@ -229,8 +196,24 @@ public class ResourcesWarehousePlacerTurnStateTest {
 
     @Test
     public void testGoodSwitch() throws EmptyPayloadException, InvalidPayloadException {
-        sendOrderTypeThreeSwitchCase();
+        sendResources(SHIELD, SERVANT, COIN);
+        assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(2).getMessageType());
+    }
 
+    @Test
+    public void testGoodSwitch_CaseEmpty() throws EmptyPayloadException, InvalidPayloadException, CanNotAddResourceToDepotException {
+        turn.getTurnPlayer().getPersonalBoard().grabAllAvailableResources();
+        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(0, SHIELD);
+        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(1, STONE);
+        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(1, STONE);
+
+        resourcesToAdd = new ArrayList<>() {{
+            add(STONE);
+            add(SHIELD);
+        }};
+        turn.changeState(new ResourcesWarehousePlacerTurnState(turn, resourcesToAdd));
+
+        sendResources(EMPTY, SHIELD, STONE);
         assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(2).getMessageType());
     }
 

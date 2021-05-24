@@ -43,7 +43,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
     }
 
     private synchronized void reset() {
-        System.out.println("HeartbeatController - Reset counter, player with sessionToken: " + sessionToken + " is alive.");
+//        System.out.println("HeartbeatController - Reset counter, player with sessionToken: " + sessionToken + " is alive.");
         countdown = MAX_TIME;
         running = true;
     }

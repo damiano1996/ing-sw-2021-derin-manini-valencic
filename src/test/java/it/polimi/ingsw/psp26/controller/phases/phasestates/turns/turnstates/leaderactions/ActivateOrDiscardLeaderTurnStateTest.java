@@ -107,7 +107,6 @@ public class ActivateOrDiscardLeaderTurnStateTest {
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.COIN);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.COIN);
 
-
         choiceLeaders(MessageType.ACTIVATE_LEADER, MessageType.ERROR_MESSAGE);
     }
 
@@ -135,6 +134,7 @@ public class ActivateOrDiscardLeaderTurnStateTest {
         );
 
         assertTrue(turn.getTurnPlayer().getLeaderCards().get(0).isActive());
+        assertEquals(MessageType.CHOICE_NORMAL_ACTION, mitm.getMessages().get(1).getMessageType());
     }
 
     @Test

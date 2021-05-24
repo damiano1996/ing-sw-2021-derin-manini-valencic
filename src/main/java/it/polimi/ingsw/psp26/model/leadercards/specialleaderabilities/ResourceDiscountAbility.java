@@ -11,14 +11,14 @@ public class ResourceDiscountAbility extends SpecialAbility {
     }
 
     @Override
-    public void execute(List<Resource> resourceList) {
-        super.execute(resourceList);
+    public void execute(List<Resource> tempResource) {
+        super.execute((List<Resource>) tempResource);
 
         try {
 
-            resourceList.add(resource);
+            tempResource.add(resource);
 
-        } catch (ClassCastException ignored) {
+        } catch (ClassCastException | UnsupportedOperationException ignored) {
         }
 
     }

@@ -22,15 +22,20 @@ import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 
 
 public class MarketResourceNormalActionTurnState extends TurnState {
+
     private List<Resource> tempResources;
 
-
+    /**
+     * Constructor of the class.
+     *
+     * @param turn current turn
+     */
     public MarketResourceNormalActionTurnState(Turn turn) {
         super(turn);
     }
 
     public void play(SessionMessage message) {
-        // TODO: to implement sub-states
+
         try {
             switch (message.getMessageType()) {
                 case CHOICE_NORMAL_ACTION:
@@ -121,9 +126,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    public List<Resource> getTempResources() {
-        return tempResources;
-    }
+    public List<Resource> getTempResources() { return tempResources;}
 
     private boolean applyMarbleLeaderEffect(SessionMessage message) {
 
@@ -134,6 +137,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         tempResourceBeforeLeaders.addAll(tempResources);
 
         for (LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
+
             leader.execute(tempResources);
 
             if (tempResources.size() != tempResourceBeforeLeaders.size()) {

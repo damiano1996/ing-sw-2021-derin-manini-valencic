@@ -82,6 +82,7 @@ public class MarketResourceNormalActionTurnStateTest {
 
         List<Resource> expectedResources = leaderCardSetter(1);
         if (expectedResources.size() > 0) {
+            List<Resource> resources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2));
 
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
 
@@ -132,4 +133,5 @@ public class MarketResourceNormalActionTurnStateTest {
         return marbleTypeSubstitute;
 
     }
+
 }

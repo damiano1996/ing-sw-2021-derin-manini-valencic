@@ -8,8 +8,10 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
+import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
+import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.ProductionAbility;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
@@ -189,9 +191,67 @@ public class ActivateProductionNormalActionTurnStateTest {
         assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
     }
 
+    @Test
+    public void testSendChoiceResourceToActivateNotEnoughResourcesForTwoCards() throws CanNotAddResourceToStrongboxException, InvalidPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToWarehouse {
+
+        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(Resource.STONE);
+        Resource cardResource = null;
+
+        DevelopmentCard playerCard = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
+        turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, playerCard);
+
+        for(Resource resource: playerCard.getProduction().getProductionCost().keySet()){
+            cardResource = resource;
+            for(int i =0; i < playerCard.getProduction().getProductionCost().get(resource); i++){
+                turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resource);
+            }
+        }
+
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray()));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE)); // STONE -> COIN
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, cardResource));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, Resource.COIN));
+
+
+        assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
+        assertEquals(MessageType.ERROR_MESSAGE, mitm.getMessages().get(6).getMessageType());
+    }
+
+    @Test
+    public void testSendChoiceResourceToActivateTwoCards() throws CanNotAddResourceToStrongboxException, InvalidPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToWarehouse {
+
+        turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(Resource.STONE);
+        turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
+        List<Resource> expectedStrongbox = new ArrayList<>();
+        DevelopmentCard playerCard = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
+        turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, playerCard);
+
+        for(Resource resource: playerCard.getProduction().getProductionCost().keySet()) {
+            for (int i = 0; i < playerCard.getProduction().getProductionCost().get(resource); i++) {
+                turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resource);
+            }
+        }
+
+        for(Resource resource: playerCard.getProduction().getProductionReturn().keySet()) {
+            for (int i = 0; i < playerCard.getProduction().getProductionReturn().get(resource); i++) {
+                expectedStrongbox.add(resource);
+            }
+        }
+        expectedStrongbox.add(Resource.COIN);
+
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray()));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE)); // STONE -> COIN
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, Resource.COIN));
+
+        assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
+        assertEquals(turn.getTurnPlayer().getPersonalBoard().getStrongbox(), expectedStrongbox );
+
+    }
+
     private void playCollection() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE)); // STONE -> COIN
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, Resource.COIN));
     }

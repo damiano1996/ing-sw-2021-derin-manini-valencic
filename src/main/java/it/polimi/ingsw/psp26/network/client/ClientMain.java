@@ -6,8 +6,7 @@ import it.polimi.ingsw.psp26.view.gui.GUI;
 
 public class ClientMain {
 
-    // mvn exec:java -Dexec.mainClass="it.polimi.ingsw.psp26.network.client.ClientMain" -Dexec.args="-playingViewMode=cli"
-
+    // j
     public static void main(String[] args) {
 
         boolean cliMode = false;

@@ -68,4 +68,5 @@ public class MarketTrayTest {
         }
         assertFalse(Arrays.equals(MarketColumn, marketTray.getMarblesOnColumn(0)));
     }
+
 }

@@ -11,11 +11,22 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_NORM
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendChoiceNormalActionMessage;
 
 public class ChooseNormalActionTurnState extends TurnState {
+
+    /**
+     * Constructor of the class.
+     *
+     * @param turn current turn
+     */
     public ChooseNormalActionTurnState(Turn turn) {
         super(turn);
         turn.setTurnPhase(TurnPhase.NORMAL_TO_LEADER_ACTION);
     }
 
+    /**
+     * Method to redirect the state of the turn in one of the three possible action
+     *
+     * @param message the message containing the action that the current player will perform
+     */
     @Override
     public void play(SessionMessage message) {
         super.play(message);

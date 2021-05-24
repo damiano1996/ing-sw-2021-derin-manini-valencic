@@ -67,7 +67,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                                             positionsForCard().toArray(new Object[0])
                                     ));
                         } else {
-
+                            sendGeneralMessage(turn, "The selected card cannot be bought...");
                             turn.getMatchController().notifyObservers(
                                     new SessionMessage(
                                             turn.getTurnPlayer().getSessionToken(),
@@ -78,7 +78,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                         }
                     } else {
 
-                        sendGeneralMessage(turn, "The selected card cannot be bought...");
+                        sendGeneralMessage(turn, "The any card cannot be bought...");
                         turn.changeState(new ChooseNormalActionTurnState(turn));
                         turn.play(message);
 

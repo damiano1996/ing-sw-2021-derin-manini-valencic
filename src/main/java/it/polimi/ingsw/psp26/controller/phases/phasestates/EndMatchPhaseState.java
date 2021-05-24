@@ -22,19 +22,23 @@ public class EndMatchPhaseState extends PhaseState {
 
     @Override
     public void execute(SessionMessage message) {
+
         super.execute(message);
 
-        if (message.getMessageType() == BLACK_CROSS_FINAL_POSITION || message.getMessageType() == NO_MORE_COLUMN_DEVELOPMENT_CARDS) {
-            winnerName = "Lorenzo il Magnifico";
-        }
-
-        showEndGameResult();
+        showEndGameResult(message);
     }
 
-    private void showEndGameResult() {
+    private void showEndGameResult(SessionMessage message) {
 
-        if (!winnerName.equals("Lorenzo il Magnifico"))
-            computePlayersPoints();
+        if (message.getMessageType() == BLACK_CROSS_FINAL_POSITION || message.getMessageType() == NO_MORE_COLUMN_DEVELOPMENT_CARDS) {
+
+            winnerName = "Lorenzo il Magnifico";
+
+        }else {
+
+                computePlayersPoints();
+
+        }
 
         for (Player player : phase.getMatchController().getMatch().getPlayers()) {
             try {

@@ -30,6 +30,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     private int numOfUnknownCost = 0;
     private int numOfUnknownProd = 0;
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn current turn
+     */
     public ActivateProductionNormalActionTurnState(Turn turn) {
         super(turn);
     }
@@ -45,7 +50,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                 case CHOICE_PRODUCTIONS_TO_ACTIVATE:
 
-                    if (isProductionPlayable()) {
+                    if (isAtLeastOneProductionPlayable()) {
 
                         productionActivated = castElements(Production.class, message.getListPayloads());
 
@@ -59,13 +64,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         }
                         if (numOfUnknownCost != 0) {
                             sendGeneralMessage(turn, "Choose the resource to pay that replaces the unknown resource in the production:");
-
                             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost, true));
                             turn.play(message);
 
                         } else if (numOfUnknownProd != 0) {
                             sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
-
                             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
                             turn.play(message);
 
@@ -87,12 +90,10 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 case CHOICE_RESOURCE_FROM_WAREHOUSE:
                 case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
 
-                    System.out.println(message.getMessageType());
                     if (unknownCostResources == null || unknownCostResources.size() == numOfUnknownCost) {
 
                         if (numOfUnknownProd != 0)
                             unknownProdResources = castElements(Resource.class, message.getListPayloads());
-
                         activateProduction(message);
 
                     } else {
@@ -126,6 +127,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         }
     }
 
+    /**
+     * Method that checks if the list of productions that the current player sent, in their totality, are actionable
+     * by their current available resources.
+     *
+     * @return true if the whole production list is actionable, false if it is not.
+     */
+
     private boolean isProductionFeasible() {
 
         List<Resource> availableResource = new ArrayList<>(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
@@ -149,6 +157,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         return true;
     }
 
+    /**
+     *
+     * @param message
+     */
+
 
     private void activateProduction(SessionMessage message) {
         if (isProductionFeasible()) {
@@ -161,21 +174,31 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                             }
                         }
                     }
-                    System.out.println(turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources());
+
                     turn.getTurnPlayer().getPersonalBoard().grabResourcesFromWarehouseAndStrongbox(resource,
                             production.getProductionCost().get(resource));
-                    System.out.println(turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources());
                 }
             }
             collectProduction();
             turn.changeState(new CheckVaticanReportTurnState(turn));
             turn.play(message);
         } else {
+            unknownCostResources.clear();
+            unknownProdResources.clear();
+            numOfUnknownCost = 0;
+            numOfUnknownProd = 0;
 
+            sendErrorMessage(turn, "Too many production activated or wrong use of resources");
             sendProductionMultipleChoiceMessage();
         }
 
     }
+
+    /**
+     * Method that sends to the current player a message to ask which production they want to activate between
+     * their available production.
+     *
+     */
 
     private void sendProductionMultipleChoiceMessage() {
         try {
@@ -186,12 +209,17 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                             "Choose the production that you want to activate:",
                             1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
                             true,
-                            turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray()
+                            turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
                     ));
         } catch (InvalidPayloadException ignored) {
         }
     }
 
+    /**
+     *  Method that adds to the current player strongbox the list of resources produced by each production that
+     *  they activated
+     *
+     */
 
     private void collectProduction() {
         List<Resource> resourcesProduced = new ArrayList<>();
@@ -202,32 +230,45 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         resourcesProduced.add(resourceProd);
                 }
             }
-            if (unknownProdResources != null) resourcesProduced.addAll(unknownProdResources);
+        }
+        if (unknownProdResources != null) resourcesProduced.addAll(unknownProdResources);
 
-            resourcesProduced.stream()
-                    .filter(x -> x.equals(Resource.FAITH_MARKER))
-                    .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
+        resourcesProduced.stream()
+                .filter(x -> x.equals(Resource.FAITH_MARKER))
+                .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
 
-            resourcesProduced = resourcesProduced.stream()
-                    .filter(x -> !x.equals(Resource.FAITH_MARKER))
-                    .collect(Collectors.toList());
+        resourcesProduced = resourcesProduced.stream()
+                .filter(x -> !x.equals(Resource.FAITH_MARKER))
+                .collect(Collectors.toList());
 
-            try {
+        try {
                 turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
-            } catch (CanNotAddResourceToStrongboxException e) {
+        } catch (CanNotAddResourceToStrongboxException e) {
                 e.printStackTrace();
-
-            }
         }
     }
 
-    private boolean isProductionPlayable() {
+
+    /**
+     *  Method that checks if the current player has enough resources to activate at least one production.
+     *
+     *  If there is only one visible production it means that it is the base one, and so it is enough to check that
+     *  player has at least two resources. If there is more than one, it means that there is at least one development
+     *  card (that could require only one resource), and so for each one of them it checks if satisfy the its
+     *  requirement.
+     *
+     * @return true if there is at least one production that is actionable by the player, false if there is none.
+     */
+    private boolean isAtLeastOneProductionPlayable() {
         if (turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size() >= 2) {
             for (int i = 0; i < turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(); i++) {
 
                 productionActivated.add(turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(i));
                 if (!productionActivated.get(0).getProductionCost().containsKey(Resource.UNKNOWN)) {
-                    if (isProductionFeasible()) return true;
+                    if (isProductionFeasible()){
+                        productionActivated.remove(0);
+                        return true;
+                    }
                 }
                 productionActivated.remove(0);
 

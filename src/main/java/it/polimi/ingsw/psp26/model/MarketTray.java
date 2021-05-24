@@ -90,11 +90,11 @@ public class MarketTray extends Observable<SessionMessage> {
     public void pushMarbleFromSlideToRow(int row) {
 
         Resource marbleTemp = marbleOnSlide;
-        marbleOnSlide = marketMarbles[row][marketMarbles[0].length - 1];
+        marbleOnSlide = marketMarbles[row][0];
         for (int i = 0; i < marketMarbles[0].length - 1; i++) {
-            marketMarbles[row][marketMarbles[0].length - i - 1] = marketMarbles[row][marketMarbles[0].length - i - 2];
+            marketMarbles[row][i] = marketMarbles[row][i + 1];
         }
-        marketMarbles[row][0] = marbleTemp;
+        marketMarbles[row][marketMarbles[0].length -1] = marbleTemp;
 
         notifyObservers(getMarketTrayModelUpdateMessage());
     }
@@ -106,10 +106,10 @@ public class MarketTray extends Observable<SessionMessage> {
      */
     public void pushMarbleFromSlideToColumn(int column) {
         Resource marbleTemp = marbleOnSlide;
-        marbleOnSlide = marketMarbles[marketMarbles.length - 1][column];
+        marbleOnSlide = marketMarbles[0][column];
         for (int i = 0; i < marketMarbles.length - 1; i++)
-            marketMarbles[marketMarbles.length - i - 1][column] = marketMarbles[marketMarbles.length - i - 2][column];
-        marketMarbles[0][column] = marbleTemp;
+            marketMarbles[i][column] = marketMarbles[i + 1][column];
+        marketMarbles[marketMarbles.length -1][column] = marbleTemp;
 
         notifyObservers(getMarketTrayModelUpdateMessage());
     }

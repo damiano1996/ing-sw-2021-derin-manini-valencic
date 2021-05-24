@@ -14,6 +14,8 @@ public class CheckVaticanReportTurnState extends TurnState {
         super(turn);
     }
 
+    private boolean lastVaticanReportCalled = false;
+
     @Override
     public void play(SessionMessage message) {
 
@@ -49,33 +51,39 @@ public class CheckVaticanReportTurnState extends TurnState {
 
     private void activateVaticanReport(Player currentPlayer) {
 
-        if (firstPlayerInPopeSpace(currentPlayer) || isBlackCrossInPopeSpaceOrOver(currentPlayer)) {
+        if (!lastVaticanReportCalled) {
 
-            try {
+            if (firstPlayerInPopeSpace(currentPlayer) || isBlackCrossInPopeSpaceOrOver(currentPlayer)) {
 
-                turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "A vatican report has been called."));
+                if (getFirstActiveSectionIndex() == currentPlayer.getPersonalBoard().getFaithTrack().getVaticanReportSections().length)
+                    lastVaticanReportCalled = true;
 
-            } catch (InvalidPayloadException e) {
-                e.printStackTrace();
-            }
+                try {
 
-            int sectionActivated = getFirstActiveSectionIndex();
+                    turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "A vatican report has been called."));
 
-            for (Player player : turn.getMatchController().getMatch().getPlayers()) {
-
-                VaticanReportSection[] playerSections = player.getPersonalBoard().getFaithTrack().getVaticanReportSections();
-
-                if (isPlayerInVaticanSectionOrOver(player, playerSections[sectionActivated])) {
-
-                    playerSections[sectionActivated].activatePopesFavorTile();
-
-                } else {
-
-                    playerSections[sectionActivated].discardPopesFavorTile();
-
+                } catch (InvalidPayloadException e) {
+                    e.printStackTrace();
                 }
 
-                sendNotification(player);
+                int sectionActivated = getFirstActiveSectionIndex();
+
+                for (Player player : turn.getMatchController().getMatch().getPlayers()) {
+
+                    VaticanReportSection[] playerSections = player.getPersonalBoard().getFaithTrack().getVaticanReportSections();
+
+                    if (isPlayerInVaticanSectionOrOver(player, playerSections[sectionActivated])) {
+
+                        playerSections[sectionActivated].activatePopesFavorTile();
+
+                    } else {
+
+                        playerSections[sectionActivated].discardPopesFavorTile();
+
+                    }
+
+                    sendNotification(player);
+                }
             }
         }
     }

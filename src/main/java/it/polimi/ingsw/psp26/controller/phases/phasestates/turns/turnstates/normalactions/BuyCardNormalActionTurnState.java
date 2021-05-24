@@ -78,7 +78,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                         }
                     } else {
 
-                        sendGeneralMessage(turn, "The any card cannot be bought...");
+                        sendGeneralMessage(turn, "There are no card that can be bought...");
                         turn.changeState(new ChooseNormalActionTurnState(turn));
                         turn.play(message);
 
@@ -103,7 +103,6 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
             }
         } catch (EmptyPayloadException | InvalidPayloadException ignored) {
-            // TODO: handle exception
         }
     }
 

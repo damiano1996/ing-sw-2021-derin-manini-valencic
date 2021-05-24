@@ -183,13 +183,10 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             turn.changeState(new CheckVaticanReportTurnState(turn));
             turn.play(message);
         } else {
-            unknownCostResources.clear();
-            unknownProdResources.clear();
-            numOfUnknownCost = 0;
-            numOfUnknownProd = 0;
 
             sendErrorMessage(turn, "Too many production activated or wrong use of resources");
-            sendProductionMultipleChoiceMessage();
+            turn.changeState(new ChooseNormalActionTurnState(turn));
+            turn.play(message);
         }
 
     }

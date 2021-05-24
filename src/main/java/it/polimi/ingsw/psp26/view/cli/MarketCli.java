@@ -59,16 +59,16 @@ public class MarketCli {
     private void printMarketMarbleRows(MarketTray marketTray, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 8, startingColumn + 18);
 
-        for (int i = 0; i <= 2; i++) {
-            Resource[] resources = marketTray.getMarblesOnRow(2 - i);
+        for (int i = 0; i < marketTray.getMarblesOnColumn(0).length; i++) {
+            Resource[] resources = marketTray.getMarblesOnRow(i);
 
-            for (int k = 3; k >= 0; k--) pw.print(cliUtils.pCS(".d88b.  ", resources[k].getColor()));
+            for (Resource resource : resources) pw.print(cliUtils.pCS(".d88b.  ", resource.getColor()));
             pw.flush();
             cliUtils.setCursorPosition(startingRow + 9 + (4 * i), startingColumn + 18);
-            for (int l = 3; l >= 0; l--) pw.print(cliUtils.pCS("8b88d8  ", resources[l].getColor()));
+            for (Resource resource : resources) pw.print(cliUtils.pCS("8b88d8  ", resource.getColor()));
             pw.flush();
             cliUtils.setCursorPosition(startingRow + 10 + (4 * i), startingColumn + 18);
-            for (int m = 3; m >= 0; m--) pw.print(cliUtils.pCS("`Y88P'  ", resources[m].getColor()));
+            for (Resource resource : resources) pw.print(cliUtils.pCS("`Y88P'  ", resource.getColor()));
             pw.flush();
             cliUtils.setCursorPosition(startingRow + 12 + (4 * i), startingColumn + 18);
         }
@@ -119,7 +119,7 @@ public class MarketCli {
             }
         }
 
-        return adjustMarketIndex(marketIndex);
+        return marketIndex;
     }
 
 
@@ -143,18 +143,6 @@ public class MarketCli {
         if (marketIndex < 0 || marketIndex > 6) throw new IndexOutOfBoundsException();
 
         return marketIndex;
-    }
-
-
-    /**
-     * Method to get the correct index to send to Server (indexes are inverted in controller)
-     *
-     * @param marketIndex The index to adjust
-     * @return The correct index
-     */
-    private int adjustMarketIndex(int marketIndex) {
-        if (marketIndex <= 2) return (2 - marketIndex);
-        else return (9 - marketIndex);
     }
 
 }

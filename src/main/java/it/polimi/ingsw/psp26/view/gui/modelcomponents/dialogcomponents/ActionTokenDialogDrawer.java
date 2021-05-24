@@ -46,6 +46,7 @@ public class ActionTokenDialogDrawer extends RatioDrawer {
 
         Text actionTokenTitle = new Text("Lorenzo plays!");
         actionTokenTitle.setId("title");
+        actionTokenTitle.setStyle("-fx-font-size: " + 60);
         titleBox.getChildren().add(actionTokenTitle);
 
 

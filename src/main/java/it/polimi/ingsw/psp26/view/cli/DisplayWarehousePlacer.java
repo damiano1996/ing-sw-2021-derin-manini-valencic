@@ -72,7 +72,7 @@ public class DisplayWarehousePlacer {
                     } catch (DepotOutOfBoundException | NumberFormatException e) {
                         executeCatchDepotOutOfBound();
                     } catch (ChangeResourcesBetweenDepotsException e) {
-                        changeResourcesDepots(warehouse, resources);
+                        changeResourcesDepots(warehouse);
                         i--;
                         setParameters(true);
                     }
@@ -212,9 +212,8 @@ public class DisplayWarehousePlacer {
      * Changes the Resources between two depots
      *
      * @param warehouse The Warehouse containing the Depots
-     * @param resources The Resource to insert List
      */
-    private void changeResourcesDepots(Warehouse warehouse, List<Resource> resources) {
+    private void changeResourcesDepots(Warehouse warehouse) {
         cliUtils.clearLine(38, 21);
 
         int sourceDepot = 0;
@@ -233,7 +232,14 @@ public class DisplayWarehousePlacer {
             }
         }
 
-        changePosition(warehouse, resources, sourceDepot, destinationDepot);
+        // Checking if the change is possible
+        int sourceDepotResourceSize = warehouse.getAllDepots().get(sourceDepot).getResources().size();
+        int destinationDepotResourceSize = warehouse.getAllDepots().get(destinationDepot).getResources().size();
+
+        if (sourceDepotResourceSize <= warehouse.getAllDepots().get(destinationDepot).getMaxNumberOfResources() &&
+                destinationDepotResourceSize <= warehouse.getAllDepots().get(sourceDepot).getMaxNumberOfResources()) {
+            changePosition(warehouse, sourceDepot, destinationDepot);
+        }
     }
 
 

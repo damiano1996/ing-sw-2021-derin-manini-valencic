@@ -5,8 +5,8 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.psp26.view.ViewUtils.getOrderedPlayersList;
 
 public class CommonScreensCli {
 
@@ -47,22 +47,6 @@ public class CommonScreensCli {
             cliUtils.pPCS(cliUtils.centerString(30, Integer.toString(leaderboard.get(playerNickname))), Color.WHITE, 19 + verticalPadding, 120);
             verticalPadding += 3;
         }
-    }
-
-
-    /**
-     * Orders the Map given in a decreasing order considering the Integers
-     *
-     * @param leaderboard The Map containing the Players nicknames and their points
-     * @return A List containing the Players nicknames in the order they have to be printed
-     */
-    private List<String> getOrderedPlayersList(Map<String, Integer> leaderboard) {
-        Set<Map.Entry<String, Integer>> entries = leaderboard.entrySet();
-        return entries.stream().sorted((o1, o2) -> {
-            if (o1.getValue() < o2.getValue()) return 1;
-            if (o1.getValue().equals(o2.getValue())) return 0;
-            return -1;
-        }).map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
 }

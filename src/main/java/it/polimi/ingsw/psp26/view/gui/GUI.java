@@ -21,6 +21,7 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.*;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
+import it.polimi.ingsw.psp26.view.gui.modelcomponents.LeaderboardDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.ActionTokenDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.DevelopmentCardsGridDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.MarketDialogDrawer;
@@ -38,10 +39,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
@@ -398,6 +396,17 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer) {
+        //TODO Usare solo per test poi rimuovere. Per provare devi sostituire il parametro leaderboard nella chiamata del metodo con map
+//        Map<String, Integer> map = new HashMap<>();
+//        map.put("Damiano", 25);
+//        map.put("Jas", 30);
+//        map.put("Player", 0);
+//        map.put("Andrea", 20);
+
+
+        LeaderboardDrawer leaderboardDrawer = new LeaderboardDrawer(client, leaderboard, winningPlayer, getWindowWidth());
+        Stage dialog = getDialog(primaryStage, leaderboardDrawer.draw());
+        dialog.show();
     }
 
     @Override

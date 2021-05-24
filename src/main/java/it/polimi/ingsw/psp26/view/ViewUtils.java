@@ -10,6 +10,7 @@ import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ViewUtils {
 
@@ -65,6 +66,22 @@ public class ViewUtils {
             e.printStackTrace();
         }
         return players;
+    }
+
+
+    /**
+     * Orders the Map given in a decreasing order considering the Integers
+     *
+     * @param leaderboard The Map containing the Players nicknames and their points
+     * @return A List containing the Players nicknames in the order they have to be printed
+     */
+    public static List<String> getOrderedPlayersList(Map<String, Integer> leaderboard) {
+        Set<Map.Entry<String, Integer>> entries = leaderboard.entrySet();
+        return entries.stream().sorted((o1, o2) -> {
+            if (o1.getValue() < o2.getValue()) return 1;
+            if (o1.getValue().equals(o2.getValue())) return 0;
+            return -1;
+        }).map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
 

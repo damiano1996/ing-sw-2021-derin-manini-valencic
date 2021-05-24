@@ -35,6 +35,10 @@ public class BenefitsTurnState extends TurnState {
             try {
                 switch (turn.getTurnNumber()) {
                     case 0:
+                        //TODO usare solo per test poi rimuovere
+//                        turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(23);
+
+                        
                         sendGeneralMessage(turn, "You are the first player. Catch the inkwell!");
                         System.out.println("BenefitsTurnState - assigning the inkwell.");
                         turn.getTurnPlayer().giveInkwell();

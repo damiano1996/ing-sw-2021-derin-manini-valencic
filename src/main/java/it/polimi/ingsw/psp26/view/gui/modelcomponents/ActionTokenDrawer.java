@@ -64,6 +64,7 @@ public class ActionTokenDrawer extends RatioDrawer {
      */
     private VBox createVisibleToken() {
         VBox visibleTokenBox = new VBox();
+        visibleTokenBox.setSpacing(-20);
         visibleTokenBox.setAlignment(Pos.CENTER);
 
         // Creating the visible Token image

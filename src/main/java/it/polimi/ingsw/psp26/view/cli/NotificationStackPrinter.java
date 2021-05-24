@@ -86,13 +86,8 @@ public class NotificationStackPrinter {
     private List<String> splitString(String string) {
         List<String> stringList = new ArrayList<>();
 
-        if (string.startsWith("Lorenzo played")) {
-            stringList.add(string.substring(0, 14));
-            stringList.add(string.substring(15));
-        } else {
-            for (int i = 0; i < string.length(); i += STACK_WIDTH)
-                stringList.add(string.substring(i, Math.min(i + STACK_WIDTH, string.length())));
-        }
+        for (int i = 0; i < string.length(); i += STACK_WIDTH)
+            stringList.add(string.substring(i, Math.min(i + STACK_WIDTH, string.length())));
 
         return stringList;
     }

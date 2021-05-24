@@ -363,7 +363,7 @@ public class CLI implements ViewInterface {
     @Override
     public synchronized void displayNotifications(List<String> notifications) {
         while (executingTask) {
-            // Using onSpinWait() not to call notifyAll() from other cli's methods
+            // Using onSpinWait() in order to not call notifyAll() from other cli's methods
             Thread.onSpinWait();
         }
         notificationStackPrinter.printMessageStack(notifications);

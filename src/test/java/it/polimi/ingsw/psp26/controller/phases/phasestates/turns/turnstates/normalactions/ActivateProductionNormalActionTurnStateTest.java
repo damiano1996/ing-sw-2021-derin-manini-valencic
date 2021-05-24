@@ -238,6 +238,7 @@ public class ActivateProductionNormalActionTurnStateTest {
             }
         }
         expectedStrongbox.add(Resource.COIN);
+        expectedStrongbox = expectedStrongbox.stream().filter(resource -> resource != Resource.FAITH_MARKER).collect(Collectors.toList());
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray()));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE)); // STONE -> COIN

@@ -203,26 +203,18 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
      * @throws LeaderCannotBeActivatedException if leader cannot be activated
      */
     private void activateLeader(LeaderCard leaderCard) throws LeaderCannotBeActivatedException {
+
+        boolean leaderHasBeenActivated = false;
         // since the input leader is a copy of the original one, we have to retrieve the original
         for (LeaderCard playerLeaderCard : turn.getTurnPlayer().getLeaderCards()) {
+
             if (playerLeaderCard.equals(leaderCard)) {
 
                 // checks if leader card can be activated
                 if (isActivatable(playerLeaderCard)) {
 
                     playerLeaderCard.activate(turn.getTurnPlayer());
-
-//                    try {
-//                        turn.getMatchController().notifyObservers(
-//                                new SessionMessage(
-//                                        turn.getTurnPlayer().getSessionToken(),
-//                                        MessageType.LEADER_ACTIVATED,
-//                                        playerLeaderCard
-//                                )
-//                        );
-//                    } catch (InvalidPayloadException ignored) {
-//
-//                    }
+                    leaderHasBeenActivated = true;
 
                 } else {
                     throw new LeaderCannotBeActivatedException();
@@ -230,7 +222,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
             }
         }
 
-        throw new LeaderCannotBeActivatedException();
+        if (!leaderHasBeenActivated) throw new LeaderCannotBeActivatedException();
     }
 
     /**

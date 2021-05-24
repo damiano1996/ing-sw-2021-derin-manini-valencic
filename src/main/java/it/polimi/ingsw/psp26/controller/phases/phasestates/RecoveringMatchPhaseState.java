@@ -8,11 +8,11 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 
-public class DisconnectionPhaseState extends PhaseState {
+public class RecoveringMatchPhaseState extends PhaseState {
 
     private final PhaseState actualPhaseState;
 
-    public DisconnectionPhaseState(Phase phase, PhaseState actualPhaseState) {
+    public RecoveringMatchPhaseState(Phase phase, PhaseState actualPhaseState) {
         super(phase);
 
         this.actualPhaseState = actualPhaseState;

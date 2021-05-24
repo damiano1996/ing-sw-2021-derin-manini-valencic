@@ -83,7 +83,7 @@ public class DraggedObject<T> {
         });
 
         imageView.addEventFilter(MouseDragEvent.MOUSE_DRAGGED, mouseEvent -> {
-            int margin = (int) (100 * getGeneralRatio());
+            int margin = (int) (110 * getGeneralRatio());
             if (mouseEvent.isPrimaryButtonDown() && selected &&
                     sourcePane.contains(new Point2D(mouseEvent.getX() + margin, mouseEvent.getY() + margin)) &&
                     sourcePane.contains(new Point2D(mouseEvent.getX() - margin, mouseEvent.getY() - margin))) {

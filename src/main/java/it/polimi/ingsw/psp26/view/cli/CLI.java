@@ -272,7 +272,8 @@ public class CLI implements ViewInterface {
     private void displayMultipleStringChoices(List<Object> choices) {
         for (int i = 0; i < choices.size(); i++) {
             cliUtils.vSpace(1);
-            pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + choices.get(i));
+            String choiceToPrint = choices.get(i).toString();
+            pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + choiceToPrint.replaceAll("_", " "));
         }
     }
 

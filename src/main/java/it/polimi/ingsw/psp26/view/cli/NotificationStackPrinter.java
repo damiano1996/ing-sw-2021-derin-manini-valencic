@@ -4,7 +4,6 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class NotificationStackPrinter {
@@ -36,7 +35,6 @@ public class NotificationStackPrinter {
         if (isStackPrintable) {
             cliUtils.saveCursorPosition();
             int delta = 0;
-            Color stringColor;
 
             cliUtils.printFigure("NotificationStackBorder", STARTING_ROW, STARTING_COLUMN);
 
@@ -44,10 +42,8 @@ public class NotificationStackPrinter {
             List<List<String>> parsedMessages = stringParser(notifications.size() >= MAX_NUMBER_OF_STRINGS ? notifications.subList(0, MAX_NUMBER_OF_STRINGS) : notifications);
 
             for (List<String> parsedMessage : parsedMessages) {
-                stringColor = randomColorPicker();
-
                 for (String string : parsedMessage) {
-                    cliUtils.pPCS(string, stringColor, STARTING_ROW + delta + 5, STARTING_COLUMN + 3);
+                    cliUtils.pPCS(string, Color.WHITE, STARTING_ROW + delta + 5, STARTING_COLUMN + 3);
                     delta++;
                     if (delta > STACK_HEIGHT - 9) break;
                 }
@@ -90,24 +86,6 @@ public class NotificationStackPrinter {
             stringList.add(string.substring(i, Math.min(i + STACK_WIDTH, string.length())));
 
         return stringList;
-    }
-
-
-    /**
-     * Picks a random Color
-     *
-     * @return A random Color
-     */
-    private Color randomColorPicker() {
-        List<Color> colors = new ArrayList<>();
-
-        colors.add(Color.GREEN);
-        colors.add(Color.PURPLE);
-        colors.add(Color.BLUE);
-        colors.add(Color.YELLOW);
-
-        Collections.shuffle(colors);
-        return colors.get(0);
     }
 
 

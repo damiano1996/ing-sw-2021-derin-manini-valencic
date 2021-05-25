@@ -14,12 +14,25 @@ import java.util.stream.Collectors;
 
 public class ViewUtils {
 
+    /**
+     * Used to change the appearance of the given MessageType replacing the underscore characters
+     *
+     * @param messageType The MessageType to beautify
+     * @return The beautified MessageType
+     */
     public static String beautifyMessageType(MessageType messageType) {
         String message = messageType.name();
         message = message.replace('_', ' ');
         return toTitleStyle(message);
     }
 
+
+    /**
+     * Used in beautifyMessageType() to manipulate the MessageType
+     *
+     * @param string The MessageType name
+     * @return The beautified MessageType
+     */
     public static String toTitleStyle(String string) {
         StringBuilder newString = new StringBuilder();
 

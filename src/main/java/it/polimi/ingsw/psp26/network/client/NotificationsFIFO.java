@@ -17,11 +17,22 @@ public class NotificationsFIFO {
         updated = true;
     }
 
+
+    /**
+     * @return The NotificationsFIFO instance
+     */
     public synchronized static NotificationsFIFO getInstance() {
         if (instance == null) instance = new NotificationsFIFO(10);
         return instance;
     }
 
+
+    /**
+     * Push a new notification in the FIFO
+     * If the size of the FIFO grows over the maxFIFOSize, removes the first element of the FIFO
+     * 
+     * @param notification The notification to insert
+     */
     public synchronized void pushNotification(String notification) {
         notifications.add(notification);
         if (notifications.size() > maxFIFOSize) notifications.remove(0);
@@ -29,6 +40,10 @@ public class NotificationsFIFO {
         notifyAll();
     }
 
+
+    /**
+     * @return The List of all the contained notifications
+     */
     public synchronized List<String> getNotifications() {
         while (!updated) {
             try {
@@ -41,6 +56,10 @@ public class NotificationsFIFO {
         return Collections.unmodifiableList(notifications);
     }
 
+
+    /**
+     * Creates a new FIFO instance
+     */
     public synchronized void resetFIFO() {
         instance = new NotificationsFIFO(10);
     }

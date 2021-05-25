@@ -6,9 +6,10 @@ import it.polimi.ingsw.psp26.view.gui.GUI;
 
 public class ClientMain {
 
-    // j
+    /**
+     * Starts the Client
+     */
     public static void main(String[] args) {
-
         boolean cliMode = false;
 
         if (args.length > 0) {

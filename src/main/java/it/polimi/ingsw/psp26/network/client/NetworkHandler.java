@@ -29,16 +29,29 @@ public class NetworkHandler implements Observer<Message> {
         this.client = client;
     }
 
+
+    /**
+     * Creates a new SessionMessage and sends it to the Server
+     *
+     * @param message Used to build the SessionMessage to send to the Server
+     */
     @Override
     public void update(Message message) {
         try {
-//            System.out.println("NetworkHandler - " + message.toString());
+//          System.out.println("NetworkHandler - " + message.toString());
             sendToServer(new SessionMessage(sessionToken, message.getMessageType(), message.getArrayPayloads()));
         } catch (IOException | InvalidPayloadException e) {
             e.printStackTrace();
         }
     }
 
+
+    /**
+     * Creates a new NetworkNode
+     *
+     * @param serverIP The Server IP address
+     * @throws IOException Thrown if an IOException occurs
+     */
     public void initializeNetworkNode(String serverIP) throws IOException {
         networkNode = new NetworkNode(new Socket(serverIP, DEFAULT_SERVER_PORT));
         sessionToken = networkNode.receiveStringData();
@@ -47,6 +60,10 @@ public class NetworkHandler implements Observer<Message> {
         startHeartbeat();
     }
 
+
+    /**
+     * Sends a ping Message to the Server every 1000ms to tell the Server the Client is still alive
+     */
     private void startHeartbeat() {
         new Thread(() -> {
             while (true) {
@@ -59,13 +76,17 @@ public class NetworkHandler implements Observer<Message> {
         }).start();
     }
 
+
+    /**
+     * Creates a Thread used to receive Messages from Server
+     * Based on the MessageType of the received Message, performs different actions
+     */
     private void startListening() {
         new Thread(() -> {
             while (true) {
                 try {
-
                     Message message = (Message) networkNode.receiveObjectData();
-//                    System.out.println("NetworkHandler - message received: " + message.toString());
+//                  System.out.println("NetworkHandler - message received: " + message.toString());
 
                     switch (message.getMessageType()) {
                         case MODEL_UPDATE:
@@ -83,7 +104,6 @@ public class NetworkHandler implements Observer<Message> {
                             MessageSynchronizedFIFO.getInstance().update(message);
                             break;
                     }
-
                 } catch (IOException | ClassNotFoundException | EmptyPayloadException e) {
                     // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }
@@ -91,11 +111,23 @@ public class NetworkHandler implements Observer<Message> {
         }).start();
     }
 
+
+    /**
+     * @return The Player's SessionToken
+     */
     public String getSessionToken() {
         return sessionToken;
     }
 
-    public void sendToServer(SessionMessage message) throws IOException {
+
+    /**
+     * Sends the given Message to Server
+     *
+     * @param message The Message to send
+     * @throws IOException Thrown if an IOException occurs
+     */
+    public synchronized void sendToServer(SessionMessage message) throws IOException {
         networkNode.sendData(message);
     }
+    
 }

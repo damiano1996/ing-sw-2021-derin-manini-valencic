@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
 import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
+import static it.polimi.ingsw.psp26.view.ViewUtils.toTitleStyle;
 
 public class CLI implements ViewInterface {
 
@@ -273,7 +274,7 @@ public class CLI implements ViewInterface {
         for (int i = 0; i < choices.size(); i++) {
             cliUtils.vSpace(1);
             String choiceToPrint = choices.get(i).toString();
-            pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + choiceToPrint.replaceAll("_", " "));
+            pw.println(cliUtils.hSpace(5) + (i + 1) + " - " + toTitleStyle(choiceToPrint.replaceAll("_", " ")));
         }
     }
 

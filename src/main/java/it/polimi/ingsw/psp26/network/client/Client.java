@@ -36,10 +36,20 @@ public class Client extends Observable<Message> {
         this.viewInterface = viewInterface;
     }
 
+
+    /**
+     * Gets the next Message from the MessageSynchronisedFIFO and uses it in the handleMessages() method
+     */
     public void viewNext() {
         handleMessages(MessageSynchronizedFIFO.getInstance().getNext());
     }
 
+
+    /**
+     * Executes different actions based on the given Message's MessageType
+     *
+     * @param message The Message from where to get the MessageType to control
+     */
     private void handleMessages(Message message) {
         try {
             switch (message.getMessageType()) {
@@ -142,6 +152,13 @@ public class Client extends Observable<Message> {
         return castElements(Resource.class, secondMessage.getListPayloads());
     }
 
+
+    /**
+     * Used to set a connection between the Client and the Server
+     *
+     * @param serverIP The Server IP
+     * @throws ServerIsNotReachableException Thrown if the Server is not available
+     */
     public void initializeNetworkHandler(String serverIP) throws ServerIsNotReachableException {
         try {
             networkHandler.initializeNetworkNode(serverIP);
@@ -151,27 +168,55 @@ public class Client extends Observable<Message> {
         }
     }
 
+
+    /**
+     * @return The local CachedModel
+     */
     public synchronized CachedModel getCachedModel() {
         return cachedModel;
     }
 
+
+    /**
+     * @return The nickname of the Player
+     */
     public String getNickname() {
         return nickname;
     }
 
+
+    /**
+     * Sets a new nickname for the Player and creates a new CachedModel
+     *
+     * @param nickname The nickname to give to the Player
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
         this.cachedModel = new CachedModel(nickname);
     }
 
+
+    /**
+     * @return True if the Match is in MultiPlayer mode, false if the Match is in SinglePlayer mode
+     */
     public boolean isMultiplayerMode() {
         return !matchModeType.equals(SINGLE_PLAYER_MODE);
     }
 
+
+    /**
+     * Used to set the MatchModeType (single/multi Player)
+     *
+     * @param matchModeType SINGLE_PLAYER_MODE or MULTI_PLAYER_MODE
+     */
     public void setMatchModeType(MessageType matchModeType) {
         this.matchModeType = matchModeType;
     }
 
+
+    /**
+     * Sends an undo Message to the Server when selected by the Player
+     */
     public void sendUndoMessage() {
         try {
             notifyObservers(new Message(QUIT_OPTION_SELECTED));

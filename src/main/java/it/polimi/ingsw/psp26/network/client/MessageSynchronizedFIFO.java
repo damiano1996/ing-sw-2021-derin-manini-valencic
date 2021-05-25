@@ -18,12 +18,22 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
         newMessage = false;
     }
 
+
+    /**
+     * @return The SynchronisedFIFO instance
+     */
     public static MessageSynchronizedFIFO getInstance() {
         if (instance == null)
             instance = new MessageSynchronizedFIFO();
         return instance;
     }
 
+
+    /**
+     * When a new Message arrives, adds it to the FIFO
+     *
+     * @param message The Message to add
+     */
     @Override
     public synchronized void update(Message message) {
         messages.add(message);
@@ -31,6 +41,13 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
         notifyAll();
     }
 
+
+    /**
+     * Returns and removes the first Message contained in the FIFO
+     * If the FIFO size is 0, makes the calling Thread wait
+     *
+     * @return The first FIFO Message
+     */
     public synchronized Message getNext() {
         while (messages.size() == 0) {
             try {
@@ -42,6 +59,10 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
         return messages.remove(0);
     }
 
+
+    /**
+     * Checks if new messages arrive
+     */
     public synchronized void lookingForNext() {
         while (!newMessage) {
             try {
@@ -50,4 +71,5 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
             }
         }
     }
+    
 }

@@ -63,9 +63,24 @@ public class CLI implements ViewInterface {
     }
 
 
-    //-------------------------------//
-    //          CLI METHODS          //
-    //-------------------------------//
+    //--------------------------------------//
+    //          START GAME METHODS          //
+    //--------------------------------------//
+
+    /**
+     * Starts a new Client, a new Thread for the notifications and displays the login screen
+     */
+    @Override
+    public void start() {
+        try {
+            this.client = new Client(this);
+            //TODO controlla che questa cosa abbia senso: se crei un nuovo match facendo partire il metodo start devi in qualoche modo creare una nuova notificationsFIFO
+            NotificationsFIFO.getInstance().resetFIFO();
+            displayLogIn();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     /**
@@ -126,6 +141,361 @@ public class CLI implements ViewInterface {
         } catch (ServerIsNotReachableException serverIsNotReachableException) {
             displayLogIn();
         }
+    }
+
+
+    //------------------------------------------//
+    //          WAITING SCREEN METHODS          //
+    //------------------------------------------//
+
+    /**
+     * Starts a waiting screen
+     *
+     * @param message A String to display during the waiting screen
+     */
+    public void displayWaitingScreen(Message message) {
+        try {
+            WaitingScreenStarter.getInstance().startWaiting(message);
+        } catch (EmptyPayloadException ignored) {
+        }
+        client.viewNext();
+    }
+
+
+    /**
+     * Stops the waiting screen
+     */
+    public void stopDisplayingWaitingScreen() {
+        WaitingScreenStarter.getInstance().stopWaiting();
+        client.viewNext();
+    }
+
+
+    //---------------------------------------//
+    //          LIVE UPDATE METHODS          //
+    //---------------------------------------//
+
+    /**
+     * Creates a new Thread that checks if there are new notifications
+     */
+    private void startLiveUpdate() {
+        new Thread(() -> {
+            while (true) {
+                // Only one call to the get method, otherwise it will freeze
+                List<String> notifications = NotificationsFIFO.getInstance().getNotifications();
+
+                // If you don't give time the cursor may be in the wrong position when printing
+                try {
+                    TimeUnit.MILLISECONDS.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                displayNotifications(notifications);
+            }
+        }).start();
+    }
+
+
+    /**
+     * Used to print notifications in the Notification Stack printer
+     *
+     * @param notifications The Strings to print in the Notification Stack
+     */
+    @Override
+    public synchronized void displayNotifications(List<String> notifications) {
+        while (executingTask) {
+            // Using onSpinWait() in order to not call notifyAll() from other cli's methods
+            Thread.onSpinWait();
+        }
+        notificationStackPrinter.printMessageStack(notifications);
+    }
+
+
+    //-----------------------------------------//
+    //          MISC ELEMENTS METHODS          //
+    //-----------------------------------------//
+
+    /**
+     * Displays the given Leader Cards
+     *
+     * @param leaderCards The Leader Cards to display
+     */
+    @Override
+    public void displayLeaderCards(List<LeaderCard> leaderCards) { // never used
+        executingTask = true;
+        personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
+        executingTask = false;
+    }
+
+
+    /**
+     * Displays the Player's Personal Board
+     *
+     * @param player            The Player from where to get the Personal Board
+     * @param isMultiplayerMode Used to print Lorenzo's Faith Marker if set to false
+     */
+    @Override
+    public void displayPersonalBoard(Player player, boolean isMultiplayerMode) { // never used
+        executingTask = true;
+
+        notificationStackPrinter.restoreStackView();
+        personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
+        cliUtils.setCursorPosition(47, 1);
+
+        executingTask = false;
+        client.viewNext();
+    }
+
+
+    /**
+     * Displays a Faith Track
+     *
+     * @param faithTrack        The Faith Track to display
+     * @param isMultiPlayerMode Used to print Lorenzo's Faith Marker if set to false
+     */
+    @Override
+    public void displayFaithTrack(FaithTrack faithTrack, boolean isMultiPlayerMode) { // never used
+        executingTask = true;
+        faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
+        executingTask = false;
+    }
+
+
+    /**
+     * Displays the List of Development Cards as Development Card Slots
+     *
+     * @param developmentCardsSlots The Cards to display
+     */
+    @Override
+    public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
+        cliUtils.pPCS("Enter the number of the slot in which you want to put the drawn card", Color.WHITE, 10, 4);
+        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
+        cliUtils.pPCS("Slot  1", Color.GREY, 47, 85);
+        cliUtils.pPCS("Slot  2", Color.GREY, 47, 121);
+        cliUtils.pPCS("Slot  3", Color.GREY, 47, 157);
+        cliUtils.vSpace(3);
+    }
+
+
+    /**
+     * Displays the Market screen
+     *
+     * @param marketTray The Market Tray to display
+     */
+    @Override
+    public void displayMarketScreen(MarketTray marketTray) { // never used
+        executingTask = true;
+        marketCli.displayMarketScreen(marketTray);
+        executingTask = false;
+    }
+
+
+    /**
+     * Displays the Development Card Grid
+     *
+     * @param developmentCardsGrid The Development Card Grid to display
+     */
+    @Override
+    public void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid) { // never used
+        executingTask = true;
+        developmentCardsCli.displayDevelopmentGrid(developmentCardsGrid);
+        executingTask = false;
+    }
+
+
+    /**
+     * Displays the Resource Supply
+     *
+     * @param resourceSupply The Resource Supply to display
+     * @param resourcesTypes The Resource types contained in the Resource Supply
+     */
+    @Override
+    public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes) {
+        executingTask = true;
+        personalBoardCli.displayResourceSupply(resourceSupply, resourcesTypes, 1, 37);
+        executingTask = false;
+    }
+
+
+    /**
+     * Displays the Action Tokens screen
+     *
+     * @param unusedTokens The Action Tokens to display
+     */
+    @Override
+    public void displayActionTokens(List<ActionToken> unusedTokens) {
+        executingTask = true;
+
+        notificationStackPrinter.restoreStackView();
+        personalBoardCli.displayActionTokens(unusedTokens);
+
+        executingTask = false;
+        displayNext();
+    }
+
+
+    //----------------------------------------//
+    //          MAIN ACTIONS METHODS          //
+    //----------------------------------------//
+
+    /**
+     * Displays the Market action screen
+     *
+     * @param marketTray      The Market Tray to display
+     * @param playerResources The Player's current Resources
+     */
+    @Override
+    public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
+        notificationStackPrinter.hideNotifications();
+
+        List<Integer> choice = new ArrayList<>();
+        try {
+            choice.add(marketCli.displayMarketSelection(marketTray, playerResources));
+            client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
+            displayNext();
+        } catch (UndoOptionSelectedException e) {
+            client.sendUndoMessage();
+            client.viewNext();
+        } catch (InvalidPayloadException ignored) {
+        }
+    }
+
+
+    /**
+     * Displays the Development Card buy action screen
+     *
+     * @param developmentCardsGrid The Development Grid to display
+     * @param playerResources      The Player's current Resources
+     */
+    @Override
+    public void displayDevelopmentCardBuyAction(DevelopmentCardsGrid developmentCardsGrid, List<Resource> playerResources) {
+        notificationStackPrinter.hideNotifications();
+
+        List<DevelopmentCard> choice = new ArrayList<>();
+        try {
+            choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentCardsGrid, playerResources));
+            client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
+            cliUtils.setCursorBottomLeft();
+            displayNext();
+        } catch (UndoOptionSelectedException e) {
+            client.sendUndoMessage();
+            client.viewNext();
+        } catch (InvalidPayloadException ignored) {
+        }
+    }
+
+
+    /**
+     * Displays the screen where the Player can modify the Depots
+     *
+     * @param warehouse      The Warehouse of the Player
+     * @param resourcesToAdd The Resources the Player can add to the Warehouse
+     */
+    @Override
+    public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd) {
+        notificationStackPrinter.hideNotifications();
+
+        List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourcesToAdd);
+        try {
+            client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
+        } catch (InvalidPayloadException ignored) {
+        }
+
+        displayNext();
+    }
+
+
+    //-------------------------------------------//
+    //          DISPLAY CHOICES METHODS          //
+    //-------------------------------------------//
+
+    /**
+     * Method used to display choices using the following layout:
+     * Question
+     * Middle block (objects shown here changes when method is called)
+     * Choices
+     *
+     * @param messageType   The Message Type used to get the correct representation of the screen
+     * @param question      The question to ask
+     * @param choices       The choices the Player has
+     * @param minChoices    The minimum number of choices the Player can make
+     * @param maxChoices    The maximum number of choices the Player can make
+     * @param hasUndoOption True if the Player can exit from the choice screen
+     */
+    @Override
+    public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
+        // Starts blocking the notifications printing
+        executingTask = true;
+
+        cliUtils.vSpace(1);
+        pw.println(cliUtils.hSpace(3) + question);
+
+        switch (messageType) {
+
+            case MULTI_OR_SINGLE_PLAYER_MODE:
+                cliUtils.clns();
+                displayMultipleStringChoices(choices);
+                break;
+
+            case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
+                choicePositionExecute(choices);
+                break;
+
+            case CHOICE_NORMAL_ACTION:
+            case CHOICE_LEADER_ACTION:
+                choiceNormalLeaderActionExecute(choices);
+                break;
+
+            case CHOICE_LEADERS:
+                cliUtils.clns();
+                displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
+                break;
+
+            case CHOICE_RESOURCE_FROM_WAREHOUSE:
+                choiceResourceFromWarehouseExecute(choices);
+                break;
+
+            case CHOICE_PRODUCTIONS_TO_ACTIVATE:
+                displayProductionSelection(castElements(Production.class, choices));
+                break;
+
+            case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
+                displayResourceSupply(new ResourceSupply(), castElements(Resource.class, choices));
+                cliUtils.vSpace(10);
+                cliUtils.pPCS("Please insert the number of the Resource slot you want.", Color.WHITE, 38, 4);
+                break;
+
+            default:
+                break;
+        }
+
+        // Stops blocking the notification printing
+        executingTask = false;
+
+        // send to server response
+        try {
+            cliUtils.vSpace(1);
+            List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasUndoOption));
+            client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
+
+            if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
+                client.setMatchModeType((MessageType) selected.get(0));
+                try {
+                    client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
+                } catch (InvalidPayloadException e) {
+                    e.printStackTrace();
+                }
+            }
+            client.viewNext();
+
+        } catch (InvalidPayloadException e) {
+            e.printStackTrace();
+        } catch (UndoOptionSelectedException e) {
+            client.sendUndoMessage();
+            client.viewNext();
+        }
+
     }
 
 
@@ -279,391 +649,9 @@ public class CLI implements ViewInterface {
     }
 
 
-    /**
-     * Used to continue between screens and to get the next Message from MessageSynchronizedFIFO
-     */
-    private void displayNext() {
-        cliUtils.vSpace(1);
-        pw.print(cliUtils.hSpace(3) + "Press ENTER to confirm.");
-        pw.flush();
-        in.nextLine();
-        client.viewNext();
-    }
-
-
-    /**
-     * Starts a waiting screen
-     *
-     * @param message A String to display during the waiting screen
-     */
-    public void displayWaitingScreen(Message message) {
-        try {
-            WaitingScreenStarter.getInstance().startWaiting(message);
-        } catch (EmptyPayloadException ignored) {
-        }
-        client.viewNext();
-    }
-
-
-    /**
-     * Stops the waiting screen
-     */
-    public void stopDisplayingWaitingScreen() {
-        WaitingScreenStarter.getInstance().stopWaiting();
-        client.viewNext();
-    }
-
-
-    //------------------------------------------//
-    //          VIEW INTERFACE METHODS          //
-    //------------------------------------------//
-
-
-    /**
-     * Starts a new Client, a new Thread for the notifications and displays the login screen
-     */
-    @Override
-    public void start() {
-        try {
-            this.client = new Client(this);
-            //TODO controlla che questa cosa abbia senso: se crei un nuovo match facendo partire il metodo start devi in qualoche modo creare una nuova notificationsFIFO
-            NotificationsFIFO.getInstance().resetFIFO();
-            displayLogIn();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * Creates a new Thread that checks if there are new notifications
-     */
-    private void startLiveUpdate() {
-        new Thread(() -> {
-            while (true) {
-                // Only one call to the get method, otherwise it will freeze
-                List<String> notifications = NotificationsFIFO.getInstance().getNotifications();
-
-                // If you don't give time the cursor may be in the wrong position when printing
-                try {
-                    TimeUnit.MILLISECONDS.sleep(250);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                displayNotifications(notifications);
-            }
-        }).start();
-    }
-
-
-    /**
-     * Used to print notifications in the Notification Stack printer
-     *
-     * @param notifications The Strings to print in the Notification Stack
-     */
-    @Override
-    public synchronized void displayNotifications(List<String> notifications) {
-        while (executingTask) {
-            // Using onSpinWait() in order to not call notifyAll() from other cli's methods
-            Thread.onSpinWait();
-        }
-        notificationStackPrinter.printMessageStack(notifications);
-    }
-
-
-    /**
-     * Displays the given Leader Cards
-     *
-     * @param leaderCards The Leader Cards to display
-     */
-    @Override
-    public void displayLeaderCards(List<LeaderCard> leaderCards) { // never used
-        executingTask = true;
-        personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
-        executingTask = false;
-    }
-
-
-    /**
-     * Displays the Player's Personal Board
-     *
-     * @param player            The Player from where to get the Personal Board
-     * @param isMultiplayerMode Used to print Lorenzo's Faith Marker if set to false
-     */
-    @Override
-    public void displayPersonalBoard(Player player, boolean isMultiplayerMode) { // never used
-        executingTask = true;
-
-        notificationStackPrinter.restoreStackView();
-        personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
-        cliUtils.setCursorPosition(47, 1);
-
-        executingTask = false;
-        client.viewNext();
-    }
-
-
-    /**
-     * Displays the screen where the Player can modify the Depots
-     *
-     * @param warehouse      The Warehouse of the Player
-     * @param resourcesToAdd The Resources the Player can add to the Warehouse
-     */
-    @Override
-    public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd) {
-        notificationStackPrinter.hideNotifications();
-
-        List<Resource> resources = displayWarehousePlacer.displayMarketResourcesSelection(warehouse, resourcesToAdd);
-        try {
-            client.notifyObservers(new Message(PLACE_IN_WAREHOUSE, resources.toArray(new Object[0])));
-        } catch (InvalidPayloadException ignored) {
-        }
-
-        displayNext();
-    }
-
-
-    /**
-     * Displays a Faith Track
-     *
-     * @param faithTrack        The Faith Track to display
-     * @param isMultiPlayerMode Used to print Lorenzo's Faith Marker if set to false
-     */
-    @Override
-    public void displayFaithTrack(FaithTrack faithTrack, boolean isMultiPlayerMode) { // never used
-        executingTask = true;
-        faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
-        executingTask = false;
-    }
-
-
-    /**
-     * Displays the List of Development Cards as Development Card Slots
-     *
-     * @param developmentCardsSlots The Cards to display
-     */
-    @Override
-    public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
-        cliUtils.pPCS("Enter the number of the slot in which you want to put the drawn card", Color.WHITE, 10, 4);
-        personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
-        cliUtils.pPCS("Slot  1", Color.GREY, 47, 85);
-        cliUtils.pPCS("Slot  2", Color.GREY, 47, 121);
-        cliUtils.pPCS("Slot  3", Color.GREY, 47, 157);
-        cliUtils.vSpace(3);
-    }
-
-
-    /**
-     * Displays the Market screen
-     *
-     * @param marketTray The Market Tray to display
-     */
-    @Override
-    public void displayMarketScreen(MarketTray marketTray) { // never used
-        executingTask = true;
-        marketCli.displayMarketScreen(marketTray);
-        executingTask = false;
-    }
-
-
-    /**
-     * Displays the Development Card Grid
-     *
-     * @param developmentCardsGrid The Development Card Grid to display
-     */
-    @Override
-    public void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid) { // never used
-        executingTask = true;
-        developmentCardsCli.displayDevelopmentGrid(developmentCardsGrid);
-        executingTask = false;
-    }
-
-
-    /**
-     * Displays the Resource Supply
-     *
-     * @param resourceSupply The Resource Supply to display
-     * @param resourcesTypes The Resource types contained in the Resource Supply
-     */
-    @Override
-    public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes) {
-        executingTask = true;
-        personalBoardCli.displayResourceSupply(resourceSupply, resourcesTypes, 1, 37);
-        executingTask = false;
-    }
-
-
-    /**
-     * Displays the Action Tokens screen
-     *
-     * @param unusedTokens The Action Tokens to display
-     */
-    @Override
-    public void displayActionTokens(List<ActionToken> unusedTokens) {
-        executingTask = true;
-
-        notificationStackPrinter.restoreStackView();
-        personalBoardCli.displayActionTokens(unusedTokens);
-
-        executingTask = false;
-        displayNext();
-    }
-
-
-    /**
-     * Displays the Market action screen
-     *
-     * @param marketTray      The Market Tray to display
-     * @param playerResources The Player's current Resources
-     */
-    @Override
-    public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
-        notificationStackPrinter.hideNotifications();
-
-        List<Integer> choice = new ArrayList<>();
-        try {
-            choice.add(marketCli.displayMarketSelection(marketTray, playerResources));
-            client.notifyObservers(new Message(CHOICE_ROW_COLUMN, choice.toArray(new Object[0])));
-            displayNext();
-        } catch (UndoOptionSelectedException e) {
-            client.sendUndoMessage();
-            client.viewNext();
-        } catch (InvalidPayloadException ignored) {
-        }
-    }
-
-
-    /**
-     * Displays the Development Card buy action screen
-     *
-     * @param developmentCardsGrid The Development Grid to display
-     * @param playerResources      The Player's current Resources
-     */
-    @Override
-    public void displayDevelopmentCardBuyAction(DevelopmentCardsGrid developmentCardsGrid, List<Resource> playerResources) {
-        notificationStackPrinter.hideNotifications();
-
-        List<DevelopmentCard> choice = new ArrayList<>();
-        try {
-            choice.add(developmentCardsCli.displayDevelopmentCardSelection(developmentCardsGrid, playerResources));
-            client.notifyObservers(new Message(CHOICE_CARD_TO_BUY, choice.toArray(new Object[0])));
-            cliUtils.setCursorBottomLeft();
-            displayNext();
-        } catch (UndoOptionSelectedException e) {
-            client.sendUndoMessage();
-            client.viewNext();
-        } catch (InvalidPayloadException ignored) {
-        }
-    }
-
-
-    /**
-     * Method used to display choices using the following layout:
-     * Question
-     * Middle block (objects shown here changes when method is called)
-     * Choices
-     *
-     * @param messageType   The Message Type used to get the correct representation of the screen
-     * @param question      The question to ask
-     * @param choices       The choices the Player has
-     * @param minChoices    The minimum number of choices the Player can make
-     * @param maxChoices    The maximum number of choices the Player can make
-     * @param hasUndoOption True if the Player can exit from the choice screen
-     */
-    @Override
-    public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
-        // Starts blocking the notifications printing
-        executingTask = true;
-
-        cliUtils.vSpace(1);
-        pw.println(cliUtils.hSpace(3) + question);
-
-        switch (messageType) {
-
-            case MULTI_OR_SINGLE_PLAYER_MODE:
-                cliUtils.clns();
-                displayMultipleStringChoices(choices);
-                break;
-
-            case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
-                choicePositionExecute(choices);
-                break;
-
-            case CHOICE_NORMAL_ACTION:
-            case CHOICE_LEADER_ACTION:
-                choiceNormalLeaderActionExecute(choices);
-                break;
-
-            case CHOICE_LEADERS:
-                cliUtils.clns();
-                displayLeaderCardDiscardActivationSelection(castElements(LeaderCard.class, choices));
-                break;
-
-            case CHOICE_RESOURCE_FROM_WAREHOUSE:
-                choiceResourceFromWarehouseExecute(choices);
-                break;
-
-            case CHOICE_PRODUCTIONS_TO_ACTIVATE:
-                displayProductionSelection(castElements(Production.class, choices));
-                break;
-
-            case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
-                displayResourceSupply(new ResourceSupply(), castElements(Resource.class, choices));
-                cliUtils.vSpace(10);
-                cliUtils.pPCS("Please insert the number of the Resource slot you want.", Color.WHITE, 38, 4);
-                break;
-
-            default:
-                break;
-        }
-
-        // Stops blocking the notification printing
-        executingTask = false;
-
-        // send to server response
-        try {
-            cliUtils.vSpace(1);
-            List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasUndoOption));
-            client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
-
-            if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
-                client.setMatchModeType((MessageType) selected.get(0));
-                try {
-                    client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
-                } catch (InvalidPayloadException e) {
-                    e.printStackTrace();
-                }
-            }
-            client.viewNext();
-
-        } catch (InvalidPayloadException e) {
-            e.printStackTrace();
-        } catch (UndoOptionSelectedException e) {
-            client.sendUndoMessage();
-            client.viewNext();
-        }
-
-    }
-
-
-    /**
-     * Displays the given String on screen
-     *
-     * @param text The String to display
-     */
-    @Override
-    public void displayText(String text) {
-        executingTask = true;
-
-        cliUtils.clns();
-        cliUtils.vSpace(1);
-        pw.println(cliUtils.hSpace(3) + text);
-
-        executingTask = false;
-        displayNext();
-    }
-
+    //-----------------------------------//
+    //          ENDGAME METHODS          //
+    //-----------------------------------//
 
     /**
      * Displays the screen that appears when the Match stops
@@ -700,6 +688,27 @@ public class CLI implements ViewInterface {
     }
 
 
+    //-------------------------------------------//
+    //          GENERAL DISPLAY METHODS          //
+    //-------------------------------------------//
+
+    /**
+     * Displays the given String on screen
+     *
+     * @param text The String to display
+     */
+    @Override
+    public void displayText(String text) {
+        executingTask = true;
+
+        cliUtils.clns();
+        cliUtils.vSpace(1);
+        pw.println(cliUtils.hSpace(3) + text);
+
+        executingTask = false;
+        displayNext();
+    }
+
     /**
      * Displays an error popup
      *
@@ -729,6 +738,22 @@ public class CLI implements ViewInterface {
 
 
     /**
+     * Used to continue between screens and to get the next Message from MessageSynchronizedFIFO
+     */
+    private void displayNext() {
+        cliUtils.vSpace(1);
+        pw.print(cliUtils.hSpace(3) + "Press ENTER to confirm.");
+        pw.flush();
+        in.nextLine();
+        client.viewNext();
+    }
+
+
+    //----------------------------------------//
+    //          TURN WAITING METHODS          //
+    //----------------------------------------//
+
+    /**
      * Method used to do some actions while opponents are playing
      */
     @Override
@@ -741,8 +766,10 @@ public class CLI implements ViewInterface {
             // At each iteration the current Player Personal Board will be printed
             personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
 
+            executingTask = true;
             printOpponentViewScreenInformation();
             printOpponentsPersonalBoardList();
+            executingTask = false;
 
             // If there are opponents to display, the Player can choose which one to see the Personal Board
             if (client.getCachedModel().getNumberOfOpponents() > 0) {
@@ -772,14 +799,10 @@ public class CLI implements ViewInterface {
      * Prints the instructions of the opponent viewing screen
      */
     private void printOpponentViewScreenInformation() {
-        executingTask = true;
-
         cliUtils.pPCS("OPPONENTS TURN!", Color.WHITE, 48, 5);
         cliUtils.pPCS("Select the number of the opponents Board you want to see.", Color.WHITE, 49, 5);
         cliUtils.pPCS("Enter 'done' when you want to continue with your turn.", Color.WHITE, 50, 5);
         cliUtils.pPCS("After entering 'done' if nothing happens don't worry: the opponents are still playing their turn!", Color.WHITE, 51, 5);
-
-        executingTask = false;
     }
 
 
@@ -793,15 +816,14 @@ public class CLI implements ViewInterface {
         cliUtils.vSpace(2);
         pw.print(cliUtils.hSpace(4) + "Your choice: ");
         pw.flush();
+
         int opponentNumber = getCorrectOpponentNumber(client.getCachedModel().getNumberOfOpponents());
         Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObject();
 
         executingTask = true;
-
         personalBoardCli.displayPersonalBoard(opponent, client.isMultiplayerMode());
         cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board", Color.WHITE, 50, 5);
         cliUtils.pPCS("Press Enter to go back to your Personal Board view.", Color.WHITE, 52, 5);
-
         executingTask = false;
     }
 
@@ -831,8 +853,6 @@ public class CLI implements ViewInterface {
      * Prints the List of the cached opponents nicknames
      */
     private void printOpponentsPersonalBoardList() {
-        executingTask = true;
-
         if (client.getCachedModel().getNumberOfOpponents() == 0) {
             cliUtils.pPCS("No opponent registered yet.", Color.WHITE, 54, 5);
         } else {
@@ -846,8 +866,6 @@ public class CLI implements ViewInterface {
                 }
             }
         }
-
-        executingTask = false;
     }
 
 }

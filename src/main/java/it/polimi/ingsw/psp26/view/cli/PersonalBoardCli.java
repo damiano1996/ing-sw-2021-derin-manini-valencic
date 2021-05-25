@@ -280,6 +280,7 @@ public class PersonalBoardCli {
         cliUtils.printFigure("/actiontokens/" + actionTokens.get(0).toString(), 20, 141);
         cliUtils.pPCS("ACTIVATED  TOKEN", Color.WHITE, 34, 148);
         printTokenStack(actionTokens.size());
+        cliUtils.vSpace(5);
     }
 
 

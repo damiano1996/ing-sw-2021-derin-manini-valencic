@@ -30,6 +30,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         addObserver(matchController);
     }
 
+
     /**
      * Updates the virtual view.
      * Messages will be sent to the network handler of the client.
@@ -42,6 +43,14 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         sendToClient(message);
     }
 
+
+    /**
+     * Adds a new Client in the nodeClients Map
+     * Starts the heartbeat for the added Client
+     *
+     * @param sessionToken The sessionToken of the Client to add
+     * @param nodeClient   The Client to add
+     */
     public void addNetworkNodeClient(String sessionToken, NetworkNode nodeClient) {
         System.out.println("VirtualView - new client has been added.");
         nodeClients.put(sessionToken, nodeClient);
@@ -55,8 +64,9 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         startListening(nodeClient);
     }
 
+
     /**
-     * Starts to listen the client node. If message received, it will notify the observers (match controller).
+     * Starts to listen the client node. If a message is received, it will notify the observers (match controller).
      *
      * @param nodeClient network node of the client
      */
@@ -76,14 +86,26 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         }).start();
     }
 
+
     private int getMatchId() {
         return 0; // TODO: if we want an incremental id we should implement a way to retrieve the last assigned id
     }
 
+
+    /**
+     * @return The MatchController
+     */
     public MatchController getMatchController() {
         return matchController;
     }
 
+
+    /**
+     * Sends the SessionMessage to the Client
+     * If it is a broadcast Message, sends it to all Players
+     *
+     * @param message The SessionMessage to send
+     */
     private void sendToClient(SessionMessage message) {
 
         // broadcast branch
@@ -111,21 +133,31 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
     }
 
+
+    /**
+     * Creates a new ModelUpdateMessage based on the received SessionMessage's MessageType
+     *
+     * @param message The received SessionMessage
+     * @return The new ModelUpdateMessage
+     */
     private SessionMessage filterModelUpdateMessage(SessionMessage message) {
         try {
 
             if (message.getMessageType().equals(MessageType.PLAYER_MODEL)) {
 
+                // Inserting a Player in the broadcast Message
                 Object payload = matchController.getMatch().getPlayerBySessionToken(message.getSessionToken());
                 return new ModelUpdateMessage(SpecialToken.BROADCAST.getToken(), message.getMessageType(), payload);
 
             } else if (message.getMessageType().equals(MessageType.MARKET_TRAY_MODEL)) {
 
+                // Inserting the MarketTray in the broadcast Message
                 Object payload = matchController.getMatch().getMarketTray();
                 return new ModelUpdateMessage(SpecialToken.BROADCAST.getToken(), message.getMessageType(), payload);
 
             } else if (message.getMessageType().equals(MessageType.DEVELOPMENT_GRID_MODEL)) {
 
+                // Inserting the DevelopmentCardGrid in the broadcast Message
                 Object payload = matchController.getMatch().getDevelopmentGrid();
                 return new ModelUpdateMessage(SpecialToken.BROADCAST.getToken(), message.getMessageType(), payload);
 
@@ -136,4 +168,5 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
         return message;
     }
+    
 }

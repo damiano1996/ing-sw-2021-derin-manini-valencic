@@ -10,7 +10,12 @@ public enum SpecialToken {
         this.token = token;
     }
 
+
+    /**
+     * @return The special token
+     */
     public String getToken() {
         return token;
     }
+
 }

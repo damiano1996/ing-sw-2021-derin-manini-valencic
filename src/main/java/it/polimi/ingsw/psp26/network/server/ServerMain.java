@@ -4,8 +4,10 @@ import java.io.IOException;
 
 public class ServerMain {
 
+    /**
+     * Starts a new Server
+     */
     public static void main(String[] args) {
-
         try {
             Server server = new Server();
             while (true)
@@ -15,4 +17,5 @@ public class ServerMain {
             e.printStackTrace();
         }
     }
+    
 }

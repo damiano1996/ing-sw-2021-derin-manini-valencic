@@ -11,10 +11,14 @@
     <Label id="label" text="Nickname"/>
     <TextField id="text-field" fx:id="nicknameTextField" prefHeight="26.0" prefWidth="155.0"/>
 
+    <Label id="label" text="Password"/>
+    <PasswordField id="text-field" fx:id="passwordTextField" prefHeight="26.0" prefWidth="155.0"/>
+
     <Label id="label" text="ServerIP"/>
     <TextField id="text-field" fx:id="serverIPTextField"/>
 
-    <Text id="error" fx:id="errorConnection" text="The server is not reachable!" visible="false"/>
+    <Text id="error" fx:id="errorConnection" text="The server is not reachable..."
+          visible="false"/>
 
     <Button fx:id="connectionButton" text="Connect"/>
 

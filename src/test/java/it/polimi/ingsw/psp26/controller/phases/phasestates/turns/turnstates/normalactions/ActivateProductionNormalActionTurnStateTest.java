@@ -8,10 +8,8 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
-import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.ProductionAbility;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
@@ -54,7 +52,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendActivateProductionMessage() throws EmptyPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
+    public void testSendActivateProductionMessage() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
 
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard());
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
@@ -64,7 +62,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendChoiceResourceToActivateNormalProduction() throws EmptyPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException, CanNotAddResourceToDepotException, CanNotAddResourceToWarehouse {
+    public void testSendChoiceResourceToActivateNormalProduction() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException, CanNotAddResourceToDepotException, CanNotAddResourceToWarehouse {
 
         DevelopmentCard chosenCard = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
 
@@ -113,7 +111,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendChoiceCardsToActivateNoUnknownResource() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, EmptyPayloadException, CanNotAddResourceToStrongboxException, InvalidPayloadException {
+    public void testSendChoiceCardsToActivateNoUnknownResource() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, InvalidPayloadException {
 
         DevelopmentCard card = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
 
@@ -192,7 +190,7 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendChoiceResourceToActivateNotEnoughResourcesForTwoCards() throws CanNotAddResourceToStrongboxException, InvalidPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToWarehouse {
+    public void testSendChoiceResourceToActivateNotEnoughResourcesForTwoCards() throws InvalidPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToWarehouse {
 
         turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(Resource.STONE);
         Resource cardResource = null;
@@ -200,9 +198,9 @@ public class ActivateProductionNormalActionTurnStateTest {
         DevelopmentCard playerCard = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, playerCard);
 
-        for(Resource resource: playerCard.getProduction().getProductionCost().keySet()){
+        for (Resource resource : playerCard.getProduction().getProductionCost().keySet()) {
             cardResource = resource;
-            for(int i =0; i < playerCard.getProduction().getProductionCost().get(resource); i++){
+            for (int i = 0; i < playerCard.getProduction().getProductionCost().get(resource); i++) {
                 turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resource);
             }
         }
@@ -226,13 +224,13 @@ public class ActivateProductionNormalActionTurnStateTest {
         DevelopmentCard playerCard = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, playerCard);
 
-        for(Resource resource: playerCard.getProduction().getProductionCost().keySet()) {
+        for (Resource resource : playerCard.getProduction().getProductionCost().keySet()) {
             for (int i = 0; i < playerCard.getProduction().getProductionCost().get(resource); i++) {
                 turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resource);
             }
         }
 
-        for(Resource resource: playerCard.getProduction().getProductionReturn().keySet()) {
+        for (Resource resource : playerCard.getProduction().getProductionReturn().keySet()) {
             for (int i = 0; i < playerCard.getProduction().getProductionReturn().get(resource); i++) {
                 expectedStrongbox.add(resource);
             }
@@ -246,7 +244,7 @@ public class ActivateProductionNormalActionTurnStateTest {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, Resource.COIN));
 
         assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
-        assertEquals(turn.getTurnPlayer().getPersonalBoard().getStrongbox(), expectedStrongbox );
+        assertEquals(turn.getTurnPlayer().getPersonalBoard().getStrongbox(), expectedStrongbox);
 
     }
 

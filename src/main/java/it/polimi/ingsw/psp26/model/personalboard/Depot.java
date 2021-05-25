@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.grabElements;
 
 /**
  * Class to model the depot (one shelf of the warehouse)

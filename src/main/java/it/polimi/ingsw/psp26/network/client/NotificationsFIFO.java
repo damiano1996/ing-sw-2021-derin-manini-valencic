@@ -30,7 +30,7 @@ public class NotificationsFIFO {
     /**
      * Push a new notification in the FIFO
      * If the size of the FIFO grows over the maxFIFOSize, removes the first element of the FIFO
-     * 
+     *
      * @param notification The notification to insert
      */
     public synchronized void pushNotification(String notification) {

@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.NotificationUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
@@ -24,7 +25,6 @@ public class PlayingPhaseState extends PhaseState {
 
     @Override
     public void execute(SessionMessage message) {
-        super.execute(message);
         currentTurn.play(message);
     }
 
@@ -83,10 +83,18 @@ public class PlayingPhaseState extends PhaseState {
 
     private void sendNotificationMessageNewTurn() {
         try {
+            String messagePayload = "Turn of " + currentTurn.getTurnPlayer().getNickname();
+            phase.getMatchController().notifyObservers(
+                    new NotificationUpdateMessage(
+                            SpecialToken.BROADCAST.getToken(),
+                            messagePayload
+                    )
+            );
             phase.getMatchController().notifyObservers(
                     new SessionMessage(
                             SpecialToken.BROADCAST.getToken(),
-                            MessageType.GENERAL_MESSAGE, "Turn of " + currentTurn.getTurnPlayer().getNickname()
+                            MessageType.GENERAL_MESSAGE,
+                            messagePayload
                     )
             );
             sendMessageToAllPlayerExceptOne(

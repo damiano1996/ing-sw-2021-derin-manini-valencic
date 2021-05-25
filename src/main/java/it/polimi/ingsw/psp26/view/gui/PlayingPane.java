@@ -153,7 +153,7 @@ public class PlayingPane {
         float resizeMainBlockFactor = (client.isMultiplayerMode()) ? 0.7f : 0.8f;
         border.setCenter(addMainBox(client, (int) (width * resizeMainBlockFactor)));
 
-        border.setRight(addRightBar((int) (width * (0.9 - resizeMainBlockFactor))));
+        border.setRight(addRightBar((int) (width * 0.1)));
 
         return border;
     }

@@ -39,9 +39,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.MULTI_OR_SINGLE_PLAYER_MODE;
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
@@ -112,21 +114,14 @@ public class GUI extends Application implements ViewInterface {
                 connectionButton.setDisable(true);
 
                 String nickname = ((TextField) fxmlLoader.getNamespace().get("nicknameTextField")).getText();
+                String password = ((TextField) fxmlLoader.getNamespace().get("passwordTextField")).getText();
                 String serverIP = ((TextField) fxmlLoader.getNamespace().get("serverIPTextField")).getText();
 
                 client.setNickname(nickname);
                 try {
-                    client.initializeNetworkHandler(serverIP);
-
-                    displayChoices(
-                            MULTI_OR_SINGLE_PLAYER_MODE,
-                            "Choose the playing mode:",
-                            Arrays.asList(new MessageType[]{SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE}),
-                            1, 1,
-                            false
-                    );
-
+                    client.initializeNetworkHandler(nickname, password, serverIP);
                     dialog.close();
+                    client.viewNext();
 
                 } catch (ServerIsNotReachableException serverIsNotReachableException) {
                     ((Text) fxmlLoader.getNamespace().get("errorConnection")).setVisible(true);
@@ -224,6 +219,7 @@ public class GUI extends Application implements ViewInterface {
             case MULTI_OR_SINGLE_PLAYER_MODE:
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
+            case NEW_OR_OLD:
                 choicesDrawer = new MessageTypeChoicesDrawer();
                 break;
 
@@ -297,12 +293,7 @@ public class GUI extends Application implements ViewInterface {
                 }
 
                 if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
-                    client.setMatchModeType((MessageType) choices.get(finalI));
-                    try {
-                        client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
-                    } catch (InvalidPayloadException e) {
-                        e.printStackTrace();
-                    }
+                    client.setMatchModeType((MessageType) choices.get(finalI)); // TODO: set match mode in recovery mode
                 }
 
                 dialog.close();

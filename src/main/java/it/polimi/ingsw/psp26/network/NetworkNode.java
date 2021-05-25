@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.network;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Objects;
 
 /**
  * Class to model a node of the network.
@@ -44,32 +45,13 @@ public class NetworkNode {
     }
 
     /**
-     * Method to send string data.
-     *
-     * @param data data to send
-     */
-    public void sendData(String data) {
-        printWriter.println(data);
-    }
-
-    /**
      * Method to send data object.
      *
      * @param data data to send
      * @throws IOException if object can not be sent
      */
-    public synchronized void sendData(Object data) throws IOException { //TODO OCCHIO AL SYNCHRONISED
+    public void sendData(Object data) throws IOException {
         objectOutputStream.writeObject(data);
-    }
-
-    /**
-     * Method to receive string data.
-     *
-     * @return string line
-     * @throws IOException if data can not be read
-     */
-    public String receiveStringData() throws IOException {
-        return bufferedReader.readLine();
     }
 
     /**
@@ -79,7 +61,7 @@ public class NetworkNode {
      * @throws IOException            if object can not be read
      * @throws ClassNotFoundException if object class not found
      */
-    public Object receiveObjectData() throws IOException, ClassNotFoundException {
+    public Object receiveData() throws IOException, ClassNotFoundException {
         return objectInputStream.readObject();
     }
 
@@ -92,4 +74,27 @@ public class NetworkNode {
         socket.close();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NetworkNode that = (NetworkNode) o;
+        return Objects.equals(socket, that.socket) &&
+                Objects.equals(outputStream, that.outputStream) &&
+                Objects.equals(printWriter, that.printWriter) &&
+                Objects.equals(objectOutputStream, that.objectOutputStream) &&
+                Objects.equals(inputStream, that.inputStream) &&
+                Objects.equals(inputStreamReader, that.inputStreamReader) &&
+                Objects.equals(bufferedReader, that.bufferedReader) &&
+                Objects.equals(objectInputStream, that.objectInputStream);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                socket, outputStream, printWriter,
+                objectOutputStream, inputStream, inputStreamReader,
+                bufferedReader, objectInputStream
+        );
+    }
 }

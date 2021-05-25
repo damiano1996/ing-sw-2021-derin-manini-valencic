@@ -13,7 +13,7 @@ import java.util.List;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
 public class BenefitsTurnState extends TurnState {
 
@@ -38,7 +38,7 @@ public class BenefitsTurnState extends TurnState {
                         //TODO usare solo per test poi rimuovere
 //                        turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(23);
 
-                        
+
                         sendGeneralMessage(turn, "You are the first player. Catch the inkwell!");
                         System.out.println("BenefitsTurnState - assigning the inkwell.");
                         turn.getTurnPlayer().giveInkwell();

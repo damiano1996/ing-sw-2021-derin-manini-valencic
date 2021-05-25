@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
+import it.polimi.ingsw.psp26.network.server.memory.Users;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,8 +23,10 @@ public class MatchControllerTest {
 
     @Test
     public void testAddPlayer() throws InvalidPayloadException {
-        matchController.update(new SessionMessage("sessionToken", MessageType.ADD_PLAYER, "nickname"));
-        assertEquals("sessionToken", matchController.getMatch().getPlayers().get(0).getSessionToken());
+        String sessionToken = "sessionToken";
+        Users.getInstance().addUser("nickname", "password", sessionToken);
+        matchController.update(new SessionMessage(sessionToken, MessageType.ADD_PLAYER));
+        assertEquals(sessionToken, matchController.getMatch().getPlayers().get(0).getSessionToken());
     }
 
     @Test

@@ -52,7 +52,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
     public void play(SessionMessage message) {
         super.play(message);
 
-        if (message.getMessageType().equals(MessageType.QUIT_OPTION_SELECTED)) {
+        if (message.getMessageType().equals(MessageType.UNDO_OPTION_SELECTED)) {
             turn.changeState(new ChooseLeaderActionTurnState(turn, turn.getTurnPhase()));
             turn.play(message);
         } else {

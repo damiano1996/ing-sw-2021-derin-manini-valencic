@@ -26,8 +26,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.getElementsByIndices;
 import static it.polimi.ingsw.psp26.view.ViewUtils.toTitleStyle;
 
 public class CLI implements ViewInterface {
@@ -92,14 +92,14 @@ public class CLI implements ViewInterface {
             cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
 
             in.nextLine();
-
+            String nickname = "";
             for (int i = 0; i < 2; i++) {
                 printTitle();
                 cliUtils.vSpace(4);
                 if (i == 0) {
                     pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
                     pw.flush();
-                    String nickname = in.nextLine();
+                    nickname = in.nextLine();
                     client.setNickname(nickname);
                 } else {
                     pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
@@ -112,7 +112,7 @@ public class CLI implements ViewInterface {
                     // Starting the Thread to print notifications
                     startLiveUpdate();
 
-                    client.initializeNetworkHandler(serverIP);
+                    client.initializeNetworkHandler(nickname, "password", serverIP); // TODO: to add the password
                     // go to Multi/single player choice
                     displayChoices(
                             MULTI_OR_SINGLE_PLAYER_MODE,

@@ -1,11 +1,15 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates.turns;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.messages.NotificationUpdateMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.LeaderCardsAssignmentTurnState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.TurnState;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
 public class Turn {
 
@@ -36,8 +40,21 @@ public class Turn {
     }
 
     public void play(SessionMessage message) {
-        if (message.getSessionToken().equals(turnPlayer.getSessionToken()))
-            turnState.play(message);
+        if (message.getSessionToken().equals(turnPlayer.getSessionToken())) {
+
+            if (message.getMessageType().equals(MessageType.DEATH)) {
+                try {
+                    getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), turnPlayer.getNickname() + " lost the connection. He skips the turn."));
+                } catch (InvalidPayloadException e) {
+                    e.printStackTrace();
+                }
+                // updating turn skipping for current player
+                playingPhaseState.updateCurrentTurn();
+
+            } else {
+                turnState.play(message);
+            }
+        }
     }
 
     public void changeState(TurnState newTurnState) {

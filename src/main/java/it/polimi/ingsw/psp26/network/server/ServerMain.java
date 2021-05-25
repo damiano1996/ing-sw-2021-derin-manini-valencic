@@ -9,13 +9,10 @@ public class ServerMain {
      */
     public static void main(String[] args) {
         try {
-            Server server = new Server();
             while (true)
-                server.listening();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+                Server.getInstance().listening();
+        } catch (IOException ignored) {
         }
     }
-    
+
 }

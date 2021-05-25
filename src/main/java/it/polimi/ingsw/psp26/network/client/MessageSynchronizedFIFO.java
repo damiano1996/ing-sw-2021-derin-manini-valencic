@@ -71,5 +71,5 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
             }
         }
     }
-    
+
 }

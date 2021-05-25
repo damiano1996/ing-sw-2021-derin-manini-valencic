@@ -26,7 +26,7 @@ public class InitializationPhaseStateTest {
     @Test
     public void testAddPlayer() throws InvalidPayloadException {
 
-        String nickname = "Nickname";
+        String nickname = "nickname";
         String sessionToken = "sessionToken";
         phase.execute(new SessionMessage(
                 sessionToken,

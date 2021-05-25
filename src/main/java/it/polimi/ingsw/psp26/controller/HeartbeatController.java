@@ -5,29 +5,30 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.network.SpecialToken;
+import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import static java.lang.Thread.sleep;
 
 public class HeartbeatController extends Observable<SessionMessage> implements Observer<SessionMessage> {
 
-    private final int MAX_TIME = 2000; // milliseconds
-    private final int DELTA_TIME = 100; // every 100 ms checks countdown
+    public final int MAX_TIME_TO_DIE = 5000; // 5 ms
+    public final int MAX_TIME_TO_END_MATCH = 1000 * 60 * 5; // 5 minutes
+    private final int DELTA_TIME = 1000; // every 100 ms checks countdown
 
     private final String sessionToken;
-    private final MatchController matchController;
+    private final VirtualView virtualView;
     private int countdown;
     private boolean running;
 
     public HeartbeatController(String sessionToken, MatchController matchController) {
         this.sessionToken = sessionToken;
-        this.matchController = matchController;
-        addObserver(this.matchController);
+        this.virtualView = matchController.getVirtualView();
+        addObserver(matchController);
         running = true;
-        reset();
+        reset(sessionToken);
     }
 
-    public void startMonitoringHeartbeat() {
+    public synchronized void startMonitoringHeartbeat() {
         new Thread(() -> {
             while (running) {
 
@@ -42,10 +43,11 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         }).start();
     }
 
-    private synchronized void reset() {
-//        System.out.println("HeartbeatController - Reset counter, player with sessionToken: " + sessionToken + " is alive.");
-        countdown = MAX_TIME;
-        running = true;
+    public synchronized void reset(String sessionToken) {
+        if (this.sessionToken.equals(sessionToken)) {
+            countdown = MAX_TIME_TO_DIE;
+            running = true;
+        }
     }
 
     private synchronized void checksForDeath() {
@@ -53,11 +55,22 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
 
         if (countdown < 0) {
             try {
+                virtualView.stopListeningNetworkNode(sessionToken);
                 notifyObservers(
-                        new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.DEATH, sessionToken)
+                        new SessionMessage(sessionToken, MessageType.DEATH)
                 );
-                System.out.println("HeartbeatController - No heartbeat from player with sessionToken: " + sessionToken);
-                running = false;
+//                System.out.println("HeartbeatController - No heartbeat from player with sessionToken: " + sessionToken);
+//                running = false;
+            } catch (InvalidPayloadException ignored) {
+            }
+        }
+
+        // If countdown exceed, we declare the end of the match
+        if (countdown < -MAX_TIME_TO_END_MATCH) {
+            try {
+                notifyObservers(
+                        new SessionMessage(sessionToken, MessageType.INDEFINITE_SUSPENSION)
+                );
             } catch (InvalidPayloadException ignored) {
             }
         }
@@ -65,7 +78,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
 
     @Override
     public synchronized void update(SessionMessage message) {
-        if (message.getMessageType().equals(MessageType.HEARTBEAT) && message.getSessionToken().equals(sessionToken))
-            reset();
+        if (message.getMessageType().equals(MessageType.HEARTBEAT))
+            reset(message.getSessionToken());
     }
 }

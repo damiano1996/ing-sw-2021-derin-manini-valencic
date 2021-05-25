@@ -28,7 +28,7 @@ import java.util.List;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.model.enums.Resource.*;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 import static org.junit.Assert.assertEquals;
 
 public class ResourcesWarehousePlacerTurnStateTest {

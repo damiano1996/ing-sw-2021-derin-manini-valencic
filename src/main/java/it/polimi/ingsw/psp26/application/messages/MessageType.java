@@ -6,6 +6,11 @@ public enum MessageType {
     MODEL_UPDATE,
     HEARTBEAT,
     DEATH,
+    INDEFINITE_SUSPENSION,
+
+    NEW_OR_OLD,
+    RECOVERY_MATCH,
+    NEW_MATCH,
 
     GENERAL_MESSAGE,
     ERROR_MESSAGE,
@@ -60,7 +65,9 @@ public enum MessageType {
     STOP_WAITING,
 
     // The Player select to undo from the current selection
-    QUIT_OPTION_SELECTED,
+    UNDO_OPTION_SELECTED,
+
+    DISPLAY_LOGIN,
 
     OPPONENT_TURN,
     LORENZO_PLAY,

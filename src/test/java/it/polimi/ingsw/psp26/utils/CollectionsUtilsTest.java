@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.model.enums.Resource.*;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.getElementsByIndices;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.grabElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.getElementsByIndices;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.grabElements;
 import static org.junit.Assert.assertEquals;
 
-public class ArrayListUtilsTest {
+public class CollectionsUtilsTest {
 
     @Test
     public void testGrabElements() {

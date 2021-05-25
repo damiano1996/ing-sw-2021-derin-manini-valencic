@@ -10,11 +10,11 @@ import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 
 public class CheckVaticanReportTurnState extends TurnState {
+    private boolean lastVaticanReportCalled = false;
+
     public CheckVaticanReportTurnState(Turn turn) {
         super(turn);
     }
-
-    private boolean lastVaticanReportCalled = false;
 
     @Override
     public void play(SessionMessage message) {

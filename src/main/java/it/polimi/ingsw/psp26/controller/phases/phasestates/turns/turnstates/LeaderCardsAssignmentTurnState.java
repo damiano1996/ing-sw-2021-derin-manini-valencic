@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendErrorMessage;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
 /**
  * Class that models the leader cards assignment.

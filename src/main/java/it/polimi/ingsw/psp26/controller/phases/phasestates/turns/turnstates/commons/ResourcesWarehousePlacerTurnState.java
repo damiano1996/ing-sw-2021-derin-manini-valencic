@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendErrorMessage;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.commons.MatchUtils.addFaithPointsToPlayers;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
 /**
  * Class to model the turn state in which players pace resources in the warehouse.

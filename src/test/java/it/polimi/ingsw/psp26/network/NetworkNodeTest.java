@@ -51,10 +51,10 @@ public class NetworkNodeTest {
     }
 
     @Test
-    public void testSendReceiveStringData() throws IOException {
+    public void testSendReceiveStringData() throws IOException, ClassNotFoundException {
         String message = "hello world!";
         n1.sendData(message);
-        assertEquals(message, n2.receiveStringData());
+        assertEquals(message, n2.receiveData());
         closeAll();
     }
 
@@ -62,7 +62,7 @@ public class NetworkNodeTest {
     public void testSendReceiveObjectData() throws IOException, ClassNotFoundException {
         Resource resource = Resource.COIN;
         n1.sendData(resource);
-        assertEquals(resource, n2.receiveObjectData());
+        assertEquals(resource, n2.receiveData());
         closeAll();
     }
 

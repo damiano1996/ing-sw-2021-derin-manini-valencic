@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
 
 public class MarketResourceNormalActionTurnState extends TurnState {
@@ -84,7 +84,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     refactorResourceAndChangeTurn(message);
                     break;
 
-                case QUIT_OPTION_SELECTED:
+                case UNDO_OPTION_SELECTED:
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);
                     break;
@@ -126,15 +126,15 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    public List<Resource> getTempResources() { return tempResources;}
+    public List<Resource> getTempResources() {
+        return tempResources;
+    }
 
     private boolean applyMarbleLeaderEffect(SessionMessage message) {
 
         List<Resource> tempResourceLeader = new ArrayList<>();
 
-        List<Resource> tempResourceBeforeLeaders = new ArrayList<>();
-
-        tempResourceBeforeLeaders.addAll(tempResources);
+        List<Resource> tempResourceBeforeLeaders = new ArrayList<>(tempResources);
 
         for (LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
 

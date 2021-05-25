@@ -93,7 +93,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                     turn.play(message);
                     break;
 
-                case QUIT_OPTION_SELECTED:
+                case UNDO_OPTION_SELECTED:
                 default:
 
                     turn.changeState(new ChooseNormalActionTurnState(turn));

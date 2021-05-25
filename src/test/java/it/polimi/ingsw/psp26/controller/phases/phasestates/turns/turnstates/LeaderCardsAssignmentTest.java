@@ -5,7 +5,6 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -16,7 +15,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -46,7 +45,7 @@ public class LeaderCardsAssignmentTest {
     }
 
     @Test
-    public void testSendLeaderCardsChoiceMessage() throws EmptyPayloadException, InvalidPayloadException {
+    public void testSendLeaderCardsChoiceMessage() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
 
         assertEquals(MessageType.CHOICE_LEADERS, mitm.getMessages().get(0).getMessageType());
@@ -54,7 +53,7 @@ public class LeaderCardsAssignmentTest {
     }
 
     @Test
-    public void testWrongLeaderCards() throws EmptyPayloadException, InvalidPayloadException {
+    public void testWrongLeaderCards() throws InvalidPayloadException {
         testSendLeaderCardsChoiceMessage();
 
         List<LeaderCard> twoRandomLeaders = phase.getMatchController().getMatch().drawLeaders(2);
@@ -72,7 +71,7 @@ public class LeaderCardsAssignmentTest {
     }
 
     @Test
-    public void testGoodLeaderChoice() throws EmptyPayloadException, InvalidPayloadException {
+    public void testGoodLeaderChoice() throws InvalidPayloadException {
         testSendLeaderCardsChoiceMessage();
 
         List<LeaderCard> selectedLeaders = castElements(LeaderCard.class, mitm.getMessages().get(0).getListPayloads()).subList(0, 2);

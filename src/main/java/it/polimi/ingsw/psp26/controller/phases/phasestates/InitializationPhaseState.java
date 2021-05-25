@@ -6,12 +6,13 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.exceptions.SessionTokenDoesNotExistsException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.SpecialToken;
+import it.polimi.ingsw.psp26.network.server.memory.Users;
 
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getDevelopmentGridModelUpdateMessage;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getMarketTrayModelUpdateMessage;
-import static it.polimi.ingsw.psp26.view.ViewUtils.toTitleStyle;
 
 
 public class InitializationPhaseState extends PhaseState {
@@ -21,15 +22,14 @@ public class InitializationPhaseState extends PhaseState {
     }
 
     @Override
-    public void execute(SessionMessage message) {
+    public synchronized void execute(SessionMessage message) {
         super.execute(message);
 
-        if (message.getMessageType() == MessageType.ADD_PLAYER) {
+        if (message.getMessageType().equals(MessageType.ADD_PLAYER)) {
 
             try {
                 addPlayer(message);
-            } catch (EmptyPayloadException e) {
-                e.printStackTrace();
+            } catch (EmptyPayloadException | SessionTokenDoesNotExistsException ignored) {
             }
 
             // next state is...
@@ -37,7 +37,7 @@ public class InitializationPhaseState extends PhaseState {
                 // Communicating to match controller that we reached the maximum number of players.
                 phase.getMatchController().stopWaitingForPlayers();
 
-                System.out.println("Initialization phase - sending stop message");
+                System.out.println("InitializationPhaseState - sending stop message");
                 try {
                     phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.STOP_WAITING, "Stop waiting..."));
                     phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.GENERAL_MESSAGE, "The match can start!"));
@@ -57,18 +57,17 @@ public class InitializationPhaseState extends PhaseState {
         }
     }
 
-    private void addPlayer(SessionMessage message) throws EmptyPayloadException {
-        String nickname = (String) message.getPayload();
-        nickname = getFilteredNickname(nickname);
+    private synchronized void addPlayer(SessionMessage message) throws EmptyPayloadException, SessionTokenDoesNotExistsException {
         String sessionToken = message.getSessionToken();
+        String nickname = Users.getInstance().getNickname(sessionToken);
         Player newPlayer = new Player(phase.getMatchController().getVirtualView(), nickname, sessionToken);
 
-        System.out.println("Initialization phase - new player - nickname: " + nickname + " - sessionToken: " + sessionToken);
+        System.out.println("InitializationPhaseState - New player - nickname: " + nickname + " - sessionToken: " + sessionToken);
         phase.getMatchController().getMatch().addPlayer(newPlayer);
+        System.out.println("InitializationPhaseState - Number of players in the match: " + phase.getMatchController().getMatch().getPlayers().size());
 
-        System.out.println("Initialization phase  - sending start waiting message");
+        System.out.println("InitializationPhaseState - Sending start waiting message");
         try {
-            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.SET_NICKNAME, nickname));
             phase.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), nickname + " joined the game!"));
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Waiting for opponents to connect..."));
         } catch (InvalidPayloadException ignored) {
@@ -78,34 +77,9 @@ public class InitializationPhaseState extends PhaseState {
     /**
      * Used to send the first version of the Market and Development Grid to all Players
      */
-    private void notifyMarketAndGridCreation() {
+    private synchronized void notifyMarketAndGridCreation() {
         phase.getMatchController().notifyObservers(getMarketTrayModelUpdateMessage());
         phase.getMatchController().notifyObservers(getDevelopmentGridModelUpdateMessage());
-    }
-
-    /**
-     * Method to filter the nicknames
-     *
-     * @param nickname nickname that must be filtered
-     * @return new nickname
-     */
-    private String getFilteredNickname(String nickname) {
-        nickname = nickname.replace(" ", "").replace("_", "-");
-        nickname = toTitleStyle(nickname);
-        int maxLength = 8;
-        nickname = nickname.substring(0, Math.min(maxLength, nickname.length()));
-
-        if (nickname.length() == 0) nickname = "Player";
-
-        int equalPrefix = 0;
-        for (Player opponentPlayer : phase.getMatchController().getMatch().getPlayers()) {
-            if (opponentPlayer.getNickname().equals(nickname)) equalPrefix += 1;
-            else if (opponentPlayer.getNickname().startsWith(nickname) && opponentPlayer.getNickname().charAt(maxLength) == '_')
-                equalPrefix += 1;
-        }
-        if (equalPrefix > 0) nickname += "_" + (equalPrefix + 1);
-
-        return nickname;
     }
 
 }

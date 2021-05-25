@@ -4,9 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
-import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
+import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
@@ -17,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createLeaderboard;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createPlayersList;
 
@@ -82,6 +80,8 @@ public class Client extends Observable<Message> {
                 case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
                 case CHOICE_LEADERS:
                 case CHOICE_PRODUCTIONS_TO_ACTIVATE:
+                case NEW_OR_OLD:
+                case MULTI_OR_SINGLE_PLAYER_MODE:
 
                     MultipleChoicesMessage mcm = (MultipleChoicesMessage) message;
                     viewInterface.displayChoices(
@@ -126,6 +126,10 @@ public class Client extends Observable<Message> {
                 // --------- DISPLAY MESSAGES ----------
                 // -------------------------------------
 
+                case DISPLAY_LOGIN:
+                    viewInterface.displayLogIn();
+                    break;
+
                 case OPPONENT_TURN:
                     viewInterface.waitForYourTurn();
                     break;
@@ -159,12 +163,20 @@ public class Client extends Observable<Message> {
      * @param serverIP The Server IP
      * @throws ServerIsNotReachableException Thrown if the Server is not available
      */
-    public void initializeNetworkHandler(String serverIP) throws ServerIsNotReachableException {
+    public void initializeNetworkHandler(String nickname, String password, String serverIP) throws ServerIsNotReachableException {
         try {
-            networkHandler.initializeNetworkNode(serverIP);
+            networkHandler.initializeNetworkNode(nickname, password, serverIP);
+
         } catch (IOException e) {
+
             System.out.println("Server IP is unreachable...");
             throw new ServerIsNotReachableException();
+
+        } catch (NicknameTooShortException | PasswordTooShortException | NicknameAlreadyExistsException | InvalidPayloadException | ClassNotFoundException | PasswordNotCorrectException e) {
+            try {
+                MessageSynchronizedFIFO.getInstance().update(new Message(DISPLAY_LOGIN));
+            } catch (InvalidPayloadException ignored) {
+            }
         }
     }
 
@@ -219,7 +231,7 @@ public class Client extends Observable<Message> {
      */
     public void sendUndoMessage() {
         try {
-            notifyObservers(new Message(QUIT_OPTION_SELECTED));
+            notifyObservers(new Message(UNDO_OPTION_SELECTED));
         } catch (InvalidPayloadException ignored) {
         }
     }

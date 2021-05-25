@@ -5,16 +5,16 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NotificationUpdateMessageTest {
 
     @Test
     public void testMessagePayloadExtraction() throws InvalidPayloadException, EmptyPayloadException {
         String contentMessage = "contentMessage";
-        NotificationUpdateMessage liveUpdateMessage = new NotificationUpdateMessage("sessionToken", MessageType.GENERAL_MESSAGE, contentMessage);
+        NotificationUpdateMessage liveUpdateMessage = new NotificationUpdateMessage("sessionToken", contentMessage);
 
         assertEquals(MessageType.NOTIFICATION_UPDATE, liveUpdateMessage.getMessageType());
-        assertEquals(MessageType.GENERAL_MESSAGE, liveUpdateMessage.getPayload(0));
-        assertEquals(contentMessage, liveUpdateMessage.getPayload(1));
+        assertTrue(((String) liveUpdateMessage.getPayload()).contains(contentMessage));
     }
 }

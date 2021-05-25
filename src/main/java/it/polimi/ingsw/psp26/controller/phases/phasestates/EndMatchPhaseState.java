@@ -34,9 +34,9 @@ public class EndMatchPhaseState extends PhaseState {
 
             winnerName = "Lorenzo il Magnifico";
 
-        }else {
+        } else {
 
-                computePlayersPoints();
+            computePlayersPoints();
 
         }
 

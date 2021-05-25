@@ -20,7 +20,7 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_PROD
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendErrorMessage;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
-import static it.polimi.ingsw.psp26.utils.ArrayListUtils.castElements;
+import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
 public class ActivateProductionNormalActionTurnState extends TurnState {
 
@@ -116,7 +116,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                     break;
 
                 default:
-                case QUIT_OPTION_SELECTED:
+                case UNDO_OPTION_SELECTED:
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);
                     break;
@@ -158,11 +158,8 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     }
 
     /**
-     *
-     * @param message
+     * @param message session message
      */
-
-
     private void activateProduction(SessionMessage message) {
         if (isProductionFeasible()) {
             for (Production production : productionActivated) {
@@ -181,20 +178,18 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             }
             collectProduction();
             turn.changeState(new CheckVaticanReportTurnState(turn));
-            turn.play(message);
         } else {
 
             sendErrorMessage(turn, "Too many production activated or wrong use of resources");
             turn.changeState(new ChooseNormalActionTurnState(turn));
-            turn.play(message);
         }
+        turn.play(message);
 
     }
 
     /**
      * Method that sends to the current player a message to ask which production they want to activate between
      * their available production.
-     *
      */
 
     private void sendProductionMultipleChoiceMessage() {
@@ -213,9 +208,8 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     }
 
     /**
-     *  Method that adds to the current player strongbox the list of resources produced by each production that
-     *  they activated
-     *
+     * Method that adds to the current player strongbox the list of resources produced by each production that
+     * they activated
      */
 
     private void collectProduction() {
@@ -239,20 +233,20 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 .collect(Collectors.toList());
 
         try {
-                turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
+            turn.getTurnPlayer().getPersonalBoard().addResourcesToStrongbox(resourcesProduced);
         } catch (CanNotAddResourceToStrongboxException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
 
     /**
-     *  Method that checks if the current player has enough resources to activate at least one production.
-     *
-     *  If there is only one visible production it means that it is the base one, and so it is enough to check that
-     *  player has at least two resources. If there is more than one, it means that there is at least one development
-     *  card (that could require only one resource), and so for each one of them it checks if satisfy the its
-     *  requirement.
+     * Method that checks if the current player has enough resources to activate at least one production.
+     * <p>
+     * If there is only one visible production it means that it is the base one, and so it is enough to check that
+     * player has at least two resources. If there is more than one, it means that there is at least one development
+     * card (that could require only one resource), and so for each one of them it checks if satisfy the its
+     * requirement.
      *
      * @return true if there is at least one production that is actionable by the player, false if there is none.
      */
@@ -262,7 +256,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                 productionActivated.add(turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(i));
                 if (!productionActivated.get(0).getProductionCost().containsKey(Resource.UNKNOWN)) {
-                    if (isProductionFeasible()){
+                    if (isProductionFeasible()) {
                         productionActivated.remove(0);
                         return true;
                     }

@@ -1,11 +1,9 @@
 package it.polimi.ingsw.psp26.controller;
 
-import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
-import it.polimi.ingsw.psp26.controller.phases.phasestates.RecoveringMatchPhaseState;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
@@ -24,7 +22,7 @@ public class MatchController extends Observable<SessionMessage> implements Obser
         addObserver(virtualView);
         this.virtualView = virtualView;
 
-        System.out.println("MatchController - new match controller has been created.");
+        System.out.println("MatchController - New match controller has been created.");
         this.isWaitingForPlayers = true;
 
         initializeMatch(matchId);
@@ -32,42 +30,36 @@ public class MatchController extends Observable<SessionMessage> implements Obser
     }
 
     @Override
-    public void update(SessionMessage message) {
-        if (!message.getMessageType().equals(MessageType.HEARTBEAT)) {
-
-            if (message.getMessageType().equals(MessageType.DEATH))
-                phase.changeState(new RecoveringMatchPhaseState(phase, phase.getPhaseState()));
-
-            phase.execute(message);
-        }
+    public synchronized void update(SessionMessage message) {
+        phase.execute(message);
     }
 
-    private void initializeMatch(int id) {
+    private synchronized void initializeMatch(int id) {
         match = new Match(virtualView, id);
     }
 
-    public Match getMatch() {
+    public synchronized Match getMatch() {
         return match;
     }
 
-    public VirtualView getVirtualView() {
+    public synchronized VirtualView getVirtualView() {
         return virtualView;
     }
 
-    public boolean isWaitingForPlayers() {
+    public synchronized boolean isWaitingForPlayers() {
         return isWaitingForPlayers;
     }
 
-    public void stopWaitingForPlayers() {
+    public synchronized void stopWaitingForPlayers() {
         isWaitingForPlayers = false;
     }
 
-    public int getMaxNumberOfPlayers() {
+    public synchronized int getMaxNumberOfPlayers() {
         return maxNumberOfPlayers;
     }
 
-    public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
+    public synchronized void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
         this.maxNumberOfPlayers = maxNumberOfPlayers;
-        System.out.println("MatchController - number of players: " + this.maxNumberOfPlayers);
+        System.out.println("MatchController - Max number of players: " + this.maxNumberOfPlayers);
     }
 }

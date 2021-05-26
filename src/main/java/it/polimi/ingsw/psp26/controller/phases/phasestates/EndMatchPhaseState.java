@@ -16,9 +16,22 @@ public class EndMatchPhaseState extends PhaseState {
 
     private String winnerName = "";
 
+    /**
+     * Constructor of the class.
+     *
+     * @param phase current phase.
+     */
+
     public EndMatchPhaseState(Phase phase) {
         super(phase);
     }
+
+    /**
+     *  Method that calls a method to calculate the points of the game and notifies the player. Then
+     *  redirect to the start of the game.
+     *
+     * @param message that contains information on what caused the endgame.
+     */
 
     @Override
     public void execute(SessionMessage message) {
@@ -27,6 +40,17 @@ public class EndMatchPhaseState extends PhaseState {
 
         showEndGameResult(message);
     }
+
+    /**
+     * Method that checks the winner, computes the points and sends to all player the message with the winner name.
+     *
+     * it checks if the winner is "Lorenzo il Magnifico" (Only in single player mode), if he is, the method does not
+     * calculate the point for the player and sends them the winner name. If he is not, it calculates the points for
+     * each player and sends to them the winner name among the players.
+     *
+     *
+     * @param message
+     */
 
     private void showEndGameResult(SessionMessage message) {
 
@@ -55,6 +79,11 @@ public class EndMatchPhaseState extends PhaseState {
 
     }
 
+    /**
+     * Method that computes for each player their victory points and establish the player with the most victory points.
+     *
+     * @return the string with the name of the player with most points.
+     */
     private String computePlayersPoints() {
 
         int playerPoints;
@@ -84,7 +113,12 @@ public class EndMatchPhaseState extends PhaseState {
         return winnerName;
     }
 
-
+    /**
+     * Method to calculate the victory points obtained by a player for their development cards.
+     *
+     * @param player the player for which it calculates the points.
+     * @return the victory points obtained by this source.
+     */
     private int computeDevelopmentCardPoints(Player player) {
 
         int developmentCardVictoryPoints = 0;
@@ -104,6 +138,13 @@ public class EndMatchPhaseState extends PhaseState {
         return developmentCardVictoryPoints;
     }
 
+    /**
+     * Method to calculate the victory points obtained by a player from their leader cards.
+     *
+     * @param player the player for which it calculates the points.
+     * @return the victory points obtained by this source.
+     */
+
     private int computeLeaderPoints(Player player) {
         int leaderPoints = 0;
         for (LeaderCard leaderCard : player.getLeaderCards()) {
@@ -112,6 +153,13 @@ public class EndMatchPhaseState extends PhaseState {
         }
         return leaderPoints;
     }
+
+    /**
+     * Method to calculate the victory points obtained by a player for the number of favor tile they activated.
+     *
+     * @param player the player for which it calculates the points.
+     * @return the victory points obtained by this source.
+     */
 
     private int computePopeFavorTilePoints(Player player) {
         int popeFavorTilePoints = 0;

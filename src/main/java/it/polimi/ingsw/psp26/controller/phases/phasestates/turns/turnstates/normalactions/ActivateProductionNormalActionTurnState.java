@@ -309,9 +309,9 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
      *  are, it let them pick the substitute resources for them. Then it redirects the player to the next phase.
      *
      *  For each production, it checks the presence of unknown resources both in the production cost and in the return,
-     *  for each unknown resource found it increase the relative counter. First it checks the cost counter if it is not
-     *  zero and in case ask for the resource to substitute them with. If the cost counter is zero it does the same for
-     *  the return. And if both are zero it directly goes to the next phase.
+     *  for each unknown resource found it increase the relative counter. Then first it checks the cost counter if it is
+     *  not zero and in case ask for the resource to substitute them with. If the cost counter is zero it does the same
+     *  for the return counter. And if both are zero it directly redirect to the next phase.
      *
      * @param message
      */

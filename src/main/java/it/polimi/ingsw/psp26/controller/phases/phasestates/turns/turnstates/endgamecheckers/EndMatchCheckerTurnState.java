@@ -46,14 +46,14 @@ public class EndMatchCheckerTurnState extends TurnState {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
-                                turn.getTurnPlayer() + " activated the endgame by drawing the seventh card.")
+                                turn.getTurnPlayer().getNickname() + " activated the endgame by drawing the seventh card.")
                 );
                 turn.getPlayingPhaseState().setLastTurn();
             } else if (isFinalTilePosition()) {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
-                                turn.getTurnPlayer() + " activated the endgame by reaching the final tile in the faith track.")
+                                turn.getTurnPlayer().getNickname() + " activated the endgame by reaching the final tile in the faith track.")
                 );
                 turn.getPlayingPhaseState().setLastTurn();
             }
@@ -115,7 +115,7 @@ public class EndMatchCheckerTurnState extends TurnState {
      * @return true if marker on the last position, false otherwise.
      */
     private boolean isFinalTilePosition() {
-        return turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getMarkerPosition() ==
+        return turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getMarkerPosition() >=
                 turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getFinalPosition();
     }
 

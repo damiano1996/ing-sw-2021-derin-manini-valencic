@@ -65,8 +65,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     turn.getMatchController().notifyObservers(
                             new SessionMessage(
                                     turn.getTurnPlayer().getSessionToken(),
-                                    MessageType.CHOICE_ROW_COLUMN,
-                                    turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().toArray(new Object[0])
+                                    MessageType.CHOICE_ROW_COLUMN
                             ));
 
                     break;

@@ -7,7 +7,6 @@ import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
@@ -99,23 +98,31 @@ public class Client extends Observable<Message> {
                     break;
 
                 case PLACE_IN_WAREHOUSE:
-                    // first message contains the warehouse
-                    Warehouse warehouse = ((Warehouse) message.getPayload());
-                    viewInterface.displayWarehouseNewResourcesAssignment(warehouse, getSecondMessageResources(PLACE_IN_WAREHOUSE));
+                    // message contains the resources to add; Player's Resources are taken from the CachedModel
+                    viewInterface.displayWarehouseNewResourcesAssignment(
+                            cachedModel.getMyPlayerCached().getObject().getPersonalBoard().getWarehouse(),
+                            castElements(Resource.class, message.getListPayloads())
+                    );
                     break;
 
                 case CHOICE_ROW_COLUMN:
-                    // message contains the Player's Resources
-                    viewInterface.displayMarketAction(cachedModel.getMarketTrayCached().getObject(), castElements(Resource.class, message.getListPayloads()));
+                    // taking the Market Tray and the Player's Resources from the CachedModel
+                    viewInterface.displayMarketAction(
+                            cachedModel.getMarketTrayCached().getObject(),
+                            cachedModel.getMyPlayerCached().getObject().getPersonalBoard().getAllAvailableResources()
+                    );
                     break;
 
                 case CHOICE_CARD_TO_BUY:
-                    // message contains the Player's Resources
-                    viewInterface.displayDevelopmentCardBuyAction(cachedModel.getDevelopmentGridCached().getObject(), castElements(Resource.class, message.getListPayloads()));
+                    // taking the Development Grid and the Player's Resources from CachedModel
+                    viewInterface.displayDevelopmentCardBuyAction(
+                            cachedModel.getDevelopmentGridCached().getObject(),
+                            cachedModel.getMyPlayerCached().getObject().getPersonalBoard().getAllAvailableResources()
+                    );
                     break;
 
                 case LORENZO_PLAY:
-                    // message contains the stack od Action Tokens
+                    // message contains the stack of Action Tokens
                     List<ActionToken> actionTokens = castElements(ActionToken.class, message.getListPayloads());
                     viewInterface.displayActionTokens(actionTokens);
                     break;
@@ -153,14 +160,7 @@ public class Client extends Observable<Message> {
         } catch (EmptyPayloadException ignored) {
         }
     }
-
-    private List<Resource> getSecondMessageResources(MessageType messageType) {
-        Message secondMessage = MessageSynchronizedFIFO.getInstance().getNext();
-        while (!secondMessage.getMessageType().equals(messageType))
-            secondMessage = MessageSynchronizedFIFO.getInstance().getNext();
-        return castElements(Resource.class, secondMessage.getListPayloads());
-    }
-
+    
 
     /**
      * Used to set a connection between the Client and the Server

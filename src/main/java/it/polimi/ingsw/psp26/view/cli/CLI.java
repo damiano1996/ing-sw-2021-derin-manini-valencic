@@ -107,29 +107,47 @@ public class CLI implements ViewInterface {
     public void displayLogIn() {
         printTitle();
         cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
-
         in.nextLine();
+        
         String nickname = "";
-        for (int i = 0; i < 2; i++) {
+        String password = "";
+
+        for (int i = 0; i < 3; i++) {
             printTitle();
             cliUtils.vSpace(4);
+            
             if (i == 0) {
                 pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
                 pw.flush();
                 nickname = in.nextLine();
                 client.setNickname(nickname);
-            } else {
-                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
+            }
+            
+            if (i == 1) {
+                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + nickname);
                 pw.flush();
                 cliUtils.vSpace(2);
+                pw.print(cliUtils.hSpace(100) + "Enter Password: ");
+                pw.flush();
+                password = in.nextLine();
+            }
+            
+            if (i == 2) {
+                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + nickname);
+                pw.flush();
+                cliUtils.vSpace(2);
+                pw.print(cliUtils.hSpace(100) + "Enter password: " + password);
+                pw.flush();
+                cliUtils.vSpace(3);
                 pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                 pw.flush();
                 String serverIP = in.nextLine();
-
+                
                 // Starting the Thread to print notifications
                 startLiveUpdate();
 
-                client.initializeNetworkHandler(nickname, "password", serverIP); // TODO: to add the password
+                client.initializeNetworkHandler(nickname, password, serverIP);
+                client.viewNext();
             }
         }
     }

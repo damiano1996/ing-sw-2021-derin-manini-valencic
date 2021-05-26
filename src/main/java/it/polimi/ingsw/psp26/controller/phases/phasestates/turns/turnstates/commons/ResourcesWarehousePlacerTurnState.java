@@ -184,21 +184,11 @@ public class ResourcesWarehousePlacerTurnState extends TurnState {
     }
 
     /**
-     * Method to send to the client the warehouse and the list of resource that he has received.
-     * The method sends two consecutive messages with same message type. the first with warehouse as payload,
-     * the second with the list of resources to add to it.
+     * Method to send to the client the list of resources that he has received in the market action.
      */
     private void sendWarehouseMessage() {
         System.out.println("ResourcesWarehousePlacer - sending message to " + turn.getTurnPlayer().getNickname());
         try {
-
-            turn.getMatchController().notifyObservers(
-                    new SessionMessage(
-                            turn.getTurnPlayer().getSessionToken(),
-                            MessageType.PLACE_IN_WAREHOUSE,
-                            turn.getTurnPlayer().getPersonalBoard().getWarehouse()
-                    )
-            );
             turn.getMatchController().notifyObservers(
                     new SessionMessage(
                             turn.getTurnPlayer().getSessionToken(),

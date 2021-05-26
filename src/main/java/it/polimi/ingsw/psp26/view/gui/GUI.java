@@ -4,7 +4,6 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.exceptions.ServerIsNotReachableException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -43,7 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.MULTI_OR_SINGLE_PLAYER_MODE;
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
@@ -118,15 +116,10 @@ public class GUI extends Application implements ViewInterface {
                 String serverIP = ((TextField) fxmlLoader.getNamespace().get("serverIPTextField")).getText();
 
                 client.setNickname(nickname);
-                try {
-                    client.initializeNetworkHandler(nickname, password, serverIP);
-                    dialog.close();
-                    client.viewNext();
 
-                } catch (ServerIsNotReachableException serverIsNotReachableException) {
-                    ((Text) fxmlLoader.getNamespace().get("errorConnection")).setVisible(true);
-                    connectionButton.setDisable(false);
-                }
+                client.initializeNetworkHandler(nickname, password, serverIP);
+                dialog.close();
+                client.viewNext();
 
             });
 
@@ -282,7 +275,6 @@ public class GUI extends Application implements ViewInterface {
             ButtonContainer<?> buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
             buttonContainers.add(buttonContainer);
 
-            int finalI = i;
             buttonContainer.setOnAction(event -> {
                 // disabling all buttons
                 for (Button button1 : buttonContainers) button1.setDisable(true);
@@ -290,10 +282,6 @@ public class GUI extends Application implements ViewInterface {
                 try {
                     client.notifyObservers(new Message(messageType, buttonContainer.getContainedObject()));
                 } catch (InvalidPayloadException ignored) {
-                }
-
-                if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
-                    client.setMatchModeType((MessageType) choices.get(finalI)); // TODO: set match mode in recovery mode
                 }
 
                 dialog.close();
@@ -387,14 +375,6 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer) {
-        //TODO Usare solo per test poi rimuovere. Per provare devi sostituire il parametro leaderboard nella chiamata del metodo con map
-//        Map<String, Integer> map = new HashMap<>();
-//        map.put("Damiano", 25);
-//        map.put("Jas", 30);
-//        map.put("Player", 0);
-//        map.put("Andrea", 20);
-
-
         LeaderboardDrawer leaderboardDrawer = new LeaderboardDrawer(client, leaderboard, winningPlayer, getWindowWidth());
         Stage dialog = getDialog(primaryStage, leaderboardDrawer.draw());
         dialog.show();
@@ -427,7 +407,7 @@ public class GUI extends Application implements ViewInterface {
                 getWindowWidth(),
                 getWindowHeight()
         );
-        primaryStage.hide();
+        // primaryStage.hide();
         primaryStage.getScene().setRoot(pane);
         primaryStage.show();
         client.viewNext();

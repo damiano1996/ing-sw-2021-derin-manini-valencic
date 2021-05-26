@@ -11,6 +11,7 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 import it.polimi.ingsw.psp26.network.server.memory.Users;
 
+import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_OF_PLAYERS;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getDevelopmentGridModelUpdateMessage;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getMarketTrayModelUpdateMessage;
 
@@ -68,6 +69,7 @@ public class InitializationPhaseState extends PhaseState {
 
         System.out.println("InitializationPhaseState - Sending start waiting message");
         try {
+            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, phase.getMatchController().getMatch().getPlayers().size()));
             phase.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), nickname + " joined the game!"));
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Waiting for opponents to connect..."));
         } catch (InvalidPayloadException ignored) {

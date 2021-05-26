@@ -15,8 +15,12 @@ import it.polimi.ingsw.psp26.network.NetworkNode;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_OF_PLAYERS;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.*;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.getIndexOf;
 
@@ -77,12 +81,14 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
             // but we can just rest it.
             heartbeatControllers.get(sessionToken).reset(sessionToken);
             // resending to client all match main data!
-            sendToClient(getMarketTrayModelUpdateMessage());
-            sendToClient(getDevelopmentGridModelUpdateMessage());
-            for (Player player : matchController.getMatch().getPlayers())
-                sendToClient(Objects.requireNonNull(getPlayerModelUpdateMessage(player.getSessionToken())));
-            sendToClient(new SessionMessage(sessionToken, MessageType.START_WAITING));
-            sendToClient(new SessionMessage(sessionToken, MessageType.STOP_WAITING));
+            update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "Your match has been recovered!"));
+            // Sending main game components to restore the cache of the client
+            sendingMainMatchComponents();
+            update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMatch().getPlayers().size()));
+            // Sending a stop waiting message to resume the match
+//            update(new SessionMessage(sessionToken, MessageType.START_WAITING, "Reloading the match..."));
+            update(new SessionMessage(sessionToken, MessageType.STOP_WAITING));
+            // No needs to add the player since the match already contains it
 
         } catch (Exception | InvalidPayloadException e) {
             // Only in case of a new node
@@ -96,6 +102,13 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
             } catch (InvalidPayloadException ignored) {
             }
         }
+    }
+
+    private void sendingMainMatchComponents() {
+        update(getMarketTrayModelUpdateMessage());
+        update(getDevelopmentGridModelUpdateMessage());
+        for (Player player : matchController.getMatch().getPlayers())
+            update(getPlayerModelUpdateMessage(player.getSessionToken()));
     }
 
 

@@ -17,6 +17,7 @@ public enum MessageType {
 
     // Initialize game:
     SET_NICKNAME,
+    SET_NUMBER_OF_PLAYERS,
     MULTI_OR_SINGLE_PLAYER_MODE,
     SINGLE_PLAYER_MODE,
     TWO_PLAYERS_MODE,

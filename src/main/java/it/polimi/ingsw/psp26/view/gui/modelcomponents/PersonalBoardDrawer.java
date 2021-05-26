@@ -178,7 +178,7 @@ public class PersonalBoardDrawer extends RatioDrawer {
         VaticanReportSection[] vaticanReportSections = personalBoard.getFaithTrack().getVaticanReportSections();
         for (int i = 0; i < vaticanReportSections.length; i++) {
 
-            if (vaticanReportSections[i].isPopesFavorTileActive()) { // if active
+            if (vaticanReportSections[i].isPopesFavorTileActive() && !vaticanReportSections[i].isPopesFavorTileDiscarded()) { // if active
                 Image tileImage = loadImage("faith_track/active_" + notActiveFiles[i] + ".png", (int) (200 * ratio));
                 tileImage = setRoundedCorners(tileImage, ratio);
                 tileImage = addLightEffects(tileImage, ratio);
@@ -188,7 +188,7 @@ public class PersonalBoardDrawer extends RatioDrawer {
 
                 pane.getChildren().add(imageView);
 
-            } else if (!vaticanReportSections[i].isPopesFavorTileActive()) { // if not active
+            } else if (!vaticanReportSections[i].isPopesFavorTileActive() && !vaticanReportSections[i].isPopesFavorTileDiscarded()) { // if not active
                 Image tileImage = loadImage("faith_track/not_active_" + notActiveFiles[i] + ".png", (int) (200 * ratio));
                 tileImage = addLightEffects(tileImage, ratio);
 

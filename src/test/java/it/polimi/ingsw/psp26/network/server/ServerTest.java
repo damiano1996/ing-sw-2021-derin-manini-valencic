@@ -78,9 +78,8 @@ public class ServerTest {
     }
 
     private synchronized void assertStartMatch(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
-        SessionMessage message = (SessionMessage) networkNode.receiveData();
-        assertEquals(MessageType.NOTIFICATION_UPDATE, message.getMessageType());
-        assertTrue(((String) message.getPayload()).contains("joined the game!"));
+        SessionMessage message = ignoreJoinMessage(networkNode);
+        assertEquals(MessageType.SET_NUMBER_OF_PLAYERS, message.getMessageType());
 
         message = ignoreJoinMessage(networkNode);
         assertEquals(MessageType.START_WAITING, message.getMessageType());
@@ -96,6 +95,7 @@ public class ServerTest {
     // The tests below are working,
     // but only if they are executed separately from the others.
     // Motivations are: they use socket and threads that can go in conflict with other tests.
+
 
 /*
 
@@ -126,5 +126,4 @@ public class ServerTest {
     }
 
  */
-
 }

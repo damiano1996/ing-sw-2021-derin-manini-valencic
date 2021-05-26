@@ -50,7 +50,7 @@ public class NetworkHandler implements Observer<Message> {
     public void initializeNetworkNode(String nickname, String password, String serverIP) throws IOException, PasswordNotCorrectException, NicknameTooShortException, ClassNotFoundException, NicknameAlreadyExistsException, PasswordTooShortException, InvalidPayloadException {
 
         networkNode = new NetworkNode(new Socket(serverIP, DEFAULT_SERVER_PORT));
-        System.out.println("NetworkHandler - " + nickname + ":" + password + ":" + serverIP);
+        // System.out.println("NetworkHandler - " + nickname + ":" + password + ":" + serverIP);
         // step: sending nickname and password to server
         networkNode.sendData(nickname);
         networkNode.sendData(password);
@@ -111,7 +111,7 @@ public class NetworkHandler implements Observer<Message> {
                 try {
 
                     Message message = (Message) networkNode.receiveData();
-                    System.out.println("NetworkHandler - message received: " + message.toString());
+                    // System.out.println("NetworkHandler - message received: " + message.toString());
 
                     switch (message.getMessageType()) {
                         case MODEL_UPDATE:

@@ -4,7 +4,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" id="VBox" alignment="CENTER" prefHeight="176.0" prefWidth="200.0"
-      stylesheets="@../stylesheets/stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1">
+      stylesheets="@../stylesheets/stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1"
+      style="-fx-spacing: 10px">
 
     <Text id="title" text="Masters of Renaissance" textAlignment="CENTER"/>
 
@@ -16,9 +17,6 @@
 
     <Label id="label" text="ServerIP"/>
     <TextField id="text-field" fx:id="serverIPTextField"/>
-
-    <Text id="error" fx:id="errorConnection" text="The server is not reachable..."
-          visible="false"/>
 
     <Button fx:id="connectionButton" text="Connect"/>
 

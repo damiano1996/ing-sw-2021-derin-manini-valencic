@@ -213,7 +213,7 @@ public class ActivateOrDiscardLeaderTurnState extends TurnState {
                 // checks if leader card can be activated
                 if (isActivatable(playerLeaderCard)) {
 
-                    playerLeaderCard.activate(turn.getTurnPlayer());
+                    turn.getTurnPlayer().activateLeaderCard(playerLeaderCard);
                     leaderHasBeenActivated = true;
 
                 } else {

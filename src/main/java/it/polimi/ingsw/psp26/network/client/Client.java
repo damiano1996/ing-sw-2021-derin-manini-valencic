@@ -24,7 +24,7 @@ public class Client extends Observable<Message> {
     private final NetworkHandler networkHandler;
     private final ViewInterface viewInterface;
     private String nickname;
-    private MessageType matchModeType;
+    private int numberOfPlayers;
     private CachedModel cachedModel;
 
     public Client(ViewInterface viewInterface) throws IOException {
@@ -66,6 +66,11 @@ public class Client extends Observable<Message> {
 
                 case SET_NICKNAME:
                     setNickname((String) message.getPayload());
+                    viewNext();
+                    break;
+
+                case SET_NUMBER_OF_PLAYERS:
+                    setNumberOfPlayers((Integer) message.getPayload());
                     viewNext();
                     break;
 
@@ -161,16 +166,20 @@ public class Client extends Observable<Message> {
      * Used to set a connection between the Client and the Server
      *
      * @param serverIP The Server IP
-     * @throws ServerIsNotReachableException Thrown if the Server is not available
      */
-    public void initializeNetworkHandler(String nickname, String password, String serverIP) throws ServerIsNotReachableException {
+    public void initializeNetworkHandler(String nickname, String password, String serverIP) {
         try {
             networkHandler.initializeNetworkNode(nickname, password, serverIP);
 
         } catch (IOException e) {
 
             System.out.println("Server IP is unreachable...");
-            throw new ServerIsNotReachableException();
+            try {
+                MessageSynchronizedFIFO.getInstance().update(new Message(MessageType.ERROR_MESSAGE, "Server is not reachable!"));
+                MessageSynchronizedFIFO.getInstance().update(new Message(DISPLAY_LOGIN));
+            } catch (InvalidPayloadException ignored) {
+            }
+
 
         } catch (NicknameTooShortException | PasswordTooShortException | NicknameAlreadyExistsException | InvalidPayloadException | ClassNotFoundException | PasswordNotCorrectException e) {
             try {
@@ -212,17 +221,17 @@ public class Client extends Observable<Message> {
      * @return True if the Match is in MultiPlayer mode, false if the Match is in SinglePlayer mode
      */
     public boolean isMultiplayerMode() {
-        return !matchModeType.equals(SINGLE_PLAYER_MODE);
+        return numberOfPlayers > 1;
     }
 
 
     /**
-     * Used to set the MatchModeType (single/multi Player)
+     * Setter of the number of players in the match.
      *
-     * @param matchModeType SINGLE_PLAYER_MODE or MULTI_PLAYER_MODE
+     * @param numberOfPlayers number of players in the match
      */
-    public void setMatchModeType(MessageType matchModeType) {
-        this.matchModeType = matchModeType;
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
 

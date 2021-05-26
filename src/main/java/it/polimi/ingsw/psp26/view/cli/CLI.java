@@ -22,7 +22,10 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
@@ -102,44 +105,32 @@ public class CLI implements ViewInterface {
      * Used to ask the Player's credentials
      */
     public void displayLogIn() {
-        try {
+        printTitle();
+        cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
+
+        in.nextLine();
+        String nickname = "";
+        for (int i = 0; i < 2; i++) {
             printTitle();
-            cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
+            cliUtils.vSpace(4);
+            if (i == 0) {
+                pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
+                pw.flush();
+                nickname = in.nextLine();
+                client.setNickname(nickname);
+            } else {
+                pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
+                pw.flush();
+                cliUtils.vSpace(2);
+                pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
+                pw.flush();
+                String serverIP = in.nextLine();
 
-            in.nextLine();
-            String nickname = "";
-            for (int i = 0; i < 2; i++) {
-                printTitle();
-                cliUtils.vSpace(4);
-                if (i == 0) {
-                    pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
-                    pw.flush();
-                    nickname = in.nextLine();
-                    client.setNickname(nickname);
-                } else {
-                    pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + client.getNickname());
-                    pw.flush();
-                    cliUtils.vSpace(2);
-                    pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
-                    pw.flush();
-                    String serverIP = in.nextLine();
+                // Starting the Thread to print notifications
+                startLiveUpdate();
 
-                    // Starting the Thread to print notifications
-                    startLiveUpdate();
-
-                    client.initializeNetworkHandler(nickname, "password", serverIP); // TODO: to add the password
-                    // go to Multi/single player choice
-                    displayChoices(
-                            MULTI_OR_SINGLE_PLAYER_MODE,
-                            "Choose the playing mode:",
-                            Arrays.asList(new MessageType[]{SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE}),
-                            1, 1,
-                            false
-                    );
-                }
+                client.initializeNetworkHandler(nickname, "password", serverIP); // TODO: to add the password
             }
-        } catch (ServerIsNotReachableException serverIsNotReachableException) {
-            displayLogIn();
         }
     }
 
@@ -479,14 +470,6 @@ public class CLI implements ViewInterface {
             List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasUndoOption));
             client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
 
-            if (messageType.equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
-                client.setMatchModeType((MessageType) selected.get(0));
-                try {
-                    client.notifyObservers(new Message(ADD_PLAYER, client.getNickname()));
-                } catch (InvalidPayloadException e) {
-                    e.printStackTrace();
-                }
-            }
             client.viewNext();
 
         } catch (InvalidPayloadException e) {

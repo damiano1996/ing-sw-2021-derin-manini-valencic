@@ -95,6 +95,18 @@ public class Player extends Observable<SessionMessage> {
     }
 
     /**
+     * Method to activate the leader card.
+     * It activates the leader and notifies players sending an updating model message.
+     *
+     * @param leaderCard copy of the original leader that must be activated
+     */
+    public void activateLeaderCard(LeaderCard leaderCard) {
+        leaderCards.get(leaderCards.indexOf(leaderCard)).activate(this);
+
+        notifyObservers(getPlayerModelUpdateMessage(sessionToken));
+    }
+
+    /**
      * Method to discard a leader card.
      *
      * @param leaderCard leader card to discard

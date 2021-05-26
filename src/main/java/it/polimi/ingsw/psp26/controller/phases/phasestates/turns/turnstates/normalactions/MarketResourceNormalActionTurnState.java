@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
 
+
 public class MarketResourceNormalActionTurnState extends TurnState {
 
     private List<Resource> tempResources;
@@ -33,6 +34,28 @@ public class MarketResourceNormalActionTurnState extends TurnState {
     public MarketResourceNormalActionTurnState(Turn turn) {
         super(turn);
     }
+
+    /**
+     *  Method that checks the messages of the current player and redirects to the right sub-phase.
+     *
+     *  The first sub-phase is CHOICE_NORMAL_ACTION: It checks if it is the message that arrived from
+     *  ChooseNormalActionTurnState, and then it sends to the current player the list of their available resources.
+     *
+     *  The second sub-phase is CHOICE_ROW_COLUMN: It receives the answer of the previous message, it checks if the
+     *  player choose a row or a column and which and takes it. Then it push the marble on the corresponding column/row.
+     *  If the resources taken contain a empty resource it calls the method that execute the leader power. If two
+     *  leaders are activated ask for the resources otherwise calls the method to parse the resource and to redirect to
+     *  the next phase.
+     *
+     *  The third sub-phase is CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY: This message type is received only when two leaders
+     *  are executed with success. The message contains the choice for each empty resource. The empty resources are
+     *  changed accordingly, and then it calls the method to parse the resource and to redirect to the next phase.
+     *
+     *  The fourth sub-phase is UNDO_OPTION_SELECTED/default: It checks if an undo message is sent, and redirects the
+     *  player to the ChooseNormalActionTurnState.
+     *
+     * @param message The message sent by the current player, that carries his choices during the turn.
+     */
 
     public void play(SessionMessage message) {
 
@@ -84,6 +107,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                     refactorResourceAndChangeTurn(message);
                     break;
 
+                default:
                 case UNDO_OPTION_SELECTED:
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);
@@ -94,19 +118,20 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         }
     }
 
-    private List<Resource> parseResource() {
 
-        return tempResources.stream()
+    /**
+     *  Method that filters the resource of white and red marbles and redirects to the next phase.
+     *
+     * @param message the message that is forward to the next phase.
+     *
+     */
+    private void refactorResourceAndChangeTurn(SessionMessage message){
+
+        isRedMarblePresent();
+        tempResources = tempResources.stream()
                 .filter(x -> !x.equals(Resource.EMPTY))
                 .filter(x -> !x.equals(Resource.FAITH_MARKER))
                 .collect(Collectors.toList());
-    }
-
-
-    private void refactorResourceAndChangeTurn(SessionMessage message) throws InvalidPayloadException {
-
-        isRedMarblePresent();
-        tempResources = parseResource();
 
         if (tempResources.size() > 0) {
 
@@ -119,6 +144,11 @@ public class MarketResourceNormalActionTurnState extends TurnState {
         turn.play(message);
     }
 
+    /**
+     * Method that checks if there is a red marble in the selected row or column and in case gives one point.
+     *
+     */
+
     private void isRedMarblePresent() {
 
         tempResources.stream()
@@ -126,15 +156,28 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                 .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
 
-    public List<Resource> getTempResources() {
-        return tempResources;
-    }
+    //public List<Resource> getTempResources() { return tempResources;}
+
+    /**
+     *  Method that for each leader active, tries to execute their power and in case of one or more marble leader it
+     *  apply their effect.
+     *
+     *  It creates two empty lists, in one list it is copied the original list of the column/row.Then for each leader
+     *  it tries to execute the power, if the result list has a different number of empty resources of the original one,
+     *  the list is saved.Then it checks the lists to see if both are different from the original one, if they are for
+     *  each empty resources it request to the player with which resource between the two they want to substitute it.
+     *
+     * @param message the message that is forwarded to the next phase.
+     *
+     * @return true if two leaders executed their effect, false otherwise.
+     */
 
     private boolean applyMarbleLeaderEffect(SessionMessage message) {
 
         List<Resource> tempResourceLeader = new ArrayList<>();
+        List<Resource> tempResourceBeforeLeaders = new ArrayList<>();
 
-        List<Resource> tempResourceBeforeLeaders = new ArrayList<>(tempResources);
+        tempResourceBeforeLeaders.addAll(tempResources);
 
         for (LeaderCard leader : turn.getTurnPlayer().getLeaderCards()) {
 
@@ -143,17 +186,16 @@ public class MarketResourceNormalActionTurnState extends TurnState {
             if (tempResources.size() != tempResourceBeforeLeaders.size()) {
 
                 tempResources = new ArrayList<>();
-
                 tempResources.addAll(tempResourceBeforeLeaders);
+
             }
 
             if (tempResourceLeader.size() == 0 && !tempResources.contains(Resource.EMPTY)) {
 
                 tempResourceLeader.addAll(tempResources);
-
                 tempResources = new ArrayList<>();
-
                 tempResources.addAll(tempResourceBeforeLeaders);
+
             }
         }
 

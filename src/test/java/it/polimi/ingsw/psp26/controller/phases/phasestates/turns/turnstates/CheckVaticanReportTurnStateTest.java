@@ -71,7 +71,7 @@ public class CheckVaticanReportTurnStateTest {
     @Test
     public void testPlaySinglePlayerBlackCrossActivate_caseActivated() throws InvalidPayloadException {
 
-        turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(7);
+        turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(5);
 
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().moveBlackCrossPosition(8);
 

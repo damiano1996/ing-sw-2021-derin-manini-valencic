@@ -34,7 +34,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
     private boolean isPlayerInVaticanSectionOrOver(Player player, VaticanReportSection section) {
 
-        return player.getPersonalBoard().getFaithTrack().getFaithPoints() > section.getStartSection();
+        return player.getPersonalBoard().getFaithTrack().getFaithPoints() >= section.getStartSection();
     }
 
     private boolean firstPlayerInPopeSpace(Player player) {

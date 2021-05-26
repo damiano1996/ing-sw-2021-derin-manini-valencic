@@ -26,6 +26,28 @@ public class BuyCardNormalActionTurnState extends TurnState {
         super(turn);
     }
 
+    /**
+     *  Method that checks the messages of the current player and redirects to the right sub-phase.
+     *
+     *  The first sub-phase is CHOICE_NORMAL_ACTION: It checks if it is the message that arrived from
+     *  ChooseNormalActionTurnState, it also checks if there are leader discount power to activate and in case it stores
+     *  the discount amount.In the sends to the current player the list of their available resources.
+     *
+     *  The second sub-phase is CHOICE_CARD_TO_BUY: It checks if the player can buy at least one card and if it the
+     *  player choice of the development card they want to buy is affordable. If it does not pass the first check
+     *  it sends an error message and redirect to the ChooseNormalActionTurnState, if it does not pass the second check
+     *  send them a message to choose another card. If it pass both checks, it call the method to draw the card player
+     *  and pay the cost resources. It then send a message to the player with the card slot available.
+     *
+     *  The third sub-phase is CHOICE_DEVELOPMENT_CARD_SLOT_POSITION: It takes the player answer of the previous
+     *  message(the card slot), and calls a method to put the bought card in that card slot.
+     *
+     *  The fourth sub-phase is UNDO_OPTION_SELECTED/default: It checks if an undo message is sent, and redirects the
+     *  player to the ChooseNormalActionTurnState.
+     *
+     * @param message The message sent by the current player, that carries his choices during the turn.
+     */
+
     public void play(SessionMessage message) {
         super.play(message);
 
@@ -49,13 +71,8 @@ public class BuyCardNormalActionTurnState extends TurnState {
                     if (getAvailableCard().size() > 0) {
                         if (getAvailableCard().contains((DevelopmentCard) message.getPayload())) {
 
-                            try {
-
-                                boughtCard = buyCard((DevelopmentCard) message.getPayload());
-
-                            } catch (NegativeNumberOfElementsToGrabException e) {
-                                e.printStackTrace();
-                            }
+                            boughtCard = (DevelopmentCard) message.getPayload();
+                            buyCard();
 
                             turn.getMatchController().notifyObservers(
                                     new MultipleChoicesMessage(
@@ -106,6 +123,12 @@ public class BuyCardNormalActionTurnState extends TurnState {
         }
     }
 
+    /**
+     * Method that filters the visible cards of the development grid in base if player can afford and place in one of
+     * their slot or not.
+     *
+     * @return List of development card that the player has enough resources to buy or is able to position.
+     */
 
     private List<DevelopmentCard> getAvailableCard() {
         List<DevelopmentCard> availableCard = new ArrayList<>();
@@ -132,30 +155,38 @@ public class BuyCardNormalActionTurnState extends TurnState {
 
     }
 
-    private DevelopmentCard buyCard(DevelopmentCard playerCard) throws NegativeNumberOfElementsToGrabException {
-        DevelopmentCard drawnCard = null;
+    /**
+     *  Method that given a card, takes the resource cost from the warehouse and depot of the current player.
+     *
+     */
+
+    private void buyCard(){
+        DevelopmentCard drawnCard = boughtCard;
         int numberResources;
         int i = 0;
 
         try {
-            drawnCard = turn.getMatchController().getMatch().getDevelopmentGrid().drawCard(playerCard.getDevelopmentCardType().getColor(), playerCard.getDevelopmentCardType().getLevel());
+            drawnCard = turn.getMatchController().getMatch().getDevelopmentGrid().drawCard(drawnCard.getDevelopmentCardType().getColor(), drawnCard.getDevelopmentCardType().getLevel());
 
         } catch (LevelDoesNotExistException | ColorDoesNotExistException | NoMoreDevelopmentCardsException ignored) {
         }
 
-        assert drawnCard != null;
         for (Resource resource : drawnCard.getCost().keySet()) {
 
             numberResources = drawnCard.getCost().get(resource) - (int) tempResources.stream().filter(x -> x.equals(resource)).count();
             numberResources -= turn.getTurnPlayer().getPersonalBoard().getWarehouse().grabResources(resource, numberResources).size();
+
             if (numberResources > 0)
                 turn.getTurnPlayer().getPersonalBoard().grabResourcesFromStrongbox(resource, numberResources);
 
         }
-        return drawnCard;
-
-
     }
+
+    /**
+     * Method that checks which position the boughtCard can be placed
+     *
+     * @return List of string that represent the indexes of the position that are allowed.
+     */
 
     private List<String> positionsForCard() {
         List<String> CorrectPositions = new ArrayList<>();
@@ -166,6 +197,12 @@ public class BuyCardNormalActionTurnState extends TurnState {
         }
         return CorrectPositions;
     }
+
+    /**
+     * Method that place a development card in the pointed slot of the current player.
+     *
+     * @param slotIndex the index of the slot in which the card is placed.
+     */
 
     private void placeCard(String slotIndex) {
         try {

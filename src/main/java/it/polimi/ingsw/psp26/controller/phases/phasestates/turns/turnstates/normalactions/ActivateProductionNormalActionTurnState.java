@@ -22,6 +22,7 @@ import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtil
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
+
 public class ActivateProductionNormalActionTurnState extends TurnState {
 
     private List<Production> productionActivated = new ArrayList<>();
@@ -39,6 +40,29 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         super(turn);
     }
 
+    /**
+     *  Method that checks the messages of the current player and redirects to the right sub-phase.
+     *
+     *  The first sub-phase is CHOICE_NORMAL_ACTION: It checks if it is the message that arrived from
+     *  ChooseNormalActionTurnState, and then it sends to the current player the message to choose the list of
+     *  production that they want to activate.
+     *
+     *  The second sub-phase is CHOICE_PRODUCTIONS_TO_ACTIVATE: It receives the answer of the previous message, it calls
+     *  the method to check if at least one production is actionable, if it is not it sends an error message and a
+     *  redirection to the ChooseNormalActionTurnState. Then it calls the method to check and handle unknown resources
+     *  and redirects to the next phase.
+     *
+     *  The third sub-phase is CHOICE_RESOURCE_FROM_WAREHOUSE/CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY: The message type
+     *  depends on the unknown resource on the production list. It checks if there are unresolved unknown resources and
+     *  so if it has to ask the player the unknown resource for the production result. If all unknown resources are
+     *  defined, it calls the method to activate the productions and to go to the next phase.
+     *
+     *  The fourth sub-phase is QUIT_OPTION_SELECTED/default: It checks if an undo message is sent, and redirects the
+     *  player to the ChooseNormalActionTurnState.
+     *
+     * @param message The message sent by the current player, that carries his choices during the turn.
+     */
+
     public void play(SessionMessage message) {
 
         try {
@@ -46,6 +70,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 case CHOICE_NORMAL_ACTION:
 
                     sendProductionMultipleChoiceMessage();
+
                     break;
 
                 case CHOICE_PRODUCTIONS_TO_ACTIVATE:
@@ -54,30 +79,8 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                         productionActivated = castElements(Production.class, message.getListPayloads());
 
-                        for (Production production : productionActivated) {
+                        checkForUnknownAndRedirect(message);
 
-                            if (production.getProductionCost().containsKey(Resource.UNKNOWN))
-                                numOfUnknownCost += production.getProductionCost().get(Resource.UNKNOWN);
-
-                            if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
-                                numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
-                        }
-                        if (numOfUnknownCost != 0) {
-                            sendGeneralMessage(turn, "Choose the resource to pay that replaces the unknown resource in the production:");
-                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost, true));
-                            turn.play(message);
-
-                        } else if (numOfUnknownProd != 0) {
-                            sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
-                            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
-                            turn.play(message);
-
-
-                        } else {
-
-                            play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE));
-
-                        }
                     } else {
 
                         sendGeneralMessage(turn, "No enough resources to activate any card - sending to choose action:");
@@ -94,9 +97,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                         if (numOfUnknownProd != 0)
                             unknownProdResources = castElements(Resource.class, message.getListPayloads());
+
                         activateProduction(message);
 
                     } else {
+
                         unknownCostResources = castElements(Resource.class, message.getListPayloads());
 
                         if (numOfUnknownProd != 0) {
@@ -131,6 +136,11 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
      * Method that checks if the list of productions that the current player sent, in their totality, are actionable
      * by their current available resources.
      *
+     * It takes a copy of all player resources and removes from them the resources required for the production, when it
+     * meets unknown resources it substitute them with the player choices. If it cannot remove a resource from the copy
+     * list it returns false, return true otherwise.
+     *
+     *
      * @return true if the whole production list is actionable, false if it is not.
      */
 
@@ -158,8 +168,21 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     }
 
     /**
-     * @param message session message
+     * Method that check if the player production list proposed is possible, in case it takes the required resources
+     * from the current player, gives them back the production resulting resources and then it takes them to the
+     * following turn state
+     *
+     * It calls the isProductionFeasible to check if the player has enough resources to activate the production, If not
+     * it sends an error message to the player and redirect them to ChooseNormalActionTurnState.
+     * Instead if they have, it takes the resources required to activate the production first from the warehouse then
+     * from the strongbox. Then it adds to the player the resources resulting by the production and redirect them to
+     * next phase, CheckVaticanReportTurnState
+     *
+     *
+     * @param message
      */
+
+
     private void activateProduction(SessionMessage message) {
         if (isProductionFeasible()) {
             for (Production production : productionActivated) {
@@ -176,13 +199,16 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                             production.getProductionCost().get(resource));
                 }
             }
+
             collectProduction();
             turn.changeState(new CheckVaticanReportTurnState(turn));
+
         } else {
 
-            sendErrorMessage(turn, "Too many production activated or wrong use of resources");
+            sendErrorMessage(turn, "Too many production activated or wrong use of the resources");
             turn.changeState(new ChooseNormalActionTurnState(turn));
         }
+
         turn.play(message);
 
     }
@@ -190,6 +216,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     /**
      * Method that sends to the current player a message to ask which production they want to activate between
      * their available production.
+     *
      */
 
     private void sendProductionMultipleChoiceMessage() {
@@ -208,8 +235,14 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
     }
 
     /**
-     * Method that adds to the current player strongbox the list of resources produced by each production that
-     * they activated
+     *  Method that adds to the current player strongbox the list of resources produced by the production list that
+     *  they activated
+     *
+     *  For each production that the player activated it adds all the resource produced that are not unknown to a
+     *  temporary list, then it checks if there were unknown resources and in case it adds up also the resources that
+     *  the player decided to substitute the unknown resources with. The list is parsed and then added to the player
+     *  strongbox
+     *
      */
 
     private void collectProduction() {
@@ -241,12 +274,13 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
 
     /**
-     * Method that checks if the current player has enough resources to activate at least one production.
-     * <p>
-     * If there is only one visible production it means that it is the base one, and so it is enough to check that
-     * player has at least two resources. If there is more than one, it means that there is at least one development
-     * card (that could require only one resource), and so for each one of them it checks if satisfy the its
-     * requirement.
+     *  Method that checks if the current player has enough resources to activate at least one production of the
+     *  productions they possess.
+     *
+     *  If there is only one visible production it means that it is the base one, and so it is enough to check that
+     *  player has at least two resources. If there are more than one, it means that there is at least one development
+     *  card (that could require only one resource), and so for each one of them it checks if its requirements are
+     *  satisfiable.
      *
      * @return true if there is at least one production that is actionable by the player, false if there is none.
      */
@@ -256,7 +290,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
                 productionActivated.add(turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(i));
                 if (!productionActivated.get(0).getProductionCost().containsKey(Resource.UNKNOWN)) {
-                    if (isProductionFeasible()) {
+                    if (isProductionFeasible()){
                         productionActivated.remove(0);
                         return true;
                     }
@@ -268,6 +302,59 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
         }
 
         return turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().size() >= 2;
+    }
+
+    /**
+     *  Method that checks the presence of unknown resources in the production list sent by the current player. If there
+     *  are, it let them pick the substitute resources for them. Then it redirects the player to the next phase.
+     *
+     *  For each production, it checks the presence of unknown resources both in the production cost and in the return,
+     *  for each unknown resource found it increase the relative counter. First it checks the cost counter if it is not
+     *  zero and in case ask for the resource to substitute them with. If the cost counter is zero it does the same for
+     *  the return. And if both are zero it directly goes to the next phase.
+     *
+     * @param message
+     */
+
+    private void checkForUnknownAndRedirect(SessionMessage message){
+        for (Production production : productionActivated) {
+
+            if (production.getProductionCost().containsKey(Resource.UNKNOWN))
+                numOfUnknownCost += production.getProductionCost().get(Resource.UNKNOWN);
+
+            if (production.getProductionReturn().containsKey(Resource.UNKNOWN))
+                numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
+        }
+        if(numOfUnknownCost != 0 & turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().size() <= 1){
+            sendGeneralMessage(turn, "Not enough resources to activate base power");
+            turn.changeState(new ChooseNormalActionTurnState(turn));
+            turn.play(message);
+            return;
+        }
+        if (numOfUnknownCost != 0) {
+            sendGeneralMessage(turn, "Choose the resource to pay that replaces the unknown resource in the production:");
+            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost, true));
+            turn.play(message);
+
+        } else if (numOfUnknownProd != 0) {
+            sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
+            turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
+            turn.play(message);
+
+
+        } else {
+
+            try {
+                play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE));
+
+            } catch (InvalidPayloadException e) {
+
+                e.printStackTrace();
+
+            }
+
+        }
+
     }
 
 }

@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.SpecialToken;
+import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendMessageToAllPlayerExceptOne;
 
@@ -20,7 +21,13 @@ public class PlayingPhaseState extends PhaseState {
     public PlayingPhaseState(Phase phase) {
         super(phase);
 
-        initializeFirstTurn();
+        initializeFirstTurn(true);
+    }
+
+    public PlayingPhaseState(Phase phase, boolean shuffle) {
+        super(phase);
+
+        initializeFirstTurn(shuffle);
     }
 
     @Override
@@ -28,8 +35,13 @@ public class PlayingPhaseState extends PhaseState {
         currentTurn.play(message);
     }
 
-    private void initializeFirstTurn() {
-        phase.getMatchController().getMatch().shufflePlayers();
+    public Turn getCurrentTurn() {
+        return currentTurn;
+    }
+
+    private void initializeFirstTurn(boolean shuffle) {
+        if (shuffle) phase.getMatchController().getMatch().shufflePlayers();
+
         currentTurn = new Turn(
                 this,
                 phase.getMatchController(),
@@ -50,11 +62,18 @@ public class PlayingPhaseState extends PhaseState {
     }
 
     public void updateCurrentTurn() {
-        int nextTurnNUmber = currentTurn.getTurnNumber() + 1;
+        int nextTurnNumber = currentTurn.getTurnNumber() + 1;
+
+        GameSaver.getInstance().backupMatch(
+                currentTurn.getMatchController().getMatch(),
+                currentTurn.getMatchController().getMatch().getPlayers().indexOf(getNextPlayer()),
+                nextTurnNumber
+        );
+
         currentTurn = new Turn(this,
                 phase.getMatchController(),
                 getNextPlayer(),
-                nextTurnNUmber);
+                nextTurnNumber);
         try {
             sendNotificationMessageNewTurn();
             currentTurn.play(new SessionMessage(currentTurn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));

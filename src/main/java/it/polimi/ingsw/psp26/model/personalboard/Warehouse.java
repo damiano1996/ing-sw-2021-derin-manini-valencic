@@ -39,6 +39,11 @@ public class Warehouse extends Observable<SessionMessage> {
         this.sessionToken = sessionToken;
     }
 
+    public void recoverVirtualView(VirtualView virtualView) {
+        addObserver(virtualView);
+        for (Depot depot : baseDepots) depot.addObserver(virtualView);
+    }
+
     /**
      * Method to add resource to a given depot.
      * It checks the rule: "no same resource among different base depots".

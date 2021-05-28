@@ -63,6 +63,12 @@ public class PersonalBoard extends Observable<SessionMessage> {
         this.sessionToken = sessionToken;
     }
 
+    public void recoverVirtualView(VirtualView virtualView) {
+        addObserver(virtualView);
+        faithTrack.recoverVirtualView(virtualView);
+        warehouse.recoverVirtualView(virtualView);
+    }
+
     /**
      * Getter of the faith track.
      *

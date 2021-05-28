@@ -1,7 +1,10 @@
 package it.polimi.ingsw.psp26.network.server;
 
+import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.NetworkNode;
+import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,6 +35,8 @@ public class Server {
 
         this.virtualViews = new ArrayList<>();
         waitingRoom = new WaitingRoom();
+        
+        recoveryMatches();
     }
 
     public synchronized static Server getInstance() {
@@ -68,6 +73,18 @@ public class Server {
             try {
                 logIn.join();
             } catch (InterruptedException ignored) {
+            }
+        }
+    }
+    
+    private void recoveryMatches() {
+        for (String gamePath : GameSaver.getInstance().getSavedMatchesPath()) {
+            try {
+                Match restoredMatch = GameSaver.getInstance().loadMatch(gamePath);
+                VirtualView virtualView = new VirtualView(restoredMatch, GameSaver.getInstance().loadTurnPlayerIndex(gamePath), GameSaver.getInstance().loadTurnNumber(gamePath));
+                virtualViews.add(virtualView);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         }
     }

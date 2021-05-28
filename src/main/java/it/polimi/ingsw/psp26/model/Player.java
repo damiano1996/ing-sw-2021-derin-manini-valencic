@@ -20,7 +20,7 @@ public class Player extends Observable<SessionMessage> {
     private transient final VirtualView virtualView;
 
     private final String nickname;
-    private transient final String sessionToken;
+    private transient String sessionToken;
     private final PersonalBoard personalBoard;
     private int points;
 
@@ -45,6 +45,15 @@ public class Player extends Observable<SessionMessage> {
         inkwell = false;
         leaderCards = new ArrayList<>();
         points = 0;
+    }
+
+    public void recoverVirtualView(VirtualView virtualView) {
+        addObserver(virtualView);
+        personalBoard.recoverVirtualView(virtualView);
+    }
+    
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
     }
 
     /**

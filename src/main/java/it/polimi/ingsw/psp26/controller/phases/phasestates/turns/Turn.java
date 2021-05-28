@@ -15,8 +15,8 @@ public class Turn {
 
     private final PlayingPhaseState playingPhaseState;
     private final MatchController matchController;
-    private final int turnNumber;
-    private final Player turnPlayer;
+    private int turnNumber;
+    private Player turnPlayer;
 
     private TurnState turnState;
     private TurnPhase turnPhase;
@@ -64,9 +64,17 @@ public class Turn {
     public Player getTurnPlayer() {
         return turnPlayer;
     }
+    
+    public void setTurnPlayer(Player turnPlayer) {
+        this.turnPlayer = turnPlayer;
+    } 
 
     public int getTurnNumber() {
         return turnNumber;
+    }
+    
+    public void setTurnNumber(int turnNumber) {
+        this.turnNumber = turnNumber;
     }
 
     public TurnPhase getTurnPhase() {

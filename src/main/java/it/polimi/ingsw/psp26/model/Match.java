@@ -56,6 +56,14 @@ public class Match extends Observable<SessionMessage> {
         initializeLeaderDeck();
         initializeActionTokenStack();
     }
+    
+    public void recoverVirtualView(VirtualView virtualView) {
+        addObserver(virtualView);
+        
+        developmentCardsGrid.addObserver(virtualView);
+        marketTray.addObserver(virtualView);
+        for (Player player : players) player.recoverVirtualView(virtualView);
+    }
 
     /**
      * Initialization of the deck containing the leader cards and shuffling.

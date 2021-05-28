@@ -4,6 +4,8 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.PhaseState;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
@@ -28,6 +30,24 @@ public class MatchController extends Observable<SessionMessage> implements Obser
         initializeMatch(matchId);
         phase = new Phase(this);
     }
+    
+    public MatchController(VirtualView virtualView, Match match, int turnPlayerIndex, int turnNumber) {
+        super();
+        addObserver(virtualView);
+        this.virtualView = virtualView;
+
+        this.match = match;
+        phase = new Phase(this);
+        
+        PlayingPhaseState playingPhaseState = new PlayingPhaseState(phase, false);
+        playingPhaseState.getCurrentTurn().setTurnPlayer(match.getPlayers().get(turnPlayerIndex));
+        playingPhaseState.getCurrentTurn().setTurnNumber(turnNumber);
+        phase.changeState(playingPhaseState);
+
+        maxNumberOfPlayers = match.getPlayers().size();
+        System.out.println("MatchController - MatchController has been restored.");
+    }
+
 
     @Override
     public synchronized void update(SessionMessage message) {
@@ -62,4 +82,5 @@ public class MatchController extends Observable<SessionMessage> implements Obser
         this.maxNumberOfPlayers = maxNumberOfPlayers;
         System.out.println("MatchController - Max number of players: " + this.maxNumberOfPlayers);
     }
+    
 }

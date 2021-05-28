@@ -44,6 +44,12 @@ public class FaithTrack extends Observable<SessionMessage> {
         victoryPoints = new int[]{0, 1, 2, 4, 6, 9, 12, 16, 20};
     }
 
+    public void recoverVirtualView(VirtualView virtualView) {
+        addObserver(virtualView);
+        for (VaticanReportSection vaticanReportSection : vaticanReportSections)
+            vaticanReportSection.addObserver(virtualView);
+    }
+
     /**
      * Method to add points to the track.
      *

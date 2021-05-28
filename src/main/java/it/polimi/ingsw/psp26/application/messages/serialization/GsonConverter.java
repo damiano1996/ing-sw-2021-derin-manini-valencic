@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.psp26.application.messages.serialization.serializers.AbstractClassSerializer;
 import it.polimi.ingsw.psp26.application.messages.serialization.serializers.MapSerializer;
+import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardType;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialAbility;
@@ -26,6 +27,7 @@ public class GsonConverter {
      */
     private GsonConverter() {
         gson = new GsonBuilder()
+                .registerTypeAdapter(ActionToken.class, new AbstractClassSerializer<ActionToken>())
                 .registerTypeAdapter(SpecialAbility.class, new AbstractClassSerializer<SpecialAbility>())
                 .registerTypeAdapter((new TypeToken<Map<Resource, Integer>>() {
                 }).getType(), new MapSerializer<>(Resource.class, Integer.class))

@@ -10,9 +10,11 @@ import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.PlayerDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.ValueDoesNotExistsException;
+import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 import it.polimi.ingsw.psp26.network.SpecialToken;
+import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +41,19 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         connectedNetworkNodes = new ArrayList<>();
 
         matchController = new MatchController(this, getMatchId());
+
+        heartbeatControllers = new HashMap<>();
+
+        addObserver(matchController);
+    }
+    
+    public VirtualView(Match match, int turnPlayerIndex, int turnNumber) {
+        super();
+        nodeClients = new HashMap<>();
+        connectedNetworkNodes = new ArrayList<>();
+
+        match.recoverVirtualView(this);
+        matchController = new MatchController(this, match, turnPlayerIndex, turnNumber);
 
         heartbeatControllers = new HashMap<>();
 
@@ -179,7 +194,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
     }
 
     private synchronized int getMatchId() {
-        return 0; // TODO: if we want an incremental id we should implement a way to retrieve the last assigned id
+        return GameSaver.getInstance().getLastId() + 1;
     }
 
 

@@ -108,21 +108,20 @@ public class CLI implements ViewInterface {
         printTitle();
         cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
         in.nextLine();
-        
+
         String nickname = "";
         String password = "";
 
         for (int i = 0; i < 3; i++) {
             printTitle();
             cliUtils.vSpace(4);
-            
+
             if (i == 0) {
                 pw.print(cliUtils.hSpace(100) + "Enter Nickname: ");
                 pw.flush();
                 nickname = in.nextLine();
-                client.setNickname(nickname);
             }
-            
+
             if (i == 1) {
                 pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + nickname);
                 pw.flush();
@@ -131,7 +130,7 @@ public class CLI implements ViewInterface {
                 pw.flush();
                 password = in.nextLine();
             }
-            
+
             if (i == 2) {
                 pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + nickname);
                 pw.flush();
@@ -142,7 +141,7 @@ public class CLI implements ViewInterface {
                 pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                 pw.flush();
                 String serverIP = in.nextLine();
-                
+
                 // Starting the Thread to print notifications
                 startLiveUpdate();
 

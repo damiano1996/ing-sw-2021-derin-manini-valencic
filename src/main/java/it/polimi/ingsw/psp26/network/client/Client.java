@@ -13,7 +13,8 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import java.io.IOException;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.DISPLAY_LOGIN;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.UNDO_OPTION_SELECTED;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createLeaderboard;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createPlayersList;
@@ -22,7 +23,10 @@ public class Client extends Observable<Message> {
 
     private final NetworkHandler networkHandler;
     private final ViewInterface viewInterface;
+
     private String nickname;
+    private String password;
+
     private int numberOfPlayers;
     private CachedModel cachedModel;
 
@@ -63,11 +67,6 @@ public class Client extends Observable<Message> {
                     viewInterface.displayError((String) message.getPayload());
                     break;
 
-                case SET_NICKNAME:
-                    setNickname((String) message.getPayload());
-                    viewNext();
-                    break;
-
                 case SET_NUMBER_OF_PLAYERS:
                     setNumberOfPlayers((Integer) message.getPayload());
                     viewNext();
@@ -86,6 +85,7 @@ public class Client extends Observable<Message> {
                 case CHOICE_PRODUCTIONS_TO_ACTIVATE:
                 case NEW_OR_OLD:
                 case MULTI_OR_SINGLE_PLAYER_MODE:
+                case MENU:
 
                     MultipleChoicesMessage mcm = (MultipleChoicesMessage) message;
                     viewInterface.displayChoices(
@@ -160,14 +160,14 @@ public class Client extends Observable<Message> {
         } catch (EmptyPayloadException ignored) {
         }
     }
-    
+
 
     /**
      * Used to set a connection between the Client and the Server
      *
      * @param serverIP The Server IP
      */
-    public void initializeNetworkHandler(String nickname, String password, String serverIP) {
+    public synchronized void initializeNetworkHandler(String nickname, String password, String serverIP) {
         try {
             networkHandler.initializeNetworkNode(nickname, password, serverIP);
 
@@ -191,6 +191,8 @@ public class Client extends Observable<Message> {
 
 
     /**
+     * Getter of the cached model.
+     *
      * @return The local CachedModel
      */
     public synchronized CachedModel getCachedModel() {
@@ -199,10 +201,21 @@ public class Client extends Observable<Message> {
 
 
     /**
+     * Getter of the nickname of the user.
+     *
      * @return The nickname of the Player
      */
-    public String getNickname() {
+    public synchronized String getNickname() {
         return nickname;
+    }
+
+    /**
+     * Getter of the password of the user.
+     *
+     * @return The password of the user
+     */
+    public synchronized String getPassword() {
+        return password;
     }
 
 
@@ -210,9 +223,11 @@ public class Client extends Observable<Message> {
      * Sets a new nickname for the Player and creates a new CachedModel
      *
      * @param nickname The nickname to give to the Player
+     * @param password The password of the user
      */
-    public void setNickname(String nickname) {
+    public synchronized void setNickname(String nickname, String password) {
         this.nickname = nickname;
+        this.password = password;
         this.cachedModel = new CachedModel(nickname);
     }
 
@@ -220,7 +235,7 @@ public class Client extends Observable<Message> {
     /**
      * @return True if the Match is in MultiPlayer mode, false if the Match is in SinglePlayer mode
      */
-    public boolean isMultiplayerMode() {
+    public synchronized boolean isMultiplayerMode() {
         return numberOfPlayers > 1;
     }
 
@@ -230,7 +245,7 @@ public class Client extends Observable<Message> {
      *
      * @param numberOfPlayers number of players in the match
      */
-    public void setNumberOfPlayers(int numberOfPlayers) {
+    public synchronized void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 
@@ -238,7 +253,7 @@ public class Client extends Observable<Message> {
     /**
      * Sends an undo Message to the Server when selected by the Player
      */
-    public void sendUndoMessage() {
+    public synchronized void sendUndoMessage() {
         try {
             notifyObservers(new Message(UNDO_OPTION_SELECTED));
         } catch (InvalidPayloadException ignored) {

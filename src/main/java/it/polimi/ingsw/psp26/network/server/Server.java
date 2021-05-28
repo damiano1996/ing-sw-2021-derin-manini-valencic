@@ -19,6 +19,7 @@ public class Server {
 
     private static ServerSocket serverSocket;
     private final List<VirtualView> virtualViews; // One virtual view for each match
+    private final WaitingRoom waitingRoom;
 
     /**
      * Class constructor.
@@ -30,6 +31,7 @@ public class Server {
         System.out.println("Server is listening on port " + DEFAULT_SERVER_PORT);
 
         this.virtualViews = new ArrayList<>();
+        waitingRoom = new WaitingRoom();
     }
 
     public synchronized static Server getInstance() {
@@ -49,16 +51,25 @@ public class Server {
      * it to the network node.
      * A thread is executed to parallelize new node initialization.
      *
+     * @param joinLogInThread boolean to join the thread that starts the login phase
      * @throws IOException if socket cannot be instantiated
      */
-    public void listening() throws IOException {
+    public void listening(boolean joinLogInThread) throws IOException {
         // New client is arrived
         Socket socket = serverSocket.accept();
         // run thread to handle client setup
         NetworkNode clientNode = new NetworkNode(socket);
         System.out.println("Server - New socket!");
 
-        new VirtualViewAssignment(clientNode).start();
+        LogIn logIn = new LogIn(clientNode);
+        logIn.start();
+
+        if (joinLogInThread) {
+            try {
+                logIn.join();
+            } catch (InterruptedException ignored) {
+            }
+        }
     }
 
     /**
@@ -76,5 +87,9 @@ public class Server {
 
     public void addVirtualView(VirtualView virtualView) {
         virtualViews.add(virtualView);
+    }
+
+    public void addNodeClientToWaitingRoom(String sessionToken, NetworkNode nodeClient) {
+        waitingRoom.addNodeClient(sessionToken, nodeClient);
     }
 }

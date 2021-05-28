@@ -81,7 +81,7 @@ public class NotificationStackPrinter {
      */
     private List<String> splitString(String string) {
         List<String> stringList = new ArrayList<>();
-        
+
         String noEscapeString = string.replaceAll("\n", " ");
         for (int i = 0; i < noEscapeString.length(); i += STACK_WIDTH)
             stringList.add(noEscapeString.substring(i, Math.min(i + STACK_WIDTH, noEscapeString.length())));

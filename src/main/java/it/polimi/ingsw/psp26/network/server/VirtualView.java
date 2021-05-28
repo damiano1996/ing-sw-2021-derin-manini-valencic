@@ -167,7 +167,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
     /**
      * Method to stop the thread that is listening messages from client node.
      * It sets to false the associated value of the network node that is referring to the connection status.
-     * This action will stop the thread that will remove the network node from the pool of network clients.
+     * As consequence, this action will stop the "listening" thread that will remove the network node from the list of network clients.
      *
      * @param sessionToken session token of the disconnected player
      */

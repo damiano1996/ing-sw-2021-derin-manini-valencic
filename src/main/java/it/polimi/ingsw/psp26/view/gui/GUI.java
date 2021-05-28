@@ -115,8 +115,6 @@ public class GUI extends Application implements ViewInterface {
                 String password = ((TextField) fxmlLoader.getNamespace().get("passwordTextField")).getText();
                 String serverIP = ((TextField) fxmlLoader.getNamespace().get("serverIPTextField")).getText();
 
-                client.setNickname(nickname);
-
                 client.initializeNetworkHandler(nickname, password, serverIP);
                 dialog.close();
                 client.viewNext();
@@ -213,6 +211,7 @@ public class GUI extends Application implements ViewInterface {
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
             case NEW_OR_OLD:
+            case MENU:
                 choicesDrawer = new MessageTypeChoicesDrawer();
                 break;
 

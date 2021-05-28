@@ -49,7 +49,7 @@ public class Turn {
                     e.printStackTrace();
                 }
                 // updating turn skipping for current player
-                playingPhaseState.updateCurrentTurn();
+                if (matchController.getMatch().isMultiPlayerMode()) playingPhaseState.updateCurrentTurn();
 
             } else {
                 turnState.play(message);

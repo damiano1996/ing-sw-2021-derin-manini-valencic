@@ -3,23 +3,24 @@ package it.polimi.ingsw.psp26.network.server;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
-import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.exceptions.DesiredVirtualViewDoesNotExistException;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.NetworkNode;
-import it.polimi.ingsw.psp26.network.server.memory.Users;
 
 import java.io.IOException;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static it.polimi.ingsw.psp26.configurations.Configurations.SESSION_TOKEN_LENGTH;
-import static it.polimi.ingsw.psp26.network.NetworkUtils.generateSessionToken;
-import static it.polimi.ingsw.psp26.network.server.memory.CommonNicknamePasswordChecksEnums.*;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.lookingForMessage;
 
 public class VirtualViewAssignment extends Thread {
 
+    private final String sessionToken;
     private final NetworkNode clientNode;
 
-    public VirtualViewAssignment(NetworkNode clientNode) {
+    public VirtualViewAssignment(String sessionToken, NetworkNode clientNode) {
+        this.sessionToken = sessionToken;
         this.clientNode = clientNode;
     }
 
@@ -27,79 +28,14 @@ public class VirtualViewAssignment extends Thread {
     public void run() {
 
         try {
-            try {
 
-                System.out.println("VirtualViewAssignment - New clientNode to add.");
-                String sessionToken = getSessionToken(clientNode);
+            System.out.println("VirtualViewAssignment - New match or recover an old?");
+            newOrOldMatchSetup(clientNode, sessionToken);
 
-                System.out.println("VirtualViewAssignment - New match or recover an old?");
-                newOrOldMatchSetup(clientNode, sessionToken);
-
-            } catch (PasswordNotCorrectException e) {
-                clientNode.sendData(PASSWORD_NOT_CORRECT);
-                clientNode.closeConnection();
-            } catch (NicknameTooShortException e) {
-                clientNode.sendData(NICKNAME_TOO_SHORT);
-                clientNode.closeConnection();
-            } catch (NicknameAlreadyExistsException e) {
-                clientNode.sendData(NICKNAME_ALREADY_EXISTS);
-                clientNode.closeConnection();
-            } catch (PasswordTooShortException e) {
-                clientNode.sendData(PASSWORD_TOO_SHORT);
-                clientNode.closeConnection();
-            } catch (EmptyPayloadException | ClassNotFoundException | InvalidPayloadException ignored) {
-            }
-        } catch (IOException ignored) {
+        } catch (IOException | EmptyPayloadException | InvalidPayloadException | ClassNotFoundException ignored) {
         }
     }
 
-    private String getSessionToken(NetworkNode clientNode) throws IOException, PasswordNotCorrectException, NicknameTooShortException, NicknameAlreadyExistsException, PasswordTooShortException, InvalidPayloadException, ClassNotFoundException {
-        boolean showNewNicknameMessage = false;
-
-        // step: receiving nickname and password from clientNode
-        String nickname = (String) clientNode.receiveData();
-        String password = (String) clientNode.receiveData();
-        // step: checking if it is a new user or not
-        String sessionToken;
-        if (Users.getInstance().getNicknamePasswords().containsKey(nickname)) {
-
-            if (Users.getInstance().getNicknamePasswords().get(nickname).equals(password)) {
-                System.out.println("VirtualViewAssignment - Login success!");
-                // first case: user exists and correctly registered, we can load the session token:
-                sessionToken = Users.getInstance().getNicknameSessionTokens().get(nickname);
-            } else {
-                System.out.println("VirtualViewAssignment - Bad password!");
-                // bad password
-                throw new PasswordNotCorrectException();
-            }
-
-        } else {
-            System.out.println("VirtualViewAssignment - New user, welcome!!");
-            // completely new user!
-            // checking if nickname requirements are satisfied
-            Users.checkNicknameRequirements(nickname);
-            Users.checkPasswordRequirements(password);
-
-            showNewNicknameMessage = true;
-            sessionToken = generateSessionToken(SESSION_TOKEN_LENGTH);
-            Users.getInstance().addUser(nickname, password, sessionToken);
-        }
-
-        System.out.println("VirtualViewAssignment - Sending ok message for nick and pass.");
-        clientNode.sendData(NICKNAME_AND_PASSWORD_ARE_OK);
-        System.out.println("VirtualViewAssignment - Sending sessionToken");
-        clientNode.sendData(sessionToken);
-
-        System.out.println("VirtualViewAssignment - nickname: " + nickname + " - password: " + password + " - sessionToken: " + sessionToken);
-
-        System.out.println("VirtualViewAssignment - Sending the welcome message");
-        if (showNewNicknameMessage)
-            clientNode.sendData(new SessionMessage(sessionToken, GENERAL_MESSAGE, "Welcome " + nickname + " in the community!"));
-        else
-            clientNode.sendData(new SessionMessage(sessionToken, GENERAL_MESSAGE, "Welcome back " + nickname + "!"));
-
-        return sessionToken;
-    }
 
     private void newOrOldMatchSetup(NetworkNode clientNode, String sessionToken) throws InvalidPayloadException, IOException, ClassNotFoundException, EmptyPayloadException {
         // step: checking if there is a suspended match:
@@ -116,13 +52,11 @@ public class VirtualViewAssignment extends Thread {
                             MessageType.NEW_MATCH, MessageType.RECOVERY_MATCH));
 
             System.out.println("VirtualViewAssignment - Waiting response.");
-            SessionMessage message = (SessionMessage) clientNode.receiveData();
-
-            while (!message.getMessageType().equals(MessageType.NEW_OR_OLD))
-                message = (SessionMessage) clientNode.receiveData();
+            SessionMessage message = lookingForMessage(clientNode, NEW_OR_OLD);
 
             System.out.println("VirtualViewAssignment - Response received.");
             if (message.getPayload().equals(MessageType.NEW_MATCH)) {
+                // TODO: We shall communicate to other users that the match will be suspended for ever!
                 System.out.println("VirtualViewAssignment - New match selected.");
                 // asking for a new match
                 matchModeRequests(clientNode, sessionToken);
@@ -152,15 +86,10 @@ public class VirtualViewAssignment extends Thread {
                         SINGLE_PLAYER_MODE, TWO_PLAYERS_MODE, THREE_PLAYERS_MODE, FOUR_PLAYERS_MODE));
 
         System.out.println("VirtualViewAssignment - Waiting response.");
-        SessionMessage message = (SessionMessage) clientNode.receiveData();
-        System.out.println("VirtualViewAssignment - Received message: " + message);
-        while (!message.getMessageType().equals(MULTI_OR_SINGLE_PLAYER_MODE)) {
-            message = (SessionMessage) clientNode.receiveData();
-            System.out.println("VirtualViewAssignment - Received message: " + message);
-        }
+        SessionMessage message = lookingForMessage(clientNode, MULTI_OR_SINGLE_PLAYER_MODE);
         System.out.println("VirtualViewAssignment - Response has been received.");
-        handlePlayerModeMessage(clientNode, message);
 
+        handlePlayerModeMessage(clientNode, message);
     }
 
 

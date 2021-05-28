@@ -10,7 +10,7 @@ public class ServerMain {
     public static void main(String[] args) {
         try {
             while (true)
-                Server.getInstance().listening();
+                Server.getInstance().listening(false);
         } catch (IOException ignored) {
         }
     }

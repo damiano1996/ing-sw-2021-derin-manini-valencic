@@ -2,6 +2,13 @@ package it.polimi.ingsw.psp26.application.messages;
 
 public enum MessageType {
 
+    // Menu messages:
+    MENU,
+    PLAY,
+    GLOBAL_LEADERBOARD,
+    HELP,
+    SETTINGS,
+
     NOTIFICATION_UPDATE,
     MODEL_UPDATE,
     HEARTBEAT,
@@ -16,7 +23,6 @@ public enum MessageType {
     ERROR_MESSAGE,
 
     // Initialize game:
-    SET_NICKNAME,
     SET_NUMBER_OF_PLAYERS,
     MULTI_OR_SINGLE_PLAYER_MODE,
     SINGLE_PLAYER_MODE,

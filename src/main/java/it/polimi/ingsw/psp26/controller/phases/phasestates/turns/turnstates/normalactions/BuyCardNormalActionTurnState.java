@@ -27,23 +27,23 @@ public class BuyCardNormalActionTurnState extends TurnState {
     }
 
     /**
-     *  Method that checks the messages of the current player and redirects to the right sub-phase.
-     *
-     *  The first sub-phase is CHOICE_NORMAL_ACTION: It checks if it is the message that arrived from
-     *  ChooseNormalActionTurnState, it also checks if there are leader discount power to activate and in case it stores
-     *  the discount amount.In the sends to the current player the list of their available resources.
-     *
-     *  The second sub-phase is CHOICE_CARD_TO_BUY: It checks if the player can buy at least one card and if it the
-     *  player choice of the development card they want to buy is affordable. If it does not pass the first check
-     *  it sends an error message and redirect to the ChooseNormalActionTurnState, if it does not pass the second check
-     *  send them a message to choose another card. If it pass both checks, it call the method to draw the card player
-     *  and pay the cost resources. It then send a message to the player with the card slot available.
-     *
-     *  The third sub-phase is CHOICE_DEVELOPMENT_CARD_SLOT_POSITION: It takes the player answer of the previous
-     *  message(the card slot), and calls a method to put the bought card in that card slot.
-     *
-     *  The fourth sub-phase is UNDO_OPTION_SELECTED/default: It checks if an undo message is sent, and redirects the
-     *  player to the ChooseNormalActionTurnState.
+     * Method that checks the messages of the current player and redirects to the right sub-phase.
+     * <p>
+     * The first sub-phase is CHOICE_NORMAL_ACTION: It checks if it is the message that arrived from
+     * ChooseNormalActionTurnState, it also checks if there are leader discount power to activate and in case it stores
+     * the discount amount.In the sends to the current player the list of their available resources.
+     * <p>
+     * The second sub-phase is CHOICE_CARD_TO_BUY: It checks if the player can buy at least one card and if it the
+     * player choice of the development card they want to buy is affordable. If it does not pass the first check
+     * it sends an error message and redirect to the ChooseNormalActionTurnState, if it does not pass the second check
+     * send them a message to choose another card. If it pass both checks, it call the method to draw the card player
+     * and pay the cost resources. It then send a message to the player with the card slot available.
+     * <p>
+     * The third sub-phase is CHOICE_DEVELOPMENT_CARD_SLOT_POSITION: It takes the player answer of the previous
+     * message(the card slot), and calls a method to put the bought card in that card slot.
+     * <p>
+     * The fourth sub-phase is UNDO_OPTION_SELECTED/default: It checks if an undo message is sent, and redirects the
+     * player to the ChooseNormalActionTurnState.
      *
      * @param message The message sent by the current player, that carries his choices during the turn.
      */
@@ -154,11 +154,10 @@ public class BuyCardNormalActionTurnState extends TurnState {
     }
 
     /**
-     *  Method that given a card, takes the resource cost from the warehouse and depot of the current player.
-     *
+     * Method that given a card, takes the resource cost from the warehouse and depot of the current player.
      */
 
-    private void buyCard(){
+    private void buyCard() {
         DevelopmentCard drawnCard = boughtCard;
         int numberResources;
         int i = 0;

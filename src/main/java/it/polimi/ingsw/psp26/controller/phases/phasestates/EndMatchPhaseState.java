@@ -27,8 +27,8 @@ public class EndMatchPhaseState extends PhaseState {
     }
 
     /**
-     *  Method that calls a method to calculate the points of the game and notifies the player. Then
-     *  redirect to the start of the game.
+     * Method that calls a method to calculate the points of the game and notifies the player. Then
+     * redirect to the start of the game.
      *
      * @param message that contains information on what caused the endgame.
      */
@@ -43,13 +43,12 @@ public class EndMatchPhaseState extends PhaseState {
 
     /**
      * Method that checks the winner, computes the points and sends to all player the message with the winner name.
-     *
+     * <p>
      * it checks if the winner is "Lorenzo il Magnifico" (Only in single player mode), if he is, the method does not
      * calculate the point for the player and sends them the winner name. If he is not, it calculates the points for
      * each player and sends to them the winner name among the players.
      *
-     *
-     * @param message
+     * @param message Session message
      */
 
     private void showEndGameResult(SessionMessage message) {

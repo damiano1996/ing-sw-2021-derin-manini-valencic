@@ -25,7 +25,7 @@ public class CheckVaticanReportTurnState extends TurnState {
      * Method that calls the method activateVaticanReportSection for each player and then redirects the current player
      * to the next phase.
      *
-     * @param message
+     * @param message Session message
      */
     @Override
     public void play(SessionMessage message) {
@@ -46,7 +46,7 @@ public class CheckVaticanReportTurnState extends TurnState {
     /**
      * Method to check if a given player is inside or over a given vatican report section.
      *
-     * @param player The player to check.
+     * @param player  The player to check.
      * @param section The section to check.
      * @return true if the player is inside or over the section, false otherwise.
      */
@@ -59,7 +59,6 @@ public class CheckVaticanReportTurnState extends TurnState {
      * Method to check if the current player is the first one to reach or go beyond a pope space.
      *
      * @param player Current player.
-     *
      * @return True if they are the first player to pass over a pope space.
      */
 
@@ -92,7 +91,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
         if (!lastVaticanReportCalled) {
 
-            if (firstPlayerInPopeSpace(currentPlayer) || isBlackCrossInPopeSpaceOrOver(currentPlayer)){
+            if (firstPlayerInPopeSpace(currentPlayer) || isBlackCrossInPopeSpaceOrOver(currentPlayer)) {
 
                 if (getFirstActiveSectionIndex() == currentPlayer.getPersonalBoard().getFaithTrack().getVaticanReportSections().length)
                     lastVaticanReportCalled = true;
@@ -148,7 +147,7 @@ public class CheckVaticanReportTurnState extends TurnState {
     }
 
     /**
-     *  Method to determine the section index of the first tile of the faith track that no one has passed.
+     * Method to determine the section index of the first tile of the faith track that no one has passed.
      *
      * @return the index of the first tile that no one has passed.
      */

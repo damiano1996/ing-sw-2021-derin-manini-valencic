@@ -6,9 +6,11 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 import it.polimi.ingsw.psp26.network.server.memory.CommonNicknamePasswordChecksEnums;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.*;
 import static it.polimi.ingsw.psp26.network.NetworkUtils.generateSessionToken;
@@ -18,16 +20,15 @@ import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
 
+    private int getNumberOfTotalPlayers() {
+        int totalNumber = 0;
+        for (VirtualView virtualView : Server.getInstance().getVirtualViews()) {
+            totalNumber += virtualView.getMatchController().getMatch().getPlayers().size();
+        }
+        return totalNumber;
+    }
 
-    private NetworkNode assignToVirtualView(MessageType playingMode) throws IOException, InvalidPayloadException, InterruptedException, ClassNotFoundException {
-
-        Thread thread = new Thread(() -> {
-            try {
-                Server.getInstance().listening();
-            } catch (IOException ignored) {
-            }
-        });
-        thread.start();
+    private NetworkNode connectionSequence(MessageType playingMode) throws IOException, ClassNotFoundException, InvalidPayloadException {
 
         Socket socket = new Socket("localhost", DEFAULT_SERVER_PORT);
         NetworkNode networkNode = new NetworkNode(socket);
@@ -45,11 +46,10 @@ public class ServerTest {
         // receiving welcome general message
         SessionMessage sessionMessage = (SessionMessage) networkNode.receiveData();
         assertEquals(MessageType.GENERAL_MESSAGE, sessionMessage.getMessageType());
-//        // receiving request for game new or old
-//        sessionMessage = (SessionMessage) networkNode.receiveObjectData();
-//        assertEquals(MessageType.NEW_OR_OLD, sessionMessage.getMessageType());
-//        // sending response
-//        networkNode.sendData(new SessionMessage(sessionToken, MessageType.NEW_OR_OLD, MessageType.NEW_MATCH));
+        // receiving menu options
+        sessionMessage = (SessionMessage) networkNode.receiveData();
+        assertEquals(MessageType.MENU, sessionMessage.getMessageType());
+        networkNode.sendData(new SessionMessage(sessionToken, MessageType.MENU, MessageType.PLAY));
         // waiting request for match mode
         sessionMessage = (SessionMessage) networkNode.receiveData();
         assertEquals(MessageType.MULTI_OR_SINGLE_PLAYER_MODE, sessionMessage.getMessageType());
@@ -62,12 +62,38 @@ public class ServerTest {
                 )
         );
 
-        thread.join();
-
-        // delay to allow the first user to be assigned to the match
-        sleep(500);
-
         return networkNode;
+    }
+
+
+    private NetworkNode assignToVirtualView(MessageType playingMode) throws InterruptedException {
+
+        int initialNumberOfPlayers = getNumberOfTotalPlayers();
+
+        Thread serverThread = new Thread(() -> {
+            try {
+                Server.getInstance().listening(true);
+                // Waiting that the player is completely assigned to the virtual view to void parallel match creations
+                while (getNumberOfTotalPlayers() == initialNumberOfPlayers) sleep(10);
+            } catch (IOException | InterruptedException ignored) {
+            }
+        });
+        serverThread.start();
+
+        AtomicReference<NetworkNode> networkNode = new AtomicReference<>();
+        Thread clientThread = new Thread(() -> {
+            try {
+                networkNode.set(connectionSequence(playingMode));
+            } catch (IOException | ClassNotFoundException | InvalidPayloadException ignored) {
+            }
+        });
+
+        clientThread.start();
+        clientThread.join();
+
+        serverThread.join();
+
+        return networkNode.get();
     }
 
     private synchronized SessionMessage ignoreJoinMessage(NetworkNode networkNode) throws IOException, ClassNotFoundException {
@@ -92,28 +118,21 @@ public class ServerTest {
         assertTrue(((String) message.getPayload()).contains("The match can start!"));
     }
 
-    // The tests below are working,
-    // but only if they are executed separately from the others.
-    // Motivations are: they use socket and threads that can go in conflict with other tests.
-
-
-/*
-
     @Test
-    public void testListening() throws IOException, InvalidPayloadException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
+    public void testListening() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
         NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE);
         assertStartMatch(networkNode);
     }
 
     @Test
-    public void testAssigningToExistingVirtualView() throws IOException, InvalidPayloadException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
+    public void testAssigningToExistingVirtualView() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
         assignToVirtualView(MessageType.TWO_PLAYERS_MODE);
         NetworkNode networkNode = assignToVirtualView(MessageType.TWO_PLAYERS_MODE);
         assertStartMatch(networkNode);
     }
 
     @Test
-    public void testTwoSimilarVirtualView() throws IOException, InvalidPayloadException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
+    public void testTwoSimilarVirtualView() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
         assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
         assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
         NetworkNode networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
@@ -125,5 +144,4 @@ public class ServerTest {
         assertStartMatch(networkNode);
     }
 
- */
 }

@@ -13,7 +13,6 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialDepotAbility;
-import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
@@ -71,7 +70,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testSendWarehouseMessage() throws EmptyPayloadException, InvalidPayloadException {
+    public void testSendWarehouseMessage() throws InvalidPayloadException {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.GENERAL_MESSAGE));
         assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
 //        assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(1).getMessageType());

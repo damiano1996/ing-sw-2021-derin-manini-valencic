@@ -23,11 +23,17 @@ public class NetworkHandler implements Observer<Message> {
 
     private final Client client;
     private NetworkNode networkNode;
+    private String serverIP;
     private String sessionToken;
+
+    private boolean connected;
+    private boolean listening;
 
     public NetworkHandler(Client client) {
         super();
         this.client = client;
+        connected = false;
+        listening = false;
     }
 
 
@@ -47,9 +53,11 @@ public class NetworkHandler implements Observer<Message> {
         }
     }
 
-    public void initializeNetworkNode(String nickname, String password, String serverIP) throws IOException, PasswordNotCorrectException, NicknameTooShortException, ClassNotFoundException, NicknameAlreadyExistsException, PasswordTooShortException, InvalidPayloadException {
+    public synchronized void initializeNetworkNode(String nickname, String password, String serverIP) throws IOException, PasswordNotCorrectException, NicknameTooShortException, ClassNotFoundException, NicknameAlreadyExistsException, PasswordTooShortException, InvalidPayloadException {
+        this.serverIP = serverIP;
 
-        networkNode = new NetworkNode(new Socket(serverIP, DEFAULT_SERVER_PORT));
+        networkNode = new NetworkNode(new Socket(this.serverIP, DEFAULT_SERVER_PORT));
+        connected = true;
         // System.out.println("NetworkHandler - " + nickname + ":" + password + ":" + serverIP);
         // step: sending nickname and password to server
         networkNode.sendData(nickname);
@@ -75,9 +83,10 @@ public class NetworkHandler implements Observer<Message> {
             case NICKNAME_AND_PASSWORD_ARE_OK:
                 // System.out.println("NetworkHandler - Nickname and password are ok");
 
-                client.setNickname(nickname);
+                client.setNickname(nickname, password);
                 sessionToken = (String) networkNode.receiveData();
 
+                listening = true;
                 startListening();
                 startHeartbeat();
                 break;
@@ -90,12 +99,53 @@ public class NetworkHandler implements Observer<Message> {
      */
     private void startHeartbeat() {
         new Thread(() -> {
-            while (true) {
+            boolean running = true;
+            while (running) {
                 try {
-                    networkNode.sendData(new SessionMessage(sessionToken, MessageType.HEARTBEAT));
-                    sleep(1000);
-                } catch (IOException | InvalidPayloadException | InterruptedException ignored) {
+
+                    if (!connected) {
+                        // trying to recovery connection
+                        // step: establishing connection and sending user credentials
+                        System.out.println("NetworkHandler - Trying to establish connection...");
+                        initializeNetworkNode(client.getNickname(), client.getPassword(), serverIP);
+                        connected = true;
+                        // step: stopping this thread since initializeNetworkNode() will start a new one
+                        running = false;
+                    } else {
+                        networkNode.sendData(new SessionMessage(sessionToken, MessageType.HEARTBEAT));
+                    }
+
+                } catch (InvalidPayloadException | NicknameTooShortException |
+                        PasswordTooShortException | NicknameAlreadyExistsException | ClassNotFoundException |
+                        PasswordNotCorrectException ignored) {
+                    // Exceptions can be ignored since we were already connected, so we know that nickname and password were ok
+                } catch (IOException ioException) {
+                    if (connected) {
+                        connected = false;
+                        listening = false;
+                        System.out.println("NetworkHandler - Lost connection!!");
+                        try {
+                            MessageSynchronizedFIFO.getInstance().update(
+                                    new Message(
+                                            MessageType.START_WAITING,
+                                            "Connection error!\n" +
+                                                    "Causes can be:\n" +
+                                                    "1. You have lost the connection; or\n" +
+                                                    "2. The server is no more reachable.\n" +
+                                                    "Waiting for automatic recovery..."
+                                    )
+                            );
+                        } catch (InvalidPayloadException ignored) {
+                        }
+                    }
+
                 }
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException ignored) {
+                }
+
             }
         }).start();
     }
@@ -107,11 +157,11 @@ public class NetworkHandler implements Observer<Message> {
      */
     private void startListening() {
         new Thread(() -> {
-            while (true) {
+            while (listening) {
                 try {
 
                     Message message = (Message) networkNode.receiveData();
-                    // System.out.println("NetworkHandler - message received: " + message.toString());
+                    System.out.println("NetworkHandler - message received: " + message.toString());
 
                     switch (message.getMessageType()) {
                         case MODEL_UPDATE:
@@ -134,6 +184,7 @@ public class NetworkHandler implements Observer<Message> {
                     // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }
             }
+            System.out.println("NetworkHandler - Stop listening from network node.");
         }).start();
     }
 

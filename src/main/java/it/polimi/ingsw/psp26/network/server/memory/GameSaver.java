@@ -4,7 +4,6 @@ import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.psp26.application.messages.serialization.GsonConverter;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
-import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,25 +26,13 @@ public class GameSaver {
     // Used to store backups. Remember to add the matchID after the parameter
     private static final String BACKUP_PATH = "saved_matches/game_";
 
+    // Used to get the correct numbering for directories and files
     private static final String FORMAT_ID = "%03d";
 
     public static GameSaver getInstance() {
         if (instance == null) instance = new GameSaver();
         return instance;
     }
-
-
-    //-------------------------------------------------------------------
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 4; i++) {
-            VirtualView virtualView = new VirtualView();
-            GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 0, 0);
-        }
-        System.out.println(getInstance().getSavedMatchesPath());
-    }
-
-    //-------------------------------------------------------------------
 
 
     //--------------------------//
@@ -56,6 +43,11 @@ public class GameSaver {
      * Used to backup a VirtualView in a new directory (if needed)
      * At first, the method checks if a folder with the Match already exists: if not, creates one
      * Then it calls several auxiliary methods for backing up things
+     * <p>
+     * Naming convention
+     * Each directory/file created has the MatchID number at the end of the name
+     * This id is properly formatted and is incremental
+     * The MatchID is assigned to Matches in the VirtualView class
      *
      * @param match The Match to backup
      */
@@ -81,9 +73,19 @@ public class GameSaver {
     }
 
 
+    /**
+     * Writes on a file the given turnPlayerIndex and turnNumber
+     * These elements must be saved separately in order to correctly reconstruct the VirtualView when loading a saved Match
+     * They are saved in a List for an easier saving process; then the whole List is written to file
+     *
+     * @param turnPlayerIndex The index of the Player that was playing when the Server shut down
+     * @param turnNumber      The number of the turn when the Server shut down
+     * @param matchID         The id of the Match to backup
+     */
     private void storeMatchControllerData(int turnPlayerIndex, int turnNumber, int matchID) {
         String formattedMatchId = String.format(FORMAT_ID, matchID);
         List<Integer> matchControllerData = new ArrayList<>();
+
         matchControllerData.add(turnPlayerIndex);
         matchControllerData.add(turnNumber);
 
@@ -101,6 +103,7 @@ public class GameSaver {
     /**
      * Load an existing Match by retrieving it from the given matchID
      * It calls several auxiliary methods to correctly reconstruct the Match
+     * Before returning the Match, the method sets the Player's sessionTokens
      *
      * @param matchID The Match to load from file
      * @return The loaded Match
@@ -120,31 +123,64 @@ public class GameSaver {
         return restoredMatch;
     }
 
-    
+
+    /**
+     * Load an existing Match by retrieving it from the given matchID
+     *
+     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
+     * @return The desired Match
+     */
     public Match loadMatch(String gamePath) {
         return loadMatch(getID(gamePath));
     }
-    
-    
+
+
+    /**
+     * Load the turnPlayerIndex using the given gamePath
+     * turnPlayerIndex is the first element of the matchControllersData List
+     *
+     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
+     * @return The turnPlayerIndex related to the Match stored in the gamePath
+     * @throws FileNotFoundException Thrown if the fle doesn't exists
+     */
     public int loadTurnPlayerIndex(String gamePath) throws FileNotFoundException {
         return loadMatchControllersData(gamePath).get(0);
     }
-    
-    
+
+
+    /**
+     * Load the turnNumber using the given gamePath
+     * turnNumber is the second element of the matchControllersData List
+     *
+     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
+     * @return The turnNumber related to the Match stored in the gamePath
+     * @throws FileNotFoundException Thrown if the fle doesn't exists
+     */
     public int loadTurnNumber(String gamePath) throws FileNotFoundException {
         return loadMatchControllersData(gamePath).get(1);
     }
 
-    
+
+    /**
+     * Loads the matchControllerData List
+     *
+     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
+     * @return The matchControllerData List
+     * @throws FileNotFoundException Thrown if the fle doesn't exists
+     */
     private List<Integer> loadMatchControllersData(String gamePath) throws FileNotFoundException {
         Type type = new TypeToken<List<Integer>>() {
         }.getType();
 
-        return GsonConverter.getInstance().getGson().fromJson(readFromFile(gamePath), type);
+        int id = getID(gamePath);
+        String formattedId = String.format(FORMAT_ID, id);
+        String loadPath = "saved_matches/game_" + formattedId + "/matchcontrollerdata_" + formattedId + ".json";
+
+        return GsonConverter.getInstance().getGson().fromJson(readFromFile(loadPath), type);
     }
 
     /**
-     * Load a Match from file
+     * Loads a Match from file
      *
      * @param matchPath The path where to find the Match
      * @return The loaded Match
@@ -171,9 +207,14 @@ public class GameSaver {
     }
 
 
+    /**
+     * Creates a List of all the directories names contained in the saved_match folder
+     *
+     * @return The List of the directories names
+     */
     public List<String> getSavedMatchesPath() {
         try {
-            File directory = new File("saved_matches");
+            File directory = new File(GAME_FILES + "saved_matches");
             return Arrays.stream(Objects.requireNonNull(directory.list())).sorted().collect(Collectors.toList());
         } catch (Exception e) {
             return new ArrayList<>();
@@ -181,13 +222,22 @@ public class GameSaver {
     }
 
 
+    /**
+     * @return The last directory id contained in the saved_match folder. If no directory is present, returns 0
+     */
     public int getLastId() {
         List<String> directoryList = getSavedMatchesPath();
         if (directoryList.size() == 0) return 0;
         return getID(directoryList.get(directoryList.size() - 1));
     }
-    
-    
+
+
+    /**
+     * Returns the last numbers of a game directory name
+     *
+     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
+     * @return The last numbers of the game directory name
+     */
     public int getID(String gamePath) {
         String[] splitDirectoryName = gamePath.split("_");
         return Integer.parseInt(splitDirectoryName[splitDirectoryName.length - 1]);

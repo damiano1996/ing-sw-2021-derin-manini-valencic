@@ -47,5 +47,17 @@ public class GameSaverTest {
             assertEquals(match.getActionTokens().get(i).toString(), restoredMatch.getActionTokens().get(i).toString());
         }
     }
+    
+    @Test
+    public void testCreateNewDirectories() {
+        for (int i = 0; i < 4; i++) {
+            VirtualView virtualView = new VirtualView();
+            GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 0, 0);
+        }
+        System.out.println(GameSaver.getInstance().getSavedMatchesPath());
+        
+        // Clean saved_matches folder before running the test
+        assertEquals(4, GameSaver.getInstance().getSavedMatchesPath().size());
+    }
 
 }

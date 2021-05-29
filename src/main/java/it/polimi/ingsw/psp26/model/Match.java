@@ -58,10 +58,11 @@ public class Match extends Observable<SessionMessage> {
     }
     
     public void recoverVirtualView(VirtualView virtualView) {
+        resetObservers();
         addObserver(virtualView);
         
-        developmentCardsGrid.addObserver(virtualView);
-        marketTray.addObserver(virtualView);
+        developmentCardsGrid.restoreVirtualView(virtualView);
+        marketTray.restoreVirtualView(virtualView);
         for (Player player : players) player.recoverVirtualView(virtualView);
     }
 

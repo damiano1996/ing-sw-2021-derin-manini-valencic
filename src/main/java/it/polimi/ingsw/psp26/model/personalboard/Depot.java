@@ -33,7 +33,12 @@ public class Depot extends Observable<SessionMessage> {
         this.maxNumberOfResources = maxNumberOfResources;
         resources = new ArrayList<>();
     }
-
+    
+    public void restoreVirtualView(VirtualView virtualView) {
+        resetObservers();
+        addObserver(virtualView);
+    }
+    
     /**
      * Getter of the max number of resources that are allowed.
      *

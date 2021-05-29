@@ -85,6 +85,8 @@ public class NetworkHandler implements Observer<Message> {
 
                 client.setNickname(nickname, password);
                 sessionToken = (String) networkNode.receiveData();
+                
+                NotificationsFIFO.getInstance().resetFIFO();
 
                 listening = true;
                 startListening();

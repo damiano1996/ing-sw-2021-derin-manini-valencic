@@ -40,8 +40,10 @@ public class Warehouse extends Observable<SessionMessage> {
     }
 
     public void recoverVirtualView(VirtualView virtualView) {
+        resetObservers();
         addObserver(virtualView);
-        for (Depot depot : baseDepots) depot.addObserver(virtualView);
+        
+        for (Depot depot : baseDepots) depot.restoreVirtualView(virtualView);
     }
 
     /**

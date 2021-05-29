@@ -30,6 +30,11 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
         initializeGrid();
     }
+    
+    public void restoreVirtualView(VirtualView virtualView) {
+        resetObservers();
+        addObserver(virtualView);
+    }
 
     private void initializeGrid() {
         for (int row = 0; row < LEVELS.length; row++) {

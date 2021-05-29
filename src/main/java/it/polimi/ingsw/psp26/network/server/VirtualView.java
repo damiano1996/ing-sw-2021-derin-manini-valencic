@@ -119,7 +119,8 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         }
     }
 
-    private void sendingMainMatchComponents() {
+    // TODO L'HO MESSO PUBLIC
+    public void sendingMainMatchComponents() {
         update(getMarketTrayModelUpdateMessage());
         update(getDevelopmentGridModelUpdateMessage());
         for (Player player : matchController.getMatch().getPlayers())

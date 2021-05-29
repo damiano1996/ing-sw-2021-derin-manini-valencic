@@ -129,6 +129,7 @@ public class Client extends Observable<Message> {
 
                 case ENDGAME_RESULT:
                     // message contains the nickname of the player that won
+                    NotificationsFIFO.getInstance().resetFIFO();
                     String winner = (String) message.getPayload();
                     viewInterface.displayEndGame(createLeaderboard(createPlayersList(cachedModel)), winner);
                     break;

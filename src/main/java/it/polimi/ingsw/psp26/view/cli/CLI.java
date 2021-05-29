@@ -77,8 +77,6 @@ public class CLI implements ViewInterface {
     public void start() {
         try {
             this.client = new Client(this);
-            //TODO controlla che questa cosa abbia senso: se crei un nuovo match facendo partire il metodo start devi in qualoche modo creare una nuova notificationsFIFO
-            NotificationsFIFO.getInstance().resetFIFO();
             displayLogIn();
         } catch (IOException e) {
             e.printStackTrace();

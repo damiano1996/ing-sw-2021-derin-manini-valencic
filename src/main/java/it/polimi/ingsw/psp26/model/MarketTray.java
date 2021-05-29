@@ -45,7 +45,11 @@ public class MarketTray extends Observable<SessionMessage> {
 
     }
 
-
+    public void restoreVirtualView(VirtualView virtualView) {
+        resetObservers();
+        addObserver(virtualView);
+    }
+    
     /**
      * Getter of the marbles on the requested row.
      *

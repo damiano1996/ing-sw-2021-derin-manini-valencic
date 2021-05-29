@@ -50,14 +50,17 @@ public class GameSaverTest {
     
     @Test
     public void testCreateNewDirectories() {
-        for (int i = 0; i < 4; i++) {
+        int savedDirectories = GameSaver.getInstance().getSavedMatchesPath().size();
+        int directoriesToCreate = 4;
+        
+        for (int i = 0; i < directoriesToCreate; i++) {
             VirtualView virtualView = new VirtualView();
             GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 0, 0);
         }
         System.out.println(GameSaver.getInstance().getSavedMatchesPath());
         
         // Clean saved_matches folder before running the test
-        assertEquals(4, GameSaver.getInstance().getSavedMatchesPath().size());
+        assertEquals(directoriesToCreate + savedDirectories, GameSaver.getInstance().getSavedMatchesPath().size());
     }
 
 }

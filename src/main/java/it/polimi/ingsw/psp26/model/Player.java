@@ -48,7 +48,9 @@ public class Player extends Observable<SessionMessage> {
     }
 
     public void recoverVirtualView(VirtualView virtualView) {
+        resetObservers();
         addObserver(virtualView);
+        
         personalBoard.recoverVirtualView(virtualView);
     }
     

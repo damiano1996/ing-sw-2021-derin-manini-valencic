@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class Observable<T> {
 
-    private transient final List<Observer<T>> observers;
+    private transient List<Observer<T>> observers;
 
     public Observable() {
         observers = new ArrayList<>();
@@ -24,6 +24,10 @@ public abstract class Observable<T> {
 
     public void removeObserver(Observer<T> observer) {
         observers.remove(observer);
+    }
+    
+    public void resetObservers() {
+        observers = new ArrayList<>();
     }
 
 }

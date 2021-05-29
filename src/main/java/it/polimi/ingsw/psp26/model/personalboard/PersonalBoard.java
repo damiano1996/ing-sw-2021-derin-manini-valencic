@@ -66,7 +66,7 @@ public class PersonalBoard extends Observable<SessionMessage> {
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
         addObserver(virtualView);
-        
+
         faithTrack.recoverVirtualView(virtualView);
         warehouse.recoverVirtualView(virtualView);
     }

@@ -12,7 +12,6 @@ import it.polimi.ingsw.psp26.network.NetworkNode;
 import java.io.IOException;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.getPlayerModelUpdateMessage;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.lookingForMessage;
 
 public class VirtualViewAssignment extends Thread {
@@ -204,8 +203,6 @@ public class VirtualViewAssignment extends Thread {
             for (Player player : virtualView.getMatchController().getMatch().getPlayers()) {
                 if (player.getSessionToken().equals(sessionToken)) {
                     virtualView.addNetworkNodeClient(sessionToken, clientNode);
-
-                    virtualView.sendingMainMatchComponents();
                 }
             }
         }

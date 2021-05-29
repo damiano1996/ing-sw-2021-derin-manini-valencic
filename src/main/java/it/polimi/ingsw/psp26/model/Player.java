@@ -20,8 +20,8 @@ public class Player extends Observable<SessionMessage> {
     private transient final VirtualView virtualView;
 
     private final String nickname;
-    private transient String sessionToken;
     private final PersonalBoard personalBoard;
+    private transient String sessionToken;
     private int points;
 
     private boolean inkwell;
@@ -50,12 +50,8 @@ public class Player extends Observable<SessionMessage> {
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
         addObserver(virtualView);
-        
+
         personalBoard.recoverVirtualView(virtualView);
-    }
-    
-    public void setSessionToken(String sessionToken) {
-        this.sessionToken = sessionToken;
     }
 
     /**
@@ -73,7 +69,12 @@ public class Player extends Observable<SessionMessage> {
      * @return the token of the player
      */
     public String getSessionToken() {
+        if (sessionToken == null) return ""; // TODO: Why it is null sometimes after recovery?
         return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
     }
 
     /**

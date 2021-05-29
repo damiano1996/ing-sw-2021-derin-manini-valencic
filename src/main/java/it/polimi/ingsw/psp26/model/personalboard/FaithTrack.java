@@ -47,7 +47,7 @@ public class FaithTrack extends Observable<SessionMessage> {
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
         addObserver(virtualView);
-        
+
         for (VaticanReportSection vaticanReportSection : vaticanReportSections)
             vaticanReportSection.restoreVirtualView(virtualView);
     }

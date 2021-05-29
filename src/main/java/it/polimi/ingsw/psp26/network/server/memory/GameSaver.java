@@ -8,26 +8,26 @@ import it.polimi.ingsw.psp26.model.Player;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-
-import static it.polimi.ingsw.psp26.application.files.Files.*;
+import static it.polimi.ingsw.psp26.application.files.Files.readFromFile;
+import static it.polimi.ingsw.psp26.application.files.Files.writeToFile;
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 
 
 public class GameSaver {
 
-    private static GameSaver instance;
-
     // Used to create new directories. Remember to add the matchID after the parameter
     private static final String DIRECTORY_PATH = GAME_FILES + "saved_matches/game_";
-
     // Used to store backups. Remember to add the matchID after the parameter
     private static final String BACKUP_PATH = "saved_matches/game_";
-
     // Used to get the correct numbering for directories and files
     private static final String FORMAT_ID = "%03d";
+    private static GameSaver instance;
 
     public static GameSaver getInstance() {
         if (instance == null) instance = new GameSaver();

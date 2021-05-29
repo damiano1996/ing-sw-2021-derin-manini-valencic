@@ -6,7 +6,7 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class GameSaverTest {
@@ -47,18 +47,18 @@ public class GameSaverTest {
             assertEquals(match.getActionTokens().get(i).toString(), restoredMatch.getActionTokens().get(i).toString());
         }
     }
-    
+
     @Test
     public void testCreateNewDirectories() {
         int savedDirectories = GameSaver.getInstance().getSavedMatchesPath().size();
         int directoriesToCreate = 4;
-        
+
         for (int i = 0; i < directoriesToCreate; i++) {
             VirtualView virtualView = new VirtualView();
             GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 0, 0);
         }
         System.out.println(GameSaver.getInstance().getSavedMatchesPath());
-        
+
         // Clean saved_matches folder before running the test
         assertEquals(directoriesToCreate + savedDirectories, GameSaver.getInstance().getSavedMatchesPath().size());
     }

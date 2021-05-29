@@ -30,7 +30,7 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
         initializeGrid();
     }
-    
+
     public void restoreVirtualView(VirtualView virtualView) {
         resetObservers();
         addObserver(virtualView);

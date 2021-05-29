@@ -15,6 +15,7 @@ import java.util.List;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.DISPLAY_LOGIN;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.UNDO_OPTION_SELECTED;
+import static it.polimi.ingsw.psp26.configurations.Configurations.PRINT_CLIENT_SIDE;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createLeaderboard;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createPlayersList;
@@ -174,7 +175,7 @@ public class Client extends Observable<Message> {
 
         } catch (IOException e) {
 
-            System.out.println("Server IP is unreachable...");
+            if (PRINT_CLIENT_SIDE) System.out.println("Server IP is unreachable...");
             try {
                 MessageSynchronizedFIFO.getInstance().update(new Message(MessageType.ERROR_MESSAGE, "Server is not reachable!"));
                 MessageSynchronizedFIFO.getInstance().update(new Message(DISPLAY_LOGIN));

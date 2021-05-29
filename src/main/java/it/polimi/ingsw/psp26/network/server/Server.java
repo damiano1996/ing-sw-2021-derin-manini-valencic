@@ -1,10 +1,10 @@
 package it.polimi.ingsw.psp26.network.server;
 
 import it.polimi.ingsw.psp26.model.Match;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,7 +35,7 @@ public class Server {
 
         this.virtualViews = new ArrayList<>();
         waitingRoom = new WaitingRoom();
-        
+
         recoveryMatches();
     }
 
@@ -76,17 +76,28 @@ public class Server {
             }
         }
     }
-    
+
     private void recoveryMatches() {
+        System.out.println("Server - Recovering matches from files.");
         for (String gamePath : GameSaver.getInstance().getSavedMatchesPath()) {
             try {
                 Match restoredMatch = GameSaver.getInstance().loadMatch(gamePath);
-                VirtualView virtualView = new VirtualView(restoredMatch, GameSaver.getInstance().loadTurnPlayerIndex(gamePath), GameSaver.getInstance().loadTurnNumber(gamePath));
-                virtualViews.add(virtualView);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                // Checking if all the players have the session token correctly loaded
+                boolean allPlayersHaveSessionToken = true;
+                for (Player player : restoredMatch.getPlayers())
+                    if (player.getSessionToken().equals("")) allPlayersHaveSessionToken = false;
+
+                if (allPlayersHaveSessionToken) {
+                    VirtualView virtualView = new VirtualView(restoredMatch, GameSaver.getInstance().loadTurnPlayerIndex(gamePath), GameSaver.getInstance().loadTurnNumber(gamePath));
+                    virtualViews.add(virtualView);
+                } else {
+                    System.out.println("Server - Corrupted match (id = " + GameSaver.getInstance().getID(gamePath) + "). At least one player has not the sessionToken.");
+                }
+            } catch (Exception e) {
+                System.out.println("Server - Corrupted match (id = " + GameSaver.getInstance().getID(gamePath) + "). Unable to reload it!");
             }
         }
+        System.out.println("Server - " + virtualViews.size() + " matches have been recovered!!");
     }
 
     /**

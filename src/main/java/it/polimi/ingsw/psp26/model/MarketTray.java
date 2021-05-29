@@ -49,7 +49,7 @@ public class MarketTray extends Observable<SessionMessage> {
         resetObservers();
         addObserver(virtualView);
     }
-    
+
     /**
      * Getter of the marbles on the requested row.
      *

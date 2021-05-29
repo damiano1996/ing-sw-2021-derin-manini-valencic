@@ -15,4 +15,8 @@ public class Configurations {
 
     public static final int MIN_NICKNAME_LENGTH = 8;
     public static final int MIN_PASSWORD_LENGTH = 8;
+
+    // To print or not on the std out of the cli,
+    // from the main classes of the package network.client
+    public static final boolean PRINT_CLIENT_SIDE = false;
 }

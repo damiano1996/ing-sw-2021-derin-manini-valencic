@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.DEFAULT_SERVER_PORT;
+import static it.polimi.ingsw.psp26.configurations.Configurations.PRINT_CLIENT_SIDE;
 import static it.polimi.ingsw.psp26.network.server.memory.CommonNicknamePasswordChecksEnums.*;
 import static java.lang.Thread.sleep;
 
@@ -45,11 +46,10 @@ public class NetworkHandler implements Observer<Message> {
     @Override
     public void update(Message message) {
         try {
-            // System.out.println("NetworkHandler - " + message);
+            if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - " + message);
             networkNode.sendData(new SessionMessage(sessionToken, message.getMessageType(), message.getArrayPayloads()));
-            // System.out.println("NetworkHandler - Message has been sent successfully!");
-        } catch (IOException | InvalidPayloadException e) {
-            e.printStackTrace();
+            if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - Message has been sent successfully!");
+        } catch (IOException | InvalidPayloadException ignored) {
         }
     }
 
@@ -58,7 +58,7 @@ public class NetworkHandler implements Observer<Message> {
 
         networkNode = new NetworkNode(new Socket(this.serverIP, DEFAULT_SERVER_PORT));
         connected = true;
-        // System.out.println("NetworkHandler - " + nickname + ":" + password + ":" + serverIP);
+        if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - " + nickname + ":" + password + ":" + serverIP);
         // step: sending nickname and password to server
         networkNode.sendData(nickname);
         networkNode.sendData(password);
@@ -81,11 +81,11 @@ public class NetworkHandler implements Observer<Message> {
                 throw new PasswordTooShortException();
 
             case NICKNAME_AND_PASSWORD_ARE_OK:
-                // System.out.println("NetworkHandler - Nickname and password are ok");
+                if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - Nickname and password are ok");
 
                 client.setNickname(nickname, password);
                 sessionToken = (String) networkNode.receiveData();
-                
+
                 NotificationsFIFO.getInstance().resetFIFO();
 
                 listening = true;
@@ -108,7 +108,7 @@ public class NetworkHandler implements Observer<Message> {
                     if (!connected) {
                         // trying to recovery connection
                         // step: establishing connection and sending user credentials
-                        System.out.println("NetworkHandler - Trying to establish connection...");
+                        if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - Trying to establish connection...");
                         initializeNetworkNode(client.getNickname(), client.getPassword(), serverIP);
                         connected = true;
                         // step: stopping this thread since initializeNetworkNode() will start a new one
@@ -125,7 +125,7 @@ public class NetworkHandler implements Observer<Message> {
                     if (connected) {
                         connected = false;
                         listening = false;
-                        System.out.println("NetworkHandler - Lost connection!!");
+                        if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - Lost connection!!");
                         try {
                             MessageSynchronizedFIFO.getInstance().update(
                                     new Message(
@@ -163,7 +163,8 @@ public class NetworkHandler implements Observer<Message> {
                 try {
 
                     Message message = (Message) networkNode.receiveData();
-                    System.out.println("NetworkHandler - message received: " + message.toString());
+                    if (PRINT_CLIENT_SIDE)
+                        System.out.println("NetworkHandler - message received: " + message.toString());
 
                     switch (message.getMessageType()) {
                         case MODEL_UPDATE:
@@ -186,7 +187,7 @@ public class NetworkHandler implements Observer<Message> {
                     // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }
             }
-            System.out.println("NetworkHandler - Stop listening from network node.");
+            if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - Stop listening from network node.");
         }).start();
     }
 

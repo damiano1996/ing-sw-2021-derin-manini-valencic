@@ -19,6 +19,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
     private final VirtualView virtualView;
     private int countdown;
     private boolean running;
+    private boolean isDeath;
 
     public HeartbeatController(String sessionToken, MatchController matchController) {
         this.sessionToken = sessionToken;
@@ -47,6 +48,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         if (this.sessionToken.equals(sessionToken)) {
             countdown = MAX_TIME_TO_DIE;
             running = true;
+            isDeath = false;
         }
     }
 
@@ -54,6 +56,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         countdown -= DELTA_TIME;
 
         if (countdown < 0) {
+            isDeath = true;
             try {
                 virtualView.stopListeningNetworkNode(sessionToken);
                 notifyObservers(
@@ -80,5 +83,9 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
     public synchronized void update(SessionMessage message) {
         if (message.getMessageType().equals(MessageType.HEARTBEAT))
             reset(message.getSessionToken());
+    }
+
+    public synchronized boolean isDeath() {
+        return isDeath;
     }
 }

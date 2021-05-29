@@ -4,8 +4,12 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.model.Match;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 import it.polimi.ingsw.psp26.network.server.memory.CommonNicknamePasswordChecksEnums;
+import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
+import it.polimi.ingsw.psp26.network.server.memory.Users;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -20,21 +24,22 @@ import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
 
-    private int getNumberOfTotalPlayers() {
+    private int getTotalNumberOfNodeClientsInVirtualViews() {
         int totalNumber = 0;
         for (VirtualView virtualView : Server.getInstance().getVirtualViews()) {
-            totalNumber += virtualView.getMatchController().getMatch().getPlayers().size();
+            totalNumber += virtualView.getNumberOfNodeClients();
         }
         return totalNumber;
     }
 
-    private NetworkNode connectionSequence(MessageType playingMode) throws IOException, ClassNotFoundException, InvalidPayloadException {
+    private NetworkNode connectionSequence(MessageType playingMode, boolean recovery) throws IOException, ClassNotFoundException, InvalidPayloadException {
+        return connectionSequence(playingMode, recovery, generateSessionToken(MIN_NICKNAME_LENGTH), generateSessionToken(MIN_PASSWORD_LENGTH));
+    }
+
+    private NetworkNode connectionSequence(MessageType playingMode, boolean recovery, String nickname, String password) throws IOException, ClassNotFoundException, InvalidPayloadException {
 
         Socket socket = new Socket("localhost", DEFAULT_SERVER_PORT);
         NetworkNode networkNode = new NetworkNode(socket);
-
-        String nickname = generateSessionToken(MIN_NICKNAME_LENGTH);
-        String password = generateSessionToken(MIN_PASSWORD_LENGTH);
 
         // sending user data
         networkNode.sendData(nickname);
@@ -50,8 +55,20 @@ public class ServerTest {
         sessionMessage = (SessionMessage) networkNode.receiveData();
         assertEquals(MessageType.MENU, sessionMessage.getMessageType());
         networkNode.sendData(new SessionMessage(sessionToken, MessageType.MENU, MessageType.PLAY));
-        // waiting request for match mode
+
         sessionMessage = (SessionMessage) networkNode.receiveData();
+        // In case of recovery the sequence of messages can change
+        if (sessionMessage.getMessageType().equals(MessageType.NEW_OR_OLD)) {
+            if (recovery) {
+                networkNode.sendData(new SessionMessage(sessionToken, MessageType.NEW_OR_OLD, MessageType.RECOVERY_MATCH));
+                return networkNode;
+            } else {
+                networkNode.sendData(new SessionMessage(sessionToken, MessageType.NEW_OR_OLD, MessageType.NEW_MATCH));
+                // waiting request for match mode
+                sessionMessage = (SessionMessage) networkNode.receiveData();
+            }
+        }
+
         assertEquals(MessageType.MULTI_OR_SINGLE_PLAYER_MODE, sessionMessage.getMessageType());
         // sending playing mode
         networkNode.sendData(
@@ -66,15 +83,19 @@ public class ServerTest {
     }
 
 
-    private NetworkNode assignToVirtualView(MessageType playingMode) throws InterruptedException {
+    private NetworkNode assignToVirtualView(MessageType playingMode, boolean recovery) throws InterruptedException {
+        return assignToVirtualView(playingMode, recovery, false, null, null);
+    }
 
-        int initialNumberOfPlayers = getNumberOfTotalPlayers();
+    private NetworkNode assignToVirtualView(MessageType playingMode, boolean recovery, boolean credentials, String nickname, String password) throws InterruptedException {
+
+        int initialNumberOfPlayers = getTotalNumberOfNodeClientsInVirtualViews();
 
         Thread serverThread = new Thread(() -> {
             try {
                 Server.getInstance().listening(true);
                 // Waiting that the player is completely assigned to the virtual view to void parallel match creations
-                while (getNumberOfTotalPlayers() == initialNumberOfPlayers) sleep(10);
+                while (getTotalNumberOfNodeClientsInVirtualViews() == initialNumberOfPlayers) sleep(10);
             } catch (IOException | InterruptedException ignored) {
             }
         });
@@ -83,7 +104,8 @@ public class ServerTest {
         AtomicReference<NetworkNode> networkNode = new AtomicReference<>();
         Thread clientThread = new Thread(() -> {
             try {
-                networkNode.set(connectionSequence(playingMode));
+                if (credentials) networkNode.set(connectionSequence(playingMode, recovery, nickname, password));
+                else networkNode.set(connectionSequence(playingMode, recovery));
             } catch (IOException | ClassNotFoundException | InvalidPayloadException ignored) {
             }
         });
@@ -120,28 +142,60 @@ public class ServerTest {
 
     @Test
     public void testListening() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
-        NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE);
+        NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false);
         assertStartMatch(networkNode);
     }
 
     @Test
     public void testAssigningToExistingVirtualView() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
-        assignToVirtualView(MessageType.TWO_PLAYERS_MODE);
-        NetworkNode networkNode = assignToVirtualView(MessageType.TWO_PLAYERS_MODE);
+        assignToVirtualView(MessageType.TWO_PLAYERS_MODE, false);
+        NetworkNode networkNode = assignToVirtualView(MessageType.TWO_PLAYERS_MODE, false);
         assertStartMatch(networkNode);
     }
 
     @Test
     public void testTwoSimilarVirtualView() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
-        assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
-        assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
-        NetworkNode networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
+        assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
+        assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
+        NetworkNode networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
         assertStartMatch(networkNode);
 
-        assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
-        assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
-        networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
+        assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
+        assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
+        networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
         assertStartMatch(networkNode);
+    }
+
+    private synchronized void assertRecoveryMatch(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
+        SessionMessage message = ignoreJoinMessage(networkNode);
+        assertEquals(MessageType.GENERAL_MESSAGE, message.getMessageType());
+        assertEquals("Your match has been reloaded!", message.getPayload());
+    }
+
+    @Test
+    public void testAssignmentAndThenDisconnect() throws InterruptedException, IOException, EmptyPayloadException, ClassNotFoundException {
+        String nickname = generateSessionToken(MIN_NICKNAME_LENGTH);
+        String password = generateSessionToken(MIN_PASSWORD_LENGTH);
+        String sessionToken = generateSessionToken(SESSION_TOKEN_LENGTH);
+        Users.getInstance().addUser(nickname, password, sessionToken);
+
+        VirtualView virtualView = new VirtualView();
+
+        Match match = new Match(virtualView, 0);
+        match.addPlayer(new Player(virtualView, nickname, sessionToken));
+
+        GameSaver.getInstance().backupMatch(
+                match,
+                0,
+                1
+        );
+
+        Server.getInstance().closeConnection();
+
+        NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, true, true, nickname, password);
+        assertRecoveryMatch(networkNode);
+
+        // TODO: adding deletion of the match
     }
 
 }

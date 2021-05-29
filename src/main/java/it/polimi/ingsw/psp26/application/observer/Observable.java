@@ -25,7 +25,7 @@ public abstract class Observable<T> {
     public void removeObserver(Observer<T> observer) {
         observers.remove(observer);
     }
-    
+
     public void resetObservers() {
         observers = new ArrayList<>();
     }

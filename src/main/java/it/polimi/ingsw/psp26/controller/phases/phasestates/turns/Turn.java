@@ -44,7 +44,12 @@ public class Turn {
 
             if (message.getMessageType().equals(MessageType.DEATH)) {
                 try {
-                    getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), turnPlayer.getNickname() + " lost the connection. He skips the turn."));
+                    getMatchController().notifyObservers(
+                            new NotificationUpdateMessage(
+                                    SpecialToken.BROADCAST.getToken(),
+                                    turnPlayer.getNickname() + " lost the connection. He skips the turn."
+                            )
+                    );
                 } catch (InvalidPayloadException e) {
                     e.printStackTrace();
                 }
@@ -53,6 +58,13 @@ public class Turn {
 
             } else {
                 turnState.play(message);
+            }
+        } else {
+
+            // saying that the turn is of one opponent
+            try {
+                matchController.notifyObservers(new SessionMessage(message.getSessionToken(), MessageType.OPPONENT_TURN));
+            } catch (InvalidPayloadException ignored) {
             }
         }
     }
@@ -64,15 +76,15 @@ public class Turn {
     public Player getTurnPlayer() {
         return turnPlayer;
     }
-    
+
     public void setTurnPlayer(Player turnPlayer) {
         this.turnPlayer = turnPlayer;
-    } 
+    }
 
     public int getTurnNumber() {
         return turnNumber;
     }
-    
+
     public void setTurnNumber(int turnNumber) {
         this.turnNumber = turnNumber;
     }

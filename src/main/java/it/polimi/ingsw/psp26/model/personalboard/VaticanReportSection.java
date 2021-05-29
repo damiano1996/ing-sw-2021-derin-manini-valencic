@@ -38,7 +38,7 @@ public class VaticanReportSection extends Observable<SessionMessage> {
         this.value = value;
         this.sessionToken = sessionToken;
     }
-    
+
     public void restoreVirtualView(VirtualView virtualView) {
         resetObservers();
         addObserver(virtualView);

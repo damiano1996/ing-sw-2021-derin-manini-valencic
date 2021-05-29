@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static it.polimi.ingsw.psp26.application.messages.MessageType.GENERAL_MESSAGE;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_OF_PLAYERS;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.*;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.getIndexOf;
@@ -46,7 +47,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
         addObserver(matchController);
     }
-    
+
     public VirtualView(Match match, int turnPlayerIndex, int turnNumber) {
         super();
         nodeClients = new HashMap<>();
@@ -86,41 +87,71 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         nodeClients.put(sessionToken, nodeClient);
         connectedNetworkNodes.add(true);
 
+        if (matchController.isRecoveryMode()) sendingRecoveryMessagesAfterServerDownOrMatchContinuation(sessionToken);
+
+        startTrackingHeartbeat(sessionToken);
+
+        try {
+            // adding player only if match is completely new, because in the recovered match the player already was present.
+            if (!matchController.isRecoveryMode())
+                notifyObservers(new SessionMessage(sessionToken, MessageType.ADD_PLAYER));
+
+            sendingMainMatchComponents();
+
+        } catch (InvalidPayloadException ignored) {
+        }
+
         // Start to listen the messages
-        startListening(nodeClient, sessionToken);
+        startListening(nodeClient);
     }
 
     private synchronized void startTrackingHeartbeat(String sessionToken) {
         try {
-            // In case of recovery mode we don't have to create a new heartbeat controller,
-            // but we can just rest it.
-            heartbeatControllers.get(sessionToken).reset(sessionToken);
-            // resending to client all match main data!
-            update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "Your match has been recovered!"));
-            // Sending main game components to restore the cache of the client
-            sendingMainMatchComponents();
-            update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMatch().getPlayers().size()));
-            // Sending a stop waiting message to resume the match
-//            update(new SessionMessage(sessionToken, MessageType.START_WAITING, "Reloading the match..."));
-            update(new SessionMessage(sessionToken, MessageType.STOP_WAITING));
-            // No needs to add the player since the match already contains it
 
-        } catch (Exception | InvalidPayloadException e) {
-            // Only in case of a new node
+            // In case of recovery mode (for client termination (!= server termination))
+            // we don't have to create a new heartbeat controller,
+            // but we can just rest it.
+            if (heartbeatControllers.get(sessionToken).isDeath()) {
+                // we can reset the heartbeat
+                heartbeatControllers.get(sessionToken).reset(sessionToken);
+                // sending recovery messages
+                sendingRecoveryMessagesAfterClientNodeDown(sessionToken);
+            }
+
+        } catch (Exception e) {
+            // Only in case of a new node (new match or recovered (after server down))
             // Starting to monitor the heartbeat of this network node
             HeartbeatController heartbeatController = new HeartbeatController(sessionToken, matchController);
             heartbeatController.startMonitoringHeartbeat();
             heartbeatControllers.put(sessionToken, heartbeatController);
-            // adding player
-            try {
-                matchController.update(new SessionMessage(sessionToken, MessageType.ADD_PLAYER));
-            } catch (InvalidPayloadException ignored) {
-            }
         }
     }
 
-    // TODO L'HO MESSO PUBLIC
-    public void sendingMainMatchComponents() {
+    private void sendingRecoveryMessagesAfterServerDownOrMatchContinuation(String sessionToken) {
+        try {
+            System.out.println("VirtualView - Sending recovery messages after server restoration.");
+            update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "Your match has been reloaded!"));
+            update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMatch().getPlayers().size()));
+            // Sending message to match controller to activate the RecoveringMatchPhaseState
+            notifyObservers(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE));
+        } catch (InvalidPayloadException ignored) {
+        }
+    }
+
+    private void sendingRecoveryMessagesAfterClientNodeDown(String sessionToken) {
+        try {
+            update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "You can resume the match!"));
+            update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMatch().getPlayers().size()));
+            // Sending message to stop the waiting screen
+            // notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Recovering match..."));
+            notifyObservers(new SessionMessage(sessionToken, MessageType.STOP_WAITING));
+            // triggering the match controller
+            notifyObservers(new SessionMessage(sessionToken, GENERAL_MESSAGE));
+        } catch (InvalidPayloadException ignored) {
+        }
+    }
+
+    private void sendingMainMatchComponents() throws InvalidPayloadException {
         update(getMarketTrayModelUpdateMessage());
         update(getDevelopmentGridModelUpdateMessage());
         for (Player player : matchController.getMatch().getPlayers())
@@ -133,11 +164,10 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
      *
      * @param nodeClient network node of the client
      */
-    private synchronized void startListening(NetworkNode nodeClient, String sessionToken) {
+    private synchronized void startListening(NetworkNode nodeClient) {
         // it receives message from the communication channel and it has to forward the message to the controller
         new Thread(() -> {
             System.out.println("VirtualView - Starting to listen client node.");
-            startTrackingHeartbeat(sessionToken);
             while (true) {
                 try {
                     // If node client is no more connected we stop the loop.
@@ -274,6 +304,10 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         }
 
         return message;
+    }
+
+    public synchronized int getNumberOfNodeClients() {
+        return nodeClients.size();
     }
 
 }

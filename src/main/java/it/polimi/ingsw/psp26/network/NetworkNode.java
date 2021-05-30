@@ -50,7 +50,7 @@ public class NetworkNode {
      * @param data data to send
      * @throws IOException if object can not be sent
      */
-    public void sendData(Object data) throws IOException {
+    public synchronized void sendData(Object data) throws IOException {
         objectOutputStream.writeObject(data);
     }
 

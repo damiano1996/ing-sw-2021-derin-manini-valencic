@@ -22,7 +22,7 @@ public class DevelopmentCardsGridDialogDrawer extends RatioDrawer {
         super(maxWidth);
 
         this.client = client;
-        developmentGridDrawer = new DevelopmentCardsGridDrawer(client, developmentCardsGrid, initMaxWidth / 3);
+        developmentGridDrawer = new DevelopmentCardsGridDrawer(client, developmentCardsGrid, initMaxWidth / 2);
     }
 
     @Override
@@ -33,12 +33,13 @@ public class DevelopmentCardsGridDialogDrawer extends RatioDrawer {
 
         Text text = new Text("Development Cards");
         text.setId("title");
+        text.setStyle("-fx-font-size: " + 100 * ratio + ";");
         rootPane.getChildren().add(text);
 
         Text description = new Text(
                 "*Click on the card that you want to buy.");
         description.setId("title");
-        description.setStyle("-fx-font-size: " + 40 * ratio + ";");
+        description.setStyle("-fx-font-size: " + 70 * ratio + ";");
         rootPane.getChildren().add(description);
 
         rootPane.getChildren().add(new HBox(developmentGridDrawer.draw()));

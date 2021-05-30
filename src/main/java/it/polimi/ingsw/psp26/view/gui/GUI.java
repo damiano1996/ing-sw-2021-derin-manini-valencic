@@ -61,13 +61,13 @@ public class GUI extends Application implements ViewInterface {
         Application.launch(args);
     }
 
-//    private void setStageWindowProperties(Stage stage) {
-//        stage.setMaximized(true);
-//        stage.setResizable(true);
-//        stage.setFullScreen(true);
-//        stage.setAlwaysOnTop(true);
-//        stage.sizeToScene();
-//    }
+    private void setStageWindowProperties(Stage stage) {
+        // stage.setMaximized(false);
+        stage.setResizable(false);
+        // stage.setFullScreen(false);
+        // stage.setAlwaysOnTop(false);
+        // stage.sizeToScene();
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -83,7 +83,7 @@ public class GUI extends Application implements ViewInterface {
 
         this.primaryStage = primaryStage;
         this.primaryStage.setScene(scene);
-//        setStageWindowProperties(this.primaryStage);
+        setStageWindowProperties(this.primaryStage);
         this.primaryStage.show();
 
         displayLogIn();
@@ -139,7 +139,6 @@ public class GUI extends Application implements ViewInterface {
 
     }
 
-
     @Override
     public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
 
@@ -148,20 +147,28 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd) {
-        Stage dialog = getDialog(primaryStage, new WarehousePlacerDrawer(client, warehouse, resourcesToAdd, getWindowWidth()).draw());
+        Stage dialog = getDialog(
+                primaryStage,
+                new WarehousePlacerDrawer(client, warehouse, resourcesToAdd, getMinBetweenWindowWidthAndHeight()).draw()
+        );
         dialog.show();
     }
 
     @Override
     public void displayDevelopmentCardBuyAction(DevelopmentCardsGrid developmentCardsGrid, List<Resource> playerResources) {
-        Stage dialog = getDialog(primaryStage, new DevelopmentCardsGridDialogDrawer(client, developmentCardsGrid, getWindowWidth()).draw());
+        Stage dialog = getDialog(
+                primaryStage,
+                new DevelopmentCardsGridDialogDrawer(client, developmentCardsGrid, getMinBetweenWindowWidthAndHeight()).draw()
+        );
         dialog.show();
     }
 
-
     @Override
     public void displayMarketAction(MarketTray marketTray, List<Resource> playerResources) {
-        Stage dialog = getDialog(primaryStage, new MarketDialogDrawer(client, marketTray, getWindowWidth()).draw());
+        Stage dialog = getDialog(
+                primaryStage,
+                new MarketDialogDrawer(client, marketTray, getMinBetweenWindowWidthAndHeight()).draw()
+        );
         dialog.show();
     }
 
@@ -195,7 +202,7 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
-        VBox mainContainer = new VBox(10 * getGeneralRatio());
+        VBox mainContainer = new VBox(5 * getGeneralRatio());
         Stage dialog = getDialog(primaryStage, mainContainer);
 
         Label label = new Label(question);
@@ -293,7 +300,7 @@ public class GUI extends Application implements ViewInterface {
 
     private int setGridPanePosition(GridPane container, List<Object> choices, int j, int i, ButtonContainer<?> buttonContainer) {
         if (choices.size() % 2 != 0 && i == choices.size() - 1)
-            container.add(new VBox(buttonContainer), 0, container.getRowCount() + 1, (container.getColumnCount() == 0) ? 1 : container.getColumnCount(), 1);
+            container.add(new VBox(buttonContainer), 0, container.getRowCount(), (container.getColumnCount() == 0) ? 1 : container.getColumnCount(), 1);
         else container.add(buttonContainer, i % 2, j % 2, 1, 1);
         j += i % 2;
         return j;
@@ -336,8 +343,8 @@ public class GUI extends Application implements ViewInterface {
             }
         });
 
-        container.add(new VBox(errorText), 0, container.getRowCount() + 1, container.getColumnCount(), 1);
-        container.add(new VBox(confirmationButton), 0, container.getRowCount() + 2, container.getColumnCount(), 1);
+        container.add(new VBox(errorText), 0, container.getRowCount(), container.getColumnCount(), 1);
+        container.add(new VBox(confirmationButton), 0, container.getRowCount(), container.getColumnCount(), 1);
     }
 
     @Override
@@ -402,7 +409,7 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void stopDisplayingWaitingScreen() {
         Pane pane = addBackground(
-                getPlayingPane(primaryStage, client, getWindowWidth()),
+                getPlayingPane(primaryStage, client, getWindowWidth() - 100),
                 getWindowWidth(),
                 getWindowHeight()
         );

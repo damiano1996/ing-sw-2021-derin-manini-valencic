@@ -14,7 +14,7 @@ public class PlayerDrawer {
         BorderPane borderPane = new BorderPane();
 
         Text nickname = new Text(toTitleStyle(player.getNickname()));
-        nickname.setFont(getFont(50, ratio));
+        nickname.setStyle("-fx-font-size: " + 70 * ratio + ";");
         nickname.setFill(Color.WHITE);
         borderPane.setTop(nickname);
 

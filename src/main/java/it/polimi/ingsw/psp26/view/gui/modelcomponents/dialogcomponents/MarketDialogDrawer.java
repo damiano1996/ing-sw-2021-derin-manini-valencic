@@ -22,7 +22,7 @@ public class MarketDialogDrawer extends RatioDrawer {
         super(maxWidth);
 
         this.client = client;
-        marketTrayDrawer = new MarketTrayDrawer(client, marketTray, initMaxWidth / 3);
+        marketTrayDrawer = new MarketTrayDrawer(client, marketTray, initMaxWidth / 2);
     }
 
     @Override
@@ -33,12 +33,13 @@ public class MarketDialogDrawer extends RatioDrawer {
 
         Text text = new Text("Market");
         text.setId("title");
+        text.setStyle("-fx-font-size: " + 100 * ratio + ";");
         rootPane.getChildren().add(text);
 
         Text description = new Text(
                 "*Click on the arrow to obtain the resources on the corresponding row (or column).");
         description.setId("title");
-        description.setStyle("-fx-font-size: " + 40 * ratio + ";");
+        description.setStyle("-fx-font-size: " + 70 * ratio + ";");
         rootPane.getChildren().add(description);
 
         rootPane.getChildren().add(new HBox(marketTrayDrawer.draw()));

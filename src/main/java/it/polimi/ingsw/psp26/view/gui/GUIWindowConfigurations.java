@@ -27,4 +27,8 @@ public class GUIWindowConfigurations {
     public static int getWindowHeight() {
         return Math.min(WINDOW_HEIGHT, getScreenHeight()) - 100;
     }
+
+    public static int getMinBetweenWindowWidthAndHeight(){
+        return Math.min(getWindowWidth(), getWindowHeight());
+    }
 }

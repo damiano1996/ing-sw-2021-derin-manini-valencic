@@ -15,33 +15,36 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPlayer;
 
 public class PlayingPane {
 
-    private static HBox addOpponents(Stage primaryStage, int thumbnailSize, Client client) {
+    private static final int ZOOM_FACTOR = 4;
 
-        int zoomFactor = 3;
+    private static VBox addOpponents(Stage primaryStage, int thumbnailSize, Client client) {
 
-        HBox hBox = new HBox();
-        hBox.setCache(true);
-        hBox.setCacheHint(CacheHint.SPEED);
+        float ratio = thumbnailSize / REFERENCE_WIDTH;
+
+        VBox vBox = new VBox();
+        vBox.setCache(true);
+        vBox.setCacheHint(CacheHint.SPEED);
 
         // adding opponents
         for (int i = 0; i < 3; i++) {
             int finalI = i;
-            hBox.getChildren().add(new Pane());
+            vBox.getChildren().add(new Pane());
             new AsynchronousDrawer(
                     () -> client.getCachedModel().getOpponentCached(finalI).lookingForUpdate(),
                     () -> {
                         Player player = client.getCachedModel().getOpponentCached(finalI).getObject();
-                        hBox.getChildren().set(
+                        vBox.getChildren().set(
                                 finalI,
                                 drawThumbNail(
                                         primaryStage,
-                                        drawPlayer(player, thumbnailSize, getGeneralRatio(), true, client.isMultiplayerMode()),
-                                        drawPlayer(player, zoomFactor * thumbnailSize, getGeneralRatio(), true, client.isMultiplayerMode()),
+                                        drawPlayer(player, thumbnailSize, ratio, true, client.isMultiplayerMode()),
+                                        drawPlayer(player, ZOOM_FACTOR * thumbnailSize, ZOOM_FACTOR * ratio, true, client.isMultiplayerMode()),
                                         thumbnailSize, thumbnailSize)
                         );
                     },
@@ -49,12 +52,10 @@ public class PlayingPane {
             ).start();
         }
 
-        return hBox;
+        return vBox;
     }
 
     private static VBox addMatchComponents(Stage primaryStage, int thumbnailSize, Client client) {
-
-        int zoomFactor = 3;
 
         VBox vBox = new VBox();
         vBox.setCache(true);
@@ -71,7 +72,7 @@ public class PlayingPane {
                             drawThumbNail(
                                     primaryStage,
                                     new MarketTrayDrawer(marketTray, thumbnailSize).draw(),
-                                    new MarketTrayDrawer(marketTray, zoomFactor * thumbnailSize).draw(),
+                                    new MarketTrayDrawer(marketTray, ZOOM_FACTOR * thumbnailSize).draw(),
                                     thumbnailSize, thumbnailSize)
                     );
                 },
@@ -89,7 +90,7 @@ public class PlayingPane {
                             drawThumbNail(
                                     primaryStage,
                                     new DevelopmentCardsGridDrawer(developmentCardsGrid, thumbnailSize).draw(),
-                                    new DevelopmentCardsGridDrawer(developmentCardsGrid, zoomFactor * thumbnailSize).draw(),
+                                    new DevelopmentCardsGridDrawer(developmentCardsGrid, ZOOM_FACTOR * thumbnailSize).draw(),
                                     thumbnailSize, thumbnailSize)
                     );
                 },
@@ -146,12 +147,14 @@ public class PlayingPane {
 
         int thumbnailSize = (int) (width * 0.1);
 
-        if (client.isMultiplayerMode()) border.setTop(addOpponents(primaryStage, thumbnailSize, client));
+        VBox vBox = new VBox();
 
-        border.setLeft(addMatchComponents(primaryStage, thumbnailSize, client));
+        vBox.getChildren().add(addMatchComponents(primaryStage, thumbnailSize, client));
+        if (client.isMultiplayerMode()) vBox.getChildren().add(addOpponents(primaryStage, thumbnailSize, client));
 
-        float resizeMainBlockFactor = (client.isMultiplayerMode()) ? 0.7f : 0.8f;
-        border.setCenter(addMainBox(client, (int) (width * resizeMainBlockFactor)));
+        border.setLeft(vBox);
+
+        border.setCenter(addMainBox(client, (int) (width * 0.8)));
 
         border.setRight(addRightBar((int) (width * 0.1)));
 

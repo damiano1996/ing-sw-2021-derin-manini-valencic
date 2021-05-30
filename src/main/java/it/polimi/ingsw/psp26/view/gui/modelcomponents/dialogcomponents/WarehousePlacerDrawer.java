@@ -46,7 +46,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
     private Text errorMessage;
 
     public WarehousePlacerDrawer(Client client, Warehouse warehouse, List<Resource> resourcesToAdd, int maxWidth) {
-        super(maxWidth);
+        super((int) (maxWidth * 1.2f));
 
         this.client = client;
         this.warehouse = warehouse;
@@ -70,13 +70,14 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         VBox rootPane = new VBox(10 * ratio);
         Text text = new Text("Place Resources in the Warehouse");
         text.setId("title");
+        text.setStyle("-fx-font-size: " + 120 * ratio + ";");
         rootPane.getChildren().add(text);
 
         Text description = new Text(
                 "*Drag and drop resources in the depots.\n" +
                         "**Click over depots to switch content among them.");
         description.setId("title");
-        description.setStyle("-fx-font-size: " + 40 * ratio + ";");
+        description.setStyle("-fx-font-size: " + 70 * ratio + ";");
         rootPane.getChildren().add(description);
 
         Pane warehousePane = getWarehousePane();

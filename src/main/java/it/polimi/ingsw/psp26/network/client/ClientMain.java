@@ -8,10 +8,10 @@ public class ClientMain {
 
     /**
      * Starts the Client
-     *
+     * <p>
      * To run with GUI:
      * mvn exec:java -Dexec.mainClass="it.polimi.ingsw.psp26.network.client.ClientMain" -Dexec.args="-playingViewMode=gui"
-     *
+     * <p>
      * To run with CLI
      * mvn exec:java -Dexec.mainClass="it.polimi.ingsw.psp26.network.client.ClientMain" -Dexec.args="-playingViewMode=cli"
      */

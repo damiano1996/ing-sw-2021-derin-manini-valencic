@@ -62,7 +62,7 @@ public class MarketResourceNormalActionTurnStateTest {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
 
-        assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
+        assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType()); // TODO: sometimes it crashes
     }
 
     @Test

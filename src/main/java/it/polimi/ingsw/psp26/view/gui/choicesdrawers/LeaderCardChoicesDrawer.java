@@ -6,7 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
-import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_WIDTH;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getMinBetweenWindowWidthAndHeight;
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getCard;
 

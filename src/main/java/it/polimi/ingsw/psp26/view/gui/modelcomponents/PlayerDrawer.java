@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import static it.polimi.ingsw.psp26.view.ViewUtils.toTitleStyle;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getFont;
 
 public class PlayerDrawer {
 

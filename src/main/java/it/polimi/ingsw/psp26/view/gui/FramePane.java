@@ -21,7 +21,7 @@ import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffect
 public class FramePane {
 
     public static StackPane drawThumbNail(Stage primaryStage, Pane content, Pane contentEnhanced, int contentWidth, int contentHeight) {
-        StackPane thumbNailStackPane = addCoolFrame(content, true, getGeneralRatio(), (int) (contentWidth * 1.2f), (int) (contentHeight * 1.2f));
+        StackPane thumbNailStackPane = addCoolFrame(content, false, getGeneralRatio(), (int) (contentWidth * 1.2f), (int) (contentHeight * 1.2f));
 
         Stage dialog = getDialog(primaryStage, contentEnhanced);
 

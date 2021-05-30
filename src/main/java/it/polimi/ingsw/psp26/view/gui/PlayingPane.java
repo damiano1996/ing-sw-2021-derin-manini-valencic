@@ -11,7 +11,10 @@ import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardsGridDrawer
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.NotificationStackDrawer;
 import javafx.scene.CacheHint;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
@@ -27,7 +30,7 @@ public class PlayingPane {
 
         float ratio = thumbnailSize / REFERENCE_WIDTH;
 
-        VBox vBox = new VBox();
+        VBox vBox = new VBox(0);
         vBox.setCache(true);
         vBox.setCacheHint(CacheHint.SPEED);
 
@@ -57,7 +60,7 @@ public class PlayingPane {
 
     private static VBox addMatchComponents(Stage primaryStage, int thumbnailSize, Client client) {
 
-        VBox vBox = new VBox();
+        VBox vBox = new VBox(0);
         vBox.setCache(true);
         vBox.setCacheHint(CacheHint.SPEED);
 
@@ -145,9 +148,9 @@ public class PlayingPane {
         border.setCache(true);
         border.setCacheHint(CacheHint.SPEED);
 
-        int thumbnailSize = (int) (width * 0.1);
+        int thumbnailSize = (int) (width * 0.08);
 
-        VBox vBox = new VBox();
+        VBox vBox = new VBox(0);
 
         vBox.getChildren().add(addMatchComponents(primaryStage, thumbnailSize, client));
         if (client.isMultiplayerMode()) vBox.getChildren().add(addOpponents(primaryStage, thumbnailSize, client));

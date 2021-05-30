@@ -118,24 +118,24 @@ public class ServerTest {
         return networkNode.get();
     }
 
-    private synchronized SessionMessage ignoreJoinMessage(NetworkNode networkNode) throws IOException, ClassNotFoundException {
+    private synchronized SessionMessage ignoreMessages(NetworkNode networkNode) throws IOException, ClassNotFoundException {
         SessionMessage message = (SessionMessage) networkNode.receiveData();
-        while (message.getMessageType().equals(MessageType.NOTIFICATION_UPDATE))
+        while (message.getMessageType().equals(MessageType.NOTIFICATION_UPDATE) || message.getMessageType().equals(MessageType.MODEL_UPDATE))
             message = (SessionMessage) networkNode.receiveData();
         return message;
     }
 
     private synchronized void assertStartMatch(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
-        SessionMessage message = ignoreJoinMessage(networkNode);
+        SessionMessage message = ignoreMessages(networkNode);
         assertEquals(MessageType.SET_NUMBER_OF_PLAYERS, message.getMessageType());
 
-        message = ignoreJoinMessage(networkNode);
+        message = ignoreMessages(networkNode);
         assertEquals(MessageType.START_WAITING, message.getMessageType());
 
-        message = ignoreJoinMessage(networkNode);
+        message = ignoreMessages(networkNode);
         assertEquals(MessageType.STOP_WAITING, message.getMessageType());
 
-        message = ignoreJoinMessage(networkNode);
+        message = ignoreMessages(networkNode);
         assertEquals(MessageType.GENERAL_MESSAGE, message.getMessageType());
         assertTrue(((String) message.getPayload()).contains("The match can start!"));
     }
@@ -167,7 +167,7 @@ public class ServerTest {
     }
 
     private synchronized void assertRecoveryMatch(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
-        SessionMessage message = ignoreJoinMessage(networkNode);
+        SessionMessage message = ignoreMessages(networkNode);
         assertEquals(MessageType.GENERAL_MESSAGE, message.getMessageType());
         assertEquals("Your match has been reloaded!", message.getPayload());
     }

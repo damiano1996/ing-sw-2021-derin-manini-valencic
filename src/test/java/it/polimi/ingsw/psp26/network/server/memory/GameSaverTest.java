@@ -6,6 +6,9 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 
@@ -26,41 +29,78 @@ public class GameSaverTest {
 
     @Test
     public void testRestoreMatch_EqualsPlayersNicknames() {
+        List<Integer> matchIDs = new ArrayList<>();
         Match match = virtualView.getMatchController().getMatch();
 
-        GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 1, 1);
+        matchIDs.add(match.getId());
+
+        GameSaver.getInstance().backupMatch(match, 1, 1);
         Match restoredMatch = GameSaver.getInstance().loadMatch(match.getId());
 
         assertEquals(match.getPlayers().get(0).getNickname(), restoredMatch.getPlayers().get(0).getNickname());
         assertEquals(match.getPlayers().get(1).getNickname(), restoredMatch.getPlayers().get(1).getNickname());
+
+        deleteCreatedDirectories(matchIDs);
     }
 
     @Test
     public void testRestoreMatch_EqualsActionTokens() {
+        List<Integer> matchIDs = new ArrayList<>();
         Match match = virtualView.getMatchController().getMatch();
 
-        GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 1, 1);
+        matchIDs.add(match.getId());
+
+        GameSaver.getInstance().backupMatch(match, 1, 1);
         Match restoredMatch = GameSaver.getInstance().loadMatch(match.getId());
 
         for (int i = 0; i < match.getActionTokens().size(); i++) {
             // If you don't put a toString() it will cause an error even though the tokens are the same
             assertEquals(match.getActionTokens().get(i).toString(), restoredMatch.getActionTokens().get(i).toString());
         }
+
+        deleteCreatedDirectories(matchIDs);
     }
 
     @Test
     public void testCreateNewDirectories() {
-        int savedDirectories = GameSaver.getInstance().getSavedMatchesPath().size();
+        List<Integer> matchIDs = new ArrayList<>();
+        int savedDirectories = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
         int directoriesToCreate = 4;
 
         for (int i = 0; i < directoriesToCreate; i++) {
             VirtualView virtualView = new VirtualView();
             GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 0, 0);
+            matchIDs.add(virtualView.getMatchController().getMatch().getId());
         }
-        System.out.println(GameSaver.getInstance().getSavedMatchesPath());
+        int expectedDirectoriesNumber = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
 
         // Clean saved_matches folder before running the test
-        assertEquals(directoriesToCreate + savedDirectories, GameSaver.getInstance().getSavedMatchesPath().size());
+        assertEquals(directoriesToCreate + savedDirectories, expectedDirectoriesNumber);
+
+        deleteCreatedDirectories(matchIDs);
+    }
+
+    @Test
+    public void testDeleteDirectory() {
+        int savedDirectories = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
+
+        GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 0, 0);
+        GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", virtualView.getMatchController().getMatch().getId()));
+
+        assertEquals(savedDirectories, GameSaver.getInstance().getSavedMatchesDirectoriesNames().size());
+    }
+
+
+    /**
+     * Used to delete all the created directories after executing a test
+     * Must call it in every test method that doesn't delete directories at the end
+     *
+     * @param matchIDs The List of all the saved Matches ids to delete
+     */
+    private void deleteCreatedDirectories(List<Integer> matchIDs) {
+        for (Integer id : matchIDs) {
+            GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", id));
+        }
     }
 
 }

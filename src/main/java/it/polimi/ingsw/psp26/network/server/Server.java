@@ -79,7 +79,7 @@ public class Server {
 
     private void recoveryMatches() {
         System.out.println("Server - Recovering matches from files.");
-        for (String gamePath : GameSaver.getInstance().getSavedMatchesPath()) {
+        for (String gamePath : GameSaver.getInstance().getSavedMatchesDirectoriesNames()) {
             try {
                 Match restoredMatch = GameSaver.getInstance().loadMatch(gamePath);
                 // Checking if all the players have the session token correctly loaded

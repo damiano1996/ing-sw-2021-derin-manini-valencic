@@ -57,4 +57,40 @@ public class Files {
         }
     }
 
+
+    /**
+     * Creates a new directory in the given directoryPath if it doesn't already exist
+     *
+     * @param directoryPath The path where to create the directory (if not already present)
+     * @return True if a new directory is created, false if a new directory is not created
+     */
+    public static boolean createNewDirectory(String directoryPath) {
+        File directory = new File(directoryPath);
+        return directory.mkdir();
+    }
+
+
+    /**
+     * Deletes a directory and all sub-files in the given directoryPath
+     *
+     * @param directoryPath The path of the Directory to delete
+     * @return True if the directory is correctly deleted, false in the other case
+     */
+    public static boolean deleteDirectory(String directoryPath) {
+        try {
+            File directoryToDelete = new File(directoryPath);
+
+            String[] filesInDirectory = directoryToDelete.list();
+            assert filesInDirectory != null;
+            for (String fileName : filesInDirectory) {
+                File fileToDelete = new File(directoryToDelete.getPath(), fileName);
+                fileToDelete.delete();
+            }
+            return directoryToDelete.delete();
+        } catch (Exception e) { // Using general Exception catching because delete() can throw an IOException
+            System.out.println("NO FILES TO DELETE!");
+            return false;
+        }
+    }
+
 }

@@ -8,14 +8,10 @@ import it.polimi.ingsw.psp26.model.Player;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.psp26.application.files.Files.readFromFile;
-import static it.polimi.ingsw.psp26.application.files.Files.writeToFile;
+import static it.polimi.ingsw.psp26.application.files.Files.*;
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 
 
@@ -127,52 +123,52 @@ public class GameSaver {
     /**
      * Load an existing Match by retrieving it from the given matchID
      *
-     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
+     * @param directoryName The name of the directory in which the Match is stored (e.g. game_001)
      * @return The desired Match
      */
-    public Match loadMatch(String gamePath) {
-        return loadMatch(getID(gamePath));
+    public Match loadMatch(String directoryName) {
+        return loadMatch(getID(directoryName));
     }
 
 
     /**
-     * Load the turnPlayerIndex using the given gamePath
+     * Load the turnPlayerIndex using the given directoryName
      * turnPlayerIndex is the first element of the matchControllersData List
      *
-     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
-     * @return The turnPlayerIndex related to the Match stored in the gamePath
+     * @param directoryName The name of the directory in which the Match is stored (e.g. game_001)
+     * @return The turnPlayerIndex related to the Match stored in the directoryName
      * @throws FileNotFoundException Thrown if the fle doesn't exists
      */
-    public int loadTurnPlayerIndex(String gamePath) throws FileNotFoundException {
-        return loadMatchControllersData(gamePath).get(0);
+    public int loadTurnPlayerIndex(String directoryName) throws FileNotFoundException {
+        return restoreMatchControllersData(directoryName).get(0);
     }
 
 
     /**
-     * Load the turnNumber using the given gamePath
+     * Load the turnNumber using the given directoryName
      * turnNumber is the second element of the matchControllersData List
      *
-     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
-     * @return The turnNumber related to the Match stored in the gamePath
+     * @param directoryName The name of the directory in which the Match is stored (e.g. game_001)
+     * @return The turnNumber related to the Match stored in the directoryName
      * @throws FileNotFoundException Thrown if the fle doesn't exists
      */
-    public int loadTurnNumber(String gamePath) throws FileNotFoundException {
-        return loadMatchControllersData(gamePath).get(1);
+    public int loadTurnNumber(String directoryName) throws FileNotFoundException {
+        return restoreMatchControllersData(directoryName).get(1);
     }
 
 
     /**
      * Loads the matchControllerData List
      *
-     * @param gamePath The name of the directory in which the Match is stored (e.g. game_001)
+     * @param directoryName The name of the directory in which the Match is stored (e.g. game_001)
      * @return The matchControllerData List
      * @throws FileNotFoundException Thrown if the fle doesn't exists
      */
-    private List<Integer> loadMatchControllersData(String gamePath) throws FileNotFoundException {
+    private List<Integer> restoreMatchControllersData(String directoryName) throws FileNotFoundException {
         Type type = new TypeToken<List<Integer>>() {
         }.getType();
 
-        int id = getID(gamePath);
+        int id = getID(directoryName);
         String formattedId = String.format(FORMAT_ID, id);
         String loadPath = "saved_matches/game_" + formattedId + "/matchcontrollerdata_" + formattedId + ".json";
 
@@ -196,23 +192,11 @@ public class GameSaver {
     //---------------------------//
 
     /**
-     * Creates a new directory in the given directoryPath if it doesn't already exist
-     *
-     * @param directoryPath The path where to create the directory (if not already present)
-     * @return True if a new directory is created, false if a new directory is not created
-     */
-    private boolean createNewDirectory(String directoryPath) {
-        File directory = new File(directoryPath);
-        return directory.mkdir();
-    }
-
-
-    /**
      * Creates a List of all the directories names contained in the saved_match folder
      *
      * @return The List of the directories names
      */
-    public List<String> getSavedMatchesPath() {
+    public List<String> getSavedMatchesDirectoriesNames() {
         try {
             File directory = new File(GAME_FILES + "saved_matches");
             return Arrays.stream(Objects.requireNonNull(directory.list())).sorted().collect(Collectors.toList());
@@ -226,7 +210,7 @@ public class GameSaver {
      * @return The last directory id contained in the saved_match folder. If no directory is present, returns 0
      */
     public int getLastId() {
-        List<String> directoryList = getSavedMatchesPath();
+        List<String> directoryList = getSavedMatchesDirectoriesNames();
         if (directoryList.size() == 0) return 0;
         return getID(directoryList.get(directoryList.size() - 1));
     }
@@ -241,6 +225,17 @@ public class GameSaver {
     public int getID(String gamePath) {
         String[] splitDirectoryName = gamePath.split("_");
         return Integer.parseInt(splitDirectoryName[splitDirectoryName.length - 1]);
+    }
+
+
+    /**
+     * Delete a game directory retrieving it by the directory's name
+     * It prints true if the directory is correctly deleted, false if not
+     *
+     * @param directoryName The name of the directory in which the Match is stored (e.g. game_001)
+     */
+    public void deleteDirectoryByName(String directoryName) {
+        System.out.println("Directory deleted: " + deleteDirectory(GAME_FILES + "saved_matches/" + directoryName));
     }
 
 }

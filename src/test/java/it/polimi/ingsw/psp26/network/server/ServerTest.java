@@ -181,7 +181,7 @@ public class ServerTest {
 
         VirtualView virtualView = new VirtualView();
 
-        Match match = new Match(virtualView, 0);
+        Match match = new Match(virtualView, GameSaver.getInstance().getLastId() + 1);
         match.addPlayer(new Player(virtualView, nickname, sessionToken));
 
         GameSaver.getInstance().backupMatch(
@@ -195,7 +195,7 @@ public class ServerTest {
         NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, true, true, nickname, password);
         assertRecoveryMatch(networkNode);
 
-        // TODO: adding deletion of the match
+        GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", match.getId()));
     }
 
 }

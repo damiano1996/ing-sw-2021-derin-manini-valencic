@@ -439,6 +439,8 @@ public class CLI implements ViewInterface {
 
         switch (messageType) {
 
+            case MENU:
+            case NEW_OR_OLD:
             case MULTI_OR_SINGLE_PLAYER_MODE:
                 cliUtils.clns();
                 displayMultipleStringChoices(choices);

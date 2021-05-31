@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 public class GameSaverTest {
 
-    VirtualView virtualView;
+    private VirtualView virtualView;
 
     @Before
     public void setUp() throws Exception {
@@ -73,8 +73,7 @@ public class GameSaverTest {
             matchIDs.add(virtualView.getMatchController().getMatch().getId());
         }
         int expectedDirectoriesNumber = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
-
-        // Clean saved_matches folder before running the test
+        
         assertEquals(directoriesToCreate + savedDirectories, expectedDirectoriesNumber);
 
         deleteCreatedDirectories(matchIDs);
@@ -82,12 +81,12 @@ public class GameSaverTest {
 
     @Test
     public void testDeleteDirectory() {
-        int savedDirectories = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
+        int savedDirectoriesNumber = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
 
         GameSaver.getInstance().backupMatch(virtualView.getMatchController().getMatch(), 0, 0);
         GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", virtualView.getMatchController().getMatch().getId()));
 
-        assertEquals(savedDirectories, GameSaver.getInstance().getSavedMatchesDirectoriesNames().size());
+        assertEquals(savedDirectoriesNumber, GameSaver.getInstance().getSavedMatchesDirectoriesNames().size());
     }
 
 

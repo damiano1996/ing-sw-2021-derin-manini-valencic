@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
+import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import static org.junit.Assert.*;
 
 public class CheckVaticanReportTurnStateTest {
 
+    private VirtualView virtualView;
     private MitmObserver mitm;
     private Phase phase;
     private Turn turn;
@@ -23,7 +25,7 @@ public class CheckVaticanReportTurnStateTest {
     @Before
     public void setUp() throws Exception {
         mitm = new MitmObserver();
-        VirtualView virtualView = new VirtualView();
+        virtualView = new VirtualView();
         phase = new Phase(virtualView.getMatchController());
         phase.getMatchController().addObserver(mitm);
 
@@ -86,6 +88,7 @@ public class CheckVaticanReportTurnStateTest {
 
         assertTrue(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
 
+        GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", virtualView.getMatchController().getMatch().getId()));
     }
 
     @Test
@@ -108,5 +111,7 @@ public class CheckVaticanReportTurnStateTest {
         assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
         assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].isPopesFavorTileActive());
         assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].isPopesFavorTileDiscarded());
+
+        GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", virtualView.getMatchController().getMatch().getId()));
     }
 }

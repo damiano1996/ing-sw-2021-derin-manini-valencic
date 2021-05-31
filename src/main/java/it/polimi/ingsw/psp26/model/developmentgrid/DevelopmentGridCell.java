@@ -10,6 +10,12 @@ public class DevelopmentGridCell {
     private final DevelopmentCardType developmentCardType;
     private final List<DevelopmentCard> developmentCards;
 
+    /**
+     * Constructor of the class
+     * It creates the Development Cards using the DevelopmentCardsInitializer, then shuffles the obtained Cards
+     *
+     * @param developmentCardType The Type wanted for that specific Cell
+     */
     public DevelopmentGridCell(DevelopmentCardType developmentCardType) {
         this.developmentCardType = developmentCardType;
 
@@ -18,6 +24,13 @@ public class DevelopmentGridCell {
         Collections.shuffle(developmentCards);
     }
 
+
+    /**
+     * Removes and returns the Card on top of the Development Grid Cell
+     *
+     * @return The Card on top of the Development Grid Cell
+     * @throws NoMoreDevelopmentCardsException Thrown if the cell is empty
+     */
     public DevelopmentCard drawCard() throws NoMoreDevelopmentCardsException {
         try {
             return developmentCards.remove(0);
@@ -26,19 +39,36 @@ public class DevelopmentGridCell {
         }
     }
 
+
+    /**
+     * @return True if no Cards are contained in the Cell, false otherwise
+     */
     public boolean isEmpty() {
         return developmentCards.size() == 0;
     }
 
+
+    /**
+     * @return The developmentCardType attribute of the Development Grid Cell
+     */
     public DevelopmentCardType getDevelopmentCardType() {
         return developmentCardType;
     }
 
+
+    /**
+     * @return The Card on top of the Cell
+     */
     public DevelopmentCard getFirstCard() {
         return developmentCards.get(0);
     }
 
+
+    /**
+     * @return The number of Development Cards contained in the Development Grid Cell
+     */
     public int getDevelopmentCardsSize() {
         return developmentCards.size();
     }
+
 }

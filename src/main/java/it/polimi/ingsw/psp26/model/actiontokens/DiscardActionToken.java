@@ -18,6 +18,20 @@ public class DiscardActionToken implements ActionToken {
     }
 
 
+    /**
+     * Executes the action of the ActionToken
+     * In this case, discards 2 cards from the Development Card Grid. The attribute colorToDiscard will tell what
+     * Color of the Development Cards will be discarded.
+     * The method tries to discard from the first Level; if no cards are available, proceeds to the higher Levels, up to the third
+     * The ColorDoesNotExistException and LevelDoesNotExistException are thrown since drawCards() is used in the auxiliary methods
+     *
+     * @param faithTrack           The Faith Track where the Black Cross is contained
+     * @param developmentCardsGrid The Development Grid where the Tokens can discard Development Cards
+     * @throws ColorDoesNotExistException The Color of the Development Card doesn't exist
+     * @throws LevelDoesNotExistException The Level of the Development Card doesn't exist
+     * @throws LorenzoWinException        All the cards of a Color have been discarded (e.g. all the yellow cards have been
+     *                                    discarded: Lorenzo wins the game)
+     */
     @Override
     public void execute(FaithTrack faithTrack, DevelopmentCardsGrid developmentCardsGrid) throws ColorDoesNotExistException, LevelDoesNotExistException, LorenzoWinException {
         int cardsToRemove = 2;
@@ -35,6 +49,7 @@ public class DiscardActionToken implements ActionToken {
             }
         }
     }
+
 
     /**
      * Used by the token to remove cards from First, Second or both DevelopmentGrid levels
@@ -60,6 +75,7 @@ public class DiscardActionToken implements ActionToken {
         return cardsToRemove;
     }
 
+
     /**
      * Used by the token to remove cards from the Third DevelopmentGrid levels
      *
@@ -80,11 +96,13 @@ public class DiscardActionToken implements ActionToken {
         }
     }
 
+
     /**
-     * Returns the Token's name
+     * @return The Token's name
      */
     @Override
     public String toString() {
         return getClass().getSimpleName() + "-" + colorToDiscard.getName();
     }
+
 }

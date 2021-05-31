@@ -8,7 +8,10 @@ import it.polimi.ingsw.psp26.model.Player;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.files.Files.*;
@@ -17,13 +20,16 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 
 public class GameSaver {
 
-    // Used to create new directories. Remember to add the matchID after the parameter
-    private static final String DIRECTORY_PATH = GAME_FILES + "saved_matches/game_";
-    // Used to store backups. Remember to add the matchID after the parameter
-    private static final String BACKUP_PATH = "saved_matches/game_";
+    private static final String MATCHES_PATH = GAME_FILES + "saved_matches/";
     // Used to get the correct numbering for directories and files
     private static final String FORMAT_ID = "%03d";
     private static GameSaver instance;
+
+    private GameSaver() {
+        // Initialization of the directories
+        createNewDirectory(GAME_FILES);
+        createNewDirectory(MATCHES_PATH);
+    }
 
     public static GameSaver getInstance() {
         if (instance == null) instance = new GameSaver();
@@ -34,6 +40,10 @@ public class GameSaver {
     //--------------------------//
     //          BACKUP          //
     //--------------------------//
+
+    private String getMatchPath(int matchId) {
+        return MATCHES_PATH + "game_" + String.format(FORMAT_ID, matchId) + "/";
+    }
 
     /**
      * Used to backup a VirtualView in a new directory (if needed)
@@ -48,7 +58,7 @@ public class GameSaver {
      * @param match The Match to backup
      */
     public void backupMatch(Match match, int turnPlayerIndex, int turnNumber) {
-        System.out.println("Directory created: " + createNewDirectory(DIRECTORY_PATH + String.format(FORMAT_ID, match.getId())));
+        System.out.println("Directory created: " + createNewDirectory(getMatchPath(match.getId())));
 
         storeMatch(match);
         storeMatchControllerData(turnPlayerIndex, turnNumber, match.getId());
@@ -63,7 +73,7 @@ public class GameSaver {
     private void storeMatch(Match match) {
         String formattedMatchId = String.format(FORMAT_ID, match.getId());
         writeToFile(
-                BACKUP_PATH + formattedMatchId + "/match_" + formattedMatchId + ".json",
+                getMatchPath(match.getId()) + "/match_" + formattedMatchId + ".json",
                 GsonConverter.getInstance().getGson().toJson(match)
         );
     }
@@ -86,7 +96,7 @@ public class GameSaver {
         matchControllerData.add(turnNumber);
 
         writeToFile(
-                BACKUP_PATH + formattedMatchId + "/matchcontrollerdata_" + formattedMatchId + ".json",
+                getMatchPath(matchID) + "/matchcontrollerdata_" + formattedMatchId + ".json",
                 GsonConverter.getInstance().getGson().toJson(matchControllerData)
         );
     }
@@ -109,7 +119,7 @@ public class GameSaver {
         Match restoredMatch = null;
 
         try {
-            restoredMatch = restoreMatch("saved_matches/game_" + formattedMatchId + "/match_" + formattedMatchId + ".json");
+            restoredMatch = restoreMatch(getMatchPath(matchID) + "/match_" + formattedMatchId + ".json");
             for (Player player : restoredMatch.getPlayers())
                 player.setSessionToken(Users.getInstance().getNicknameSessionTokens().get(player.getNickname()));
         } catch (FileNotFoundException e) {
@@ -170,7 +180,7 @@ public class GameSaver {
 
         int id = getID(directoryName);
         String formattedId = String.format(FORMAT_ID, id);
-        String loadPath = "saved_matches/game_" + formattedId + "/matchcontrollerdata_" + formattedId + ".json";
+        String loadPath = getMatchPath(id) + "/matchcontrollerdata_" + formattedId + ".json";
 
         return GsonConverter.getInstance().getGson().fromJson(readFromFile(loadPath), type);
     }
@@ -198,7 +208,7 @@ public class GameSaver {
      */
     public List<String> getSavedMatchesDirectoriesNames() {
         try {
-            File directory = new File(GAME_FILES + "saved_matches");
+            File directory = new File(MATCHES_PATH);
             return Arrays.stream(Objects.requireNonNull(directory.list())).sorted().collect(Collectors.toList());
         } catch (Exception e) {
             return new ArrayList<>();
@@ -235,7 +245,9 @@ public class GameSaver {
      * @param directoryName The name of the directory in which the Match is stored (e.g. game_001)
      */
     public void deleteDirectoryByName(String directoryName) {
-        System.out.println("Directory deleted: " + deleteDirectory(GAME_FILES + "saved_matches/" + directoryName));
+        String path = MATCHES_PATH + directoryName;
+        deleteDirectory(path);
+        System.out.println("GameSaver - Directory deleted: " + path);
     }
 
 }

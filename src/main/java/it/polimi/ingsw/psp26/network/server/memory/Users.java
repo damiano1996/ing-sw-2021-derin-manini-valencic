@@ -13,15 +13,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static it.polimi.ingsw.psp26.application.files.Files.readFromFile;
-import static it.polimi.ingsw.psp26.application.files.Files.writeToFile;
-import static it.polimi.ingsw.psp26.configurations.Configurations.MIN_NICKNAME_LENGTH;
-import static it.polimi.ingsw.psp26.configurations.Configurations.MIN_PASSWORD_LENGTH;
+import static it.polimi.ingsw.psp26.application.files.Files.*;
+import static it.polimi.ingsw.psp26.configurations.Configurations.*;
 
 public class Users {
 
-    private static String USERS_FILE_PASSWORDS = "nickname-password.json";
-    private static String USERS_FILE_SESSION_TOKENS = "nickname-sessionToken.json";
+    private static String USERS_FILE_PASSWORDS = GAME_FILES + "nickname-password.json";
+    private static String USERS_FILE_SESSION_TOKENS = GAME_FILES + "nickname-sessionToken.json";
 
     private static Users instance;
 
@@ -29,6 +27,8 @@ public class Users {
     private Map<String, String> nicknameSessionTokens;
 
     public Users() {
+        createNewDirectory(GAME_FILES);
+
         nicknamePasswords = new HashMap<>();
         nicknameSessionTokens = new HashMap<>();
         try {

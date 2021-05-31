@@ -6,13 +6,11 @@ import it.polimi.ingsw.psp26.exceptions.CannotReadMessageFileException;
 import java.io.*;
 import java.util.Scanner;
 
-import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
-
 public class Files {
 
     public static void writeToFile(String fileName, String content) {
         try {
-            FileWriter fileWriter = new FileWriter(GAME_FILES + fileName);
+            FileWriter fileWriter = new FileWriter(fileName);
             fileWriter.write(content);
             fileWriter.flush();
             fileWriter.close();
@@ -22,21 +20,21 @@ public class Files {
 
     public static String readFromFile(String fileName) throws FileNotFoundException {
         StringBuilder content = new StringBuilder();
-        File file = new File(GAME_FILES + fileName);
+        File file = new File(fileName);
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine()) content.append(scanner.nextLine());
         scanner.close();
         return content.toString();
     }
 
-    public static void deleteFile(String fileName) {
-        new File(GAME_FILES + fileName).delete();
+    public static boolean deleteFile(String fileName) {
+        return new File(fileName).delete();
     }
 
     public static void writeMessageToFile(String fileName, Message message) {
         try {
 
-            FileOutputStream fileOutputStream = new FileOutputStream(GAME_FILES + fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(message);
 
@@ -48,7 +46,7 @@ public class Files {
     public static Message readMessageFromFile(String fileName) throws CannotReadMessageFileException {
         try {
 
-            FileInputStream fileInputStream = new FileInputStream(GAME_FILES + fileName);
+            FileInputStream fileInputStream = new FileInputStream(fileName);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             return (Message) objectInputStream.readObject();
 
@@ -71,26 +69,25 @@ public class Files {
 
 
     /**
-     * Deletes a directory and all sub-files in the given directoryPath
+     * Method to delete recursively a directory: files and sub-directories will be deleted.
      *
      * @param directoryPath The path of the Directory to delete
-     * @return True if the directory is correctly deleted, false in the other case
      */
-    public static boolean deleteDirectory(String directoryPath) {
-        try {
-            File directoryToDelete = new File(directoryPath);
+    public static void deleteDirectory(String directoryPath) {
+        File directoryToDelete = new File(directoryPath);
 
+        if (directoryToDelete.isDirectory()) {
             String[] filesInDirectory = directoryToDelete.list();
-            assert filesInDirectory != null;
-            for (String fileName : filesInDirectory) {
-                File fileToDelete = new File(directoryToDelete.getPath(), fileName);
-                fileToDelete.delete();
+            if (filesInDirectory != null) {
+                for (String fileName : filesInDirectory) {
+                    String path = directoryToDelete.getPath() + "/" + fileName;
+                    System.out.println("Files - looking for: " + path);
+                    deleteDirectory(path);
+                }
             }
-            return directoryToDelete.delete();
-        } catch (Exception e) { // Using general Exception catching because delete() can throw an IOException
-            System.out.println("NO FILES TO DELETE!");
-            return false;
         }
-    }
 
+        System.out.println("Files - Deleting file: " + directoryPath);
+        deleteFile(directoryPath);
+    }
 }

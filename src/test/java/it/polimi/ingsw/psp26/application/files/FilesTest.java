@@ -8,9 +8,12 @@ import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 import static it.polimi.ingsw.psp26.application.files.Files.*;
+import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 import static it.polimi.ingsw.psp26.network.NetworkUtils.generateSessionToken;
 import static org.junit.Assert.assertEquals;
 
@@ -46,5 +49,23 @@ public class FilesTest {
         assert readMessage != null;
         assertEquals(message.getMessageType(), readMessage.getMessageType());
         deleteFile(fileName);
+    }
+
+    @Test
+    public void recursiveDirectoryDeletion() {
+        createNewDirectory(GAME_FILES);
+        int numberOfSubDirectories = Objects.requireNonNull(new File(GAME_FILES).list()).length;
+        String testDirectoryPath = GAME_FILES + "test/";
+        createNewDirectory(testDirectoryPath);
+        assertEquals(numberOfSubDirectories + 1, Objects.requireNonNull(new File(GAME_FILES).list()).length);
+        // zero folders
+        assertEquals(0, Objects.requireNonNull(new File(testDirectoryPath).list()).length);
+        // after 2 folders creation
+        createNewDirectory(testDirectoryPath + "aaa/");
+        createNewDirectory(testDirectoryPath + "bbb/");
+        assertEquals(2, Objects.requireNonNull(new File(testDirectoryPath).list()).length);
+        // after deletion
+        deleteDirectory(testDirectoryPath);
+        assertEquals(numberOfSubDirectories, Objects.requireNonNull(new File(GAME_FILES).list()).length);
     }
 }

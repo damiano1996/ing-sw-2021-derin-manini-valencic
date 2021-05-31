@@ -73,7 +73,7 @@ public class GameSaverTest {
             matchIDs.add(virtualView.getMatchController().getMatch().getId());
         }
         int expectedDirectoriesNumber = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
-        
+
         assertEquals(directoriesToCreate + savedDirectories, expectedDirectoriesNumber);
 
         deleteCreatedDirectories(matchIDs);

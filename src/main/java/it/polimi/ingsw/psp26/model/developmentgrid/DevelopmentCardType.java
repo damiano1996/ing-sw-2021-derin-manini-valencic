@@ -5,6 +5,10 @@ import it.polimi.ingsw.psp26.model.enums.Level;
 
 import java.util.Objects;
 
+
+/**
+ * This class is used to put in a single place both the Color and the Level of Development Cards
+ */
 public class DevelopmentCardType {
 
     private final Color color;
@@ -15,14 +19,28 @@ public class DevelopmentCardType {
         this.level = level;
     }
 
+
+    /**
+     * @return The Color of the Development Card
+     */
     public Color getColor() {
         return color;
     }
 
+
+    /**
+     * @return The Level of the Development Card
+     */
     public Level getLevel() {
         return level;
     }
 
+
+    /**
+     * toString method
+     *
+     * @return A String representation of the Object
+     */
     @Override
     public String toString() {
         return "DevelopmentCardType{" +
@@ -31,6 +49,13 @@ public class DevelopmentCardType {
                 '}';
     }
 
+
+    /**
+     * Equals method
+     *
+     * @param o Object to be compared
+     * @return True if equals, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,8 +64,15 @@ public class DevelopmentCardType {
         return color == that.color && level == that.level;
     }
 
+
+    /**
+     * hashCode method
+     *
+     * @return A hashCode of the Object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(color, level);
     }
+
 }

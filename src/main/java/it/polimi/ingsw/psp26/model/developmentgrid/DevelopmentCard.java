@@ -9,12 +9,14 @@ import java.util.Objects;
 
 public class DevelopmentCard {
 
-    private final Map<Resource, Integer> cost;
+    // This attribute contains information about the Card Level and Color
     private final DevelopmentCardType developmentCardType;
+
+    // This attribute contains information about the Production power of the Development Card
     private final Production production;
 
+    private final Map<Resource, Integer> cost;
     private final int victoryPoints;
-
 
     public DevelopmentCard(
             HashMap<Resource, Integer> cost,
@@ -29,22 +31,44 @@ public class DevelopmentCard {
         this.victoryPoints = victoryPoints;
     }
 
+
+    /**
+     * @return An unmodifiable Map containing the cost of the Card
+     */
     public Map<Resource, Integer> getCost() {
         return Collections.unmodifiableMap(cost);
     }
 
+
+    /**
+     * @return The DevelopmentCardType of the Card
+     */
     public DevelopmentCardType getDevelopmentCardType() {
         return developmentCardType;
     }
 
+
+    /**
+     * @return The Production of the Card
+     */
     public Production getProduction() {
         return production;
     }
 
+
+    /**
+     * @return The Victory Points of the Card
+     */
     public int getVictoryPoints() {
         return victoryPoints;
     }
 
+
+    /**
+     * toString method
+     *
+     * @return A String representation of the Object
+     */
     @Override
     public String toString() {
         return "DevelopmentCard{" +
@@ -53,6 +77,13 @@ public class DevelopmentCard {
                 '}';
     }
 
+
+    /**
+     * Equals method
+     *
+     * @param o Object to be compared
+     * @return True if equals, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,8 +95,15 @@ public class DevelopmentCard {
                 Objects.equals(production, that.production);
     }
 
+
+    /**
+     * hashCode method
+     *
+     * @return A hashCode of the Object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(cost, developmentCardType, production, victoryPoints);
     }
+
 }

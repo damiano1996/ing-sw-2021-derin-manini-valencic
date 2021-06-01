@@ -27,6 +27,7 @@ public class Production {
         this.productionReturn = productionReturn;
     }
 
+    
     /**
      * Getter of the production cost.
      *
@@ -36,6 +37,7 @@ public class Production {
         return Collections.unmodifiableMap(productionCost);
     }
 
+    
     /**
      * Getter of the production return.
      *
@@ -45,11 +47,12 @@ public class Production {
         return Collections.unmodifiableMap(productionReturn);
     }
 
+    
     /**
      * Equals method.
      *
      * @param o object to be compared
-     * @return true if equals
+     * @return true if equals, false otherwise
      */
     @Override
     public boolean equals(Object o) {

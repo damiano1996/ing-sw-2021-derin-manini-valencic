@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
-import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
 import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
 
 public class WaitingScreen {
@@ -55,6 +55,7 @@ public class WaitingScreen {
 
         Text text = new Text(waitingMessage);
         text.setId("title");
+        text.setStyle("-fx-font-size: " + 100 * getMinBetweenWindowWidthAndHeight() / REFERENCE_WIDTH + ";");
         text.setWrappingWidth(1000 * getGeneralRatio());
         animationContainer.getChildren().add(text);
 

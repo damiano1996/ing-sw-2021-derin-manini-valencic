@@ -26,12 +26,13 @@ public class MatchController extends Observable<SessionMessage> implements Obser
         addObserver(virtualView);
         this.virtualView = virtualView;
 
-        System.out.println("MatchController - New match controller has been created.");
         this.isWaitingForPlayers = true;
 
         initializeMatch(matchId);
         phase = new Phase(this);
         recoveryMode = false;
+
+        System.out.println("MatchController - New match controller has been created.");
     }
 
     public MatchController(VirtualView virtualView, Match match, int turnPlayerIndex, int turnNumber) {

@@ -34,8 +34,6 @@ public class RecoveringMatchPhaseState extends PhaseState {
                 phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.STOP_WAITING));
 
                 phase.changeState(nextPlayingPhaseState);
-                nextPlayingPhaseState.playFirstTurn();
-
             }
 
         } catch (InvalidPayloadException ignored) {

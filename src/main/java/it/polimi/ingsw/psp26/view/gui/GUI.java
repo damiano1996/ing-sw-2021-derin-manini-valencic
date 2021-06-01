@@ -349,7 +349,10 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
-        Stage dialog = getDialog(primaryStage, new ActionTokenDialogDrawer(client, unusedTokens, getWindowWidth()).draw());
+        Stage dialog = getDialog(
+                primaryStage,
+                new ActionTokenDialogDrawer(client, unusedTokens, getMinBetweenWindowWidthAndHeight()).draw()
+        );
         dialog.show();
     }
 
@@ -358,7 +361,7 @@ public class GUI extends Application implements ViewInterface {
 
         Text text1 = new Text(text);
         text1.setId(textId);
-        // text1.setWrapText(true);
+        text1.setWrappingWidth(1000 * getGeneralRatio());
         vBox.getChildren().add(text1);
 
         Button confirmationButton = new Button("OK");

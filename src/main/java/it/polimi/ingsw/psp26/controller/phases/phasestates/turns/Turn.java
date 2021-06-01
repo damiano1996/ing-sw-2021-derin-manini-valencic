@@ -50,8 +50,7 @@ public class Turn {
                                     turnPlayer.getNickname() + " lost the connection. He skips the turn."
                             )
                     );
-                } catch (InvalidPayloadException e) {
-                    e.printStackTrace();
+                } catch (InvalidPayloadException ignored) {
                 }
                 // updating turn skipping for current player
                 if (matchController.getMatch().isMultiPlayerMode()) playingPhaseState.updateCurrentTurn();

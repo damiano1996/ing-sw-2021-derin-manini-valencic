@@ -11,9 +11,9 @@ import static java.lang.Thread.sleep;
 
 public class HeartbeatController extends Observable<SessionMessage> implements Observer<SessionMessage> {
 
-    public final int MAX_TIME_TO_DIE = 5000; // 5 ms
-    public final int MAX_TIME_TO_END_MATCH = 1000 * 60 * 5; // 5 minutes
-    private final int DELTA_TIME = 1000; // every 100 ms checks countdown
+    public static final int MAX_TIME_TO_DIE = 5000; // 5 ms
+    public static final int MAX_TIME_TO_END_MATCH = 1000 * 60 * 5; // 5 minutes
+    private static final int DELTA_TIME = 1000; // every 100 ms checks countdown
 
     private final String sessionToken;
     private final VirtualView virtualView;
@@ -58,12 +58,10 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         if (countdown < 0) {
             isDeath = true;
             try {
+
                 virtualView.stopListeningNetworkNode(sessionToken);
-                notifyObservers(
-                        new SessionMessage(sessionToken, MessageType.DEATH)
-                );
-//                System.out.println("HeartbeatController - No heartbeat from player with sessionToken: " + sessionToken);
-//                running = false;
+                notifyObservers(new SessionMessage(sessionToken, MessageType.DEATH));
+
             } catch (InvalidPayloadException ignored) {
             }
         }
@@ -71,9 +69,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         // If countdown exceed, we declare the end of the match
         if (countdown < -MAX_TIME_TO_END_MATCH) {
             try {
-                notifyObservers(
-                        new SessionMessage(sessionToken, MessageType.INDEFINITE_SUSPENSION)
-                );
+                notifyObservers(new SessionMessage(sessionToken, MessageType.INDEFINITE_SUSPENSION));
             } catch (InvalidPayloadException ignored) {
             }
         }

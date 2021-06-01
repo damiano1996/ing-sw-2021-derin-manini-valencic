@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.GENERAL_MESSAGE;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_OF_PLAYERS;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.STOP_WAITING;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.*;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.getIndexOf;
 
@@ -112,6 +112,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
             // we don't have to create a new heartbeat controller,
             // but we can just rest it.
             if (heartbeatControllers.get(sessionToken).isDeath()) {
+                System.out.println("VirtualView - Resetting (recovering) heartbeat of user.");
                 // we can reset the heartbeat
                 heartbeatControllers.get(sessionToken).reset(sessionToken);
                 // sending recovery messages
@@ -142,11 +143,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         try {
             update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "You can resume the match!"));
             update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMatch().getPlayers().size()));
-            // Sending message to stop the waiting screen
-            // notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Recovering match..."));
-            notifyObservers(new SessionMessage(sessionToken, MessageType.STOP_WAITING));
-            // triggering the match controller
-            notifyObservers(new SessionMessage(sessionToken, GENERAL_MESSAGE));
+            update(new SessionMessage(sessionToken, STOP_WAITING));
         } catch (InvalidPayloadException ignored) {
         }
     }
@@ -181,7 +178,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
                     else
                         notifyObservers(message);
 
-                } catch (IOException | ClassNotFoundException | ValueDoesNotExistsException e) {
+                } catch (IOException | ClassNotFoundException | ValueDoesNotExistsException | NullPointerException e) {
                     // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }
             }

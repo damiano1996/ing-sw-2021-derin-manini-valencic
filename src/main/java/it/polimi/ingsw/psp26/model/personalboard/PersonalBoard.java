@@ -63,6 +63,13 @@ public class PersonalBoard extends Observable<SessionMessage> {
         this.sessionToken = sessionToken;
     }
 
+    /**
+     * Used when recovering a Match
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter
+     * It also calls the recoverVirtualView() method on the faithTrack and the warehouse
+     *
+     * @param virtualView The new VirtualView to add to the Observers List
+     */
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
         addObserver(virtualView);

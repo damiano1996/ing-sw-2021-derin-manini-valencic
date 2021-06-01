@@ -44,6 +44,13 @@ public class FaithTrack extends Observable<SessionMessage> {
         victoryPoints = new int[]{0, 1, 2, 4, 6, 9, 12, 16, 20};
     }
 
+    /**
+     * Used when recovering a Match
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter
+     * It also calls the restoreVirtualView() method on all the vaticanReportSections
+     *
+     * @param virtualView The new VirtualView to add to the Observers List
+     */
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
         addObserver(virtualView);

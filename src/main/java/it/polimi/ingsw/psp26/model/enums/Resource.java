@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.model.enums;
 
 public enum Resource {
+
     COIN("    Coin    ", Color.YELLOW),
     STONE("   Stones   ", Color.GREY),
     SERVANT("  Servants  ", Color.PURPLE),
@@ -17,11 +18,20 @@ public enum Resource {
         this.color = color;
     }
 
+
+    /**
+     * @return The Resource name
+     */
     public String getName() {
         return name;
     }
 
+
+    /**
+     * @return The Resource Color
+     */
     public Color getColor() {
         return color;
     }
+
 }

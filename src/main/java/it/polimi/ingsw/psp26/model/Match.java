@@ -57,6 +57,14 @@ public class Match extends Observable<SessionMessage> {
         initializeActionTokenStack();
     }
 
+    /**
+     * Used when recovering a Match
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter
+     * It also calls restoreVirtualView() method on both developmentCardsGrid and marketTray attributes
+     * It also calls recoverVirtualView() method on all the players
+     *
+     * @param virtualView The new VirtualView to add to the Observers List
+     */
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
         addObserver(virtualView);

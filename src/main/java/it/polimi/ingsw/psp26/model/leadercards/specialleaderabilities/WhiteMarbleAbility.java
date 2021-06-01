@@ -11,6 +11,14 @@ public class WhiteMarbleAbility extends SpecialAbility {
         super(resource);
     }
 
+
+    /**
+     * Activates the ability of the Leader Card
+     * In this case, it replaces all the EMPTY Resources in the given List with another Resource type
+     * The new Resource type is taken from the resource attribute
+     *
+     * @param resourceList The List where to replace all its EMPTY Resources with a new resource type
+     */
     @Override
     public void execute(List<Resource> resourceList) {
         super.execute(resourceList);
@@ -19,10 +27,8 @@ public class WhiteMarbleAbility extends SpecialAbility {
 
             resourceList.replaceAll(r -> r.equals(Resource.EMPTY) ? resource : r);
 
-
         } catch (ClassCastException ignored) {
         }
-
     }
 
 }

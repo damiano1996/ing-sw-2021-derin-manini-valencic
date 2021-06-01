@@ -12,6 +12,15 @@ public class ProductionAbility extends SpecialAbility {
         super(resource);
     }
 
+
+    /**
+     * Activates the ability of the Leader Card
+     * In this case, it adds a new Production Power to the Player Productions
+     * The Production power cost is taken from the resource attribute
+     * The Production power return is the same for all the Leader Cards
+     * 
+     * @param player The Player that activates the Leader Card
+     */
     @Override
     public void activate(Player player) {
         super.activate(player);

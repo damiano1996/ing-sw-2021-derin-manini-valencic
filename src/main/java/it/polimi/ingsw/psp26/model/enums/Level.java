@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.model.enums;
 
 public enum Level {
+
     UNDEFINED("UNDEFINED", 0),
     FIRST("FIRST", 1),
     SECOND("SECOND", 2),
@@ -14,11 +15,20 @@ public enum Level {
         this.levelName = levelName;
     }
 
+
+    /**
+     * @return The Level number
+     */
     public int getLevelNumber() {
         return levelNumber;
     }
 
+
+    /**
+     * @return The Level name
+     */
     public String getLevelName() {
         return levelName;
     }
+
 }

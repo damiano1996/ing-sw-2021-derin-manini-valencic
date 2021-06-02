@@ -34,6 +34,7 @@ public class RecoveringMatchPhaseState extends PhaseState {
                 phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.STOP_WAITING));
 
                 phase.changeState(nextPlayingPhaseState);
+                // TODO: Needs of message to trigger the match controller to notify players that the turn can be of an opponent!
             }
 
         } catch (InvalidPayloadException ignored) {

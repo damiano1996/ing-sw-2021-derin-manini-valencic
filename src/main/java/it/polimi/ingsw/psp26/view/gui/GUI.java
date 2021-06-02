@@ -425,7 +425,7 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void waitForYourTurn() {
         new AsynchronousDrawer(
-                () -> MessageSynchronizedFIFO.getInstance().getNext(),
+                () -> MessageSynchronizedFIFO.getInstance().lookingForNext(),
                 () -> client.viewNext(),
                 false
         ).start();

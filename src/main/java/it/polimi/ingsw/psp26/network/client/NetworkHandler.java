@@ -114,6 +114,7 @@ public class NetworkHandler implements Observer<Message> {
                         // step: stopping this thread since initializeNetworkNode() will start a new one
                         running = false;
                     } else {
+                        if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - HEARTBEAT message.");
                         networkNode.sendData(new SessionMessage(sessionToken, MessageType.HEARTBEAT));
                     }
 
@@ -137,7 +138,8 @@ public class NetworkHandler implements Observer<Message> {
                                                     "Waiting for automatic recovery..."
                                     )
                             );
-                        } catch (InvalidPayloadException ignored) {
+                        } catch (InvalidPayloadException e) {
+                            e.printStackTrace();
                         }
                     }
 

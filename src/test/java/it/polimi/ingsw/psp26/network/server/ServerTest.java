@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
 
-    private static boolean runningHeartbeat;
+    // private static boolean runningHeartbeat;
 
     private int getTotalNumberOfNodeClientsInVirtualViews() {
         int totalNumber = 0;
@@ -236,6 +236,44 @@ public class ServerTest {
 
         // GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", match.getId()));
     }
+
+    @Test
+    public void testCloseMatchIfNotRecovered() throws InterruptedException, IOException, EmptyPayloadException, ClassNotFoundException {
+        Server.getInstance().closeConnection();
+
+        String nickname = generateSessionToken(MIN_NICKNAME_LENGTH);
+        String password = generateSessionToken(MIN_PASSWORD_LENGTH);
+        String sessionToken = generateSessionToken(SESSION_TOKEN_LENGTH);
+        Users.getInstance().addUser(nickname, password, sessionToken);
+
+        int numberOfSavedMatches = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
+        int numberOfMatchWithThisPlayer = 3;
+
+        for (int i = 0; i < numberOfMatchWithThisPlayer; i++) {
+            VirtualView virtualView = new VirtualView();
+
+            Match match = new Match(virtualView, GameSaver.getInstance().getLastId() + 1);
+            match.addPlayer(new Player(virtualView, nickname, sessionToken));
+
+            GameSaver.getInstance().backupMatch(
+                    match,
+                    0,
+                    1
+            );
+        }
+        // Checking that the total number of matches is the sum of the initial plus the news.
+        int savedMatches = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
+        System.out.println("ServerTest - saved matches before deletion: " + savedMatches);
+        assertEquals(numberOfSavedMatches + numberOfMatchWithThisPlayer, savedMatches);
+        // Creating new match without recovery the olds
+        NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false, true, nickname, password);
+        assertStartMatch(networkNode);
+        // Checking that the old matches have been removed
+        savedMatches = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
+        System.out.println("ServerTest - saved matches after deletion: " + savedMatches);
+        assertEquals(numberOfSavedMatches, savedMatches);
+    }
+
 //
 //    @Test
 //    public void testRecoverMatchServerDown() throws InterruptedException, IOException, EmptyPayloadException, ClassNotFoundException, InvalidPayloadException {

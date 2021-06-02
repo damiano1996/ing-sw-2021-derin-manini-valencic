@@ -136,7 +136,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         try {
             System.out.println("VirtualView - Sending recovery messages after server restoration.");
             update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "Your match has been reloaded!"));
-            update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMatch().getPlayers().size()));
+            update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMaxNumberOfPlayers()));
             // Sending message to match controller to activate the RecoveringMatchPhaseState
             notifyObservers(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE));
         } catch (InvalidPayloadException ignored) {
@@ -182,7 +182,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
                     else
                         notifyObservers(message);
 
-                } catch (IOException | ClassNotFoundException | ValueDoesNotExistsException | NullPointerException e) {
+                } catch (Exception | ValueDoesNotExistsException e) {
                     // e.printStackTrace(); // -> EOFException exception is returned at every end of the stream.
                 }
             }
@@ -211,14 +211,14 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
             int indexOf = getIndexOf(nodeClients, networkNode);
             String sessionToken = new ArrayList<>(nodeClients.keySet()).get(indexOf);
 
-            if (moveToWaitingRoom.get(sessionToken)) { // throwing ValueDoesNotExistsException
+            if (moveToWaitingRoom.get(sessionToken)) {
                 heartbeatControllers.get(sessionToken).kill(sessionToken);
                 Server.getInstance().addNodeClientToWaitingRoom(sessionToken, nodeClients.remove(sessionToken));
             } else {
                 nodeClients.remove(sessionToken).closeConnection();
             }
             connectedNetworkNodes.remove(indexOf);
-        } catch (ValueDoesNotExistsException | IOException ignored) {
+        } catch (Exception | ValueDoesNotExistsException ignored) {
         }
     }
 

@@ -45,13 +45,9 @@ public class InitializationPhaseState extends PhaseState {
                     e.printStackTrace();
                 }
 
-                // Send the initial version of the Market and Development Grid to all Players
-                //notifyMarketAndGridCreation();
-
                 // Updating the state. The match can begin!
                 PlayingPhaseState playingPhaseState = new PlayingPhaseState(phase);
                 phase.changeState(playingPhaseState);
-                // phase.execute(message); // is performed by the PlayingPhaseState() at the initialization of the turn
                 playingPhaseState.playFirstTurn();
             }
         }

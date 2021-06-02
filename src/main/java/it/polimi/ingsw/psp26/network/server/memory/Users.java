@@ -37,8 +37,7 @@ public class Users {
 
             nicknamePasswords = GsonConverter.getInstance().getGson().fromJson(readFromFile(USERS_FILE_PASSWORDS), type);
             nicknameSessionTokens = GsonConverter.getInstance().getGson().fromJson(readFromFile(USERS_FILE_SESSION_TOKENS), type);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException ignored) {
         }
     }
 

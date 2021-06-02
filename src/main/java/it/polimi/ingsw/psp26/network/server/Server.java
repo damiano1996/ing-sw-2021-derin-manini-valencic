@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.DEFAULT_SERVER_PORT;
@@ -110,7 +111,7 @@ public class Server {
     }
 
     public List<VirtualView> getVirtualViews() {
-        return virtualViews;
+        return Collections.unmodifiableList(virtualViews);
     }
 
     public void addVirtualView(VirtualView virtualView) {

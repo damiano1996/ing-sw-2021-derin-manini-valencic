@@ -18,5 +18,5 @@ public class Configurations {
 
     // To print or not on the std out of the cli,
     // from the main classes of the package network.client
-    public static final boolean PRINT_CLIENT_SIDE = true;
+    public static final boolean PRINT_CLIENT_SIDE = false;
 }

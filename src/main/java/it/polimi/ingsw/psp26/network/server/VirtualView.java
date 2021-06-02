@@ -36,6 +36,9 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
     private final Map<String, HeartbeatController> heartbeatControllers;
 
+    // Map containing [sessionToken;boolean] that tells if a nodeClient must be moved to the WaitingRoom or not
+    private final Map<String, Boolean> moveToWaitingRoom;
+
     public VirtualView() {
         super();
         nodeClients = new HashMap<>();
@@ -44,6 +47,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         matchController = new MatchController(this, getMatchId());
 
         heartbeatControllers = new HashMap<>();
+        moveToWaitingRoom = new HashMap<>();
 
         addObserver(matchController);
     }
@@ -57,10 +61,10 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         matchController = new MatchController(this, match, turnPlayerIndex, turnNumber);
 
         heartbeatControllers = new HashMap<>();
+        moveToWaitingRoom = new HashMap<>();
 
         addObserver(matchController);
     }
-
 
     /**
      * Updates the virtual view.
@@ -192,8 +196,13 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
 
     /**
-     * Method to remove the network node from the pool.
+     * Method to remove the network node from the pool or put it in the waiting room.
      * It will be called from the listening thread.
+     * <p>
+     * The method checks if the sessionToken has to be moved in the waiting room by getting the relative boolean value
+     * contained in the moveToWaitingRoom Map:
+     * (moveToWaitingRoom.get(sessionToken) == true) ==> the networkNode's heartbeatController is stopped and the networkNode is moved to the waiting room.
+     * (moveToWaitingRoom.get(sessionToken) == false) ==> the networkNode is removed from the nodeClients Map and its connection closed
      *
      * @param networkNode network node that must be removed
      */
@@ -201,7 +210,13 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         try {
             int indexOf = getIndexOf(nodeClients, networkNode);
             String sessionToken = new ArrayList<>(nodeClients.keySet()).get(indexOf);
-            nodeClients.remove(sessionToken).closeConnection();
+
+            if (moveToWaitingRoom.get(sessionToken)) {
+                heartbeatControllers.get(sessionToken).kill(sessionToken);
+                Server.getInstance().addNodeClientToWaitingRoom(sessionToken, nodeClients.remove(sessionToken));
+            } else {
+                nodeClients.remove(sessionToken).closeConnection();
+            }
             connectedNetworkNodes.remove(indexOf);
         } catch (ValueDoesNotExistsException | IOException ignored) {
         }
@@ -211,11 +226,14 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
      * Method to stop the thread that is listening messages from client node.
      * It sets to false the associated value of the network node that is referring to the connection status.
      * As consequence, this action will stop the "listening" thread that will remove the network node from the list of network clients.
+     * It also puts a new pair [sessionToken;boolean] in the moveToWaitingRoom Map
      *
-     * @param sessionToken session token of the disconnected player
+     * @param sessionToken        session token of the disconnected player
+     * @param onStopToWaitingRoom True if the networkNode must be moved to the waiting room, false if the networkNode must only be deleted
      */
-    public synchronized void stopListeningNetworkNode(String sessionToken) {
+    public synchronized void stopListeningNetworkNode(String sessionToken, boolean onStopToWaitingRoom) {
         try {
+            moveToWaitingRoom.put(sessionToken, onStopToWaitingRoom);
             connectedNetworkNodes.set(getIndexOf(nodeClients, nodeClients.get(sessionToken)), false);
         } catch (ValueDoesNotExistsException ignored) {
         }

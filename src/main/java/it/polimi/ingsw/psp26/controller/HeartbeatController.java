@@ -59,7 +59,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
             isDeath = true;
             try {
 
-                virtualView.stopListeningNetworkNode(sessionToken);
+                virtualView.stopListeningNetworkNode(sessionToken, false);
                 notifyObservers(new SessionMessage(sessionToken, MessageType.DEATH));
 
             } catch (InvalidPayloadException ignored) {
@@ -83,5 +83,10 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
 
     public synchronized boolean isDeath() {
         return isDeath;
+    }
+
+    public synchronized void kill(String sessionToken) {
+        if (this.sessionToken.equals(sessionToken))
+            this.running = false;
     }
 }

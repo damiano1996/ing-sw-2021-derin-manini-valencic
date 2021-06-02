@@ -250,4 +250,15 @@ public class GameSaver {
         System.out.println("GameSaver - Directory deleted: " + path);
     }
 
+
+    /**
+     * Deletes a directory retrieving it by the MatchID
+     *
+     * @param matchID The id of the Match to be deleted
+     */
+    public void deleteDirectoryByMatchId(int matchID) {
+        String directoryName = "game_" + String.format(FORMAT_ID, matchID);
+        deleteDirectoryByName(directoryName);
+    }
+
 }

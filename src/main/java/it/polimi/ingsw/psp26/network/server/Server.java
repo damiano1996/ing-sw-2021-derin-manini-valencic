@@ -120,4 +120,9 @@ public class Server {
     public void addNodeClientToWaitingRoom(String sessionToken, NetworkNode nodeClient) {
         waitingRoom.addNodeClient(sessionToken, nodeClient);
     }
+
+    public void removeVirtualView(VirtualView virtualView) {
+        virtualViews.remove(virtualView);
+    }
+
 }

@@ -71,7 +71,7 @@ public class CLI implements ViewInterface {
     //--------------------------------------//
 
     /**
-     * Starts a new Client, a new Thread for the notifications and displays the login screen
+     * Starts a new Client and displays the login screen
      */
     @Override
     public void start() {
@@ -133,7 +133,7 @@ public class CLI implements ViewInterface {
                 pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + nickname);
                 pw.flush();
                 cliUtils.vSpace(2);
-                pw.print(cliUtils.hSpace(100) + "Enter password: " + password);
+                pw.print(cliUtils.hSpace(100) + "Enter Password: " + password);
                 pw.flush();
                 cliUtils.vSpace(3);
                 pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
@@ -680,11 +680,9 @@ public class CLI implements ViewInterface {
         cliUtils.pPCS("Press Enter to go back to the main screen", Color.WHITE, 50, 4);
 
         executingTask = false;
-
+        
         in.nextLine();
-
-        //TODO Controllare lato server cosa fare del vecchio Match
-        start();
+        client.viewNext();
     }
 
 

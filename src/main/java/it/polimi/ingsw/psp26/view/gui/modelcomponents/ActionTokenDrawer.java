@@ -45,7 +45,7 @@ public class ActionTokenDrawer extends RatioDrawer {
     private VBox createUnusedTokenList() {
         VBox tokenStack = new VBox();
         tokenStack.setAlignment(Pos.CENTER);
-        tokenStack.setSpacing(-130);
+        tokenStack.setSpacing(-100);
 
         // Creating the stack of unused Tokens
         for (int i = 0; i < actionTokensToDisplay.size() - 1; i++) {

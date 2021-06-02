@@ -9,6 +9,8 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
+import it.polimi.ingsw.psp26.network.server.Server;
+import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
@@ -21,7 +23,6 @@ public class EndMatchPhaseState extends PhaseState {
      *
      * @param phase current phase.
      */
-
     public EndMatchPhaseState(Phase phase) {
         super(phase);
     }
@@ -32,13 +33,25 @@ public class EndMatchPhaseState extends PhaseState {
      *
      * @param message that contains information on what caused the endgame.
      */
-
     @Override
     public void execute(SessionMessage message) {
 
         super.execute(message);
 
         showEndGameResult(message);
+
+        // Deleting the directory containing the ended Match files
+        GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
+
+        // Making the VirtualView Thread finish its lifecycle
+        for (Player player : phase.getMatchController().getMatch().getPlayers())
+            phase.getMatchController().getVirtualView().stopListeningNetworkNode(player.getSessionToken(), true);
+
+        // Removing the VirtualView from the Server VirtualViews
+        Server.getInstance().removeVirtualView(phase.getMatchController().getVirtualView());
+
+        // Checking if all went correct and no loops remain
+        System.out.println("EndMatchPhaseState - VirtualView removed");
     }
 
     /**
@@ -50,7 +63,6 @@ public class EndMatchPhaseState extends PhaseState {
      *
      * @param message Session message
      */
-
     private void showEndGameResult(SessionMessage message) {
 
         if (message.getMessageType() == BLACK_CROSS_FINAL_POSITION || message.getMessageType() == NO_MORE_COLUMN_DEVELOPMENT_CARDS) {
@@ -143,7 +155,6 @@ public class EndMatchPhaseState extends PhaseState {
      * @param player the player for which it calculates the points.
      * @return the victory points obtained by this source.
      */
-
     private int computeLeaderPoints(Player player) {
         int leaderPoints = 0;
         for (LeaderCard leaderCard : player.getLeaderCards()) {
@@ -159,7 +170,6 @@ public class EndMatchPhaseState extends PhaseState {
      * @param player the player for which it calculates the points.
      * @return the victory points obtained by this source.
      */
-
     private int computePopeFavorTilePoints(Player player) {
         int popeFavorTilePoints = 0;
 

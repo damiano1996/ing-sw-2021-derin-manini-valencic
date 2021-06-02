@@ -46,7 +46,7 @@ public class InitializationPhaseState extends PhaseState {
                 }
 
                 // Send the initial version of the Market and Development Grid to all Players
-                notifyMarketAndGridCreation();
+                //notifyMarketAndGridCreation();
 
                 // Updating the state. The match can begin!
                 PlayingPhaseState playingPhaseState = new PlayingPhaseState(phase);
@@ -68,7 +68,7 @@ public class InitializationPhaseState extends PhaseState {
 
         System.out.println("InitializationPhaseState - Sending start waiting message");
         try {
-            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, phase.getMatchController().getMatch().getPlayers().size()));
+            phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, phase.getMatchController().getMaxNumberOfPlayers()));
             phase.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), nickname + " joined the game!"));
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Waiting for opponents to connect..."));
             // Sending to all players the board of the new player.
@@ -80,9 +80,9 @@ public class InitializationPhaseState extends PhaseState {
     /**
      * Used to send the first version of the Market and Development Grid to all Players
      */
-    private synchronized void notifyMarketAndGridCreation() {
-        phase.getMatchController().notifyObservers(getMarketTrayModelUpdateMessage());
-        phase.getMatchController().notifyObservers(getDevelopmentGridModelUpdateMessage());
-    }
+//    private synchronized void notifyMarketAndGridCreation() {
+//        phase.getMatchController().notifyObservers(getMarketTrayModelUpdateMessage());
+//        phase.getMatchController().notifyObservers(getDevelopmentGridModelUpdateMessage());
+//    }
 
 }

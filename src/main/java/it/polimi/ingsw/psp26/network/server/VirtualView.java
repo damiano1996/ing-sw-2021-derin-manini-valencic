@@ -211,7 +211,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
             int indexOf = getIndexOf(nodeClients, networkNode);
             String sessionToken = new ArrayList<>(nodeClients.keySet()).get(indexOf);
 
-            if (moveToWaitingRoom.get(sessionToken)) {
+            if (moveToWaitingRoom.get(sessionToken)) { // throwing ValueDoesNotExistsException
                 heartbeatControllers.get(sessionToken).kill(sessionToken);
                 Server.getInstance().addNodeClientToWaitingRoom(sessionToken, nodeClients.remove(sessionToken));
             } else {

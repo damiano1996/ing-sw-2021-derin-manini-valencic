@@ -159,7 +159,7 @@ public class Client extends Observable<Message> {
                 default:
                     break;
             }
-            
+
         } catch (EmptyPayloadException ignored) {
         }
     }

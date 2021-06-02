@@ -19,18 +19,21 @@ public class NetworkNodeTest {
     private Socket s1, s2;
     private NetworkNode n1, n2;
 
+    private int serverPort;
+
     @Before
     public void setUp() throws IOException, InterruptedException {
+        serverPort = DEFAULT_SERVER_PORT + 1;
         startServer();
 
-        s2 = new Socket("localhost", DEFAULT_SERVER_PORT);
+        s2 = new Socket("localhost", serverPort);
         n2 = new NetworkNode(s2);
 
         thread.join();
     }
 
     private void startServer() throws IOException {
-        serverSocket = new ServerSocket(DEFAULT_SERVER_PORT);
+        serverSocket = new ServerSocket(serverPort);
 
         thread = new Thread(() -> {
             while (s1 == null) {

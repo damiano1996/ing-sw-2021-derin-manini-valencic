@@ -18,7 +18,7 @@ public class ProductionAbility extends SpecialAbility {
      * In this case, it adds a new Production Power to the Player Productions
      * The Production power cost is taken from the resource attribute
      * The Production power return is the same for all the Leader Cards
-     * 
+     *
      * @param player The Player that activates the Leader Card
      */
     @Override

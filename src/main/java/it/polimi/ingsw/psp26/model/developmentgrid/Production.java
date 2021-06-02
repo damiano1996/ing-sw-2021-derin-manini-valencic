@@ -27,7 +27,7 @@ public class Production {
         this.productionReturn = productionReturn;
     }
 
-    
+
     /**
      * Getter of the production cost.
      *
@@ -37,7 +37,7 @@ public class Production {
         return Collections.unmodifiableMap(productionCost);
     }
 
-    
+
     /**
      * Getter of the production return.
      *
@@ -47,7 +47,7 @@ public class Production {
         return Collections.unmodifiableMap(productionReturn);
     }
 
-    
+
     /**
      * Equals method.
      *

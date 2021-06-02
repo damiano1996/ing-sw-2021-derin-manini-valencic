@@ -12,7 +12,7 @@ import it.polimi.ingsw.psp26.network.SpecialToken;
 import it.polimi.ingsw.psp26.network.server.memory.Users;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_OF_PLAYERS;
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.*;
+import static it.polimi.ingsw.psp26.network.server.MessageUtils.getPlayerModelUpdateMessage;
 
 
 public class InitializationPhaseState extends PhaseState {

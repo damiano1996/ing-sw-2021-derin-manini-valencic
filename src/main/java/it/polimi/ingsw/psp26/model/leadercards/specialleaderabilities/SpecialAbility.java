@@ -77,5 +77,5 @@ public abstract class SpecialAbility {
     public int hashCode() {
         return Objects.hash(resource);
     }
-    
+
 }

@@ -680,7 +680,7 @@ public class CLI implements ViewInterface {
         cliUtils.pPCS("Press Enter to go back to the main screen", Color.WHITE, 50, 4);
 
         executingTask = false;
-        
+
         in.nextLine();
         client.viewNext();
     }

@@ -18,7 +18,7 @@ public class PlayerDrawer {
         borderPane.setTop(nickname);
 
         borderPane.setLeft(new PersonalBoardDrawer(player.getPersonalBoard(), (int) (maxWidth * 0.8), player.hasInkwell(), hideBlackCross).draw());
-        borderPane.setRight(new LeaderCardsDrawer(player.getLeaderCards(), (int) (maxWidth * 0.8), hideNotActiveLeaderCards).draw());
+        borderPane.setRight(new LeaderCardsDrawer(player.getLeaderCards(), player.getPersonalBoard().getWarehouse().getLeaderDepots(), (int) (maxWidth * 0.8), hideNotActiveLeaderCards).draw());
 
         return borderPane;
     }

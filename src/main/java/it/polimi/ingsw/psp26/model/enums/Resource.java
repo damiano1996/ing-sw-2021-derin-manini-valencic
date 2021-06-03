@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp26.model.enums;
 
+import java.util.Locale;
+
 public enum Resource {
 
     COIN("    Coin    ", Color.YELLOW),
@@ -32,6 +34,14 @@ public enum Resource {
      */
     public Color getColor() {
         return color;
+    }
+
+
+    /**
+     * @return The name of the Resource without white spaces and in upper case letters
+     */
+    public String getUppercaseName() {
+        return name.replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
     }
 
 }

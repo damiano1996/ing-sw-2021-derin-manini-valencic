@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.view.gui.GUIUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static it.polimi.ingsw.psp26.view.ViewUtils.getOrderedPlayersList;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
 public class LeaderboardDrawer extends RatioDrawer {
 
@@ -125,7 +125,10 @@ public class LeaderboardDrawer extends RatioDrawer {
      * @param doneButton The button to set the action to
      */
     private void setDoneButtonAction(Button doneButton) {
-        doneButton.setOnAction(GUIUtils::closeParentStageOfActionEvent);
+        doneButton.setOnMouseClicked(mouseEvent -> {
+            closeParentStageOfActionEvent(mouseEvent);
+            client.viewNext();
+        });
     }
 
 }

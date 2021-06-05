@@ -1,10 +1,13 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
+import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.SpecialToken;
+
+import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendMessageToAllPlayerExceptOne;
 
 public class RecoveringMatchPhaseState extends PhaseState {
 
@@ -32,13 +35,25 @@ public class RecoveringMatchPhaseState extends PhaseState {
                 phase.getMatchController().setMatchCompletelyRecovered();
 
                 phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.STOP_WAITING));
+                phase.getMatchController().getVirtualView().sendingMainMatchComponents(SpecialToken.BROADCAST.getToken());
+
+                sendMessageToAllPlayerExceptOne(
+                        nextPlayingPhaseState.getCurrentTurn(),
+                        nextPlayingPhaseState.getCurrentTurn().getTurnPlayer(),
+                        new Message(MessageType.OPPONENT_TURN)
+                );
 
                 phase.changeState(nextPlayingPhaseState);
-                // TODO: Needs of message to trigger the match controller to notify players that the turn can be of an opponent!
+                // Message just to trigger the match controller
+                phase.getMatchController().update(
+                        new SessionMessage(
+                                nextPlayingPhaseState.getCurrentTurn().getTurnPlayer().getSessionToken(),
+                                MessageType.GENERAL_MESSAGE
+                        )
+                );
             }
 
         } catch (InvalidPayloadException ignored) {
-
         }
     }
 }

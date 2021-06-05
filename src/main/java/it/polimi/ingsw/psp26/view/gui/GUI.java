@@ -53,8 +53,10 @@ public class GUI extends Application implements ViewInterface {
     private Client client;
     private Stage primaryStage;
     private Pane root;
+    private boolean displayingPlayingPane;
 
     public GUI() {
+        displayingPlayingPane = false;
     }
 
     public static void main(String[] args) {
@@ -278,6 +280,7 @@ public class GUI extends Application implements ViewInterface {
         int j = 0;
         for (int i = 0; i < choices.size(); i++) {
 
+            @SuppressWarnings({"rawtypes", "unchecked"})
             ButtonContainer<?> buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
             buttonContainers.add(buttonContainer);
 
@@ -313,6 +316,7 @@ public class GUI extends Application implements ViewInterface {
         int j = 0;
         for (int i = 0; i < choices.size(); i++) {
 
+            @SuppressWarnings({"rawtypes", "unchecked"})
             ButtonContainer<?> buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
             buttonContainers.add(buttonContainer);
 
@@ -399,26 +403,34 @@ public class GUI extends Application implements ViewInterface {
         try {
             new WaitingScreen(
                     primaryStage,
-                    () -> MessageSynchronizedFIFO.getInstance().getNext(),
+                    () -> {
+                        Message stopMessage = MessageSynchronizedFIFO.getInstance().getNext();
+                        while (!stopMessage.getMessageType().equals(MessageType.STOP_WAITING))
+                            stopMessage = MessageSynchronizedFIFO.getInstance().getNext();
+                    },
                     this::stopDisplayingWaitingScreen,
                     (String) message.getPayload()
             ).start();
-        } catch (EmptyPayloadException emptyPayloadException) {
-            emptyPayloadException.printStackTrace();
+        } catch (EmptyPayloadException ignored) {
         }
 
     }
 
     @Override
     public void stopDisplayingWaitingScreen() {
-        Pane pane = addBackground(
-                getPlayingPane(primaryStage, client, getWindowWidth() - 100),
-                getWindowWidth(),
-                getWindowHeight()
-        );
-        // primaryStage.hide();
-        primaryStage.getScene().setRoot(pane);
-        primaryStage.show();
+        if (!displayingPlayingPane) {
+            Pane pane = addBackground(
+                    getPlayingPane(primaryStage, client, getWindowWidth() - 100),
+                    getWindowWidth(),
+                    getWindowHeight()
+            );
+            // primaryStage.hide();
+            primaryStage.getScene().setRoot(pane);
+            primaryStage.show();
+
+            displayingPlayingPane = true;
+        }
+
         client.viewNext();
     }
 

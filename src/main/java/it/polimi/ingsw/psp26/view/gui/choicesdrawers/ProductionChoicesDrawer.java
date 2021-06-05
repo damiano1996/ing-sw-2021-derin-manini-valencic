@@ -82,7 +82,7 @@ public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
 
     /**
      * Used to get the correct path for loading a Leader Production image
-     * Since this method is called after the check of Development Card Productions (after getDevelopmentCard() method), 
+     * Since this method is called after the check of Development Card Productions (after getDevelopmentCard() method),
      * it assumes that, if the given Production has a FAITH_MARKER in its ProductionReturn, it is a Leader Production
      *
      * @param production The Production to check if it is a Leader Production

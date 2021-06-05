@@ -47,7 +47,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
      *
      * @param message The message sent by the current player, that carries his choices during the turn.
      */
-
+    @Override
     public void play(SessionMessage message) {
         super.play(message);
 
@@ -127,7 +127,6 @@ public class BuyCardNormalActionTurnState extends TurnState {
      *
      * @return List of development card that the player has enough resources to buy or is able to position.
      */
-
     private List<DevelopmentCard> getAvailableCard() {
         List<DevelopmentCard> availableCard = new ArrayList<>();
         List<Integer> feasibleLevels = new ArrayList<>();
@@ -156,7 +155,6 @@ public class BuyCardNormalActionTurnState extends TurnState {
     /**
      * Method that given a card, takes the resource cost from the warehouse and depot of the current player.
      */
-
     private void buyCard() {
         DevelopmentCard drawnCard = boughtCard;
         int numberResources;
@@ -184,7 +182,6 @@ public class BuyCardNormalActionTurnState extends TurnState {
      *
      * @return List of string that represent the indexes of the position that are allowed.
      */
-
     private List<String> positionsForCard() {
         List<String> CorrectPositions = new ArrayList<>();
 
@@ -200,7 +197,6 @@ public class BuyCardNormalActionTurnState extends TurnState {
      *
      * @param slotIndex the index of the slot in which the card is placed.
      */
-
     private void placeCard(String slotIndex) {
         try {
             int position = Integer.parseInt(slotIndex.substring(5, 6)) - 1;

@@ -12,7 +12,6 @@ import it.polimi.ingsw.psp26.network.SpecialToken;
 import it.polimi.ingsw.psp26.network.server.memory.Users;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_OF_PLAYERS;
-import static it.polimi.ingsw.psp26.network.server.MessageUtils.getPlayerModelUpdateMessage;
 
 
 public class InitializationPhaseState extends PhaseState {
@@ -39,10 +38,13 @@ public class InitializationPhaseState extends PhaseState {
 
                 System.out.println("InitializationPhaseState - sending stop message");
                 try {
+
+                    // Sending all the components to the players
+                    phase.getMatchController().getVirtualView().sendingMainMatchComponents(SpecialToken.BROADCAST.getToken());
                     phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.STOP_WAITING, "Stop waiting..."));
                     phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.GENERAL_MESSAGE, "The match can start!"));
-                } catch (InvalidPayloadException e) {
-                    e.printStackTrace();
+
+                } catch (InvalidPayloadException ignored) {
                 }
 
                 // Updating the state. The match can begin!
@@ -67,18 +69,7 @@ public class InitializationPhaseState extends PhaseState {
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, phase.getMatchController().getMaxNumberOfPlayers()));
             phase.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), nickname + " joined the game!"));
             phase.getMatchController().notifyObservers(new SessionMessage(sessionToken, MessageType.START_WAITING, "Waiting for opponents to connect..."));
-            // Sending to all players the board of the new player.
-            phase.getMatchController().notifyObservers(getPlayerModelUpdateMessage(sessionToken));
         } catch (InvalidPayloadException ignored) {
         }
     }
-
-    /**
-     * Used to send the first version of the Market and Development Grid to all Players
-     */
-//    private synchronized void notifyMarketAndGridCreation() {
-//        phase.getMatchController().notifyObservers(getMarketTrayModelUpdateMessage());
-//        phase.getMatchController().notifyObservers(getDevelopmentGridModelUpdateMessage());
-//    }
-
 }

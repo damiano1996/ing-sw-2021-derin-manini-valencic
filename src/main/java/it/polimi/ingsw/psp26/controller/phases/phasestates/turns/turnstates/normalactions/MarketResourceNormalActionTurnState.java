@@ -55,7 +55,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
      *
      * @param message The message sent by the current player, that carries his choices during the turn.
      */
-
+    @Override
     public void play(SessionMessage message) {
 
         try {
@@ -144,15 +144,12 @@ public class MarketResourceNormalActionTurnState extends TurnState {
     /**
      * Method that checks if there is a red marble in the selected row or column and in case gives one point.
      */
-
     private void isRedMarblePresent() {
 
         tempResources.stream()
                 .filter(x -> x.equals(Resource.FAITH_MARKER))
                 .forEach(x -> turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(1));
     }
-
-    //public List<Resource> getTempResources() { return tempResources;}
 
     /**
      * Method that for each leader active, tries to execute their power and in case of one or more marble leader it
@@ -166,7 +163,6 @@ public class MarketResourceNormalActionTurnState extends TurnState {
      * @param message the message that is forwarded to the next phase.
      * @return true if two leaders executed their effect, false otherwise.
      */
-
     private boolean applyMarbleLeaderEffect(SessionMessage message) {
 
         List<Resource> tempResourceLeader = new ArrayList<>();

@@ -61,22 +61,18 @@ public class CachedModel {
                     }
                     break;
 
-
                 case MARKET_TRAY_MODEL:
                     MarketTray marketTray = (MarketTray) modelUpdateMessage.getModelPayload();
                     marketTrayCached.updateObject(marketTray);
                     break;
-
 
                 case DEVELOPMENT_GRID_MODEL:
                     DevelopmentCardsGrid developmentCardsGrid = (DevelopmentCardsGrid) modelUpdateMessage.getModelPayload();
                     developmentGridCached.updateObject(developmentCardsGrid);
                     break;
 
-
                 default:
                     break;
-
             }
         }
 

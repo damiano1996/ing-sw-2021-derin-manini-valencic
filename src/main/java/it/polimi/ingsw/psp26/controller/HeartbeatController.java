@@ -36,6 +36,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
                 checksForDeath();
 
                 try {
+                    //noinspection BusyWait
                     sleep(DELTA_TIME);
                 } catch (InterruptedException ignored) {
                 }
@@ -60,6 +61,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
             try {
 
                 virtualView.stopListeningNetworkNode(sessionToken, false);
+                System.out.println("HeartbeatController - Sending DEATH message to the match controller.");
                 notifyObservers(new SessionMessage(sessionToken, MessageType.DEATH));
 
             } catch (InvalidPayloadException ignored) {

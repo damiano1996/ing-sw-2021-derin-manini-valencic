@@ -11,11 +11,9 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
 
     private static MessageSynchronizedFIFO instance;
     private final List<Message> messages;
-    private boolean newMessage;
 
     private MessageSynchronizedFIFO() {
         messages = new ArrayList<>();
-        newMessage = false;
     }
 
 
@@ -37,7 +35,6 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
     @Override
     public synchronized void update(Message message) {
         messages.add(message);
-        newMessage = true;
         notifyAll();
     }
 
@@ -55,16 +52,16 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
             } catch (InterruptedException ignored) {
             }
         }
-        newMessage = false;
         return messages.remove(0);
     }
 
 
     /**
-     * Checks if new messages arrive
+     * Method to stop the calling thread if there aren't new messages.
+     * It is similar to getNext(), but without returning or removing messages from the FIFO.
      */
     public synchronized void lookingForNext() {
-        while (!newMessage) {
+        while (messages.size() == 0) {
             try {
                 wait();
             } catch (InterruptedException ignored) {

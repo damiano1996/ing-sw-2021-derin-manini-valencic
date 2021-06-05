@@ -99,7 +99,8 @@ public class ServerTest {
             try {
                 Server.getInstance().listening(true);
                 // Waiting that the player is completely assigned to the virtual view to void parallel match creations
-                while (getTotalNumberOfNodeClientsInVirtualViews() == initialNumberOfPlayers) sleep(10);
+                while (getTotalNumberOfNodeClientsInVirtualViews() == initialNumberOfPlayers) //noinspection BusyWait
+                    sleep(10);
             } catch (IOException | InterruptedException ignored) {
             }
         });
@@ -137,6 +138,11 @@ public class ServerTest {
         assertEquals(MessageType.START_WAITING, message.getMessageType());
 
         message = ignoreMessages(networkNode);
+        // Second time caused by the phase.getMatchController().getVirtualView().sendingMainMatchComponents(...).
+        // It is useful in recovering.
+        assertEquals(MessageType.SET_NUMBER_OF_PLAYERS, message.getMessageType());
+
+        message = ignoreMessages(networkNode);
         assertEquals(MessageType.STOP_WAITING, message.getMessageType());
 
         message = ignoreMessages(networkNode);
@@ -148,6 +154,7 @@ public class ServerTest {
     public void testListening() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
         NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false);
         assertStartMatch(networkNode);
+
     }
 
     @Test
@@ -155,6 +162,7 @@ public class ServerTest {
         assignToVirtualView(MessageType.TWO_PLAYERS_MODE, false);
         NetworkNode networkNode = assignToVirtualView(MessageType.TWO_PLAYERS_MODE, false);
         assertStartMatch(networkNode);
+
     }
 
     @Test
@@ -168,18 +176,20 @@ public class ServerTest {
         assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
         networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
         assertStartMatch(networkNode);
+
     }
 
-    private synchronized void assertRecoveryMatchServerDown(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
-        SessionMessage message = ignoreMessages(networkNode);
-        assertEquals(MessageType.GENERAL_MESSAGE, message.getMessageType());
-        assertEquals("Your match has been reloaded!", message.getPayload());
-    }
 
-    private synchronized void assertRecoveryMatchClientDown(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
+    private synchronized void assertRecoveryMessage(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
         SessionMessage message = ignoreMessages(networkNode);
+        assertEquals(MessageType.SET_NUMBER_OF_PLAYERS, message.getMessageType());
+
+        message = ignoreMessages(networkNode);
+        assertEquals(MessageType.STOP_WAITING, message.getMessageType());
+
+        message = ignoreMessages(networkNode);
         assertEquals(MessageType.GENERAL_MESSAGE, message.getMessageType());
-        assertEquals("You can resume the match!", message.getPayload());
+        assertEquals("Your match has been recovered!", message.getPayload());
     }
 
     @Test
@@ -203,9 +213,7 @@ public class ServerTest {
         Server.getInstance().closeConnection();
 
         NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, true, true, nickname, password);
-        assertRecoveryMatchServerDown(networkNode);
-
-        GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", match.getId()));
+        assertRecoveryMessage(networkNode);
     }
 
     @Test
@@ -232,9 +240,7 @@ public class ServerTest {
         thread.join();
 
         NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, true, true, nickname, password);
-        assertRecoveryMatchClientDown(networkNode);
-
-        // GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", match.getId()));
+        assertRecoveryMessage(networkNode);
     }
 
     @Test
@@ -271,52 +277,9 @@ public class ServerTest {
         // Checking that the old matches have been removed
         savedMatches = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
         System.out.println("ServerTest - saved matches after deletion: " + savedMatches);
-        assertEquals(numberOfSavedMatches, savedMatches);
-    }
+        // plus 1 for the new one!
+        assertEquals(numberOfSavedMatches + 1, savedMatches);
 
-//
-//    @Test
-//    public void testRecoverMatchServerDown() throws InterruptedException, IOException, EmptyPayloadException, ClassNotFoundException, InvalidPayloadException {
-//        String nickname = generateSessionToken(MIN_NICKNAME_LENGTH);
-//        String password = generateSessionToken(MIN_PASSWORD_LENGTH);
-//        String sessionToken = generateSessionToken(SESSION_TOKEN_LENGTH);
-//        Users.getInstance().addUser(nickname, password, sessionToken);
-//
-//        NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false);
-//        // Running heartbeat
-//        runningHeartbeat = true;
-//        Thread heartbeatThread = new Thread(
-//                () -> {
-//                    while (runningHeartbeat){
-//                        try {
-//                            System.out.println("Sending heartbeat message");
-//                            networkNode.sendData(new SessionMessage(sessionToken, HEARTBEAT));
-//                            sleep(1000);
-//                        } catch (IOException | InvalidPayloadException | InterruptedException ignored) {
-//                        }
-//                    }
-//                }
-//        );
-//        heartbeatThread.start();
-//
-//        assertStartMatch(networkNode);
-//
-//        // playing one turn, in this way the server will save the match
-//        List<MessageType> blackMessages = new ArrayList<>() {{
-//            add(MessageType.NOTIFICATION_UPDATE);
-//            add(MessageType.MODEL_UPDATE);
-//            add(MessageType.GENERAL_MESSAGE);
-//        }};
-//        // choice leaders
-//        SessionMessage sessionMessage = filterMessages(networkNode, blackMessages);
-//        assertEquals(CHOICE_LEADERS, sessionMessage.getMessageType());
-//        networkNode.sendData(new SessionMessage(sessionToken, CHOICE_LEADERS, sessionMessage.getPayload(0), sessionMessage.getPayload(1)));
-//
-//        sessionMessage = filterMessages(networkNode, blackMessages);
-//        System.out.println(sessionMessage);
-//
-//        runningHeartbeat = false;
-//        heartbeatThread.join();
-//    }
+    }
 
 }

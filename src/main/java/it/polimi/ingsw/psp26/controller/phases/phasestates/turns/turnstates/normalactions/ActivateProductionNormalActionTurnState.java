@@ -62,7 +62,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
      *
      * @param message The message sent by the current player, that carries his choices during the turn.
      */
-
+    @Override
     public void play(SessionMessage message) {
 
         try {
@@ -142,7 +142,6 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
      *
      * @return true if the whole production list is actionable, false if it is not.
      */
-
     private boolean isProductionFeasible() {
 
         List<Resource> availableResource = new ArrayList<>(turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources());
@@ -213,7 +212,6 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
      * Method that sends to the current player a message to ask which production they want to activate between
      * their available production.
      */
-
     private void sendProductionMultipleChoiceMessage() {
         try {
             turn.getMatchController().notifyObservers(
@@ -238,7 +236,6 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
      * the player decided to substitute the unknown resources with. The list is parsed and then added to the player
      * strongbox
      */
-
     private void collectProduction() {
         List<Resource> resourcesProduced = new ArrayList<>();
         for (Production production : productionActivated) {
@@ -309,7 +306,6 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
      *
      * @param message Session message
      */
-
     private void checkForUnknownAndRedirect(SessionMessage message) {
         for (Production production : productionActivated) {
 

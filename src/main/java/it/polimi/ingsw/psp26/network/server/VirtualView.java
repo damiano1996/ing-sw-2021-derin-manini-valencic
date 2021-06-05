@@ -16,14 +16,12 @@ import it.polimi.ingsw.psp26.network.NetworkNode;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_OF_PLAYERS;
-import static it.polimi.ingsw.psp26.application.messages.MessageType.STOP_WAITING;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.*;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.getIndexOf;
 
@@ -91,20 +89,26 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         nodeClients.put(sessionToken, nodeClient);
         connectedNetworkNodes.add(true);
 
-        if (matchController.isRecoveryMode()) sendingRecoveryMessagesAfterServerDownOrMatchContinuation(sessionToken);
-
-        startTrackingHeartbeat(sessionToken);
-
         try {
-            // adding player only if match is completely new, because in the recovered match the player already was present.
-            if (!matchController.isRecoveryMode())
-                notifyObservers(new SessionMessage(sessionToken, MessageType.ADD_PLAYER));
 
-            sendingMainMatchComponents();
+            if (matchController.isRecoveryMode() || // case left meaning: server down and virtual view restored to recover the match
+                    // (client in th while could be active, waiting for server recovery).
+                    // Case below meaning: the client was already in the match but it lost the connection.
+                    matchController.getMatch().getPlayers().stream().map(Player::getSessionToken).anyMatch(x -> x.equals(sessionToken))) {
+
+                sendingMainMatchComponents(sessionToken);
+                sendingRecoveryMessages(sessionToken);
+                // Message to trigger the match controller
+                System.out.println("VirtualView - Sending general message to match controller to trigger it.");
+                notifyObservers(new SessionMessage(sessionToken, GENERAL_MESSAGE));
+            } else {
+                notifyObservers(new SessionMessage(sessionToken, MessageType.ADD_PLAYER));
+            }
 
         } catch (InvalidPayloadException ignored) {
         }
 
+        startTrackingHeartbeat(sessionToken);
         // Start to listen the messages
         startListening(nodeClient);
     }
@@ -119,8 +123,6 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
                 System.out.println("VirtualView - Resetting (recovering) heartbeat of user.");
                 // we can reset the heartbeat
                 heartbeatControllers.get(sessionToken).reset(sessionToken);
-                // sending recovery messages
-                sendingRecoveryMessagesAfterClientNodeDown(sessionToken);
             }
 
         } catch (Exception e) {
@@ -132,27 +134,18 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         }
     }
 
-    private void sendingRecoveryMessagesAfterServerDownOrMatchContinuation(String sessionToken) {
+    private void sendingRecoveryMessages(String sessionToken) {
         try {
-            System.out.println("VirtualView - Sending recovery messages after server restoration.");
-            update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "Your match has been reloaded!"));
-            update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMaxNumberOfPlayers()));
-            // Sending message to match controller to activate the RecoveringMatchPhaseState
-            notifyObservers(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE));
-        } catch (InvalidPayloadException ignored) {
-        }
-    }
-
-    private void sendingRecoveryMessagesAfterClientNodeDown(String sessionToken) {
-        try {
-            update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "You can resume the match!"));
-            update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMatch().getPlayers().size()));
+            System.out.println("VirtualView - Sending recovery messages.");
+            // Sending a stop message to stop a waiting screen in case of player is waiting for recovery.
             update(new SessionMessage(sessionToken, STOP_WAITING));
+            update(new SessionMessage(sessionToken, MessageType.GENERAL_MESSAGE, "Your match has been recovered!"));
         } catch (InvalidPayloadException ignored) {
         }
     }
 
-    private void sendingMainMatchComponents() throws InvalidPayloadException {
+    public void sendingMainMatchComponents(String sessionToken) throws InvalidPayloadException {
+        update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMaxNumberOfPlayers()));
         update(getMarketTrayModelUpdateMessage());
         update(getDevelopmentGridModelUpdateMessage());
         for (Player player : matchController.getMatch().getPlayers())

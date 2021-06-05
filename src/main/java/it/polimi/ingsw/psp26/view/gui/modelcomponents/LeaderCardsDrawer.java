@@ -81,7 +81,7 @@ public class LeaderCardsDrawer extends RatioDrawer {
             addMouseOverAnimation(imageView, ratio);
 
             pane.getChildren().add(imageView);
-            
+
         }
     }
 

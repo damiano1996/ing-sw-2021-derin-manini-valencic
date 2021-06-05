@@ -5,7 +5,6 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.NotificationsFIFO;
-import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardsGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
@@ -24,7 +23,7 @@ import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPl
 
 public class PlayingPane {
 
-    private static final int ZOOM_FACTOR = 4;
+    private static final int ZOOM_FACTOR = 5;
 
     private static VBox addOpponents(Stage primaryStage, int thumbnailSize, Client client) {
 
@@ -39,8 +38,13 @@ public class PlayingPane {
             int finalI = i;
             vBox.getChildren().add(new Pane());
             new AsynchronousDrawer(
-                    () -> client.getCachedModel().getOpponentCached(finalI).lookingForUpdate(),
                     () -> {
+                        System.out.println("PlayingPane - waiting opponent " + finalI);
+                        client.getCachedModel().getOpponentCached(finalI).lookingForUpdate();
+                        System.out.println("PlayingPane - model updated for " + finalI);
+                    },
+                    () -> {
+                        System.out.println("PlayingPane - drawing board for opponent " + finalI);
                         Player player = client.getCachedModel().getOpponentCached(finalI).getObject();
                         vBox.getChildren().set(
                                 finalI,
@@ -50,6 +54,8 @@ public class PlayingPane {
                                         drawPlayer(player, ZOOM_FACTOR * thumbnailSize, ZOOM_FACTOR * ratio, true, client.isMultiplayerMode()),
                                         thumbnailSize, thumbnailSize)
                         );
+                        System.out.println("PlayingPane - drawing board for opponent " + finalI + " done!");
+
                     },
                     true
             ).start();
@@ -123,7 +129,7 @@ public class PlayingPane {
 
         root.getChildren().add(
                 drawPlayer(
-                        new Player(new VirtualView(), client.getNickname(), ""),
+                        new Player(null, client.getNickname(), null),
                         width,
                         getGeneralRatio(),
                         false,

@@ -133,6 +133,7 @@ public class Client extends Observable<Message> {
                     NotificationsFIFO.getInstance().resetFIFO();
                     String winner = (String) message.getPayload();
                     viewInterface.displayEndGame(createLeaderboard(createPlayersList(cachedModel)), winner);
+                    // TODO: resetting CachedModel only at this point
                     break;
 
 
@@ -231,7 +232,7 @@ public class Client extends Observable<Message> {
     public synchronized void setNickname(String nickname, String password) {
         this.nickname = nickname;
         this.password = password;
-        this.cachedModel = new CachedModel(nickname);
+        if (cachedModel == null) cachedModel = new CachedModel(nickname);
     }
 
 

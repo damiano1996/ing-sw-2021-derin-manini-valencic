@@ -220,7 +220,7 @@ public class VirtualViewAssignment extends Thread {
      * It handles the two cases:
      * <p>
      * 1. Client lost connection during match: there are other players that are playing and waiting the client,
-     * it notifies them about the end of the match.
+     * this method notifies them about the end of the match.
      * <p>
      * 2. The match has been recovered, but no client is in the virtual view, so it can directly delete the match file
      * and remove the virtual view from the virtual views handled by the server.

@@ -43,6 +43,7 @@ public class Turn {
         if (message.getSessionToken().equals(turnPlayer.getSessionToken())) {
 
             if (message.getMessageType().equals(MessageType.DEATH)) {
+                System.out.println("Turn - Receiving DEATH message, we should notify the other clients.");
                 try {
                     getMatchController().notifyObservers(
                             new NotificationUpdateMessage(
@@ -50,17 +51,24 @@ public class Turn {
                                     turnPlayer.getNickname() + " lost the connection. He skips the turn."
                             )
                     );
+
+                    // updating turn skipping for current player
+                    System.out.println("Turn - Updating current turn, since player is disconnected!");
+                    if (matchController.getMatch().isMultiPlayerMode()) {
+                        playingPhaseState.updateCurrentTurn();
+                        // Then playing with the new player:
+                        turnState.play(new SessionMessage(turnPlayer.getSessionToken(), MessageType.GENERAL_MESSAGE));
+                    }
+
                 } catch (InvalidPayloadException ignored) {
                 }
-                // updating turn skipping for current player
-                if (matchController.getMatch().isMultiPlayerMode()) playingPhaseState.updateCurrentTurn();
 
             } else {
                 turnState.play(message);
             }
         } else {
 
-            // saying that the turn is of one opponent
+            // Communicating that the turn is of one opponent
             try {
                 matchController.notifyObservers(new SessionMessage(message.getSessionToken(), MessageType.OPPONENT_TURN));
             } catch (InvalidPayloadException ignored) {

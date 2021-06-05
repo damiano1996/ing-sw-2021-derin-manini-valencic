@@ -48,6 +48,16 @@ public class PlayingPhaseState extends PhaseState {
                 phase.getMatchController().getMatch().getPlayers().get(0),
                 0
         );
+
+        // Saving match with initialization data. Since we are saving before playing the turn,
+        // we have to set current player and current turn number.
+        // Different condition w.r.t. when we save at the end of the turn!
+        GameSaver.getInstance().backupMatch(
+                currentTurn.getMatchController().getMatch(),
+                currentTurn.getMatchController().getMatch().getPlayers().indexOf(currentTurn.getTurnPlayer()),
+                currentTurn.getTurnNumber()
+        );
+
         lastTurn = false;
     }
 
@@ -102,22 +112,26 @@ public class PlayingPhaseState extends PhaseState {
 
     private void sendNotificationMessageNewTurn() {
         try {
-            String messagePayload = "Turn of " + currentTurn.getTurnPlayer().getNickname();
+            String messageToTurnPlayer = "It's your turn!";
+            String messageToOpponents = "Turn of " + currentTurn.getTurnPlayer().getNickname();
+            // Same message for all in the notification stack
             phase.getMatchController().notifyObservers(
-                    new NotificationUpdateMessage(
-                            SpecialToken.BROADCAST.getToken(),
-                            messagePayload
-                    )
+                    new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), messageToOpponents)
             );
+            // Only opponents receive messageToOpponents as general message
+            sendMessageToAllPlayerExceptOne(currentTurn, currentTurn.getTurnPlayer(),
+                    new Message(MessageType.GENERAL_MESSAGE, messageToOpponents)
+            );
+            sendMessageToAllPlayerExceptOne(currentTurn, currentTurn.getTurnPlayer(),
+                    new Message(MessageType.OPPONENT_TURN)
+            );
+            // Turn player receives messageToTurnPlayer
             phase.getMatchController().notifyObservers(
                     new SessionMessage(
-                            SpecialToken.BROADCAST.getToken(),
+                            currentTurn.getTurnPlayer().getSessionToken(),
                             MessageType.GENERAL_MESSAGE,
-                            messagePayload
-                    )
+                            messageToTurnPlayer)
             );
-            sendMessageToAllPlayerExceptOne(
-                    currentTurn, currentTurn.getTurnPlayer(), new Message(MessageType.OPPONENT_TURN));
         } catch (InvalidPayloadException e) {
             e.printStackTrace();
         }

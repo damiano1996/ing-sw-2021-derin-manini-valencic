@@ -113,6 +113,8 @@ public class NetworkHandler implements Observer<Message> {
                         connected = true;
                         // step: stopping this thread since initializeNetworkNode() will start a new one
                         running = false;
+                        // step: sending a stop message
+                        MessageSynchronizedFIFO.getInstance().update(new Message(MessageType.STOP_WAITING));
                     } else {
                         if (PRINT_CLIENT_SIDE) System.out.println("NetworkHandler - HEARTBEAT message.");
                         networkNode.sendData(new SessionMessage(sessionToken, MessageType.HEARTBEAT));
@@ -138,8 +140,7 @@ public class NetworkHandler implements Observer<Message> {
                                                     "Waiting for automatic recovery..."
                                     )
                             );
-                        } catch (InvalidPayloadException e) {
-                            e.printStackTrace();
+                        } catch (InvalidPayloadException ignored) {
                         }
                     }
 

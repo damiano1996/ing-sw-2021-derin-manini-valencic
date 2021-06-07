@@ -4,7 +4,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
-import it.polimi.ingsw.psp26.model.LeaderBoard;
+import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;

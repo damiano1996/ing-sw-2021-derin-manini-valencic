@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.view;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.model.LeaderBoard;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;

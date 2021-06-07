@@ -1,8 +1,7 @@
 package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
-import it.polimi.ingsw.psp26.model.LeaderBoard;
+import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.view.gui.GUIUtils;
 import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;

@@ -18,8 +18,8 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.*;
 
 public class Users {
 
-    private static String USERS_FILE_PASSWORDS = GAME_FILES + "nickname-password.json";
-    private static String USERS_FILE_SESSION_TOKENS = GAME_FILES + "nickname-sessionToken.json";
+    private static final String USERS_FILE_PASSWORDS = GAME_FILES + "nickname-password.json";
+    private static final String USERS_FILE_SESSION_TOKENS = GAME_FILES + "nickname-sessionToken.json";
 
     private static Users instance;
 

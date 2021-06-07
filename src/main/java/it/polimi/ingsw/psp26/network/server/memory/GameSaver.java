@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.network.server.memory;
 
 import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.psp26.application.files.Files;
 import it.polimi.ingsw.psp26.application.messages.serialization.GsonConverter;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
@@ -207,12 +208,8 @@ public class GameSaver {
      * @return The List of the directories names
      */
     public List<String> getSavedMatchesDirectoriesNames() {
-        try {
-            File directory = new File(MATCHES_PATH);
-            return Arrays.stream(Objects.requireNonNull(directory.list())).sorted().collect(Collectors.toList());
-        } catch (Exception e) {
-            return new ArrayList<>();
-        }
+           return Files.getFilesNamesInDirectory(MATCHES_PATH);
+
     }
 
 

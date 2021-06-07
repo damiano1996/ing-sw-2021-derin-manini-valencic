@@ -4,7 +4,8 @@ import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.exceptions.CannotReadMessageFileException;
 
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Files {
 
@@ -89,5 +90,13 @@ public class Files {
 
         System.out.println("Files - Deleting file: " + directoryPath);
         deleteFile(directoryPath);
+    }
+
+    public static List<String> getFilesNamesInDirectory(String directoryPath){
+        try{
+        return Arrays.stream(Objects.requireNonNull(new File(directoryPath).list())).sorted().collect(Collectors.toList());
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import it.polimi.ingsw.psp26.view.gui.drag.DraggedObject;
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.DepotTargetContainer;
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.TargetContainer;
@@ -96,6 +97,8 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         Button confirmationButton = new Button("Done");
         confirmationButton.setId("confirm-button");
         confirmationButton.setOnAction(actionEvent -> {
+            SoundManager soundManager= SoundManager.getInstance();
+            soundManager.setSoundEffect("button-21.mp3");
             try {
                 client.notifyObservers(
                         new Message(
@@ -152,6 +155,9 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
         StackPane warehousePane = new StackPane();
 
+        SoundManager soundManager= SoundManager.getInstance();
+        soundManager.setSoundEffect("button-22.mp3");
+
         Image warehouseImage = loadImage("warehouse/warehouse.png", (int) (650 * ratio));
         warehouseImage = setRoundedCorners(warehouseImage, ratio);
         warehouseImage = addLightEffects(warehouseImage, ratio);
@@ -194,6 +200,10 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
         resourcesGridPane.setAlignment(Pos.CENTER_LEFT);
         imageStack.getChildren().add(resourcesGridPane);
+
+        SoundManager soundManager= SoundManager.getInstance();
+        soundManager.setSoundEffect("button-22.mp3");
+
         vBox.getChildren().add(imageStack);
     }
 

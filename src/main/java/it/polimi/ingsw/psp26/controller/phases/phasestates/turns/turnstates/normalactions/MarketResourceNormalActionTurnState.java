@@ -53,7 +53,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
      * The fourth sub-phase is UNDO_OPTION_SELECTED/default: It checks if an undo message is sent, and redirects the
      * player to the ChooseNormalActionTurnState.
      *
-     * @param message The message sent by the current player, that carries his choices during the turn.
+     * @param message The message sent by the current player, that carries their choices during the turn.
      */
     @Override
     public void play(SessionMessage message) {
@@ -76,12 +76,10 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
                         tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow((RowColumnInt)));
                         turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow((RowColumnInt));
-
                     } else {
 
                         tempResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnColumn((RowColumnInt + 1) % 4));
                         turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToColumn((RowColumnInt + 1) % 4);
-
                     }
 
                     if (tempResources.contains(Resource.EMPTY)) doubleActivation = applyMarbleLeaderEffect(message);
@@ -90,6 +88,8 @@ public class MarketResourceNormalActionTurnState extends TurnState {
                         refactorResourceAndChangeTurn(message);
 
                     }
+                    turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + "got the following resource from the market" +
+                            tempResources);
                     break;
 
                 case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
@@ -107,6 +107,7 @@ public class MarketResourceNormalActionTurnState extends TurnState {
 
                 default:
                 case UNDO_OPTION_SELECTED:
+                    turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " went back on their steps");
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);
                     break;

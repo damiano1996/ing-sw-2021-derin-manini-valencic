@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.model.LeaderBoard;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
@@ -135,6 +136,16 @@ public class Client extends Observable<Message> {
                     viewInterface.displayEndGame(createLeaderboard(createPlayersList(cachedModel)), winner);
                     // TODO: resetting CachedModel only at this point
                     break;
+
+                case GLOBAL_LEADERBOARD:
+                    viewInterface.displayGlobalLeaderboard();
+                    break;
+
+                case EXIT:
+                    System.exit(0);
+                    break;
+
+
 
 
                 // -------------------------------------

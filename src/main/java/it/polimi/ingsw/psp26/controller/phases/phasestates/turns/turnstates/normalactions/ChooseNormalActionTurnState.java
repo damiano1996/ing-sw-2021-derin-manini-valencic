@@ -38,16 +38,19 @@ public class ChooseNormalActionTurnState extends TurnState {
                     case ACTIVATE_PRODUCTION:
                         turn.changeState(new ActivateProductionNormalActionTurnState(turn));
                         turn.play(message);
+                        turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " chose to activate their production");
                         break;
 
                     case MARKET_RESOURCE:
                         turn.changeState(new MarketResourceNormalActionTurnState(turn));
                         turn.play(message);
+                        turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " went to the market");
                         break;
 
                     case BUY_CARD:
                         turn.changeState(new BuyCardNormalActionTurnState(turn));
                         turn.play(message);
+                        turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " chose to buy a new development card");
                         break;
                 }
 

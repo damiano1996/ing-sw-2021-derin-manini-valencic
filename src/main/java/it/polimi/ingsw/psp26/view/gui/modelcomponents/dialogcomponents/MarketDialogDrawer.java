@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents;
 
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.RatioDrawer;
 import javafx.geometry.Pos;
@@ -47,6 +48,10 @@ public class MarketDialogDrawer extends RatioDrawer {
         Button confirmationButton = new Button("Undo");
         confirmationButton.setId("undo-button");
         confirmationButton.setOnAction(actionEvent -> {
+
+            SoundManager soundManager= SoundManager.getInstance();
+            soundManager.setSoundEffect("button-21.mp3");
+
             client.sendUndoMessage();
             closeParentStageOfActionEvent(actionEvent);
             client.viewNext();

@@ -7,7 +7,7 @@ public enum MessageType {
     PLAY,
     GLOBAL_LEADERBOARD,
     HELP,
-    SETTINGS,
+    EXIT,
 
     NOTIFICATION_UPDATE,
     MODEL_UPDATE,

@@ -50,10 +50,13 @@ public class TurnUtils {
                     if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
                         // After the second leader action, go to next player turn
                         turn.getPlayingPhaseState().updateCurrentTurn();
+                        turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " finished their turn");
+
                     } else {
                         // After the second leader action, go to Lorenzo action
                         turn.changeState(new LorenzoMagnificoTurnState(turn, TurnPhase.LORENZO_TO_END));
                         turn.play(message);
+
                     }
                     break;
                 case LORENZO_TO_END:

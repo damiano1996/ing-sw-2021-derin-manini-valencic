@@ -60,7 +60,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
      * The fourth sub-phase is QUIT_OPTION_SELECTED/default: It checks if an undo message is sent, and redirects the
      * player to the ChooseNormalActionTurnState.
      *
-     * @param message The message sent by the current player, that carries his choices during the turn.
+     * @param message The message sent by the current player, that carries their choices during the turn.
      */
     @Override
     public void play(SessionMessage message) {
@@ -124,6 +124,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 case UNDO_OPTION_SELECTED:
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);
+                    turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " went back on their steps");
                     break;
 
 
@@ -196,6 +197,8 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
             }
 
             collectProduction();
+            turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " activated "
+                    + productionActivated.size() +  " production");
             turn.changeState(new CheckVaticanReportTurnState(turn));
 
         } else {

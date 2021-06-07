@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents;
 
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.ActionTokenDrawer;
 import it.polimi.ingsw.psp26.view.gui.modelcomponents.RatioDrawer;
 import javafx.geometry.Pos;
@@ -69,6 +70,10 @@ public class ActionTokenDialogDrawer extends RatioDrawer {
         // Creating the button
         Button doneButton = new Button("Done");
         doneButton.setOnAction(actionEvent -> {
+
+            SoundManager soundManager= SoundManager.getInstance();
+
+            soundManager.setSoundEffect("button-21.mp3");
             closeParentStageOfActionEvent(actionEvent);
             client.viewNext();
         });

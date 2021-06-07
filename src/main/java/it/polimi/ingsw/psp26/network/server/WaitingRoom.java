@@ -7,12 +7,17 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.filterHeartbeatMessages;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class WaitingRoom {
 
@@ -38,7 +43,7 @@ public class WaitingRoom {
                             "Menu",
                             1, 1,
                             false,
-                            PLAY, GLOBAL_LEADERBOARD, HELP, SETTINGS
+                            PLAY, GLOBAL_LEADERBOARD, HELP, EXIT
                     )
             );
 
@@ -62,15 +67,59 @@ public class WaitingRoom {
                         break;
 
                     case GLOBAL_LEADERBOARD:
-                        // TODO: to be implemented
+                        System.out.println("WaitingRoom - GLOBAL_LEADERBOARD has been selected.");
+                        try {
+                            sendToClient(
+                                    new SessionMessage(
+                                            message.getSessionToken(),
+                                            GLOBAL_LEADERBOARD
+                                    )
+                            );
+                        } catch (InvalidPayloadException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("WaitingRoom - Waiting response.");
+                        try {
+                           handleMessages(filterHeartbeatMessages(nodeClients.get(message.getSessionToken())));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
                         break;
 
                     case HELP:
-                        // TODO: to be implemented
+                       try {
+                           Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
+                             Files.copy(getClass().getResource("/gui/rules_ITA.pdf").openStream(),  desktop ,REPLACE_EXISTING );
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                        }
+                        File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
+                        try {
+                            Desktop.getDesktop().open(rulesPdf);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        sendMenuMessage(message.getSessionToken());
                         break;
 
-                    case SETTINGS:
-                        // TODO: to be implemented
+                    case EXIT:
+                        System.out.println("WaitingRoom - EXIT has been selected.");
+                        try {
+                            sendToClient(
+                                    new SessionMessage(
+                                            message.getSessionToken(),
+                                            EXIT
+                                    )
+                            );
+                        } catch (InvalidPayloadException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case UNDO_OPTION_SELECTED:
+                        System.out.println("WaitingRoom - Undo payload.");
+                        sendMenuMessage(message.getSessionToken());
                         break;
 
                     default:

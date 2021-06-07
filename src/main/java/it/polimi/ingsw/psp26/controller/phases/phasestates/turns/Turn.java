@@ -111,4 +111,16 @@ public class Turn {
     public MatchController getMatchController() {
         return matchController;
     }
+
+    public void notifyAllPlayers(String messageText){
+        try {
+            getMatchController().notifyObservers(
+                    new NotificationUpdateMessage(
+                            SpecialToken.BROADCAST.getToken(),
+                            messageText)
+            );
+        } catch (InvalidPayloadException e) {
+            e.printStackTrace();
+        }
+    }
 }

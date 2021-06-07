@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -59,10 +60,14 @@ public class MarketResourceNormalActionTurnStateTest {
 
     @Test
     public void playSendChoiceRowColumn() throws InvalidPayloadException {
-
+        int marblesToPlace = (int) Arrays.stream(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2))
+                .filter(x -> x != Resource.EMPTY || x != Resource.FAITH_MARKER).count();
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
-
-        assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType()); // TODO: sometimes it crashes
+        if(marblesToPlace != 0 ) {
+            assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
+        }else{
+            assertEquals(CHOICE_LEADER_ACTION, mitm.getMessages().get(0).getMessageType());
+        }
     }
 
     @Test
@@ -106,7 +111,7 @@ public class MarketResourceNormalActionTurnStateTest {
             }
 
             assertEquals(CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, mitm.getMessages().get(0).getMessageType());
-            assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(1 + (2 * (numberOfEmpty - 1))).getMessageType());
+            assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(2 + (2 * (numberOfEmpty - 1))).getMessageType());
 
         }
     }

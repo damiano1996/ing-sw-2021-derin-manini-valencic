@@ -50,11 +50,7 @@ public class EndMatchCheckerTurnState extends TurnState {
                 );
                 turn.getPlayingPhaseState().setLastTurn();
             } else if (isFinalTilePosition()) {
-                turn.getMatchController().notifyObservers(
-                        new NotificationUpdateMessage(
-                                SpecialToken.BROADCAST.getToken(),
-                                turn.getTurnPlayer().getNickname() + " activated the endgame by reaching the final tile in the faith track.")
-                );
+                turn.notifyAllPlayers(turn.getTurnPlayer().getNickname() + " activated the endgame by reaching the final tile in the faith track.");
                 turn.getPlayingPhaseState().setLastTurn();
             }
 

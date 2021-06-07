@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.drag;
 
+import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.TargetContainer;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -65,6 +66,9 @@ public class DraggedObject<T> {
                         tTargetContainer.getTargetContainerPane().localToScene(tTargetContainer.getTargetContainerPane().getBoundsInLocal()))) {
 
                     if (tTargetContainer.place(object)) {
+                        SoundManager soundManager= SoundManager.getInstance();
+                        soundManager.setSoundEffect("button-22.mp3");
+
                         movedSuccessfully = true;
                         sourcePane.getChildren().remove(imageView);
                         if (!tTargetContainer.getDraggableObjectsContainer().getChildren().contains(imageView))

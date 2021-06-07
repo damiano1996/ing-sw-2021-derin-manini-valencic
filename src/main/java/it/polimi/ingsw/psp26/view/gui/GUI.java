@@ -110,7 +110,7 @@ public class GUI extends Application implements ViewInterface {
             Stage dialog = getDialog(primaryStage, loginVBox);
 
             SoundManager soundManager = SoundManager.getInstance();
-            soundManager.setMusic("main_theme_01.wav");
+            soundManager.setMusic("main_theme_03.wav");
 
             Button connectionButton = (Button) fxmlLoader.getNamespace().get("connectionButton");
             connectionButton.setOnAction(event -> {

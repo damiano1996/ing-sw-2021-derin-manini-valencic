@@ -5,6 +5,8 @@ import javafx.scene.media.Media;
 
 public class SoundManager {
 
+    private static final String MUSIC_DIRECTORY = "/gui/music/";
+
     private static SoundManager instance;
 
     private AudioClip musicAudio;
@@ -21,7 +23,7 @@ public class SoundManager {
     public void setMusic(String musicPath) {
         if (musicAudio != null)
             musicAudio.stop();
-        Media media = new Media(String.valueOf(getClass().getResource("/gui/music/" + musicPath)));
+        Media media = new Media(String.valueOf(getClass().getResource(MUSIC_DIRECTORY + musicPath)));
         musicAudio = new AudioClip(media.getSource());
         musicAudio.setCycleCount(10);
 
@@ -29,7 +31,7 @@ public class SoundManager {
     }
 
     public void setSoundEffect(String soundEffect) {
-        Media media = new Media(String.valueOf(getClass().getResource("/gui/music/" + soundEffect)));
+        Media media = new Media(String.valueOf(getClass().getResource(MUSIC_DIRECTORY + soundEffect)));
         effectAudio = new AudioClip(media.getSource());
         effectAudio.setCycleCount(1);
 

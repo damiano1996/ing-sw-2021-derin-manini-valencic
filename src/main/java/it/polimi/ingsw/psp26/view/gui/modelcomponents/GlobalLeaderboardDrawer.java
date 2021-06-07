@@ -114,7 +114,7 @@ public class GlobalLeaderboardDrawer extends RatioDrawer {
         backButton.setOnAction(actionEvent -> {
 
             SoundManager soundManager = SoundManager.getInstance();
-            soundManager.setSoundEffect("button-21.mp3");
+            soundManager.setSoundEffect("button_click_01.wav");
 
             closeParentStageOfActionEvent(actionEvent);
             client.sendUndoMessage();

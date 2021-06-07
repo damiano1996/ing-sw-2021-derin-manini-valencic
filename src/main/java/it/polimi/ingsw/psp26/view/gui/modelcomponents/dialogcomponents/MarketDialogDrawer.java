@@ -49,7 +49,7 @@ public class MarketDialogDrawer extends RatioDrawer {
         confirmationButton.setId("undo-button");
         confirmationButton.setOnAction(actionEvent -> {
 
-            SoundManager soundManager= SoundManager.getInstance();
+            SoundManager soundManager = SoundManager.getInstance();
             soundManager.setSoundEffect("button-21.mp3");
 
             client.sendUndoMessage();

@@ -6,14 +6,10 @@ import it.polimi.ingsw.psp26.application.messages.serialization.GsonConverter;
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.application.files.Files.*;
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
@@ -208,7 +204,7 @@ public class GameSaver {
      * @return The List of the directories names
      */
     public List<String> getSavedMatchesDirectoriesNames() {
-           return Files.getFilesNamesInDirectory(MATCHES_PATH);
+        return Files.getFilesNamesInDirectory(MATCHES_PATH);
 
     }
 

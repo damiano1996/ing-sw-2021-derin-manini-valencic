@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.view.gui.modelcomponents;
 
-import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -16,7 +16,7 @@ import java.util.Map;
 import static it.polimi.ingsw.psp26.view.ViewUtils.getOrderedPlayersList;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
-public class GlobalLeaderboardDrawer extends RatioDrawer{
+public class GlobalLeaderboardDrawer extends RatioDrawer {
 
     private final LeaderBoard globalLeaderboard;
     private final Client client;
@@ -77,17 +77,17 @@ public class GlobalLeaderboardDrawer extends RatioDrawer{
         // Getting a List of ordered Players' nicknames to better insert values in the leaderboard
         List<String> orderedPlayers = getOrderedPlayersList(leaderboard);
 
-        for(int i = 0; i < Math.min(5, orderedPlayers.size()); i++) {
+        for (int i = 0; i < Math.min(5, orderedPlayers.size()); i++) {
 
-                // Inserting Players' nicknames into the leaderboard
-                Text name = new Text(orderedPlayers.get(i));
-                setTextDimensions(name, 40, false);
-                playerBox.getChildren().add(name);
+            // Inserting Players' nicknames into the leaderboard
+            Text name = new Text(orderedPlayers.get(i));
+            setTextDimensions(name, 40, false);
+            playerBox.getChildren().add(name);
 
-                // Inserting Player's points into the leaderboard
-                Text points = new Text(Integer.toString(leaderboard.get(orderedPlayers.get(i))));
-                setTextDimensions(points, 40, false);
-                pointsBox.getChildren().add(points);
+            // Inserting Player's points into the leaderboard
+            Text points = new Text(Integer.toString(leaderboard.get(orderedPlayers.get(i))));
+            setTextDimensions(points, 40, false);
+            pointsBox.getChildren().add(points);
 
         }
     }
@@ -113,7 +113,7 @@ public class GlobalLeaderboardDrawer extends RatioDrawer{
     private void setBackButtonAction(Button backButton) {
         backButton.setOnAction(actionEvent -> {
 
-            SoundManager soundManager= SoundManager.getInstance();
+            SoundManager soundManager = SoundManager.getInstance();
             soundManager.setSoundEffect("button-21.mp3");
 
             closeParentStageOfActionEvent(actionEvent);

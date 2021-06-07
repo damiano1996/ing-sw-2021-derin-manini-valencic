@@ -97,7 +97,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         Button confirmationButton = new Button("Done");
         confirmationButton.setId("confirm-button");
         confirmationButton.setOnAction(actionEvent -> {
-            SoundManager soundManager= SoundManager.getInstance();
+            SoundManager soundManager = SoundManager.getInstance();
             soundManager.setSoundEffect("button-21.mp3");
             try {
                 client.notifyObservers(
@@ -155,7 +155,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
         StackPane warehousePane = new StackPane();
 
-        SoundManager soundManager= SoundManager.getInstance();
+        SoundManager soundManager = SoundManager.getInstance();
         soundManager.setSoundEffect("button-22.mp3");
 
         Image warehouseImage = loadImage("warehouse/warehouse.png", (int) (650 * ratio));
@@ -201,7 +201,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         resourcesGridPane.setAlignment(Pos.CENTER_LEFT);
         imageStack.getChildren().add(resourcesGridPane);
 
-        SoundManager soundManager= SoundManager.getInstance();
+        SoundManager soundManager = SoundManager.getInstance();
         soundManager.setSoundEffect("button-22.mp3");
 
         vBox.getChildren().add(imageStack);

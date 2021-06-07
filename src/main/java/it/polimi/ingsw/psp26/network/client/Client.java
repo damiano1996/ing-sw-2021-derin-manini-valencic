@@ -5,7 +5,6 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.exceptions.*;
-import it.polimi.ingsw.psp26.model.LeaderBoard;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
@@ -144,8 +143,6 @@ public class Client extends Observable<Message> {
                 case EXIT:
                     System.exit(0);
                     break;
-
-
 
 
                 // -------------------------------------

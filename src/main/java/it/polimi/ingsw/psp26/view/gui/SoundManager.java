@@ -3,8 +3,6 @@ package it.polimi.ingsw.psp26.view.gui;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 
-import java.io.File;
-
 public class SoundManager {
 
     private static SoundManager instance;
@@ -13,8 +11,15 @@ public class SoundManager {
     private AudioClip effectAudio;
     private double volume = 100;
 
-    public void setMusic(String musicPath){
-        if(musicAudio != null)
+    public static SoundManager getInstance() {
+        if (instance == null)
+            instance = new SoundManager();
+
+        return instance;
+    }
+
+    public void setMusic(String musicPath) {
+        if (musicAudio != null)
             musicAudio.stop();
         Media media = new Media(String.valueOf(getClass().getResource("/gui/music/" + musicPath)));
         musicAudio = new AudioClip(media.getSource());
@@ -23,7 +28,7 @@ public class SoundManager {
         musicAudio.play(volume);
     }
 
-    public void setSoundEffect(String soundEffect){
+    public void setSoundEffect(String soundEffect) {
         Media media = new Media(String.valueOf(getClass().getResource("/gui/music/" + soundEffect)));
         effectAudio = new AudioClip(media.getSource());
         effectAudio.setCycleCount(1);
@@ -31,20 +36,13 @@ public class SoundManager {
         effectAudio.play(150);
     }
 
-    public static SoundManager getInstance() {
-        if (instance == null)
-            instance = new SoundManager();
-
-        return instance;
-    }
-
-    public void muteMusic(){
-        if(musicAudio != null)
+    public void muteMusic() {
+        if (musicAudio != null)
             musicAudio.stop();
         volume = 0;
     }
 
-    public void unmuteMusic(){
+    public void unmuteMusic() {
         volume = 100;
         musicAudio.play(volume);
     }

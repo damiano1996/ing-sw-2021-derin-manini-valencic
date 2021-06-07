@@ -109,7 +109,7 @@ public class GUI extends Application implements ViewInterface {
 
             Stage dialog = getDialog(primaryStage, loginVBox);
 
-            SoundManager soundManager= SoundManager.getInstance();
+            SoundManager soundManager = SoundManager.getInstance();
             soundManager.setMusic("pinao_wip.mp3");
 
             Button connectionButton = (Button) fxmlLoader.getNamespace().get("connectionButton");
@@ -230,7 +230,7 @@ public class GUI extends Application implements ViewInterface {
 
             case CHOICE_LEADERS:
 
-                SoundManager soundManager= SoundManager.getInstance();
+                SoundManager soundManager = SoundManager.getInstance();
                 soundManager.setMusic("untitled_11.mp3");
 
                 choicesDrawer = new LeaderCardChoicesDrawer();
@@ -263,7 +263,7 @@ public class GUI extends Application implements ViewInterface {
             Button undoOptionButton = new Button("Undo");
             undoOptionButton.setId("undo-button");
             undoOptionButton.setOnAction(actionEvent -> {
-                SoundManager soundManager= SoundManager.getInstance();
+                SoundManager soundManager = SoundManager.getInstance();
                 soundManager.setSoundEffect("button-21.mp3");
                 dialog.close();
                 client.sendUndoMessage();
@@ -297,7 +297,7 @@ public class GUI extends Application implements ViewInterface {
             buttonContainer.setOnAction(event -> {
                 // disabling all buttons
                 for (Button button1 : buttonContainers) button1.setDisable(true);
-                SoundManager soundManager= SoundManager.getInstance();
+                SoundManager soundManager = SoundManager.getInstance();
                 soundManager.setSoundEffect("button-21.mp3");
                 try {
                     client.notifyObservers(new Message(messageType, buttonContainer.getContainedObject()));
@@ -344,7 +344,7 @@ public class GUI extends Application implements ViewInterface {
             List<Object> selected = new ArrayList<>();
             for (ButtonContainer<?> buttonContainer : buttonContainers)
                 if (buttonContainer.isClicked()) {
-                    SoundManager soundManager= SoundManager.getInstance();
+                    SoundManager soundManager = SoundManager.getInstance();
                     soundManager.setSoundEffect("button-21.mp3");
                     selected.add(buttonContainer.getContainedObject());
                 }

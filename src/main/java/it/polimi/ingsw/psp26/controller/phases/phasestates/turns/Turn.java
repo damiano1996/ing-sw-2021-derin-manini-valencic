@@ -112,7 +112,7 @@ public class Turn {
         return matchController;
     }
 
-    public void notifyAllPlayers(String messageText){
+    public void notifyAllPlayers(String messageText) {
         try {
             getMatchController().notifyObservers(
                     new NotificationUpdateMessage(

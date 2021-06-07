@@ -198,7 +198,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
             collectProduction();
             turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " activated "
-                    + productionActivated.size() +  " production");
+                    + productionActivated.size() + " production");
             turn.changeState(new CheckVaticanReportTurnState(turn));
 
         } else {

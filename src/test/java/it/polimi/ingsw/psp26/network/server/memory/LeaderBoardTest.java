@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class LeaderBoardTest {
 
@@ -31,7 +31,7 @@ public class LeaderBoardTest {
 
         Files.deleteFile(LeaderBoard.LEADERBOARD_FILE);
 
-        for( String nickname : playersExample.keySet()) {
+        for (String nickname : playersExample.keySet()) {
 
             LeaderBoard.getInstance().addPlayerVictoryPoints(nickname, playersExample.get(nickname));
 

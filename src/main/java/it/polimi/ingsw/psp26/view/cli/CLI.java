@@ -150,7 +150,7 @@ public class CLI implements ViewInterface {
     }
 
     @Override
-    public void displayGlobalLeaderboard(){
+    public void displayGlobalLeaderboard() {
         // to implement;
     }
 

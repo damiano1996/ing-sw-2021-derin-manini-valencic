@@ -102,7 +102,7 @@ public class BuyCardNormalActionTurnState extends TurnState {
                     break;
 
                 case CHOICE_DEVELOPMENT_CARD_SLOT_POSITION:
-                    turn.notifyAllPlayers("The player "+ turn.getTurnPlayer().getNickname() + " bought the following card: "
+                    turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " bought the following card: "
                             + boughtCard);
                     placeCard((String) message.getPayload());
                     turn.changeState(new EndMatchCheckerTurnState(turn));

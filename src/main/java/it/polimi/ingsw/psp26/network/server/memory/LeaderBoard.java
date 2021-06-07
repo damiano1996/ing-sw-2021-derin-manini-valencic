@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static it.polimi.ingsw.psp26.application.files.Files.*;
-import static it.polimi.ingsw.psp26.application.files.Files.createNewDirectory;
 import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 
 /**
@@ -23,7 +22,6 @@ public class LeaderBoard {
     private static LeaderBoard instance;
 
     private HashMap<String, Integer> leaderboard;
-
 
 
     /**

@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.filterHeartbeatMessages;
@@ -80,20 +81,17 @@ public class WaitingRoom {
                         }
                         System.out.println("WaitingRoom - Waiting response.");
                         try {
-                           handleMessages(filterHeartbeatMessages(nodeClients.get(message.getSessionToken())));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
+                            handleMessages(filterHeartbeatMessages(nodeClients.get(message.getSessionToken())));
+                        } catch (IOException | ClassNotFoundException ignored) {
                         }
                         break;
 
                     case HELP:
-                       try {
-                           Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                             Files.copy(getClass().getResource("/gui/rules_ITA.pdf").openStream(),  desktop ,REPLACE_EXISTING );
-                       } catch (IOException e) {
-                           e.printStackTrace();
+                        try {
+                            Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
+                            Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                         File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
                         try {

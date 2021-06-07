@@ -92,9 +92,9 @@ public class Files {
         deleteFile(directoryPath);
     }
 
-    public static List<String> getFilesNamesInDirectory(String directoryPath){
-        try{
-        return Arrays.stream(Objects.requireNonNull(new File(directoryPath).list())).sorted().collect(Collectors.toList());
+    public static List<String> getFilesNamesInDirectory(String directoryPath) {
+        try {
+            return Arrays.stream(Objects.requireNonNull(new File(directoryPath).list())).sorted().collect(Collectors.toList());
         } catch (Exception e) {
             return new ArrayList<>();
         }

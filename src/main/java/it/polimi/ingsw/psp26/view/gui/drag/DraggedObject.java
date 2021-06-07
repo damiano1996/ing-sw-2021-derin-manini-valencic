@@ -66,7 +66,7 @@ public class DraggedObject<T> {
                         tTargetContainer.getTargetContainerPane().localToScene(tTargetContainer.getTargetContainerPane().getBoundsInLocal()))) {
 
                     if (tTargetContainer.place(object)) {
-                        SoundManager soundManager= SoundManager.getInstance();
+                        SoundManager soundManager = SoundManager.getInstance();
                         soundManager.setSoundEffect("button-22.mp3");
 
                         movedSuccessfully = true;

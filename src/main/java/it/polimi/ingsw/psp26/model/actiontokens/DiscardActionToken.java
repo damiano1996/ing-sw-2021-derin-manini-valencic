@@ -99,7 +99,7 @@ public class DiscardActionToken implements ActionToken {
 
     /**
      * Getter of the Token's name
-     * 
+     *
      * @return The Token's name
      */
     @Override

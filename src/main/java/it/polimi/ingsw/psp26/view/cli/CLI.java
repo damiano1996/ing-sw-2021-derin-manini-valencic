@@ -2,7 +2,10 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
-import it.polimi.ingsw.psp26.exceptions.*;
+import it.polimi.ingsw.psp26.exceptions.ConfirmationException;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
@@ -130,7 +133,7 @@ public class CLI implements ViewInterface {
                     pw.flush();
                     password = in.nextLine();
                     break;
-                    
+
                 case 2:
                     pw.println(cliUtils.hSpace(100) + "Enter Nickname: " + nickname);
                     pw.flush();
@@ -141,10 +144,10 @@ public class CLI implements ViewInterface {
                     pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                     pw.flush();
                     String serverIP = in.nextLine();
-                    
+
                     client.initializeNetworkHandler(nickname, password, serverIP);
                     break;
-                    
+
                 default:
                     break;
             }
@@ -152,7 +155,7 @@ public class CLI implements ViewInterface {
 
         // Starting the Thread to print notifications
         if (client.getNickname() != null) startLiveUpdate();
-        
+
         client.viewNext();
     }
 
@@ -497,13 +500,13 @@ public class CLI implements ViewInterface {
 
         // send to server response
         try {
-            
+
             cliUtils.vSpace(1);
             List<Object> selected = getElementsByIndices(choices, displayInputChoice(choices.size(), minChoices, maxChoices, hasUndoOption));
             client.notifyObservers(new Message(messageType, selected.toArray(new Object[0])));
 
             client.viewNext();
-        
+
         } catch (InvalidPayloadException e) {
             e.printStackTrace();
         } catch (UndoOptionSelectedException e) {

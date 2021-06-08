@@ -229,10 +229,7 @@ public class GUI extends Application implements ViewInterface {
                 break;
 
             case CHOICE_LEADERS:
-
-                SoundManager soundManager = SoundManager.getInstance();
-                soundManager.setMusic("main_theme_02.wav");
-
+                SoundManager.getInstance().setMusic("main_theme_04.wav");
                 choicesDrawer = new LeaderCardChoicesDrawer();
                 break;
 
@@ -263,8 +260,7 @@ public class GUI extends Application implements ViewInterface {
             Button undoOptionButton = new Button("Undo");
             undoOptionButton.setId("undo-button");
             undoOptionButton.setOnAction(actionEvent -> {
-                SoundManager soundManager = SoundManager.getInstance();
-                soundManager.setSoundEffect("button_click_01.wav");
+                SoundManager.getInstance().setSoundEffect("button_click_01.wav");
                 dialog.close();
                 client.sendUndoMessage();
                 client.viewNext();
@@ -297,8 +293,7 @@ public class GUI extends Application implements ViewInterface {
             buttonContainer.setOnAction(event -> {
                 // disabling all buttons
                 for (Button button1 : buttonContainers) button1.setDisable(true);
-                SoundManager soundManager = SoundManager.getInstance();
-                soundManager.setSoundEffect("button_click_01.wav");
+                SoundManager.getInstance().setSoundEffect("button_click_01.wav");
                 try {
                     client.notifyObservers(new Message(messageType, buttonContainer.getContainedObject()));
                 } catch (InvalidPayloadException ignored) {
@@ -344,8 +339,7 @@ public class GUI extends Application implements ViewInterface {
             List<Object> selected = new ArrayList<>();
             for (ButtonContainer<?> buttonContainer : buttonContainers)
                 if (buttonContainer.isClicked()) {
-                    SoundManager soundManager = SoundManager.getInstance();
-                    soundManager.setSoundEffect("button_click_01.wav");
+                    SoundManager.getInstance().setSoundEffect("button_click_01.wav");
                     selected.add(buttonContainer.getContainedObject());
                 }
 

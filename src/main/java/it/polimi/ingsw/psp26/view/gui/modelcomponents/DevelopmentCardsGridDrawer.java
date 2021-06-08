@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -67,6 +68,8 @@ public class DevelopmentCardsGridDrawer extends RatioDrawer {
                         int finalCol = col;
                         imageView.setOnMouseClicked(mouseEvent -> {
                             try {
+                                SoundManager.getInstance().setSoundEffect("button_click_02.wav");
+
                                 client.notifyObservers(
                                         new Message(
                                                 MessageType.CHOICE_CARD_TO_BUY,

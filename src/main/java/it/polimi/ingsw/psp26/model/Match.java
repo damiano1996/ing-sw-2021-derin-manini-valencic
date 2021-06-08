@@ -237,7 +237,7 @@ public class Match extends Observable<SessionMessage> {
 
     /**
      * Getter of the Action Tokens
-     * 
+     *
      * @return An unmodifiable List of the Action Tokens
      */
     public List<ActionToken> getActionTokens() {

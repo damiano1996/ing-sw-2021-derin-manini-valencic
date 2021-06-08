@@ -155,9 +155,6 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
         StackPane warehousePane = new StackPane();
 
-        SoundManager soundManager = SoundManager.getInstance();
-        soundManager.setSoundEffect("button_click_02.wav");
-
         Image warehouseImage = loadImage("warehouse/warehouse.png", (int) (650 * ratio));
         warehouseImage = setRoundedCorners(warehouseImage, ratio);
         warehouseImage = addLightEffects(warehouseImage, ratio);
@@ -200,9 +197,6 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
         resourcesGridPane.setAlignment(Pos.CENTER_LEFT);
         imageStack.getChildren().add(resourcesGridPane);
-
-        SoundManager soundManager = SoundManager.getInstance();
-        soundManager.setSoundEffect("button_click_02.wav");
 
         vBox.getChildren().add(imageStack);
     }

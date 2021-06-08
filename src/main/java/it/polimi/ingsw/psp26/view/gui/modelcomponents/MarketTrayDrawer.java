@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.client.Client;
+import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -137,6 +138,8 @@ public class MarketTrayDrawer extends RatioDrawer {
         if (client != null) {
             arrowImageView.setOnMouseClicked(mouseEvent -> {
                 try {
+                    SoundManager.getInstance().setSoundEffect("button_click_02.wav");
+
                     client.notifyObservers(new Message(MessageType.CHOICE_ROW_COLUMN, numToSend));
                     closeParentStageOfActionEvent(mouseEvent);
                     client.viewNext();

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.view.gui;
 
+import it.polimi.ingsw.psp26.view.gui.cache.MediaLoaderCache;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
 
 public class SoundManager {
 
@@ -23,16 +23,18 @@ public class SoundManager {
     public void setMusic(String musicPath) {
         if (musicAudio != null)
             musicAudio.stop();
-        Media media = new Media(String.valueOf(getClass().getResource(MUSIC_DIRECTORY + musicPath)));
-        musicAudio = new AudioClip(media.getSource());
+        musicAudio = new AudioClip(
+                MediaLoaderCache.getInstance().loadMediaFromFile(MUSIC_DIRECTORY + musicPath).getSource()
+        );
         musicAudio.setCycleCount(10);
 
         musicAudio.play(volume);
     }
 
     public void setSoundEffect(String soundEffect) {
-        Media media = new Media(String.valueOf(getClass().getResource(MUSIC_DIRECTORY + soundEffect)));
-        effectAudio = new AudioClip(media.getSource());
+        effectAudio = new AudioClip(
+                MediaLoaderCache.getInstance().loadMediaFromFile(MUSIC_DIRECTORY + soundEffect).getSource()
+        );
         effectAudio.setCycleCount(1);
 
         effectAudio.play(150);

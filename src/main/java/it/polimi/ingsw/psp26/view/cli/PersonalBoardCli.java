@@ -290,5 +290,5 @@ public class PersonalBoardCli {
     private void printTokenStack(int stackSize) {
         if (stackSize > 1) cliUtils.printFigure("/actiontokenborders/ActionTokenBorder" + (stackSize - 1), 20, 67);
     }
-    
+
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.view.gui.choicesdrawers;
 
 import it.polimi.ingsw.psp26.view.gui.ButtonContainer;
+import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -16,9 +17,12 @@ public class ChoiceDrawerUtils {
                 buttonContainer.setClicked(true);
                 Image imageSelected = addSelectionShadow(originalImage);
                 imageView.setImage(imageSelected);
+                SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+
             } else {
                 buttonContainer.setClicked(false);
                 imageView.setImage(originalImage);
+                SoundManager.getInstance().setSoundEffect("button_click_02.wav");
             }
             buttonContainer.setGraphic(imageView);
         });

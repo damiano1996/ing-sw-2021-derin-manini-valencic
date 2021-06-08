@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots;
 
+import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -68,8 +69,12 @@ public class SwitchableDepot {
         isSource = source;
         if (source) {
             depotImageView.setImage(sourceSwitchImage);
+            SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+
         } else {
             depotImageView.setImage(originalImage);
+            SoundManager.getInstance().setSoundEffect("button_click_02.wav");
+
         }
     }
 

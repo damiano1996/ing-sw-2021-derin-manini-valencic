@@ -83,7 +83,7 @@ public class Turn {
     public TurnState getTurnState() {
         return turnState;
     }
-    
+
     public Player getTurnPlayer() {
         return turnPlayer;
     }

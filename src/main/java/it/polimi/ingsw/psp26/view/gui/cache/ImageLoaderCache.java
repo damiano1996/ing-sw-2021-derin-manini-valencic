@@ -11,7 +11,11 @@ public class ImageLoaderCache {
 
     private static ImageLoaderCache instance;
 
-    private static Map<String, Image> images;
+    private final Map<String, Image> images;
+
+    private ImageLoaderCache() {
+        images = new HashMap<>();
+    }
 
     public static ImageLoaderCache getInstance() {
         if (instance == null) instance = new ImageLoaderCache();
@@ -24,8 +28,6 @@ public class ImageLoaderCache {
     }
 
     public Image loadImageFromFile(String fileName, double width, double height, boolean var1, boolean var2) {
-        if (images == null) images = new HashMap<>();
-
         String imageIdentifier = fileName + "__" + width + "_" + height + "_" + var1 + "_" + var2;
         if (images.containsKey(imageIdentifier)) return images.get(imageIdentifier);
 

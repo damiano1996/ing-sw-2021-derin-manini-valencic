@@ -31,7 +31,6 @@ public class DepotsSwitchableGroup {
                 return false;
             }
         }
-
         warehousePlacerDrawer.showMessage("Source depot has been selected.");
         return true;
     }

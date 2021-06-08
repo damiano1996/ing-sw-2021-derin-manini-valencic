@@ -181,7 +181,7 @@ public class PersonalBoardCli {
         cliUtils.setCursorPosition(startingRow + 2, startingColumn);
 
         if (leaderDepot.getResources().size() == 0)
-            pw.print("|" + cliUtils.pCS(leaderDepot.getLeaderDepotResource().getName(), Color.GREY) + "|");
+            pw.print("|" + cliUtils.pCS(cliUtils.centerString(12, leaderDepot.getLeaderDepotResource().getName()), Color.GREY));
         else if (leaderDepot.getResources().size() == 1)
             pw.print("|     " + cliUtils.pCS("\u2588\u2588", leaderDepot.getLeaderDepotResource().getColor()) + "     |");
         else
@@ -290,4 +290,5 @@ public class PersonalBoardCli {
     private void printTokenStack(int stackSize) {
         if (stackSize > 1) cliUtils.printFigure("/actiontokenborders/ActionTokenBorder" + (stackSize - 1), 20, 67);
     }
+    
 }

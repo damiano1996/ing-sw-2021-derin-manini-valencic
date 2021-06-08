@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
@@ -91,7 +92,7 @@ public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
      */
     private String getLeaderProductionName(Production production) throws PlayerHasNoLeaderProduction {
         if (production.getProductionReturn().containsKey(Resource.FAITH_MARKER))
-            return "production/leaderProduction_" + new ArrayList<>(production.getProductionCost().keySet()).get(0).getUppercaseName() + ".png";
+            return "production/leaderProduction_" + new ArrayList<>(production.getProductionCost().keySet()).get(0).getName().toUpperCase(Locale.ROOT) + ".png";
 
         throw new PlayerHasNoLeaderProduction();
     }

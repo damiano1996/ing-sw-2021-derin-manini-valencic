@@ -1,13 +1,11 @@
 package it.polimi.ingsw.psp26.model.enums;
 
-import java.util.Locale;
-
 public enum Resource {
 
-    COIN("    Coin    ", Color.YELLOW),
-    STONE("   Stones   ", Color.GREY),
-    SERVANT("  Servants  ", Color.PURPLE),
-    SHIELD("   Shield   ", Color.BLUE),
+    COIN("Coin", Color.YELLOW),
+    STONE("Stone", Color.GREY),
+    SERVANT("Servant", Color.PURPLE),
+    SHIELD("Shield", Color.BLUE),
     FAITH_MARKER("Faith Marker", Color.RED),
     EMPTY("Empty", Color.WHITE),
     UNKNOWN("Unknown", Color.WHITE);
@@ -22,6 +20,8 @@ public enum Resource {
 
 
     /**
+     * Getter of the Resource Name
+     *
      * @return The Resource name
      */
     public String getName() {
@@ -30,18 +30,12 @@ public enum Resource {
 
 
     /**
+     * Getter of the Resource Color
+     *
      * @return The Resource Color
      */
     public Color getColor() {
         return color;
-    }
-
-
-    /**
-     * @return The name of the Resource without white spaces and in upper case letters
-     */
-    public String getUppercaseName() {
-        return name.replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
     }
 
 }

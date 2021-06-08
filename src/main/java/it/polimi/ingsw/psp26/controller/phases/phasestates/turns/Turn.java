@@ -80,6 +80,10 @@ public class Turn {
         turnState = newTurnState;
     }
 
+    public TurnState getTurnState() {
+        return turnState;
+    }
+    
     public Player getTurnPlayer() {
         return turnPlayer;
     }

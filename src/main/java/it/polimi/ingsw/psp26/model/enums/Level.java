@@ -17,6 +17,8 @@ public enum Level {
 
 
     /**
+     * Getter of the Level number
+     * 
      * @return The Level number
      */
     public int getLevelNumber() {
@@ -25,6 +27,8 @@ public enum Level {
 
 
     /**
+     * Getter of the Level name
+     * 
      * @return The Level name
      */
     public String getLevelName() {

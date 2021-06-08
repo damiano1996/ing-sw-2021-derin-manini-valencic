@@ -35,6 +35,8 @@ public abstract class SpecialAbility {
 
 
     /**
+     * Getter of the characteristic Leader Resource
+     * 
      * @return The characteristic Resource type of the Leader Card
      */
     public Resource getResource() {

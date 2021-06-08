@@ -41,6 +41,8 @@ public class DevelopmentGridCell {
 
 
     /**
+     * Tells if the Development Grid Cell is empty
+     * 
      * @return True if no Cards are contained in the Cell, false otherwise
      */
     public boolean isEmpty() {
@@ -49,6 +51,8 @@ public class DevelopmentGridCell {
 
 
     /**
+     * Getter of the Development Grid Cell Development Cards type
+     * 
      * @return The developmentCardType attribute of the Development Grid Cell
      */
     public DevelopmentCardType getDevelopmentCardType() {
@@ -57,6 +61,8 @@ public class DevelopmentGridCell {
 
 
     /**
+     * Getter of the first Development Card contained in the Development Grid Cell
+     * 
      * @return The Card on top of the Cell
      */
     public DevelopmentCard getFirstCard() {
@@ -65,6 +71,8 @@ public class DevelopmentGridCell {
 
 
     /**
+     * Getter of the number of Development Cards contained in the Development Grid Cell
+     * 
      * @return The number of Development Cards contained in the Development Grid Cell
      */
     public int getDevelopmentCardsSize() {

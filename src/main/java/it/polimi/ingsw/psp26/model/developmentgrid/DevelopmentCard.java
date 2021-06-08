@@ -33,6 +33,8 @@ public class DevelopmentCard {
 
 
     /**
+     * Getter of the Development Card cost
+     * 
      * @return An unmodifiable Map containing the cost of the Card
      */
     public Map<Resource, Integer> getCost() {
@@ -41,6 +43,8 @@ public class DevelopmentCard {
 
 
     /**
+     * Getter of the Development Card type
+     * 
      * @return The DevelopmentCardType of the Card
      */
     public DevelopmentCardType getDevelopmentCardType() {
@@ -49,6 +53,8 @@ public class DevelopmentCard {
 
 
     /**
+     * Getter of the Development Card Production
+     * 
      * @return The Production of the Card
      */
     public Production getProduction() {
@@ -57,6 +63,8 @@ public class DevelopmentCard {
 
 
     /**
+     * Getter of the Development Card victory points
+     * 
      * @return The Victory Points of the Card
      */
     public int getVictoryPoints() {

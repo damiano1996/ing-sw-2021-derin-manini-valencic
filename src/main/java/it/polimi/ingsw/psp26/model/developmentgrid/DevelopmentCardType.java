@@ -21,6 +21,8 @@ public class DevelopmentCardType {
 
 
     /**
+     * Getter of the Development Card type Color
+     * 
      * @return The Color of the Development Card
      */
     public Color getColor() {
@@ -29,6 +31,8 @@ public class DevelopmentCardType {
 
 
     /**
+     * Getter of the Development Card type Level
+     * 
      * @return The Level of the Development Card
      */
     public Level getLevel() {

@@ -164,6 +164,8 @@ public class Player extends Observable<SessionMessage> {
     }
 
     /**
+     * Getter of the Player's points
+     * 
      * @return The points the Player scored in the Match
      */
     public int getPoints() {

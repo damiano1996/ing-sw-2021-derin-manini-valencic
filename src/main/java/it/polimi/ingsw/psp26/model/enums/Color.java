@@ -34,6 +34,8 @@ public enum Color {
 
 
     /**
+     * Getter of the Color ANSICode
+     * 
      * @return A String representation of the ANSICode of the Color
      */
     public String toString() {
@@ -42,6 +44,8 @@ public enum Color {
 
 
     /**
+     * Getter of the Color name
+     * 
      * @return The name of the Color
      */
     public String getName() {

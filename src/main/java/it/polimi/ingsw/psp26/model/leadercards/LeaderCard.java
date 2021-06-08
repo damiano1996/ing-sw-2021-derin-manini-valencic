@@ -134,11 +134,21 @@ public class LeaderCard {
                 Objects.equals(specialAbility, that.specialAbility);
     }
 
+    /**
+     * hashCode method
+     *
+     * @return A hashCode of the Object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(resourcesRequirements, developmentCardRequirements, victoryPoints, specialAbility, active);
     }
 
+    /**
+     * toString method
+     *
+     * @return A String representation of the Object
+     */
     @Override
     public String toString() {
         return "LeaderCard{" +

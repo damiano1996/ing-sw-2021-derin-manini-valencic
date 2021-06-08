@@ -1,9 +1,8 @@
 package it.polimi.ingsw.psp26.view.gui.effects;
 
-import javafx.scene.SnapshotParameters;
+import it.polimi.ingsw.psp26.view.gui.cache.snapshots.SnapshotCache;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class LightEffects {
@@ -29,12 +28,7 @@ public class LightEffects {
     }
 
     private static Image addShadow(Image image, DropShadow dropShadow) {
-        ImageView imageView = new ImageView(image);
-        imageView.setEffect(dropShadow);
-
-        SnapshotParameters snapshotParameters = new SnapshotParameters();
-        snapshotParameters.setFill(Color.TRANSPARENT);
-        return imageView.snapshot(snapshotParameters, null);
+        return SnapshotCache.getInstance().getShadowedImage(image, dropShadow);
     }
 
     public static Image addLightEffects(Image image, float ratio) {
@@ -61,5 +55,4 @@ public class LightEffects {
     public static Image addSelectionShadow(Image image, Color color) {
         return addShadow(image, getSelectionShadow(color));
     }
-
 }

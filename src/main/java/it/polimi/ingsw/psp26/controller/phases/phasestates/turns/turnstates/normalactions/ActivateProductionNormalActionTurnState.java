@@ -25,6 +25,8 @@ import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
 public class ActivateProductionNormalActionTurnState extends TurnState {
 
+    private final String payResourceSelectionMessage = "Choose resource to pay:";
+    private final String returnResourceSelectionMessage = "Choose resource to get back:";
     private List<Production> productionActivated = new ArrayList<>();
     private List<Resource> unknownCostResources = new ArrayList<>();
     private List<Resource> unknownProdResources = new ArrayList<>();
@@ -105,7 +107,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                         unknownCostResources = castElements(Resource.class, message.getListPayloads());
 
                         if (numOfUnknownProd != 0) {
-                            sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
+                            sendGeneralMessage(turn, returnResourceSelectionMessage);
 
                             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
                             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE));
@@ -124,7 +126,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 case UNDO_OPTION_SELECTED:
                     turn.changeState(new ChooseNormalActionTurnState(turn));
                     turn.play(message);
-                    turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " went back on their steps");
+                    turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " went back on his steps");
                     break;
 
 
@@ -203,7 +205,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
 
         } else {
 
-            sendErrorMessage(turn, "Too many production activated or wrong use of the resources");
+            sendErrorMessage(turn, "Too many productions activated or wrong use of the resources...");
             turn.changeState(new ChooseNormalActionTurnState(turn));
         }
 
@@ -221,7 +223,7 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                     new MultipleChoicesMessage(
                             turn.getTurnPlayer().getSessionToken(),
                             CHOICE_PRODUCTIONS_TO_ACTIVATE,
-                            "Choose the production that you want to activate:",
+                            "Choose the productions to activate:",
                             1, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().size(),
                             true,
                             turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().toArray(new Object[0])
@@ -319,18 +321,18 @@ public class ActivateProductionNormalActionTurnState extends TurnState {
                 numOfUnknownProd += production.getProductionReturn().get(Resource.UNKNOWN);
         }
         if (numOfUnknownCost != 0 & turn.getTurnPlayer().getPersonalBoard().getAllAvailableResources().size() <= 1) {
-            sendGeneralMessage(turn, "Not enough resources to activate base power");
+            sendGeneralMessage(turn, "Not enough resources to activate base power.");
             turn.changeState(new ChooseNormalActionTurnState(turn));
             turn.play(message);
             return;
         }
         if (numOfUnknownCost != 0) {
-            sendGeneralMessage(turn, "Choose the resource to pay that replaces the unknown resource in the production:");
+            sendGeneralMessage(turn, payResourceSelectionMessage);
             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownCost, true));
             turn.play(message);
 
         } else if (numOfUnknownProd != 0) {
-            sendGeneralMessage(turn, "Choose the resource that you want back of the unknown resource in the production:");
+            sendGeneralMessage(turn, returnResourceSelectionMessage);
             turn.changeState(new OneResourceTurnState(turn, this, numOfUnknownProd, false));
             turn.play(message);
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui;
 
+import it.polimi.ingsw.psp26.view.gui.cache.ImageLoaderCache;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -13,7 +14,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getCompletePath;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
@@ -56,8 +56,8 @@ public class FramePane {
     private static StackPane addBackground(Pane content, String backgroundFileName, boolean lightEffects, float lightRatio, boolean setSize, int width, int height) {
         StackPane stackPane = new StackPane();
 
-        Image backgroundImage = new Image(
-                getCompletePath(backgroundFileName),
+        Image backgroundImage = ImageLoaderCache.getInstance().loadImageFromFile(
+                backgroundFileName,
                 ((setSize) ? width : 1.2f * stackPane.getWidth()),
                 ((setSize) ? height : 1.2f * stackPane.getHeight()),
                 false, true

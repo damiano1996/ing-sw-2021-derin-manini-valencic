@@ -8,7 +8,7 @@ public class NotificationsFIFO {
 
     private static NotificationsFIFO instance;
     private final int maxFIFOSize;
-    private final List<String> notifications;
+    private List<String> notifications;
     private boolean updated;
 
     private NotificationsFIFO(int maxFIFOSize) {
@@ -58,10 +58,10 @@ public class NotificationsFIFO {
 
 
     /**
-     * Creates a new FIFO instance
+     * Creates a new List of notifications
      */
     public synchronized void resetFIFO() {
-        instance = new NotificationsFIFO(10);
+        notifications = new ArrayList<>();
     }
 
 }

@@ -79,10 +79,6 @@ public class CLI implements ViewInterface {
     public void start() {
         try {
             this.client = new Client(this);
-
-            // Starting the Thread to print notifications
-            startLiveUpdate();
-
             displayLogIn();
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,9 +91,7 @@ public class CLI implements ViewInterface {
      * Used in printTitle() method
      */
     private void printTitle() {
-        notificationStackPrinter.hideNotifications();
         cliUtils.cls();
-
         pw.print(Color.GREEN.setColor());
         pw.flush();
         cliUtils.printFigure("/titles/MainTitle", 1, 10);
@@ -146,18 +140,20 @@ public class CLI implements ViewInterface {
                     cliUtils.vSpace(3);
                     pw.print(cliUtils.hSpace(100) + "Enter IP-Address: ");
                     pw.flush();
-                    
                     String serverIP = in.nextLine();
+                    
                     client.initializeNetworkHandler(nickname, password, serverIP);
-
-                    notificationStackPrinter.restoreStackView();
-                    client.viewNext();
                     break;
                     
                 default:
                     break;
             }
         }
+
+        // Starting the Thread to print notifications
+        if (client.getNickname() != null) startLiveUpdate();
+        
+        client.viewNext();
     }
 
     @Override

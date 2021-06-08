@@ -13,7 +13,6 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import java.io.PrintWriter;
 import java.util.*;
 
-import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 import static it.polimi.ingsw.psp26.view.ViewUtils.getSelectedDevelopmentCard;
 
 public class DevelopmentCardsCli {
@@ -345,7 +344,7 @@ public class DevelopmentCardsCli {
         while (!isCardChosen) {
 
             displayDevelopmentGrid(developmentCardsGrid);
-            printPlayerResources(playerResources, 39, 135);
+            cliUtils.printPlayerResources(playerResources, 39, 135);
 
             if (printErrorString)
                 cliUtils.pPCS("THE DESIRED CARD IS NOT AVAILABLE! Please try again", Color.RED, 30, 135);

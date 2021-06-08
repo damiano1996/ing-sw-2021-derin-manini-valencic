@@ -8,8 +8,6 @@ import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import java.io.PrintWriter;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.utils.ViewUtils.getResourcesNumber;
-
 public class DepotCli {
 
     private final PrintWriter pw;
@@ -31,10 +29,10 @@ public class DepotCli {
     public void displayStrongbox(List<Resource> strongbox, int startingRow, int startingColumn) {
         cliUtils.printFigure("Strongbox", startingRow, startingColumn);
 
-        printStrongboxResources(Resource.STONE, getResourcesNumber(strongbox, Resource.STONE), startingRow, startingColumn);
-        printStrongboxResources(Resource.SERVANT, getResourcesNumber(strongbox, Resource.SERVANT), startingRow, startingColumn);
-        printStrongboxResources(Resource.SHIELD, getResourcesNumber(strongbox, Resource.SHIELD), startingRow, startingColumn);
-        printStrongboxResources(Resource.COIN, getResourcesNumber(strongbox, Resource.COIN), startingRow, startingColumn);
+        printStrongboxResources(Resource.STONE, cliUtils.getResourcesNumber(strongbox, Resource.STONE), startingRow, startingColumn);
+        printStrongboxResources(Resource.SERVANT, cliUtils.getResourcesNumber(strongbox, Resource.SERVANT), startingRow, startingColumn);
+        printStrongboxResources(Resource.SHIELD, cliUtils.getResourcesNumber(strongbox, Resource.SHIELD), startingRow, startingColumn);
+        printStrongboxResources(Resource.COIN, cliUtils.getResourcesNumber(strongbox, Resource.COIN), startingRow, startingColumn);
     }
 
 

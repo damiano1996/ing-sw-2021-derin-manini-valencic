@@ -22,8 +22,6 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import java.io.PrintWriter;
 import java.util.*;
 
-import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
-
 public class CliTest {
 
     private final CLI cli;
@@ -163,7 +161,7 @@ public class CliTest {
         resources.add(Resource.STONE);
         resources.add(Resource.STONE);
 
-        printPlayerResources(resources, 10, 10);
+        cliUtils.printPlayerResources(resources, 10, 10);
         in.nextLine();
     }
 

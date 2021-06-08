@@ -17,7 +17,6 @@ import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.NotificationsFIFO;
-import it.polimi.ingsw.psp26.utils.ViewUtils;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
@@ -630,7 +629,7 @@ public class CLI implements ViewInterface {
             if (item.equals("u")) throw new UndoOptionSelectedException();
 
         if (item.equals("c") && numOfChoices >= minChoices) throw new ConfirmationException();
-        if (item.isEmpty() || ViewUtils.checkAsciiRange(item.charAt(0))) throw new IndexOutOfBoundsException();
+        if (item.isEmpty() || cliUtils.checkAsciiRange(item.charAt(0))) throw new IndexOutOfBoundsException();
 
         int itemInt = Integer.parseInt(item) - 1;
         if (itemInt < 0 || itemInt >= nChoices) throw new IndexOutOfBoundsException();

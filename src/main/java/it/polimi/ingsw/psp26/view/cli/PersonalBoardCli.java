@@ -14,8 +14,6 @@ import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import java.io.PrintWriter;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
-
 public class PersonalBoardCli {
 
     private final PrintWriter pw;
@@ -204,7 +202,7 @@ public class PersonalBoardCli {
         cliUtils.clns();
 
         cliUtils.printFigure("/titles/ActivateProductionTitle", 1, 18);
-        printPlayerResources(playerResource, 29, 18);
+        cliUtils.printPlayerResources(playerResource, 29, 18);
         printProductionBooks(productions);
     }
 

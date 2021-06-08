@@ -4,13 +4,10 @@ import it.polimi.ingsw.psp26.exceptions.UndoOptionSelectedException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.utils.ViewUtils;
 
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
-
-import static it.polimi.ingsw.psp26.utils.ViewUtils.printPlayerResources;
 
 public class MarketCli {
 
@@ -102,7 +99,7 @@ public class MarketCli {
     public int displayMarketSelection(MarketTray marketTray, List<Resource> playerResources) throws UndoOptionSelectedException {
         cliUtils.cls();
         displayMarketScreen(marketTray);
-        printPlayerResources(playerResources, 38, 145);
+        cliUtils.printPlayerResources(playerResources, 38, 145);
         cliUtils.pPCS("Enter 'u' (undo) if you want to exit from Market screen.", Color.WHITE, 45, 21);
         cliUtils.pPCS("Choose a number between 1 to 7 where 1-3 refers to rows and 4-7 refers to columns: ", Color.WHITE, 46, 21);
 
@@ -137,7 +134,7 @@ public class MarketCli {
 
         if (marketString.isEmpty()) throw new IndexOutOfBoundsException();
         if (marketString.equals("u")) throw new UndoOptionSelectedException();
-        if (ViewUtils.checkAsciiRange(marketString.charAt(0))) throw new IndexOutOfBoundsException();
+        if (cliUtils.checkAsciiRange(marketString.charAt(0))) throw new IndexOutOfBoundsException();
 
         marketIndex = Integer.parseInt(marketString) - 1;
         if (marketIndex < 0 || marketIndex > 6) throw new IndexOutOfBoundsException();

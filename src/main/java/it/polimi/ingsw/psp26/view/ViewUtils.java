@@ -103,28 +103,6 @@ public class ViewUtils {
     //--------------------------------------------//
 
     /**
-     * If it's not possible to change Resources between two Depots, restores the original situation
-     *
-     * @param warehouse                The Warehouse that contains the depots
-     * @param sourceDepot              The source Depot for the change
-     * @param destinationDepot         The destination Depot for the change
-     * @param tempResourcesSource      A temporary List of the source Depot's Resources
-     * @param tempResourcesDestination A temporary List of the destination Depot's Resources
-     */
-    public static void restoreOriginalSituation(Warehouse warehouse, int sourceDepot, int destinationDepot, List<Resource> tempResourcesSource, List<Resource> tempResourcesDestination) {
-        warehouse.getAllDepots().get(sourceDepot).grabAllResources();
-        warehouse.getAllDepots().get(destinationDepot).grabAllResources();
-
-        try {
-            addMultipleResources(warehouse, sourceDepot, tempResourcesSource);
-            addMultipleResources(warehouse, destinationDepot, tempResourcesDestination);
-        } catch (CanNotAddResourceToDepotException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
      * Add a list of resources to a depot
      *
      * @param warehouse    The warehouse from where the Depot is taken
@@ -132,7 +110,7 @@ public class ViewUtils {
      * @param resourceList The resources to add
      * @throws CanNotAddResourceToDepotException Thrown if the resources can't be added to the depot
      */
-    public static void addMultipleResources(Warehouse warehouse, int depotIndex, List<Resource> resourceList) throws CanNotAddResourceToDepotException {
+    private static void addMultipleResources(Warehouse warehouse, int depotIndex, List<Resource> resourceList) throws CanNotAddResourceToDepotException {
         for (Resource resource : resourceList) warehouse.addResourceToDepot(depotIndex, resource);
     }
 
@@ -168,6 +146,28 @@ public class ViewUtils {
             addMultipleResources(warehouse, destinationDepot, tempResourcesSource);
         } catch (CanNotAddResourceToDepotException e) {
             restoreOriginalSituation(warehouse, sourceDepot, destinationDepot, tempResourcesSource, tempResourcesDestination);
+        }
+    }
+
+
+    /**
+     * If it's not possible to change Resources between two Depots, restores the original situation
+     *
+     * @param warehouse                The Warehouse that contains the depots
+     * @param sourceDepot              The source Depot for the change
+     * @param destinationDepot         The destination Depot for the change
+     * @param tempResourcesSource      A temporary List of the source Depot's Resources
+     * @param tempResourcesDestination A temporary List of the destination Depot's Resources
+     */
+    private static void restoreOriginalSituation(Warehouse warehouse, int sourceDepot, int destinationDepot, List<Resource> tempResourcesSource, List<Resource> tempResourcesDestination) {
+        warehouse.getAllDepots().get(sourceDepot).grabAllResources();
+        warehouse.getAllDepots().get(destinationDepot).grabAllResources();
+
+        try {
+            addMultipleResources(warehouse, sourceDepot, tempResourcesSource);
+            addMultipleResources(warehouse, destinationDepot, tempResourcesDestination);
+        } catch (CanNotAddResourceToDepotException e) {
+            e.printStackTrace();
         }
     }
 

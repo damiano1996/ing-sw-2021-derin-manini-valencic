@@ -13,6 +13,7 @@ public class NotificationStackPrinter {
     private static final int STACK_HEIGHT = 30;
     private static final int MAX_NUMBER_OF_STRINGS = 10;
     private static final int STACK_WIDTH = 30;
+    
     private final CliUtils cliUtils;
     private List<String> notificationCopy;
     private boolean isStackPrintable;

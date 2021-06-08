@@ -47,12 +47,11 @@ public class WaitingScreenStarter {
             isWaiting = true;
 
             //The thread cycles the different Frames reproducing a waiting icon
-            //TimeUnit.MILLISECONDS.sleep() is used to give a better viewing experience
             waitingScreenThread = new Thread(() -> {
 
                 //This wait will display correctly the starting screen
                 try {
-                    TimeUnit.MILLISECONDS.sleep(150);
+                    TimeUnit.MILLISECONDS.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -64,6 +63,7 @@ public class WaitingScreenStarter {
                     cliUtils.printFigure("/waitingscreenframes/WaitingScreenFrame" + frameCounter, 10, 101);
 
                     try {
+                        //TimeUnit.MILLISECONDS.sleep() is used to give a better viewing experience
                         TimeUnit.MILLISECONDS.sleep(250);
                     } catch (InterruptedException e) {
                         e.printStackTrace();

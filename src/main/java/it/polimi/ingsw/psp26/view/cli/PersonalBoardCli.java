@@ -125,15 +125,18 @@ public class PersonalBoardCli {
      * @param startingColumn The starting column where the Player's Leader Cards are going to be printed
      */
     public void displayPlayerLeaderCards(List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
+        cliUtils.clns();
         cliUtils.printFigure("/titles/MyLeaderCardsTitle", startingRow, startingColumn + 20);
 
         leaderCardsCli.printMultipleLeaders(leaderCards, 15);
 
         //print the String ACTIVE or INACTIVE under each LeaderCard
         for (int i = 0; i < leaderCards.size(); i++)
-            isLeaderCardActive(leaderCards.get(i), 32, leaderCardsCli.getPrintMultipleLeadersStartingColumn(leaderCards.size()) + 7 + (45 * i));
-
-        cliUtils.pPCS("Press Enter to exit this view.", Color.WHITE, 40, startingColumn + 20);
+            isLeaderCardActive(
+                    leaderCards.get(i),
+                    32,
+                    leaderCardsCli.getPrintMultipleLeadersStartingColumn(leaderCards.size()) + 7 + (45 * i)
+            );
     }
 
 

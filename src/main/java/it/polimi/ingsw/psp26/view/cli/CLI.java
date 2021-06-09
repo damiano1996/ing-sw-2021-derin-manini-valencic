@@ -468,8 +468,11 @@ public class CLI implements ViewInterface {
                 break;
 
             case CHOICE_NORMAL_ACTION:
+                choiceNormalLeaderActionExecute(choices, true);
+                break;
+
             case CHOICE_LEADER_ACTION:
-                choiceNormalLeaderActionExecute(choices);
+                choiceNormalLeaderActionExecute(choices, false);
                 break;
 
             case CHOICE_LEADERS:
@@ -550,16 +553,49 @@ public class CLI implements ViewInterface {
     /**
      * Executes the corresponding switch case in displayChoices()
      *
-     * @param choices The choices to display
+     * @param choices           The choices to display
+     * @param askLeadersShowing True if the method asks the Player if he wants to see its Leader Cards, false otherwise
      */
-    private void choiceNormalLeaderActionExecute(List<Object> choices) {
+    private void choiceNormalLeaderActionExecute(List<Object> choices, boolean askLeadersShowing) {
         // Used in displayChoices executingTask
         // Restoring the notificationStack here since previous methods may have hide it
         notificationStackPrinter.restoreStackView();
 
         personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
+
+        askForLeaderShowing(askLeadersShowing);
+
         cliUtils.setCursorPosition(47, 1);
         displayMultipleStringChoices(choices);
+    }
+
+
+    /**
+     * Before selecting a Leader/Normal action, asks the player if he wants to see its Leader Cards
+     *
+     * @param habilitateShowing Set it to true to habilitate the execution of the method, set it to false to not execute the method
+     */
+    private void askForLeaderShowing(boolean habilitateShowing) {
+        if (habilitateShowing && client.getCachedModel().getMyPlayerCached().getObject().getLeaderCards().size() > 0) {
+            String displayLeadersChoice;
+
+            cliUtils.setCursorPosition(48, 1);
+            pw.print(cliUtils.hSpace(5) + "Type 'L' if you want to display leaders, otherwise press Enter: ");
+            pw.flush();
+
+            displayLeadersChoice = in.nextLine();
+
+            if (displayLeadersChoice.equalsIgnoreCase("l")) {
+                personalBoardCli.displayPlayerLeaderCards(client.getCachedModel().getMyPlayerCached().getObject().getLeaderCards(), 1, 1);
+                cliUtils.vSpace(5);
+                pw.print(cliUtils.hSpace(5) + "Press Enter to go back to the main action selection.");
+                pw.flush();
+                in.nextLine();
+            }
+
+            cliUtils.reverseClearLine(48, 200);
+            personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
+        }
     }
 
 
@@ -622,6 +658,7 @@ public class CLI implements ViewInterface {
             } catch (ConfirmationException e) {
                 break;
             }
+
         }
 
         return choices;
@@ -789,7 +826,8 @@ public class CLI implements ViewInterface {
             MessageSynchronizedFIFO.getInstance().lookingForNext();
             waitingForTurn.set(false);
             cliUtils.vSpace(2);
-            pw.print(cliUtils.hSpace(4) + "OPPONENTS FINISHED THEIR TURN!");
+            pw.println(cliUtils.hSpace(4) + "OPPONENTS FINISHED THEIR TURN!");
+            pw.print(cliUtils.hSpace(4) + "Press Enter to play your turn.");
             pw.flush();
         }).start();
 
@@ -810,7 +848,6 @@ public class CLI implements ViewInterface {
             if (client.getCachedModel().getNumberOfOpponents() > 0) {
                 try {
                     displayOpponentPersonalBoard();
-                    in.nextLine();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
@@ -818,7 +855,7 @@ public class CLI implements ViewInterface {
             }
         }
 
-        displayNext();
+        client.viewNext();
     }
 
 
@@ -833,6 +870,7 @@ public class CLI implements ViewInterface {
 
     /**
      * Displays the chosen opponent Personal Board
+     * If the Player wants to update the current opponent view it has to enter the letter 'r'
      *
      * @throws InterruptedException The thread is interrupted
      */
@@ -842,13 +880,23 @@ public class CLI implements ViewInterface {
         pw.flush();
 
         int opponentNumber = getCorrectOpponentNumber(client.getCachedModel().getNumberOfOpponents());
-        Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObject();
+        String reloadOpponentChoice;
 
-        executingTask = true;
-        personalBoardCli.displayPersonalBoard(opponent, client.isMultiplayerMode());
-        cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board", Color.WHITE, 50, 5);
-        cliUtils.pPCS("Press Enter to go back to your Personal Board view.", Color.WHITE, 52, 5);
-        executingTask = false;
+        do {
+            Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObject();
+
+            executingTask = true;
+            personalBoardCli.displayPersonalBoard(opponent, client.isMultiplayerMode());
+            cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board.", Color.WHITE, 50, 5);
+            cliUtils.pPCS("Enter 'r' if you want to reload an updated version of " + opponent.getNickname() + "Personal Board.", Color.WHITE, 51, 5);
+            cliUtils.pPCS("Press Enter to go back to your Personal Board view.", Color.WHITE, 52, 5);
+            cliUtils.vSpace(2);
+            pw.print(cliUtils.hSpace(4) + "Your choice: ");
+            pw.flush();
+            executingTask = false;
+
+            reloadOpponentChoice = in.nextLine();
+        } while (reloadOpponentChoice.equals("r"));
     }
 
 

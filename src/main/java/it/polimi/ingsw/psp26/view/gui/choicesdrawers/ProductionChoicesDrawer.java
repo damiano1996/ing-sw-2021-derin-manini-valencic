@@ -50,14 +50,14 @@ public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
 
                 // If the Player doesn't have a DevelopmentCard Production, checks if it has a Leader Production 
                 // equals to the one contained in the ButtonContainer
-                image = loadImage(getLeaderProductionName(productionButtonContainer.getContainedObject()), (int) (200 * ratio));
+                image = loadImage(getLeaderProductionName(productionButtonContainer.getContainedObject()), (int) (400 * ratio));
                 image = setRoundedCorners(image, ratio);
                 image = addLightEffects(image, ratio);
 
             } catch (PlayerHasNoLeaderProduction playerHasNoLeaderProduction) {
 
                 // If the Production contained in the ButtonContainer doesn't match in any of the 2 cases above, loads a baseProduction 
-                image = loadImage("production/base_production.png", (int) (200 * ratio));
+                image = loadImage("production/base_production.png", (int) (400 * ratio));
                 image = addLightEffects(image, ratio);
 
             }

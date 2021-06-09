@@ -46,7 +46,7 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Printrint DevelopmentCards.
+     * Prints a DevelopmentCard
      *
      * @param developmentCard The desired card to print
      * @param startingRow     The row where the Card will be printed
@@ -72,7 +72,7 @@ public class DevelopmentCardsCli {
      *
      * @param startingRow    The row where the Card will be printed
      * @param startingColumn The column where the Card will be printed
-     * @param cardStackSize  How many cards are on the top of each othe
+     * @param cardStackSize  How many cards are on the top of each other
      */
     private void printDevelopmentCardBorder(int startingRow, int startingColumn, int cardStackSize) {
         if (cardStackSize > 1)
@@ -350,8 +350,8 @@ public class DevelopmentCardsCli {
                 cliUtils.pPCS("THE DESIRED CARD IS NOT AVAILABLE! Please try again", Color.RED, 30, 135);
             printErrorString = false;
 
-            cardLevel = askForLevelAndColor("Enter the Level [first - second - third] of the card you want: ", true);
-            cardColor = askForLevelAndColor("Enter the Color [green - blue - yellow - purple] of the card you want: ", false);
+            cardLevel = askForLevelAndColor("Enter the card Level [first - second - third]: ", true);
+            cardColor = askForLevelAndColor("Enter the card Color [green - blue - yellow - purple]: ", false);
 
             isCardChosen = isCardAvailable(developmentCardsGrid, cardLevel, cardColor);
             if (!isCardChosen) {
@@ -421,6 +421,7 @@ public class DevelopmentCardsCli {
      * @param color                The Color of the desired Card
      * @return True if the card is available, false otherwise
      */
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private boolean isCardAvailable(DevelopmentCardsGrid developmentCardsGrid, String level, String color) {
         Color cardColor = Arrays.stream(Color.values()).filter(x -> x.getName().equalsIgnoreCase(color)).findFirst().get();
         Level cardLevel = Arrays.stream(Level.values()).filter(x -> x.getLevelName().equalsIgnoreCase(level)).findFirst().get();

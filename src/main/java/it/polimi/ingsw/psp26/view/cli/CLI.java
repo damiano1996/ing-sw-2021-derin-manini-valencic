@@ -576,6 +576,7 @@ public class CLI implements ViewInterface {
      * @param habilitateShowing Set it to true to habilitate the execution of the method, set it to false to not execute the method
      */
     private void askForLeaderShowing(boolean habilitateShowing) {
+        // executingTask is always true while executing this method
         if (habilitateShowing && client.getCachedModel().getMyPlayerCached().getObject().getLeaderCards().size() > 0) {
             String displayLeadersChoice;
 

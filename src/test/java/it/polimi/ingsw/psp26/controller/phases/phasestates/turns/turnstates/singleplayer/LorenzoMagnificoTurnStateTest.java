@@ -26,7 +26,7 @@ public class LorenzoMagnificoTurnStateTest {
         Phase phase = new Phase(virtualView.getMatchController());
         phase.getMatchController().addObserver(mitm);
 
-        phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname", "sessionToken"));
+        phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "NiCkNaMe", "SeSsIoNtOkEn"));
         phase.getMatchController().setMaxNumberOfPlayers(1);
         turn = new Turn(
                 new PlayingPhaseState(phase),
@@ -45,8 +45,8 @@ public class LorenzoMagnificoTurnStateTest {
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SKIP_LEADER_ACTION));
 
-        assertEquals(numberOfTokens, turn.getMatchController().getMatch().getActionTokens().size() + 1);
         assertEquals(mitm.getMessages().get(1).getMessageType(), MessageType.LORENZO_PLAY);
+        assertEquals(numberOfTokens - 1, turn.getMatchController().getMatch().getActionTokens().size());
     }
 
 }

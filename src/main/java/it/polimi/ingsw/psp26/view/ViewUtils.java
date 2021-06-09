@@ -184,6 +184,7 @@ public class ViewUtils {
      * @param cardColor            The desired Development Card Color
      * @return The desired Development Card
      */
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static DevelopmentCard getSelectedDevelopmentCard(DevelopmentCardsGrid developmentCardsGrid, String cardLevel, String cardColor) {
         return developmentCardsGrid.getAllVisibleCards().stream().filter(x -> x.getDevelopmentCardType().getColor().getName().equalsIgnoreCase(cardColor))
                 .filter(x -> x.getDevelopmentCardType().getLevel().getLevelName().equalsIgnoreCase(cardLevel)).findFirst().get();

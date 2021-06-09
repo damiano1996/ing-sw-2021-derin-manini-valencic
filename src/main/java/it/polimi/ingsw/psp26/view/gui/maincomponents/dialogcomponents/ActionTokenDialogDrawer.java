@@ -1,10 +1,10 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents;
 
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.view.gui.SoundManager;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.ActionTokenDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.RatioDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ActionTokenDrawer;
+import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.view.gui;
+package it.polimi.ingsw.psp26.view.gui.sounds;
 
 import it.polimi.ingsw.psp26.view.gui.cache.MediaLoaderCache;
 import javafx.scene.media.AudioClip;

@@ -18,7 +18,7 @@ import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getResourceImage;
 
 public class WaitingScreen {
 

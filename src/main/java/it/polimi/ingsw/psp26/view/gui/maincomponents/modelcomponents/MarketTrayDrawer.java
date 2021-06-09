@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
@@ -6,9 +6,8 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.view.gui.SoundManager;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
+import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -39,12 +38,8 @@ public class MarketTrayDrawer extends RatioDrawer {
 
         Image marketBoardImage = loadImage("market/market_board.png", initMaxWidth);
         marketBoardImage = addLightEffects(marketBoardImage, ratio);
-
-        Canvas canvas = new Canvas(marketBoardImage.getWidth(), marketBoardImage.getHeight());
-        pane.getChildren().add(canvas);
-
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.drawImage(marketBoardImage, 0, 0);
+        ImageView imageView = getImageView(marketBoardImage, 0, 0);
+        pane.getChildren().add(imageView);
 
         drawMarketTray();
         drawGridMarbles();

@@ -1,12 +1,12 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents;
 
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -19,7 +19,7 @@ import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getResourceImage;
 
 public class PersonalBoardDrawer extends RatioDrawer {
 
@@ -41,12 +41,8 @@ public class PersonalBoardDrawer extends RatioDrawer {
         Image personalboardImage = loadImage("personalboard.png", initMaxWidth);
         personalboardImage = setRoundedCorners(personalboardImage, ratio);
         personalboardImage = addLightEffects(personalboardImage, ratio);
-
-        Canvas canvas = new Canvas(personalboardImage.getWidth(), personalboardImage.getHeight());
-        pane.getChildren().add(canvas);
-
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.drawImage(personalboardImage, 0, 0);
+        ImageView imageView = getImageView(personalboardImage, 0, 0);
+        pane.getChildren().add(imageView);
 
         drawInkwell();
         drawWarehouseBaseDepots();

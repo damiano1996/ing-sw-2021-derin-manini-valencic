@@ -1,6 +1,6 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.switchdepots;
 
-import it.polimi.ingsw.psp26.view.gui.SoundManager;
+import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;

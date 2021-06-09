@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents;
 
 
 import javafx.geometry.Insets;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.view.gui;
+package it.polimi.ingsw.psp26.view.gui.maincomponents;
 
 import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.model.Player;
@@ -6,9 +6,8 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.NotificationsFIFO;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardsGridDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.MarketTrayDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.NotificationStackDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.DevelopmentCardsGridDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.MarketTrayDrawer;
 import javafx.scene.CacheHint;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -19,7 +18,7 @@ import javafx.stage.Stage;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.PlayerDrawer.drawPlayer;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.PlayerDrawer.drawPlayer;
 
 public class PlayingPane {
 

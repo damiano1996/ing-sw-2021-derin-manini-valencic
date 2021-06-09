@@ -9,7 +9,7 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getMinBetweenWindowWidthAndHeight;
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getCard;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getCard;
 
 public class LeaderCardChoicesDrawer implements ChoicesDrawer<LeaderCard> {
 

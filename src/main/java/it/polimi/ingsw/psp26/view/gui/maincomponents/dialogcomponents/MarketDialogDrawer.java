@@ -1,10 +1,10 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents;
 
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
+import it.polimi.ingsw.psp26.model.MarketTray;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.view.gui.SoundManager;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.DevelopmentCardsGridDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.RatioDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.MarketTrayDrawer;
+import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -14,16 +14,16 @@ import javafx.scene.text.Text;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
-public class DevelopmentCardsGridDialogDrawer extends RatioDrawer {
+public class MarketDialogDrawer extends RatioDrawer {
 
     private final Client client;
-    private final DevelopmentCardsGridDrawer developmentGridDrawer;
+    private final MarketTrayDrawer marketTrayDrawer;
 
-    public DevelopmentCardsGridDialogDrawer(Client client, DevelopmentCardsGrid developmentCardsGrid, int maxWidth) {
+    public MarketDialogDrawer(Client client, MarketTray marketTray, int maxWidth) {
         super(maxWidth);
 
         this.client = client;
-        developmentGridDrawer = new DevelopmentCardsGridDrawer(client, developmentCardsGrid, initMaxWidth / 2);
+        marketTrayDrawer = new MarketTrayDrawer(client, marketTray, initMaxWidth / 2);
     }
 
     @Override
@@ -32,28 +32,27 @@ public class DevelopmentCardsGridDialogDrawer extends RatioDrawer {
         VBox rootPane = new VBox(10 * ratio);
         rootPane.setAlignment(Pos.CENTER);
 
-        Text text = new Text("Development Cards");
+        Text text = new Text("Market");
         text.setId("title");
         text.setStyle("-fx-font-size: " + 100 * ratio + ";");
         rootPane.getChildren().add(text);
 
         Text description = new Text(
-                "*Click on the card that you want to buy.");
+                "*Click on the arrow to obtain the resources on the corresponding row (or column).");
         description.setId("title");
         description.setStyle("-fx-font-size: " + 70 * ratio + ";");
         rootPane.getChildren().add(description);
 
-        rootPane.getChildren().add(new HBox(developmentGridDrawer.draw()));
+        rootPane.getChildren().add(new HBox(marketTrayDrawer.draw()));
 
         Button confirmationButton = new Button("Undo");
         confirmationButton.setId("undo-button");
         confirmationButton.setOnAction(actionEvent -> {
 
             SoundManager soundManager = SoundManager.getInstance();
-
             soundManager.setSoundEffect("button_click_01.wav");
-            client.sendUndoMessage();
 
+            client.sendUndoMessage();
             closeParentStageOfActionEvent(actionEvent);
             client.viewNext();
         });

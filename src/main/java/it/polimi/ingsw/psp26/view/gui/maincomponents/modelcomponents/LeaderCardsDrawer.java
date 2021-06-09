@@ -1,7 +1,8 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents;
 
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -11,7 +12,7 @@ import java.util.List;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addTurnCardAnimation;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.*;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.*;
 
 public class LeaderCardsDrawer extends RatioDrawer {
 

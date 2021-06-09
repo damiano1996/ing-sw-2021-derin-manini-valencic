@@ -16,43 +16,49 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
-import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_WIDTH;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getMinBetweenWindowWidthAndHeight;
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getCard;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getCard;
 
 public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
 
     private final Client client;
+    private final float resizingFactor;
 
-    public ProductionChoicesDrawer(Client client) {
+    public ProductionChoicesDrawer(Client client, int numberOfChoices) {
         this.client = client;
+        this.resizingFactor = 1.1f - 0.15f * numberOfChoices;
     }
 
     @Override
     public ButtonContainer<Production> decorateButtonContainer(ButtonContainer<Production> productionButtonContainer) {
         Image image;
+        System.out.println("ProductionChoicesDrawer - resizing factor: " + resizingFactor);
+        float ratio = getMinBetweenWindowWidthAndHeight() / REFERENCE_WIDTH * resizingFactor;
+        System.out.println("ProductionChoicesDrawer - Ratio: " + ratio);
 
         try {
 
             // Checking if the Player has a DevelopmentCard Production equals to the one contained in the ButtonContainer
             DevelopmentCard developmentCard = getDevelopmentCard(productionButtonContainer.getContainedObject());
-            image = getCard(developmentCard, (float) (getGeneralRatio() * 0.5));
+            image = getCard(developmentCard, ratio);
 
         } catch (PlayerHasNotDevelopmentCardProduction playerHasNotDevelopmentCardProduction) {
             try {
 
                 // If the Player doesn't have a DevelopmentCard Production, checks if it has a Leader Production 
                 // equals to the one contained in the ButtonContainer
-                image = loadImage(getLeaderProductionName(productionButtonContainer.getContainedObject()), (int) (200 * getGeneralRatio()));
-                image = setRoundedCorners(image, getGeneralRatio());
-                image = addLightEffects(image, (float) (getGeneralRatio() * 0.5));
+                image = loadImage(getLeaderProductionName(productionButtonContainer.getContainedObject()), (int) (200 * ratio));
+                image = setRoundedCorners(image, ratio);
+                image = addLightEffects(image, ratio);
 
             } catch (PlayerHasNoLeaderProduction playerHasNoLeaderProduction) {
 
                 // If the Production contained in the ButtonContainer doesn't match in any of the 2 cases above, loads a baseProduction 
-                image = loadImage("production/base_production.png", (int) (200 * getGeneralRatio()));
-                image = addLightEffects(image, (float) (getGeneralRatio() * 0.5));
+                image = loadImage("production/base_production.png", (int) (200 * ratio));
+                image = addLightEffects(image, ratio);
 
             }
         }

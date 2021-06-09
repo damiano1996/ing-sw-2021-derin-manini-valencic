@@ -1,8 +1,9 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents;
 
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.view.gui.GUIUtils;
 import it.polimi.ingsw.psp26.view.gui.effects.LightEffects;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

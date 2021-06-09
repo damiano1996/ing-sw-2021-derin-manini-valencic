@@ -1,14 +1,14 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.switchdepots;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.WarehousePlacerDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.WarehousePlacerDrawer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getResourceImage;
 
 public class DepotsSwitchableGroup {
 

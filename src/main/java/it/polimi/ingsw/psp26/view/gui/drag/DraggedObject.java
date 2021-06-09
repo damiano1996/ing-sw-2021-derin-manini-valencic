@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.view.gui.drag;
 
-import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.TargetContainer;
+import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

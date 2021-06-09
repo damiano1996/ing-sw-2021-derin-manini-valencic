@@ -16,6 +16,7 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.areImagesEqual;
 
 public class SnapshotCache {
 
+    private static final int MAX_CACHE_SIZE = 300;
     private static SnapshotCache instance;
     private final List<RoundedImageCache> roundedSnapshots;
     private List<ImageCache> shadowedSnapshots;
@@ -32,17 +33,21 @@ public class SnapshotCache {
     }
 
     public Image getShadowedImage(Image image, DropShadow dropShadow) {
+        if (shadowedSnapshots.size() > MAX_CACHE_SIZE) shadowedSnapshots.clear();
 
-        ImageCache snapshot = shadowedSnapshots
+        ImageCache imageCache = shadowedSnapshots
                 .stream()
                 .filter(x -> areImagesEqual(x.getOriginalImage(), image))
                 .findFirst()
                 .orElse(null);
 
-        if (snapshot != null) {
+        if (imageCache != null) {
 
-            System.out.println("SnapshotCache - Snapshot reloaded from local memory");
-            return snapshot.getEditedImage();
+            System.out.println(
+                    "SnapshotCache - Snapshot reloaded from local memory. " +
+                            "Saved images: " + shadowedSnapshots.size()
+            );
+            return imageCache.getEditedImage();
 
         } else {
 
@@ -58,8 +63,9 @@ public class SnapshotCache {
     }
 
     public Image getRoundedCornerImage(Image image, float ratio, int arcSize) {
+        if (roundedSnapshots.size() > MAX_CACHE_SIZE) roundedSnapshots.clear();
 
-        RoundedImageCache snapshot = roundedSnapshots
+        RoundedImageCache roundedImageCache = roundedSnapshots
                 .stream()
                 .filter(x -> areImagesEqual(
                         x.getOriginalImage(), image) &&
@@ -67,10 +73,13 @@ public class SnapshotCache {
                 .findFirst()
                 .orElse(null);
 
-        if (snapshot != null) {
+        if (roundedImageCache != null) {
 
-            System.out.println("SnapshotCache - Snapshot reloaded from local memory.");
-            return snapshot.getEditedImage();
+            System.out.println(
+                    "SnapshotCache - Snapshot reloaded from local memory. " +
+                            "Saved rounded images: " + roundedSnapshots.size()
+            );
+            return roundedImageCache.getEditedImage();
 
         } else {
 

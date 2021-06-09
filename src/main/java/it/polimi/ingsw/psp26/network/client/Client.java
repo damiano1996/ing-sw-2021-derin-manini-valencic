@@ -31,6 +31,8 @@ public class Client extends Observable<Message> {
     private int numberOfPlayers;
     private CachedModel cachedModel;
 
+    private Message lastMessage;
+
     public Client(ViewInterface viewInterface) throws IOException {
         super();
         networkHandler = new NetworkHandler(this);
@@ -54,6 +56,7 @@ public class Client extends Observable<Message> {
      */
     private void handleMessages(Message message) {
         try {
+            lastMessage = message;
             switch (message.getMessageType()) {
 
                 // -------------------------------------
@@ -270,6 +273,15 @@ public class Client extends Observable<Message> {
             notifyObservers(new Message(UNDO_OPTION_SELECTED));
         } catch (InvalidPayloadException ignored) {
         }
+    }
+
+    /**
+     * Method that calls the handleMessages(Message message) method with the last message already handled.
+     * If no message was already handled it calls viewNext().
+     */
+    public synchronized void reHandleLastMessage() {
+        if (lastMessage != null) handleMessages(lastMessage);
+        else viewNext();
     }
 
 }

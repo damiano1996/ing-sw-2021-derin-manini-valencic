@@ -20,12 +20,13 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.*;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.GlobalLeaderboardDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.LeaderboardDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.ActionTokenDialogDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.DevelopmentCardsGridDialogDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.MarketDialogDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.WarehousePlacerDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.GlobalLeaderboardDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.LeaderboardDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.ActionTokenDialogDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.DevelopmentCardsGridDialogDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.MarketDialogDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.WarehousePlacerDrawer;
+import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -42,12 +43,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
-import static it.polimi.ingsw.psp26.view.gui.PlayingPane.getPlayingPane;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.PlayingPane.getPlayingPane;
+import static java.lang.Thread.sleep;
 
 public class GUI extends Application implements ViewInterface {
 
@@ -208,7 +211,10 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
-        VBox mainContainer = new VBox(5 * getGeneralRatio());
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        System.out.println("GUI - RUNNING THREADS: " + threadSet.size());
+
+        VBox mainContainer = new VBox(10 * getGeneralRatio());
         Stage dialog = getDialog(primaryStage, mainContainer);
 
         Label label = new Label(question);
@@ -243,7 +249,7 @@ public class GUI extends Application implements ViewInterface {
                 break;
 
             case CHOICE_PRODUCTIONS_TO_ACTIVATE:
-                choicesDrawer = new ProductionChoicesDrawer(client);
+                choicesDrawer = new ProductionChoicesDrawer(client, choices.size());
                 break;
 
             default:
@@ -255,6 +261,22 @@ public class GUI extends Application implements ViewInterface {
         contentPane.setVgap(10 * getGeneralRatio());
         mainContainer.getChildren().add(contentPane);
         buttonOrCheckBox(contentPane, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
+
+        if (!messageType.equals(MessageType.MENU) &&
+                !messageType.equals(MessageType.NEW_OR_OLD) &&
+                !messageType.equals(MessageType.MULTI_OR_SINGLE_PLAYER_MODE)) {
+            Button viewBoardButton = new Button("View Board");
+            viewBoardButton.setOnAction(actionEvent -> {
+                SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+                dialog.close();
+                new AsynchronousDrawer(
+                        () -> sleep(3000),
+                        () -> client.reHandleLastMessage(),
+                        false
+                ).start();
+            });
+            mainContainer.getChildren().add(viewBoardButton);
+        }
 
         if (hasUndoOption) {
             Button undoOptionButton = new Button("Undo");

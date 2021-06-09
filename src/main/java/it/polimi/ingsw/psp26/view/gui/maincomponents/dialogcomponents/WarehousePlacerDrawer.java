@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
@@ -8,13 +8,13 @@ import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
-import it.polimi.ingsw.psp26.view.gui.SoundManager;
 import it.polimi.ingsw.psp26.view.gui.drag.DraggedObject;
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.DepotTargetContainer;
 import it.polimi.ingsw.psp26.view.gui.drag.targetstrategies.TargetContainer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.RatioDrawer;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots.DepotsSwitchableGroup;
-import it.polimi.ingsw.psp26.view.gui.modelcomponents.dialogcomponents.switchdepots.SwitchableDepot;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.switchdepots.DepotsSwitchableGroup;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.switchdepots.SwitchableDepot;
+import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -33,7 +33,7 @@ import java.util.Random;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createListToSend;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
-import static it.polimi.ingsw.psp26.view.gui.modelcomponents.ModelDrawUtils.getResourceImage;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getResourceImage;
 
 public class WarehousePlacerDrawer extends RatioDrawer {
 

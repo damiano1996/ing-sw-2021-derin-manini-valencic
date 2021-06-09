@@ -86,7 +86,10 @@ public class Server {
                 // Checking if all the players have the session token correctly loaded
                 boolean allPlayersHaveSessionToken = true;
                 for (Player player : restoredMatch.getPlayers())
-                    if (player.getSessionToken().equals("")) allPlayersHaveSessionToken = false;
+                    if (player.getSessionToken() == null) {
+                        allPlayersHaveSessionToken = false;
+                        break;
+                    }
 
                 if (allPlayersHaveSessionToken) {
                     VirtualView virtualView = new VirtualView(restoredMatch, GameSaver.getInstance().loadTurnPlayerIndex(gamePath), GameSaver.getInstance().loadTurnNumber(gamePath));

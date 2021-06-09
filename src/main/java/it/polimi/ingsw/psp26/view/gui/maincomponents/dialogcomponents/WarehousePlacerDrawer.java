@@ -33,7 +33,7 @@ import java.util.Random;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createListToSend;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
-import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getResourceImage;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getResourceImage;
 
 public class WarehousePlacerDrawer extends RatioDrawer {
 

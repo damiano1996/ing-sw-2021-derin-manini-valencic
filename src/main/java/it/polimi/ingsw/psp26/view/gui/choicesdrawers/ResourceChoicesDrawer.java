@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
-import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getResourceImage;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getResourceImage;
 
 public class ResourceChoicesDrawer implements ChoicesDrawer<Resource> {
 

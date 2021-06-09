@@ -76,7 +76,6 @@ public class Player extends Observable<SessionMessage> {
      * @return the token of the player
      */
     public String getSessionToken() {
-        if (sessionToken == null) return ""; // TODO: Why it is null sometimes after recovery?
         return sessionToken;
     }
 

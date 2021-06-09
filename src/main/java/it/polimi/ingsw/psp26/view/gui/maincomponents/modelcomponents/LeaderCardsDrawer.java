@@ -12,7 +12,7 @@ import java.util.List;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addTurnCardAnimation;
-import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.*;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.*;
 
 public class LeaderCardsDrawer extends RatioDrawer {
 

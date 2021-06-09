@@ -20,7 +20,7 @@ import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_W
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getMinBetweenWindowWidthAndHeight;
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
-import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getCard;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getCard;
 
 public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
 

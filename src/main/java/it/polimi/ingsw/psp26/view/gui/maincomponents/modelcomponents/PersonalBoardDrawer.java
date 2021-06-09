@@ -5,7 +5,6 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
-import it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +18,7 @@ import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
-import static it.polimi.ingsw.psp26.view.gui.maincomponents.ModelDrawUtils.getResourceImage;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getResourceImage;
 
 public class PersonalBoardDrawer extends RatioDrawer {
 

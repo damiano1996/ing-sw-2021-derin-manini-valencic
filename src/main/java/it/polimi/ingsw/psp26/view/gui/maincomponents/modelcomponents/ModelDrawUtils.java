@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp26.view.gui.maincomponents;
+package it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents;
 
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;

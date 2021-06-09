@@ -70,11 +70,11 @@ public class GUIUtils {
 
     public static boolean areImagesEqual(Image image1, Image image2) {
         if (image1.getWidth() != image2.getWidth() ||
-                image1.getHeight() != image1.getHeight()) return false;
+                image1.getHeight() != image2.getHeight()) return false;
 
         try {
             for (int i = 0; i < image1.getWidth(); i++)
-                for (int j = 0; j < image1.getWidth(); j++)
+                for (int j = 0; j < image1.getHeight(); j++)
                     if (image1.getPixelReader().getArgb(i, j) != image2.getPixelReader().getArgb(i, j)) return false;
         } catch (Exception e) {
             return false;

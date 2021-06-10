@@ -17,7 +17,7 @@ public interface ViewInterface {
 
 
     void displayLogIn();
-    
+
 
     void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd);
 
@@ -26,7 +26,7 @@ public interface ViewInterface {
 
 
     void displayMarketAction(MarketTray marketTray, List<Resource> playerResources);
-    
+
 
     void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption);
 
@@ -53,5 +53,5 @@ public interface ViewInterface {
 
 
     void displayGlobalLeaderboard();
-    
+
 }

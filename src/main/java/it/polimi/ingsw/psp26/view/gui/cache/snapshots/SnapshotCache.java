@@ -102,5 +102,5 @@ public class SnapshotCache {
         snapshotParameters.setFill(Color.TRANSPARENT);
         return imageView.snapshot(snapshotParameters, null);
     }
-    
+
 }

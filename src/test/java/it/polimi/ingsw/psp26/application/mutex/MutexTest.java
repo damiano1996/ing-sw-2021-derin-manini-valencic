@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class MutexTest {
 
@@ -51,7 +51,7 @@ public class MutexTest {
 
         t1.join();
         t2.join();
-        
+
         assertTrue(
                 (startT1 < startT2 && endT1 <= startT2) ||
                         (startT2 < startT1 && endT2 <= startT1)

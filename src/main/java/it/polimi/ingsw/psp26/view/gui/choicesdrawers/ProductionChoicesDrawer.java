@@ -25,18 +25,15 @@ import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.Mode
 public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
 
     private final Client client;
-    private final float resizingFactor;
 
-    public ProductionChoicesDrawer(Client client, int numberOfChoices) {
+    public ProductionChoicesDrawer(Client client) {
         this.client = client;
-        this.resizingFactor = 1.1f - 0.15f * numberOfChoices;
     }
 
     @Override
     public ButtonContainer<Production> decorateButtonContainer(ButtonContainer<Production> productionButtonContainer) {
         Image image;
-        System.out.println("ProductionChoicesDrawer - resizing factor: " + resizingFactor);
-        float ratio = getMinBetweenWindowWidthAndHeight() / REFERENCE_WIDTH * resizingFactor;
+        float ratio = getMinBetweenWindowWidthAndHeight() / REFERENCE_WIDTH;
         System.out.println("ProductionChoicesDrawer - Ratio: " + ratio);
 
         try {

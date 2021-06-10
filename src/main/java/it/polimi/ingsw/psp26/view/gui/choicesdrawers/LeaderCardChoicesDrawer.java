@@ -15,7 +15,7 @@ public class LeaderCardChoicesDrawer implements ChoicesDrawer<LeaderCard> {
 
     @Override
     public ButtonContainer<LeaderCard> decorateButtonContainer(ButtonContainer<LeaderCard> leaderCardButtonContainer) {
-        float ratio = getMinBetweenWindowWidthAndHeight() / 1.5f / REFERENCE_WIDTH;
+        float ratio = getMinBetweenWindowWidthAndHeight() / REFERENCE_WIDTH;
         Image leaderCardImage = getCard(leaderCardButtonContainer.getContainedObject(), ratio);
         ImageView leaderCardImageView = getImageView(leaderCardImage, 0, 0);
 

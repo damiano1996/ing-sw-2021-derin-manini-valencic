@@ -149,7 +149,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
     private Pane getWarehousePane() {
 
-        int[] leftOffsets = new int[]{220, 160, 80};
+        int[] leftOffsets = new int[]{240, 170, 100};
         int[] topOffsets = new int[]{0, 0, 0};
         int[] bottomOffsets = new int[]{0, 0, 0};
 
@@ -167,10 +167,10 @@ public class WarehousePlacerDrawer extends RatioDrawer {
             int depotIndex = warehouse.getBaseDepots().indexOf(baseDepot);
 
             // Opacity zero image view. It is used to keep distance between depot-targets even if no resources are in the depots
-            Image baseDepotImage = loadImage("warehouse/warehouse_" + depotIndex + ".png", (int) (warehouseImage.getWidth() - 50 * ratio));
+            Image baseDepotImage = loadImage("warehouse/warehouse_" + depotIndex + ".png", (int) (warehouseImage.getWidth()));
             baseDepotImage = setRoundedCorners(baseDepotImage, ratio);
             ImageView baseDepotImageView = getImageView(baseDepotImage, 0, 0);
-            baseDepotImageView.setOpacity(0.1);
+            baseDepotImageView.setOpacity(0.0);
             StackPane imageStack = new StackPane(baseDepotImageView);
 
             GridPane resourcesGridPane = new GridPane();

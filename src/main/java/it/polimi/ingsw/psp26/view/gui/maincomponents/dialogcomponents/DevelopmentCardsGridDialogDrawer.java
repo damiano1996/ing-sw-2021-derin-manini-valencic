@@ -23,7 +23,7 @@ public class DevelopmentCardsGridDialogDrawer extends RatioDrawer {
         super(maxWidth);
 
         this.client = client;
-        developmentGridDrawer = new DevelopmentCardsGridDrawer(client, developmentCardsGrid, (int) (initMaxWidth / 1.5));
+        developmentGridDrawer = new DevelopmentCardsGridDrawer(client, developmentCardsGrid, (int) (initMaxWidth / 1.7));
     }
 
     @Override

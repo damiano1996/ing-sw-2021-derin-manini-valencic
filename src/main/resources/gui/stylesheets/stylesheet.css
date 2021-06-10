@@ -65,7 +65,7 @@
 
 HBox, VBox {
     -fx-alignment: center;
-    -fx-padding: 20px;
+    -fx-padding: 10px;
     -fx-border-insets: 10px;
     -fx-background-insets: 5px;
 }
@@ -78,6 +78,16 @@ HBox, VBox {
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-border-width: 3px;
+}
+
+.scroll-pane .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar .increment-arrow,
+.scroll-pane .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
 }
 
 /* Removes the rectangle around the ScrollPane */

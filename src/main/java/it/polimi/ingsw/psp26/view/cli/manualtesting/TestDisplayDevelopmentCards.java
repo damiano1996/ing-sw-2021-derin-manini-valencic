@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.cli.CLI;
 import it.polimi.ingsw.psp26.view.cli.CliUtils;
+import it.polimi.ingsw.psp26.view.cli.DevelopmentCardsCli;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -16,6 +17,7 @@ import java.util.Scanner;
 public class TestDisplayDevelopmentCards {
 
     CLI cli;
+    DevelopmentCardsCli developmentCardsCli;
     CliUtils cliUtils;
     Scanner in;
     PrintWriter pw;
@@ -24,6 +26,7 @@ public class TestDisplayDevelopmentCards {
         pw = new PrintWriter(System.out);
         in = new Scanner(System.in);
         cliUtils = new CliUtils(pw);
+        developmentCardsCli = new DevelopmentCardsCli(pw);
         cli = new CLI();
     }
 
@@ -56,7 +59,7 @@ public class TestDisplayDevelopmentCards {
 
         for (int i = 0; i < 4; i++) {
             cliUtils.cls();
-            cli.displayDevelopmentGrid(developmentCardsGrid);
+            developmentCardsCli.displayDevelopmentGrid(developmentCardsGrid);
             in.nextLine();
             developmentCardsGrid.drawCard(Color.PURPLE, Level.FIRST);
             developmentCardsGrid.drawCard(Color.PURPLE, Level.SECOND);

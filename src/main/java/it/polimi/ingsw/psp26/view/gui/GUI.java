@@ -5,14 +5,9 @@ import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.MarketTray;
-import it.polimi.ingsw.psp26.model.Player;
-import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
-import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.MessageSynchronizedFIFO;
@@ -43,7 +38,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
@@ -56,7 +50,6 @@ public class GUI extends Application implements ViewInterface {
 
     private Client client;
     private Stage primaryStage;
-    private Pane root;
     private boolean displayingPlayingPane;
 
     public GUI() {
@@ -82,7 +75,7 @@ public class GUI extends Application implements ViewInterface {
 
         client = new Client(this);
 
-        root = addBackground(new Pane(), getWindowWidth(), getWindowHeight());
+        Pane root = addBackground(new Pane(), getWindowWidth(), getWindowHeight());
 
         Scene scene = new Scene(root);
         addStylesheet(scene);
@@ -139,22 +132,6 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void displayLeaderCards(List<LeaderCard> leaderCards) {
-
-    }
-
-    @Override
-    public void displayNotifications(List<String> notifications) {
-
-    }
-
-    @Override
-    public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
-
-    }
-
-
-    @Override
     public void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd) {
         Stage dialog = getDialog(
                 primaryStage,
@@ -182,37 +159,7 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void displayFaithTrack(FaithTrack faithTrack, boolean isMultiplayerMode) {
-
-    }
-
-    @Override
-    public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
-
-    }
-
-
-    @Override
-    public void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid) {
-
-    }
-
-    @Override
-    public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes) {
-
-    }
-
-
-    @Override
-    public void displayMarketScreen(MarketTray marketTray) {
-
-    }
-
-    @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
-
-        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-        System.out.println("GUI - RUNNING THREADS: " + threadSet.size());
 
         VBox mainContainer = new VBox(10 * getGeneralRatio());
         Stage dialog = getDialog(primaryStage, mainContainer);

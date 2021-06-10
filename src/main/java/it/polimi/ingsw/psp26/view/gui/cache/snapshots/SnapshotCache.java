@@ -19,7 +19,7 @@ public class SnapshotCache {
     private static final int MAX_CACHE_SIZE = 300;
     private static SnapshotCache instance;
     private final List<RoundedImageCache> roundedSnapshots;
-    private List<ImageCache> shadowedSnapshots;
+    private final List<ImageCache> shadowedSnapshots;
 
 
     private SnapshotCache() {
@@ -98,10 +98,9 @@ public class SnapshotCache {
     }
 
     private Image getSnapshot(ImageView imageView) {
-        System.gc();
-
         SnapshotParameters snapshotParameters = new SnapshotParameters();
         snapshotParameters.setFill(Color.TRANSPARENT);
         return imageView.snapshot(snapshotParameters, null);
     }
+    
 }

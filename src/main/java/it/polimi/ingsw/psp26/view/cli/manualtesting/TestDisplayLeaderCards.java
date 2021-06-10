@@ -120,7 +120,7 @@ public class TestDisplayLeaderCards {
         player.setLeaderCards(playerLeaders);
 
         cliUtils.cls();
-        cli.displayLeaderCards(player.getLeaderCards());
+        personalBoardCli.displayPlayerLeaderCards(player.getLeaderCards(), 1, 1);
         in.nextLine();
         cliUtils.cls();
 
@@ -128,7 +128,7 @@ public class TestDisplayLeaderCards {
         personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
-        cli.displayLeaderCards(player.getLeaderCards());
+        personalBoardCli.displayPlayerLeaderCards(player.getLeaderCards(), 1, 1);
         in.nextLine();
         cliUtils.cls();
 
@@ -136,7 +136,7 @@ public class TestDisplayLeaderCards {
         personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
-        cli.displayLeaderCards(player.getLeaderCards());
+        personalBoardCli.displayPlayerLeaderCards(player.getLeaderCards(), 1, 1);
         cli.displayLeaderCardDiscardActivationSelection(player.getLeaderCards());
         in.nextLine();
         cliUtils.cls();
@@ -145,7 +145,7 @@ public class TestDisplayLeaderCards {
         personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
-        cli.displayLeaderCards(player.getLeaderCards());
+        personalBoardCli.displayPlayerLeaderCards(player.getLeaderCards(), 1, 1);
         in.nextLine();
         cliUtils.cls();
 
@@ -153,7 +153,7 @@ public class TestDisplayLeaderCards {
         personalBoardCli.displayPersonalBoard(player, false);
         in.nextLine();
         cliUtils.cls();
-        cli.displayLeaderCards(player.getLeaderCards());
+        personalBoardCli.displayPlayerLeaderCards(player.getLeaderCards(), 1, 1);
         in.nextLine();
     }
 

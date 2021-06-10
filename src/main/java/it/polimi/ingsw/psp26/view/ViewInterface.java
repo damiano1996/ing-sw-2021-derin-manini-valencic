@@ -22,16 +22,7 @@ public interface ViewInterface {
 
 
     void displayLogIn();
-
-
-    void displayLeaderCards(List<LeaderCard> leaderCards);
-
-
-    void displayNotifications(List<String> notifications);
-
-
-    void displayPersonalBoard(Player player, boolean isMultiplayerMode);
-
+    
 
     void displayWarehouseNewResourcesAssignment(Warehouse warehouse, List<Resource> resourcesToAdd);
 
@@ -40,22 +31,7 @@ public interface ViewInterface {
 
 
     void displayMarketAction(MarketTray marketTray, List<Resource> playerResources);
-
-
-    void displayFaithTrack(FaithTrack faithTrack, boolean isMultiplayerMode);
-
-
-    void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots);
-
-
-    void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid);
-
-
-    void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes);
-
-
-    void displayMarketScreen(MarketTray marketTray);
-
+    
 
     void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption);
 
@@ -82,6 +58,5 @@ public interface ViewInterface {
 
 
     void displayGlobalLeaderboard();
-
-
+    
 }

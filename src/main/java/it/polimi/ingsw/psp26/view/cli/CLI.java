@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp26.view.cli;
 
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
+import it.polimi.ingsw.psp26.application.mutex.Mutex;
 import it.polimi.ingsw.psp26.exceptions.ConfirmationException;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
@@ -16,7 +17,6 @@ import it.polimi.ingsw.psp26.model.developmentgrid.Production;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
-import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.MessageSynchronizedFIFO;
@@ -43,7 +43,6 @@ public class CLI implements ViewInterface {
     private final PrintWriter pw;
     private final CliUtils cliUtils;
     private final DevelopmentCardsCli developmentCardsCli;
-    private final FaithTrackCli faithTrackCli;
     private final LeaderCardsCli leaderCardsCli;
     private final MarketCli marketCli;
     private final PersonalBoardCli personalBoardCli;
@@ -52,22 +51,21 @@ public class CLI implements ViewInterface {
     private final CommonScreensCli commonScreensCli;
     private Client client;
 
-    // If true, the Thread printing notifications will wait until other cli's elements are printed 
-    // and this attribute is set back to false
-    private volatile boolean executingTask;
+    Mutex mutex;
 
     public CLI() {
         this.in = new Scanner(System.in);
         this.pw = new PrintWriter(System.out);
         this.cliUtils = new CliUtils(pw);
         this.developmentCardsCli = new DevelopmentCardsCli(pw);
-        this.faithTrackCli = new FaithTrackCli(pw);
         this.leaderCardsCli = new LeaderCardsCli(pw);
         this.marketCli = new MarketCli(pw);
         this.personalBoardCli = new PersonalBoardCli(pw);
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
         this.notificationStackPrinter = new NotificationStackPrinter(pw);
         this.commonScreensCli = new CommonScreensCli(pw);
+        
+        mutex = new Mutex();
     }
 
 
@@ -164,6 +162,7 @@ public class CLI implements ViewInterface {
         // to implement;
     }
 
+    
     //------------------------------------------//
     //          WAITING SCREEN METHODS          //
     //------------------------------------------//
@@ -211,24 +210,9 @@ public class CLI implements ViewInterface {
                     e.printStackTrace();
                 }
 
-                displayNotifications(notifications);
+                notificationStackPrinter.printMessageStack(notifications);
             }
         }).start();
-    }
-
-
-    /**
-     * Used to print notifications in the Notification Stack printer
-     *
-     * @param notifications The Strings to print in the Notification Stack
-     */
-    @Override
-    public synchronized void displayNotifications(List<String> notifications) {
-        while (executingTask) {
-            // Using onSpinWait() in order to not call notifyAll() from other cli's methods
-            Thread.onSpinWait();
-        }
-        notificationStackPrinter.printMessageStack(notifications);
     }
 
 
@@ -236,60 +220,13 @@ public class CLI implements ViewInterface {
     //          MISC ELEMENTS METHODS          //
     //-----------------------------------------//
 
-    /**
-     * Displays the given Leader Cards
-     *
-     * @param leaderCards The Leader Cards to display
-     */
-    @Override
-    public void displayLeaderCards(List<LeaderCard> leaderCards) { // never used
-        executingTask = true;
-        personalBoardCli.displayPlayerLeaderCards(leaderCards, 1, 1);
-        executingTask = false;
-    }
-
-
-    /**
-     * Displays the Player's Personal Board
-     *
-     * @param player            The Player from where to get the Personal Board
-     * @param isMultiplayerMode Used to print Lorenzo's Faith Marker if set to false
-     */
-    @Override
-    public void displayPersonalBoard(Player player, boolean isMultiplayerMode) { // never used
-        executingTask = true;
-
-        notificationStackPrinter.restoreStackView();
-        personalBoardCli.displayPersonalBoard(player, isMultiplayerMode);
-        cliUtils.setCursorPosition(47, 1);
-
-        executingTask = false;
-        client.viewNext();
-    }
-
-
-    /**
-     * Displays a Faith Track
-     *
-     * @param faithTrack        The Faith Track to display
-     * @param isMultiPlayerMode Used to print Lorenzo's Faith Marker if set to false
-     */
-    @Override
-    public void displayFaithTrack(FaithTrack faithTrack, boolean isMultiPlayerMode) { // never used
-        executingTask = true;
-        faithTrackCli.displayFaithTrack(faithTrack, 3, 10, isMultiPlayerMode);
-        executingTask = false;
-    }
-
 
     /**
      * Displays the List of Development Cards as Development Card Slots
      *
      * @param developmentCardsSlots The Cards to display
      */
-    @Override
-    public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
-        // Used in displayChoices executingTask
+    private void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentCardsSlots) {
         cliUtils.pPCS("Enter the number of the slot in which you want to put the drawn card", Color.WHITE, 10, 4);
         personalBoardCli.displayDevelopmentCardsSlots(developmentCardsSlots, 30, 70);
         cliUtils.pPCS("Slot  1", Color.GREY, 47, 85);
@@ -300,60 +237,19 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Displays the Market screen
-     *
-     * @param marketTray The Market Tray to display
-     */
-    @Override
-    public void displayMarketScreen(MarketTray marketTray) { // never used
-        executingTask = true;
-        marketCli.displayMarketScreen(marketTray);
-        executingTask = false;
-    }
-
-
-    /**
-     * Displays the Development Card Grid
-     *
-     * @param developmentCardsGrid The Development Card Grid to display
-     */
-    @Override
-    public void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid) { // never used
-        executingTask = true;
-        developmentCardsCli.displayDevelopmentGrid(developmentCardsGrid);
-        executingTask = false;
-    }
-
-
-    /**
-     * Displays the Resource Supply
-     *
-     * @param resourceSupply The Resource Supply to display
-     * @param resourcesTypes The Resource types contained in the Resource Supply
-     */
-    @Override
-    public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesTypes) {
-        // Used in displayChoices executingTask
-        executingTask = true;
-        personalBoardCli.displayResourceSupply(resourceSupply, resourcesTypes, 1, 37);
-        executingTask = false;
-    }
-
-
-    /**
      * Displays the Action Tokens screen
      *
      * @param unusedTokens The Action Tokens to display
      */
     @Override
     public void displayActionTokens(List<ActionToken> unusedTokens) {
-        executingTask = true;
+        mutex.lock();
 
         // Must have a restoreNotification here since the LeaderAction selection can disappear if no Action is possible
         notificationStackPrinter.restoreStackView();
         personalBoardCli.displayActionTokens(unusedTokens);
 
-        executingTask = false;
+        mutex.unlock();
         displayNext();
     }
 
@@ -449,7 +345,7 @@ public class CLI implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
         // Starts blocking the notifications printing
-        executingTask = true;
+        mutex.lock();
 
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + question);
@@ -489,7 +385,7 @@ public class CLI implements ViewInterface {
                 break;
 
             case CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY:
-                displayResourceSupply(new ResourceSupply(), castElements(Resource.class, choices));
+                personalBoardCli.displayResourceSupply(new ResourceSupply(), castElements(Resource.class, choices), 1, 37);
                 cliUtils.vSpace(10);
                 cliUtils.pPCS("Please insert the number of the Resource slot you want.", Color.WHITE, 38, 4);
                 break;
@@ -499,7 +395,7 @@ public class CLI implements ViewInterface {
         }
 
         // Stops blocking the notification printing
-        executingTask = false;
+        mutex.unlock();
 
         // send to server response
         try {
@@ -526,7 +422,6 @@ public class CLI implements ViewInterface {
      * @param leaderCards The Leader Cards to display
      */
     public void displayLeaderCardDiscardActivationSelection(List<LeaderCard> leaderCards) {
-        // Used in displayChoices executingTask
         cliUtils.clns();
         leaderCardsCli.printMultipleLeaders(leaderCards, 3);
         cliUtils.vSpace(3);
@@ -539,7 +434,6 @@ public class CLI implements ViewInterface {
      * @param choices The choices to display
      */
     private void choicePositionExecute(List<Object> choices) {
-        // Used in displayChoices executingTask
         cliUtils.cls();
         cliUtils.printFigure("/titles/DevelopmentCardSlotSelection", 1, 11);
         cliUtils.vSpace(10);
@@ -557,7 +451,6 @@ public class CLI implements ViewInterface {
      * @param askLeadersShowing True if the method asks the Player if he wants to see its Leader Cards, false otherwise
      */
     private void choiceNormalLeaderActionExecute(List<Object> choices, boolean askLeadersShowing) {
-        // Used in displayChoices executingTask
         // Restoring the notificationStack here since previous methods may have hide it
         notificationStackPrinter.restoreStackView();
 
@@ -606,7 +499,6 @@ public class CLI implements ViewInterface {
      * @param choices The choices to display
      */
     private void choiceResourceFromWarehouseExecute(List<Object> choices) {
-        // Used in displayChoices executingTask
         cliUtils.clns();
         cliUtils.printFigure("/titles/ChooseResourceFromWarehouse", 1, 8);
         cliUtils.vSpace(3);
@@ -624,7 +516,6 @@ public class CLI implements ViewInterface {
      * @param productions The Productions to display
      */
     public void displayProductionSelection(List<Production> productions) {
-        // Used in displayChoices executingTask
         List<Resource> playerResources = client.getCachedModel().getMyPlayerCached().getObject().getPersonalBoard().getAllAvailableResources();
         personalBoardCli.displayProductionActivation(productions, playerResources);
         cliUtils.moveCursor("dn", 10);
@@ -703,7 +594,6 @@ public class CLI implements ViewInterface {
      * @param choices The choices to print
      */
     private void displayMultipleStringChoices(List<Object> choices) {
-        // Used in displayChoices executingTask
         for (int i = 0; i < choices.size(); i++) {
             cliUtils.vSpace(1);
             String choiceToPrint = choices.get(i).toString();
@@ -724,7 +614,7 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer) {
-        executingTask = true;
+        mutex.lock();
 
         commonScreensCli.displayFinalScreen(leaderboard);
 
@@ -742,7 +632,7 @@ public class CLI implements ViewInterface {
 
         cliUtils.pPCS("Press Enter to go back to the main screen", Color.WHITE, 50, 4);
 
-        executingTask = false;
+        mutex.unlock();
 
         in.nextLine();
         client.viewNext();
@@ -760,13 +650,13 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayText(String text) {
-        executingTask = true;
+        mutex.lock();
 
         cliUtils.clns();
         cliUtils.vSpace(1);
         pw.println(cliUtils.hSpace(3) + text);
 
-        executingTask = false;
+        mutex.unlock();
         displayNext();
     }
 
@@ -778,7 +668,7 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void displayError(String error) {
-        executingTask = true;
+        mutex.lock();
 
         cliUtils.clns();
         cliUtils.setCursorPosition(20, 81);
@@ -794,7 +684,7 @@ public class CLI implements ViewInterface {
         pw.flush();
         cliUtils.vSpace(5);
 
-        executingTask = false;
+        mutex.unlock();
         displayNext();
     }
 
@@ -840,10 +730,10 @@ public class CLI implements ViewInterface {
             // At each iteration the current Player Personal Board will be printed
             personalBoardCli.displayPersonalBoard(client.getCachedModel().getMyPlayerCached().getObject(), client.isMultiplayerMode());
 
-            executingTask = true;
+            mutex.lock();
             printOpponentViewScreenInformation();
             printOpponentsPersonalBoardList();
-            executingTask = false;
+            mutex.unlock();
 
             // If there are opponents to display, the Player can choose which one to see the Personal Board
             if (client.getCachedModel().getNumberOfOpponents() > 0) {
@@ -886,7 +776,7 @@ public class CLI implements ViewInterface {
         do {
             Player opponent = client.getCachedModel().getOpponentCached(opponentNumber).getObject();
 
-            executingTask = true;
+            mutex.lock();
             personalBoardCli.displayPersonalBoard(opponent, client.isMultiplayerMode());
             cliUtils.pPCS("Viewing " + opponent.getNickname() + " Personal Board.", Color.WHITE, 50, 5);
             cliUtils.pPCS("Enter 'r' if you want to reload an updated version of " + opponent.getNickname() + "Personal Board.", Color.WHITE, 51, 5);
@@ -894,7 +784,7 @@ public class CLI implements ViewInterface {
             cliUtils.vSpace(2);
             pw.print(cliUtils.hSpace(4) + "Your choice: ");
             pw.flush();
-            executingTask = false;
+            mutex.unlock();
 
             reloadOpponentChoice = in.nextLine();
         } while (reloadOpponentChoice.equals("r"));

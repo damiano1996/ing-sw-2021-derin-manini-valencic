@@ -17,6 +17,7 @@ import it.polimi.ingsw.psp26.model.personalboard.PersonalBoard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.view.cli.CLI;
 import it.polimi.ingsw.psp26.view.cli.CliUtils;
+import it.polimi.ingsw.psp26.view.cli.FaithTrackCli;
 import it.polimi.ingsw.psp26.view.cli.PersonalBoardCli;
 
 import java.io.PrintWriter;
@@ -28,6 +29,7 @@ public class TestDisplayPersonalBoard {
 
     CLI cli;
     PersonalBoardCli personalBoardCli;
+    FaithTrackCli faithTrackCli;
     CliUtils cliUtils;
     Scanner in;
     PrintWriter pw;
@@ -36,6 +38,7 @@ public class TestDisplayPersonalBoard {
         pw = new PrintWriter(System.out);
         in = new Scanner(System.in);
         cliUtils = new CliUtils(pw);
+        faithTrackCli = new FaithTrackCli(pw);
         personalBoardCli = new PersonalBoardCli(pw);
         cli = new CLI();
     }
@@ -156,7 +159,7 @@ public class TestDisplayPersonalBoard {
         resources.add(Resource.STONE);
         resources.add(Resource.SERVANT);
 
-        cli.displayResourceSupply(resourceSupply, resources);
+        personalBoardCli.displayResourceSupply(resourceSupply, resources, 1, 37);
         in.nextLine();
     }
 
@@ -176,11 +179,11 @@ public class TestDisplayPersonalBoard {
             if (i == 14) {
                 for (int m = 0; m < 14; m++) {
                     personalBoard.getFaithTrack().moveBlackCrossPosition(1);
-                    cli.displayFaithTrack(personalBoard.getFaithTrack(), false);
+                    faithTrackCli.displayFaithTrack(personalBoard.getFaithTrack(), 5, 5, false);
                     in.nextLine();
                 }
             }
-            cli.displayFaithTrack(personalBoard.getFaithTrack(), false);
+            faithTrackCli.displayFaithTrack(personalBoard.getFaithTrack(), 5, 5,false);
             in.nextLine();
             personalBoard.getFaithTrack().moveMarkerPosition(1);
             cliUtils.cls();

@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
+import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -26,7 +27,7 @@ public class LorenzoMagnificoTurnStateTest {
         Phase phase = new Phase(virtualView.getMatchController());
         phase.getMatchController().addObserver(mitm);
 
-        phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "NiCkNaMe", "SeSsIoNtOkEn"));
+        phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname", "sessionToken"));
         phase.getMatchController().setMaxNumberOfPlayers(1);
         turn = new Turn(
                 new PlayingPhaseState(phase),
@@ -40,13 +41,19 @@ public class LorenzoMagnificoTurnStateTest {
 
 
     @Test
-    public void testLorenzoPlay() throws InvalidPayloadException {
+    public void testLorenzoPlay() throws InvalidPayloadException, EmptyPayloadException {
         int numberOfTokens = turn.getMatchController().getMatch().getActionTokens().size();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SKIP_LEADER_ACTION));
 
+        String lorenzoPlay = mitm.getMessages().get(1).getPayload().toString();
+
+        int numberOfRemainingTokens;
+        if (lorenzoPlay.contains("BlackCrossShuffleActionToken")) numberOfRemainingTokens = numberOfTokens;
+        else numberOfRemainingTokens = numberOfTokens - 1;
+        
         assertEquals(mitm.getMessages().get(1).getMessageType(), MessageType.LORENZO_PLAY);
-        assertEquals(numberOfTokens - 1, turn.getMatchController().getMatch().getActionTokens().size());
+        assertEquals(numberOfRemainingTokens, turn.getMatchController().getMatch().getActionTokens().size());
     }
 
 }

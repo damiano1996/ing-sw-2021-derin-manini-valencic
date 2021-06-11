@@ -183,7 +183,7 @@ public class TestDisplayPersonalBoard {
                     in.nextLine();
                 }
             }
-            faithTrackCli.displayFaithTrack(personalBoard.getFaithTrack(), 5, 5,false);
+            faithTrackCli.displayFaithTrack(personalBoard.getFaithTrack(), 5, 5, false);
             in.nextLine();
             personalBoard.getFaithTrack().moveMarkerPosition(1);
             cliUtils.cls();

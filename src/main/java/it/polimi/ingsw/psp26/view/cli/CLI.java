@@ -49,9 +49,8 @@ public class CLI implements ViewInterface {
     private final DisplayWarehousePlacer displayWarehousePlacer;
     private final NotificationStackPrinter notificationStackPrinter;
     private final CommonScreensCli commonScreensCli;
-    private Client client;
-
     Mutex mutex;
+    private Client client;
 
     public CLI() {
         this.in = new Scanner(System.in);
@@ -64,7 +63,7 @@ public class CLI implements ViewInterface {
         this.displayWarehousePlacer = new DisplayWarehousePlacer(pw);
         this.notificationStackPrinter = new NotificationStackPrinter(pw);
         this.commonScreensCli = new CommonScreensCli(pw);
-        
+
         mutex = new Mutex();
     }
 
@@ -162,7 +161,7 @@ public class CLI implements ViewInterface {
         // to implement;
     }
 
-    
+
     //------------------------------------------//
     //          WAITING SCREEN METHODS          //
     //------------------------------------------//

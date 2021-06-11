@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp26.view.gui.manualtesting;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
-import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getMinBetweenWindowWidthAndHeight;
 
 public class WarehousePlacerDrawerTest extends Application {
 
@@ -25,8 +25,8 @@ public class WarehousePlacerDrawerTest extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Warehouse warehouse = new Warehouse(new VirtualView(), 3, "");
-        warehouse.addLeaderDepot(new LeaderDepot(new VirtualView(), Resource.STONE));
-        warehouse.addLeaderDepot(new LeaderDepot(new VirtualView(), Resource.SERVANT));
+        //warehouse.addLeaderDepot(new LeaderDepot(new VirtualView(), Resource.STONE));
+        //warehouse.addLeaderDepot(new LeaderDepot(new VirtualView(), Resource.SERVANT));
 
         try {
             warehouse.addResourceToDepot(0, Resource.SHIELD);
@@ -48,7 +48,10 @@ public class WarehousePlacerDrawerTest extends Application {
             add(Resource.SHIELD);
         }};
 
-        Stage dialog = getDialog(stage, new WarehousePlacerDrawer(new Client(new GUI()), warehouse, resourcesToAdd, 1920).draw());
+        Stage dialog = getDialog(
+                stage,
+                new WarehousePlacerDrawer(new Client(new GUI()), warehouse, resourcesToAdd, getMinBetweenWindowWidthAndHeight()).draw()
+        );
         dialog.show();
     }
 }

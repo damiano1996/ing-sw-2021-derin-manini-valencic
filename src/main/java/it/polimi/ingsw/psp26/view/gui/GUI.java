@@ -27,8 +27,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -161,7 +162,7 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void displayChoices(MessageType messageType, String question, List<Object> choices, int minChoices, int maxChoices, boolean hasUndoOption) {
 
-        VBox mainContainer = new VBox(10 * getGeneralRatio());
+        VBox mainContainer = new VBox(5 * getGeneralRatio());
         Stage dialog = getDialog(primaryStage, mainContainer);
 
         Label label = new Label(question);
@@ -170,6 +171,7 @@ public class GUI extends Application implements ViewInterface {
         mainContainer.getChildren().add(label);
 
         ChoicesDrawer<?> choicesDrawer;
+        boolean inScrollPane = false;
 
         switch (messageType) {
 
@@ -183,6 +185,7 @@ public class GUI extends Application implements ViewInterface {
 
             case CHOICE_LEADERS:
                 SoundManager.getInstance().setMusic("main_theme_04.wav");
+                inScrollPane = true;
                 choicesDrawer = new LeaderCardChoicesDrawer();
                 break;
 
@@ -196,18 +199,17 @@ public class GUI extends Application implements ViewInterface {
                 break;
 
             case CHOICE_PRODUCTIONS_TO_ACTIVATE:
-                choicesDrawer = new ProductionChoicesDrawer(client, choices.size());
+                inScrollPane = true;
+                choicesDrawer = new ProductionChoicesDrawer(client);
                 break;
 
             default:
                 throw new IllegalStateException("Unexpected value: " + messageType);
         }
 
-        GridPane contentPane = new GridPane();
-        contentPane.setHgap(10 * getGeneralRatio());
-        contentPane.setVgap(10 * getGeneralRatio());
+        Pane contentPane = new Pane();
         mainContainer.getChildren().add(contentPane);
-        buttonOrCheckBox(contentPane, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
+        buttonOrCheckBox(contentPane, inScrollPane, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
 
         if (!messageType.equals(MessageType.MENU) &&
                 !messageType.equals(MessageType.NEW_OR_OLD) &&
@@ -217,7 +219,7 @@ public class GUI extends Application implements ViewInterface {
                 SoundManager.getInstance().setSoundEffect("button_click_01.wav");
                 dialog.close();
                 new AsynchronousDrawer(
-                        () -> sleep(3000),
+                        () -> sleep(5000),
                         () -> client.reHandleLastMessage(),
                         false
                 ).start();
@@ -240,19 +242,33 @@ public class GUI extends Application implements ViewInterface {
         dialog.show();
     }
 
-    private void buttonOrCheckBox(GridPane container, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+    private ScrollPane getScrollPane() {
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setStyle("-fx-border-color: transparent;");
+        scrollPane.setPannable(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setMaxHeight(getMinBetweenWindowWidthAndHeight() * 0.7);
+        scrollPane.setMaxWidth(getMinBetweenWindowWidthAndHeight() * 0.7);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setHvalue(0.5);
+        return scrollPane;
+    }
+
+    private void buttonOrCheckBox(Pane container, boolean inScrollPane, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
         if (minChoices == 1 && maxChoices == 1) {
-            buttonMultipleChoices(container, dialog, choicesDrawer, messageType, choices);
+            buttonMultipleChoices(container, inScrollPane, dialog, choicesDrawer, messageType, choices);
         } else {
-            checkBoxMultipleChoices(container, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
+            checkBoxMultipleChoices(container, inScrollPane, dialog, choicesDrawer, messageType, choices, minChoices, maxChoices);
         }
     }
 
-    private void buttonMultipleChoices(GridPane container, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices) {
+    private void buttonMultipleChoices(Pane container, boolean inScrollPane, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices) {
+        VBox vBox = new VBox(0);
+        container.getChildren().add(vBox);
 
         List<ButtonContainer<?>> buttonContainers = new ArrayList<>();
 
-        int j = 0;
         for (int i = 0; i < choices.size(); i++) {
 
             @SuppressWarnings({"rawtypes", "unchecked"})
@@ -272,30 +288,25 @@ public class GUI extends Application implements ViewInterface {
                 client.viewNext();
 
             });
-            j = setGridPanePosition(container, choices, j, i, buttonContainer);
+
+            setScrollPaneOrGrid(inScrollPane, vBox, i, buttonContainer);
         }
     }
 
-    private int setGridPanePosition(GridPane container, List<Object> choices, int j, int i, ButtonContainer<?> buttonContainer) {
-        if (choices.size() % 2 != 0 && i == choices.size() - 1)
-            container.add(new VBox(buttonContainer), 0, container.getRowCount(), (container.getColumnCount() == 0) ? 1 : container.getColumnCount(), 1);
-        else container.add(buttonContainer, i % 2, j % 2, 1, 1);
-        j += i % 2;
-        return j;
-    }
+    private void checkBoxMultipleChoices(Pane container, boolean inScrollPane, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
 
-    private void checkBoxMultipleChoices(GridPane container, Stage dialog, ChoicesDrawer<?> choicesDrawer, MessageType messageType, List<Object> choices, int minChoices, int maxChoices) {
+        VBox vBox = new VBox(0);
+        container.getChildren().add(vBox);
 
         List<ButtonContainer<?>> buttonContainers = new ArrayList<>();
 
-        int j = 0;
         for (int i = 0; i < choices.size(); i++) {
 
             @SuppressWarnings({"rawtypes", "unchecked"})
             ButtonContainer<?> buttonContainer = choicesDrawer.decorateButtonContainer(new ButtonContainer(choices.get(i)));
             buttonContainers.add(buttonContainer);
 
-            j = setGridPanePosition(container, choices, j, i, buttonContainer);
+            setScrollPaneOrGrid(inScrollPane, vBox, i, buttonContainer);
         }
 
         Text errorText = new Text("Select " + minChoices + " items." + ((maxChoices > minChoices) ? " Up to " + maxChoices + " items." : ""));
@@ -324,8 +335,30 @@ public class GUI extends Application implements ViewInterface {
             }
         });
 
-        container.add(new VBox(errorText), 0, container.getRowCount(), container.getColumnCount(), 1);
-        container.add(new VBox(confirmationButton), 0, container.getRowCount(), container.getColumnCount(), 1);
+        vBox.getChildren().add(errorText);
+        vBox.getChildren().add(confirmationButton);
+    }
+
+    private void setScrollPaneOrGrid(boolean inScrollPane, VBox vBox, int i, ButtonContainer<?> buttonContainer) {
+        if (!inScrollPane) {
+            if (i % 2 == 0) {
+                HBox hBox = new HBox(5 * getGeneralRatio());
+                hBox.getChildren().add(buttonContainer);
+                vBox.getChildren().add(hBox);
+            } else {
+                ((HBox) vBox.getChildren().get(vBox.getChildren().size() - 1)).getChildren().add(buttonContainer);
+            }
+        } else {
+            if (i == 0) {
+                HBox hBox = new HBox(5 * getGeneralRatio());
+                hBox.getChildren().add(buttonContainer);
+                ScrollPane scrollPane = getScrollPane();
+                scrollPane.setContent(hBox);
+                vBox.getChildren().add(scrollPane);
+            } else {
+                ((HBox) ((ScrollPane) vBox.getChildren().get(0)).getContent()).getChildren().add(buttonContainer);
+            }
+        }
     }
 
     @Override

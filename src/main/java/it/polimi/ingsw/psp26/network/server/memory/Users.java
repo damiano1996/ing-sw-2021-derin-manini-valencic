@@ -110,7 +110,7 @@ public class Users {
 
     /**
      * Getter of the nicknamePasswords Map
-     * 
+     *
      * @return An unmodifiable nicknamePasswords Map
      */
     public synchronized Map<String, String> getNicknamePasswords() {
@@ -120,7 +120,7 @@ public class Users {
 
     /**
      * Getter of the nicknameSessionTokens Map
-     * 
+     *
      * @return An unmodifiable nicknameSessionTokens Map
      */
     public synchronized Map<String, String> getNicknameSessionTokens() {

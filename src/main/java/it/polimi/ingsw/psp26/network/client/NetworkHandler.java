@@ -197,7 +197,7 @@ public class NetworkHandler implements Observer<Message> {
 
     /**
      * Getter of the SessionToken
-     * 
+     *
      * @return The Player's SessionToken
      */
     public String getSessionToken() {

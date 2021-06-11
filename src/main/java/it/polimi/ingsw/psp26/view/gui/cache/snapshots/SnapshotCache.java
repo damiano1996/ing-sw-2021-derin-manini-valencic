@@ -14,6 +14,10 @@ import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.areImagesEqual;
 
+/**
+ * Snapshots are objects that requires huge amount of RAM.
+ * This singleton class saves snapshots and returns older versions instead of performing new ones.
+ */
 public class SnapshotCache {
 
     private static final int MAX_CACHE_SIZE = 300;
@@ -21,17 +25,36 @@ public class SnapshotCache {
     private final List<RoundedImageCache> roundedSnapshots;
     private final List<ImageCache> shadowedSnapshots;
 
-
+    /**
+     * Constructor of the class.
+     */
     private SnapshotCache() {
         shadowedSnapshots = new ArrayList<>();
         roundedSnapshots = new ArrayList<>();
     }
 
+    /**
+     * Getter of the instance of this class.
+     *
+     * @return instance associated to thi class
+     */
     public static SnapshotCache getInstance() {
         if (instance == null) instance = new SnapshotCache();
         return instance;
     }
 
+    /**
+     * Method creates an image starting from the given one and adds the drop shadow effect.
+     * <p>
+     * If the given image was already between the local variables,
+     * it returns an older shadowed version instead of creating a new one.
+     * If image was not present, it creates the shadowed version and stores as local variable the result
+     * before returning it.
+     *
+     * @param image      original image that must be decorated with the shadow effect
+     * @param dropShadow shadow effect
+     * @return shadowed image
+     */
     public Image getShadowedImage(Image image, DropShadow dropShadow) {
         if (shadowedSnapshots.size() > MAX_CACHE_SIZE) shadowedSnapshots.clear();
 
@@ -62,6 +85,19 @@ public class SnapshotCache {
         }
     }
 
+    /**
+     * Method creates an image starting from the given one and makes the corner rounded.
+     * <p>
+     * If the given image was already between the local variables,
+     * it returns an older rounded version instead of creating a new one.
+     * If image was not present, it creates the shadowed version and stores as local variable the result
+     * before returning it.
+     *
+     * @param image   original image
+     * @param ratio   ratio for the corners
+     * @param arcSize arc size
+     * @return image with rounded corners
+     */
     public Image getRoundedCornerImage(Image image, float ratio, int arcSize) {
         if (roundedSnapshots.size() > MAX_CACHE_SIZE) roundedSnapshots.clear();
 
@@ -97,6 +133,12 @@ public class SnapshotCache {
         }
     }
 
+    /**
+     * Method that takes the snapshot of the image view.
+     *
+     * @param imageView image view
+     * @return image that is a snapshot of the image view
+     */
     private Image getSnapshot(ImageView imageView) {
         SnapshotParameters snapshotParameters = new SnapshotParameters();
         snapshotParameters.setFill(Color.TRANSPARENT);

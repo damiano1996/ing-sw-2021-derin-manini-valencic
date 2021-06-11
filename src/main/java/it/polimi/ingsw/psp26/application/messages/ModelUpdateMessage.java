@@ -24,7 +24,7 @@ public class ModelUpdateMessage extends SessionMessage implements Serializable {
 
     /**
      * Getter of the Message Type of the payload of the ModelUpdateMessage
-     * 
+     *
      * @return The Message Type of the payload
      * @throws EmptyPayloadException The required payload is empty
      */
@@ -34,7 +34,7 @@ public class ModelUpdateMessage extends SessionMessage implements Serializable {
 
     /**
      * Getter of the payload that contains the update the Client receives
-     * 
+     *
      * @return The Object containing the update
      * @throws EmptyPayloadException The required payload is empty
      */

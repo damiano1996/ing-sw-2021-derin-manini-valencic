@@ -13,7 +13,7 @@ public enum SpecialToken {
 
     /**
      * Getter of the special token
-     * 
+     *
      * @return The special token
      */
     public String getToken() {

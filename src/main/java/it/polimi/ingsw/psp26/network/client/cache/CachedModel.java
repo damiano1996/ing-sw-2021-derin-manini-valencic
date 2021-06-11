@@ -120,7 +120,7 @@ public class CachedModel {
 
     /**
      * Getter of the number of cached opponents
-     * 
+     *
      * @return The number of cached opponents
      */
     public synchronized int getNumberOfOpponents() {

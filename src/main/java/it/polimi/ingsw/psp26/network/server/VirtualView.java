@@ -234,16 +234,16 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
     /**
      * Generate a new MatchID by counting how many matches are saved and incrementing that value by 1
-     * 
+     *
      * @return The so generated MatchID
      */
     private synchronized int getMatchId() {
         return GameSaver.getInstance().getLastId() + 1;
     }
-    
+
     /**
      * Getter of the Match Controller
-     * 
+     *
      * @return The MatchController
      */
     public synchronized MatchController getMatchController() {
@@ -322,7 +322,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
     /**
      * Getter of the number of Client nodes
-     * 
+     *
      * @return The number of Client nodes
      */
     public synchronized int getNumberOfNodeClients() {

@@ -13,6 +13,12 @@ import java.util.List;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addSelectionShadow;
 
+/**
+ * Class to model and control a draggable object.
+ * It assigns properties to an object to be dragged and released using the mouse.
+ *
+ * @param <T> generic object type
+ */
 public class DraggedObject<T> {
 
     private final T object;
@@ -29,6 +35,15 @@ public class DraggedObject<T> {
 
     private boolean selected;
 
+    /**
+     * Constructor of the class.
+     * It defines variables and adds the properties to the imageView to allow drag and drop operations.
+     *
+     * @param object           object to drag
+     * @param sourcePane       pane in which the object is in
+     * @param imageView        image view associated to the given object
+     * @param targetContainers list of feasible target containers
+     */
     public DraggedObject(T object, Pane sourcePane, ImageView imageView, List<TargetContainer<T>> targetContainers) {
         this.object = object;
         this.imageView = imageView;
@@ -45,6 +60,20 @@ public class DraggedObject<T> {
         addProperties();
     }
 
+    /**
+     * Method to add drag and drop properties to the imageView.
+     * <p>
+     * It defines mouse events for the imageView associated to the object.
+     * Events defined are:
+     * - Mouse pressed: object becomes selected and image changes to represent selection;
+     * <p>
+     * - Mouse released: object becomes un-selected and image changes.
+     * The method checks if the object can be placed where it has been dropped
+     * and it calls the place() method from the target containers to place it.
+     * If it cannot be placed, it is positioned in the original position.
+     * <p>
+     * - Dragged event: it moves the imageview following the mouse cursor.
+     */
     private void addProperties() {
 
         imageView.setOnMousePressed(mouseEvent -> {

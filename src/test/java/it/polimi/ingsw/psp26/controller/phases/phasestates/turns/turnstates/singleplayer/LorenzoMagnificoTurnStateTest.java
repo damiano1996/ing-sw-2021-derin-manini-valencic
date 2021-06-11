@@ -51,7 +51,7 @@ public class LorenzoMagnificoTurnStateTest {
         int numberOfRemainingTokens;
         if (lorenzoPlay.contains("BlackCrossShuffleActionToken")) numberOfRemainingTokens = numberOfTokens;
         else numberOfRemainingTokens = numberOfTokens - 1;
-        
+
         assertEquals(mitm.getMessages().get(1).getMessageType(), MessageType.LORENZO_PLAY);
         assertEquals(numberOfRemainingTokens, turn.getMatchController().getMatch().getActionTokens().size());
     }

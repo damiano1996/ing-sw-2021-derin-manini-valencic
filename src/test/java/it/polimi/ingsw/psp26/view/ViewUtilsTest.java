@@ -29,19 +29,19 @@ public class ViewUtilsTest {
         virtualView = new VirtualView();
     }
 
-    
+
     @Test
     public void testBeautifyMessageType() {
         assertEquals("General Message", beautifyMessageType(MessageType.GENERAL_MESSAGE));
     }
 
-    
+
     @Test
     public void testToTitleStyle() {
         assertEquals("This Is A Title", toTitleStyle("this IS a TITLE"));
     }
 
-    
+
     @Test
     public void testCreateLeaderboardAndGetOrderedPlayersList() {
         Map<String, Integer> leaderboardOne = new HashMap<>();
@@ -75,7 +75,7 @@ public class ViewUtilsTest {
         }
     }
 
-    
+
     @Test
     public void testCreatePlayersList() throws InvalidPayloadException, EmptyPayloadException {
         CachedModel cachedModel = new CachedModel("myNickname");
@@ -107,7 +107,7 @@ public class ViewUtilsTest {
         assertTrue(playersNicknames.containsAll(createdPlayersNicknames));
     }
 
-    
+
     @Test
     public void testCreateListToSend() throws CanNotAddResourceToDepotException {
         Warehouse warehouse = new Warehouse(virtualView, 3, "sessionToken");
@@ -130,7 +130,7 @@ public class ViewUtilsTest {
         }
     }
 
-    
+
     @Test
     public void testChangePosition() throws CanNotAddResourceToDepotException {
         Warehouse warehouse = new Warehouse(virtualView, 3, "sessionToken");
@@ -144,7 +144,7 @@ public class ViewUtilsTest {
         assertEquals(warehouse.getAllDepots().get(2).getContainedResourceType(), Resource.COIN);
     }
 
-    
+
     @Test
     public void testChangePosition_RestoreOriginalSituation() throws CanNotAddResourceToDepotException {
         Warehouse warehouse = new Warehouse(virtualView, 3, "sessionToken");

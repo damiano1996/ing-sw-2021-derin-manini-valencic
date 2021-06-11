@@ -73,7 +73,7 @@ public class NetworkNode {
     public void closeConnection() throws IOException {
         socket.close();
     }
-    
+
     /**
      * Equals method
      *

@@ -13,8 +13,6 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import java.io.PrintWriter;
 import java.util.*;
 
-import static it.polimi.ingsw.psp26.view.ViewUtils.getSelectedDevelopmentCard;
-
 public class DevelopmentCardsCli {
 
     private final PrintWriter pw;
@@ -415,6 +413,7 @@ public class DevelopmentCardsCli {
 
     /**
      * Checks if the desired Card is available on the Grid
+     * Warnings are suppressed since previous controls ensure that the value returned by the get() methods is always not null
      *
      * @param developmentCardsGrid The DevelopmentGrid
      * @param level                The Level of the desired Card
@@ -431,6 +430,22 @@ public class DevelopmentCardsCli {
         } catch (LevelDoesNotExistException | ColorDoesNotExistException e) {
             return false;
         }
+    }
+
+
+    /**
+     * Returns the desired Development Card without drawing it from the Development Grid
+     * Warnings are suppressed since previous controls ensure that the value returned by the get() method is always not null
+     *
+     * @param developmentCardsGrid The Grid from where to get the Development Card
+     * @param cardLevel            The desired Development Card Level
+     * @param cardColor            The desired Development Card Color
+     * @return The desired Development Card
+     */
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    private DevelopmentCard getSelectedDevelopmentCard(DevelopmentCardsGrid developmentCardsGrid, String cardLevel, String cardColor) {
+        return developmentCardsGrid.getAllVisibleCards().stream().filter(x -> x.getDevelopmentCardType().getColor().getName().equalsIgnoreCase(cardColor))
+                .filter(x -> x.getDevelopmentCardType().getLevel().getLevelName().equalsIgnoreCase(cardLevel)).findFirst().get();
     }
 
 }

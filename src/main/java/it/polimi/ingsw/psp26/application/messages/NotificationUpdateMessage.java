@@ -7,6 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Class used to send notifications to the Clients
+ */
 public class NotificationUpdateMessage extends SessionMessage implements Serializable {
 
     /**
@@ -20,6 +23,12 @@ public class NotificationUpdateMessage extends SessionMessage implements Seriali
         super(sessionToken, MessageType.NOTIFICATION_UPDATE, decorateWithTime(notification));
     }
 
+    /**
+     * Adds the current time in the Notification Update Message
+     *
+     * @param notification The notification where to add the time decoration
+     * @return The decorated String containing the notification
+     */
     private static String decorateWithTime(String notification) {
         Date date = new Date();
         Calendar calendar = GregorianCalendar.getInstance();

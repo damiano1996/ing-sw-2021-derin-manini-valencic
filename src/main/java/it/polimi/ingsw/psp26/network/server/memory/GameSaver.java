@@ -38,10 +38,17 @@ public class GameSaver {
     //          BACKUP          //
     //--------------------------//
 
+    /**
+     * Getter of the correct path for retrieving Matches
+     *
+     * @param matchId The ID of the Match to retrieve
+     * @return The correct path of the Match related to the given ID
+     */
     private String getMatchPath(int matchId) {
         return MATCHES_PATH + "game_" + String.format(FORMAT_ID, matchId) + "/";
     }
 
+    
     /**
      * Used to backup a VirtualView in a new directory (if needed)
      * At first, the method checks if a folder with the Match already exists: if not, creates one
@@ -210,6 +217,8 @@ public class GameSaver {
 
 
     /**
+     * Getter of the last ID contained in the saved_matches folder
+     * 
      * @return The last directory id contained in the saved_match folder. If no directory is present, returns 0
      */
     public int getLastId() {

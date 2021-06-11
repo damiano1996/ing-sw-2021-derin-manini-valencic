@@ -19,6 +19,8 @@ public class NotificationsFIFO {
 
 
     /**
+     * Getter of the NotificationsFIFO instance
+     *
      * @return The NotificationsFIFO instance
      */
     public synchronized static NotificationsFIFO getInstance() {
@@ -42,7 +44,9 @@ public class NotificationsFIFO {
 
 
     /**
-     * @return The List of all the contained notifications
+     * Getter of all the notifications contained in the notificationFIFO
+     *
+     * @return An unmodifiable List of all the contained notifications
      */
     public synchronized List<String> getNotifications() {
         while (!updated) {

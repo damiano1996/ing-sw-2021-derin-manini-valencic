@@ -73,7 +73,13 @@ public class NetworkNode {
     public void closeConnection() throws IOException {
         socket.close();
     }
-
+    
+    /**
+     * Equals method
+     *
+     * @param o Object to be compared
+     * @return True if equals, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,6 +95,11 @@ public class NetworkNode {
                 Objects.equals(objectInputStream, that.objectInputStream);
     }
 
+    /**
+     * hashCode method
+     *
+     * @return A hashCode of the Object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(

@@ -367,7 +367,7 @@ public class DevelopmentCardsInitializer {
      */
     private List<DevelopmentCard> createThirdLevelVPNine() {
         Resource[] costs = new Resource[]{SHIELD, COIN, STONE, SERVANT};
-        Resource[] productionCosts = new Resource[]{SERVANT, SERVANT, SHIELD, STONE};
+        Resource[] productionCosts = new Resource[]{COIN, SERVANT, SHIELD, STONE};
         Resource[] productionReturns1 = new Resource[]{STONE, SHIELD, SERVANT, COIN};
         Resource[] productionReturns2 = new Resource[]{FAITH_MARKER, FAITH_MARKER, FAITH_MARKER, FAITH_MARKER};
 

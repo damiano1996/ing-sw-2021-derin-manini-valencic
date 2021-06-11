@@ -7,8 +7,17 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Utility class that contains methods to operate with Files
+ */
 public class Files {
 
+    /**
+     * Writes a String on a File using a FileWriter
+     *
+     * @param fileName The name of the File where the String is written
+     * @param content  The String to write in the File
+     */
     public static void writeToFile(String fileName, String content) {
         try {
             FileWriter fileWriter = new FileWriter(fileName);
@@ -19,6 +28,14 @@ public class Files {
         }
     }
 
+
+    /**
+     * Reads a String from a File using a Scanner
+     *
+     * @param fileName The name of the File to read
+     * @return The String contained in the File
+     * @throws FileNotFoundException Thrown if the File doesn't exist
+     */
     public static String readFromFile(String fileName) throws FileNotFoundException {
         StringBuilder content = new StringBuilder();
         File file = new File(fileName);
@@ -28,10 +45,24 @@ public class Files {
         return content.toString();
     }
 
-    public static boolean deleteFile(String fileName) {
-        return new File(fileName).delete();
+
+    /**
+     * Deletes a File
+     *
+     * @param fileName The name of the File to delete
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void deleteFile(String fileName) {
+        new File(fileName).delete();
     }
 
+
+    /**
+     * Writes a Message Object into a File
+     *
+     * @param fileName The name of the File where to write the Message Object
+     * @param message  The Message Object to write into the File
+     */
     public static void writeMessageToFile(String fileName, Message message) {
         try {
 
@@ -44,6 +75,14 @@ public class Files {
 
     }
 
+
+    /**
+     * Reads a Message Object from a File
+     *
+     * @param fileName The name of the File containing the Message Object to read
+     * @return The Message Object contained in the File
+     * @throws CannotReadMessageFileException Thrown if the File cannot be read due to an IOException or ClassNotFoundException
+     */
     public static Message readMessageFromFile(String fileName) throws CannotReadMessageFileException {
         try {
 
@@ -92,6 +131,13 @@ public class Files {
         deleteFile(directoryPath);
     }
 
+
+    /**
+     * Creates and returns a List of all the File Names in the given path
+     *
+     * @param directoryPath The name of the path where to find all the Files names
+     * @return The Files names contained in the directoryPath directory
+     */
     public static List<String> getFilesNamesInDirectory(String directoryPath) {
         try {
             return Arrays.stream(Objects.requireNonNull(new File(directoryPath).list())).sorted().collect(Collectors.toList());
@@ -99,4 +145,5 @@ public class Files {
             return new ArrayList<>();
         }
     }
+
 }

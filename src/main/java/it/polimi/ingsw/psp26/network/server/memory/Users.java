@@ -41,21 +41,49 @@ public class Users {
         }
     }
 
+    /**
+     * Getter of the instance of the class
+     *
+     * @return The instance of the class
+     */
     public synchronized static Users getInstance() {
         if (instance == null) instance = new Users();
         return instance;
     }
 
+
+    /**
+     * Checks if the nickname entered by the Player satisfies the requirements
+     *
+     * @param nickname The nickname entered by the Player
+     * @throws NicknameTooShortException      Thrown if nickname length < MIN_NICKNAME_LENGTH
+     * @throws NicknameAlreadyExistsException Thrown if the nickname has already been entered by another Player
+     */
     public synchronized static void checkNicknameRequirements(String nickname) throws NicknameTooShortException, NicknameAlreadyExistsException {
         if (nickname.length() < MIN_NICKNAME_LENGTH) throw new NicknameTooShortException();
         if (Users.getInstance().getNicknamePasswords().containsKey(nickname))
             throw new NicknameAlreadyExistsException();
     }
 
+
+    /**
+     * Checks if the password entered by the Player satisfies the requirements
+     *
+     * @param password The password entered by the Player
+     * @throws PasswordTooShortException Thrown if password length < MIN_PASSWORD_LENGTH
+     */
     public synchronized static void checkPasswordRequirements(String password) throws PasswordTooShortException {
         if (password.length() < MIN_PASSWORD_LENGTH) throw new PasswordTooShortException();
     }
 
+
+    /**
+     * Adds a new user nickname and password in the nicknamePasswords Map and writes it to File
+     *
+     * @param nickname     The nickname of the Player
+     * @param password     The password of the Player
+     * @param sessionToken The sessionToken of the Player
+     */
     public synchronized void addUser(String nickname, String password, String sessionToken) {
         nicknamePasswords.put(nickname, password);
         writeToFile(USERS_FILE_PASSWORDS, GsonConverter.getInstance().getGson().toJson(nicknamePasswords));
@@ -64,6 +92,14 @@ public class Users {
         writeToFile(USERS_FILE_SESSION_TOKENS, GsonConverter.getInstance().getGson().toJson(nicknameSessionTokens));
     }
 
+
+    /**
+     * Getter of the nickname of a Player from the nicknamePasswords Map. Retrieves it by using the Player sessionToken
+     *
+     * @param sessionToken The sessionToken of the wanted Player
+     * @return The nickname of the Player
+     * @throws SessionTokenDoesNotExistsException Thrown if nicknameSessionTokens doesn't contain the given sessionToken
+     */
     public synchronized String getNickname(String sessionToken) throws SessionTokenDoesNotExistsException {
         for (String nickname : nicknameSessionTokens.keySet()) {
             if (nicknameSessionTokens.get(nickname).equals(sessionToken)) return nickname;
@@ -71,10 +107,22 @@ public class Users {
         throw new SessionTokenDoesNotExistsException();
     }
 
+
+    /**
+     * Getter of the nicknamePasswords Map
+     * 
+     * @return An unmodifiable nicknamePasswords Map
+     */
     public synchronized Map<String, String> getNicknamePasswords() {
         return Collections.unmodifiableMap(nicknamePasswords);
     }
 
+
+    /**
+     * Getter of the nicknameSessionTokens Map
+     * 
+     * @return An unmodifiable nicknameSessionTokens Map
+     */
     public synchronized Map<String, String> getNicknameSessionTokens() {
         return Collections.unmodifiableMap(nicknameSessionTokens);
     }

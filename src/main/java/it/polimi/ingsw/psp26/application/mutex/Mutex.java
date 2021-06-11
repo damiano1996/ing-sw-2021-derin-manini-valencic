@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.application.mutex;
 
 /**
- * Class used in CLI to block the printing
+ * Class that resemble a mutex to stop Threads
  */
 public class Mutex {
 

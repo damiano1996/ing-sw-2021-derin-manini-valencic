@@ -40,6 +40,11 @@ public class Server {
         recoveryMatches();
     }
 
+    /**
+     * Getter of the instance of the class
+     *
+     * @return The instance of the class
+     */
     public synchronized static Server getInstance() {
         if (instance == null || serverSocket.isClosed()) {
             try {
@@ -113,18 +118,39 @@ public class Server {
         serverSocket.close();
     }
 
+    /**
+     * Getter of the virtualViews List
+     *
+     * @return An unmodifiable virtualViews List
+     */
     public List<VirtualView> getVirtualViews() {
         return Collections.unmodifiableList(virtualViews);
     }
 
+    /**
+     * Adds a VirtualView to the virtualViews List
+     *
+     * @param virtualView The VirtualView to add
+     */
     public void addVirtualView(VirtualView virtualView) {
         virtualViews.add(virtualView);
     }
 
+    /**
+     * Adds a Client to the Waiting Room
+     *
+     * @param sessionToken The sessionToken of the Client
+     * @param nodeClient   The Network Node of the Client
+     */
     public void addNodeClientToWaitingRoom(String sessionToken, NetworkNode nodeClient) {
         waitingRoom.addNodeClient(sessionToken, nodeClient);
     }
 
+    /**
+     * Removes a VirtualView from the virtualViews List
+     *
+     * @param virtualView The VirtualView to remove
+     */
     public void removeVirtualView(VirtualView virtualView) {
         virtualViews.remove(virtualView);
     }

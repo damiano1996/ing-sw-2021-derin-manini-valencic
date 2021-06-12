@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp26.network.client.Client;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -14,12 +15,23 @@ import java.util.Map;
 import static it.polimi.ingsw.psp26.view.ViewUtils.getOrderedPlayersList;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
+/**
+ * Class to draw the leaderboard.
+ */
 public class LeaderboardDrawer extends RatioDrawer {
 
     private final Client client;
     private final Map<String, Integer> endMatchLeaderboard;
     private final String winningPlayer;
 
+    /**
+     * Class constructor.
+     *
+     * @param client              client object
+     * @param endMatchLeaderboard map containing nickname -> points associations
+     * @param winningPlayer       nickname of the winner
+     * @param maxWidth            max width that can be used to draw the root pane
+     */
     public LeaderboardDrawer(Client client, Map<String, Integer> endMatchLeaderboard, String winningPlayer, int maxWidth) {
         super(maxWidth);
 
@@ -30,9 +42,12 @@ public class LeaderboardDrawer extends RatioDrawer {
 
 
     /**
-     * @return An AnchorPane containing the leaderboard
+     * Method to draw the leaderboard.
+     *
+     * @return a pane containing the leaderboard
      */
-    public AnchorPane draw() {
+    @Override
+    public Pane draw() {
         AnchorPane leaderboard = new AnchorPane();
 
         try {
@@ -67,7 +82,7 @@ public class LeaderboardDrawer extends RatioDrawer {
 
 
     /**
-     * Insert the Players' nicknames and points in the leaderboard
+     * Method to insert the Players' nicknames and points in the leaderboard.
      *
      * @param playerBox   The VBox containing the Players' nicknames
      * @param pointsBox   The VBox containing the Players' points
@@ -92,7 +107,7 @@ public class LeaderboardDrawer extends RatioDrawer {
 
 
     /**
-     * Sets the desired dimension to the text and, if wanted, underlines the text
+     * Sets the desired dimension to the text and, if wanted, underlines the text.
      *
      * @param text      The text to change
      * @param dimension The desired dimension of the text
@@ -106,7 +121,7 @@ public class LeaderboardDrawer extends RatioDrawer {
 
 
     /**
-     * Sets the winningText
+     * Sets the winningText.
      *
      * @param winningText The winningText to change
      */
@@ -120,7 +135,7 @@ public class LeaderboardDrawer extends RatioDrawer {
 
 
     /**
-     * Sets the action of the doneButton
+     * Sets the action of the doneButton.
      *
      * @param doneButton The button to set the action to
      */

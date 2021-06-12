@@ -16,23 +16,45 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOverAnimation;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
 
+/**
+ * Class to draw the market tray.
+ */
 public class MarketTrayDrawer extends RatioDrawer {
 
     private final MarketTray marketTray;
 
     private Client client;
 
+    /**
+     * Class constructor.
+     *
+     * @param marketTray market tray that must be drawn
+     * @param maxWidth   max width for the root pane
+     */
     public MarketTrayDrawer(MarketTray marketTray, int maxWidth) {
         super(maxWidth);
         this.marketTray = marketTray;
     }
 
+    /**
+     * Class constructor.
+     *
+     * @param client     client object
+     * @param marketTray market tray that must be drawn
+     * @param maxWidth   max width for the root pane
+     */
     public MarketTrayDrawer(Client client, MarketTray marketTray, int maxWidth) {
         super(maxWidth);
         this.client = client;
         this.marketTray = marketTray;
     }
 
+    /**
+     * Method to draw the market.
+     * It returns tha pane containing it.
+     *
+     * @return pane
+     */
     @Override
     public Pane draw() {
 
@@ -49,6 +71,10 @@ public class MarketTrayDrawer extends RatioDrawer {
         return pane;
     }
 
+    /**
+     * Method to load the image of the market tray and to assign it to an image view
+     * that will be added to the root pane.
+     */
     private void drawMarketTray() {
         Image marketTrayImage = loadImage("market/market_tray.png", (int) (1550 * ratio));
         marketTrayImage = setRoundedCorners(marketTrayImage, ratio);
@@ -59,6 +85,9 @@ public class MarketTrayDrawer extends RatioDrawer {
         pane.getChildren().add(imageView);
     }
 
+    /**
+     * Method to draw the marble on the slide.
+     */
     private void drawSlideMarble() {
         Image marbleImage = loadImage("resources/" + marketTray.getMarbleOnSlide().getColor().getName() + "_MARBLE.png", (int) (250 * ratio));
         marbleImage = addLightEffects(marbleImage, ratio);
@@ -69,6 +98,9 @@ public class MarketTrayDrawer extends RatioDrawer {
         pane.getChildren().add(imageView);
     }
 
+    /**
+     * Method to draw the grid of marbles.
+     */
     private void drawGridMarbles() {
         int hOffset = 650;
         int vOffset = 650;
@@ -89,11 +121,17 @@ public class MarketTrayDrawer extends RatioDrawer {
         }
     }
 
+    /**
+     * Method that draws on the root pane the arrows targeting th rows and the columns of the market.
+     */
     private void drawArrows() {
         drawHorizontalArrows();
         drawVerticalArrows();
     }
 
+    /**
+     * Method to draw the horizontal arrows.
+     */
     private void drawHorizontalArrows() {
         int hOffset = 2040;
         int vOffset = 530;
@@ -109,6 +147,9 @@ public class MarketTrayDrawer extends RatioDrawer {
         }
     }
 
+    /**
+     * Method to draw the vertical arrows.
+     */
     private void drawVerticalArrows() {
         int hOffset = 650;
         int vOffset = 1680;
@@ -123,12 +164,25 @@ public class MarketTrayDrawer extends RatioDrawer {
         }
     }
 
+    /**
+     * Getter of the arrow image.
+     *
+     * @return an image with the arrow
+     */
     private Image getArrowImage() {
         Image arrowImage = loadImage("market/arrow.png", (int) (450 * ratio));
         arrowImage = addLightEffects(arrowImage, ratio);
         return arrowImage;
     }
 
+    /**
+     * Method to add the arrow click event. (Only if client has been defined)
+     * If an arrow will be clicked, the event will send to the server the corresponding index of the arrow.
+     * To choose the resources of the corresponding row or column
+     *
+     * @param arrowImageView image view of the arrow
+     * @param numToSend      index associated to the arrow
+     */
     private void addArrowClickEvent(ImageView arrowImageView, int numToSend) {
         if (client != null) {
             arrowImageView.setOnMouseClicked(mouseEvent -> {

@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -16,11 +17,20 @@ import java.util.Map;
 import static it.polimi.ingsw.psp26.view.ViewUtils.getOrderedPlayersList;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
+/**
+ * Class to draw the global leaderboard.
+ */
 public class GlobalLeaderboardDrawer extends RatioDrawer {
 
     private final LeaderBoard globalLeaderboard;
     private final Client client;
 
+    /**
+     * Class constructor.
+     *
+     * @param client   client object
+     * @param maxWidth max width that can be used to draw the root pane
+     */
     public GlobalLeaderboardDrawer(Client client, int maxWidth) {
         super(maxWidth);
         this.globalLeaderboard = LeaderBoard.getInstance();
@@ -28,9 +38,11 @@ public class GlobalLeaderboardDrawer extends RatioDrawer {
     }
 
     /**
-     * @return An AnchorPane containing the leaderboard
+     * Method to draw the global leaderboard.
+     *
+     * @return a pane containing the leaderboard
      */
-    public AnchorPane draw() {
+    public Pane draw() {
         AnchorPane leaderboard = new AnchorPane();
         try {
 

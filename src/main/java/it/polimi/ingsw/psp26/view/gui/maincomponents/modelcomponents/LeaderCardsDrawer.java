@@ -14,12 +14,23 @@ import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOv
 import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addTurnCardAnimation;
 import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.*;
 
+/**
+ * Class to draw leader cards.
+ */
 public class LeaderCardsDrawer extends RatioDrawer {
 
     private final List<LeaderCard> leaderCards;
     private final List<LeaderDepot> leaderDepots;
     private final boolean hideNotActiveLeaderCards;
 
+    /**
+     * Class constructor.
+     *
+     * @param leaderCards              leader cards of the player that must be drawn
+     * @param leaderDepots             leader depots of the player
+     * @param maxWidth                 max width for the root pane
+     * @param hideNotActiveLeaderCards boolean to hide non active leader
+     */
     public LeaderCardsDrawer(List<LeaderCard> leaderCards, List<LeaderDepot> leaderDepots, int maxWidth, boolean hideNotActiveLeaderCards) {
         super(maxWidth);
 
@@ -28,12 +39,26 @@ public class LeaderCardsDrawer extends RatioDrawer {
         this.hideNotActiveLeaderCards = hideNotActiveLeaderCards;
     }
 
+    /**
+     * Method to draw leader cards.
+     * It returns the pane containing them
+     *
+     * @return pane
+     */
     @Override
     public Pane draw() {
         drawLeaders();
         return pane;
     }
 
+    /**
+     * Method to draw leader cards on the root pane.
+     * if leader is active it draws the front image of the leader, otherwise it draws the back
+     * Passing with the mouse over an non-active leader, the front will be shown,
+     * but only if the hideNotActiveLeaderCards has been set to false.
+     * <p>
+     * In case of leader with depot ability, resources will be drawn over it.
+     */
     private void drawLeaders() {
         int hOffset = 100;
         int vOffset = 100;
@@ -67,7 +92,7 @@ public class LeaderCardsDrawer extends RatioDrawer {
 
 
     /**
-     * Draws the Resources contained in the Leader Depots directly on the Leader Cards
+     * Draws the Resources contained in the Leader Depots directly on the Leader Cards.
      *
      * @param leaderCard The card where the Resources will be drawn
      * @param cardX      The X position of the card
@@ -88,7 +113,7 @@ public class LeaderCardsDrawer extends RatioDrawer {
 
 
     /**
-     * Used to get the correct index of the Leader Card in the leaderDepots List in order to display the correct amount of Resources
+     * Used to get the correct index of the Leader Card in the leaderDepots List in order to display the correct amount of Resources.
      *
      * @param leaderCard The Leader Card that has to be drawn
      * @return The index of the Leader Card in the leaderDepots List

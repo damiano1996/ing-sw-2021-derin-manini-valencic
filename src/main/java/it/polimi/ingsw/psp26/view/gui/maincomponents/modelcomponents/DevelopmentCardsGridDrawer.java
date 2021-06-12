@@ -17,18 +17,34 @@ import java.util.Random;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 
+/**
+ * Class to draw the development cards grid.
+ */
 public class DevelopmentCardsGridDrawer extends RatioDrawer {
 
     private final DevelopmentCardsGrid developmentCardsGrid;
 
     private Client client;
 
+    /**
+     * Class constructor.
+     *
+     * @param developmentCardsGrid development cards grid that must be drawn
+     * @param maxWidth             max allowed width for the root pane
+     */
     public DevelopmentCardsGridDrawer(DevelopmentCardsGrid developmentCardsGrid, int maxWidth) {
         super(maxWidth);
 
         this.developmentCardsGrid = developmentCardsGrid;
     }
 
+    /**
+     * Class constructor.
+     *
+     * @param client               client object
+     * @param developmentCardsGrid development cards grid that must be drawn
+     * @param maxWidth             max allowed width for the root pane
+     */
     public DevelopmentCardsGridDrawer(Client client, DevelopmentCardsGrid developmentCardsGrid, int maxWidth) {
         super(maxWidth);
 
@@ -36,12 +52,25 @@ public class DevelopmentCardsGridDrawer extends RatioDrawer {
         this.client = client;
     }
 
+    /**
+     * Method to draw the grid of cards.
+     * It returns a pane containing the grid.
+     *
+     * @return pane
+     */
     @Override
     public Pane draw() {
 
         return drawGrid();
     }
 
+    /**
+     * Method to draw the matrix containing the development cards.
+     * If client object is defined,
+     * if cards are clicked, an event is triggered and the card will be sent to the server.
+     *
+     * @return pane containing th grid
+     */
     private Pane drawGrid() {
 
         int cellShift = 5;
@@ -84,7 +113,6 @@ public class DevelopmentCardsGridDrawer extends RatioDrawer {
                         });
                     }
 
-//                    addMouseOverAnimation(imageView, ratio);
                     cell.getChildren().add(imageView);
                 }
 

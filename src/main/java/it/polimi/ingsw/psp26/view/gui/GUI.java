@@ -372,7 +372,7 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayGlobalLeaderboard() {
-        Stage dialog = getDialog(primaryStage, new GlobalLeaderboardDrawer(client, getWindowWidth()).draw());
+        Stage dialog = getDialog(primaryStage, new GlobalLeaderboardDrawer(client, getMinBetweenWindowWidthAndHeight()).draw());
         dialog.show();
     }
 
@@ -406,7 +406,9 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer) {
-        LeaderboardDrawer leaderboardDrawer = new LeaderboardDrawer(client, leaderboard, winningPlayer, getWindowWidth());
+        LeaderboardDrawer leaderboardDrawer = new LeaderboardDrawer(
+                client, leaderboard, winningPlayer, getMinBetweenWindowWidthAndHeight()
+        );
         Stage dialog = getDialog(primaryStage, leaderboardDrawer.draw());
         dialog.show();
     }

@@ -7,8 +7,21 @@ import javafx.scene.text.Text;
 
 import static it.polimi.ingsw.psp26.view.ViewUtils.toTitleStyle;
 
+/**
+ * Class containing a static method to draw a board of a player with his nickname and leader cards.
+ */
 public class PlayerDrawer {
 
+    /**
+     * Method to draw the nickname of the player, the personal board and the leader cards.
+     *
+     * @param player                   player object
+     * @param maxWidth                 max width for the pane
+     * @param ratio                    ratio for the drawings
+     * @param hideNotActiveLeaderCards boolean to hide non-active leaders
+     * @param hideBlackCross           boolean to hide black cross
+     * @return border pane containing the player's components
+     */
     public static BorderPane drawPlayer(Player player, int maxWidth, float ratio, boolean hideNotActiveLeaderCards, boolean hideBlackCross) {
         BorderPane borderPane = new BorderPane();
 

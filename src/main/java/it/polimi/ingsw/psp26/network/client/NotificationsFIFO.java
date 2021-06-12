@@ -19,7 +19,7 @@ public class NotificationsFIFO {
 
 
     /**
-     * Getter of the NotificationsFIFO instance
+     * Getter of the NotificationsFIFO instance.
      *
      * @return The NotificationsFIFO instance
      */
@@ -30,8 +30,8 @@ public class NotificationsFIFO {
 
 
     /**
-     * Push a new notification in the FIFO
-     * If the size of the FIFO grows over the maxFIFOSize, removes the first element of the FIFO
+     * Push a new notification in the FIFO.
+     * If the size of the FIFO grows over the maxFIFOSize, removes the first element of the FIFO.
      *
      * @param notification The notification to insert
      */
@@ -44,7 +44,7 @@ public class NotificationsFIFO {
 
 
     /**
-     * Getter of all the notifications contained in the notificationFIFO
+     * Getter of all the notifications contained in the notificationFIFO.
      *
      * @return An unmodifiable List of all the contained notifications
      */
@@ -62,7 +62,7 @@ public class NotificationsFIFO {
 
 
     /**
-     * Creates a new List of notifications
+     * Creates a new List of notifications.
      */
     public synchronized void resetFIFO() {
         notifications = new ArrayList<>();

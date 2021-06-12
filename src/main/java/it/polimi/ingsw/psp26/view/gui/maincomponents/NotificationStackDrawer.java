@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Class to draw the notification stack.
+ */
 public class NotificationStackDrawer extends RatioDrawer {
 
     // The notifications displayed on screen
@@ -20,12 +23,24 @@ public class NotificationStackDrawer extends RatioDrawer {
     // The updated notifications received from the Server
     private List<String> receivedNotifications;
 
+    /**
+     * Class constructor.
+     *
+     * @param maxWidth max width that can be used to draw the stack
+     */
     public NotificationStackDrawer(int maxWidth) {
         super(maxWidth);
         notificationsToShow = new ArrayList<>();
         receivedNotifications = new ArrayList<>();
     }
 
+    /**
+     * Method that returns the pane containing the stack.
+     * Messages in the stack are initialized as empty text fields.
+     * They will be updated
+     *
+     * @return border pane containing the stack
+     */
     @Override
     public Pane draw() {
 
@@ -77,7 +92,7 @@ public class NotificationStackDrawer extends RatioDrawer {
 
 
     /**
-     * Displays the new notifications by changing the text in the existing Text fields
+     * Method to display the new notifications by changing the text in the existing Text fields.
      */
     public synchronized void displayNotifications() {
         for (int i = 0; i < receivedNotifications.size(); i++) {
@@ -87,9 +102,9 @@ public class NotificationStackDrawer extends RatioDrawer {
 
 
     /**
-     * Saves the updated notifications
+     * Setter of the received notifications.
      *
-     * @param receivedNotifications The updated notifications to save
+     * @param receivedNotifications list of notifications
      */
     public synchronized void setReceivedNotifications(List<String> receivedNotifications) {
         this.receivedNotifications = receivedNotifications;

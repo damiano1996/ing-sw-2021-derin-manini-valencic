@@ -14,10 +14,19 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
+/**
+ * Class to draw action tokens.
+ */
 public class ActionTokenDrawer extends RatioDrawer {
 
     private final List<ActionToken> actionTokensToDisplay;
 
+    /**
+     * Class constructor.
+     *
+     * @param actionTokensToDisplay list of the action tokens
+     * @param maxWidth              max width that can be used to draw the root pane
+     */
     public ActionTokenDrawer(List<ActionToken> actionTokensToDisplay, int maxWidth) {
         super(maxWidth);
 
@@ -25,6 +34,12 @@ public class ActionTokenDrawer extends RatioDrawer {
     }
 
 
+    /**
+     * Method to draw the pane containing the action tokens.
+     * It creates an horizontal box and fills it with the action tokens.
+     *
+     * @return pane containing the tokens
+     */
     @Override
     public Pane draw() {
         HBox hBox = new HBox();
@@ -39,7 +54,7 @@ public class ActionTokenDrawer extends RatioDrawer {
 
 
     /**
-     * Creates the stack of unused Tokens
+     * Creates the stack of unused Tokens.
      *
      * @return The stack of the unused tokens
      */
@@ -61,7 +76,10 @@ public class ActionTokenDrawer extends RatioDrawer {
 
 
     /**
-     * @return A view of the active Token
+     * Method creates the visible token.
+     * It creates a vertical box and fills it with the token and a text.
+     *
+     * @return a vertical box
      */
     private VBox createVisibleToken() {
         VBox visibleTokenBox = new VBox();

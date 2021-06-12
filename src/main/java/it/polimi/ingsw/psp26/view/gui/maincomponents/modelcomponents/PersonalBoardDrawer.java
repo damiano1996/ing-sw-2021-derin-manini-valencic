@@ -20,12 +20,23 @@ import static it.polimi.ingsw.psp26.view.gui.effects.AnimationEffects.addMouseOv
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
 import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getResourceImage;
 
+/**
+ * Class to draw the personal board.
+ */
 public class PersonalBoardDrawer extends RatioDrawer {
 
     private final PersonalBoard personalBoard;
     private final boolean hasInkwell;
     private final boolean hideBlackCross;
 
+    /**
+     * Class constructor.
+     *
+     * @param personalBoard  personal board to draw
+     * @param maxWidth       max width for the root pane
+     * @param hasInkwell     boolean to draw or not the inkwell
+     * @param hideBlackCross boolean to draw or not the black cross
+     */
     public PersonalBoardDrawer(PersonalBoard personalBoard, int maxWidth, boolean hasInkwell, boolean hideBlackCross) {
         super(maxWidth);
 
@@ -34,6 +45,11 @@ public class PersonalBoardDrawer extends RatioDrawer {
         this.hideBlackCross = hideBlackCross;
     }
 
+    /**
+     * Method to draw the personal board.
+     *
+     * @return pane containing the personal board
+     */
     @Override
     public Pane draw() {
 
@@ -52,6 +68,9 @@ public class PersonalBoardDrawer extends RatioDrawer {
         return pane;
     }
 
+    /**
+     * Method to draw the inkwell over the board.
+     */
     private void drawInkwell() {
         int hOffset = 50;
         int vOffset = 50;
@@ -66,6 +85,9 @@ public class PersonalBoardDrawer extends RatioDrawer {
         }
     }
 
+    /**
+     * Method to draw the resources in the warehouse.
+     */
     private void drawWarehouseBaseDepots() {
         int[] hOffsets = new int[]{345, 275, 215};
         int vOffsetFirstDepot = 895;
@@ -73,9 +95,8 @@ public class PersonalBoardDrawer extends RatioDrawer {
         List<Depot> baseDepots = personalBoard.getWarehouse().getBaseDepots();
         for (int i = 0; i < baseDepots.size(); i++) {
             Depot depot = baseDepots.get(i);
-//            Image resourceImage = loadImage("resources/" + depot.getContainedResourceType() + ".png", (int) (100 * ratio));
+
             Image resourceImage = getResourceImage(depot.getContainedResourceType(), ratio);
-//            resourceImage = addLightEffects(resourceImage, ratio);
 
             for (int j = 0; j < depot.getResources().size(); j++) {
 
@@ -88,6 +109,9 @@ public class PersonalBoardDrawer extends RatioDrawer {
         }
     }
 
+    /**
+     * Method to draw the resources in the strongbox.
+     */
     private void drawStrongbox() {
         int[] hOffsets = new int[]{150, 150, 400, 400};
         int[] vOffsets = new int[]{1750, 1600, 1750, 1600};
@@ -100,9 +124,7 @@ public class PersonalBoardDrawer extends RatioDrawer {
             Resource resource = RESOURCES_SLOTS[i];
             int multiplicity = Collections.frequency(resources, resource);
 
-//            Image resourceImage = loadImage("resources/" + depot.getContainedResourceType() + ".png", (int) (100 * ratio));
             Image resourceImage = getResourceImage(resource, ratio);
-//            resourceImage = addLightEffects(resourceImage, ratio);
 
             for (int j = 0; j < multiplicity; j++) {
 
@@ -117,6 +139,9 @@ public class PersonalBoardDrawer extends RatioDrawer {
         }
     }
 
+    /**
+     * Method to draw the development cards in the corresponding slots.
+     */
     private void drawDevelopmentCards() {
         int[] hOffsets = new int[]{1120, 1665, 2240};
         int vOffset = 800;
@@ -135,20 +160,36 @@ public class PersonalBoardDrawer extends RatioDrawer {
         }
     }
 
+    /**
+     * Method to draw the faith track.
+     * It draws the pope's favor tiles, the markers and the black cross.
+     */
     private void drawFaithTrack() {
         drawPopesFavorTiles();
         drawFaithMarker();
         if (!hideBlackCross) drawBlackCross();
     }
 
+    /**
+     * Method to draw the faith marker.
+     */
     private void drawFaithMarker() {
         drawMarker("resources/FAITH_MARKER.png", personalBoard.getFaithTrack().getMarkerPosition());
     }
 
+    /**
+     * Method to draw the black cross.
+     */
     private void drawBlackCross() {
         drawMarker("faith_track/BLACK_CROSS.png", personalBoard.getFaithTrack().getBlackCrossPosition());
     }
 
+    /**
+     * Method to draw an image in a given position of the faith track.
+     *
+     * @param fileName file name of the image that must be drawn in the given position
+     * @param position position of the faith track
+     */
     private void drawMarker(String fileName, int position) {
         int[] hOffsets = new int[]{120, 260, 400, 400, 400, 540, 680, 820, 960, 1100, 1100, 1100, 1240, 1380, 1520, 1660, 1800, 1800, 1800, 1940, 2080, 2220, 2360, 2500, 2640};
         int[] vOffsets = new int[]{415, 415, 415, 275, 135, 135, 135, 135, 135, 135, 275, 415, 415, 415, 415, 415, 415, 275, 135, 135, 135, 135, 135, 135, 135};
@@ -165,6 +206,10 @@ public class PersonalBoardDrawer extends RatioDrawer {
         pane.getChildren().add(imageView);
     }
 
+    /**
+     * Method to draw the pope's favor tiles.
+     * They can be active, non-active and they can be discarded.
+     */
     private void drawPopesFavorTiles() {
         int[] hOffsets = new int[]{705, 1410, 2250};
         int[] vOffsets = new int[]{295, 150, 295};

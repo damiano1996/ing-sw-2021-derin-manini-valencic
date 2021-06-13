@@ -118,8 +118,9 @@ public class GUI extends Application implements ViewInterface {
                 String password = ((TextField) fxmlLoader.getNamespace().get("passwordTextField")).getText();
                 String serverIP = ((TextField) fxmlLoader.getNamespace().get("serverIPTextField")).getText();
 
-                client.initializeNetworkHandler(nickname, password, serverIP);
                 dialog.close();
+
+                client.initializeNetworkHandler(nickname, password, serverIP);
                 client.viewNext();
 
             });

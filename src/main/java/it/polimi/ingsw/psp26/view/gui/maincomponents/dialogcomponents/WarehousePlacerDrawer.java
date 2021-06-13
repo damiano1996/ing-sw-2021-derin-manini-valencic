@@ -176,12 +176,22 @@ public class WarehousePlacerDrawer extends RatioDrawer {
             GridPane resourcesGridPane = new GridPane();
             resourcesGridPane.setVgap(0 * ratio);
             resourcesGridPane.setHgap(-10 * ratio);
-            resourcesGridPane.setPadding(new Insets(topOffsets[depotIndex] * ratio, 0, bottomOffsets[depotIndex] * ratio, leftOffsets[depotIndex] * ratio)); // top / right / bottom / left
+            resourcesGridPane.setPadding(
+                    // top / right / bottom / left
+                    new Insets(topOffsets[depotIndex] * ratio,
+                            0,
+                            bottomOffsets[depotIndex] * ratio,
+                            leftOffsets[depotIndex] * ratio)
+            );
             drawResources(vBox, baseDepot, imageStack, resourcesGridPane);
 
             System.out.println("WarehousePlacerDrawer - index: " + depotIndex);
-            DepotTargetContainer depotTargetContainer = new DepotTargetContainer(resourcesGridPane, imageStack, warehouse, depotIndex);
-            SwitchableDepot switchableDepot = new SwitchableDepot(depotIndex, switchableGroup, imageStack, baseDepotImageView, resourcesGridPane);
+            DepotTargetContainer depotTargetContainer = new DepotTargetContainer(
+                    resourcesGridPane, imageStack, warehouse, depotIndex
+            );
+            SwitchableDepot switchableDepot = new SwitchableDepot(
+                    depotIndex, switchableGroup, imageStack, baseDepotImageView, resourcesGridPane
+            );
             switchableGroup.addSwitchableDepot(switchableDepot);
             targets.add(depotTargetContainer);
 

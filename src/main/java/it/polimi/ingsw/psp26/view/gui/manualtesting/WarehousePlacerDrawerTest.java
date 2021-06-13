@@ -31,8 +31,8 @@ public class WarehousePlacerDrawerTest extends Application {
 
         try {
             warehouse.addResourceToDepot(0, Resource.SHIELD);
-            warehouse.addResourceToDepot(2, Resource.COIN);
-            warehouse.addResourceToDepot(2, Resource.COIN);
+            // warehouse.addResourceToDepot(2, Resource.COIN);
+            // warehouse.addResourceToDepot(2, Resource.COIN);
         } catch (CanNotAddResourceToDepotException canNotAddResourceToWarehouse) {
             canNotAddResourceToWarehouse.printStackTrace();
         }

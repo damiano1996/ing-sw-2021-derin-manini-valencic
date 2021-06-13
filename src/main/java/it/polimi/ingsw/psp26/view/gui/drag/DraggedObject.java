@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 
 import java.util.List;
 
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addSelectionShadow;
 
@@ -100,8 +101,12 @@ public class DraggedObject<T> {
 
                         movedSuccessfully = true;
                         sourcePane.getChildren().remove(imageView);
-                        if (!tTargetContainer.getDraggableObjectsContainer().getChildren().contains(imageView))
-                            tTargetContainer.getDraggableObjectsContainer().add(imageView, tTargetContainer.getDraggableObjectsContainer().getColumnCount() + 1, 1, 1, 1);
+                        if (!tTargetContainer.getDraggableObjectsContainer().getChildren().contains(imageView)) {
+                            tTargetContainer.getDraggableObjectsContainer().add(
+                                    getImageView(originalImage, 0, 0), // new image view without draggable properties
+                                    tTargetContainer.getDraggableObjectsContainer().getColumnCount() + 1, 1, 1, 1
+                            );
+                        }
                     }
                     break;
                 }

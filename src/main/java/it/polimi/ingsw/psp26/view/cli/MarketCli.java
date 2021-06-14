@@ -32,7 +32,7 @@ public class MarketCli {
 
 
     /**
-     * Prints the Market Tray
+     * Prints the Market Tray by printing the base figure first and then adding the marbles
      *
      * @param marketTray     The Market Tray to print
      * @param startingRow    The starting row where the Market is going to be printed
@@ -90,6 +90,7 @@ public class MarketCli {
 
     /**
      * Displays the Market row/column choice
+     * Each input is checked to see if the Player enters the correct row or column
      *
      * @param marketTray      The actual state of the Market
      * @param playerResources The Player Resources
@@ -122,6 +123,7 @@ public class MarketCli {
 
     /**
      * Asks the desired index for Market row/column
+     * If the Player wants to go back to the previous screen, he must enter u+Enter
      *
      * @return An integer between 0 and 6
      * @throws IndexOutOfBoundsException   If the index inserted is not correct

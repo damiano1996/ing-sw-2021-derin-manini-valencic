@@ -22,7 +22,7 @@ public class CommonScreensCli {
     //-----------------------------------//    
 
     /**
-     * Displays the end game screen
+     * Displays the end game screen by printing the Match Leaderboard
      *
      * @param leaderboard It contains the Players nicknames and the points they achieved during the Match
      */
@@ -36,6 +36,7 @@ public class CommonScreensCli {
 
     /**
      * Auxiliary method used to print the leaderboard content
+     * A verticalPadding variable is used to set the correct space between the Leaderboard rows
      *
      * @param leaderboard        The Map containing the Players nicknames and their points
      * @param orderedPlayersList A List containing the Players in the order the have to be printed

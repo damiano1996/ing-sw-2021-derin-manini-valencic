@@ -36,6 +36,7 @@ public class WaitingScreenStarter {
 
     /**
      * Starts a waiting screen by creating a new Thread
+     * The waiting screen will then show the five Resources moving simulating a waiting icon
      *
      * @param message A Message containing a String to display on screen
      */

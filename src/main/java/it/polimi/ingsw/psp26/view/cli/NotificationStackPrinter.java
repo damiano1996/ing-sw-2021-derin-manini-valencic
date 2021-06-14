@@ -27,6 +27,7 @@ public class NotificationStackPrinter {
 
     /**
      * Prints the given List of notifications in a stack of fixed size
+     * No more of MAX_NUMBER_OF_STRINGS Strings will be printed in the stack
      *
      * @param notifications The Strings to print
      */

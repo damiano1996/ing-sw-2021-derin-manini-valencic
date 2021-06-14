@@ -22,7 +22,7 @@ public class LeaderCardsCli {
 
 
     /**
-     * Prints the given Leader Cards by correctly aligning them on screen
+     * Prints the given Leader Cards by correctly aligning them in the center of the screen
      *
      * @param leaderCards The Leader Cards to print
      * @param startingRow The row where the cards will be printed
@@ -51,6 +51,8 @@ public class LeaderCardsCli {
 
     /**
      * Prints a single LeaderCard
+     * First, the base Leader figure is printed
+     * Then, adds the Leader requirements and the Leader characteristic Resource
      *
      * @param leaderCard     The Leader Card to print
      * @param startingRow    The row in which the Leader Card will be printed

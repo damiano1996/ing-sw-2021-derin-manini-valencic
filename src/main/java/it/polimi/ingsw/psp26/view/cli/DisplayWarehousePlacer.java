@@ -41,7 +41,13 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Show the screen that appears after getting Resources from the Market
+     * Shows the screen that appears after getting Resources from the Market
+     * While the Player is rearranging its Warehouse, it has to enter the number of the Depot in which he wants to store the
+     * first Resource on the left in the "Resources left to insert" List
+     * It is possible to change the Resources contained between two Depots: to do so, the Player must enter c+Enter, and then
+     * follow the instructions printed on the screen
+     * It is also possible to discard the first Resource on the left in the "Resources left to insert" List: to do so, the Player
+     * must enter d+Enter
      *
      * @param warehouse The Warehouse to print
      * @param resources The resources get prom the Market to insert into the Warehouse
@@ -59,7 +65,7 @@ public class DisplayWarehousePlacer {
 
             while (!resourceAdded) {
 
-                askForInput(warehouse.getAllDepots().size(), resources.get(i).getName().replaceAll("\\s+", ""));
+                askForInput(warehouse.getAllDepots().size(), resources.get(i).getName());
 
                 while (!correctDepotIndexInserted) {
                     try {
@@ -96,7 +102,7 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Executes the corresponding catch in displayMarketResourcesSelection()
+     * Executes the (DepotOutOfBoundException | NumberFormatException) catch in displayMarketResourcesSelection()
      */
     private void executeCatchDepotOutOfBound() {
         cliUtils.pPCS("WRONG INDEX INSERTED! Insert Depot index again: ", Color.RED, 38, 21);
@@ -106,7 +112,7 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Executes the corresponding catch displayMarketResourcesSelection()
+     * Executes the (CanNotAddResourceToDepotException) catch displayMarketResourcesSelection()
      */
     private void executeCatchCanNotAddResourcesToDepot() {
         cliUtils.pPCS("RESOURCE CAN'T BE ADDED! Please try again", Color.RED, 38, 21);
@@ -152,7 +158,8 @@ public class DisplayWarehousePlacer {
 
     /**
      * Asks the Player the index where he wants to insert the Resource
-     * If the Player enters 'd' skip the current Resource and add it to the discard list
+     * If the Player enters d+Enter skip the current Resource and add it to the discard list
+     * If the Player enters c+Enter shows the instructions for changing Resources between Depots
      *
      * @param warehouseDepotSize The max index the Player can enter
      * @return The index (an Integer between 0 and 4)
@@ -209,6 +216,7 @@ public class DisplayWarehousePlacer {
 
     /**
      * Changes the Resources between two depots
+     * Controls are made to ensure the change will not beak the game rules
      *
      * @param warehouse The Warehouse containing the Depots
      */

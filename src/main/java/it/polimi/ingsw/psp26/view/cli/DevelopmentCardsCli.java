@@ -28,6 +28,7 @@ public class DevelopmentCardsCli {
 
     /**
      * Prints the Development Card Grid
+     * The Grid is printed a row at a time, and each Development Grid Cell is printed individually
      *
      * @param developmentCardsGrid The Development Grid to print
      */
@@ -45,6 +46,14 @@ public class DevelopmentCardsCli {
 
     /**
      * Prints a DevelopmentCard
+     * First, the base Development Card Border is printed
+     * Then, the property of the Card are added:
+     * - The Development Card requirements
+     * - The Card Color
+     * - The Card Level
+     * - The Card Production power
+     * - The Card victory points
+     * It also prints additional borders based on the number of the other Cards placed under the one is being printed
      *
      * @param developmentCard The desired card to print
      * @param startingRow     The row where the Card will be printed
@@ -173,7 +182,7 @@ public class DevelopmentCardsCli {
 
     /**
      * Used to print the Production section of a DevelopmentCard
-     * It calls three auxiliary methods in order to get a clean print of the Resources
+     * It calls three auxiliary methods in order to get a clean print of the Resources (centered in the Card)
      *
      * @param productionCost   The cost of the Production
      * @param productionReturn The Resources returned by the Production
@@ -325,6 +334,9 @@ public class DevelopmentCardsCli {
 
     /**
      * Display the Grid selection screen
+     * The method check the input entered by the Player to ensure he selects a valid Development Card
+     * It also habilitate the undo option if the Player decides to do it
+     * If the entered input is not correct, or the Card not available, error strings will be printed
      *
      * @param developmentCardsGrid The Development Grid to display
      * @param playerResources      The Player's Resources
@@ -365,6 +377,7 @@ public class DevelopmentCardsCli {
 
     /**
      * Asks the Player the Level and the Color of the desired Development Card
+     * Each input is checked to see if it matches the correct requirements (Level or Color) of the desired Card
      *
      * @param stringToDisplay A message to inform the Player the String to enter
      * @param levelOrColor    True if a Level is entered, false if a Color is entered

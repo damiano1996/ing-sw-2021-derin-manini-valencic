@@ -34,7 +34,8 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Personal Board of a given player
+     * Prints the Personal Board of a given Player
+     * To display each element, one specific method is called for each figure to print
      *
      * @param player            The player who's Personal Board is gonna be printed
      * @param isMultiplayerMode Tells if the Match is Single or MultiPlayer (used to print the correct FaithTrack)

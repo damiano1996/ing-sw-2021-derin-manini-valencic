@@ -21,7 +21,7 @@ public class CliUtils {
 
 
     /**
-     * Inserts blank lines
+     * Inserts blank lines in the row where the method is called
      *
      * @param spaces The number of the lines
      */
@@ -64,7 +64,7 @@ public class CliUtils {
 
 
     /**
-     * Moves the cursor in the specified direction and by the specified numbers
+     * Moves the cursor in the specified direction and by the specified space numbers
      *
      * @param direction Up(up), Down(dn), Left(lf) or Right(rg)
      * @param spaces    The number of spaces the cursor will move
@@ -104,7 +104,7 @@ public class CliUtils {
 
 
     /**
-     * Restore the cursor position from the previous saved one
+     * Restore the last saved cursor position
      */
     public void restoreCursorPosition() {
         pw.print("\u001b[u");
@@ -125,7 +125,7 @@ public class CliUtils {
 
 
     /**
-     * Prints an ASCII figure on the screen th the specified coordinates (x,y)
+     * Prints an ASCII figure on the screen starting at the specified coordinates (x,y)
      *
      * @param figureName The name of the figure file you want to print
      * @param row        The y coordinate
@@ -176,7 +176,7 @@ public class CliUtils {
 
 
     /**
-     * Prints a colored string and set the cursor one line under the first column
+     * Prints a colored string and set the cursor one line under its first column
      *
      * @param s     The String to print
      * @param color The color of the printed String
@@ -207,6 +207,8 @@ public class CliUtils {
 
     /**
      * Centers a String in the given space
+     * If the space can contain the whole String, centers it in the given space
+     * If the space cannot contain the whole String, returns the String stopping at the rowSize character
      *
      * @param rowSize The size of the row where the String will be printed
      * @param string  The String to print

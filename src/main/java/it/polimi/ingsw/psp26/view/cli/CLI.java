@@ -102,6 +102,7 @@ public class CLI implements ViewInterface {
 
     /**
      * Used to ask the Player's credentials
+     * After they have been entered, starts the Notification Thread
      */
     public void displayLogIn() {
         printTitle();
@@ -195,6 +196,7 @@ public class CLI implements ViewInterface {
 
     /**
      * Creates a new Thread that checks if there are new notifications
+     * In case of new Notifications, prints them in the right-bottom corner of the screen
      */
     private void startLiveUpdate() {
         new Thread(() -> {
@@ -259,6 +261,8 @@ public class CLI implements ViewInterface {
 
     /**
      * Displays the Market action screen
+     * Hides the Notification Stack view for better displaying all the elements
+     * After choices have been entered, sends them to the Server
      *
      * @param marketTray      The Market Tray to display
      * @param playerResources The Player's current Resources
@@ -282,6 +286,8 @@ public class CLI implements ViewInterface {
 
     /**
      * Displays the Development Card buy action screen
+     * Hides the Notification Stack view for better displaying all the elements
+     * After choices have been entered, sends them to the Server
      *
      * @param developmentCardsGrid The Development Grid to display
      * @param playerResources      The Player's current Resources
@@ -306,6 +312,8 @@ public class CLI implements ViewInterface {
 
     /**
      * Displays the screen where the Player can modify the Depots
+     * Hides the Notification Stack view for better displaying all the elements
+     * After choices have been entered, sends them to the Server
      *
      * @param warehouse      The Warehouse of the Player
      * @param resourcesToAdd The Resources the Player can add to the Warehouse
@@ -333,6 +341,9 @@ public class CLI implements ViewInterface {
      * Question
      * Middle block (objects shown here changes when method is called)
      * Choices
+     * <p>
+     * After the layout has been printed, calls the displayInputChoice() in order to let the Player make his choices.
+     * Once the Player has finished, the choices will be send to the Server
      *
      * @param messageType   The Message Type used to get the correct representation of the screen
      * @param question      The question to ask
@@ -428,9 +439,10 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Executes the corresponding switch case in displayChoices()
+     * Executes the CHOICE_DEVELOPMENT_CARD_SLOT_POSITION switch case in displayChoices()
+     * The method displays the Player's Development Card slots, asking him where he wants to place the new bought Card
      *
-     * @param choices The choices to display
+     * @param choices The choices to display. In this case, the available slots where the Player can place the Card
      */
     private void choicePositionExecute(List<Object> choices) {
         cliUtils.cls();
@@ -444,9 +456,11 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Executes the corresponding switch case in displayChoices()
+     * Executes the CHOICE_NORMAL_ACTION or CHOICE_LEADER_ACTION switch case in displayChoices()
+     * The method displays the Player's Personal Board and under it, the questions asking which action (normal or leader
+     * he wants to make)
      *
-     * @param choices           The choices to display
+     * @param choices           The choices to display. In this case, the normal or leader actions the Player can make
      * @param askLeadersShowing True if the method asks the Player if he wants to see its Leader Cards, false otherwise
      */
     private void choiceNormalLeaderActionExecute(List<Object> choices, boolean askLeadersShowing) {
@@ -464,6 +478,8 @@ public class CLI implements ViewInterface {
 
     /**
      * Before selecting a Leader/Normal action, asks the player if he wants to see its Leader Cards
+     * If the Player decides to see its Leader Cards, the method will call the displayPlayerLeaderCards() method
+     * In each case, the Personal Board view is restored after the method execution
      *
      * @param habilitateShowing Set it to true to habilitate the execution of the method, set it to false to not execute the method
      */
@@ -493,9 +509,10 @@ public class CLI implements ViewInterface {
 
 
     /**
-     * Executes the corresponding switch case in displayChoices()
+     * Executes the CHOICE_RESOURCE_FROM_WAREHOUSE switch case in displayChoices()
+     * A List of the possible Resource the Player can choose is displayed with the displayMultipleStringChoices() method
      *
-     * @param choices The choices to display
+     * @param choices The choices to display. In this case, the Resources the Player can choose
      */
     private void choiceResourceFromWarehouseExecute(List<Object> choices) {
         cliUtils.clns();
@@ -523,6 +540,9 @@ public class CLI implements ViewInterface {
 
     /**
      * Used as an auxiliary method in displayChoices() to display the available choices
+     * The choices entered must be at least a maxChoices number
+     * Each user input is controlled by the getCorrectChoice() method
+     * In case of wrong choices, an error message will be printed
      *
      * @param nChoices      The number of choices the Player can make
      * @param minChoices    The minimum number of choices the Player can make
@@ -558,6 +578,11 @@ public class CLI implements ViewInterface {
 
     /**
      * Used as an auxiliary method in displayChoices() to get the correct input from the Player
+     * After the input is entered by the user, performs several controls in order to detect an error, a correct choice or special actions
+     * The special actions are:
+     * u -- a new UndoOptionSelectedException() will be thrown (if permitted) and the Player will be able to go back to the previous screen
+     * c -- a new ConfirmationException() will be thrown and the Player will be able to continue the game even if the choices
+     * entered are at least a minChoices number
      *
      * @param nChoices      The number of choices the Player can make
      * @param minChoices    The minimum number of choices the Player can make
@@ -589,6 +614,7 @@ public class CLI implements ViewInterface {
 
     /**
      * Used as an auxiliary method in displayChoices() to correctly print the choices
+     * Each choice is printed on a new line
      *
      * @param choices The choices to print
      */
@@ -606,7 +632,7 @@ public class CLI implements ViewInterface {
     //-----------------------------------//
 
     /**
-     * Displays the screen that appears when the Match stops
+     * Displays the screen that appears when the Match stops, showing the Match Leaderboard and the win or lose title
      *
      * @param leaderboard   It contains the Players nicknames and the points they achieved during the Match
      * @param winningPlayer The nickname of the winning Player
@@ -662,6 +688,7 @@ public class CLI implements ViewInterface {
 
     /**
      * Displays an error popup
+     * The size of the popup change dynamically in base of the given error String
      *
      * @param error The error String to print on screen
      */
@@ -706,6 +733,11 @@ public class CLI implements ViewInterface {
 
     /**
      * Method used to navigate between boards while opponents are playing
+     * A new Thread is created for waiting a new Message which tells the Player its Turn has arrived: when this message is received,
+     * the navigation stops and the Player must press Enter to continue with its Turn
+     * <p>
+     * While the Player is in navigation mode, he can select the number of the opponents Personal Boards to see (if there are any)
+     * When the Player is viewing an opponent Personal Board, he can press r+Enter to see an updated version of the Personal Board
      */
     @Override
     public void waitForYourTurn() {
@@ -761,6 +793,7 @@ public class CLI implements ViewInterface {
     /**
      * Displays the chosen opponent Personal Board
      * If the Player wants to update the current opponent view it has to enter the letter 'r'
+     * If no 'r' is entered when asked, the method will stop and the Player will go back to its Personal Board view
      *
      * @throws InterruptedException The thread is interrupted
      */

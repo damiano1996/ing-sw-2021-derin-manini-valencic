@@ -21,6 +21,7 @@ public class DepotCli {
 
     /**
      * Used to print the Strongbox
+     * Prints each Resource type and the number of the corresponding Resources the Player has in its Strongbox
      *
      * @param strongbox      The Strongbox Resources to print
      * @param startingRow    The starting row where the Strongbox is going to be printed
@@ -87,6 +88,8 @@ public class DepotCli {
 
     /**
      * Used in printWarehouse() to get the correct representation of Resources
+     * The position of the Resources contained in the given Depot is aligned considering the number of Resources contained in it
+     * It also prints the name of the Depot next to it
      *
      * @param depot          Depot to print
      * @param startingRow    The starting row where the Warehouse is going to be printed

@@ -21,13 +21,13 @@ public class PlayingPhaseState extends PhaseState {
     public PlayingPhaseState(Phase phase) {
         super(phase);
 
-        initializeFirstTurn(true);
+        initializeFirstTurn(true, 0);
     }
 
-    public PlayingPhaseState(Phase phase, boolean shuffle) {
+    public PlayingPhaseState(Phase phase, boolean shuffle, int firstTurnNumber) {
         super(phase);
 
-        initializeFirstTurn(shuffle);
+        initializeFirstTurn(shuffle, firstTurnNumber);
     }
 
     @Override
@@ -39,14 +39,14 @@ public class PlayingPhaseState extends PhaseState {
         return currentTurn;
     }
 
-    private void initializeFirstTurn(boolean shuffle) {
+    private void initializeFirstTurn(boolean shuffle, int firstTurnNumber) {
         if (shuffle) phase.getMatchController().getMatch().shufflePlayers();
 
         currentTurn = new Turn(
                 this,
                 phase.getMatchController(),
                 phase.getMatchController().getMatch().getPlayers().get(0),
-                0
+                firstTurnNumber
         );
 
         // Saving match with initialization data. Since we are saving before playing the turn,

@@ -96,10 +96,6 @@ public class Turn {
         return turnNumber;
     }
 
-    public void setTurnNumber(int turnNumber) {
-        this.turnNumber = turnNumber;
-    }
-
     public TurnPhase getTurnPhase() {
         return turnPhase;
     }

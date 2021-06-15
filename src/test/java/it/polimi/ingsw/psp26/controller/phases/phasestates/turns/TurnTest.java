@@ -45,7 +45,7 @@ public class TurnTest {
         Phase phase = new Phase(matchController);
         phase.getMatchController().addObserver(mitm);
 
-        playingPhaseState = new PlayingPhaseState(phase, false);
+        playingPhaseState = new PlayingPhaseState(phase, false, 0);
 
         int turnNumber = 1;
 
@@ -79,14 +79,6 @@ public class TurnTest {
     @Test
     public void testGetTurnNumber() {
         assertEquals(1, turn.getTurnNumber());
-    }
-
-
-    @Test
-    public void testSetTurnNumber() {
-        turn.setTurnNumber(4);
-
-        assertEquals(4, turn.getTurnNumber());
     }
 
 

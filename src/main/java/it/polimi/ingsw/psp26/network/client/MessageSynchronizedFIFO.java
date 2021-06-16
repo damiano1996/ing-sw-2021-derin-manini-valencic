@@ -18,9 +18,11 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
 
 
     /**
+     * Getter of the MessageSynchronisedFIFO instance
+     * 
      * @return The SynchronisedFIFO instance
      */
-    public static MessageSynchronizedFIFO getInstance() {
+    public synchronized static MessageSynchronizedFIFO getInstance() {
         if (instance == null)
             instance = new MessageSynchronizedFIFO();
         return instance;

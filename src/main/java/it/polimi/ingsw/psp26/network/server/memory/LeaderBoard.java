@@ -48,7 +48,7 @@ public class LeaderBoard {
      *
      * @return the LeaderBoard object
      */
-    public static LeaderBoard getInstance() {
+    public synchronized static LeaderBoard getInstance() {
         if (instance == null)
             instance = new LeaderBoard();
 

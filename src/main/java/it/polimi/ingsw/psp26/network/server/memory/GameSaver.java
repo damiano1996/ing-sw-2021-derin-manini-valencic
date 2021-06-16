@@ -28,7 +28,7 @@ public class GameSaver {
         createNewDirectory(MATCHES_PATH);
     }
 
-    public static GameSaver getInstance() {
+    public synchronized static GameSaver getInstance() {
         if (instance == null) instance = new GameSaver();
         return instance;
     }

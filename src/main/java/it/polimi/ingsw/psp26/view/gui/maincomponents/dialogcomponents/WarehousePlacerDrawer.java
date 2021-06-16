@@ -35,6 +35,9 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.*;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
 import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getResourceImage;
 
+/**
+ * Class to create the pane that will contain the warehouse and the resources that must be placed in.
+ */
 public class WarehousePlacerDrawer extends RatioDrawer {
 
     private final Client client;
@@ -44,8 +47,16 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
     private final Pane resourcesToAddPane;
     private final DepotsSwitchableGroup switchableGroup;
-    private Text errorMessage;
+    private final Text errorMessage;
 
+    /**
+     * Class constructor.
+     *
+     * @param client         client object
+     * @param warehouse      warehouse object to draw
+     * @param resourcesToAdd list of resources to add in the warehouse
+     * @param maxWidth       maximum allowed width for the pane
+     */
     public WarehousePlacerDrawer(Client client, Warehouse warehouse, List<Resource> resourcesToAdd, int maxWidth) {
         super((int) (maxWidth * 1.2f));
 
@@ -61,10 +72,20 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         errorMessage.setId("error");
     }
 
+    /**
+     * Getter of the warehouse
+     *
+     * @return warehouse object
+     */
     public Warehouse getWarehouse() {
         return warehouse;
     }
 
+    /**
+     * Method to draw the pane containing the warehouse and the resources to place in.
+     *
+     * @return pane
+     */
     @Override
     public Pane draw() {
 
@@ -120,6 +141,13 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         return rootPane;
     }
 
+    /**
+     * Method to draw the received resources, that must be placed in the warehouse, and
+     * the other components that must be displayed in the pane (such as the warehouse and the leader depots).
+     *
+     * @param panesToDraw list of pane
+     * @return pane
+     */
     private Pane drawResourcesToAdd(List<Pane> panesToDraw) {
 
         int componentWidth = 600;
@@ -135,6 +163,11 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         return resourcesToAddPane;
     }
 
+    /**
+     * Method to draw a resource in the pane.
+     *
+     * @param resource resource to add in the pane
+     */
     public void placeResourceToAdd(Resource resource) {
         int maxHeight = 400;
         int componentWidth = 600;
@@ -147,6 +180,14 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         resourcesToAddPane.getChildren().add(imageView);
     }
 
+    /**
+     * Method to draw the warehouse with the resources.
+     * It initializes the warehouse and draws the resources that are already in.
+     * Moreover, it sets the targets for the resources to add.
+     * Targets for the draggable objects are image views placed over the image of the entire warehouse.
+     *
+     * @return pane containing the warehouse
+     */
     private Pane getWarehousePane() {
 
         int[] leftOffsets = new int[]{240, 170, 100};
@@ -201,6 +242,14 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         return warehousePane;
     }
 
+    /**
+     * Method to draw resources in the grid pane.
+     *
+     * @param vBox              vertical box that contains the depot
+     * @param baseDepot         depot object to draw
+     * @param imageStack        stack pane that contains the image of the depot
+     * @param resourcesGridPane grid pane containing the resources
+     */
     private void drawResources(VBox vBox, Depot baseDepot, StackPane imageStack, GridPane resourcesGridPane) {
         for (int i = 0; i < baseDepot.getResources().size(); i++)
             resourcesGridPane.add(getImageView(getResourceImage(baseDepot.getResources().get(i), ratio), 0, 0), i, 1, 1, 1);
@@ -211,6 +260,12 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         vBox.getChildren().add(imageStack);
     }
 
+    /**
+     * Method to setup the leader depot pane.
+     * It loads the images of the depots and draws the resources.
+     *
+     * @return pane
+     */
     private Pane getLeaderDepotsPane() {
 
         VBox vBox = new VBox(5 * ratio);
@@ -237,11 +292,19 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         return vBox;
     }
 
-    public void showMessage(String error) {
-        errorMessage.setText(error);
+    /**
+     * Method to show a message in the root pane.
+     *
+     * @param message message to display
+     */
+    public void showMessage(String message) {
+        errorMessage.setText(message);
         errorMessage.setVisible(true);
     }
 
+    /**
+     * Method to hide the message that is displayed in the root pane.
+     */
     public void hideMessage() {
         errorMessage.setVisible(false);
     }

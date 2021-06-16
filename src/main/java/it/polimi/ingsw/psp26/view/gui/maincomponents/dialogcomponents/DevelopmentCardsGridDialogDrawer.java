@@ -4,21 +4,29 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.DevelopmentCardsGridDrawer;
-import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
+import static it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.DialogComponentsUtils.getDialogPane;
 
+/**
+ * Class to draw the development cards grid in a dialog.
+ * It designs a pane containing the grid with a title, a description and the undo button.
+ */
 public class DevelopmentCardsGridDialogDrawer extends RatioDrawer {
 
     private final Client client;
     private final DevelopmentCardsGridDrawer developmentGridDrawer;
 
+    /**
+     * Class constructor.
+     *
+     * @param client               client object
+     * @param developmentCardsGrid development cards grid object to draw
+     * @param maxWidth             max width allowed for the pane
+     */
     public DevelopmentCardsGridDialogDrawer(Client client, DevelopmentCardsGrid developmentCardsGrid, int maxWidth) {
         super(maxWidth);
 
@@ -26,6 +34,12 @@ public class DevelopmentCardsGridDialogDrawer extends RatioDrawer {
         developmentGridDrawer = new DevelopmentCardsGridDrawer(client, developmentCardsGrid, (int) (initMaxWidth / 1.7));
     }
 
+    /**
+     * Method to draw the pane for the dialog.
+     * It will contain the grid with a title, a description and an undo button.
+     *
+     * @return pane
+     */
     @Override
     public Pane draw() {
 
@@ -37,29 +51,9 @@ public class DevelopmentCardsGridDialogDrawer extends RatioDrawer {
         text.setStyle("-fx-font-size: " + 100 * ratio + ";");
         rootPane.getChildren().add(text);
 
-        Text description = new Text(
-                "*Click on the card that you want to buy.");
-        description.setId("title");
-        description.setStyle("-fx-font-size: " + 70 * ratio + ";");
-        rootPane.getChildren().add(description);
+        Text description = new Text("*Click on the card that you want to buy.");
 
-        rootPane.getChildren().add(new HBox(developmentGridDrawer.draw()));
-
-        Button confirmationButton = new Button("Undo");
-        confirmationButton.setId("undo-button");
-        confirmationButton.setOnAction(actionEvent -> {
-
-            SoundManager soundManager = SoundManager.getInstance();
-
-            soundManager.setSoundEffect("button_click_01.wav");
-            client.sendUndoMessage();
-
-            closeParentStageOfActionEvent(actionEvent);
-            client.viewNext();
-        });
-
-        rootPane.getChildren().add(confirmationButton);
-        return rootPane;
+        return getDialogPane(rootPane, description, 70 * ratio, developmentGridDrawer.draw(), client);
     }
 
 }

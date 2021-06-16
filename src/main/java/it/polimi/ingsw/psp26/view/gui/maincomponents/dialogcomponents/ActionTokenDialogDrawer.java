@@ -16,11 +16,22 @@ import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
+/**
+ * Class to provide the content for the dialog that has to show the action tokens.
+ * It uses the ActionTokenDrawer to setup the pane for the dialog, adding the title.
+ */
 public class ActionTokenDialogDrawer extends RatioDrawer {
 
     private final Client client;
     private final ActionTokenDrawer actionTokenDrawer;
 
+    /**
+     * Class constructor.
+     *
+     * @param client                client object
+     * @param actionTokensToDisplay list of action tokens that must be displayed
+     * @param maxWidth              maximum width for the pane
+     */
     public ActionTokenDialogDrawer(Client client, List<ActionToken> actionTokensToDisplay, int maxWidth) {
         super(maxWidth);
 
@@ -29,16 +40,13 @@ public class ActionTokenDialogDrawer extends RatioDrawer {
     }
 
 
+    /**
+     * Method to create the pane containing the action tokens.
+     *
+     * @return pane
+     */
     @Override
     public Pane draw() {
-        return adjustLayout();
-    }
-
-
-    /**
-     * @return A correct BorderPane of the Action Tokens dialog
-     */
-    private BorderPane adjustLayout() {
         BorderPane borderPane = new BorderPane();
 
         // Creating the dialog title
@@ -47,9 +55,8 @@ public class ActionTokenDialogDrawer extends RatioDrawer {
 
         Text actionTokenTitle = new Text("Lorenzo plays!");
         actionTokenTitle.setId("title");
-        actionTokenTitle.setStyle("-fx-font-size: " + 60);
+        actionTokenTitle.setStyle("-fx-font-size: " + 60 + ";");
         titleBox.getChildren().add(actionTokenTitle);
-
 
         // Filling the BorderPane
         borderPane.setTop(titleBox);
@@ -61,7 +68,9 @@ public class ActionTokenDialogDrawer extends RatioDrawer {
 
 
     /**
-     * @return A Button that lets the Match continue
+     * Method to setup the button to exit from the dialog and to request for the next action.
+     *
+     * @return horizontal box containing the button
      */
     private HBox createDoneButton() {
         HBox buttonBox = new HBox();

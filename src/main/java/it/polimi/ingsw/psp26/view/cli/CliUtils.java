@@ -13,7 +13,7 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH
 
 public class CliUtils {
 
-    public final PrintWriter pw;
+    private final PrintWriter pw;
 
     public CliUtils(PrintWriter pw) {
         this.pw = pw;

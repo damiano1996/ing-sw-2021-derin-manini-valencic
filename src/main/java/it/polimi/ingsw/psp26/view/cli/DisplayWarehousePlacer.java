@@ -25,11 +25,11 @@ public class DisplayWarehousePlacer {
     private final List<Resource> discardedResources;
 
     //If the Player enters an incorrect index, ask it again
-    boolean correctDepotIndexInserted;
+    private boolean correctDepotIndexInserted;
     //If the Player chooses an invalid position, ask it again
-    boolean resourceAdded;
+    private boolean resourceAdded;
     //If the player decides to discard the Resource, add it to discardedResources and proceed with the next Resource
-    boolean discardResource;
+    private boolean discardResource;
 
     public DisplayWarehousePlacer(PrintWriter pw) {
         this.pw = pw;

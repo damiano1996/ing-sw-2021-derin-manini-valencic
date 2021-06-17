@@ -49,7 +49,7 @@ public class CLI implements ViewInterface {
     private final DisplayWarehousePlacer displayWarehousePlacer;
     private final NotificationStackPrinter notificationStackPrinter;
     private final CommonScreensCli commonScreensCli;
-    Mutex mutex;
+    private final Mutex mutex;
     private Client client;
 
     public CLI() {

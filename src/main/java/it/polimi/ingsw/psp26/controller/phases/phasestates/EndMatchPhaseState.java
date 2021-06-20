@@ -1,23 +1,17 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
-import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
-import it.polimi.ingsw.psp26.controller.HeartbeatController;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.DevelopmentCardSlotOutOfBoundsException;
-import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
-import it.polimi.ingsw.psp26.network.NetworkNode;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 import it.polimi.ingsw.psp26.network.server.Server;
-import it.polimi.ingsw.psp26.network.server.VirtualViewAssignment;
 import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
-
-import java.io.IOException;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
@@ -42,28 +36,51 @@ public class EndMatchPhaseState extends PhaseState {
      */
     @Override
     public synchronized void execute(SessionMessage message) {
-
         super.execute(message);
 
-        showEndGameResult(message);
+        if (message.getMessageType() != INDEFINITE_SUSPENSION &&
+                message.getMessageType() != HEARTBEAT_INDEFINITE_SUSPENSION) {
 
-        if(message.getMessageType() != INDEFINITE_SUSPENSION) {
-            // Deleting the directory containing the ended Match files
-            GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
+            sendEndGameResults(message);
 
-            // Making the VirtualView Thread finish its lifecycle
-            for (Player player : phase.getMatchController().getMatch().getPlayers()) {
-                phase.getMatchController().getVirtualView().stopListeningNetworkNode(player.getSessionToken(), true);
+        } else {
 
+            try {
+                phase.getMatchController().notifyObservers(
+                        new SessionMessage(SpecialToken.BROADCAST.getToken(),
+                                GENERAL_MESSAGE,
+                                (message.getMessageType().equals(INDEFINITE_SUSPENSION)) ?
+                                        "The match has been suspended indefinitely since one player decided to abandon." :
+                                        "The match has been suspended indefinitely since one player has lost the connection for too long time.")
+                );
+            } catch (InvalidPayloadException ignored) {
             }
-
-            // Removing the virtual view
-            Server.getInstance().removeVirtualView(phase.getMatchController().getVirtualView());
-            System.out.println("EndMatchPhaseState - VirtualView removed");
-
-            //Killing the hearth beats threads
-            phase.getMatchController().getVirtualView().killHeartbeats();
         }
+
+        closeMatch();
+
+    }
+
+    /**
+     * Method to close the match.
+     * It deletes the files associated to the match and
+     * it moves the network nodes to the waiting room after having closed the virtual view.
+     */
+    private void closeMatch() {
+        // Deleting the directory containing the ended Match files
+        GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
+
+        // Making the VirtualView Thread finish its lifecycle
+        for (Player player : phase.getMatchController().getMatch().getPlayers()) {
+            phase.getMatchController().getVirtualView().stopListeningNetworkNode(player.getSessionToken(), true);
+        }
+
+        // Removing the virtual view
+        Server.getInstance().removeVirtualView(phase.getMatchController().getVirtualView());
+        System.out.println("EndMatchPhaseState - VirtualView removed");
+
+        // Killing the heartbeats threads
+        phase.getMatchController().getVirtualView().killHeartbeats();
     }
 
     /**
@@ -75,20 +92,13 @@ public class EndMatchPhaseState extends PhaseState {
      *
      * @param message Session message
      */
-    private void showEndGameResult(SessionMessage message) {
+    private void sendEndGameResults(SessionMessage message) {
 
-        if (message.getMessageType() == BLACK_CROSS_FINAL_POSITION || message.getMessageType() == NO_MORE_COLUMN_DEVELOPMENT_CARDS) {
-
+        if (message.getMessageType() == BLACK_CROSS_FINAL_POSITION ||
+                message.getMessageType() == NO_MORE_COLUMN_DEVELOPMENT_CARDS) {
             winnerName = "Lorenzo il Magnifico";
-
-        } else if(message.getMessageType() == INDEFINITE_SUSPENSION || message.getMessageType() == HEARTBEAT_INDEFINITE_SUSPENSION) {
-
-            winnerName = "None";
-
-        }else{
-
+        } else {
             computePlayersPoints();
-
         }
 
         for (Player player : phase.getMatchController().getMatch().getPlayers()) {
@@ -103,16 +113,12 @@ public class EndMatchPhaseState extends PhaseState {
                 e.printStackTrace();
             }
         }
-
-
     }
 
     /**
      * Method that computes for each player their victory points and establish the player with the most victory points.
-     *
-     * @return the string with the name of the player with most points.
      */
-    private String computePlayersPoints() {
+    private void computePlayersPoints() {
 
         int playerPoints;
         int winnerPoints = 0;
@@ -138,7 +144,6 @@ public class EndMatchPhaseState extends PhaseState {
                 winnerName = player.getNickname();
 
         }
-        return winnerName;
     }
 
     /**

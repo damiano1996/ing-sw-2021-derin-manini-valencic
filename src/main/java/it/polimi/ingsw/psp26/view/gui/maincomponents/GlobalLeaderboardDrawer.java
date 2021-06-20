@@ -5,17 +5,13 @@ import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
-import static it.polimi.ingsw.psp26.view.ViewUtils.getOrderedPlayersList;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
 /**
@@ -33,7 +29,8 @@ public class GlobalLeaderboardDrawer extends LeaderboardDrawer {
     public GlobalLeaderboardDrawer(Client client, int maxWidth) {
         super(client, LeaderBoard.getInstance().getLeaderboard(), "", maxWidth);
     }
-     /**
+
+    /**
      * Method to draw the global leaderboard.
      *
      * @return a pane containing the leaderboard

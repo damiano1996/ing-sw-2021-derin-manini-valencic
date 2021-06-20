@@ -3,7 +3,6 @@ package it.polimi.ingsw.psp26.view.gui.maincomponents;
 import it.polimi.ingsw.psp26.network.client.Client;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -129,9 +128,9 @@ public class LeaderboardDrawer extends RatioDrawer {
     private void setWinningText(Text winningText) {
         if (client.getNickname().equals(winningPlayer)) {
             winningText.setText("YOU WON!");
-        } else if(client.isMultiplayerMode() && !endMatchLeaderboard.containsKey(winningPlayer) ) {
+        } else if (client.isMultiplayerMode() && !endMatchLeaderboard.containsKey(winningPlayer)) {
             winningText.setText("DISCONNECTION!");
-        }else{
+        } else {
             winningText.setText("YOU LOST!");
         }
     }

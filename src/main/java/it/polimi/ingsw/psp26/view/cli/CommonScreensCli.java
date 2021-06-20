@@ -24,7 +24,7 @@ public class CommonScreensCli {
     /**
      * Displays the end game screen by printing the Match Leaderboard
      *
-     * @param leaderboard It contains the Players nicknames and the points they achieved during the Match
+     * @param leaderboard     It contains the Players nicknames and the points they achieved during the Match
      * @param numberOfPlayers the number of players that are displayed
      */
     public void displayFinalScreen(Map<String, Integer> leaderboard, int numberOfPlayers) {
@@ -41,7 +41,7 @@ public class CommonScreensCli {
      *
      * @param leaderboard        The Map containing the Players nicknames and their points
      * @param orderedPlayersList A List containing the Players in the order the have to be printed
-     * @param numberOfPlayers The number of players that are printed
+     * @param numberOfPlayers    The number of players that are printed
      */
     private void printLeaderboardContent(Map<String, Integer> leaderboard, List<String> orderedPlayersList, int numberOfPlayers) {
         int verticalPadding = 0;

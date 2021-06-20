@@ -69,52 +69,26 @@ public class WaitingRoom {
 
                     case GLOBAL_LEADERBOARD:
                         System.out.println("WaitingRoom - GLOBAL_LEADERBOARD has been selected.");
-                        try {
-                            sendToClient(
-                                    new SessionMessage(
-                                            message.getSessionToken(),
-                                            GLOBAL_LEADERBOARD
-                                    )
-                            );
-                        } catch (InvalidPayloadException e) {
-                            e.printStackTrace();
-                        }
+                        sendToClient(new SessionMessage(message.getSessionToken(), GLOBAL_LEADERBOARD));
                         System.out.println("WaitingRoom - Waiting response.");
-                        try {
-                            handleMessages(filterHeartbeatMessages(nodeClients.get(message.getSessionToken())));
-                        } catch (IOException | ClassNotFoundException ignored) {
-                        }
+                        handleMessages(filterHeartbeatMessages(nodeClients.get(message.getSessionToken())));
                         break;
 
                     case HELP:
-                        try {
-                            Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                            Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
+                        Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
                         File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                        try {
-                            Desktop.getDesktop().open(rulesPdf);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Desktop.getDesktop().open(rulesPdf);
                         sendMenuMessage(message.getSessionToken());
                         break;
 
                     case EXIT:
                         System.out.println("WaitingRoom - EXIT has been selected.");
-                        try {
-                            sendToClient(
-                                    new SessionMessage(
-                                            message.getSessionToken(),
-                                            EXIT
-                                    )
-                            );
-                        } catch (InvalidPayloadException e) {
-                            e.printStackTrace();
-                        }
+                        sendToClient(new SessionMessage(message.getSessionToken(), EXIT));
+                        // Removing client from waiting room
+                        nodeClients.remove(message.getSessionToken());
                         break;
+
                     case UNDO_OPTION_SELECTED:
                         System.out.println("WaitingRoom - Undo payload.");
                         sendMenuMessage(message.getSessionToken());
@@ -126,10 +100,10 @@ public class WaitingRoom {
                         break;
                 }
             } else {
-                System.out.println("WaitingRoom - Unexpected MessageType.");
-                sendMenuMessage(message.getSessionToken());
+                System.out.println("WaitingRoom - Unexpected MessageType... Waiting for the next message.");
+                handleMessages(filterHeartbeatMessages(nodeClients.get(message.getSessionToken())));
             }
-        } catch (EmptyPayloadException ignored) {
+        } catch (EmptyPayloadException | IOException | ClassNotFoundException | InvalidPayloadException ignored) {
         }
     }
 

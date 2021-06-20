@@ -94,7 +94,8 @@ public class MatchController extends Observable<SessionMessage> implements Obser
     @Override
     public synchronized void update(SessionMessage message) {
 
-        if(message.getMessageType() == MessageType.INDEFINITE_SUSPENSION || message.getMessageType() == MessageType.HEARTBEAT_INDEFINITE_SUSPENSION) {
+        if (message.getMessageType() == MessageType.INDEFINITE_SUSPENSION ||
+                message.getMessageType() == MessageType.HEARTBEAT_INDEFINITE_SUSPENSION) {
             phase.changeState(new EndMatchPhaseState(phase));
         }
         phase.execute(message);

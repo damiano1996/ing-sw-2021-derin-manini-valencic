@@ -660,7 +660,7 @@ public class CLI implements ViewInterface {
             pw.print(Color.GREEN.setColor());
             pw.flush();
             cliUtils.printFigure("/titles/YouWonTitle", 37, 89);
-        }  else if(client.isMultiplayerMode() && !leaderboard.containsKey(winningPlayer) ) {
+        } else if (client.isMultiplayerMode() && !leaderboard.containsKey(winningPlayer)) {
             pw.print(Color.YELLOW.setColor());
             pw.flush();
             cliUtils.printFigure("/titles/DisconnectionTitle", 37, 89);

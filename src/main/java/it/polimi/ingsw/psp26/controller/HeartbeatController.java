@@ -37,7 +37,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
                 checksForDeath();
 
                 try {
-                    //no inspection BusyWait
+                    //noinspection BusyWait
                     sleep(DELTA_TIME);
                 } catch (InterruptedException ignored) {
                 }
@@ -73,7 +73,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         if (countdown < -MAX_TIME_TO_END_MATCH) {
             try {
                 notifyObservers(new SessionMessage(sessionToken, MessageType.HEARTBEAT_INDEFINITE_SUSPENSION));
-                System.out.println("A message of INDEFINITE_SUSPENSION IS SENT");
+                System.out.println("HeartbeatController - A message of INDEFINITE_SUSPENSION IS SENT");
             } catch (InvalidPayloadException ignored) {
             }
         }
@@ -82,7 +82,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
     @Override
     public synchronized void update(SessionMessage message) {
         if (message.getMessageType().equals(MessageType.HEARTBEAT))
-                reset(message.getSessionToken());
+            reset(message.getSessionToken());
 
     }
 
@@ -95,10 +95,9 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
             this.running = false;
 
         try {
-        if(thread != null)
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            if (thread != null)
+                thread.join();
+        } catch (InterruptedException ignored) {
         }
     }
 }

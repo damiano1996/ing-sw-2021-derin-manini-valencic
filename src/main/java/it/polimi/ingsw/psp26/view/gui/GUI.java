@@ -102,6 +102,7 @@ public class GUI extends Application implements ViewInterface {
 
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/gui/fxml/login.fxml"));
+            
             VBox loginVBox = fxmlLoader.load();
 
             Stage dialog = getDialog(primaryStage, loginVBox);

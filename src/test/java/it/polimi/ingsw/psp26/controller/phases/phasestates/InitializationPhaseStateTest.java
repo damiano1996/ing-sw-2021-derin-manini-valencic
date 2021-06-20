@@ -18,14 +18,12 @@ public class InitializationPhaseStateTest {
 
     @Before
     public void setUp() {
-
         phase = new Phase(new MatchController(new VirtualView(), 0));
         phase.changeState(new InitializationPhaseState(phase));
     }
 
     @Test
     public void testAddPlayer() throws InvalidPayloadException {
-
         String nickname = "nickname";
         String sessionToken = "sessionToken";
         phase.execute(new SessionMessage(

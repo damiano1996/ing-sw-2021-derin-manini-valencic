@@ -158,21 +158,23 @@ public class CLI implements ViewInterface {
         client.viewNext();
     }
 
+
+    /**
+     * Prints the global Leaderboard
+     */
     @Override
     public void displayGlobalLeaderboard() {
         mutex.lock();
-
         commonScreensCli.displayFinalScreen(LeaderBoard.getInstance().getLeaderboard(), 5);
-
-        cliUtils.pPCS("Press Enter to go back to the menu", Color.WHITE, 50, 4);
-
+        cliUtils.pPCS("Press Enter to go back to the menu.", Color.WHITE, 50, 4);
         mutex.unlock();
 
         in.nextLine();
+
+        notificationStackPrinter.restoreStackView();
+        client.sendUndoMessage();
         client.sendMenuUndoMessage();
         client.viewNext();
-
-
     }
 
 

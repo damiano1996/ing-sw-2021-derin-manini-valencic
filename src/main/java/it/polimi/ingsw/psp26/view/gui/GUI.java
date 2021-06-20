@@ -12,6 +12,7 @@ import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.MessageSynchronizedFIFO;
 import it.polimi.ingsw.psp26.view.ViewInterface;
+import it.polimi.ingsw.psp26.view.gui.FXMLControllers.LoginController;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.*;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
@@ -28,7 +29,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -106,24 +106,11 @@ public class GUI extends Application implements ViewInterface {
 
             Stage dialog = getDialog(primaryStage, loginVBox);
 
+            LoginController loginController = fxmlLoader.getController();
+            loginController.addConnectionButtonEvent(dialog, client);
+
             SoundManager soundManager = SoundManager.getInstance();
             soundManager.setMusic("main_theme_03.wav");
-
-            Button connectionButton = (Button) fxmlLoader.getNamespace().get("connectionButton");
-            connectionButton.setOnAction(event -> {
-
-                connectionButton.setDisable(true);
-
-                String nickname = ((TextField) fxmlLoader.getNamespace().get("nicknameTextField")).getText();
-                String password = ((TextField) fxmlLoader.getNamespace().get("passwordTextField")).getText();
-                String serverIP = ((TextField) fxmlLoader.getNamespace().get("serverIPTextField")).getText();
-
-                dialog.close();
-
-                client.initializeNetworkHandler(nickname, password, serverIP);
-                client.viewNext();
-
-            });
 
             dialog.show();
 

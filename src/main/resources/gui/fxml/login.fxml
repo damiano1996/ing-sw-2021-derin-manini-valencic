@@ -3,7 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" id="VBox" alignment="CENTER" prefHeight="176.0" prefWidth="200.0"
+
+<VBox fx:controller="it.polimi.ingsw.psp26.view.gui.FXMLControllers.LoginController" xmlns:fx="http://javafx.com/fxml/1"
+      id="VBox" alignment="CENTER" prefHeight="176.0" prefWidth="200.0"
       stylesheets="@../stylesheets/stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1"
       style="-fx-spacing: 10px">
 

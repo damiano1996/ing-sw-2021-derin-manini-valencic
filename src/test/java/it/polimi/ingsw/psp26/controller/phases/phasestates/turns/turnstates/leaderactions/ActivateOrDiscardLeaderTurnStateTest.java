@@ -15,7 +15,9 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialDepotAbility;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
+import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -62,6 +64,11 @@ public class ActivateOrDiscardLeaderTurnStateTest {
         }});
 
         turn.changeState(new ActivateOrDiscardLeaderTurnState(turn));
+    }
+
+    @After
+    public void tearDown() {
+        GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
     }
 
     private void choiceLeaders(MessageType action, MessageType expected) throws InvalidPayloadException {

@@ -2,17 +2,12 @@ package it.polimi.ingsw.psp26.view.gui.maincomponents;
 
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
-import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
+import it.polimi.ingsw.psp26.view.gui.FXMLControllers.LeaderboardController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
-
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
 /**
  * Class to draw the global leaderboard.
@@ -37,32 +32,16 @@ public class GlobalLeaderboardDrawer extends LeaderboardDrawer {
      */
     public Pane draw() {
         AnchorPane leaderboard = new AnchorPane();
+
         try {
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/gui/fxml/Leaderboard.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/gui/fxml/leaderboard.fxml"));
+
             leaderboard = fxmlLoader.load();
 
-            // Setting texts dimensions
-            setTextDimensions((Text) fxmlLoader.getNamespace().get("leaderboardText"), 50, true);
-            setTextDimensions((Text) fxmlLoader.getNamespace().get("playersText"), 45, true);
-            setTextDimensions((Text) fxmlLoader.getNamespace().get("pointsText"), 45, true);
-
-            Text winningText = (Text) fxmlLoader.getNamespace().get("winningText");
-            setTextDimensions(winningText, 0, false);
-            winningText.setText(winningPlayer);
-
-            // Inserting values into the leaderboard
-            insertLeaderboardValues(
-                    (VBox) fxmlLoader.getNamespace().get("playersBox"),
-                    (VBox) fxmlLoader.getNamespace().get("pointsBox"),
-                    endMatchLeaderboard
-            );
-
-            setDoneButtonAction((Button) fxmlLoader.getNamespace().get("doneButton"));
-            VBox box = (VBox) fxmlLoader.getNamespace().get("BottomBox");
-            box.setMinHeight(150);
-
+            LeaderboardController leaderboardController = fxmlLoader.getController();
+            leaderboardController.initializeGlobalLeaderboard(client, ratio, leaderboardToDisplay);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,25 +49,5 @@ public class GlobalLeaderboardDrawer extends LeaderboardDrawer {
 
         return leaderboard;
     }
-
-
-    /**
-     * Sets the action of the backButton
-     *
-     * @param backButton The button to set the action to
-     */
-    @Override
-    protected void setDoneButtonAction(Button backButton) {
-        backButton.setOnAction(actionEvent -> {
-
-            SoundManager soundManager = SoundManager.getInstance();
-            soundManager.setSoundEffect("button_click_01.wav");
-
-            closeParentStageOfActionEvent(actionEvent);
-            client.sendMenuUndoMessage();
-            client.viewNext();
-        });
-    }
-
 
 }

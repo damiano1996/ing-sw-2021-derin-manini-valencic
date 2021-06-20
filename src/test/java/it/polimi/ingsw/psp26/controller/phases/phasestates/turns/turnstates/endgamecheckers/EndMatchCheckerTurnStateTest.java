@@ -12,7 +12,9 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
+import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +43,11 @@ public class EndMatchCheckerTurnStateTest {
         );
 
         turn.changeState(new EndMatchCheckerTurnState(turn));
+    }
+
+    @After
+    public void tearDown() {
+        GameSaver.getInstance().deleteDirectoryByMatchId(turn.getMatchController().getMatch().getId());
     }
 
 

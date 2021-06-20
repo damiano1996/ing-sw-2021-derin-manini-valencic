@@ -172,7 +172,6 @@ public class CLI implements ViewInterface {
         in.nextLine();
 
         notificationStackPrinter.restoreStackView();
-        client.sendUndoMessage();
         client.sendMenuUndoMessage();
         client.viewNext();
     }

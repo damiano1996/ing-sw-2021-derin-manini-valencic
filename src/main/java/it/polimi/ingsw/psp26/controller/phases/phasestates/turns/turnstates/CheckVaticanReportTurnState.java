@@ -33,11 +33,10 @@ public class CheckVaticanReportTurnState extends TurnState {
         super.play(message);
 
         for (Player player : turn.getMatchController().getMatch().getPlayers()) {
-
-            activateVaticanReport(player);
+             activateVaticanReport(player);
 
         }
-
+        System.out.println("HO finito");
         turn.changeState(new EndMatchCheckerTurnState(turn));
         turn.play(message);
     }
@@ -88,13 +87,14 @@ public class CheckVaticanReportTurnState extends TurnState {
      * @param currentPlayer the player is in this turn state.
      */
     private void activateVaticanReport(Player currentPlayer) {
-
         if (!lastVaticanReportCalled) {
-
             if (firstPlayerInPopeSpace(currentPlayer) || isBlackCrossInPopeSpaceOrOver(currentPlayer)) {
-
-                if (getFirstActiveSectionIndex() == currentPlayer.getPersonalBoard().getFaithTrack().getVaticanReportSections().length)
+                System.out.println(getFirstActiveSectionIndex() == currentPlayer.getPersonalBoard().getFaithTrack().getVaticanReportSections().length);
+                System.out.println(getFirstActiveSectionIndex());
+                if (getFirstActiveSectionIndex() == (currentPlayer.getPersonalBoard().getFaithTrack().getVaticanReportSections().length - 1)) {
                     lastVaticanReportCalled = true;
+                    System.out.println("CheckVaticanReport - Last turn called");
+                }
 
                 try {
 
@@ -111,7 +111,7 @@ public class CheckVaticanReportTurnState extends TurnState {
                     VaticanReportSection[] playerSections = player.getPersonalBoard().getFaithTrack().getVaticanReportSections();
 
                     if (isPlayerInVaticanSectionOrOver(player, playerSections[sectionActivated])) {
-
+                        System.out.println("5");
                         playerSections[sectionActivated].activatePopesFavorTile();
 
                     } else {

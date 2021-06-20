@@ -169,7 +169,7 @@ public class CLI implements ViewInterface {
         mutex.unlock();
 
         in.nextLine();
-        client.sendUndoMessage();
+        client.sendMenuUndoMessage();
         client.viewNext();
 
 

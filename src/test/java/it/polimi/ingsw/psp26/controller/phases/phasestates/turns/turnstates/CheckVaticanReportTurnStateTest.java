@@ -30,7 +30,9 @@ public class CheckVaticanReportTurnStateTest {
         phase.getMatchController().addObserver(mitm);
 
         phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname", "sessionToken"));
-        phase.getMatchController().setMaxNumberOfPlayers(1);
+        phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname1", "sessionToken1"));
+
+        phase.getMatchController().setMaxNumberOfPlayers(2);
         turn = new Turn(
                 new PlayingPhaseState(phase),
                 phase.getMatchController(),
@@ -106,7 +108,7 @@ public class CheckVaticanReportTurnStateTest {
 
         turn.changeState(new CheckVaticanReportTurnState(turn));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
-
+        System.out.println(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections().length);
         assertTrue(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileDiscarded());
         assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
         assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].isPopesFavorTileActive());
@@ -114,4 +116,19 @@ public class CheckVaticanReportTurnStateTest {
 
         GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", virtualView.getMatchController().getMatch().getId()));
     }
+
+    @Test
+    public void testPlayMultiPlayerActivateFinalTile() throws InvalidPayloadException {
+
+        turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(24);
+
+        boolean tileBeforeTurn = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].isPopesFavorTileActive();
+
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
+
+        assertFalse(tileBeforeTurn);
+        assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].isPopesFavorTileActive());
+        assertTrue(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
+    }
+
 }

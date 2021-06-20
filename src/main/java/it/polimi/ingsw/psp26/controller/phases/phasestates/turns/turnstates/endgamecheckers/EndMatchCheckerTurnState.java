@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.Turn
 import it.polimi.ingsw.psp26.exceptions.ColorDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.exceptions.LevelDoesNotExistException;
+import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.network.SpecialToken;
@@ -29,10 +30,11 @@ public class EndMatchCheckerTurnState extends TurnState {
     public void play(SessionMessage message) {
         super.play(message);
 
-        checkMultiPlayerEnd(); // checks in any case
+        for(Player player : turn.getMatchController().getMatch().getPlayers()) {
+            checkMultiPlayerEnd(player); // checks in any case
 
-        if (!turn.getMatchController().getMatch().isMultiPlayerMode()) checkSinglePlayerEnd();
-
+            if (!turn.getMatchController().getMatch().isMultiPlayerMode()) checkSinglePlayerEnd();
+        }
         goToNextStateAfterLeaderAction(turn, message);
     }
 
@@ -40,16 +42,16 @@ public class EndMatchCheckerTurnState extends TurnState {
      * Method to check if the game has finished.
      * It checks the conditions and modifies the state of the phase of the match.
      */
-    private void checkMultiPlayerEnd() {
+    private void checkMultiPlayerEnd(Player player) {
         try {
-            if (isSeventhCardDrawn()) {
+            if (isSeventhCardDrawn(player)) {
                 turn.getMatchController().notifyObservers(
                         new NotificationUpdateMessage(
                                 SpecialToken.BROADCAST.getToken(),
                                 turn.getTurnPlayer().getNickname() + " activated the endgame by drawing the seventh card.")
                 );
                 turn.getPlayingPhaseState().setLastTurn();
-            } else if (isFinalTilePosition()) {
+            } else if (isFinalTilePosition(player)) {
                 turn.notifyAllPlayers(turn.getTurnPlayer().getNickname() + " activated the endgame by reaching the final tile in the faith track.");
                 turn.getPlayingPhaseState().setLastTurn();
             }
@@ -85,7 +87,9 @@ public class EndMatchCheckerTurnState extends TurnState {
                                 "Lorenzo activated the endgame by reaching the final the final tile in the faith track.")
                 );
 
-                turn.getPlayingPhaseState().setLastTurn();
+                turn.getPlayingPhaseState().goToEndMatchPhaseState(
+                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.NO_MORE_COLUMN_DEVELOPMENT_CARDS));
+
             }
 
         } catch (InvalidPayloadException e) {
@@ -98,8 +102,8 @@ public class EndMatchCheckerTurnState extends TurnState {
      *
      * @return true if player has seven cards, false otherwise
      */
-    private boolean isSeventhCardDrawn() {
-        return turn.getTurnPlayer().getPersonalBoard().getDevelopmentCardsSlots()
+    private boolean isSeventhCardDrawn(Player player) {
+        return player.getPersonalBoard().getDevelopmentCardsSlots()
                 .stream()
                 .map(List::size)
                 .reduce(0, Integer::sum) >= 7;
@@ -110,9 +114,9 @@ public class EndMatchCheckerTurnState extends TurnState {
      *
      * @return true if marker on the last position, false otherwise.
      */
-    private boolean isFinalTilePosition() {
-        return turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getMarkerPosition() >=
-                turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getFinalPosition();
+    private boolean isFinalTilePosition(Player player) {
+        return player.getPersonalBoard().getFaithTrack().getMarkerPosition() >=
+                player.getPersonalBoard().getFaithTrack().getFinalPosition();
     }
 
     /**

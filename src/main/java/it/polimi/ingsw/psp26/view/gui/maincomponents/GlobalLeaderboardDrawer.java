@@ -85,7 +85,7 @@ public class GlobalLeaderboardDrawer extends LeaderboardDrawer {
             soundManager.setSoundEffect("button_click_01.wav");
 
             closeParentStageOfActionEvent(actionEvent);
-            client.sendUndoMessage();
+            client.sendMenuUndoMessage();
             client.viewNext();
         });
     }

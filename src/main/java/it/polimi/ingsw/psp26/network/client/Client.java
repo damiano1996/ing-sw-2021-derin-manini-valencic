@@ -13,8 +13,7 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import java.io.IOException;
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.application.messages.MessageType.DISPLAY_LOGIN;
-import static it.polimi.ingsw.psp26.application.messages.MessageType.UNDO_OPTION_SELECTED;
+import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.configurations.Configurations.PRINT_CLIENT_SIDE;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createLeaderboard;
@@ -271,6 +270,16 @@ public class Client extends Observable<Message> {
     public synchronized void sendUndoMessage() {
         try {
             notifyObservers(new Message(UNDO_OPTION_SELECTED));
+        } catch (InvalidPayloadException ignored) {
+        }
+    }
+
+    /**
+     * Sends an undo Message for the waiting room to the Server when selected by the Player
+     */
+    public synchronized void sendMenuUndoMessage() {
+        try {
+            notifyObservers(new Message(MENU, UNDO_OPTION_SELECTED));
         } catch (InvalidPayloadException ignored) {
         }
     }

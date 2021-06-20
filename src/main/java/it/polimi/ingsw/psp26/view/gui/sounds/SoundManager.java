@@ -10,6 +10,7 @@ public class SoundManager {
     private static SoundManager instance;
 
     private AudioClip musicAudio;
+    private AudioClip effectAudio;
     private double volume = 100;
 
     public static SoundManager getInstance() {
@@ -31,7 +32,7 @@ public class SoundManager {
     }
 
     public void setSoundEffect(String soundEffect) {
-        AudioClip effectAudio = new AudioClip(
+        effectAudio = new AudioClip(
                 MediaLoaderCache.getInstance().loadMediaFromFile(MUSIC_DIRECTORY + soundEffect).getSource()
         );
         effectAudio.setCycleCount(1);

@@ -17,7 +17,6 @@ public class TurnUtils {
     public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
         System.out.println("goToNextStateAfterLeaderAction - current turn phase: " + turn.getTurnPhase());
         if (turn.getPlayingPhaseState().isLastTurn() && turn.getTurnPlayer().hasInkwell()) {
-
             try {
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
                         new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));

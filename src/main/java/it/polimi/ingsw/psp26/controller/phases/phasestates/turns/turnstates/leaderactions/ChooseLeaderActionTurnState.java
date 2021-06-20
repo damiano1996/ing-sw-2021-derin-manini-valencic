@@ -95,6 +95,11 @@ public class ChooseLeaderActionTurnState extends TurnState {
         }
     }
 
+    /**
+     * Method to check which leader actions are playable and in case adds them to the choices
+     *
+     * @return The list of MessageType relative to the possible actions playable
+     */
     private List<MessageType> getPlayableLeaderActions() {
         ActivateOrDiscardLeaderTurnState activateOrDiscardLeaderTurnState = new ActivateOrDiscardLeaderTurnState(turn);
         List<MessageType> choices = new ArrayList<>();

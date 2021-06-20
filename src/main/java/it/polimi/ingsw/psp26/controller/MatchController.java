@@ -1,9 +1,11 @@
 package it.polimi.ingsw.psp26.controller;
 
+import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.application.observer.Observable;
 import it.polimi.ingsw.psp26.application.observer.Observer;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
+import it.polimi.ingsw.psp26.controller.phases.phasestates.EndMatchPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.RecoveringMatchPhaseState;
 import it.polimi.ingsw.psp26.model.Match;
@@ -91,7 +93,12 @@ public class MatchController extends Observable<SessionMessage> implements Obser
      */
     @Override
     public synchronized void update(SessionMessage message) {
+
+        if(message.getMessageType() == MessageType.INDEFINITE_SUSPENSION || message.getMessageType() == MessageType.HEARTBEAT_INDEFINITE_SUSPENSION) {
+            phase.changeState(new EndMatchPhaseState(phase));
+        }
         phase.execute(message);
+
     }
 
     /**

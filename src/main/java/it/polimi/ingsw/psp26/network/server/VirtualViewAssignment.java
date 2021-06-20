@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.network.server;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.MultipleChoicesMessage;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
+import it.polimi.ingsw.psp26.controller.HeartbeatController;
 import it.polimi.ingsw.psp26.exceptions.DesiredVirtualViewDoesNotExistException;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
@@ -62,6 +63,7 @@ public class VirtualViewAssignment extends Thread {
             System.out.println("VirtualViewAssignment - Response received.");
             if (message.getPayload().equals(MessageType.NEW_MATCH)) {
                 System.out.println("VirtualViewAssignment - Going to close other matches.");
+
                 noRecoverySelected(sessionToken);
 
                 System.out.println("VirtualViewAssignment - New match selected.");
@@ -227,7 +229,7 @@ public class VirtualViewAssignment extends Thread {
      *
      * @param sessionToken session token of the player that joins after termination or disconnection
      */
-    private void noRecoverySelected(String sessionToken) {
+    private synchronized void noRecoverySelected(String sessionToken) {
         List<VirtualView> virtualViewsToRemove = new ArrayList<>();
         for (VirtualView virtualView : Server.getInstance().getVirtualViews()) {
             try {
@@ -235,21 +237,38 @@ public class VirtualViewAssignment extends Thread {
                 // if player was in this virtual view we have to close this match
                 // case 1: In the virtual view there are other players waiting for recovery
                 if (virtualView.getNumberOfNodeClients() > 0) {
-                    // in this case we have to communicate to other players that the match will be indefinitely suspended
-                    virtualView.getMatchController().update(
-                            new SessionMessage(SpecialToken.BROADCAST.getToken(), INDEFINITE_SUSPENSION)
+
+                    // Deleting the directory containing the ended Match files
+                    GameSaver.getInstance().deleteDirectoryByMatchId(virtualView.getMatchController().getMatch().getId());
+
+                    //Killing the hearth beats threads
+                    virtualView.killHeartbeats();
+
+                    //Sending the indefinite suspension message to the other nodes
+                    virtualView.notifyObservers(
+                            new SessionMessage(SpecialToken.BROADCAST.getToken(), INDEFINITE_SUSPENSION , sessionToken)
                     );
-                    // the match will be closed by the match controller
+
+                    // Making the VirtualView Thread finish its lifecycle
+                    for(Player player : virtualView.getMatchController().getMatch().getPlayers()) {
+                        virtualView.stopListeningNetworkNode(player.getSessionToken(), true);
+                    }
+
+                    // Checking if all went correct and no loops remain
+                    System.out.println("EndMatchPhaseState - VirtualView removed");
+
                 } else {
                     // case 2: the match can be deleted from directory.
                     // (case of server and client closed: no network nodes are in the virtual view)
                     GameSaver.getInstance().deleteDirectoryByMatchId(virtualView.getMatchController().getMatch().getId());
-                    virtualViewsToRemove.add(virtualView);
+
                 }
+                virtualViewsToRemove.add(virtualView);
             } catch (PlayerDoesNotExistException | InvalidPayloadException ignored) {
             }
         }
 
         for (VirtualView virtualView : virtualViewsToRemove) Server.getInstance().removeVirtualView(virtualView);
+
     }
 }

@@ -329,4 +329,11 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         return nodeClients.size();
     }
 
+    public void killHeartbeats() {
+        for(String sessionToken : heartbeatControllers.keySet()){
+            heartbeatControllers.get(sessionToken).kill(sessionToken);
+
+        }
+    }
+
 }

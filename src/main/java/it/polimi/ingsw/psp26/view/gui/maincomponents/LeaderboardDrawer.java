@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.view.gui.maincomponents;
 import it.polimi.ingsw.psp26.network.client.Client;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -20,9 +21,9 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEv
  */
 public class LeaderboardDrawer extends RatioDrawer {
 
-    private final Client client;
-    private final Map<String, Integer> endMatchLeaderboard;
-    private final String winningPlayer;
+    protected final Client client;
+    protected final Map<String, Integer> endMatchLeaderboard;
+    protected final String winningPlayer;
 
     /**
      * Class constructor.
@@ -88,7 +89,7 @@ public class LeaderboardDrawer extends RatioDrawer {
      * @param pointsBox   The VBox containing the Players' points
      * @param leaderboard The Map containing the values to insert
      */
-    private void insertLeaderboardValues(VBox playerBox, VBox pointsBox, Map<String, Integer> leaderboard) {
+    protected void insertLeaderboardValues(VBox playerBox, VBox pointsBox, Map<String, Integer> leaderboard) {
         // Getting a List of ordered Players' nicknames to better insert values in the leaderboard
         List<String> orderedPlayers = getOrderedPlayersList(leaderboard);
 
@@ -113,7 +114,7 @@ public class LeaderboardDrawer extends RatioDrawer {
      * @param dimension The desired dimension of the text
      * @param underline True if you want to underline the text, false otherwise
      */
-    private void setTextDimensions(Text text, int dimension, boolean underline) {
+    protected void setTextDimensions(Text text, int dimension, boolean underline) {
         text.setId("title");
         text.setStyle("-fx-font-size: " + (dimension * ratio));
         text.setUnderline(underline);
@@ -128,7 +129,9 @@ public class LeaderboardDrawer extends RatioDrawer {
     private void setWinningText(Text winningText) {
         if (client.getNickname().equals(winningPlayer)) {
             winningText.setText("YOU WON!");
-        } else {
+        } else if(client.isMultiplayerMode() && !endMatchLeaderboard.containsKey(winningPlayer) ) {
+            winningText.setText("DISCONNECTION!");
+        }else{
             winningText.setText("YOU LOST!");
         }
     }
@@ -139,7 +142,7 @@ public class LeaderboardDrawer extends RatioDrawer {
      *
      * @param doneButton The button to set the action to
      */
-    private void setDoneButtonAction(Button doneButton) {
+    protected void setDoneButtonAction(Button doneButton) {
         doneButton.setOnMouseClicked(mouseEvent -> {
             closeParentStageOfActionEvent(mouseEvent);
             client.viewNext();

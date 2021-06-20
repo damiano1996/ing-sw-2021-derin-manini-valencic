@@ -21,6 +21,7 @@ import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.MessageSynchronizedFIFO;
 import it.polimi.ingsw.psp26.network.client.NotificationsFIFO;
+import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.io.IOException;
@@ -159,7 +160,19 @@ public class CLI implements ViewInterface {
 
     @Override
     public void displayGlobalLeaderboard() {
-        // to implement;
+        mutex.lock();
+
+        commonScreensCli.displayFinalScreen(LeaderBoard.getInstance().getLeaderboard(), 5);
+
+        cliUtils.pPCS("Press Enter to go back to the menu", Color.WHITE, 50, 4);
+
+        mutex.unlock();
+
+        in.nextLine();
+        client.sendUndoMessage();
+        client.viewNext();
+
+
     }
 
 
@@ -641,12 +654,16 @@ public class CLI implements ViewInterface {
     public void displayEndGame(Map<String, Integer> leaderboard, String winningPlayer) {
         mutex.lock();
 
-        commonScreensCli.displayFinalScreen(leaderboard);
+        commonScreensCli.displayFinalScreen(leaderboard, leaderboard.size());
 
         if (client.getNickname().equals(winningPlayer)) {
             pw.print(Color.GREEN.setColor());
             pw.flush();
             cliUtils.printFigure("/titles/YouWonTitle", 37, 89);
+        }  else if(client.isMultiplayerMode() && !leaderboard.containsKey(winningPlayer) ) {
+            pw.print(Color.YELLOW.setColor());
+            pw.flush();
+            cliUtils.printFigure("/titles/DisconnectionTitle", 37, 89);
         } else {
             pw.print(Color.RED.setColor());
             pw.flush();

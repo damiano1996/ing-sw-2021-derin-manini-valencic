@@ -76,6 +76,7 @@ public class EndMatchCheckerTurnState extends TurnState {
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
                         new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.NO_MORE_COLUMN_DEVELOPMENT_CARDS));
 
+
             } else if (isBlackCrossFinalPosition()) {
 
                 turn.getMatchController().notifyObservers(
@@ -84,8 +85,7 @@ public class EndMatchCheckerTurnState extends TurnState {
                                 "Lorenzo activated the endgame by reaching the final the final tile in the faith track.")
                 );
 
-                turn.getPlayingPhaseState().goToEndMatchPhaseState(
-                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.BLACK_CROSS_FINAL_POSITION));
+                turn.getPlayingPhaseState().setLastTurn();
             }
 
         } catch (InvalidPayloadException e) {

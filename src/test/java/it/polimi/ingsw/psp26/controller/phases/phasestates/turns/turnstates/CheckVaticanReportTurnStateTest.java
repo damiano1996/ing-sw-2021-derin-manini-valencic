@@ -31,9 +31,8 @@ public class CheckVaticanReportTurnStateTest {
         phase.getMatchController().addObserver(mitm);
 
         phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname", "sessionToken"));
-        phase.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname1", "sessionToken1"));
 
-        phase.getMatchController().setMaxNumberOfPlayers(2);
+        phase.getMatchController().setMaxNumberOfPlayers(1);
         turn = new Turn(
                 new PlayingPhaseState(phase),
                 phase.getMatchController(),
@@ -120,20 +119,6 @@ public class CheckVaticanReportTurnStateTest {
         assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].isPopesFavorTileDiscarded());
 
         GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", virtualView.getMatchController().getMatch().getId()));
-    }
-
-    @Test
-    public void testPlayMultiPlayerActivateFinalTile() throws InvalidPayloadException {
-
-        turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(24);
-
-        boolean tileBeforeTurn = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[2].isPopesFavorTileActive();
-
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
-
-        assertFalse(tileBeforeTurn);
-        assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].isPopesFavorTileActive());
-        assertTrue(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
     }
 
 }

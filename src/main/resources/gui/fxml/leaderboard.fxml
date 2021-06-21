@@ -5,7 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.ingsw.psp26.view.gui.FXMLControllers.LeaderboardController" xmlns="http://javafx.com/javafx/11.0.1">
+            fx:controller="it.polimi.ingsw.psp26.view.gui.FXMLControllers.LeaderboardController"
+            xmlns="http://javafx.com/javafx/11.0.1">
     <BorderPane>
         <top>
             <HBox alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">

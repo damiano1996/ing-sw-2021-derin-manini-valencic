@@ -1,13 +1,10 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
-import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.SpecialToken;
-
-import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendMessageToAllPlayerExceptOne;
 
 public class RecoveringMatchPhaseState extends PhaseState {
 
@@ -25,8 +22,13 @@ public class RecoveringMatchPhaseState extends PhaseState {
         try {
 
             System.out.println("RecoveringMatchPhaseState - Player wants to resume the match.");
-            phase.getMatchController().notifyObservers(new SessionMessage(message.getSessionToken(), MessageType.START_WAITING, "Waiting all players to resume the match..."));
-
+            phase.getMatchController().notifyObservers(
+                    new SessionMessage(
+                            message.getSessionToken(),
+                            MessageType.START_WAITING,
+                            "Waiting all players to resume the match..."
+                    )
+            );
 
             if (phase.getMatchController().getMatch().getPlayers().size() ==
                     phase.getMatchController().getVirtualView().getNumberOfNodeClients()) {
@@ -37,11 +39,8 @@ public class RecoveringMatchPhaseState extends PhaseState {
                 phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.STOP_WAITING));
                 phase.getMatchController().getVirtualView().sendingMainMatchComponents(SpecialToken.BROADCAST.getToken());
 
-                sendMessageToAllPlayerExceptOne(
-                        nextPlayingPhaseState.getCurrentTurn(),
-                        nextPlayingPhaseState.getCurrentTurn().getTurnPlayer(),
-                        new Message(MessageType.OPPONENT_TURN)
-                );
+                // notifying players to remember who is the turn player
+                nextPlayingPhaseState.sendNotificationMessageNewTurn();
 
                 phase.changeState(nextPlayingPhaseState);
                 // Message just to trigger the match controller

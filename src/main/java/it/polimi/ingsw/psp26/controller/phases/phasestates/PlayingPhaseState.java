@@ -110,7 +110,7 @@ public class PlayingPhaseState extends PhaseState {
         lastTurn = true;
     }
 
-    private void sendNotificationMessageNewTurn() {
+    public void sendNotificationMessageNewTurn() {
         try {
             String messageToTurnPlayer = "It's your turn!";
             String messageToOpponents = "Turn of " + currentTurn.getTurnPlayer().getNickname();

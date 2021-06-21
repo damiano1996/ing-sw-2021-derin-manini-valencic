@@ -16,8 +16,8 @@ public enum Level {
     /**
      * Constructor of the class.
      * It sets the levelName and levelNumber of the Level.
-     * 
-     * @param levelName the name of the Level
+     *
+     * @param levelName   the name of the Level
      * @param levelNumber the Number of the Level
      */
     Level(String levelName, int levelNumber) {

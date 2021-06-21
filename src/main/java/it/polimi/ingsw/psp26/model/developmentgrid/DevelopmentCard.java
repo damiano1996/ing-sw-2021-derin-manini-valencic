@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Class representing a DevelopmentCard.
+ */
 public class DevelopmentCard {
 
     // This attribute contains information about the Card Level and Color
@@ -18,6 +21,16 @@ public class DevelopmentCard {
     private final Map<Resource, Integer> cost;
     private final int victoryPoints;
 
+    /**
+     * Constructor of the class.
+     * It sets the DevelopmentCard parameters.
+     *
+     * @param cost             the cost of the DevelopmentCard
+     * @param colorLevel       the DevelopmentCard Level
+     * @param productionCost   the DevelopmentCard Production cost
+     * @param productionReturn the DevelopmentCard Production return
+     * @param victoryPoints    the DevelopmentCard victory points
+     */
     public DevelopmentCard(
             HashMap<Resource, Integer> cost,
             DevelopmentCardType colorLevel,
@@ -33,9 +46,9 @@ public class DevelopmentCard {
 
 
     /**
-     * Getter of the Development Card cost
+     * Getter of the DevelopmentCard cost.
      *
-     * @return An unmodifiable Map containing the cost of the Card
+     * @return an unmodifiable Map containing the cost of the DevelopmentCard
      */
     public Map<Resource, Integer> getCost() {
         return Collections.unmodifiableMap(cost);
@@ -43,9 +56,9 @@ public class DevelopmentCard {
 
 
     /**
-     * Getter of the Development Card type
+     * Getter of the DevelopmentCard type.
      *
-     * @return The DevelopmentCardType of the Card
+     * @return the DevelopmentCardType of the DevelopmentCard
      */
     public DevelopmentCardType getDevelopmentCardType() {
         return developmentCardType;
@@ -53,9 +66,9 @@ public class DevelopmentCard {
 
 
     /**
-     * Getter of the Development Card Production
+     * Getter of the DevelopmentCard Production.
      *
-     * @return The Production of the Card
+     * @return the Production of the DevelopmentCard
      */
     public Production getProduction() {
         return production;
@@ -63,9 +76,9 @@ public class DevelopmentCard {
 
 
     /**
-     * Getter of the Development Card victory points
+     * Getter of the DevelopmentCard victory points.
      *
-     * @return The Victory Points of the Card
+     * @return the victory points of the DevelopmentCard
      */
     public int getVictoryPoints() {
         return victoryPoints;
@@ -73,9 +86,9 @@ public class DevelopmentCard {
 
 
     /**
-     * toString method
+     * toString method.
      *
-     * @return A String representation of the Object
+     * @return a String representation of the Object
      */
     @Override
     public String toString() {
@@ -87,10 +100,10 @@ public class DevelopmentCard {
 
 
     /**
-     * Equals method
+     * Equals method.
      *
      * @param o Object to be compared
-     * @return True if equals, false otherwise
+     * @return true if equals, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -105,9 +118,9 @@ public class DevelopmentCard {
 
 
     /**
-     * hashCode method
+     * hashCode method.
      *
-     * @return A hashCode of the Object
+     * @return a hashCode of the Object
      */
     @Override
     public int hashCode() {

@@ -3,14 +3,17 @@ package it.polimi.ingsw.psp26.model.actiontokens;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 
+/**
+ * The class representing the Lorenzo's BlackCrossActionToken.
+ */
 public class BlackCrossActionToken implements ActionToken {
 
     /**
-     * Executes the action of the Action Token
-     * In this case, it gives 2 points to the Black Cross marker
+     * Executes the action of the BlackCrossActionToken.
+     * In this case, it gives 2 points to the BlackCross marker.
      *
-     * @param faithTrack           The Faith Track where the Black Cross is contained
-     * @param developmentCardsGrid The Development Grid where the Tokens can discard Development Cards
+     * @param faithTrack           the FaithTrack where the BlackCross is contained
+     * @param developmentCardsGrid the DevelopmentGrid where the Tokens can discard DevelopmentCards
      */
     @Override
     public void execute(FaithTrack faithTrack, DevelopmentCardsGrid developmentCardsGrid) {
@@ -19,9 +22,9 @@ public class BlackCrossActionToken implements ActionToken {
 
 
     /**
-     * Getter of the Token's name
+     * Getter of the ActionToken's name.
      *
-     * @return The Token's name
+     * @return the ActionToken's name
      */
     @Override
     public String toString() {

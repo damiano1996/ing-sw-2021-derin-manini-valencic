@@ -5,15 +5,21 @@ import it.polimi.ingsw.psp26.model.enums.Level;
 
 import java.util.Objects;
 
-
 /**
- * This class is used to put in a single place both the Color and the Level of Development Cards
+ * This class is used to put in a single place both the Color and the Level of DevelopmentCards.
  */
 public class DevelopmentCardType {
 
     private final Color color;
     private final Level level;
 
+    /**
+     * Constructor of the class.
+     * It sets the Color and Level for the DevelopmentCardType.
+     *
+     * @param color the Color of the DevelopmentCardType
+     * @param level the Level of the DevelopmentCardType
+     */
     public DevelopmentCardType(Color color, Level level) {
         this.color = color;
         this.level = level;
@@ -21,9 +27,9 @@ public class DevelopmentCardType {
 
 
     /**
-     * Getter of the Development Card type Color
+     * Getter of the DevelopmentCardType Color.
      *
-     * @return The Color of the Development Card
+     * @return the Color of the DevelopmentCard
      */
     public Color getColor() {
         return color;
@@ -31,9 +37,9 @@ public class DevelopmentCardType {
 
 
     /**
-     * Getter of the Development Card type Level
+     * Getter of the DevelopmentCardType Level.
      *
-     * @return The Level of the Development Card
+     * @return the Level of the DevelopmentCard
      */
     public Level getLevel() {
         return level;
@@ -41,9 +47,9 @@ public class DevelopmentCardType {
 
 
     /**
-     * toString method
+     * toString method.
      *
-     * @return A String representation of the Object
+     * @return a String representation of the Object
      */
     @Override
     public String toString() {
@@ -55,10 +61,10 @@ public class DevelopmentCardType {
 
 
     /**
-     * Equals method
+     * Equals method.
      *
-     * @param o Object to be compared
-     * @return True if equals, false otherwise
+     * @param o Object to be compared.
+     * @return true if equals, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -70,9 +76,9 @@ public class DevelopmentCardType {
 
 
     /**
-     * hashCode method
+     * hashCode method.
      *
-     * @return A hashCode of the Object
+     * @return a hashCode of the Object
      */
     @Override
     public int hashCode() {

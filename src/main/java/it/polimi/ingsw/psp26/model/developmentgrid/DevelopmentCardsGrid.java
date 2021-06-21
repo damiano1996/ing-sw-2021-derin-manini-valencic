@@ -15,6 +15,11 @@ import java.util.List;
 
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.getDevelopmentGridModelUpdateMessage;
 
+/**
+ * Class representing the DevelopmentCardsGrid.
+ * By the rules, it has 4 columns and 3 rows.
+ * It contains 12 DevelopmentGridCells, each containing 4 DevelopmentCards.
+ */
 public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
     public static final Color[] COLORS = new Color[]{Color.GREEN, Color.BLUE, Color.YELLOW, Color.PURPLE};
@@ -22,6 +27,12 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
     private final DevelopmentGridCell[][] grid;
 
+    /**
+     * Constructor of the class.
+     * It adds a VirtualView to the Observers List and creates a new DevelopmentCardsGrid.
+     *
+     * @param virtualView the VirtualView to add to the Observers List
+     */
     public DevelopmentCardsGrid(VirtualView virtualView) {
         super();
         addObserver(virtualView);
@@ -33,10 +44,10 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
 
     /**
-     * Used when recovering a Match
-     * It resets the List of Observers and adds the new VirtualView passed as a parameter
+     * Used when recovering a Match.
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter.
      *
-     * @param virtualView The new VirtualView to add to the Observers List
+     * @param virtualView the new VirtualView to add to the Observers List
      */
     public void restoreVirtualView(VirtualView virtualView) {
         resetObservers();
@@ -45,8 +56,8 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
 
     /**
-     * This method creates a new Development Cards Grid by iterating over Colors and Levels
-     * For each Color and Level, creates a new Cell of the Grid
+     * This method creates a new DevelopmentCardsGrid by iterating over Colors and Levels.
+     * For each Color and Level, creates a new Cell of the DevelopmentCardsGrid.
      */
     private void initializeGrid() {
         for (int row = 0; row < LEVELS.length; row++) {
@@ -58,11 +69,11 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
 
     /**
-     * Returns the row of the Grid of the desired Level
+     * Returns the row of the DevelopmentCardsGrid of the desired Level.
      *
-     * @param level The desired Level of the Grid
-     * @return The selected row of the Grid
-     * @throws LevelDoesNotExistException Thrown if the selected Level is not present in the Grid
+     * @param level the desired Level of the DevelopmentCardsGrid
+     * @return the selected row of the DevelopmentCardsGrid
+     * @throws LevelDoesNotExistException thrown if the selected Level is not present in the DevelopmentCardsGrid
      */
     private int getRow(Level level) throws LevelDoesNotExistException {
         for (int row = 0; row < grid.length; row++)
@@ -73,11 +84,11 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
 
     /**
-     * Returns the column of the Grid of the desired Color
+     * Returns the column of the DevelopmentCardsGrid of the desired Color.
      *
-     * @param color The desired Color of the Grid
-     * @return The selected column of the Grid
-     * @throws ColorDoesNotExistException Thrown if the selected Color is not present in the Grid
+     * @param color the desired Color of the DevelopmentCardsGrid
+     * @return the selected column of the DevelopmentCardsGrid
+     * @throws ColorDoesNotExistException thrown if the selected Color is not present in the DevelopmentCardsGrid
      */
     private int getColumn(Color color) throws ColorDoesNotExistException {
         for (int col = 0; col < grid[0].length; col++)
@@ -88,14 +99,14 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
 
     /**
-     * Draws a Card from the Grid by removing it from the Grid and returning it
+     * Draws a DevelopmentCard from the DevelopmentCardsGrid by removing it from the DevelopmentCardsGrid and returning it.
      *
-     * @param color The Color of the desired Card
-     * @param level The Level of the desired Card
-     * @return The desired Development Card
-     * @throws LevelDoesNotExistException      The Level selected is not present in the Grid
-     * @throws ColorDoesNotExistException      The Color selected is not present in the Grid
-     * @throws NoMoreDevelopmentCardsException There are no more Development Cards in the Grid
+     * @param color the Color of the desired DevelopmentCard
+     * @param level the Level of the desired DevelopmentCard
+     * @return the desired DevelopmentCard
+     * @throws LevelDoesNotExistException      the Level selected is not present in the DevelopmentCardsGrid
+     * @throws ColorDoesNotExistException      the Color selected is not present in the DevelopmentCardsGrid
+     * @throws NoMoreDevelopmentCardsException there are no more Development Cards in the DevelopmentCardsGrid
      */
     public DevelopmentCard drawCard(Color color, Level level) throws LevelDoesNotExistException, ColorDoesNotExistException, NoMoreDevelopmentCardsException {
         int row = getRow(level);
@@ -110,13 +121,13 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
 
     /**
-     * Checks if a Development Card is present in the Grid
+     * Checks if a DevelopmentCard is present in the DevelopmentCardsGrid.
      *
-     * @param color The Color of the desired Card
-     * @param level The Level of the desired Card
-     * @return True if the Card of specified Level and Color is present in the Grid, false otherwise
-     * @throws LevelDoesNotExistException The Level selected is not present in the Grid
-     * @throws ColorDoesNotExistException The Color selected is not present in the Grid
+     * @param color the Color of the desired DevelopmentCard
+     * @param level the Level of the desired DevelopmentCard
+     * @return true if the DevelopmentCard of specified Level and Color is present in the DevelopmentCardsGrid, false otherwise
+     * @throws LevelDoesNotExistException the Level selected is not present in the DevelopmentCardsGrid
+     * @throws ColorDoesNotExistException the Color selected is not present in the DevelopmentCardsGrid
      */
     public boolean isAvailable(Color color, Level level) throws LevelDoesNotExistException, ColorDoesNotExistException {
         int row = getRow(level);
@@ -126,11 +137,11 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
 
     /**
-     * By iterating over the entire Grid, returns a List containing all the visible Cards
-     * The visible Cards are the one on the top of every Development Grid Cell
-     * If a Cell is empty, nothing is added to the List to return
+     * By iterating over the entire DevelopmentCardsGrid, returns a List containing all the visible DevelopmentCards.
+     * The visible DevelopmentCards are the one on the top of every DevelopmentGridCell.
+     * If a DevelopmentGridCell is empty, nothing is added to the List to return.
      *
-     * @return An unmodifiable List containing all the visible Cards of the Grid
+     * @return an unmodifiable List containing all the visible Cards of the DevelopmentCardsGrid
      */
     public List<DevelopmentCard> getAllVisibleCards() {
         List<DevelopmentCard> visibleCards = new ArrayList<>();
@@ -144,11 +155,11 @@ public class DevelopmentCardsGrid extends Observable<SessionMessage> {
 
 
     /**
-     * Retrieves and returns a Development Grid cell (one element of the bi-dimensional grid array)
+     * Retrieves and returns a DevelopmentGridCell (one element of the bi-dimensional grid array).
      *
-     * @param row The desired row of the Grid
-     * @param col The desired column of the Grid
-     * @return The corresponding Development Grid Cell
+     * @param row the desired row of the DevelopmentGrid
+     * @param col the desired column of the DevelopmentGrid
+     * @return the corresponding DevelopmentGridCell
      */
     public DevelopmentGridCell getDevelopmentGridCell(int row, int col) {
         return grid[row][col];

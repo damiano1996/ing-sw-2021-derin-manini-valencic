@@ -11,16 +11,28 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid.COLORS;
 import static it.polimi.ingsw.psp26.model.enums.Resource.*;
 
+/**
+ * Class that initializes all the DevelopmentCards used in the game.
+ */
 public class DevelopmentCardsInitializer {
 
     private static DevelopmentCardsInitializer instance;
 
     private final List<DevelopmentCard> developmentCards;
 
+    /**
+     * Constructor of the class.
+     * Creates the List of all the DevelopmentCards.
+     */
     private DevelopmentCardsInitializer() {
         developmentCards = createDevelopmentCards();
     }
 
+    /**
+     * Getter of the instance of the class.
+     *
+     * @return the instance of the class
+     */
     public static DevelopmentCardsInitializer getInstance() {
         if (instance == null)
             instance = new DevelopmentCardsInitializer();
@@ -30,10 +42,10 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Filter the Development Cards based on their Type
+     * Filter the DevelopmentCards based on their Type.
      *
-     * @param developmentCardType The Type that the wanted Cards must have
-     * @return A List of the selected Development Cards
+     * @param developmentCardType the Type that the wanted DevelopmentCards must have
+     * @return a List of the selected DevelopmentCards
      */
     public List<DevelopmentCard> getByDevelopmentCardType(DevelopmentCardType developmentCardType) {
         return developmentCards
@@ -43,9 +55,9 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Creates all the cards, Level by Level, by calling auxiliary methods that build Development Cards based on their Level
+     * Creates all the DevelopmentCards, Level by Level, by calling auxiliary methods that build DevelopmentCards based on their Level.
      *
-     * @return A List of all the Development Cards
+     * @return a List of all the DevelopmentCards
      */
     private List<DevelopmentCard> createDevelopmentCards() {
         List<DevelopmentCard> cards = new ArrayList<>();
@@ -70,12 +82,12 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Creates Development Cards with these characteristics:
-     * Level: 1
-     * Victory Points: 1
-     * Production and costs are based on the Level and Victory Points value
+     * Creates DevelopmentCards with these characteristics:
+     * Level: 1.
+     * Victory Points: 1.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createFirstLevelVPOne() {
         Resource[] costs = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -103,12 +115,12 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Creates Development Cards with these characteristics:
-     * Level: 1
-     * Victory Points: 2
-     * Production and costs are based on the Level and Victory Points value
+     * Creates DevelopmentCards with these characteristics:
+     * Level: 1.
+     * Victory Points: 2.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createFirstLevelVPTwo() {
         Resource[] costs1 = new Resource[]{SHIELD, COIN, SHIELD, SHIELD};
@@ -140,12 +152,12 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Creates Development Cards with these characteristics:
-     * Level: 1
-     * Victory Points: 3
-     * Production and costs are based on the Level and Victory Points value
+     * Creates DevelopmentCards with these characteristics:
+     * Level: 1.
+     * Victory Points: 3.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createFirstLevelVPThree() {
         Resource[] costs = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -178,11 +190,11 @@ public class DevelopmentCardsInitializer {
 
     /**
      * Creates Development Cards with these characteristics:
-     * Level: 1
-     * Victory Points: 4
-     * Production and costs are based on the Level and Victory Points value
+     * Level: 1.
+     * Victory Points: 4.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createFirstLevelVPFour() {
         Resource[] costs1 = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -217,11 +229,11 @@ public class DevelopmentCardsInitializer {
 
     /**
      * Creates Development Cards with these characteristics:
-     * Level: 2
-     * Victory Points: 5
-     * Production and costs are based on the Level and Victory Points value
+     * Level: 2.
+     * Victory Points: 5.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createSecondLevelVPFive() {
         Resource[] costs = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -250,11 +262,11 @@ public class DevelopmentCardsInitializer {
 
     /**
      * Creates Development Cards with these characteristics:
-     * Level: 2
-     * Victory Points: 6
-     * Production and costs are based on the Level and Victory Points value
+     * Level: 2.
+     * Victory Points: 6.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createSecondLevelVPSix() {
         Resource[] costs1 = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -287,11 +299,11 @@ public class DevelopmentCardsInitializer {
 
     /**
      * Creates Development Cards with these characteristics:
-     * Level: 2
-     * Victory Points: 7
-     * Production and costs are based on the Level and Victory Points value
+     * Level: 2.
+     * Victory Points: 7.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createSecondLevelVPSeven() {
         Resource[] costs = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -322,11 +334,11 @@ public class DevelopmentCardsInitializer {
 
     /**
      * Creates Development Cards with these characteristics:
-     * Level: 2
-     * Victory Points: 8
-     * Production and costs are based on the Level and Victory Points value
+     * Level: 2.
+     * Victory Points: 8.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createSecondLevelVPEight() {
         Resource[] costs1 = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -358,12 +370,12 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Creates Development Cards with these characteristics:
-     * Level: 3
-     * Victory Points: 9
-     * Production and costs are based on the Level and Victory Points value
+     * Creates DevelopmentCards with these characteristics:
+     * Level: 3.
+     * Victory Points: 9.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createThirdLevelVPNine() {
         Resource[] costs = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -393,12 +405,12 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Creates Development Cards with these characteristics:
-     * Level: 3
-     * Victory Points: 10
-     * Production and costs are based on the Level and Victory Points value
+     * Creates DevelopmentCards with these characteristics:
+     * Level: 3.
+     * Victory Points: 10.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createThirdLevelVPTen() {
         Resource[] costs1 = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -434,12 +446,12 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Creates Development Cards with these characteristics:
-     * Level: 3
-     * Victory Points: 11
-     * Production and costs are based on the Level and Victory Points value
+     * Creates DevelopmentCards with these characteristics:
+     * Level: 3.
+     * Victory Points: 11.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createThirdLevelVPEleven() {
         Resource[] costs = new Resource[]{SHIELD, COIN, STONE, SERVANT};
@@ -469,12 +481,12 @@ public class DevelopmentCardsInitializer {
 
 
     /**
-     * Creates Development Cards with these characteristics:
-     * Level: 3
-     * Victory Points: 12
-     * Production and costs are based on the Level and Victory Points value
+     * Creates DevelopmentCards with these characteristics:
+     * Level: 3.
+     * Victory Points: 12.
+     * Production and costs are based on the Level and Victory Points value.
      *
-     * @return A List of Development Cards of the described characteristics
+     * @return a List of DevelopmentCards of the described characteristics
      */
     private List<DevelopmentCard> createThirdLevelVPTwelve() {
         Resource[] costs1 = new Resource[]{SHIELD, COIN, STONE, SERVANT};

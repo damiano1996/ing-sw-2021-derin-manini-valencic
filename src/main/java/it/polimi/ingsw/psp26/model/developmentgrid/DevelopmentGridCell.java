@@ -5,16 +5,20 @@ import it.polimi.ingsw.psp26.exceptions.NoMoreDevelopmentCardsException;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class that represent a DevelopmentGridCell.
+ * A DevelopmentGridCell can contain up to 4 DevelopmentCards.
+ */
 public class DevelopmentGridCell {
 
     private final DevelopmentCardType developmentCardType;
     private final List<DevelopmentCard> developmentCards;
 
     /**
-     * Constructor of the class
-     * It creates the Development Cards using the DevelopmentCardsInitializer, then shuffles the obtained Cards
+     * Constructor of the class.
+     * It creates the DevelopmentCards using the DevelopmentCardsInitializer, then shuffles the obtained DevelopmentCards.
      *
-     * @param developmentCardType The Type wanted for that specific Cell
+     * @param developmentCardType the DevelopmentCardType wanted for that specific DevelopmentGridCell
      */
     public DevelopmentGridCell(DevelopmentCardType developmentCardType) {
         this.developmentCardType = developmentCardType;
@@ -26,10 +30,10 @@ public class DevelopmentGridCell {
 
 
     /**
-     * Removes and returns the Card on top of the Development Grid Cell
+     * Removes and returns the DevelopmentCard on top of the DevelopmentGridCell.
      *
-     * @return The Card on top of the Development Grid Cell
-     * @throws NoMoreDevelopmentCardsException Thrown if the cell is empty
+     * @return the DevelopmentCard on top of the DevelopmentGridCell
+     * @throws NoMoreDevelopmentCardsException thrown if the DevelopmentGridCell is empty
      */
     public DevelopmentCard drawCard() throws NoMoreDevelopmentCardsException {
         try {
@@ -41,9 +45,9 @@ public class DevelopmentGridCell {
 
 
     /**
-     * Tells if the Development Grid Cell is empty
+     * Tells if the DevelopmentGridCell is empty.
      *
-     * @return True if no Cards are contained in the Cell, false otherwise
+     * @return true if no DevelopmentCards are contained in the DevelopmentGridCell, false otherwise
      */
     public boolean isEmpty() {
         return developmentCards.size() == 0;
@@ -51,9 +55,9 @@ public class DevelopmentGridCell {
 
 
     /**
-     * Getter of the Development Grid Cell Development Cards type
+     * Getter of the DevelopmentGridCell's DevelopmentCardsType.
      *
-     * @return The developmentCardType attribute of the Development Grid Cell
+     * @return the DevelopmentCardType attribute of the DevelopmentGridCell
      */
     public DevelopmentCardType getDevelopmentCardType() {
         return developmentCardType;
@@ -61,9 +65,9 @@ public class DevelopmentGridCell {
 
 
     /**
-     * Getter of the first Development Card contained in the Development Grid Cell
+     * Getter of the first DevelopmentCard contained in the DevelopmentGridCell.
      *
-     * @return The Card on top of the Cell
+     * @return the DevelopmentCard on top of the DevelopmentGridCell
      */
     public DevelopmentCard getFirstCard() {
         return developmentCards.get(0);
@@ -71,9 +75,9 @@ public class DevelopmentGridCell {
 
 
     /**
-     * Getter of the number of Development Cards contained in the Development Grid Cell
+     * Getter of the number of DevelopmentCards contained in the DevelopmentGridCell.
      *
-     * @return The number of Development Cards contained in the Development Grid Cell
+     * @return the number of DevelopmentCards contained in the DevelopmentGridCell
      */
     public int getDevelopmentCardsSize() {
         return developmentCards.size();

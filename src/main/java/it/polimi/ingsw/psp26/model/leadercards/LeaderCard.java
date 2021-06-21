@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Leader card class.
+ * LeaderCard class.
  */
 public class LeaderCard {
 
@@ -44,7 +44,7 @@ public class LeaderCard {
     }
 
     /**
-     * Method to check if leader is active or not.
+     * Method to check if LeaderCard is active or not.
      *
      * @return true if activated, false otherwise
      */
@@ -53,9 +53,9 @@ public class LeaderCard {
     }
 
     /**
-     * Method to activate the leader.
+     * Method to activate the LeaderCard.
      *
-     * @param ownerPlayer player that is owner of this leader
+     * @param ownerPlayer player that is owner of this LeaderCard
      */
     public void activate(Player ownerPlayer) {
         active = true;
@@ -63,9 +63,9 @@ public class LeaderCard {
     }
 
     /**
-     * Method to execute the special ability.
+     * Method to execute the SpecialAbility.
      *
-     * @param resourceList list of resource the leader power interacts with
+     * @param resourceList list of Resources the leader power interacts with
      */
     public void execute(List<Resource> resourceList) {
         if (isActive()) specialAbility.execute(resourceList);
@@ -81,7 +81,7 @@ public class LeaderCard {
     }
 
     /**
-     * Getter of the development card type requirements
+     * Getter of the DevelopmentCardType requirements.
      *
      * @return unmodifiable hashmap containing the development card type and the requested quantity
      */
@@ -99,7 +99,7 @@ public class LeaderCard {
     }
 
     /**
-     * Method to get the special ability in string.
+     * Method to get the SpecialAbility in string.
      *
      * @return string of the special ability
      */
@@ -108,7 +108,7 @@ public class LeaderCard {
     }
 
     /**
-     * Getter of the resource managed by the special ability.
+     * Getter of the resource managed by the SpecialAbility.
      *
      * @return resource
      */
@@ -135,9 +135,9 @@ public class LeaderCard {
     }
 
     /**
-     * hashCode method
+     * hashCode method.
      *
-     * @return A hashCode of the Object
+     * @return a hashCode of the Object
      */
     @Override
     public int hashCode() {
@@ -145,9 +145,9 @@ public class LeaderCard {
     }
 
     /**
-     * toString method
+     * toString method.
      *
-     * @return A String representation of the Object
+     * @return a String representation of the Object
      */
     @Override
     public String toString() {

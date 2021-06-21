@@ -1,5 +1,8 @@
 package it.polimi.ingsw.psp26.model.enums;
 
+/**
+ * Enum used to contain Level values.
+ */
 public enum Level {
 
     UNDEFINED("UNDEFINED", 0),
@@ -10,6 +13,13 @@ public enum Level {
     private final int levelNumber;
     private final String levelName;
 
+    /**
+     * Constructor of the class.
+     * It sets the levelName and levelNumber of the Level.
+     * 
+     * @param levelName the name of the Level
+     * @param levelNumber the Number of the Level
+     */
     Level(String levelName, int levelNumber) {
         this.levelNumber = levelNumber;
         this.levelName = levelName;
@@ -17,9 +27,9 @@ public enum Level {
 
 
     /**
-     * Getter of the Level number
+     * Getter of the Level number.
      *
-     * @return The Level number
+     * @return the Level number
      */
     public int getLevelNumber() {
         return levelNumber;
@@ -27,9 +37,9 @@ public enum Level {
 
 
     /**
-     * Getter of the Level name
+     * Getter of the Level name.
      *
-     * @return The Level name
+     * @return the Level name
      */
     public String getLevelName() {
         return levelName;

@@ -14,7 +14,7 @@ import java.util.Objects;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.grabElements;
 
 /**
- * Class to model the depot (one shelf of the warehouse)
+ * Class to model the depot (one shelf of the warehouse).
  */
 public class Depot extends Observable<SessionMessage> {
 
@@ -35,10 +35,10 @@ public class Depot extends Observable<SessionMessage> {
     }
 
     /**
-     * Used when recovering a Match
-     * It resets the List of Observers and adds the new VirtualView passed as a parameter
+     * Used when recovering a Match.
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter.
      *
-     * @param virtualView The new VirtualView to add to the Observers List
+     * @param virtualView the new VirtualView to add to the Observers List
      */
     public void restoreVirtualView(VirtualView virtualView) {
         resetObservers();
@@ -55,20 +55,20 @@ public class Depot extends Observable<SessionMessage> {
     }
 
     /**
-     * Getter of the resources contained in the depot.
+     * Getter of the resources contained in the Depot.
      *
-     * @return list of the resources in the depot
+     * @return list of the resources in the Depot
      */
     public List<Resource> getResources() {
         return Collections.unmodifiableList(resources);
     }
 
     /**
-     * Method to add a resource to the depot.
+     * Method to add a Resource to the Depot.
      *
      * @param resource resource to add
-     * @throws CanNotAddResourceToDepotException if depot has reached the maximum number of resources or
-     *                                           if the resource is not admissible given the others
+     * @throws CanNotAddResourceToDepotException if Depot has reached the maximum number of Resources or
+     *                                           if the Resource is not admissible given the others
      */
     protected void addResource(Resource resource) throws CanNotAddResourceToDepotException {
         if (resources.size() == maxNumberOfResources) throw new CanNotAddResourceToDepotException();
@@ -77,30 +77,30 @@ public class Depot extends Observable<SessionMessage> {
     }
 
     /**
-     * Method to obtain all the resources from the depot.
+     * Method to obtain all the Resources from the Depot.
      *
-     * @return ist containing all the resources of the depot
+     * @return ist containing all the resources of the Depot
      */
     public List<Resource> grabAllResources() {
         return grabResources(resources.size());
     }
 
     /**
-     * Method to grab resources from the depot.
+     * Method to grab resources from the Depot.
      *
-     * @param quantity quantity of resources to be removed from the depot
-     * @return list containing the number of requested resources
-     * @throws IndexOutOfBoundsException if trying to remove more resources than the depot contains
+     * @param quantity quantity of Resources to be removed from the Depot
+     * @return list containing the number of requested Resources
+     * @throws IndexOutOfBoundsException if trying to remove more Resources than the Depot contains
      */
     public List<Resource> grabResources(int quantity) throws IndexOutOfBoundsException {
         return grabElements(resources, quantity);
     }
 
     /**
-     * Checks if a resource could be added to a specified depot.
+     * Checks if a Resource could be added to a specified Depot.
      *
-     * @param resource resource to be added to the depot
-     * @return true if the resource can be added, false in the other case
+     * @param resource resource to be added to the Depot
+     * @return true if the Resource can be added, false in the other case
      */
     protected boolean isAdmissible(Resource resource) {
         return (resources.size() == 0 || resources.contains(resource)) &&
@@ -109,9 +109,9 @@ public class Depot extends Observable<SessionMessage> {
     }
 
     /**
-     * Getter of the type of resources contained in the depot.
+     * Getter of the type of Resources contained in the Depot.
      *
-     * @return contained resource type
+     * @return contained Resource type
      */
     public Resource getContainedResourceType() {
         if (resources.size() > 0) return resources.get(0);

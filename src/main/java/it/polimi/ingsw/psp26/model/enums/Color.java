@@ -1,5 +1,8 @@
 package it.polimi.ingsw.psp26.model.enums;
 
+/**
+ * Enum used to contain Color values.
+ */
 public enum Color {
 
     GREY("\033[38;5;242m", "GREY"),
@@ -15,6 +18,13 @@ public enum Color {
     private final String ANSICode;
     private final String name;
 
+    /**
+     * Constructor of the class.
+     * It sets the Color ANSICode and name.
+     *
+     * @param ANSICode the AnsiCode of the Color
+     * @param name     the name of the Color
+     */
     Color(String ANSICode, String name) {
         this.ANSICode = ANSICode;
         this.name = name;
@@ -22,10 +32,10 @@ public enum Color {
 
 
     /**
-     * Used to set the desired Color in the console screen
-     * Must call a setColor() on RESET to bo back to normal Color when needed
+     * Used to set the desired Color in the console screen.
+     * Must call a setColor() on RESET to bo back to normal Color when needed.
      *
-     * @return The ANSICode that will set the Color on the console screen
+     * @return the ANSICode that will set the Color on the console screen
      */
     public String setColor() {
         return ANSICode;
@@ -33,9 +43,9 @@ public enum Color {
 
 
     /**
-     * Getter of the Color ANSICode
+     * Getter of the Color ANSICode.
      *
-     * @return A String representation of the ANSICode of the Color
+     * @return a String representation of the ANSICode of the Color
      */
     public String toString() {
         return ANSICode;
@@ -43,9 +53,9 @@ public enum Color {
 
 
     /**
-     * Getter of the Color name
+     * Getter of the Color name.
      *
-     * @return The name of the Color
+     * @return the name of the Color
      */
     public String getName() {
         return name;

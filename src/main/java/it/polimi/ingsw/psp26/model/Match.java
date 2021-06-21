@@ -21,7 +21,7 @@ import java.util.Objects;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.grabElements;
 
 /**
- * Class that models the whole game
+ * Class that models the whole game.
  */
 public class Match extends Observable<SessionMessage> {
 
@@ -58,12 +58,12 @@ public class Match extends Observable<SessionMessage> {
     }
 
     /**
-     * Used when recovering a Match
-     * It resets the List of Observers and adds the new VirtualView passed as a parameter
-     * It also calls restoreVirtualView() method on both developmentCardsGrid and marketTray attributes
-     * It also calls recoverVirtualView() method on all the players
+     * Used when recovering a Match.
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter.
+     * It also calls restoreVirtualView() method on both developmentCardsGrid and marketTray attributes.
+     * It also calls recoverVirtualView() method on all the players.
      *
-     * @param virtualView The new VirtualView to add to the Observers List
+     * @param virtualView the new VirtualView to add to the Observers List
      */
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
@@ -236,9 +236,9 @@ public class Match extends Observable<SessionMessage> {
     }
 
     /**
-     * Getter of the Action Tokens
+     * Getter of the Action Tokens.
      *
-     * @return An unmodifiable List of the Action Tokens
+     * @return an unmodifiable List of the Action Tokens
      */
     public List<ActionToken> getActionTokens() {
         return Collections.unmodifiableList(actionTokenStack);

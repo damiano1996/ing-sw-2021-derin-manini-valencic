@@ -5,6 +5,9 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import java.util.Objects;
 
+/**
+ * Class to model a LeaderDepot.
+ */
 public class LeaderDepot extends Depot {
 
     private final Resource depotResource;
@@ -21,7 +24,7 @@ public class LeaderDepot extends Depot {
     }
 
     /**
-     * Getter of the resource managed by the leader depot.
+     * Getter of the resource managed by the LeaderDepot.
      *
      * @return resource
      */
@@ -30,9 +33,9 @@ public class LeaderDepot extends Depot {
     }
 
     /**
-     * Overrides the method isAdmissible() to check if the Resource Type to insert is correct
+     * Overrides the method isAdmissible() to check if the Resource Type to insert is correct.
      *
-     * @param resource Resource to be added to the Depot
+     * @param resource resource to be added to the Depot
      * @return true if the Resource can be added, false in the other case
      */
     protected boolean isAdmissible(Resource resource) {
@@ -65,9 +68,9 @@ public class LeaderDepot extends Depot {
     }
 
     /**
-     * toString method
+     * toString method.
      *
-     * @return A String representation of the Object
+     * @return a String representation of the Object
      */
     @Override
     public String toString() {

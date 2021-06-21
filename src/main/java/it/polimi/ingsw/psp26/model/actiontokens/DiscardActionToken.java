@@ -9,27 +9,36 @@ import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Level;
 import it.polimi.ingsw.psp26.model.personalboard.FaithTrack;
 
+/**
+ * The class representing the Lorenzo's DiscardActionToken.
+ */
 public class DiscardActionToken implements ActionToken {
 
     private final Color colorToDiscard;
 
+    /**
+     * Constructor of the class.
+     * It sets the Color of the DevelopmentCards the ActionToken will discard when executed.
+     *
+     * @param colorToDiscard the Color of the DevelopmentCards the ActionToken will discard when executed
+     */
     public DiscardActionToken(Color colorToDiscard) {
         this.colorToDiscard = colorToDiscard;
     }
 
 
     /**
-     * Executes the action of the ActionToken
-     * In this case, discards 2 cards from the Development Card Grid. The attribute colorToDiscard will tell what
-     * Color of the Development Cards will be discarded.
-     * The method tries to discard from the first Level; if no cards are available, proceeds to the higher Levels, up to the third
-     * The ColorDoesNotExistException and LevelDoesNotExistException are thrown since drawCards() is used in the auxiliary methods
+     * Executes the action of the ActionToken.
+     * In this case, discards 2 cards from the DevelopmentCardGrid. The attribute colorToDiscard will tell what
+     * Color of the DevelopmentCards will be discarded.
+     * The method tries to discard from the first Level; if no cards are available, proceeds to the higher Levels, up to the third.
+     * The ColorDoesNotExistException and LevelDoesNotExistException are thrown since drawCards() is used in the auxiliary methods.
      *
-     * @param faithTrack           The Faith Track where the Black Cross is contained
-     * @param developmentCardsGrid The Development Grid where the Tokens can discard Development Cards
-     * @throws ColorDoesNotExistException The Color of the Development Card doesn't exist
-     * @throws LevelDoesNotExistException The Level of the Development Card doesn't exist
-     * @throws LorenzoWinException        All the cards of a Color have been discarded (e.g. all the yellow cards have been
+     * @param faithTrack           the FaithTrack where the BlackCross is contained
+     * @param developmentCardsGrid the DevelopmentGrid where the ActionTokens can discard DevelopmentCards
+     * @throws ColorDoesNotExistException the Color of the DevelopmentCard doesn't exist
+     * @throws LevelDoesNotExistException the Level of the DevelopmentCard doesn't exist
+     * @throws LorenzoWinException        all the cards of a Color have been discarded (e.g. all the yellow cards have been
      *                                    discarded: Lorenzo wins the game)
      */
     @Override
@@ -52,14 +61,14 @@ public class DiscardActionToken implements ActionToken {
 
 
     /**
-     * Used by the token to remove cards from First, Second or both DevelopmentGrid levels
+     * Used by the ActionToken to remove cards from First, Second or both DevelopmentGrid levels.
      *
      * @param cardsToRemove        the number of cards to remove
      * @param developmentCardsGrid the grid where the cards are removed
      * @param level                the desired level of cards to be removed
      * @return the number of cards left to remove
-     * @throws ColorDoesNotExistException There are no longer Development Cards of the Color the Token tried to remove
-     * @throws LevelDoesNotExistException There are no longer Development Cards of the Level the Token tried to remove
+     * @throws ColorDoesNotExistException there are no longer DevelopmentCards of the Color the ActionToken tried to remove
+     * @throws LevelDoesNotExistException there are no longer DevelopmentCards of the Level the ActionToken tried to remove
      */
     private int removeFirstAndSecondLevel(int cardsToRemove, DevelopmentCardsGrid developmentCardsGrid, Level level) throws ColorDoesNotExistException, LevelDoesNotExistException {
         int removedCards = 2 - cardsToRemove;
@@ -77,13 +86,13 @@ public class DiscardActionToken implements ActionToken {
 
 
     /**
-     * Used by the token to remove cards from the Third DevelopmentGrid levels
+     * Used by the ActionToken to remove cards from the Third DevelopmentGrid levels.
      *
      * @param cardsToRemove        the number of cards to remove
      * @param developmentCardsGrid the grid where the cards are removed
-     * @throws ColorDoesNotExistException There are no longer Development Cards of the Color the Token tried to remove
-     * @throws LevelDoesNotExistException There are no longer Development Cards of the Level the Token tried to remove
-     * @throws LorenzoWinException        The token draws all the cards from Third Level. You loose
+     * @throws ColorDoesNotExistException there are no longer DevelopmentCards of the Color the ActionToken tried to remove
+     * @throws LevelDoesNotExistException there are no longer DevelopmentCards of the Level the ActionToken tried to remove
+     * @throws LorenzoWinException        the token draws all the cards from Third Level. Lorenzo wins the game
      */
     private void removeThirdLevel(int cardsToRemove, DevelopmentCardsGrid developmentCardsGrid) throws ColorDoesNotExistException, LevelDoesNotExistException, LorenzoWinException {
         try {
@@ -98,9 +107,9 @@ public class DiscardActionToken implements ActionToken {
 
 
     /**
-     * Getter of the Token's name
+     * Getter of the ActionToken's name.
      *
-     * @return The Token's name
+     * @return the Token's name
      */
     @Override
     public String toString() {

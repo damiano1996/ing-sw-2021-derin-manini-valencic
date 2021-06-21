@@ -45,11 +45,11 @@ public class FaithTrack extends Observable<SessionMessage> {
     }
 
     /**
-     * Used when recovering a Match
-     * It resets the List of Observers and adds the new VirtualView passed as a parameter
-     * It also calls the restoreVirtualView() method on all the vaticanReportSections
+     * Used when recovering a Match.
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter.
+     * It also calls the restoreVirtualView() method on all the vaticanReportSections.
      *
-     * @param virtualView The new VirtualView to add to the Observers List
+     * @param virtualView the new VirtualView to add to the Observers List
      */
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
@@ -60,7 +60,7 @@ public class FaithTrack extends Observable<SessionMessage> {
     }
 
     /**
-     * Method to add points to the track.
+     * Method to add points to the FaithTrack.
      *
      * @param points points to add
      */
@@ -73,9 +73,9 @@ public class FaithTrack extends Observable<SessionMessage> {
     }
 
     /**
-     * Getter of the vatican report sections
+     * Getter of the VaticanReportSections.
      *
-     * @return an array containing the vatican report sections
+     * @return an array containing the VaticanReportSections
      */
     public VaticanReportSection[] getVaticanReportSections() {
         return Arrays.copyOf(vaticanReportSections, vaticanReportSections.length);

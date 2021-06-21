@@ -45,10 +45,10 @@ public class MarketTray extends Observable<SessionMessage> {
     }
 
     /**
-     * Used when recovering a Match
-     * It resets the List of Observers and adds the new VirtualView passed as a parameter
+     * Used when recovering a Match.
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter.
      *
-     * @param virtualView The new VirtualView to add to the Observers List
+     * @param virtualView the new VirtualView to add to the Observers List
      */
     public void restoreVirtualView(VirtualView virtualView) {
         resetObservers();

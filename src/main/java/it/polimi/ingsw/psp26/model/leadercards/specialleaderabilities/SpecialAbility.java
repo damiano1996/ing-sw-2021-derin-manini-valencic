@@ -6,18 +6,27 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Abstract class that represent the SpecialAbility of the LeaderCards.
+ */
 public abstract class SpecialAbility {
 
-    // The characteristic Resource type of the Leader Card
+    // The characteristic Resource type of the LeaderCard
     protected final Resource resource;
 
+    /**
+     * Constructor of the class.
+     * It sets the characteristic Resource of the LeaderCard.
+     *
+     * @param resource the characteristic Resource type of the LeaderCard
+     */
     protected SpecialAbility(Resource resource) {
         this.resource = resource;
     }
 
 
     /**
-     * Method to execute the special ability.
+     * Method to execute the SpecialAbility.
      *
      * @param resourceList list of resource the leader power interacts with
      */
@@ -26,18 +35,18 @@ public abstract class SpecialAbility {
 
 
     /**
-     * Method to activate the leader.
+     * Method to activate the LeaderCard.
      *
-     * @param player player that is owner of this leader
+     * @param player player that is owner of this LeaderCard
      */
     public void activate(Player player) {
     }
 
 
     /**
-     * Getter of the characteristic Leader Resource
+     * Getter of the characteristic Leader Resource.
      *
-     * @return The characteristic Resource type of the Leader Card
+     * @return the characteristic Resource type of the LeaderCard
      */
     public Resource getResource() {
         return resource;
@@ -45,9 +54,9 @@ public abstract class SpecialAbility {
 
 
     /**
-     * toString method
+     * toString method.
      *
-     * @return A String representation of the Object
+     * @return a String representation of the Object
      */
     @Override
     public String toString() {
@@ -56,10 +65,10 @@ public abstract class SpecialAbility {
 
 
     /**
-     * Equals method
+     * Equals method.
      *
      * @param o Object to be compared
-     * @return True if equals, false otherwise
+     * @return true if equals, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -71,9 +80,9 @@ public abstract class SpecialAbility {
 
 
     /**
-     * hashCode method
+     * hashCode method.
      *
-     * @return A hashCode of the Object
+     * @return a hashCode of the Object
      */
     @Override
     public int hashCode() {

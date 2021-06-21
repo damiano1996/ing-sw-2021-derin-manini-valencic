@@ -40,11 +40,11 @@ public class Warehouse extends Observable<SessionMessage> {
     }
 
     /**
-     * Used when recovering a Match
-     * It resets the List of Observers and adds the new VirtualView passed as a parameter
-     * It also calls the restoreVirtualView() method on all the baseDepots
+     * Used when recovering a Match.
+     * It resets the List of Observers and adds the new VirtualView passed as a parameter.
+     * It also calls the restoreVirtualView() method on all the baseDepots.
      *
-     * @param virtualView The new VirtualView to add to the Observers List
+     * @param virtualView the new VirtualView to add to the Observers List
      */
     public void recoverVirtualView(VirtualView virtualView) {
         resetObservers();
@@ -80,7 +80,7 @@ public class Warehouse extends Observable<SessionMessage> {
     /**
      * Getter of the depot by index.
      * Since the base depot list is split by the leader depot list,
-     * this method returns the indexed depot as if the two lists were connected (in order: baseDepots - leaderDepots)
+     * this method returns the indexed depot as if the two lists were connected (in order: baseDepots - leaderDepots).
      *
      * @param indexDepot index of the depot
      * @return depot
@@ -107,7 +107,7 @@ public class Warehouse extends Observable<SessionMessage> {
     /**
      * Method to add a resource to the warehouse starting from a desired depot index.
      * If the resource can be placed in the requested depot index, it will be placed,
-     * otherwise the resource will be placed in the first available
+     * otherwise the resource will be placed in the first available.
      *
      * @param resource           resource to add to the warehouse
      * @param startingDepotIndex index of the desired depot
@@ -151,7 +151,7 @@ public class Warehouse extends Observable<SessionMessage> {
     }
 
     /**
-     * Getter of the base depots
+     * Getter of the base depots.
      *
      * @return list of depots
      */
@@ -160,7 +160,7 @@ public class Warehouse extends Observable<SessionMessage> {
     }
 
     /**
-     * Getter of the leader depots
+     * Getter of the leader depots.
      *
      * @return list of leader depots
      */
@@ -218,7 +218,7 @@ public class Warehouse extends Observable<SessionMessage> {
     }
 
     /**
-     * Equals method
+     * Equals method.
      *
      * @param o object to be compared
      * @return true if equals

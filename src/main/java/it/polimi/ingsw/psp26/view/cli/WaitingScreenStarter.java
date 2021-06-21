@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Use this class to start a new waiting screen
+ * Use this class to start a new waiting screen.
  */
 public class WaitingScreenStarter {
 
@@ -17,6 +17,10 @@ public class WaitingScreenStarter {
     private Thread waitingScreenThread;
     private boolean isWaiting;
 
+    /**
+     * Constructor of the class.
+     * It creates a new CliUtils to use and sets the isWaiting attribute to false.
+     */
     private WaitingScreenStarter() {
         this.cliUtils = new CliUtils(new PrintWriter(System.out));
         isWaiting = false;
@@ -24,9 +28,9 @@ public class WaitingScreenStarter {
 
 
     /**
-     * Singleton instance
+     * Getter of the singleton instance.
      *
-     * @return The WaitingScreenStarter instance
+     * @return the WaitingScreenStarter instance
      */
     public static WaitingScreenStarter getInstance() {
         if (instance == null) instance = new WaitingScreenStarter();
@@ -35,10 +39,10 @@ public class WaitingScreenStarter {
 
 
     /**
-     * Starts a waiting screen by creating a new Thread
-     * The waiting screen will then show the five Resources moving simulating a waiting icon
+     * Starts a waiting screen by creating a new Thread.
+     * The waiting screen will then show the five Resources moving simulating a waiting icon.
      *
-     * @param message A Message containing a String to display on screen
+     * @param message a Message containing a String to display on screen
      */
     public void startWaiting(Message message) throws EmptyPayloadException {
         if (!isWaiting) {
@@ -83,7 +87,7 @@ public class WaitingScreenStarter {
 
 
     /**
-     * Stops the executing waitingScreenThread
+     * Stops the executing waitingScreenThread.
      */
     public void stopWaiting() {
         if (isWaiting) {

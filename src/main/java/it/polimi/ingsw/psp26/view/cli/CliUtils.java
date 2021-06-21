@@ -11,19 +11,28 @@ import java.util.Scanner;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH;
 
+/**
+ * Class that contains utility methods for the cli package
+ */
 public class CliUtils {
 
     private final PrintWriter pw;
 
+    /**
+     * Constructor of the class.
+     * It sets the PrintWriter.
+     *
+     * @param pw the PrintWriter to use
+     */
     public CliUtils(PrintWriter pw) {
         this.pw = pw;
     }
 
 
     /**
-     * Inserts blank lines in the row where the method is called
+     * Inserts blank lines in the row where the method is called.
      *
-     * @param spaces The number of the lines
+     * @param spaces the number of the lines
      */
     public void vSpace(int spaces) {
         for (int i = 0; i < spaces; i++) pw.println();
@@ -32,10 +41,10 @@ public class CliUtils {
 
 
     /**
-     * Inserts blank spaces in a String
+     * Inserts blank spaces in a String.
      *
-     * @param spaces The number of the spaces
-     * @return A blank String which length is == spaces
+     * @param spaces the number of the spaces
+     * @return a blank String which String.length == spaces
      */
     public String hSpace(int spaces) {
         return " ".repeat(Math.max(0, spaces));
@@ -43,7 +52,7 @@ public class CliUtils {
 
 
     /**
-     * Clears the terminal screen
+     * Clears the terminal screen.
      */
     public void cls() {
         pw.print("\033[H\033[2J");
@@ -52,11 +61,11 @@ public class CliUtils {
 
 
     /**
-     * pCS = Print Colored String. Returns a colored String
+     * pCS = Print Colored String. Returns a colored String.
      *
-     * @param string The String to be colored
-     * @param color  The Color
-     * @return The colored String
+     * @param string the String to be colored
+     * @param color  the Color
+     * @return the colored String
      */
     public String pCS(String string, Color color) {
         return color.toString() + string + Color.RESET;
@@ -64,10 +73,10 @@ public class CliUtils {
 
 
     /**
-     * Moves the cursor in the specified direction and by the specified space numbers
+     * Moves the cursor in the specified direction and by the specified space numbers.
      *
-     * @param direction Up(up), Down(dn), Left(lf) or Right(rg)
-     * @param spaces    The number of spaces the cursor will move
+     * @param direction up(up), down(dn), left(lf) or right(rg)
+     * @param spaces    the number of spaces the cursor will move
      */
     public void moveCursor(String direction, int spaces) {
         switch (direction) {
@@ -95,7 +104,7 @@ public class CliUtils {
 
 
     /**
-     * Saves the cursor position
+     * Saves the cursor position.
      */
     public void saveCursorPosition() {
         pw.print("\u001b[s");
@@ -104,7 +113,7 @@ public class CliUtils {
 
 
     /**
-     * Restore the last saved cursor position
+     * Restore the last saved cursor position.
      */
     public void restoreCursorPosition() {
         pw.print("\u001b[u");
@@ -113,10 +122,10 @@ public class CliUtils {
 
 
     /**
-     * Set the cursor position at the specified row and column
+     * Set the cursor position at the specified row and column.
      *
-     * @param row    The row where the cursor will appear
-     * @param column The column where the cursor will appear
+     * @param row    the row where the cursor will appear
+     * @param column the column where the cursor will appear
      */
     public void setCursorPosition(int row, int column) {
         pw.print("\u001b[" + row + ";" + column + "H");
@@ -125,11 +134,11 @@ public class CliUtils {
 
 
     /**
-     * Prints an ASCII figure on the screen starting at the specified coordinates (x,y)
+     * Prints an ASCII figure on the screen starting at the specified coordinates (x,y).
      *
-     * @param figureName The name of the figure file you want to print
-     * @param row        The y coordinate
-     * @param col        The x coordinate
+     * @param figureName the name of the figure file you want to print
+     * @param row        the y coordinate
+     * @param col        the x coordinate
      */
     public void printFigure(String figureName, int row, int col) {
         Scanner in = null;
@@ -152,11 +161,11 @@ public class CliUtils {
 
 
     /**
-     * Auxiliary method that prints the specified ascii figure
+     * Auxiliary method that prints the specified ascii figure.
      *
-     * @param ascii The figure to print
-     * @param row   The y coordinate
-     * @param col   The x coordinate
+     * @param ascii the figure to print
+     * @param row   the y coordinate
+     * @param col   the x coordinate
      */
     private void printASCII(String[] ascii, int row, int col) {
         for (int i = 0; i < ascii.length; i++) {
@@ -168,7 +177,7 @@ public class CliUtils {
 
 
     /**
-     * Set the cursor in the bottom left position of the screen
+     * Set the cursor in the bottom left position of the screen.
      */
     public void setCursorBottomLeft() {
         setCursorPosition(58, 1);
@@ -176,10 +185,10 @@ public class CliUtils {
 
 
     /**
-     * Prints a colored string and set the cursor one line under its first column
+     * Prints a colored string and set the cursor one line under its first column.
      *
-     * @param s     The String to print
-     * @param color The color of the printed String
+     * @param s     the String to print
+     * @param color the color of the printed String
      */
     public void printAndBackWithColor(String s, Color color) {
         pw.print(pCS(s, color));
@@ -190,13 +199,13 @@ public class CliUtils {
 
 
     /**
-     * pPCS = print Positioned Colored String
-     * Prints a colored String in a specified position
+     * pPCS = print Positioned Colored String.
+     * Prints a colored String in a specified position.
      *
-     * @param s              The string to print
-     * @param color          The Color of the string
-     * @param startingRow    The row where the String will be printed
-     * @param startingColumn The column where the String will be printed
+     * @param s              the string to print
+     * @param color          the Color of the string
+     * @param startingRow    the row where the String will be printed
+     * @param startingColumn the column where the String will be printed
      */
     public void pPCS(String s, Color color, int startingRow, int startingColumn) {
         setCursorPosition(startingRow, startingColumn);
@@ -206,13 +215,13 @@ public class CliUtils {
 
 
     /**
-     * Centers a String in the given space
-     * If the space can contain the whole String, centers it in the given space
-     * If the space cannot contain the whole String, returns the String stopping at the rowSize character
+     * Centers a String in the given space.
+     * If the space can contain the whole String, centers it in the given space.
+     * If the space cannot contain the whole String, returns the String stopping at the rowSize character.
      *
-     * @param rowSize The size of the row where the String will be printed
-     * @param string  The String to print
-     * @return A String centered in the rowSize space
+     * @param rowSize the size of the row where the String will be printed
+     * @param string  the String to print
+     * @return a String centered in the rowSize space
      */
     public String centerString(int rowSize, String string) {
         if (rowSize >= string.length()) return hSpace((rowSize - string.length()) / 2) + string;
@@ -221,7 +230,7 @@ public class CliUtils {
 
 
     /**
-     * Hides the cursor from screen
+     * Hides the cursor from screen.
      */
     public void hideCursor() {
         pw.print("\u001b[?25l");
@@ -230,7 +239,7 @@ public class CliUtils {
 
 
     /**
-     * Puts the cursor visibility back on screen
+     * Puts the cursor visibility back on screen.
      */
     public void showCursor() {
         pw.print("\u001b[?25h");
@@ -239,10 +248,10 @@ public class CliUtils {
 
 
     /**
-     * Clears a line from the current cursor position to end of line
+     * Clears a line from the current cursor position to end of line.
      *
-     * @param row    The row of the line to clean
-     * @param column The column of the line to clean
+     * @param row    the row of the line to clean
+     * @param column the column of the line to clean
      */
     public void clearLine(int row, int column) {
         setCursorPosition(row, column);
@@ -253,7 +262,7 @@ public class CliUtils {
 
 
     /**
-     * Clears the screen without the notification area
+     * Clears the screen without the notification area.
      */
     public void clns() {
         for (int i = 1; i < 30; i++) clearLine(i, 1);
@@ -263,10 +272,10 @@ public class CliUtils {
 
 
     /**
-     * Clears a line from the current cursor position to start of line
+     * Clears a line from the current cursor position to start of line.
      *
-     * @param row    The row of the line to clean
-     * @param column The column of the line to clean
+     * @param row    the row of the line to clean
+     * @param column the column of the line to clean
      */
     public void reverseClearLine(int row, int column) {
         setCursorPosition(row, column);
@@ -277,10 +286,10 @@ public class CliUtils {
 
 
     /**
-     * Checks if the inserted char is a number or a character
+     * Checks if the inserted char is a number or a character.
      *
-     * @param c The char to examine
-     * @return False if c is a number, true if it's not a number
+     * @param c the char to examine
+     * @return false if c is a number, true if it's not a number
      */
     public boolean checkAsciiRange(char c) {
         return (48 > (int) c || (int) c > 57);
@@ -288,11 +297,11 @@ public class CliUtils {
 
 
     /**
-     * Given a List of Resources, it returns the number of a specific ResourceType contained in the List
+     * Given a List of Resources, it returns the number of a specific ResourceType contained in the List.
      *
-     * @param resources    The Resource List
-     * @param resourceType The Resource you want to know the number of elements contained in the List
-     * @return The number of resourceType contained in resources
+     * @param resources    the Resource List
+     * @param resourceType the Resource you want to know the number of elements contained in the List
+     * @return the number of resourceType contained in resources
      */
     public int getResourcesNumber(List<Resource> resources, Resource resourceType) {
         if (!resources.contains(resourceType)) return 0;
@@ -301,11 +310,11 @@ public class CliUtils {
 
 
     /**
-     * Prints a List of Resources where it is indicated the number of Resources the Player has
+     * Prints a List of Resources where it is indicated the number of Resources the Player has.
      *
-     * @param resources      The Player's Resources
-     * @param startingRow    The row at which the List is going to be printed
-     * @param startingColumn The column at which the List is going to be printed
+     * @param resources      the Player's Resources
+     * @param startingRow    the row at which the List is going to be printed
+     * @param startingColumn the column at which the List is going to be printed
      */
     public void printPlayerResources(List<Resource> resources, int startingRow, int startingColumn) {
         CliUtils cliUtils = new CliUtils(new PrintWriter(System.out));
@@ -320,12 +329,12 @@ public class CliUtils {
 
 
     /**
-     * Prints a Resource and the number (previously calculated) of this Resource in a List
+     * Prints a Resource and the number (previously calculated) of this Resource in a List.
      *
-     * @param resource        The Resource to print
-     * @param resourceNumbers The number of this Resource in the List
-     * @param startingRow     The row at which the Resource is going to be printed
-     * @param startingColumn  The column at which the Resource is going to be printed
+     * @param resource        the Resource to print
+     * @param resourceNumbers the number of this Resource in the List
+     * @param startingRow     the row at which the Resource is going to be printed
+     * @param startingColumn  the column at which the Resource is going to be printed
      */
     private void printResourceAndNumber(Resource resource, int resourceNumbers, int startingRow, int startingColumn) {
         CliUtils cliUtils = new CliUtils(new PrintWriter(System.out));

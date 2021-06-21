@@ -8,11 +8,20 @@ import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * Class that contains all the methods related to display the Warehouse.
+ */
 public class DepotCli {
 
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
+    /**
+     * Constructor of the class.
+     * It creates a new PrintWriter and a new CliUtils to use.
+     *
+     * @param pw the PrintWriter to use
+     */
     public DepotCli(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
@@ -20,12 +29,12 @@ public class DepotCli {
 
 
     /**
-     * Used to print the Strongbox
-     * Prints each Resource type and the number of the corresponding Resources the Player has in its Strongbox
+     * Used to print the Strongbox.
+     * Prints each Resource type and the number of the corresponding Resources the Player has in its Strongbox.
      *
-     * @param strongbox      The Strongbox Resources to print
-     * @param startingRow    The starting row where the Strongbox is going to be printed
-     * @param startingColumn The starting column where the Strongbox is going to be printed
+     * @param strongbox      the Strongbox Resources to print
+     * @param startingRow    the starting row where the Strongbox is going to be printed
+     * @param startingColumn the starting column where the Strongbox is going to be printed
      */
     public void displayStrongbox(List<Resource> strongbox, int startingRow, int startingColumn) {
         cliUtils.printFigure("Strongbox", startingRow, startingColumn);
@@ -38,11 +47,11 @@ public class DepotCli {
 
 
     /**
-     * Prints the Warehouse and the Resources in it
+     * Prints the Warehouse and the Resources in it.
      *
-     * @param warehouse      warehouse
-     * @param startingRow    The starting row where the Warehouse is going to be printed
-     * @param startingColumn The starting column where the Warehouse is going to be printed
+     * @param warehouse      the Warehouse to print
+     * @param startingRow    the starting row where the Warehouse is going to be printed
+     * @param startingColumn the starting column where the Warehouse is going to be printed
      */
     public void printWarehouse(Warehouse warehouse, int startingRow, int startingColumn) {
         cliUtils.printFigure("Warehouse", startingRow, startingColumn);
@@ -52,12 +61,12 @@ public class DepotCli {
 
 
     /**
-     * Prints the Resources contained in the Strongbox
+     * Prints the Resources contained in the Strongbox.
      *
-     * @param resourceType    The Resource contained
-     * @param resourceNumbers The number of the Resource contained
-     * @param startingRow     The starting row of the Strongbox
-     * @param startingColumn  The starting column of the Strongbox
+     * @param resourceType    the Resource contained
+     * @param resourceNumbers the number of the Resource contained
+     * @param startingRow     the starting row of the Strongbox
+     * @param startingColumn  the starting column of the Strongbox
      */
     private void printStrongboxResources(Resource resourceType, int resourceNumbers, int startingRow, int startingColumn) {
         switch (resourceType) {
@@ -87,13 +96,13 @@ public class DepotCli {
 
 
     /**
-     * Used in printWarehouse() to get the correct representation of Resources
-     * The position of the Resources contained in the given Depot is aligned considering the number of Resources contained in it
-     * It also prints the name of the Depot next to it
+     * Used in printWarehouse() to get the correct representation of Resources.
+     * The position of the Resources contained in the given Depot is aligned considering the number of Resources contained in it.
+     * It also prints the name of the Depot next to it.
      *
-     * @param depot          Depot to print
-     * @param startingRow    The starting row where the Warehouse is going to be printed
-     * @param startingColumn The starting column where the Warehouse is going to be printed
+     * @param depot          depot to print
+     * @param startingRow    the starting row where the Warehouse is going to be printed
+     * @param startingColumn the starting column where the Warehouse is going to be printed
      */
     private void printDepot(Depot depot, int startingRow, int startingColumn, int depotNumber) {
         cliUtils.pPCS("Depot" + depotNumber, Color.GREY, startingRow + ((3 * depotNumber) - 1), startingColumn + 23);

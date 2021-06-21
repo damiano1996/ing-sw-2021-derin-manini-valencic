@@ -9,11 +9,20 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class that contains all the methods related to display the MarketTray.
+ */
 public class MarketCli {
 
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
+    /**
+     * Constructor of the class.
+     * It creates a new PrintWriter and a new CliUtils to use.
+     *
+     * @param pw the PrintWriter to use
+     */
     public MarketCli(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
@@ -21,9 +30,9 @@ public class MarketCli {
 
 
     /**
-     * Prints the Market interaction screen
+     * Prints the Market interaction screen.
      *
-     * @param marketTray The market
+     * @param marketTray the MarketTray to display
      */
     public void displayMarketScreen(MarketTray marketTray) {
         cliUtils.printFigure("/titles/MarketTitle", 1, 59);
@@ -32,11 +41,11 @@ public class MarketCli {
 
 
     /**
-     * Prints the Market Tray by printing the base figure first and then adding the marbles
+     * Prints the MarketTray by printing the base figure first and then adding the marbles.
      *
-     * @param marketTray     The Market Tray to print
-     * @param startingRow    The starting row where the Market is going to be printed
-     * @param startingColumn The starting column where the Market is going to be printed
+     * @param marketTray     the MarketTray to print
+     * @param startingRow    the starting row where the MarketTray is going to be printed
+     * @param startingColumn the starting column where the MarketTray is going to be printed
      */
     public void displayMarketTray(MarketTray marketTray, int startingRow, int startingColumn) {
         cliUtils.printFigure("Market", startingRow, startingColumn + 17);
@@ -47,11 +56,11 @@ public class MarketCli {
 
 
     /**
-     * Prints the rows of the Market Tray
+     * Prints the rows of the MarketTray.
      *
-     * @param marketTray     The Market Tray to print
-     * @param startingRow    The starting row where the Market is going to be printed
-     * @param startingColumn The starting column where the Market is going to be printed
+     * @param marketTray     the MarketTray to print
+     * @param startingRow    the starting row where the MarketTray is going to be printed
+     * @param startingColumn the starting column where the MarketTray is going to be printed
      */
     private void printMarketMarbleRows(MarketTray marketTray, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 8, startingColumn + 18);
@@ -73,11 +82,11 @@ public class MarketCli {
 
 
     /**
-     * Prints the marble on the Market Tray slide
+     * Prints the marble on the MarketTray slide.
      *
-     * @param marketTray     The Market Tray to print
-     * @param startingRow    The starting row where the Market is going to be printed
-     * @param startingColumn The starting column where the Market is going to be printed
+     * @param marketTray     the MarketTray to print
+     * @param startingRow    the starting row where the MarketTray is going to be printed
+     * @param startingColumn the starting column where the MarketTray is going to be printed
      */
     private void printMarbleOnSlide(MarketTray marketTray, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 2, startingColumn + 40);
@@ -89,13 +98,13 @@ public class MarketCli {
 
 
     /**
-     * Displays the Market row/column choice
-     * Each input is checked to see if the Player enters the correct row or column
+     * Displays the MarketTray row/column choice.
+     * Each input is checked to see if the Player enters the correct row or column.
      *
-     * @param marketTray      The actual state of the Market
-     * @param playerResources The Player Resources
-     * @return The selected row or column
-     * @throws UndoOptionSelectedException The Player decided to quit from the Market selection screen
+     * @param marketTray      the actual state of the MarketTray
+     * @param playerResources the Player Resources
+     * @return the selected row or column
+     * @throws UndoOptionSelectedException the Player decided to quit from the Market selection screen
      */
     public int displayMarketSelection(MarketTray marketTray, List<Resource> playerResources) throws UndoOptionSelectedException {
         cliUtils.cls();
@@ -122,12 +131,12 @@ public class MarketCli {
 
 
     /**
-     * Asks the desired index for Market row/column
-     * If the Player wants to go back to the previous screen, he must enter u+Enter
+     * Asks the desired index for MarketTray row/column.
+     * If the Player wants to go back to the previous screen, he must enter u+Enter.
      *
-     * @return An integer between 0 and 6
-     * @throws IndexOutOfBoundsException   If the index inserted is not correct
-     * @throws UndoOptionSelectedException The Player decided to quit from the Market selection screen
+     * @return an integer between 0 and 6
+     * @throws IndexOutOfBoundsException   if the index inserted is not correct
+     * @throws UndoOptionSelectedException the Player decided to quit from the Market selection screen
      */
     private int getMarketIndex() throws IndexOutOfBoundsException, UndoOptionSelectedException {
         Scanner in = new Scanner(System.in);

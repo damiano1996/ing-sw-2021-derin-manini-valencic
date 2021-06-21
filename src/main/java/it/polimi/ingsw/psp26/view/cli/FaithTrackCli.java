@@ -5,11 +5,20 @@ import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 
 import java.io.PrintWriter;
 
+/**
+ * Class that contains all the methods related to display the FaithTrack.
+ */
 public class FaithTrackCli {
 
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
+    /**
+     * Constructor of the class.
+     * It creates a new PrintWriter and a new CliUtils to use.
+     *
+     * @param pw the PrintWriter to use
+     */
     public FaithTrackCli(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
@@ -17,12 +26,12 @@ public class FaithTrackCli {
 
 
     /**
-     * Prints the Player's Faith Track. The PopeSpace intervals are printed thicker
+     * Prints the Player's FaithTrack. The PopeSpace intervals are printed thicker.
      *
-     * @param faithTrack        The Faith Track to print
-     * @param startingRow       The starting row where the Faith Track is going to be printed
-     * @param startingColumn    The starting column where the Faith Track is going to be printed
-     * @param isMultiPlayerMode If the Match is SinglePlayer, prints the Lorenzo's cross too
+     * @param faithTrack        the FaithTrack to print
+     * @param startingRow       the starting row where the FaithTrack is going to be printed
+     * @param startingColumn    the starting column where the Faith Track is going to be printed
+     * @param isMultiPlayerMode if the Match is SinglePlayer, prints the Lorenzo's cross too
      */
     public void displayFaithTrack(FaithTrack faithTrack, int startingRow, int startingColumn, boolean isMultiPlayerMode) {
         cliUtils.printFigure("FaithTrack", startingRow, startingColumn);
@@ -42,7 +51,7 @@ public class FaithTrackCli {
 
 
     /**
-     * Return a String representing the Player's cross
+     * Return a String representing the Player's cross.
      */
     private void printCross() {
         pw.print("  \u001b[41;1m \u2020 \u001b[0m  ");
@@ -51,7 +60,7 @@ public class FaithTrackCli {
 
 
     /**
-     * Return a String representing Lorenzo's cross
+     * Return a String representing Lorenzo's cross.
      */
     private void printBlackCross() {
         pw.print("  \u001b[47m \u001b[30m\u2020 \u001b[0m  ");
@@ -60,7 +69,7 @@ public class FaithTrackCli {
 
 
     /**
-     * Return a String representing the Player's cross and Lorenzo's cross both in the same cell
+     * Return a String representing the Player's cross and Lorenzo's cross both in the same cell.
      */
     private void printTwoCrosses() {
         pw.print(" \u001b[41;1m\u2020\u001b[0m   \u001b[47m\u001b[30m\u2020\u001b[0m ");
@@ -69,11 +78,11 @@ public class FaithTrackCli {
 
 
     /**
-     * If the Marker is in the first line of the Track, set the cursor to the correct position for printing it
+     * If the Marker is in the first line of the FaithTrack, set the cursor to the correct position for printing it.
      *
-     * @param fp             The total amount of Marker's Faith Points
-     * @param startingRow    The starting row where the Faith Track is going to be printed
-     * @param startingColumn The starting column where the Faith Track is going to be printed
+     * @param fp             the total amount of Marker's Faith Points
+     * @param startingRow    the starting row where the FaithTrack is going to be printed
+     * @param startingColumn the starting column where the FaithTrack is going to be printed
      */
     private void firstLineMarkerPosition(int startingRow, int startingColumn, int fp) {
         if (4 <= fp && fp <= 9) cliUtils.setCursorPosition(startingRow + 2, startingColumn + 17 + (8 * (fp - 4)));
@@ -83,11 +92,11 @@ public class FaithTrackCli {
 
 
     /**
-     * If the Marker is in the mid line of the Track, set the cursor to the correct position for printing it
+     * If the Marker is in the mid line of the FaithTrack, set the cursor to the correct position for printing it.
      *
-     * @param fp             The total amount of Marker's Faith Points
-     * @param startingRow    The starting row where the Faith Track is going to be printed
-     * @param startingColumn The starting column where the Faith Track is going to be printed
+     * @param fp             the total amount of Marker's Faith Points
+     * @param startingRow    the starting row where the FaithTrack is going to be printed
+     * @param startingColumn the starting column where the FaithTrack is going to be printed
      */
     private void midLineMarkerPosition(int startingRow, int startingColumn, int fp) {
         if (fp == 3) cliUtils.setCursorPosition(startingRow + 6, startingColumn + 17);
@@ -97,11 +106,11 @@ public class FaithTrackCli {
 
 
     /**
-     * If the Marker is in the last line of the Track, set the cursor to the correct position for printing it
+     * If the Marker is in the last line of the FaithTrack, set the cursor to the correct position for printing it.
      *
-     * @param fp             The total amount of Marker's Faith Points
-     * @param startingRow    The starting row where the Faith Track is going to be printed
-     * @param startingColumn The starting column where the Faith Track is going to be printed
+     * @param fp             the total amount of Marker's Faith Points
+     * @param startingRow    the starting row where the Faith Track is going to be printed
+     * @param startingColumn the starting column where the Faith Track is going to be printed
      */
     private void lastLineMarkerPosition(int startingRow, int startingColumn, int fp) {
         if (0 <= fp && fp <= 2) cliUtils.setCursorPosition(startingRow + 10, startingColumn + 1 + (8 * fp));
@@ -111,11 +120,11 @@ public class FaithTrackCli {
 
 
     /**
-     * Set the cursor in the correct position for printing the Marker
+     * Set the cursor in the correct position for printing the Marker.
      *
-     * @param startingRow    The starting row where the Faith Track is going to be printed
-     * @param startingColumn The starting column where the Faith Track is going to be printed
-     * @param fp             The total amount of Marker's Faith Points
+     * @param startingRow    the starting row where the FaithTrack is going to be printed
+     * @param startingColumn the starting column where the FaithTrack is going to be printed
+     * @param fp             the total amount of Marker's Faith Points
      */
     private void setMarkerCursorPosition(int startingRow, int startingColumn, int fp) {
         firstLineMarkerPosition(startingRow, startingColumn, fp);
@@ -125,11 +134,11 @@ public class FaithTrackCli {
 
 
     /**
-     * Prints the Vatican Report Sections on the Track
+     * Prints the Vatican Report Sections on the FaithTrack.
      *
-     * @param vaticanReportSections The sections to print
-     * @param startingRow           The starting row where the Faith Track is going to be printed
-     * @param startingColumn        The starting column where the Faith Track is going to be printed
+     * @param vaticanReportSections the sections to print
+     * @param startingRow           the starting row where the FaithTrack is going to be printed
+     * @param startingColumn        the starting column where the FaithTrack is going to be printed
      */
     private void printVaticanReportSections(VaticanReportSection[] vaticanReportSections, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 6, startingColumn + 36);
@@ -142,9 +151,9 @@ public class FaithTrackCli {
 
 
     /**
-     * If the Vatican Report Tile is active returns it's value
+     * If the Vatican Report Tile is active returns it's value.
      *
-     * @param vaticanReportSection The section to print
+     * @param vaticanReportSection the section to print
      * @return X if the Section isn't active, a blank space if the Section is discarded, the Section's value if it's active
      */
     private String isVaticanReportSectionActive(VaticanReportSection vaticanReportSection) {

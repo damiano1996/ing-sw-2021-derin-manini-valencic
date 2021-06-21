@@ -8,10 +8,19 @@ import java.util.Map;
 
 import static it.polimi.ingsw.psp26.view.ViewUtils.getOrderedPlayersList;
 
+/**
+ * Class used to contain methods to display screens not related to a Match.
+ */
 public class CommonScreensCli {
 
     private final CliUtils cliUtils;
 
+    /**
+     * Constructor of the class.
+     * Initialize a cliUtils attribute in order to use its methods.
+     *
+     * @param pw the PrintWriter to use
+     */
     public CommonScreensCli(PrintWriter pw) {
         this.cliUtils = new CliUtils(pw);
     }
@@ -22,9 +31,9 @@ public class CommonScreensCli {
     //-----------------------------------//    
 
     /**
-     * Displays the end game screen by printing the Match Leaderboard
+     * Displays the end game screen by printing the Match Leaderboard.
      *
-     * @param leaderboard     It contains the Players nicknames and the points they achieved during the Match
+     * @param leaderboard     it contains the Players nicknames and the points they achieved during the Match
      * @param numberOfPlayers the number of players that are displayed
      */
     public void displayFinalScreen(Map<String, Integer> leaderboard, int numberOfPlayers) {
@@ -36,12 +45,12 @@ public class CommonScreensCli {
 
 
     /**
-     * Auxiliary method used to print the leaderboard content
-     * A verticalPadding variable is used to set the correct space between the Leaderboard rows
+     * Auxiliary method used to print the leaderboard content.
+     * A verticalPadding variable is used to set the correct space between the Leaderboard rows.
      *
-     * @param leaderboard        The Map containing the Players nicknames and their points
-     * @param orderedPlayersList A List containing the Players in the order the have to be printed
-     * @param numberOfPlayers    The number of players that are printed
+     * @param leaderboard        the Map containing the Players nicknames and their points
+     * @param orderedPlayersList a List containing the Players in the order the have to be printed
+     * @param numberOfPlayers    the number of players that are printed
      */
     private void printLeaderboardContent(Map<String, Integer> leaderboard, List<String> orderedPlayersList, int numberOfPlayers) {
         int verticalPadding = 0;

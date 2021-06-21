@@ -16,6 +16,9 @@ import java.util.Scanner;
 import static it.polimi.ingsw.psp26.view.ViewUtils.changePosition;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createListToSend;
 
+/**
+ * Class that displays the screen where the Player can rearrange its Warehouse.
+ */
 public class DisplayWarehousePlacer {
 
     private final PrintWriter pw;
@@ -31,6 +34,13 @@ public class DisplayWarehousePlacer {
     //If the player decides to discard the Resource, add it to discardedResources and proceed with the next Resource
     private boolean discardResource;
 
+    /**
+     * Constructor of the class.
+     * It creates a new PrintWriter, a new CliUtils, a new DepotCli and a new PersonalBoardCli to use.
+     * It also initialize the discardedResources List.
+     *
+     * @param pw the PrintWriter to use
+     */
     public DisplayWarehousePlacer(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
@@ -41,17 +51,17 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Shows the screen that appears after getting Resources from the Market
+     * Shows the screen that appears after getting Resources from the Market.
      * While the Player is rearranging its Warehouse, it has to enter the number of the Depot in which he wants to store the
-     * first Resource on the left in the "Resources left to insert" List
+     * first Resource on the left in the "Resources left to insert" List.
      * It is possible to change the Resources contained between two Depots: to do so, the Player must enter c+Enter, and then
-     * follow the instructions printed on the screen
+     * follow the instructions printed on the screen.
      * It is also possible to discard the first Resource on the left in the "Resources left to insert" List: to do so, the Player
-     * must enter d+Enter
+     * must enter d+Enter.
      *
-     * @param warehouse The Warehouse to print
-     * @param resources The resources get prom the Market to insert into the Warehouse
-     * @return The Resources placed in the Warehouse
+     * @param warehouse the Warehouse to print
+     * @param resources the resources get prom the Market to insert into the Warehouse
+     * @return the Resources placed in the Warehouse
      */
     public List<Resource> displayMarketResourcesSelection(Warehouse warehouse, List<Resource> resources) {
         discardedResources.clear();
@@ -102,7 +112,7 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Executes the (DepotOutOfBoundException | NumberFormatException) catch in displayMarketResourcesSelection()
+     * Executes the (DepotOutOfBoundException | NumberFormatException) catch in displayMarketResourcesSelection().
      */
     private void executeCatchDepotOutOfBound() {
         cliUtils.pPCS("WRONG INDEX INSERTED! Insert Depot index again: ", Color.RED, 38, 21);
@@ -112,7 +122,7 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Executes the (CanNotAddResourceToDepotException) catch displayMarketResourcesSelection()
+     * Executes the (CanNotAddResourceToDepotException) catch displayMarketResourcesSelection().
      */
     private void executeCatchCanNotAddResourcesToDepot() {
         cliUtils.pPCS("RESOURCE CAN'T BE ADDED! Please try again", Color.RED, 38, 21);
@@ -123,12 +133,12 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Prints the Warehouse and the Resources to insert
+     * Prints the Warehouse and the Resources to insert.
      *
-     * @param warehouse          The Player's Warehouse
-     * @param resourcesLeft      The Resources to insert
-     * @param resourcesDiscarded The Player's discarded Resources
-     * @param resourceIndex      The index from where the resources are shown
+     * @param warehouse          the Player's Warehouse
+     * @param resourcesLeft      the Resources to insert
+     * @param resourcesDiscarded the Player's discarded Resources
+     * @param resourceIndex      the index from where the resources are shown
      */
     private void printWarehouseAndResources(Warehouse warehouse, List<Resource> resourcesLeft, List<Resource> resourcesDiscarded, int resourceIndex) {
         cliUtils.printFigure("/titles/WarehouseConfigurationTitle", 1, 21);
@@ -141,13 +151,13 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Prints the given Resources
+     * Prints the given Resources.
      *
-     * @param resources       The Resources to print
-     * @param startingIndex   The index where the list starts to be printed
-     * @param listDescription A description that will be printed near the List of Resources
-     * @param startingRow     The row where the Resources are going to be printed
-     * @param startingColumn  The column where the Resources are going to be printed
+     * @param resources       the Resources to print
+     * @param startingIndex   the index where the list starts to be printed
+     * @param listDescription a description that will be printed near the List of Resources
+     * @param startingRow     the row where the Resources are going to be printed
+     * @param startingColumn  the column where the Resources are going to be printed
      */
     private void printResources(List<Resource> resources, int startingIndex, String listDescription, int startingRow, int startingColumn) {
         cliUtils.pPCS(listDescription, Color.WHITE, startingRow, startingColumn);
@@ -157,15 +167,15 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Asks the Player the index where he wants to insert the Resource
-     * If the Player enters d+Enter skip the current Resource and add it to the discard list
-     * If the Player enters c+Enter shows the instructions for changing Resources between Depots
+     * Asks the Player the index where he wants to insert the Resource.
+     * If the Player enters d+Enter skip the current Resource and add it to the discard list.
+     * If the Player enters c+Enter shows the instructions for changing Resources between Depots.
      *
-     * @param warehouseDepotSize The max index the Player can enter
-     * @return The index (an Integer between 0 and 4)
-     * @throws DepotOutOfBoundException              The index is not in the correct bounds
-     * @throws SkipResourceException                 The player skips this Resource
-     * @throws ChangeResourcesBetweenDepotsException The Player wants to change Resources between Depots
+     * @param warehouseDepotSize the max index the Player can enter
+     * @return the index (an Integer between 0 and 4)
+     * @throws DepotOutOfBoundException              the index is not in the correct bounds
+     * @throws SkipResourceException                 the player skips this Resource
+     * @throws ChangeResourcesBetweenDepotsException the Player wants to change Resources between Depots
      */
     private int getDepotIndex(int warehouseDepotSize) throws DepotOutOfBoundException, SkipResourceException, ChangeResourcesBetweenDepotsException {
         Scanner in = new Scanner(System.in);
@@ -183,10 +193,10 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Prints the input phrases on screen
+     * Prints the input phrases on screen.
      *
-     * @param warehouseDepotSize The max index the Player can enter
-     * @param resourceName       The resource that the Player is currently positioning
+     * @param warehouseDepotSize the max index the Player can enter
+     * @param resourceName       the resource that the Player is currently positioning
      */
     private void askForInput(int warehouseDepotSize, String resourceName) {
         cliUtils.setCursorPosition(30, 21);
@@ -203,9 +213,9 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Sets the parameters to control the insertion process
+     * Sets the parameters to control the insertion process.
      *
-     * @param parameterValue The boolean value to set in the parameters
+     * @param parameterValue the boolean value to set in the parameters
      */
     private void setParameters(boolean parameterValue) {
         correctDepotIndexInserted = parameterValue;
@@ -215,10 +225,10 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Changes the Resources between two depots
-     * Controls are made to ensure the change will not beak the game rules
+     * Changes the Resources between two depots.
+     * Controls are made to ensure the change will not beak the game rules.
      *
-     * @param warehouse The Warehouse containing the Depots
+     * @param warehouse the Warehouse containing the Depots
      */
     private void changeResourcesDepots(Warehouse warehouse) {
         cliUtils.clearLine(38, 21);
@@ -251,12 +261,12 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Asks the indices of the Depots when the Player wants to change Resources between them
+     * Asks the indices of the Depots when the Player wants to change Resources between them.
      *
-     * @param warehouseDepotSize The max index the Player can enter
-     * @param phrase             A phrase that will ask the Depot index
-     * @return The Depot index
-     * @throws DepotOutOfBoundException Thrown if the index is not correct
+     * @param warehouseDepotSize the max index the Player can enter
+     * @param phrase             a phrase that will ask the Depot index
+     * @return the Depot index
+     * @throws DepotOutOfBoundException thrown if the index is not correct
      */
     private int askForIndicesInChangePhase(int warehouseDepotSize, String phrase) throws DepotOutOfBoundException {
         Scanner in = new Scanner(System.in);
@@ -274,9 +284,9 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Prints the Depot number the Player has to enter to store a Resource in a LeaderDepot
+     * Prints the Depot number the Player has to enter to store a Resource in a LeaderDepot.
      *
-     * @param numberOfLeaderDepots The number of Leader Depots
+     * @param numberOfLeaderDepots the number of LeaderDepots
      */
     private void printLeaderDepotNumber(int numberOfLeaderDepots) {
         cliUtils.setCursorPosition(14, 135);
@@ -287,12 +297,12 @@ public class DisplayWarehousePlacer {
 
 
     /**
-     * Shows the final configuration of the Warehouse that will be send to Server
+     * Shows the final configuration of the Warehouse that will be send to Server.
      *
-     * @param warehouse          The Player's Warehouse
-     * @param resourcesLeft      The Resources to insert
-     * @param resourcesDiscarded The Player's discarded Resources
-     * @param resourceIndex      The index from where the resources are shown
+     * @param warehouse          the Player's Warehouse
+     * @param resourcesLeft      the Resources to insert
+     * @param resourcesDiscarded the Player's discarded Resources
+     * @param resourceIndex      the index from where the resources are shown
      */
     private void showFinalScreen(Warehouse warehouse, List<Resource> resourcesLeft, List<Resource> resourcesDiscarded, int resourceIndex) {
         Scanner in = new Scanner(System.in);

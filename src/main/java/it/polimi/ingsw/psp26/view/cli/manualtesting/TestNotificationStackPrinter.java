@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class used to test NotificationStackPrinter related methods.
+ */
 public class TestNotificationStackPrinter {
 
     CliUtils cliUtils;
@@ -22,7 +25,7 @@ public class TestNotificationStackPrinter {
 
 
     /**
-     * Used to launch tests
+     * Used to launch tests.
      */
     public static void main(String[] args) {
         TestNotificationStackPrinter testNotificationStackPrinter = new TestNotificationStackPrinter();
@@ -31,7 +34,7 @@ public class TestNotificationStackPrinter {
 
 
     /**
-     * Call here the methods to test
+     * Call here the methods to test.
      */
     public void testMethod() {
         testMessageStackPrinter();
@@ -39,7 +42,7 @@ public class TestNotificationStackPrinter {
 
 
     /**
-     * Test the ability to print messages in the notification stack
+     * Test the ability to print messages in the notification stack.
      */
     private void testMessageStackPrinter() {
 

@@ -14,6 +14,9 @@ import it.polimi.ingsw.psp26.view.cli.DevelopmentCardsCli;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+/**
+ * Class used to test DevelopmentCardsCli related methods.
+ */
 public class TestDisplayDevelopmentCards {
 
     CLI cli;
@@ -32,7 +35,7 @@ public class TestDisplayDevelopmentCards {
 
 
     /**
-     * Used to launch tests
+     * Used to launch tests.
      */
     public static void main(String[] args) throws ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException {
         TestDisplayDevelopmentCards testDisplayDevelopmentCards = new TestDisplayDevelopmentCards();
@@ -41,7 +44,7 @@ public class TestDisplayDevelopmentCards {
 
 
     /**
-     * Call here the methods to test
+     * Call here the methods to test.
      */
     public void testMethod() throws ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException {
         testDevelopmentGrid();
@@ -49,7 +52,7 @@ public class TestDisplayDevelopmentCards {
 
 
     /**
-     * Test the ability to display the Development Grid
+     * Test the ability to display the DevelopmentGrid.
      */
     private void testDevelopmentGrid() throws ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException {
 

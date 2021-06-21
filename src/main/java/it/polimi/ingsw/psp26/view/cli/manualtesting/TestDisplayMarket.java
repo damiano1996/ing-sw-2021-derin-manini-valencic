@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class used to test MarketCli related methods.
+ */
 public class TestDisplayMarket {
 
     CLI cli;
@@ -33,7 +36,7 @@ public class TestDisplayMarket {
 
 
     /**
-     * Used to launch tests
+     * Used to launch tests.
      */
     public static void main(String[] args) throws CanNotAddResourceToDepotException {
         TestDisplayMarket testDisplayMarket = new TestDisplayMarket();
@@ -42,7 +45,7 @@ public class TestDisplayMarket {
 
 
     /**
-     * Call here the methods to test
+     * Call here the methods to test.
      */
     public void testMethod() throws CanNotAddResourceToDepotException {
         testMarket();
@@ -52,7 +55,7 @@ public class TestDisplayMarket {
 
 
     /**
-     * Test the ability to display the Market Tray
+     * Test the ability to display the MarketTray.
      */
     private void testMarket() {
 
@@ -77,7 +80,7 @@ public class TestDisplayMarket {
 
 
     /**
-     * Test the ability to display Player's Resources
+     * Test the ability to display Player's Resources.
      */
     private void testPrintPlayerResources() {
 
@@ -103,7 +106,7 @@ public class TestDisplayMarket {
 
 
     /**
-     * Test the ability to rearrange the Warehouse
+     * Test the ability to rearrange the Warehouse.
      */
     private void testWarehouseConfiguration() throws CanNotAddResourceToDepotException {
 

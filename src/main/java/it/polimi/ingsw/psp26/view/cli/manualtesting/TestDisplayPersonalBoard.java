@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class used to test PersonalBoardCli and FaithTrackCli related methods.
+ */
 public class TestDisplayPersonalBoard {
 
     CLI cli;
@@ -45,7 +48,7 @@ public class TestDisplayPersonalBoard {
 
 
     /**
-     * Used to launch tests
+     * Used to launch tests.
      */
     public static void main(String[] args) throws DevelopmentCardSlotOutOfBoundsException, CanNotAddDevelopmentCardToSlotException, CanNotAddResourceToDepotException, ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException, CanNotAddResourceToStrongboxException {
         TestDisplayPersonalBoard testDisplayPersonalBoard = new TestDisplayPersonalBoard();
@@ -54,7 +57,7 @@ public class TestDisplayPersonalBoard {
 
 
     /**
-     * Call here the methods to test
+     * Call here the methods to test.
      */
     public void testMethod() throws DevelopmentCardSlotOutOfBoundsException, CanNotAddDevelopmentCardToSlotException, CanNotAddResourceToDepotException, ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException, CanNotAddResourceToStrongboxException {
         testPersonalBoard();
@@ -66,7 +69,7 @@ public class TestDisplayPersonalBoard {
 
 
     /**
-     * Test the ability to display the entire PersonalBoard elements
+     * Test the ability to display the entire PersonalBoard elements.
      */
     private void testPersonalBoard() throws CanNotAddResourceToDepotException, CanNotAddResourceToStrongboxException, ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException, DevelopmentCardSlotOutOfBoundsException, CanNotAddDevelopmentCardToSlotException {
 
@@ -146,7 +149,7 @@ public class TestDisplayPersonalBoard {
 
 
     /**
-     * Test the ability to display the Resource Supply
+     * Test the ability to display the ResourceSupply.
      */
     private void testResourceSupply() {
 
@@ -165,7 +168,7 @@ public class TestDisplayPersonalBoard {
 
 
     /**
-     * Test the ability to display the movement of the Faith Markers
+     * Test the ability to display the movement of the Faith Markers.
      */
     private void testFaithTrackMovement() {
 
@@ -192,7 +195,7 @@ public class TestDisplayPersonalBoard {
 
 
     /**
-     * Test the ability to display the Action Tokens
+     * Test the ability to display the ActionTokens.
      */
     private void testActionTokens() {
 
@@ -210,7 +213,7 @@ public class TestDisplayPersonalBoard {
 
 
     /**
-     * Test the ability to display the Productions
+     * Test the ability to display the Productions.
      */
     private void testActivateProduction() throws ColorDoesNotExistException, NoMoreDevelopmentCardsException, LevelDoesNotExistException {
 

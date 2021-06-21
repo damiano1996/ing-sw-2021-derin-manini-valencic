@@ -14,6 +14,9 @@ import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * Class that contains all the methods related to display the PersonalBoard.
+ */
 public class PersonalBoardCli {
 
     private final PrintWriter pw;
@@ -23,6 +26,13 @@ public class PersonalBoardCli {
     private final FaithTrackCli faithTrackCli;
     private final DepotCli depotCli;
 
+    /**
+     * Constructor of the class.
+     * It creates a new PrintWriter, a new CliUtils, a new LeaderCardsCli, a new DevelopmentCardsCli,
+     * a new FaithTrackCli and a new DepotCli to use.
+     *
+     * @param pw the PrintWriter to use
+     */
     public PersonalBoardCli(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
@@ -34,11 +44,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Personal Board of a given Player
-     * To display each element, one specific method is called for each figure to print
+     * Prints the PersonalBoard of a given Player.
+     * To display each element, one specific method is called for each figure to print.
      *
-     * @param player            The player who's Personal Board is gonna be printed
-     * @param isMultiplayerMode Tells if the Match is Single or MultiPlayer (used to print the correct FaithTrack)
+     * @param player            the player who's Personal Board is gonna be printed
+     * @param isMultiplayerMode tells if the Match is Single or MultiPlayer (used to print the correct FaithTrack)
      */
     public void displayPersonalBoard(Player player, boolean isMultiplayerMode) {
         cliUtils.clns();
@@ -60,11 +70,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Inkwell
+     * Prints the Inkwell.
      *
-     * @param isPrintable    Tells the method if the Player has the Inkwell
-     * @param startingRow    The starting row where the Inkwell is going to be printed
-     * @param startingColumn The starting column where the Inkwell is going to be printed
+     * @param isPrintable    tells the method if the Player has the Inkwell
+     * @param startingRow    the starting row where the Inkwell is going to be printed
+     * @param startingColumn the starting column where the Inkwell is going to be printed
      */
     public void displayInkwell(boolean isPrintable, int startingRow, int startingColumn) {
         if (isPrintable) cliUtils.printFigure("Inkwell", startingRow, startingColumn);
@@ -72,11 +82,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Player's Leader Cards in the bottom right after the Development Card Slots
+     * Prints the Player's LeaderCards in the bottom right after the DevelopmentCard Slots.
      *
-     * @param leaderCards    The Player's cards
-     * @param startingRow    The starting row where the Player's Leader Cards are going to be printed in the Personal Board
-     * @param startingColumn The starting column where the Player's Leader Cards are going to be printed in the Personal Board
+     * @param leaderCards    the Player's cards
+     * @param startingRow    the starting row where the Player's LeaderCards are going to be printed in the PersonalBoard
+     * @param startingColumn the starting column where the Player's LeaderCards are going to be printed in the PersonalBoard
      */
     public void printLeaderCardsInPersonalBoard(List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
         for (int i = 0; i < leaderCards.size(); i++) {
@@ -88,11 +98,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * Auxiliary method used to print the Leader Card number in the Personal Board view
+     * Auxiliary method used to print the LeaderCard number in the PersonalBoard view.
      *
-     * @param startingRow    The first row where the Cards will be printed
-     * @param startingColumn The first column where the Cards will be printed
-     * @param index          The number of the Card
+     * @param startingRow    the first row where the LeaderCards will be printed
+     * @param startingColumn the first column where the LeaderCards will be printed
+     * @param index          the number of the LeaderCard
      */
     private void printLeaderNumber(int startingRow, int startingColumn, int index) {
         cliUtils.setCursorPosition(startingRow + 2, startingColumn);
@@ -103,11 +113,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * Used to print the String under the Player's Leader Cards
+     * Used to print the String under the Player's LeaderCards.
      *
-     * @param leaderCard     The card to be controlled
-     * @param startingRow    The starting row where the Player's Leader Cards are going to be printed
-     * @param startingColumn The starting column where the Player's Leader Cards are going to be printed
+     * @param leaderCard     the LeaderCard to be controlled
+     * @param startingRow    the starting row where the Player's LeaderCards are going to be printed
+     * @param startingColumn the starting column where the Player's LeaderCards are going to be printed
      */
     private void isLeaderCardActive(LeaderCard leaderCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 5, startingColumn + 1);
@@ -119,11 +129,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Player's Leader Cards in a new screen
+     * Prints the Player's LeaderCards in a new screen.
      *
-     * @param leaderCards    The Player's Leader Cards to print
-     * @param startingRow    The starting row where the Player's Leader Cards are going to be printed
-     * @param startingColumn The starting column where the Player's Leader Cards are going to be printed
+     * @param leaderCards    the Player's LeaderCards to print
+     * @param startingRow    the starting row where the Player's LeaderCards are going to be printed
+     * @param startingColumn the starting column where the Player's LeaderCards are going to be printed
      */
     public void displayPlayerLeaderCards(List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
         cliUtils.clns();
@@ -142,11 +152,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Player's Development Cards
+     * Prints the Player's DevelopmentCards.
      *
-     * @param developmentSlots Development Cards slots of the Player
-     * @param startingRow      The initial row of the slots
-     * @param startingColumn   The initial column of the slots
+     * @param developmentSlots DevelopmentCards slots of the Player
+     * @param startingRow      the initial row of the slots
+     * @param startingColumn   the initial column of the slots
      */
     public void displayDevelopmentCardsSlots(List<List<DevelopmentCard>> developmentSlots, int startingRow, int startingColumn) {
         for (int i = 0; i < 3; i++) {
@@ -159,11 +169,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * If the Warehouse has more than 3 depots, prints the corresponding Leader Depots
+     * If the Warehouse has more than 3 depots, prints the corresponding LeaderDepots.
      *
-     * @param leaderDepots   Leader Depots of the warehouse
-     * @param startingRow    The starting row where the Player's Leader Depots are going to be printed
-     * @param startingColumn The starting column where the Player's Leader Depots are going to be printed
+     * @param leaderDepots   LeaderDepots of the Warehouse
+     * @param startingRow    the starting row where the Player's LeaderDepots are going to be printed
+     * @param startingColumn the starting column where the Player's LeaderDepots are going to be printed
      */
     public void printLeaderDepots(List<LeaderDepot> leaderDepots, int startingRow, int startingColumn) {
         for (int i = 0; i < leaderDepots.size(); i++) {
@@ -175,11 +185,11 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Resource stored in the Leader Depot
+     * Prints the Resource stored in the LeaderDepot.
      *
-     * @param leaderDepot    The Leader Depot to print
-     * @param startingRow    The starting row where the Player's Leader Depots are going to be printed
-     * @param startingColumn The starting column where the Player's Leader Depots are going to be printed
+     * @param leaderDepot    the LeaderDepot to print
+     * @param startingRow    the starting row where the Player's LeaderDepots are going to be printed
+     * @param startingColumn the starting column where the Player's LeaderDepots are going to be printed
      */
     private void printLeaderDepotResources(LeaderDepot leaderDepot, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 2, startingColumn);
@@ -197,10 +207,10 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Player's available Productions
+     * Prints the Player's available Productions.
      *
-     * @param productions    The Productions available for the Player
-     * @param playerResource The Player's Resources
+     * @param productions    the Productions available for the Player
+     * @param playerResource the Player's Resources
      */
     public void displayProductionActivation(List<Production> productions, List<Resource> playerResource) {
         cliUtils.clns();
@@ -212,9 +222,9 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Productions in the form of Production books
+     * Prints the Productions in the form of Production books.
      *
-     * @param productions The productions to print
+     * @param productions the productions to print
      */
     private void printProductionBooks(List<Production> productions) {
         for (int i = 0; i < productions.size(); i++) {
@@ -226,12 +236,12 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Resource Supply on screen
+     * Prints the ResourceSupply on screen.
      *
-     * @param resourceSupply   The Resource Supply
-     * @param resourcesToPrint The Resources to print in the Resource Supply
-     * @param startingRow      The row where the Resource Supply will be printed
-     * @param startingColumn   The column where the Resource Supply will be printed
+     * @param resourceSupply   the ResourceSupply
+     * @param resourcesToPrint the Resources to print in the ResourceSupply
+     * @param startingRow      the row where the ResourceSupply will be printed
+     * @param startingColumn   the column where the ResourceSupply will be printed
      */
     public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesToPrint, int startingRow, int startingColumn) {
         cliUtils.clns();
@@ -255,12 +265,12 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Resources in the Resource Supply Slots
-     * Please note that these are not a real representation, since the Resources are infinite
+     * Prints the Resources in the ResourceSupply Slots.
+     * Please note that these are not a real representation, since the Resources are infinite.
      *
-     * @param color          The color of the Resource Supply Slot
-     * @param startingRow    The row where the Resource Supply Slot Resources will be printed
-     * @param startingColumn The column where the Resource Supply Slot Resources will be printed
+     * @param color          the color of the ResourceSupply Slot
+     * @param startingRow    the row where the ResourceSupply Slot Resources will be printed
+     * @param startingColumn the column where the ResourceSupply Slot Resources will be printed
      */
     private void printResourceSupplyResources(Color color, int startingRow, int startingColumn) {
         for (int i = 0; i < 3; i++) cliUtils.pPCS("\u25A0", color, startingRow + 16, startingColumn + 41 + (i * 6));
@@ -271,9 +281,9 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the Action Tokens
+     * Prints the ActionTokens.
      *
-     * @param actionTokens The action Tokens to print
+     * @param actionTokens the ActionTokens to print
      */
     public void displayActionTokens(List<ActionToken> actionTokens) {
         cliUtils.clns();
@@ -287,9 +297,9 @@ public class PersonalBoardCli {
 
 
     /**
-     * Prints the stack of covered Tokens
+     * Prints the stack of covered ActionTokens
      *
-     * @param stackSize The number of Tokens that are not used yet
+     * @param stackSize the number of ActionTokens that are not used yet
      */
     private void printTokenStack(int stackSize) {
         if (stackSize > 1) cliUtils.printFigure("/actiontokenborders/ActionTokenBorder" + (stackSize - 1), 20, 67);

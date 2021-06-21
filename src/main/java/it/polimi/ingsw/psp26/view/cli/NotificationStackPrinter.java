@@ -6,6 +6,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that handle a live NotificationStack.
+ */
 public class NotificationStackPrinter {
 
     private static final int STARTING_ROW = 30;
@@ -18,6 +21,13 @@ public class NotificationStackPrinter {
     private List<String> notificationCopy;
     private boolean isStackPrintable;
 
+    /**
+     * Constructor of the class.
+     * It creates a new CliUtils to use.
+     * It also initialize the notificationCopy List and sets the isStackPrintable attribute to false.
+     *
+     * @param pw the PrintWriter to use
+     */
     public NotificationStackPrinter(PrintWriter pw) {
         this.cliUtils = new CliUtils(pw);
         notificationCopy = new ArrayList<>();
@@ -26,10 +36,10 @@ public class NotificationStackPrinter {
 
 
     /**
-     * Prints the given List of notifications in a stack of fixed size
-     * No more of MAX_NUMBER_OF_STRINGS Strings will be printed in the stack
+     * Prints the given List of notifications in a stack of fixed size.
+     * No more of MAX_NUMBER_OF_STRINGS Strings will be printed in the stack.
      *
-     * @param notifications The Strings to print
+     * @param notifications the Strings to print
      */
     public void printMessageStack(List<String> notifications) {
         notificationCopy = notifications;
@@ -60,10 +70,10 @@ public class NotificationStackPrinter {
 
 
     /**
-     * For each String given, splits it and put it in a List of substrings
+     * For each String given, splits it and put it in a List of substrings.
      *
-     * @param strings The Strings to parse
-     * @return A List os substrings
+     * @param strings the Strings to parse
+     * @return a List os substrings
      */
     private List<List<String>> stringParser(List<String> strings) {
         List<List<String>> parsedStrings = new ArrayList<>();
@@ -76,10 +86,10 @@ public class NotificationStackPrinter {
 
 
     /**
-     * Splits a String into multiple substrings of stackWidth length
+     * Splits a String into multiple substrings of stackWidth length.
      *
-     * @param string The String to split
-     * @return A List of the substrings
+     * @param string the String to split
+     * @return a List of the substrings
      */
     private List<String> splitString(String string) {
         List<String> stringList = new ArrayList<>();
@@ -93,7 +103,7 @@ public class NotificationStackPrinter {
 
 
     /**
-     * Used to set isStackPrintable attribute to false
+     * Used to set isStackPrintable attribute to false.
      */
     public void hideNotifications() {
         isStackPrintable = false;
@@ -101,7 +111,7 @@ public class NotificationStackPrinter {
 
 
     /**
-     * Sets isStackPrintable to true and prints the notification stack
+     * Sets isStackPrintable to true and prints the notification stack.
      */
     public void restoreStackView() {
         if (!isStackPrintable) {

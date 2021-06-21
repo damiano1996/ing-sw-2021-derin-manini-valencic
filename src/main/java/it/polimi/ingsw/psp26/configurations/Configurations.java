@@ -9,6 +9,8 @@ public class Configurations {
 
     public static final int DEFAULT_SERVER_PORT = 2626;
 
+    public static final int CLI_WIDTH = 237;
+
     public static final int SESSION_TOKEN_LENGTH = 32;
 
     public static final int MIN_NICKNAME_LENGTH = 8;

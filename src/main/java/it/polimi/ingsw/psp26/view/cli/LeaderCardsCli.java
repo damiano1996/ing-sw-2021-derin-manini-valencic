@@ -9,12 +9,22 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
+import static it.polimi.ingsw.psp26.configurations.Configurations.CLI_WIDTH;
+
+/**
+ * Class that contains all the methods related to display the LeaderCards.
+ */
 public class LeaderCardsCli {
 
-    private static final int CLI_WIDTH = 237;
     private final PrintWriter pw;
     private final CliUtils cliUtils;
 
+    /**
+     * Constructor of the class.
+     * It creates a new PrintWriter and a new CliUtils to use.
+     *
+     * @param pw the PrintWriter to use
+     */
     public LeaderCardsCli(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
@@ -22,10 +32,10 @@ public class LeaderCardsCli {
 
 
     /**
-     * Prints the given Leader Cards by correctly aligning them in the center of the screen
+     * Prints the given LeaderCards by correctly aligning them in the center of the screen.
      *
-     * @param leaderCards The Leader Cards to print
-     * @param startingRow The row where the cards will be printed
+     * @param leaderCards the LeaderCards to print
+     * @param startingRow the row where the cards will be printed
      */
     public void printMultipleLeaders(List<LeaderCard> leaderCards, int startingRow) {
         //print the cards
@@ -39,10 +49,10 @@ public class LeaderCardsCli {
 
 
     /**
-     * Calculate the correct position for printing the Leader Cards
+     * Calculates the correct position for printing the LeaderCards.
      *
-     * @param numberOfLeaders The number of Leader Cards to print
-     * @return The correct column position to print them
+     * @param numberOfLeaders the number of LeaderCards to print
+     * @return the correct column position to print them
      */
     public int getPrintMultipleLeadersStartingColumn(int numberOfLeaders) {
         return ((CLI_WIDTH - (numberOfLeaders * 27) - ((numberOfLeaders - 1) * 18)) / 2) - 4;
@@ -50,13 +60,13 @@ public class LeaderCardsCli {
 
 
     /**
-     * Prints a single LeaderCard
-     * First, the base Leader figure is printed
-     * Then, adds the Leader requirements and the Leader characteristic Resource
+     * Prints a single LeaderCard.
+     * First, the base LeaderCard figure is printed.
+     * Then, adds the LeaderCard requirements and the LeaderCard characteristic Resource.
      *
-     * @param leaderCard     The Leader Card to print
-     * @param startingRow    The row in which the Leader Card will be printed
-     * @param startingColumn The column in which the Leader Card will be printed
+     * @param leaderCard     the LeaderCard to print
+     * @param startingRow    the row in which the LeaderCard will be printed
+     * @param startingColumn the column in which the LeaderCard will be printed
      */
     private void printLeader(LeaderCard leaderCard, int startingRow, int startingColumn) {
         cliUtils.printFigure(
@@ -69,11 +79,11 @@ public class LeaderCardsCli {
 
 
     /**
-     * Prints the requirement of a given Leader Card
+     * Prints the requirement of a given LeaderCard.
      *
-     * @param leaderCard     The Leader Card to analyze
-     * @param startingRow    The starting row where the Leader Card is going to be printed
-     * @param startingColumn The starting column where the Leader Card is going to be printed
+     * @param leaderCard     the LeaderCard to analyze
+     * @param startingRow    the starting row where the LeaderCard is going to be printed
+     * @param startingColumn tThe starting column where the LeaderCard is going to be printed
      */
     private void printLeaderRequirements(LeaderCard leaderCard, int startingRow, int startingColumn) {
         if (leaderCard.getDevelopmentCardRequirements().keySet().size() == 0)
@@ -84,11 +94,11 @@ public class LeaderCardsCli {
 
 
     /**
-     * If the Leader Cards requires Development Cards, this method is invoked in printLeaderRequirements()
+     * If the LeaderCards requires DevelopmentCards, this method is invoked in printLeaderRequirements().
      *
-     * @param requirements   The requirements of the Leader Card
-     * @param startingRow    The starting row where the Leader Card is going to be printed
-     * @param startingColumn The starting column where the Leader Card is going to be printed
+     * @param requirements   the requirements of the LeaderCard
+     * @param startingRow    the starting row where the LeaderCard is going to be printed
+     * @param startingColumn the starting column where the LeaderCard is going to be printed
      */
     private void printLeaderDevelopmentCardRequirements(Map<DevelopmentCardType, Integer> requirements, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 1, startingColumn);
@@ -117,11 +127,11 @@ public class LeaderCardsCli {
 
 
     /**
-     * If the Leader Cards requires Resources, this method is invoked in printLeaderRequirements()
+     * If the LeaderCards requires Resources, this method is invoked in printLeaderRequirements().
      *
-     * @param requirements   The requirements of the Leader Card
-     * @param startingRow    The starting row where the Leader Card is going to be printed
-     * @param startingColumn The starting column where the Leader Card is going to be printed
+     * @param requirements   the requirements of the LeaderCard
+     * @param startingRow    the starting row where the LeaderCard is going to be printed
+     * @param startingColumn the starting column where the LeaderCard is going to be printed
      */
     private void printLeaderResourcesRequirements(Map<Resource, Integer> requirements, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 1, startingColumn);

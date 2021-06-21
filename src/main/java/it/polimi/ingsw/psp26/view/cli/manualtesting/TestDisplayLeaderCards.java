@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class used to test LeaderCardsCli and PersonalBoardCli related methods.
+ */
 public class TestDisplayLeaderCards {
 
     CLI cli;
@@ -34,7 +37,7 @@ public class TestDisplayLeaderCards {
 
 
     /**
-     * Used to launch tests
+     * Used to launch tests.
      */
     public static void main(String[] args) {
         TestDisplayLeaderCards testDisplayLeaderCards = new TestDisplayLeaderCards();
@@ -43,7 +46,7 @@ public class TestDisplayLeaderCards {
 
 
     /**
-     * Call here the methods to test
+     * Call here the methods to test.
      */
     public void testMethod() {
         testLeaderCards();
@@ -53,7 +56,7 @@ public class TestDisplayLeaderCards {
 
 
     /**
-     * Test the ability to show all the Leader Cards
+     * Test the ability to show all the LeaderCards.
      */
     private void testLeaderCards() {
 
@@ -79,7 +82,7 @@ public class TestDisplayLeaderCards {
 
 
     /**
-     * Test the ability to print the selected Leader Cards
+     * Test the ability to print the selected LeaderCards.
      */
     private void testSelectLeaders() {
 
@@ -104,7 +107,7 @@ public class TestDisplayLeaderCards {
 
 
     /**
-     * Test the ability to display the PLayer's Leader Cards
+     * Test the ability to display the Player's LeaderCards.
      */
     private void testPrintPlayerLeaderCards() {
 

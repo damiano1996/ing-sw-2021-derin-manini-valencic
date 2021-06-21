@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Class used to test CommonScreensCli related methods.
+ */
 public class TestDisplayCommonScreens {
 
     CLI cli;
@@ -33,7 +36,7 @@ public class TestDisplayCommonScreens {
 
 
     /**
-     * Used to launch tests
+     * Used to launch tests.
      */
     public static void main(String[] args) throws EmptyPayloadException, InvalidPayloadException {
         TestDisplayCommonScreens testDisplayCommonScreens = new TestDisplayCommonScreens();
@@ -42,7 +45,7 @@ public class TestDisplayCommonScreens {
 
 
     /**
-     * Call here the methods to test
+     * Call here the methods to test.
      */
     public void testMethod() throws EmptyPayloadException, InvalidPayloadException {
         testError();
@@ -52,7 +55,7 @@ public class TestDisplayCommonScreens {
 
 
     /**
-     * Test the ability to display error messages
+     * Test the ability to display error messages.
      */
     private void testError() {
 
@@ -69,7 +72,7 @@ public class TestDisplayCommonScreens {
 
 
     /**
-     * Test the ability to start and stop the waiting screen
+     * Test the ability to start and stop the waiting screen.
      */
     private void testWaitingScreen() throws EmptyPayloadException, InvalidPayloadException {
 
@@ -95,7 +98,7 @@ public class TestDisplayCommonScreens {
 
 
     /**
-     * Test the ability to show the final screen
+     * Test the ability to show the final screen.
      */
     private void testFinalScreen() {
 

@@ -13,12 +13,21 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import java.io.PrintWriter;
 import java.util.*;
 
+/**
+ * Class that contains all the methods related to display DevelopmentCards.
+ */
 public class DevelopmentCardsCli {
 
     private final PrintWriter pw;
     private final CliUtils cliUtils;
     private final Scanner in;
 
+    /**
+     * Constructor of the class.
+     * It creates a new PrintWriter, a new CliUtils and a new Scanner to use.
+     *
+     * @param pw the PrintWriter to use
+     */
     public DevelopmentCardsCli(PrintWriter pw) {
         this.pw = pw;
         this.cliUtils = new CliUtils(pw);
@@ -27,10 +36,10 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints the Development Card Grid
-     * The Grid is printed a row at a time, and each Development Grid Cell is printed individually
+     * Prints the DevelopmentCardGrid.
+     * The DevelopmentCardGrid is printed a row at a time, and each DevelopmentGridCell is printed individually.
      *
-     * @param developmentCardsGrid The Development Grid to print
+     * @param developmentCardsGrid the DevelopmentCardGrid to print
      */
     public void displayDevelopmentGrid(DevelopmentCardsGrid developmentCardsGrid) {
         for (int i = 0; i < 3; i++) {
@@ -45,20 +54,20 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints a DevelopmentCard
-     * First, the base Development Card Border is printed
-     * Then, the property of the Card are added:
-     * - The Development Card requirements
-     * - The Card Color
-     * - The Card Level
-     * - The Card Production power
-     * - The Card victory points
-     * It also prints additional borders based on the number of the other Cards placed under the one is being printed
+     * Prints a DevelopmentCard.
+     * First, the base DevelopmentCard Border is printed.
+     * Then, the property of the DevelopmentCard are added:
+     * - The Development Card requirements;
+     * - The DevelopmentCard Color;
+     * - The DevelopmentCard Level;
+     * - The DevelopmentCard Production power;
+     * - The DevelopmentCard victory points;
+     * It also prints additional borders based on the number of the other DevelopmentCards placed under the one is being printed.
      *
-     * @param developmentCard The desired card to print
-     * @param startingRow     The row where the Card will be printed
-     * @param startingColumn  The column where the Card will be printed
-     * @param cardStackSize   How many cards are on the top of each other
+     * @param developmentCard the desired DevelopmentCard to print
+     * @param startingRow     the row where the DevelopmentCard will be printed
+     * @param startingColumn  the column where the DevelopmentCard will be printed
+     * @param cardStackSize   how many DevelopmentCards are on the top of each other
      */
     public void printDevelopmentCard(DevelopmentCard developmentCard, int startingRow, int startingColumn, int cardStackSize) {
         printDevelopmentCardBorder(startingRow, startingColumn, cardStackSize);
@@ -75,11 +84,11 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints one border for each Development Card under the top one
+     * Prints one border for each DevelopmentCard under the top one.
      *
-     * @param startingRow    The row where the Card will be printed
-     * @param startingColumn The column where the Card will be printed
-     * @param cardStackSize  How many cards are on the top of each other
+     * @param startingRow    the row where the DevelopmentCard will be printed
+     * @param startingColumn the column where the DevelopmentCard will be printed
+     * @param cardStackSize  how many DevelopmentCards are on the top of each other
      */
     private void printDevelopmentCardBorder(int startingRow, int startingColumn, int cardStackSize) {
         if (cardStackSize > 1)
@@ -88,12 +97,12 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints the Card color on top and on bottom of the level dots
+     * Prints the DevelopmentCard Color on top and on bottom of the level dots.
      *
-     * @param developmentCard Get the color of this Card
-     * @param startingRow     The row where the Card will be printed
-     * @param startingColumn  The column where the Card will be printed
-     * @param upOrDown        If true prints the upper section, if false print the lower section
+     * @param developmentCard get the color of this DevelopmentCard
+     * @param startingRow     the row where the DevelopmentCard will be printed
+     * @param startingColumn  the column where the DevelopmentCard will be printed
+     * @param upOrDown        if true prints the upper section, if false print the lower section
      */
     private void printCardColor(DevelopmentCard developmentCard, int startingRow, int startingColumn, boolean upOrDown) {
         if (upOrDown) {
@@ -109,11 +118,11 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints the Development Card requirements line
+     * Prints the DevelopmentCard requirements line.
      *
-     * @param developmentCard The Card to print
-     * @param startingRow     The starting row where the Development Card is going to be printed
-     * @param startingColumn  The starting column where the Development Card is going to be printed
+     * @param developmentCard the DevelopmentCard to print
+     * @param startingRow     the starting row where the DevelopmentCard is going to be printed
+     * @param startingColumn  the starting column where the DevelopmentCard is going to be printed
      */
     private void printDevelopmentCardRequirements(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 1, startingColumn);
@@ -133,11 +142,11 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints the Development Card level line in the correct color
+     * Prints the DevelopmentCard Level line in the correct Color.
      *
-     * @param developmentCard The Card to print
-     * @param startingRow     The starting row where the Development Card is going to be printed
-     * @param startingColumn  The starting column where the Development Card is going to be printed
+     * @param developmentCard the DevelopmentCard to print
+     * @param startingRow     the starting row where the DevelopmentCard is going to be printed
+     * @param startingColumn  the starting column where the DevelopmentCard is going to be printed
      */
     private void printDevelopmentCardLevel(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 3, startingColumn);
@@ -155,11 +164,11 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints a Card level dots in the correct Color
+     * Prints a Card level dots in the correct Color.
      *
-     * @param level The level number of the Card
-     * @param color The Color of the Card
-     * @return A formatted String of the Level dots
+     * @param level the level number of the DevelopmentCard
+     * @param color the Color of the DevelopmentCard
+     * @return a formatted String of the Level dots
      */
     private String printLevelDots(int level, Color color) {
         return cliUtils.pCS("\u25CF ", color).repeat(Math.max(0, level));
@@ -167,12 +176,12 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Generic method that prints a Production. May be used with every Production Object
+     * Generic method that prints a Production. May be used with every Production Object.
      *
-     * @param productionCost   The cost of the Production
-     * @param productionReturn The Resources returned by the Production
-     * @param startingRow      The row where the Production is gonna be printed
-     * @param startingColumn   The column where the Production is gonna be printed
+     * @param productionCost   the cost of the Production
+     * @param productionReturn the Resources returned by the Production
+     * @param startingRow      the row where the Production is gonna be printed
+     * @param startingColumn   the column where the Production is gonna be printed
      */
     public void printProduction(Map<Resource, Integer> productionCost, Map<Resource, Integer> productionReturn, int startingRow, int startingColumn) {
         for (int i = 0; i < 3; i++)
@@ -181,14 +190,14 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Used to print the Production section of a DevelopmentCard
-     * It calls three auxiliary methods in order to get a clean print of the Resources (centered in the Card)
+     * Used to print the Production section of a DevelopmentCard.
+     * It calls three auxiliary methods in order to get a clean print of the Resources (centered in the DevelopmentCard).
      *
-     * @param productionCost   The cost of the Production
-     * @param productionReturn The Resources returned by the Production
-     * @param line             Print the first, second or third line of the Production section
-     * @param startingRow      The starting row where the Development Card is going to be printed
-     * @param startingColumn   The starting column where the Development Card is going to be printed
+     * @param productionCost   the cost of the Production
+     * @param productionReturn the Resources returned by the Production
+     * @param line             print the first, second or third line of the Production section
+     * @param startingRow      the starting row where the DevelopmentCard is going to be printed
+     * @param startingColumn   the starting column where the DevelopmentCard is going to be printed
      */
     private void printProductionLines(Map<Resource, Integer> productionCost, Map<Resource, Integer> productionReturn, int line, int startingRow, int startingColumn) {
         List<Resource> requiredResources = new ArrayList<>();
@@ -216,14 +225,14 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints the first line of the Development Card production section
+     * Prints the first line of the DevelopmentCard production section.
      *
-     * @param requiredResources         Resources type required to perform the production action
-     * @param numberOfRequiredResources Resources number required to perform the production action
-     * @param producedResources         Resources type produced by the production action
-     * @param numberOfProducedResources Resources number produced by the production action
-     * @param startingRow               The starting row where the Development Card is going to be printed
-     * @param startingColumn            The starting column where the Development Card is going to be printed
+     * @param requiredResources         resources type required to perform the production action
+     * @param numberOfRequiredResources resources number required to perform the production action
+     * @param producedResources         resources type produced by the production action
+     * @param numberOfProducedResources resources number produced by the production action
+     * @param startingRow               the starting row where the DevelopmentCard is going to be printed
+     * @param startingColumn            the starting column where the DevelopmentCard is going to be printed
      */
     private void printFirstProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 7, startingColumn + 5);
@@ -244,14 +253,14 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints the second line of the Development Card production section
+     * Prints the second line of the DevelopmentCard production section.
      *
-     * @param requiredResources         Resources type required to perform the production action
-     * @param numberOfRequiredResources Resources number required to perform the production action
-     * @param producedResources         Resources type produced by the production action
-     * @param numberOfProducedResources Resources number produced by the production action
-     * @param startingRow               The starting row where the Development Card is going to be printed
-     * @param startingColumn            The starting column where the Development Card is going to be printed
+     * @param requiredResources         resources type required to perform the production action
+     * @param numberOfRequiredResources resources number required to perform the production action
+     * @param producedResources         resources type produced by the production action
+     * @param numberOfProducedResources resources number produced by the production action
+     * @param startingRow               the starting row where the DevelopmentCard is going to be printed
+     * @param startingColumn            the starting column where the DevelopmentCard is going to be printed
      */
     private void printSecondProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 8, startingColumn + 5);
@@ -273,14 +282,14 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Prints the third line of the Development Card production section
+     * Prints the third line of the DevelopmentCard production section.
      *
-     * @param requiredResources         Resources type required to perform the production action
-     * @param numberOfRequiredResources Resources number required to perform the production action
-     * @param producedResources         Resources type produced by the production action
-     * @param numberOfProducedResources Resources number produced by the production action
-     * @param startingRow               The starting row where the Development Card is going to be printed
-     * @param startingColumn            The starting column where the Development Card is going to be printed
+     * @param requiredResources         resources type required to perform the production action
+     * @param numberOfRequiredResources resources number required to perform the production action
+     * @param producedResources         resources type produced by the production action
+     * @param numberOfProducedResources resources number produced by the production action
+     * @param startingRow               the starting row where the DevelopmentCard is going to be printed
+     * @param startingColumn            the starting column where the DevelopmentCard is going to be printed
      */
     private void printThirdProductionRow(List<Resource> requiredResources, List<Integer> numberOfRequiredResources, List<Resource> producedResources, List<Integer> numberOfProducedResources, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 9, startingColumn + 5);
@@ -302,11 +311,11 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Print the Development Card's Victory Points
+     * Print the DevelopmentCard's Victory Points.
      *
-     * @param developmentCard The Card where to get the VictoryPoints
-     * @param startingRow     The starting row where the Development Card is going to be printed
-     * @param startingColumn  The starting column where the Development Card is going to be printed
+     * @param developmentCard the DevelopmentCard where to get the VictoryPoints
+     * @param startingRow     the starting row where the DevelopmentCard is going to be printed
+     * @param startingColumn  the starting column where the DevelopmentCard is going to be printed
      */
     private void printCardVictoryPoints(DevelopmentCard developmentCard, int startingRow, int startingColumn) {
         cliUtils.setCursorPosition(startingRow + 12, startingColumn);
@@ -320,11 +329,11 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Used to print the Development Cards in the Development Grid
+     * Used to print the DevelopmentCards in the DevelopmentGrid.
      *
-     * @param developmentGridCell If the cell contains one or more cards, print the one on the top. Otherwise, leave a blank space
-     * @param startingRow         The starting row where the Development Card is going to be printed
-     * @param startingColumn      The starting column where the Development Card is going to be printed
+     * @param developmentGridCell if the cell contains one or more DevelopmentCards, print the one on the top. Otherwise, leave a blank space
+     * @param startingRow         the starting row where the DevelopmentCard is going to be printed
+     * @param startingColumn      the starting column where the DevelopmentCard is going to be printed
      */
     private void printDevelopmentGridCard(DevelopmentGridCell developmentGridCell, int startingRow, int startingColumn) {
         if (!developmentGridCell.isEmpty())
@@ -333,15 +342,15 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Display the Grid selection screen
-     * The method check the input entered by the Player to ensure he selects a valid Development Card
-     * It also habilitate the undo option if the Player decides to do it
-     * If the entered input is not correct, or the Card not available, error strings will be printed
+     * Display the DevelopmentCardGrid selection screen.
+     * The method check the input entered by the Player to ensure he selects a valid DevelopmentCard.
+     * It also habilitate the undo option if the Player decides to do it.
+     * If the entered input is not correct, or the DevelopmentCard not available, error strings will be printed.
      *
-     * @param developmentCardsGrid The Development Grid to display
-     * @param playerResources      The Player's Resources
-     * @return The chosen Development Card
-     * @throws UndoOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
+     * @param developmentCardsGrid the DevelopmentCardGrid to display
+     * @param playerResources      the Player's Resources
+     * @return the chosen DevelopmentCard
+     * @throws UndoOptionSelectedException the Player decided to quit from the DevelopmentCardGrid selection screen
      */
     public DevelopmentCard displayDevelopmentCardSelection(DevelopmentCardsGrid developmentCardsGrid, List<Resource> playerResources) throws UndoOptionSelectedException {
         String cardLevel = "";
@@ -376,13 +385,13 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Asks the Player the Level and the Color of the desired Development Card
-     * Each input is checked to see if it matches the correct requirements (Level or Color) of the desired Card
+     * Asks the Player the Level and the Color of the desired DevelopmentCard.
+     * Each input is checked to see if it matches the correct requirements (Level or Color) of the desired DevelopmentCard.
      *
-     * @param stringToDisplay A message to inform the Player the String to enter
-     * @param levelOrColor    True if a Level is entered, false if a Color is entered
-     * @return The Level/Color chosen by the Player
-     * @throws UndoOptionSelectedException The Player decided to quit from the DevelopmentGrid selection screen
+     * @param stringToDisplay a message to inform the Player the String to enter
+     * @param levelOrColor    true if a Level is entered, false if a Color is entered
+     * @return the Level/Color chosen by the Player
+     * @throws UndoOptionSelectedException the Player decided to quit from the DevelopmentCardGrid selection screen
      */
     private String askForLevelAndColor(String stringToDisplay, boolean levelOrColor) throws UndoOptionSelectedException {
         boolean correctInputInserted = false;
@@ -410,11 +419,11 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Checks if the input inserted by the Player is correct in terms of Levels or Colors
+     * Checks if the input inserted by the Player is correct in terms of Levels or Colors.
      *
-     * @param input        The String entered by the Player
-     * @param levelOrColor True if Level is checked, false if Color is checked
-     * @return True if the input is correct, false otherwise
+     * @param input        the String entered by the Player
+     * @param levelOrColor true if Level is checked, false if Color is checked
+     * @return true if the input is correct, false otherwise
      */
     private boolean isInputCorrect(String input, boolean levelOrColor) {
         if (levelOrColor)
@@ -425,13 +434,13 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Checks if the desired Card is available on the Grid
-     * Warnings are suppressed since previous controls ensure that the value returned by the get() methods is always not null
+     * Checks if the desired DevelopmentCard is available on the DevelopmentCardGrid.
+     * Warnings are suppressed since previous controls ensure that the value returned by the get() methods is always not null.
      *
-     * @param developmentCardsGrid The DevelopmentGrid
-     * @param level                The Level of the desired Card
-     * @param color                The Color of the desired Card
-     * @return True if the card is available, false otherwise
+     * @param developmentCardsGrid the DevelopmentCardGrid
+     * @param level                the Level of the desired DevelopmentCard
+     * @param color                the Color of the desired DevelopmentCard
+     * @return true if the DevelopmentCard is available, false otherwise
      */
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     private boolean isCardAvailable(DevelopmentCardsGrid developmentCardsGrid, String level, String color) {
@@ -447,13 +456,13 @@ public class DevelopmentCardsCli {
 
 
     /**
-     * Returns the desired Development Card without drawing it from the Development Grid
-     * Warnings are suppressed since previous controls ensure that the value returned by the get() method is always not null
+     * Returns the desired DevelopmentCard without drawing it from the DevelopmentCardGrid.
+     * Warnings are suppressed since previous controls ensure that the value returned by the get() method is always not null.
      *
-     * @param developmentCardsGrid The Grid from where to get the Development Card
-     * @param cardLevel            The desired Development Card Level
-     * @param cardColor            The desired Development Card Color
-     * @return The desired Development Card
+     * @param developmentCardsGrid the Grid from where to get the DevelopmentCard
+     * @param cardLevel            the desired DevelopmentCard Level
+     * @param cardColor            the desired DevelopmentCard Color
+     * @return the desired DevelopmentCard
      */
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     private DevelopmentCard getSelectedDevelopmentCard(DevelopmentCardsGrid developmentCardsGrid, String cardLevel, String cardColor) {

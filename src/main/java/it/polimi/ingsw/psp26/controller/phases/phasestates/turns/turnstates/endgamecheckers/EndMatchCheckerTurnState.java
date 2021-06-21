@@ -30,7 +30,7 @@ public class EndMatchCheckerTurnState extends TurnState {
     public void play(SessionMessage message) {
         super.play(message);
 
-        for(Player player : turn.getMatchController().getMatch().getPlayers()) {
+        for (Player player : turn.getMatchController().getMatch().getPlayers()) {
             checkMultiPlayerEnd(player); // checks in any case
 
             if (!turn.getMatchController().getMatch().isMultiPlayerMode()) checkSinglePlayerEnd();

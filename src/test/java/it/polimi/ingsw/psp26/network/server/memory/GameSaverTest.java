@@ -88,8 +88,8 @@ public class GameSaverTest {
 
         assertEquals(savedDirectoriesNumber, GameSaver.getInstance().getSavedMatchesDirectoriesNames().size());
     }
-    
-    
+
+
     private void deleteCreatedDirectories(List<Integer> matchIDs) {
         for (Integer id : matchIDs) {
             GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", id));

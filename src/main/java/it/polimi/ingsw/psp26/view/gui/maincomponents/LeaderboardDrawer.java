@@ -52,7 +52,7 @@ public class LeaderboardDrawer extends RatioDrawer {
 
             LeaderboardController leaderboardController = fxmlLoader.getController();
             leaderboardController.initializeEndMatchLeaderboard(client, ratio, leaderboardToDisplay, winningPlayer);
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }

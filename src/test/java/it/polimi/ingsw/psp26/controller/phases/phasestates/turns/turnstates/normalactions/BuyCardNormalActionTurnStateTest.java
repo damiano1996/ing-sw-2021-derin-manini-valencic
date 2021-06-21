@@ -123,7 +123,7 @@ public class BuyCardNormalActionTurnStateTest {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, "Slot 2"));
-        
+
         Assert.assertEquals(turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards().get(0), card);
     }
 
@@ -159,5 +159,5 @@ public class BuyCardNormalActionTurnStateTest {
             }
         }
     }
-    
+
 }

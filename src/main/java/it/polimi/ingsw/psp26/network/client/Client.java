@@ -223,7 +223,7 @@ public class Client extends Observable<Message> {
         return nickname;
     }
 
-    
+
     /**
      * Getter of the password of the user.
      *
@@ -275,7 +275,7 @@ public class Client extends Observable<Message> {
         }
     }
 
-    
+
     /**
      * Sends an undo Message for the waiting room to the Server when selected by the Player
      */
@@ -286,7 +286,7 @@ public class Client extends Observable<Message> {
         }
     }
 
-    
+
     /**
      * Method that calls the handleMessages(Message message) method with the last message already handled.
      * If no message was already handled it calls viewNext().

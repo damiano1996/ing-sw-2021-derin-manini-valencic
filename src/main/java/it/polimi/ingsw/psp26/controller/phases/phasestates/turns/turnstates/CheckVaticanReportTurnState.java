@@ -33,7 +33,7 @@ public class CheckVaticanReportTurnState extends TurnState {
         super.play(message);
 
         for (Player player : turn.getMatchController().getMatch().getPlayers()) {
-             activateVaticanReport(player);
+            activateVaticanReport(player);
 
         }
         System.out.println("HO finito");

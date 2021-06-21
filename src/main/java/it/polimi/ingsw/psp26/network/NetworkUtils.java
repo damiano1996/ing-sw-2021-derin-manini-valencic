@@ -2,6 +2,9 @@ package it.polimi.ingsw.psp26.network;
 
 import java.util.Random;
 
+/**
+ * Utility class containing utility method for the Network package.
+ */
 public class NetworkUtils {
 
     /**

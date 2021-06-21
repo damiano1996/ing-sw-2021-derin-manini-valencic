@@ -2,6 +2,9 @@ package it.polimi.ingsw.psp26.network.server;
 
 import java.io.IOException;
 
+/**
+ * Class used to start the Server
+ */
 public class ServerMain {
 
     /**

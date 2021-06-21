@@ -16,6 +16,9 @@ import java.util.Map;
 import static it.polimi.ingsw.psp26.application.files.Files.*;
 import static it.polimi.ingsw.psp26.configurations.Configurations.*;
 
+/**
+ * Class used to track correspondence between the nickname-password and nickname-sessionToken of all Players.
+ */
 public class Users {
 
     private static final String USERS_FILE_PASSWORDS = GAME_FILES + "nickname-password.json";
@@ -26,11 +29,18 @@ public class Users {
     private Map<String, String> nicknamePasswords;
     private Map<String, String> nicknameSessionTokens;
 
+    /**
+     * Constructor of the class.
+     * It creates a new GAME_FILES directory (if not already present).
+     * It initializes the nicknamePassword and nicknameSessionTokens Maps and tries to load the saved version of these
+     * Maps (if they are present in the GAME_FILES directory).
+     */
     public Users() {
         createNewDirectory(GAME_FILES);
 
         nicknamePasswords = new HashMap<>();
         nicknameSessionTokens = new HashMap<>();
+
         try {
             Type type = new TypeToken<HashMap<String, String>>() {
             }.getType();
@@ -42,9 +52,9 @@ public class Users {
     }
 
     /**
-     * Getter of the instance of the class
+     * Getter of the instance of the class.
      *
-     * @return The instance of the class
+     * @return the instance of the class
      */
     public synchronized static Users getInstance() {
         if (instance == null) instance = new Users();
@@ -53,11 +63,11 @@ public class Users {
 
 
     /**
-     * Checks if the nickname entered by the Player satisfies the requirements
+     * Checks if the nickname entered by the Player satisfies the requirements.
      *
-     * @param nickname The nickname entered by the Player
-     * @throws NicknameTooShortException      Thrown if nickname length < MIN_NICKNAME_LENGTH
-     * @throws NicknameAlreadyExistsException Thrown if the nickname has already been entered by another Player
+     * @param nickname the nickname entered by the Player
+     * @throws NicknameTooShortException      thrown if nickname length < MIN_NICKNAME_LENGTH
+     * @throws NicknameAlreadyExistsException thrown if the nickname has already been entered by another Player
      */
     public synchronized static void checkNicknameRequirements(String nickname) throws NicknameTooShortException, NicknameAlreadyExistsException {
         if (nickname.length() < MIN_NICKNAME_LENGTH) throw new NicknameTooShortException();
@@ -67,10 +77,10 @@ public class Users {
 
 
     /**
-     * Checks if the password entered by the Player satisfies the requirements
+     * Checks if the password entered by the Player satisfies the requirements.
      *
-     * @param password The password entered by the Player
-     * @throws PasswordTooShortException Thrown if password length < MIN_PASSWORD_LENGTH
+     * @param password the password entered by the Player
+     * @throws PasswordTooShortException thrown if password length < MIN_PASSWORD_LENGTH
      */
     public synchronized static void checkPasswordRequirements(String password) throws PasswordTooShortException {
         if (password.length() < MIN_PASSWORD_LENGTH) throw new PasswordTooShortException();
@@ -78,11 +88,11 @@ public class Users {
 
 
     /**
-     * Adds a new user nickname and password in the nicknamePasswords Map and writes it to File
+     * Adds a new user nickname and password in the nicknamePasswords Map and writes it to File.
      *
-     * @param nickname     The nickname of the Player
-     * @param password     The password of the Player
-     * @param sessionToken The sessionToken of the Player
+     * @param nickname     the nickname of the Player
+     * @param password     the password of the Player
+     * @param sessionToken the sessionToken of the Player
      */
     public synchronized void addUser(String nickname, String password, String sessionToken) {
         nicknamePasswords.put(nickname, password);
@@ -94,11 +104,11 @@ public class Users {
 
 
     /**
-     * Getter of the nickname of a Player from the nicknamePasswords Map. Retrieves it by using the Player sessionToken
+     * Getter of the nickname of a Player from the nicknamePasswords Map. Retrieves it by using the Player sessionToken.
      *
-     * @param sessionToken The sessionToken of the wanted Player
-     * @return The nickname of the Player
-     * @throws SessionTokenDoesNotExistsException Thrown if nicknameSessionTokens doesn't contain the given sessionToken
+     * @param sessionToken the sessionToken of the wanted Player
+     * @return the nickname of the Player
+     * @throws SessionTokenDoesNotExistsException thrown if nicknameSessionTokens doesn't contain the given sessionToken
      */
     public synchronized String getNickname(String sessionToken) throws SessionTokenDoesNotExistsException {
         for (String nickname : nicknameSessionTokens.keySet()) {
@@ -109,9 +119,9 @@ public class Users {
 
 
     /**
-     * Getter of the nicknamePasswords Map
+     * Getter of the nicknamePasswords Map.
      *
-     * @return An unmodifiable nicknamePasswords Map
+     * @return an unmodifiable nicknamePasswords Map
      */
     public synchronized Map<String, String> getNicknamePasswords() {
         return Collections.unmodifiableMap(nicknamePasswords);
@@ -119,11 +129,12 @@ public class Users {
 
 
     /**
-     * Getter of the nicknameSessionTokens Map
+     * Getter of the nicknameSessionTokens Map.
      *
-     * @return An unmodifiable nicknameSessionTokens Map
+     * @return an unmodifiable nicknameSessionTokens Map
      */
     public synchronized Map<String, String> getNicknameSessionTokens() {
         return Collections.unmodifiableMap(nicknameSessionTokens);
     }
+
 }

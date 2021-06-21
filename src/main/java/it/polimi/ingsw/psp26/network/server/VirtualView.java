@@ -25,6 +25,9 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.*;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.getIndexOf;
 
+/**
+ * Class that represent a VirtualView, simulating a view but only on the Server side.
+ */
 public class VirtualView extends Observable<SessionMessage> implements Observer<SessionMessage> {
 
     private final MatchController matchController;
@@ -37,6 +40,12 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
     // Map containing [sessionToken;boolean] that tells if a nodeClient must be moved to the WaitingRoom or not
     private final Map<String, Boolean> moveToWaitingRoom;
 
+    /**
+     * Default constructor of the class.
+     * It initializes all the class attributes.
+     * It creates a new MatchController.
+     * Used if a completely new Match is wanted.
+     */
     public VirtualView() {
         super();
         nodeClients = new HashMap<>();
@@ -50,6 +59,16 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         addObserver(matchController);
     }
 
+    /**
+     * Constructor of the class.
+     * It initializes all the class attributes using the method's parameters.
+     * It creates a MatchController which contains a recovered Match.
+     * Used when a recovered Match is wanted.
+     *
+     * @param match           the recovered Match
+     * @param turnPlayerIndex the index of the Player that was playing when the Match got interrupted
+     * @param turnNumber      the turnNumber of the Match when it got interrupted
+     */
     public VirtualView(Match match, int turnPlayerIndex, int turnNumber) {
         super();
         nodeClients = new HashMap<>();
@@ -63,6 +82,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
         addObserver(matchController);
     }
+
 
     /**
      * Updates the virtual view.
@@ -78,11 +98,12 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
 
     /**
-     * Adds a new Client in the nodeClients Map
-     * Starts the heartbeat for the added Client
+     * Adds a new Client in the nodeClients Map.
+     * Starts the heartbeat for the added Client.
+     * If the Match is a recovered one, it sends the main model components to the Clients.
      *
-     * @param sessionToken The sessionToken of the Client to add
-     * @param nodeClient   The Client to add
+     * @param sessionToken the sessionToken of the Client to add
+     * @param nodeClient   the Client to add
      */
     public synchronized void addNetworkNodeClient(String sessionToken, NetworkNode nodeClient) {
         System.out.println("VirtualView - new client has been added.");
@@ -113,9 +134,15 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         startListening(nodeClient);
     }
 
+
+    /**
+     * Method that monitors the HeartBeats of the Clients.
+     * If the Client is not sending HeartBeats (is dead), the method resets the relative heartBeat controller.
+     *
+     * @param sessionToken the sessionToken of the Client to track the HeartBeat
+     */
     private synchronized void startTrackingHeartbeat(String sessionToken) {
         try {
-
             // In case of recovery mode (for client termination (!= server termination))
             // we don't have to create a new heartbeat controller,
             // but we can just rest it.
@@ -124,7 +151,6 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
                 // we can reset the heartbeat
                 heartbeatControllers.get(sessionToken).reset(sessionToken);
             }
-
         } catch (Exception e) {
             // Only in case of a new node (new match or recovered (after server down))
             // Starting to monitor the heartbeat of this network node
@@ -134,6 +160,12 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         }
     }
 
+
+    /**
+     * Method that sends recovery messages to the Client.
+     *
+     * @param sessionToken the sessionToken of the Client that is going to be notified
+     */
     private void sendingRecoveryMessages(String sessionToken) {
         try {
             System.out.println("VirtualView - Sending recovery messages.");
@@ -144,6 +176,17 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         }
     }
 
+
+    /**
+     * Sends the updated version of:
+     * - Players
+     * - MarketTray
+     * - DevelopmentGridCard
+     * in order to update the Clients CacheModel.
+     *
+     * @param sessionToken the sessionToken of the Client that will receive the updated objects
+     * @throws InvalidPayloadException the payload can't be serialized
+     */
     public void sendingMainMatchComponents(String sessionToken) throws InvalidPayloadException {
         update(new SessionMessage(sessionToken, SET_NUMBER_OF_PLAYERS, matchController.getMaxNumberOfPlayers()));
         update(getMarketTrayModelUpdateMessage());
@@ -195,7 +238,7 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
      * The method checks if the sessionToken has to be moved in the waiting room by getting the relative boolean value
      * contained in the moveToWaitingRoom Map:
      * (moveToWaitingRoom.get(sessionToken) == true) ==> the networkNode's heartbeatController is stopped and the networkNode is moved to the waiting room.
-     * (moveToWaitingRoom.get(sessionToken) == false) ==> the networkNode is removed from the nodeClients Map and its connection closed
+     * (moveToWaitingRoom.get(sessionToken) == false) ==> the networkNode is removed from the nodeClients Map and its connection closed.
      *
      * @param networkNode network node that must be removed
      */
@@ -215,14 +258,15 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         }
     }
 
+
     /**
      * Method to stop the thread that is listening messages from client node.
      * It sets to false the associated value of the network node that is referring to the connection status.
      * As consequence, this action will stop the "listening" thread that will remove the network node from the list of network clients.
-     * It also puts a new pair [sessionToken;boolean] in the moveToWaitingRoom Map
+     * It also puts a new pair [sessionToken;boolean] in the moveToWaitingRoom Map.
      *
      * @param sessionToken        session token of the disconnected player
-     * @param onStopToWaitingRoom True if the networkNode must be moved to the waiting room, false if the networkNode must only be deleted
+     * @param onStopToWaitingRoom true if the networkNode must be moved to the waiting room, false if the networkNode must only be deleted
      */
     public synchronized void stopListeningNetworkNode(String sessionToken, boolean onStopToWaitingRoom) {
         try {
@@ -232,19 +276,21 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         }
     }
 
+
     /**
-     * Generate a new MatchID by counting how many matches are saved and incrementing that value by 1
+     * Generate a new MatchID by counting how many matches are saved and incrementing that value by 1.
      *
-     * @return The so generated MatchID
+     * @return the so generated MatchID
      */
     private synchronized int getMatchId() {
         return GameSaver.getInstance().getLastId() + 1;
     }
 
+
     /**
-     * Getter of the Match Controller
+     * Getter of the Match Controller.
      *
-     * @return The MatchController
+     * @return the MatchController
      */
     public synchronized MatchController getMatchController() {
         return matchController;
@@ -252,13 +298,12 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
 
 
     /**
-     * Sends the SessionMessage to the Client
-     * If it is a broadcast Message, sends it to all Players
+     * Sends the SessionMessage to the Client.
+     * If it is a broadcast Message, sends it to all Players.
      *
-     * @param message The SessionMessage to send
+     * @param message the SessionMessage to send
      */
     private synchronized void sendToClient(SessionMessage message) {
-
         // broadcast branch
         if (message.getSessionToken().equals(SpecialToken.BROADCAST.getToken())) {
 
@@ -270,8 +315,8 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
                         System.out.println("VirtualView - sending message to player: " + message);
                     } catch (Exception ignored) {
                     }
-            }
 
+            }
         } else {
             // send message to the specified player
             if (nodeClients.get(message.getSessionToken()) != null)
@@ -281,15 +326,14 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
                 } catch (Exception ignored) {
                 }
         }
-
     }
 
 
     /**
-     * Creates a new ModelUpdateMessage based on the received SessionMessage's MessageType
+     * Creates a new ModelUpdateMessage based on the received SessionMessage's MessageType.
      *
-     * @param message The received SessionMessage
-     * @return The new ModelUpdateMessage
+     * @param message the received SessionMessage
+     * @return the new ModelUpdateMessage
      */
     private synchronized SessionMessage filterModelUpdateMessage(SessionMessage message) {
         try {
@@ -320,15 +364,20 @@ public class VirtualView extends Observable<SessionMessage> implements Observer<
         return message;
     }
 
+
     /**
-     * Getter of the number of Client nodes
+     * Getter of the number of Client nodes.
      *
-     * @return The number of Client nodes
+     * @return the number of Client nodes
      */
     public synchronized int getNumberOfNodeClients() {
         return nodeClients.size();
     }
 
+
+    /**
+     * Method that stops the heartbeatControllers.
+     */
     public void killHeartbeats() {
         for (String sessionToken : heartbeatControllers.keySet()) {
             heartbeatControllers.get(sessionToken).kill(sessionToken);

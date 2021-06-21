@@ -19,19 +19,32 @@ import java.util.List;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.lookingForMessage;
 
+/**
+ * Class that assigns Clients to existing or new VirtualViews.
+ */
 public class VirtualViewAssignment extends Thread {
 
     private final String sessionToken;
     private final NetworkNode clientNode;
 
+    /**
+     * Constructor of the class.
+     * It sets the sessionToken and the clientNode attributes.
+     *
+     * @param sessionToken the sessionToken of the Client that has to recover a Match
+     * @param clientNode   the NetworkNode of the Client that has to recover a Match
+     */
     public VirtualViewAssignment(String sessionToken, NetworkNode clientNode) {
         this.sessionToken = sessionToken;
         this.clientNode = clientNode;
     }
 
+
+    /**
+     * Starts the newOrOldMatchSetup() method to see if the Client can recover a Match or not.
+     */
     @Override
     public void run() {
-
         try {
 
             System.out.println("VirtualViewAssignment - New match or recover an old?");
@@ -42,6 +55,21 @@ public class VirtualViewAssignment extends Thread {
     }
 
 
+    /**
+     * Method that checks if there is a suspended Match and if this is the case, sends a message to the Client asking
+     * if it wants to recover it or create a new one.
+     * If the Client decides to recover the Match, it is assigned to an existing VirtualView.
+     * If the Client decides to start a new Match, the NoRecoverySelected() method is called.
+     * If there are no Match to recover t all, the method sends to the Client a Message asking in which Match mode it
+     * wants to play (a new Match will be created this way).
+     *
+     * @param clientNode   the NetworkNode of the client that has to be assigned to a VirtualView
+     * @param sessionToken the sessionToken of the client that has to be assigned to a VirtualView
+     * @throws InvalidPayloadException the payload can't be serialized
+     * @throws IOException             if error in IO socket communication
+     * @throws ClassNotFoundException  if object class not found
+     * @throws EmptyPayloadException   the payload is empty
+     */
     private void newOrOldMatchSetup(NetworkNode clientNode, String sessionToken) throws InvalidPayloadException, IOException, ClassNotFoundException, EmptyPayloadException {
         // step: checking if there is a suspended match:
         if (isVirtualViewToRecoverMatch(sessionToken)) {
@@ -81,6 +109,17 @@ public class VirtualViewAssignment extends Thread {
         }
     }
 
+
+    /**
+     * Method that asks the Client which match mode it wants to play.
+     *
+     * @param clientNode   the NetworkNode of the client that has to be assigned to a VirtualView
+     * @param sessionToken the sessionToken of the client that has to be assigned to a VirtualView
+     * @throws InvalidPayloadException the payload can't be serialized
+     * @throws IOException             if error in IO socket communication
+     * @throws ClassNotFoundException  if object class not found
+     * @throws EmptyPayloadException   the payload is empty
+     */
     private void matchModeRequests(NetworkNode clientNode, String sessionToken) throws InvalidPayloadException, IOException, ClassNotFoundException, EmptyPayloadException {
         System.out.println("VirtualViewAssignment - Sending request mode.");
 
@@ -137,6 +176,7 @@ public class VirtualViewAssignment extends Thread {
         }
     }
 
+
     /**
      * Method to assign a network node to a virtual view.
      * It tries to assign the node to an already existing one (that is waiting for a player to start the match).
@@ -153,6 +193,7 @@ public class VirtualViewAssignment extends Thread {
             assignNodeToNewVirtualView(maxNumberOfPlayers, sessionToken, clientNode);
         }
     }
+
 
     /**
      * Method to assign a network node to an already existing virtual view.
@@ -178,12 +219,13 @@ public class VirtualViewAssignment extends Thread {
         if (!assigned) throw new DesiredVirtualViewDoesNotExistException();
     }
 
+
     /**
      * Method to assign the network node to a new virtual view.
      * It creates a new virtual view, and assigns the node to it.
      *
      * @param maxNumberOfPlayers number of requested players for the match
-     * @param sessionToken       session token of te new player
+     * @param sessionToken       session token of the new player
      * @param clientNode         network node client of the new player
      */
     private void assignNodeToNewVirtualView(int maxNumberOfPlayers, String sessionToken, NetworkNode clientNode) {
@@ -196,6 +238,13 @@ public class VirtualViewAssignment extends Thread {
         Server.getInstance().addVirtualView(virtualView);
     }
 
+
+    /**
+     * Checks if the VirtualView was of an old saved match of the Client.
+     *
+     * @param sessionToken the sessionToken of the client that has to be assigned to a VirtualView
+     * @return true if the VirtualView already exists, false otherwise
+     */
     private boolean isVirtualViewToRecoverMatch(String sessionToken) {
         for (VirtualView virtualView : Server.getInstance().getVirtualViews()) {
             for (Player player : virtualView.getMatchController().getMatch().getPlayers()) {
@@ -206,6 +255,13 @@ public class VirtualViewAssignment extends Thread {
         return false;
     }
 
+
+    /**
+     * Assigns a Client to the corresponding existing VirtualView.
+     *
+     * @param sessionToken the sessionToken of the Client that has to recover a Match
+     * @param clientNode   the NetworkNode of the Client that has to recover a Match
+     */
     private void assignNodeToExistingVirtualViewToRecoveryMatch(String sessionToken, NetworkNode clientNode) {
         for (VirtualView virtualView : Server.getInstance().getVirtualViews()) {
             for (Player player : virtualView.getMatchController().getMatch().getPlayers()) {
@@ -216,6 +272,7 @@ public class VirtualViewAssignment extends Thread {
         }
     }
 
+    
     /**
      * Method to close virtual views (matches) that the player left un-completed.
      * It handles the two cases:
@@ -259,6 +316,6 @@ public class VirtualViewAssignment extends Thread {
         }
 
         for (VirtualView virtualView : virtualViewsToRemove) Server.getInstance().removeVirtualView(virtualView);
-
     }
+
 }

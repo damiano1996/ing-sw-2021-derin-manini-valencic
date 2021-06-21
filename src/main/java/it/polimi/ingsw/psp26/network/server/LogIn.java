@@ -12,20 +12,34 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.SESSION_TOKEN_
 import static it.polimi.ingsw.psp26.network.NetworkUtils.generateSessionToken;
 import static it.polimi.ingsw.psp26.network.server.memory.CommonNicknamePasswordChecksEnums.*;
 
+/**
+ * Class that represent the Login phase of the game.
+ */
 public class LogIn extends Thread {
 
     private final NetworkNode clientNode;
 
+    /**
+     * Constructor of the class.
+     * It initializes the NetworkNode.
+     *
+     * @param clientNode the NetworkNode of the Client.
+     */
     public LogIn(NetworkNode clientNode) {
         this.clientNode = clientNode;
     }
 
+
+    /**
+     * Method that puts the clientNode in the WaitingRoom.
+     * If the nickname and password entered by the Player do not satisfy the requirements, sends a message to the Client
+     * to notify the error and closes the connection with that Client.
+     */
     @Override
     public void run() {
-
         try {
-            try {
 
+            try {
                 System.out.println("LogIn - New clientNode to log.");
                 String sessionToken = getSessionToken(clientNode);
                 System.out.println("LogIn - Adding nodeClient to waiting room.");
@@ -46,16 +60,39 @@ public class LogIn extends Thread {
                 clientNode.closeConnection();
             } catch (ClassNotFoundException | InvalidPayloadException ignored) {
             }
+
         } catch (IOException ignored) {
         }
     }
 
+
+    /**
+     * Method used to get the sessionToken related to the nickname and password that has been entered.
+     * First, the method receive the nickname and password by the Client.
+     * It then checks if they already exists in the Server files:
+     * if this is the case, retrieve the sessionToken from the nickname-sessionToken file;
+     * if the Player is a new one, checks if the nickname and password satisfies the requirements and then generate a valid
+     * sessionToken, adding it to the Server files.
+     * If the nickname and password don't match the requirements, throw the relative exception.
+     * At the end, the method sends a welcome message to the Client.
+     *
+     * @param clientNode the Client that needs a sessionToken
+     * @return the clientNode sessionToken
+     * @throws IOException                    if error in IO socket communication
+     * @throws PasswordNotCorrectException    the password doesn't match the nickname
+     * @throws NicknameTooShortException      the nickname is too short
+     * @throws NicknameAlreadyExistsException the nickname already exists in the Server files
+     * @throws PasswordTooShortException      the password is too short
+     * @throws InvalidPayloadException        the payload can't be serialized
+     * @throws ClassNotFoundException         if object class not found
+     */
     private String getSessionToken(NetworkNode clientNode) throws IOException, PasswordNotCorrectException, NicknameTooShortException, NicknameAlreadyExistsException, PasswordTooShortException, InvalidPayloadException, ClassNotFoundException {
         boolean showNewNicknameMessage = false;
 
         // step: receiving nickname and password from clientNode
         String nickname = (String) clientNode.receiveData();
         String password = (String) clientNode.receiveData();
+
         // step: checking if it is a new user or not
         String sessionToken;
         if (Users.getInstance().getNicknamePasswords().containsKey(nickname)) {

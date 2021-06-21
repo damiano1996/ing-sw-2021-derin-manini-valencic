@@ -18,17 +18,14 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 public class LeaderBoard {
 
     public static final String LEADERBOARD_FILE = GAME_FILES + "nickname-points.json";
-
     private static LeaderBoard instance;
-
     private HashMap<String, Integer> leaderboard;
-
 
     /**
      * Constructor of the class.
+     * It creates a new GAME_FILES directory (if not already present) and initialize the leaderboard.
      */
     private LeaderBoard() {
-
         createNewDirectory(GAME_FILES);
 
         leaderboard = new HashMap<>();
@@ -55,14 +52,16 @@ public class LeaderBoard {
         return instance;
     }
 
+
     /**
-     * Getter of the leaderboard
+     * Getter of the leaderboard.
      *
      * @return leaderboard (hashmap) containing scores in the following format <player, victory points>
      */
     public Map<String, Integer> getLeaderboard() {
         return Collections.unmodifiableMap(leaderboard);
     }
+
 
     /**
      * Method to add a new score to the leaderboard.
@@ -75,4 +74,5 @@ public class LeaderBoard {
         leaderboard.put(player, victoryPoints);
         writeToFile(LEADERBOARD_FILE, GsonConverter.getInstance().getGson().toJson(leaderboard));
     }
+    
 }

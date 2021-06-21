@@ -20,20 +20,40 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.network.server.MessageUtils.filterHeartbeatMessages;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
+/**
+ * Class that simulates a WaitingRoom for Clients.
+ */
 public class WaitingRoom {
 
     private final Map<String, NetworkNode> nodeClients;
 
+    /**
+     * Constructor of the class
+     * It initializes the nodeClients Mal.
+     */
     public WaitingRoom() {
         nodeClients = new HashMap<>();
     }
 
+
+    /**
+     * Adds a Client into the WaitingRoom by adding it to the nodeClients Map.
+     *
+     * @param sessionToken the sessionToken of the Client to add to the WaitingRoom
+     * @param nodeClient   the NetworkNode of the Client to add to the WaitingRoom
+     */
     public void addNodeClient(String sessionToken, NetworkNode nodeClient) {
         nodeClients.put(sessionToken, nodeClient);
 
         new Thread(() -> sendMenuMessage(sessionToken)).start();
     }
 
+
+    /**
+     * Sends the menu message to the Client corresponding to the sessionToken parameter.
+     *
+     * @param sessionToken the sessionToken of the Client that wil receive the menu Message
+     */
     private void sendMenuMessage(String sessionToken) {
         try {
             System.out.println("WaitingRoom - sending menu message!");
@@ -55,6 +75,12 @@ public class WaitingRoom {
         }
     }
 
+
+    /**
+     * Handles the Messages received from the Client and performs different action based on the type of the Message received.
+     *
+     * @param message the Message received from Client
+     */
     private void handleMessages(SessionMessage message) {
         System.out.println("WaitingRoom - message: " + message);
 
@@ -107,16 +133,36 @@ public class WaitingRoom {
         }
     }
 
+
+    /**
+     * If the Client decides to play, removes it from the nodeClients Map and starts a new VirtualViewAssignment thread
+     * in order to create or recover a Match for the Client.
+     *
+     * @param sessionToken the sessionToken of the Client that wants to play
+     */
     private void play(String sessionToken) {
         System.out.println("WaitingRoom - Starting virtual view assignment!");
         NetworkNode networkNode = removeNodeClient(sessionToken);
         new VirtualViewAssignment(sessionToken, networkNode).start();
     }
 
+
+    /**
+     * Removes and returns a nodeClient from the nodeClients Map.
+     *
+     * @param sessionToken the sessionToken of the nodeClient to remove
+     * @return the removed nodeClient
+     */
     private NetworkNode removeNodeClient(String sessionToken) {
         return nodeClients.remove(sessionToken);
     }
 
+
+    /**
+     * Sends a Message to the corresponding nodeClient, retrieving it by the sessionToken contained in the Message to send.
+     *
+     * @param message the Message to send to Client
+     */
     private void sendToClient(SessionMessage message) {
         try {
             nodeClients.get(message.getSessionToken()).sendData(message);

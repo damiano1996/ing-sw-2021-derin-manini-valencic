@@ -10,13 +10,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class containing utility methods for Messages.
+ */
 public class MessageUtils {
 
     /**
-     * Used to create a ModelUpdateMessage for the Player in order to notify the CachedModel
+     * Used to create a ModelUpdateMessage for the Player in order to notify the CachedModel.
      *
-     * @param sessionToken The Player's SessionToken
-     * @return A new Player ModelUpdateMessage
+     * @param sessionToken the Player's SessionToken
+     * @return a new Player ModelUpdateMessage
      */
     public static SessionMessage getPlayerModelUpdateMessage(String sessionToken) {
         try {
@@ -28,9 +31,9 @@ public class MessageUtils {
 
 
     /**
-     * Used to create a ModelUpdateMessage for the MarketTray in order to notify the CachedModel
+     * Used to create a ModelUpdateMessage for the MarketTray in order to notify the CachedModel.
      *
-     * @return A new MarketTray ModelUpdateMessage
+     * @return a new MarketTray ModelUpdateMessage
      */
     public static SessionMessage getMarketTrayModelUpdateMessage() {
         return getBroadcastSessionMessage(MessageType.MARKET_TRAY_MODEL);
@@ -38,9 +41,9 @@ public class MessageUtils {
 
 
     /**
-     * Used to create a ModelUpdateMessage for the DevelopmentCardGrid in order to notify the CachedModel
+     * Used to create a ModelUpdateMessage for the DevelopmentCardGrid in order to notify the CachedModel.
      *
-     * @return A new DevelopmentCardGrid ModelUpdateMessage
+     * @return a new DevelopmentCardGrid ModelUpdateMessage
      */
     public static SessionMessage getDevelopmentGridModelUpdateMessage() {
         return getBroadcastSessionMessage(MessageType.DEVELOPMENT_GRID_MODEL);
@@ -48,10 +51,10 @@ public class MessageUtils {
 
 
     /**
-     * Used to create a broadcast Message
+     * Used to create a broadcast Message.
      *
-     * @param messageType The MessageType to insert in the broadcast
-     * @return The new broadcast SessionMessage
+     * @param messageType the MessageType to insert in the broadcast
+     * @return the new broadcast SessionMessage
      */
     private static SessionMessage getBroadcastSessionMessage(MessageType messageType) {
         try {
@@ -61,16 +64,17 @@ public class MessageUtils {
         }
     }
 
+
     /**
      * Method to receive session messages from network node.
      * It listens until a message, different from the one in the black list, is received.
      * Then it returns the first white message received.
      *
-     * @param networkNode   Network node from which object data will be received
+     * @param networkNode   NetworkNode from which object data will be received
      * @param blackMessages List of message types that must be avoided
      * @return Session message
-     * @throws IOException            If error in IO socket communication
-     * @throws ClassNotFoundException If object class not found
+     * @throws IOException            if error in IO socket communication
+     * @throws ClassNotFoundException if object class not found
      */
     public static SessionMessage filterMessages(NetworkNode networkNode, List<MessageType> blackMessages) throws IOException, ClassNotFoundException {
         SessionMessage message = (SessionMessage) networkNode.receiveData();
@@ -80,14 +84,15 @@ public class MessageUtils {
         return message;
     }
 
+
     /**
      * Method to filter heartbeat messages.
      * It listens messages from the network node and returns the first session message different from the heartbeat.
      *
-     * @param networkNode Network node from which object data will be received
+     * @param networkNode NetworkNode from which object data will be received
      * @return Session message
-     * @throws IOException            If error in IO socket communication
-     * @throws ClassNotFoundException If object class not found
+     * @throws IOException            if error in IO socket communication
+     * @throws ClassNotFoundException if object class not found
      */
     public static SessionMessage filterHeartbeatMessages(NetworkNode networkNode) throws IOException, ClassNotFoundException {
         return filterMessages(networkNode, new ArrayList<>() {{
@@ -102,8 +107,8 @@ public class MessageUtils {
      * @param networkNode         Network node from which object data will be received
      * @param expectedMessageType Expected message type
      * @return Session message
-     * @throws IOException            If error in IO socket communication
-     * @throws ClassNotFoundException If object class not found
+     * @throws IOException            if error in IO socket communication
+     * @throws ClassNotFoundException if object class not found
      */
     public static SessionMessage lookingForMessage(NetworkNode networkNode, MessageType expectedMessageType) throws IOException, ClassNotFoundException {
         SessionMessage message = (SessionMessage) networkNode.receiveData();

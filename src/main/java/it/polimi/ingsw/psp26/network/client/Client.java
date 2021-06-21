@@ -42,7 +42,7 @@ public class Client extends Observable<Message> {
      * It also sets the ViewInterface.
      *
      * @param viewInterface the ViewInterface to use
-     * @throws IOException thrown if an IOException occurs
+     * @throws IOException if error in IO socket communication
      */
     public Client(ViewInterface viewInterface) throws IOException {
         super();

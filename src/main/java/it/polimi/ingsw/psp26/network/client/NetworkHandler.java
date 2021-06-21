@@ -72,7 +72,7 @@ public class NetworkHandler implements Observer<Message> {
      * @param nickname the Player's nickname
      * @param password the Player's password
      * @param serverIP the Server's IP address
-     * @throws IOException                    an IOException has occurred
+     * @throws IOException                    if error in IO socket communication
      * @throws PasswordNotCorrectException    the password doesn't match with the nickname
      * @throws NicknameTooShortException      the nickname is too short
      * @throws ClassNotFoundException         if object class not found

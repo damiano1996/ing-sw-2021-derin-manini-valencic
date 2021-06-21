@@ -27,6 +27,7 @@ public class Server {
 
     /**
      * Class constructor.
+     * It creates the ServerSocket, initializes the virtualViews List and initialize a new WaitingRom.
      *
      * @throws IOException if server socket cannot be instantiated
      */
@@ -41,9 +42,9 @@ public class Server {
     }
 
     /**
-     * Getter of the instance of the class
+     * Getter of the instance of the class.
      *
-     * @return The instance of the class
+     * @return the instance of the class
      */
     public synchronized static Server getInstance() {
         if (instance == null || serverSocket.isClosed()) {
@@ -58,8 +59,7 @@ public class Server {
 
     /**
      * Method to listen for incoming clients.
-     * It generated a new socket, for the client communication, and assigns
-     * it to the network node.
+     * It generated a new socket, for the client communication, and assigns it to the network node.
      * A thread is executed to parallelize new node initialization.
      *
      * @param joinLogInThread boolean to join the thread that starts the login phase
@@ -83,13 +83,24 @@ public class Server {
         }
     }
 
+    /**
+     * Method used to recover the saved Matches in the Server files when the Server is created.
+     * It checks every saved Match file and creates a new Match using the GameSaver singleton.
+     * For each Match created this way, the Server controls that all the saved Player have the correct sessionToken:
+     * if this is the case creates a new VirtualView and insert the restored Match in it,
+     * then adds the VirtualView to the virtualViews List;
+     * otherwise, it prints an error message on terminal and repeat the cycle.
+     */
     private void recoveryMatches() {
         System.out.println("Server - Recovering matches from files.");
+
         for (String gamePath : GameSaver.getInstance().getSavedMatchesDirectoriesNames()) {
             try {
                 Match restoredMatch = GameSaver.getInstance().loadMatch(gamePath);
+
                 // Checking if all the players have the session token correctly loaded
                 boolean allPlayersHaveSessionToken = true;
+
                 for (Player player : restoredMatch.getPlayers())
                     if (player.getSessionToken() == null) {
                         allPlayersHaveSessionToken = false;
@@ -119,37 +130,37 @@ public class Server {
     }
 
     /**
-     * Getter of the virtualViews List
+     * Getter of the virtualViews List.
      *
-     * @return An unmodifiable virtualViews List
+     * @return an unmodifiable virtualViews List
      */
     public List<VirtualView> getVirtualViews() {
         return Collections.unmodifiableList(virtualViews);
     }
 
     /**
-     * Adds a VirtualView to the virtualViews List
+     * Adds a VirtualView to the virtualViews List.
      *
-     * @param virtualView The VirtualView to add
+     * @param virtualView the VirtualView to add
      */
     public void addVirtualView(VirtualView virtualView) {
         virtualViews.add(virtualView);
     }
 
     /**
-     * Adds a Client to the Waiting Room
+     * Adds a Client to the Waiting Room.
      *
-     * @param sessionToken The sessionToken of the Client
-     * @param nodeClient   The Network Node of the Client
+     * @param sessionToken the sessionToken of the Client
+     * @param nodeClient   the Network Node of the Client
      */
     public void addNodeClientToWaitingRoom(String sessionToken, NetworkNode nodeClient) {
         waitingRoom.addNodeClient(sessionToken, nodeClient);
     }
 
     /**
-     * Removes a VirtualView from the virtualViews List
+     * Removes a VirtualView from the virtualViews List.
      *
-     * @param virtualView The VirtualView to remove
+     * @param virtualView the VirtualView to remove
      */
     public void removeVirtualView(VirtualView virtualView) {
         virtualViews.remove(virtualView);

@@ -70,6 +70,9 @@ public class Files {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(message);
 
+            fileOutputStream.close();
+            objectOutputStream.close();
+
         } catch (IOException ignored) {
         }
 
@@ -88,7 +91,13 @@ public class Files {
 
             FileInputStream fileInputStream = new FileInputStream(fileName);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            return (Message) objectInputStream.readObject();
+
+            Message message = (Message) objectInputStream.readObject();
+
+            fileInputStream.close();
+            objectInputStream.close();
+
+            return message;
 
         } catch (IOException | ClassNotFoundException ignored) {
             throw new CannotReadMessageFileException();

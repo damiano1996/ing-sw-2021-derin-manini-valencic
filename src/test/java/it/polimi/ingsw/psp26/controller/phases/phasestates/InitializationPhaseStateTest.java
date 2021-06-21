@@ -27,6 +27,13 @@ public class InitializationPhaseStateTest {
         phase.changeState(new InitializationPhaseState(phase));
     }
 
+    @After
+    public void tearDown() {
+        GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
+        Files.deleteFile(GAME_FILES + "nickname-password.json");
+        Files.deleteFile(GAME_FILES + "nickname-sessionToken.json");
+    }
+
     @Test
     public void testAddPlayer() throws InvalidPayloadException {
         String nickname = "nickname";
@@ -43,13 +50,6 @@ public class InitializationPhaseStateTest {
 
         assertEquals(phase.getMatchController().getMatch().getPlayers().get(0).getNickname(), nickname);
         assertEquals(phase.getMatchController().getMatch().getPlayers().get(0).getSessionToken(), sessionToken);
-    }
-
-    @After
-    public void tearDown() {
-        GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
-        Files.deleteFile(GAME_FILES + "nickname-password.json");
-        Files.deleteFile(GAME_FILES + "nickname-sessionToken.json");
     }
 
     @Test

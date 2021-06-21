@@ -30,6 +30,13 @@ public class NetworkHandler implements Observer<Message> {
     private boolean connected;
     private boolean listening;
 
+    /**
+     * Constructor of the class.
+     * It sets the NetworkHandler Client.
+     * It also sets the attributes connected and listening to false.
+     *
+     * @param client the Client related to this NetworkHandler
+     */
     public NetworkHandler(Client client) {
         super();
         this.client = client;
@@ -39,9 +46,9 @@ public class NetworkHandler implements Observer<Message> {
 
 
     /**
-     * Creates a new SessionMessage and sends it to the Server
+     * Creates a new SessionMessage and sends it to the Server.
      *
-     * @param message Used to build the SessionMessage to send to the Server
+     * @param message used to build the SessionMessage to send to the Server
      */
     @Override
     public void update(Message message) {
@@ -53,6 +60,26 @@ public class NetworkHandler implements Observer<Message> {
         }
     }
 
+
+    /**
+     * Method used to initialize the NetworkNode.
+     * The NetworkNode is connected to the DEFAULT_SERVER_PORT of the Server.
+     * The NetworkNode first sends the Player nickname and password to the Server and waits a response if they are correct or not.
+     * If the nickname and password satisfy the requirements, the method resets the NotificationStackFIFO and then calls
+     * the startListening() and startHeartbeat() methods.
+     * If the nickname and password are not correct, a specific Exception is rise.
+     *
+     * @param nickname the Player's nickname
+     * @param password the Player's password
+     * @param serverIP the Server's IP address
+     * @throws IOException                    an IOException has occurred
+     * @throws PasswordNotCorrectException    the password doesn't match with the nickname
+     * @throws NicknameTooShortException      the nickname is too short
+     * @throws ClassNotFoundException         if object class not found
+     * @throws NicknameAlreadyExistsException the nickname already exists in the Server memory
+     * @throws PasswordTooShortException      the password is too short
+     * @throws InvalidPayloadException        if the given payloads are not serializable
+     */
     public synchronized void initializeNetworkNode(String nickname, String password, String serverIP) throws IOException, PasswordNotCorrectException, NicknameTooShortException, ClassNotFoundException, NicknameAlreadyExistsException, PasswordTooShortException, InvalidPayloadException {
         this.serverIP = serverIP;
 
@@ -67,15 +94,19 @@ public class NetworkHandler implements Observer<Message> {
         CommonNicknamePasswordChecksEnums response = (CommonNicknamePasswordChecksEnums) networkNode.receiveData();
 
         switch (response) {
+
             case PASSWORD_NOT_CORRECT:
                 MessageSynchronizedFIFO.getInstance().update(new Message(MessageType.ERROR_MESSAGE, PASSWORD_NOT_CORRECT.getDescription()));
                 throw new PasswordNotCorrectException();
+
             case NICKNAME_TOO_SHORT:
                 MessageSynchronizedFIFO.getInstance().update(new Message(MessageType.ERROR_MESSAGE, NICKNAME_TOO_SHORT.getDescription()));
                 throw new NicknameTooShortException();
+
             case NICKNAME_ALREADY_EXISTS:
                 MessageSynchronizedFIFO.getInstance().update(new Message(MessageType.ERROR_MESSAGE, NICKNAME_ALREADY_EXISTS.getDescription()));
                 throw new NicknameAlreadyExistsException();
+
             case PASSWORD_TOO_SHORT:
                 MessageSynchronizedFIFO.getInstance().update(new Message(MessageType.ERROR_MESSAGE, PASSWORD_TOO_SHORT.getDescription()));
                 throw new PasswordTooShortException();
@@ -92,12 +123,16 @@ public class NetworkHandler implements Observer<Message> {
                 startListening();
                 startHeartbeat();
                 break;
+                
         }
     }
 
 
     /**
-     * Sends a ping Message to the Server every 1000ms to tell the Server the Client is still alive
+     * Starts a new thread that sends a ping Message to the Server every 1000ms to tell the Server the Client is still alive.
+     * If the Client is connected to the Server, sends the ping message normally.
+     * If the Client lost connection, the method tries to re-establish the connection. If it is not possible to the connection
+     * to come back, the method notifies the Client the connection has been lost and starts a new waiting screen.
      */
     private void startHeartbeat() {
         new Thread(() -> {
@@ -157,8 +192,8 @@ public class NetworkHandler implements Observer<Message> {
 
 
     /**
-     * Creates a Thread used to receive Messages from Server
-     * Based on the MessageType of the received Message, performs different actions
+     * Creates a new thread used to receive Messages from Server.
+     * Based on the MessageType of the received Message, performs different actions.
      */
     private void startListening() {
         new Thread(() -> {
@@ -196,11 +231,12 @@ public class NetworkHandler implements Observer<Message> {
 
 
     /**
-     * Getter of the SessionToken
+     * Getter of the SessionToken.
      *
-     * @return The Player's SessionToken
+     * @return the Player's SessionToken
      */
     public String getSessionToken() {
         return sessionToken;
     }
+
 }

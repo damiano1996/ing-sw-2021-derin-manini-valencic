@@ -19,6 +19,10 @@ import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createLeaderboard;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createPlayersList;
 
+/**
+ * Class representing the Client.
+ * The Client receives and sends messages to the Server and contains other useful information about the playing Player.
+ */
 public class Client extends Observable<Message> {
 
     private final NetworkHandler networkHandler;
@@ -32,6 +36,14 @@ public class Client extends Observable<Message> {
 
     private Message lastMessage;
 
+    /**
+     * Constructor of the class.
+     * It initializes the Client's NetworkHandler and adds it to the list of Observers.
+     * It also sets the ViewInterface.
+     *
+     * @param viewInterface the ViewInterface to use
+     * @throws IOException thrown if an IOException occurs
+     */
     public Client(ViewInterface viewInterface) throws IOException {
         super();
         networkHandler = new NetworkHandler(this);
@@ -41,7 +53,7 @@ public class Client extends Observable<Message> {
 
 
     /**
-     * Gets the next Message from the MessageSynchronisedFIFO and uses it in the handleMessages() method
+     * Gets the next Message from the MessageSynchronisedFIFO and uses it in the handleMessages() method.
      */
     public void viewNext() {
         handleMessages(MessageSynchronizedFIFO.getInstance().getNext());
@@ -49,9 +61,9 @@ public class Client extends Observable<Message> {
 
 
     /**
-     * Executes different actions based on the given Message's MessageType
+     * Executes different actions based on the given Message's MessageType.
      *
-     * @param message The Message from where to get the MessageType to control
+     * @param message the Message from where to get the MessageType to control
      */
     private void handleMessages(Message message) {
         try {
@@ -177,14 +189,13 @@ public class Client extends Observable<Message> {
 
 
     /**
-     * Used to set a connection between the Client and the Server
+     * Used to set a connection between the Client and the Server.
      *
-     * @param serverIP The Server IP
+     * @param serverIP the Server IP
      */
     public synchronized void initializeNetworkHandler(String nickname, String password, String serverIP) {
         try {
             networkHandler.initializeNetworkNode(nickname, password, serverIP);
-
         } catch (IOException e) {
 
             if (PRINT_CLIENT_SIDE) System.out.println("Server IP is unreachable...");
@@ -193,7 +204,6 @@ public class Client extends Observable<Message> {
                 MessageSynchronizedFIFO.getInstance().update(new Message(DISPLAY_LOGIN));
             } catch (InvalidPayloadException ignored) {
             }
-
 
         } catch (NicknameTooShortException | PasswordTooShortException | NicknameAlreadyExistsException | InvalidPayloadException | ClassNotFoundException | PasswordNotCorrectException e) {
             try {
@@ -207,7 +217,7 @@ public class Client extends Observable<Message> {
     /**
      * Getter of the cached model.
      *
-     * @return The local CachedModel
+     * @return the local CachedModel
      */
     public synchronized CachedModel getCachedModel() {
         return cachedModel;
@@ -217,7 +227,7 @@ public class Client extends Observable<Message> {
     /**
      * Getter of the nickname of the user.
      *
-     * @return The nickname of the Player
+     * @return the nickname of the Player
      */
     public synchronized String getNickname() {
         return nickname;
@@ -227,7 +237,7 @@ public class Client extends Observable<Message> {
     /**
      * Getter of the password of the user.
      *
-     * @return The password of the user
+     * @return the password of the user
      */
     public synchronized String getPassword() {
         return password;
@@ -235,10 +245,10 @@ public class Client extends Observable<Message> {
 
 
     /**
-     * Sets a new nickname for the Player and creates a new CachedModel
+     * Sets a new nickname for the Player and creates a new CachedModel.
      *
-     * @param nickname The nickname to give to the Player
-     * @param password The password of the user
+     * @param nickname the nickname to give to the Player
+     * @param password the password of the user
      */
     public synchronized void setNickname(String nickname, String password) {
         this.nickname = nickname;
@@ -248,7 +258,9 @@ public class Client extends Observable<Message> {
 
 
     /**
-     * @return True if the Match is in MultiPlayer mode, false if the Match is in SinglePlayer mode
+     * Getter of the Match playing mode.
+     *
+     * @return true if the Match is in MultiPlayer mode, false if the Match is in SinglePlayer mode
      */
     public synchronized boolean isMultiplayerMode() {
         return numberOfPlayers > 1;
@@ -256,9 +268,9 @@ public class Client extends Observable<Message> {
 
 
     /**
-     * Setter of the number of players in the match.
+     * Setter of the number of Players in the match.
      *
-     * @param numberOfPlayers number of players in the match
+     * @param numberOfPlayers the number of Players in the match
      */
     public synchronized void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
@@ -266,7 +278,7 @@ public class Client extends Observable<Message> {
 
 
     /**
-     * Sends an undo Message to the Server when selected by the Player
+     * Sends an undo Message to the Server when selected by the Player.
      */
     public synchronized void sendUndoMessage() {
         try {
@@ -277,7 +289,7 @@ public class Client extends Observable<Message> {
 
 
     /**
-     * Sends an undo Message for the waiting room to the Server when selected by the Player
+     * Sends an undo Message for the waiting room to the Server when selected by the Player.
      */
     public synchronized void sendMenuUndoMessage() {
         try {

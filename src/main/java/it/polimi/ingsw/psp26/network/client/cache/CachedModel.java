@@ -23,6 +23,12 @@ public class CachedModel {
     private final CachedObject<MarketTray> marketTrayCached;
     private final CachedObject<DevelopmentCardsGrid> developmentGridCached;
 
+    /**
+     * Constructor of the class.
+     * It sets the local Player nickname in the myNickname attribute; then initialize all the cached objects.
+     *
+     * @param myNickname the nickname of the Player the CachedModel belongs to
+     */
     public CachedModel(String myNickname) {
         this.myNickname = myNickname;
 
@@ -34,10 +40,10 @@ public class CachedModel {
 
 
     /**
-     * Updates the local Objects copies when receiving a ModelUpdateMessage
+     * Updates the local Objects copies when receiving a ModelUpdateMessage.
      *
-     * @param message The message containing the Object copy
-     * @throws EmptyPayloadException The message doesn't have a payload
+     * @param message the message containing the Object copy
+     * @throws EmptyPayloadException the message doesn't have a payload
      */
     public synchronized void updateCachedModel(Message message) throws EmptyPayloadException {
         if (message.getMessageType().equals(MessageType.MODEL_UPDATE)) {
@@ -79,14 +85,16 @@ public class CachedModel {
         notifyAll();
     }
 
+
     /**
-     * Getter of the cached player object.
+     * Getter of the cached Player object.
      *
-     * @return cached object containing the player
+     * @return cached object containing the Player
      */
     public synchronized CachedObject<Player> getMyPlayerCached() {
         return myPlayerCached;
     }
+
 
     /**
      * Getter of the cached opponent player object.
@@ -100,26 +108,29 @@ public class CachedModel {
         return opponentsCached.get(new ArrayList<>(opponentsCached.keySet()).get(index));
     }
 
+
     /**
-     * Getter of the cached market tray object.
+     * Getter of the cached MarketTray object.
      *
-     * @return cached object containing the market tray
+     * @return cached object containing the MarketTray
      */
     public synchronized CachedObject<MarketTray> getMarketTrayCached() {
         return marketTrayCached;
     }
 
+
     /**
-     * Getter of the cached object containing the development grid.
+     * Getter of the cached object containing the DevelopmentGrid.
      *
-     * @return cached object containing the development grid
+     * @return cached object containing the DevelopmentGrid
      */
     public synchronized CachedObject<DevelopmentCardsGrid> getDevelopmentGridCached() {
         return developmentGridCached;
     }
 
+
     /**
-     * Getter of the number of cached opponents
+     * Getter of the number of cached opponents.
      *
      * @return The number of cached opponents
      */

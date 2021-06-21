@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class that represent a FIFO containing the notifications send by the Server to the Client.
+ */
 public class NotificationsFIFO {
 
     private static NotificationsFIFO instance;
@@ -11,6 +14,13 @@ public class NotificationsFIFO {
     private List<String> notifications;
     private boolean updated;
 
+    /**
+     * Constructor of the class.
+     * It sets the maxFIFOSize and set the updated attribute to true.
+     * It also create a new notifications List.
+     *
+     * @param maxFIFOSize the maximum number of notifications that can be contained in the NotificationsFIFO
+     */
     private NotificationsFIFO(int maxFIFOSize) {
         this.maxFIFOSize = maxFIFOSize;
         notifications = new ArrayList<>();
@@ -21,7 +31,7 @@ public class NotificationsFIFO {
     /**
      * Getter of the NotificationsFIFO instance.
      *
-     * @return The NotificationsFIFO instance
+     * @return the NotificationsFIFO instance
      */
     public synchronized static NotificationsFIFO getInstance() {
         if (instance == null) instance = new NotificationsFIFO(10);
@@ -33,7 +43,7 @@ public class NotificationsFIFO {
      * Push a new notification in the FIFO.
      * If the size of the FIFO grows over the maxFIFOSize, removes the first element of the FIFO.
      *
-     * @param notification The notification to insert
+     * @param notification the notification to insert
      */
     public synchronized void pushNotification(String notification) {
         notifications.add(notification);
@@ -46,7 +56,7 @@ public class NotificationsFIFO {
     /**
      * Getter of all the notifications contained in the notificationFIFO.
      *
-     * @return An unmodifiable List of all the contained notifications
+     * @return an unmodifiable List of all the contained notifications
      */
     public synchronized List<String> getNotifications() {
         while (!updated) {

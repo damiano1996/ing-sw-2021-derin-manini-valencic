@@ -4,6 +4,9 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.cli.CLI;
 import it.polimi.ingsw.psp26.view.gui.GUI;
 
+/**
+ * Class used to start the Client.
+ */
 public class ClientMain {
 
     /**

@@ -7,20 +7,27 @@ import it.polimi.ingsw.psp26.application.observer.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that represent a FIFO containing Messages sent by the Server.
+ */
 public class MessageSynchronizedFIFO extends Observable<Message> implements Observer<Message> {
 
     private static MessageSynchronizedFIFO instance;
     private final List<Message> messages;
 
+    /**
+     * Constructor of the class.
+     * Initialize a new messages List.
+     */
     private MessageSynchronizedFIFO() {
         messages = new ArrayList<>();
     }
 
 
     /**
-     * Getter of the MessageSynchronisedFIFO instance
+     * Getter of the MessageSynchronisedFIFO instance.
      *
-     * @return The MessageSynchronisedFIFO instance
+     * @return the MessageSynchronisedFIFO instance
      */
     public synchronized static MessageSynchronizedFIFO getInstance() {
         if (instance == null)
@@ -30,9 +37,9 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
 
 
     /**
-     * When a new Message arrives, adds it to the FIFO
+     * When a new Message arrives, adds it to the FIFO.
      *
-     * @param message The Message to add
+     * @param message the Message to add
      */
     @Override
     public synchronized void update(Message message) {
@@ -42,10 +49,10 @@ public class MessageSynchronizedFIFO extends Observable<Message> implements Obse
 
 
     /**
-     * Returns and removes the first Message contained in the FIFO
-     * If the FIFO size is 0, makes the calling Thread wait
+     * Returns and removes the first Message contained in the FIFO.
+     * If the FIFO size is 0, makes the calling Thread wait.
      *
-     * @return The first FIFO Message
+     * @return the first FIFO Message
      */
     public synchronized Message getNext() {
         while (messages.size() == 0) {

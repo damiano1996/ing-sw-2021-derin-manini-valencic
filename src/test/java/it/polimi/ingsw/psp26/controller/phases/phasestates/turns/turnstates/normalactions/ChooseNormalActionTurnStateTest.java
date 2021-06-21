@@ -70,5 +70,5 @@ public class ChooseNormalActionTurnStateTest {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION));
         assertEquals(MessageType.CHOICE_NORMAL_ACTION, mitm.getMessages().get(0).getMessageType());
     }
-    
+
 }

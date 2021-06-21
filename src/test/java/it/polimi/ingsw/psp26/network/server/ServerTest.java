@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.network.server;
 
-import it.polimi.ingsw.psp26.application.files.Files;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
@@ -11,15 +10,12 @@ import it.polimi.ingsw.psp26.network.NetworkNode;
 import it.polimi.ingsw.psp26.network.server.memory.CommonNicknamePasswordChecksEnums;
 import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.network.server.memory.Users;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.*;
 import static it.polimi.ingsw.psp26.controller.HeartbeatController.MAX_TIME_TO_DIE;
@@ -29,23 +25,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
-
-    private List<Integer> matchIDsToRemove;
-
-    @Before
-    public void setUp() {
-        matchIDsToRemove = new ArrayList<>();
-    }
-
-    @After
-    public void tearDown() {
-        Files.deleteFile(GAME_FILES + "nickname-password.json");
-        Files.deleteFile(GAME_FILES + "nickname-sessionToken.json");
-
-        for (Integer matchID : matchIDsToRemove) GameSaver.getInstance().deleteDirectoryByMatchId(matchID);
-    }
-
-    // private static boolean runningHeartbeat;
 
     private int getTotalNumberOfNodeClientsInVirtualViews() {
         int totalNumber = 0;
@@ -58,7 +37,6 @@ public class ServerTest {
     private NetworkNode connectionSequence(MessageType playingMode, boolean recovery) throws IOException, ClassNotFoundException, InvalidPayloadException {
         return connectionSequence(playingMode, recovery, generateSessionToken(MIN_NICKNAME_LENGTH), generateSessionToken(MIN_PASSWORD_LENGTH));
     }
-
 
     private NetworkNode connectionSequence(MessageType playingMode, boolean recovery, String nickname, String password) throws IOException, ClassNotFoundException, InvalidPayloadException {
         Socket socket = new Socket("localhost", DEFAULT_SERVER_PORT);
@@ -112,8 +90,8 @@ public class ServerTest {
     }
 
 
-    private NetworkNode assignToVirtualView(MessageType playingMode, boolean recovery) throws InterruptedException {
-        return assignToVirtualView(playingMode, recovery, false, null, null);
+    private NetworkNode assignToVirtualView(MessageType playingMode) throws InterruptedException {
+        return assignToVirtualView(playingMode, false, false, null, null);
     }
 
     private NetworkNode assignToVirtualView(MessageType playingMode, boolean recovery, boolean credentials, String nickname, String password) throws InterruptedException {
@@ -143,10 +121,6 @@ public class ServerTest {
         clientThread.join();
 
         serverThread.join();
-
-        // Adding the Match IDs to be removed at the end of the test in the matchIDsToRemove List
-        for (VirtualView virtualView : Server.getInstance().getVirtualViews())
-            matchIDsToRemove.add(virtualView.getMatchController().getMatch().getId());
 
         return networkNode.get();
     }
@@ -180,27 +154,27 @@ public class ServerTest {
 
     @Test
     public void testListening() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
-        NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false);
+        NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE);
         assertStartMatch(networkNode);
     }
 
     @Test
     public void testAssigningToExistingVirtualView() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
-        assignToVirtualView(MessageType.TWO_PLAYERS_MODE, false);
-        NetworkNode networkNode = assignToVirtualView(MessageType.TWO_PLAYERS_MODE, false);
+        assignToVirtualView(MessageType.TWO_PLAYERS_MODE);
+        NetworkNode networkNode = assignToVirtualView(MessageType.TWO_PLAYERS_MODE);
         assertStartMatch(networkNode);
     }
 
     @Test
     public void testTwoSimilarVirtualView() throws IOException, InterruptedException, ClassNotFoundException, EmptyPayloadException {
-        assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
-        assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
-        NetworkNode networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
+        assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
+        assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
+        NetworkNode networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
         assertStartMatch(networkNode);
 
-        assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
-        assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
-        networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE, false);
+        assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
+        assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
+        networkNode = assignToVirtualView(MessageType.THREE_PLAYERS_MODE);
         assertStartMatch(networkNode);
     }
 
@@ -270,9 +244,6 @@ public class ServerTest {
 
     @Test
     public void testCloseMatchIfNotRecovered() throws InterruptedException, IOException, EmptyPayloadException, ClassNotFoundException {
-        // Sleep here in order to avoid parallel threads problems
-        sleep(2000);
-
         Server.getInstance().closeConnection();
 
         String nickname = generateSessionToken(MIN_NICKNAME_LENGTH);
@@ -280,7 +251,6 @@ public class ServerTest {
         String sessionToken = generateSessionToken(SESSION_TOKEN_LENGTH);
         Users.getInstance().addUser(nickname, password, sessionToken);
 
-        int numberOfSavedMatches = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
         int numberOfMatchWithThisPlayer = 3;
 
         for (int i = 0; i < numberOfMatchWithThisPlayer; i++) {
@@ -297,20 +267,27 @@ public class ServerTest {
         }
 
         // Checking that the total number of matches is the sum of the initial plus the news.
-        int savedMatches = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
-        System.out.println("ServerTest - saved matches before deletion: " + savedMatches);
-        assertEquals(numberOfSavedMatches + numberOfMatchWithThisPlayer, savedMatches);
+        int numberPlayerMatches = getNumberOfMatchesWherePlayerIs(sessionToken);
+        System.out.println("ServerTest - saved matches before deletion: " + numberPlayerMatches);
+        assertEquals(numberOfMatchWithThisPlayer, numberPlayerMatches);
 
         // Creating new match without recovery the olds
         NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false, true, nickname, password);
         assertStartMatch(networkNode);
 
-        // Checking that the old matches have been removed
-        savedMatches = GameSaver.getInstance().getSavedMatchesDirectoriesNames().size();
-        System.out.println("ServerTest - saved matches after deletion: " + savedMatches);
+        // Only the new match has to contain the session token of the current player
+        assertEquals(1, getNumberOfMatchesWherePlayerIs(sessionToken));
+    }
 
-        // plus 1 for the new one!
-        assertEquals(numberOfSavedMatches + 1, savedMatches);
+    private int getNumberOfMatchesWherePlayerIs(String sessionToken) {
+        int nMatches = 0;
+        for (VirtualView virtualView : Server.getInstance().getVirtualViews())
+            if (virtualView.getMatchController().getMatch().getPlayers()
+                    .stream()
+                    .map(Player::getSessionToken)
+                    .collect(Collectors.toList()).contains(sessionToken))
+                nMatches++;
+        return nMatches;
     }
 
 }

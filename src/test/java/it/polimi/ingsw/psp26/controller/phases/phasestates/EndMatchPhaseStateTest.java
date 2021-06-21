@@ -10,7 +10,6 @@ import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
-import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
 import org.junit.After;
 import org.junit.Before;

@@ -279,5 +279,5 @@ public class ActivateProductionNormalActionTurnStateTest {
         }
 
     }
-    
+
 }

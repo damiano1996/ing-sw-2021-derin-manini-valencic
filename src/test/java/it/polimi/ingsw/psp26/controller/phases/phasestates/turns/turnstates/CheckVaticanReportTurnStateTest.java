@@ -64,7 +64,6 @@ public class CheckVaticanReportTurnStateTest {
 
     @Test
     public void testPlaySinglePlayerNotActivatedTile() throws InvalidPayloadException {
-
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(7);
 
         boolean tileBeforeTurn = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive();
@@ -78,17 +77,13 @@ public class CheckVaticanReportTurnStateTest {
 
     @Test
     public void testPlaySinglePlayerBlackCrossActivate_caseActivated() throws InvalidPayloadException {
-
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(5);
-
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().moveBlackCrossPosition(8);
 
         boolean tileBeforeTurn = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
-
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(2);
-
         turn.changeState(new CheckVaticanReportTurnState(turn));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
 
@@ -99,20 +94,18 @@ public class CheckVaticanReportTurnStateTest {
 
     @Test
     public void testPlaySinglePlayerBlackCrossActivate_caseDiscarded() throws InvalidPayloadException {
-
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(4);
-
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().moveBlackCrossPosition(8);
 
         boolean tileBeforeTurn = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
-
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(6);
 
         turn.changeState(new CheckVaticanReportTurnState(turn));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
         System.out.println(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections().length);
+
         assertTrue(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileDiscarded());
         assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive());
         assertFalse(turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[1].isPopesFavorTileActive());

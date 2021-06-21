@@ -88,14 +88,8 @@ public class GameSaverTest {
 
         assertEquals(savedDirectoriesNumber, GameSaver.getInstance().getSavedMatchesDirectoriesNames().size());
     }
-
-
-    /**
-     * Used to delete all the created directories after executing a test
-     * Must call it in every test method that doesn't delete directories at the end
-     *
-     * @param matchIDs The List of all the saved Matches ids to delete
-     */
+    
+    
     private void deleteCreatedDirectories(List<Integer> matchIDs) {
         for (Integer id : matchIDs) {
             GameSaver.getInstance().deleteDirectoryByName("game_" + String.format("%03d", id));

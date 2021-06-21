@@ -57,9 +57,7 @@ public class MarketResourceNormalActionTurnStateTest {
 
     @Test
     public void testSendMarketResourceMessage() throws InvalidPayloadException {
-
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, MARKET_RESOURCE));
-
         assertEquals(MessageType.CHOICE_ROW_COLUMN, mitm.getMessages().get(0).getMessageType());
     }
 
@@ -77,7 +75,6 @@ public class MarketResourceNormalActionTurnStateTest {
 
     @Test
     public void playSendToWareHousePlacer() throws InvalidPayloadException {
-
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.COIN));
@@ -88,8 +85,6 @@ public class MarketResourceNormalActionTurnStateTest {
 
     @Test
     public void playSendChoiceRowColumnLeaderActive() throws InvalidPayloadException {
-
-
         List<Resource> expectedResources = leaderCardSetter(1);
         if (expectedResources.size() > 0) {
             List<Resource> resources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2));
@@ -102,7 +97,6 @@ public class MarketResourceNormalActionTurnStateTest {
 
     @Test
     public void playSendChoiceRowColumn2LeaderActive() throws InvalidPayloadException {
-
         List<Resource> marbleColors = leaderCardSetter(2);
         List<Resource> expectedResources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2));
 
@@ -117,7 +111,6 @@ public class MarketResourceNormalActionTurnStateTest {
 
             assertEquals(CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, mitm.getMessages().get(0).getMessageType());
             assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(2 + (2 * (numberOfEmpty - 1))).getMessageType());
-
         }
     }
 
@@ -141,7 +134,6 @@ public class MarketResourceNormalActionTurnStateTest {
         }
 
         return marbleTypeSubstitute;
-
     }
 
 }

@@ -51,7 +51,7 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         turn.changeState(new ActivateProductionNormalActionTurnState(turn));
     }
-    
+
     @After
     public void tearDown() {
         GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
@@ -59,8 +59,10 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     @Test
     public void testSendActivateProductionMessage() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
-
-        turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard());
+        turn.getTurnPlayer()
+                .getPersonalBoard()
+                .addDevelopmentCard(1, turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2)
+                        .getFirstCard());
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
 
         assertEquals(MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
@@ -69,8 +71,12 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     @Test
     public void testSendChoiceResourceToActivateNormalProduction() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException, CanNotAddResourceToDepotException, CanNotAddResourceToWarehouse {
-
-        DevelopmentCard chosenCard = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
+        DevelopmentCard chosenCard;
+        chosenCard = turn
+                .getMatchController()
+                .getMatch()
+                .getDevelopmentGrid()
+                .getDevelopmentGridCell(2, 2).getFirstCard();
 
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, chosenCard);
         List<Resource> resourcesProduced = new ArrayList<>();
@@ -80,20 +86,19 @@ public class ActivateProductionNormalActionTurnStateTest {
         for (Resource resource : chosenCard.getProduction().getProductionCost().keySet()) {
             System.out.println(resource);
             System.out.println(chosenCard.getProduction().getProductionCost().get(resource));
+
             if (chosenCard.getProduction().getProductionCost().get(resource) == 1) {
                 turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(resource);
-
             } else {
                 for (int j = 0; j < turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots().get(depotIndex).getMaxNumberOfResources(); j++) {
                     turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(depotIndex, resource);
                     if (j >= chosenCard.getProduction().getProductionCost().get(resource))
                         warehouseExtraResources.add(resource);
                 }
-
                 depotIndex--;
-
             }
         }
+
         for (Depot depot : turn.getTurnPlayer().getPersonalBoard().getWarehouse().getAllDepots()) {
             System.out.println(depot.getResources());
         }
@@ -113,13 +118,17 @@ public class ActivateProductionNormalActionTurnStateTest {
         assertEquals(MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, mitm.getMessages().get(0).getMessageType());
         assertEquals(resourcesProduced, turn.getTurnPlayer().getPersonalBoard().getStrongbox());
         assertEquals(warehouseExtraResources, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources());
-
     }
 
     @Test
     public void testSendChoiceCardsToActivateNoUnknownResource() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToStrongboxException, InvalidPayloadException {
-
-        DevelopmentCard card = turn.getMatchController().getMatch().getDevelopmentGrid().getDevelopmentGridCell(2, 2).getFirstCard();
+        DevelopmentCard card;
+        card = turn
+                .getMatchController()
+                .getMatch()
+                .getDevelopmentGrid()
+                .getDevelopmentGridCell(2, 2)
+                .getFirstCard();
 
         for (Resource resource : card.getProduction().getProductionCost().keySet()) {
             for (int i = 0; i < card.getProduction().getProductionCost().get(resource); i++) {
@@ -128,11 +137,9 @@ public class ActivateProductionNormalActionTurnStateTest {
         }
 
         turn.getTurnPlayer().getPersonalBoard().addDevelopmentCard(1, card);
-
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, card.getProduction()));
 
         List<Resource> resourceProduced = getProdResources(card);
-
         resourceProduced = resourceProduced.stream().filter(x -> !x.equals(Resource.EMPTY)).filter(x -> !x.equals(Resource.FAITH_MARKER)).collect(Collectors.toList());
 
         assertArrayEquals(resourceProduced.toArray(), turn.getTurnPlayer().getPersonalBoard().getStrongbox().toArray());
@@ -140,7 +147,6 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     @Test
     public void testSendChoiceCardsToActivateCostUnknown() throws InvalidPayloadException, CanNotAddResourceToStrongboxException {
-
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
 
@@ -148,7 +154,6 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
         assertEquals(MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE, mitm.getMessages().get(1).getMessageType());
-
     }
 
     @Test
@@ -167,7 +172,6 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     @Test
     public void testSendChoiceResourceToActivateCostUnknownLeaderProduction() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
-
         leaderCardSetter();
         List<Resource> resource2 = new ArrayList<>();
         if (turn.getTurnPlayer().getLeaderCards().size() > 0) {
@@ -187,7 +191,6 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     @Test
     public void testSendChoiceResourceToActivateNotEnoughResources() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
-
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_PRODUCTIONS_TO_ACTIVATE, turn.getTurnPlayer().getPersonalBoard().getAllVisibleProductions().get(0)));
@@ -197,7 +200,6 @@ public class ActivateProductionNormalActionTurnStateTest {
 
     @Test
     public void testSendChoiceResourceToActivateNotEnoughResourcesForTwoCards() throws InvalidPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToWarehouse {
-
         turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(Resource.STONE);
         Resource cardResource = null;
 
@@ -216,14 +218,12 @@ public class ActivateProductionNormalActionTurnStateTest {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, cardResource));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY, Resource.COIN));
 
-
         assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
         assertEquals(MessageType.ERROR_MESSAGE, mitm.getMessages().get(6).getMessageType());
     }
 
     @Test
     public void testSendChoiceResourceToActivateTwoCards() throws CanNotAddResourceToStrongboxException, InvalidPayloadException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, CanNotAddResourceToWarehouse {
-
         turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResource(Resource.STONE);
         turn.getTurnPlayer().getPersonalBoard().addResourceToStrongbox(Resource.STONE);
         List<Resource> expectedStrongbox = new ArrayList<>();
@@ -251,7 +251,6 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(0).getMessageType());
         assertEquals(turn.getTurnPlayer().getPersonalBoard().getStrongbox(), expectedStrongbox);
-
     }
 
     private void playCollection() throws InvalidPayloadException {
@@ -272,7 +271,6 @@ public class ActivateProductionNormalActionTurnStateTest {
     }
 
     private void leaderCardSetter() {
-
         List<LeaderCard> leaderCards = new ArrayList<>(phase.getMatchController().getMatch().drawLeaders(8));
         List<LeaderCard> leaderCardsAdded = leaderCards.stream().filter(x -> x.getAbilityToString().contains("ProductionAbility")).collect(Collectors.toList());
         if (leaderCardsAdded.size() > 0) {
@@ -281,6 +279,5 @@ public class ActivateProductionNormalActionTurnStateTest {
         }
 
     }
-
-
+    
 }

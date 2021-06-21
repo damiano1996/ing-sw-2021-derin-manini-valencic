@@ -46,7 +46,6 @@ public class EndMatchPhaseStateTest {
 
     @Test
     public void testExecuteWinnerPlayer() throws InvalidPayloadException, CanNotAddResourceToStrongboxException, EmptyPayloadException, NoMoreDevelopmentCardsException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-
         Player player = phase.getMatchController().getMatch().getPlayers().get(0);
         int expectedVictoryPoints = 0;
 
@@ -85,8 +84,7 @@ public class EndMatchPhaseStateTest {
     }
 
     @Test
-    public void testExecuteWinnerLorenzo() throws InvalidPayloadException, CanNotAddResourceToStrongboxException, EmptyPayloadException, NoMoreDevelopmentCardsException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {
-
+    public void testExecuteWinnerLorenzo() throws InvalidPayloadException, EmptyPayloadException {
         Player player = phase.getMatchController().getMatch().getPlayers().get(0);
 
         player.getPersonalBoard().getFaithTrack().addFaithPoints(22);

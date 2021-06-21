@@ -60,7 +60,6 @@ public class BuyCardNormalActionTurnStateTest {
 
     @Test
     public void testSendPlayBuyCardMessage() throws InvalidPayloadException {
-
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
         assertEquals(MessageType.CHOICE_CARD_TO_BUY, mitm.getMessages().get(0).getMessageType());
 
@@ -68,12 +67,10 @@ public class BuyCardNormalActionTurnStateTest {
 
     @Test
     public void testSendCardToBuyPlay() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
-
         DevelopmentCard card = buyCardResourceSetter();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
         assertEquals(MessageType.CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, mitm.getMessages().get(0).getMessageType());
-
     }
 
     @Test
@@ -85,19 +82,16 @@ public class BuyCardNormalActionTurnStateTest {
 
     @Test
     public void testSendCardToBuyAndPlacePlay() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
-
         DevelopmentCard card = buyCardResourceSetter();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, "Slot 2"));
 
         Assert.assertEquals(turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards().get(0), card);
-
     }
 
     @Test(expected = CanNotAddDevelopmentCardToSlotException.class)
     public void testSendCardToBuyAndPlaceWrongPositionPlay() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
-
         DevelopmentCard card = buyCardResourceSetter();
 
         // An Exception will be raised here
@@ -111,8 +105,7 @@ public class BuyCardNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendCardToBuyWithLeadersActive() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
-
+    public void testSendCardToBuyWithLeadersActive() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
         DevelopmentCard card = buyCardResourceSetter();
         leaderCardSetter();
 
@@ -123,19 +116,15 @@ public class BuyCardNormalActionTurnStateTest {
     }
 
     @Test
-    public void testSendPositionCardBoughtWithLeadersActive() throws CanNotAddResourceToStrongboxException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {
-
+    public void testSendPositionCardBoughtWithLeadersActive() throws CanNotAddResourceToStrongboxException, InvalidPayloadException {
         DevelopmentCard card = buyCardResourceSetter();
         leaderCardSetter();
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_NORMAL_ACTION, BUY_CARD));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_CARD_TO_BUY, card));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_DEVELOPMENT_CARD_SLOT_POSITION, "Slot 2"));
-
-
+        
         Assert.assertEquals(turn.getTurnPlayer().getPersonalBoard().getVisibleDevelopmentCards().get(0), card);
-
-
     }
 
     private DevelopmentCard buyCardResourceSetter() throws CanNotAddResourceToStrongboxException {
@@ -149,11 +138,10 @@ public class BuyCardNormalActionTurnStateTest {
     }
 
     private void leaderCardSetter() {
-        List<LeaderCard> leaderCards = new ArrayList<>();
         List<LeaderCard> leaderCardsAdded = new ArrayList<>();
         List<Resource> resourceToRemove = new ArrayList<>();
-        int modified = 0;
-        leaderCards.addAll(phase.getMatchController().getMatch().drawLeaders(8));
+        int modified;
+        List<LeaderCard> leaderCards = new ArrayList<>(phase.getMatchController().getMatch().drawLeaders(8));
 
         for (Resource resource : turn.getTurnPlayer().getPersonalBoard().getStrongbox()) {
             modified = leaderCardsAdded.size();
@@ -170,6 +158,6 @@ public class BuyCardNormalActionTurnStateTest {
                 leaderCard.activate(turn.getTurnPlayer());
             }
         }
-
     }
+    
 }

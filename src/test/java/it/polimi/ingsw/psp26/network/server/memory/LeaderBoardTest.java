@@ -28,7 +28,6 @@ public class LeaderBoardTest {
 
     @Test
     public void testSaveLeaderboard() {
-
         Files.deleteFile(LeaderBoard.LEADERBOARD_FILE);
 
         for (String nickname : playersExample.keySet()) {
@@ -37,14 +36,11 @@ public class LeaderBoardTest {
 
             assertTrue(LeaderBoard.getInstance().getLeaderboard().containsKey(nickname));
             assertTrue(LeaderBoard.getInstance().getLeaderboard().containsValue(playersExample.get(nickname)));
-
-
         }
 
         assertTrue(Files.getFilesNamesInDirectory(GAME_FILES).contains("nickname-points.json"));
 
         Files.deleteFile(LeaderBoard.LEADERBOARD_FILE);
-
     }
 
 }

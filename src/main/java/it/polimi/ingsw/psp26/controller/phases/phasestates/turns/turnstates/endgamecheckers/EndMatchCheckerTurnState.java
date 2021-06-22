@@ -35,7 +35,8 @@ public class EndMatchCheckerTurnState extends TurnState {
 
             if (!turn.getMatchController().getMatch().isMultiPlayerMode()) checkSinglePlayerEnd();
         }
-        goToNextStateAfterLeaderAction(turn, message);
+        if (!isBlackCrossFinalPosition() && !isNoMoreColumnOfDevelopmentCards())
+            goToNextStateAfterLeaderAction(turn, message);
     }
 
     /**

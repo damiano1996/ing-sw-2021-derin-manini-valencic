@@ -46,8 +46,7 @@ public class LeaderBoard {
      * @return the LeaderBoard object
      */
     public synchronized static LeaderBoard getInstance() {
-        if (instance == null)
-            instance = new LeaderBoard();
+        if (instance == null) instance = new LeaderBoard();
 
         return instance;
     }
@@ -70,9 +69,8 @@ public class LeaderBoard {
      * @param victoryPoints obtained victory points
      */
     public void addPlayerVictoryPoints(String player, int victoryPoints) {
-
         leaderboard.put(player, victoryPoints);
         writeToFile(LEADERBOARD_FILE, GsonConverter.getInstance().getGson().toJson(leaderboard));
     }
-    
+
 }

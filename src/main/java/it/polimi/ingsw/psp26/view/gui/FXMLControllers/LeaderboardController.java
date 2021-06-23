@@ -34,50 +34,52 @@ public class LeaderboardController {
     private VBox pointsBox;
 
     @FXML
-    private VBox bottomBox;
-
-    @FXML
     private Button doneButton;
 
 
-    //-----------------------------------------//
-    //          END MATCH LEADERBOARD          //
-    //-----------------------------------------//
+    //-------------------------------//
+    //          LEADERBOARD          //
+    //-------------------------------//
 
     /**
-     * Method used to create an end Match Leaderboard.
+     * Method used to create a Leaderboard.
      *
-     * @param client        The client that will display the leaderboard
-     * @param ratio         The ratio that will resize all the elements shown
-     * @param leaderboard   The leaderboard to display
-     * @param winningPlayer The nickname of the winning Player
+     * @param client        the client that will display the Leaderboard
+     * @param ratio         the ratio that will resize all the elements shown
+     * @param leaderboard   the Leaderboard to display
+     * @param winningPlayer tThe nickname of the winning Player
      */
     @FXML
-    public void initializeEndMatchLeaderboard(Client client, float ratio, Map<String, Integer> leaderboard, String winningPlayer) {
-        setEndMatchLeaderboardTexts(client, ratio, leaderboard, winningPlayer);
-        setEndMatchLeaderboardDoneButtonAction(client);
+    public void initializeLeaderboard(Client client, float ratio, Map<String, Integer> leaderboard, String winningPlayer) {
+        setLeaderboardTexts(client, ratio, leaderboard, winningPlayer);
+        setLeaderboardDoneButtonAction(client, winningPlayer.equals(""));
     }
 
 
     /**
-     * Sets the leaderboardText, playersText, pointsText of the leaderboard.
-     * The method also sets the winning text to display and inserts the values into the leaderboard.
+     * Sets the leaderboardText, playersText, pointsText of the Leaderboard.
+     * The method also sets the winning text to display and inserts the values into the Leaderboard.
      *
-     * @param client        The client that will display the leaderboard
-     * @param ratio         The ratio that will resize all the elements shown
-     * @param leaderboard   The leaderboard to display
-     * @param winningPlayer The nickname of the winning Player
+     * @param client        the client that will display the leaderboard
+     * @param ratio         the ratio that will resize all the elements shown
+     * @param leaderboard   the leaderboard to display
+     * @param winningPlayer the nickname of the winning Player
      */
     @FXML
-    private void setEndMatchLeaderboardTexts(Client client, float ratio, Map<String, Integer> leaderboard, String winningPlayer) {
+    private void setLeaderboardTexts(Client client, float ratio, Map<String, Integer> leaderboard, String winningPlayer) {
         // Setting texts dimensions
-        setTextDimensions(leaderboardText, 90, true, ratio);
-        setTextDimensions(playersText, 60, true, ratio);
-        setTextDimensions(pointsText, 60, true, ratio);
+        setTextDimensions(leaderboardText, 120, true, ratio);
+        setTextDimensions(playersText, 90, true, ratio);
+        setTextDimensions(pointsText, 90, true, ratio);
 
         // Setting the winningText
-        setTextDimensions(winningText, 80, false, ratio);
-        setWinningText(client, leaderboard, winningPlayer);
+        setTextDimensions(
+                winningText,
+                winningPlayer.equals("") ? 0 : 110,
+                false,
+                ratio
+        );
+        setWinningText(client, winningPlayer);
 
         // Inserting values into the leaderboard
         insertLeaderboardValues(ratio, leaderboard);
@@ -86,77 +88,16 @@ public class LeaderboardController {
 
     /**
      * Sets the action of the doneButton.
-     * In this case, the action involves closing the leaderboard stage and calling client.viewNext() method.
+     * The action involves closing the Leaderboard stage and calling client.viewNext() and client.sendMenuUndoMessage() method.
      */
     @FXML
-    private void setEndMatchLeaderboardDoneButtonAction(Client client) {
+    private void setLeaderboardDoneButtonAction(Client client, boolean undoOption) {
         doneButton.setOnMouseClicked(mouseEvent -> {
-            closeParentStageOfActionEvent(mouseEvent);
-            client.viewNext();
-        });
-    }
-
-
-    //--------------------------------------//
-    //          GLOBAL LEADERBOARD          //
-    //--------------------------------------//
-
-    /**
-     * Method used to create a global Leaderboard.
-     *
-     * @param client      The client that will display the leaderboard
-     * @param ratio       The ratio that will resize all the elements shown
-     * @param leaderboard The leaderboard to display
-     */
-    @FXML
-    public void initializeGlobalLeaderboard(Client client, float ratio, Map<String, Integer> leaderboard) {
-        setGlobalLeaderboardTexts(ratio, leaderboard);
-        setGlobalLeaderboardDoneButtonAction(client);
-    }
-
-
-    /**
-     * Sets the leaderboardText, playersText, pointsText of the leaderboard.
-     * The method also inserts the values into the leaderboard.
-     * The winningText dimension is set to 0 since there is no winner to display in this case.
-     * The bottomBox minHeight is also set.
-     *
-     * @param ratio       The ratio that will resize all the elements shown
-     * @param leaderboard The leaderboard to display
-     */
-    @FXML
-    private void setGlobalLeaderboardTexts(float ratio, Map<String, Integer> leaderboard) {
-        // Setting texts dimensions
-        setTextDimensions(leaderboardText, 50, true, ratio);
-        setTextDimensions(playersText, 45, true, ratio);
-        setTextDimensions(pointsText, 45, true, ratio);
-
-        // Setting the winningText
-        setTextDimensions(winningText, 0, false, ratio);
-        winningText.setText("");
-
-        // Inserting values into the leaderboard
-        insertLeaderboardValues(ratio, leaderboard);
-
-        bottomBox.setMinHeight(150);
-    }
-
-
-    /**
-     * Sets the action of the doneButton.
-     * A click sound is added to the button.
-     * In this case, the action involves closing the leaderboard stage, sending an undo message from Client to Server
-     * and calling client.viewNext() method.
-     */
-    @FXML
-    private void setGlobalLeaderboardDoneButtonAction(Client client) {
-        doneButton.setOnAction(actionEvent -> {
-
             SoundManager soundManager = SoundManager.getInstance();
             soundManager.setSoundEffect("button_click_01.wav");
 
-            closeParentStageOfActionEvent(actionEvent);
-            client.sendMenuUndoMessage();
+            closeParentStageOfActionEvent(mouseEvent);
+            if (undoOption) client.sendMenuUndoMessage();
             client.viewNext();
         });
     }
@@ -169,9 +110,9 @@ public class LeaderboardController {
     /**
      * Sets the desired dimension to the text and, if wanted, underlines the text.
      *
-     * @param text      The text to change
-     * @param dimension The desired dimension of the text
-     * @param underline True if you want to underline the text, false otherwise
+     * @param text      the text to change
+     * @param dimension the desired dimension of the text
+     * @param underline true if you want to underline the text, false otherwise
      */
     @FXML
     private void setTextDimensions(Text text, int dimension, boolean underline, float ratio) {
@@ -185,19 +126,23 @@ public class LeaderboardController {
      * Sets the winningText.
      */
     @FXML
-    private void setWinningText(Client client, Map<String, Integer> leaderboard, String winningPlayer) {
-        if (client.getNickname().equals(winningPlayer)) {
-            winningText.setText("YOU WON!");
-        } else if (client.isMultiplayerMode() && !leaderboard.containsKey(winningPlayer)) {
-            winningText.setText("DISCONNECTION!");
+    private void setWinningText(Client client, String winningPlayer) {
+        if (winningPlayer.equals("")) {
+            winningText.setText("");
         } else {
-            winningText.setText("YOU LOST!");
+         
+            if (client.getNickname().equals(winningPlayer)) {
+                winningText.setText("YOU WON!");
+            } else {
+                winningText.setText("YOU LOST!");
+            }
+        
         }
     }
 
 
     /**
-     * Method to insert the Players' nicknames and points in the leaderboard.
+     * Method to insert the Players' nicknames and points in the Leaderboard.
      */
     @FXML
     private void insertLeaderboardValues(float ratio, Map<String, Integer> leaderboard) {
@@ -207,12 +152,12 @@ public class LeaderboardController {
         for (String playerNickname : orderedPlayers) {
             // Inserting Players' nicknames into the leaderboard
             Text name = new Text(playerNickname);
-            setTextDimensions(name, 45, false, ratio);
+            setTextDimensions(name, 70, false, ratio);
             playersBox.getChildren().add(name);
 
             // Inserting Player's points into the leaderboard
             Text points = new Text(Integer.toString(leaderboard.get(playerNickname)));
-            setTextDimensions(points, 45, false, ratio);
+            setTextDimensions(points, 70, false, ratio);
             pointsBox.getChildren().add(points);
         }
     }

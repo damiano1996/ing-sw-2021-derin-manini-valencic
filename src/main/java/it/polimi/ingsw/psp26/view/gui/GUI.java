@@ -11,12 +11,12 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.MessageSynchronizedFIFO;
+import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 import it.polimi.ingsw.psp26.view.gui.FXMLControllers.LoginController;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.*;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
-import it.polimi.ingsw.psp26.view.gui.maincomponents.GlobalLeaderboardDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.LeaderboardDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.ActionTokenDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.DevelopmentCardsGridDialogDrawer;
@@ -361,7 +361,9 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void displayGlobalLeaderboard() {
-        Stage dialog = getDialog(primaryStage, new GlobalLeaderboardDrawer(client, getMinBetweenWindowWidthAndHeight()).draw());
+        Stage dialog = getDialog(primaryStage, new LeaderboardDrawer(
+                client, LeaderBoard.getInstance().getLeaderboard(), "", getMinBetweenWindowWidthAndHeight()
+        ).draw());
         dialog.show();
     }
 

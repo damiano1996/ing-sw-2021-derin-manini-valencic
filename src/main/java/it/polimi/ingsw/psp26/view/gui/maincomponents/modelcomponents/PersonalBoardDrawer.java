@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents;
 
+import it.polimi.ingsw.psp26.exceptions.NoImageException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
@@ -96,15 +97,18 @@ public class PersonalBoardDrawer extends RatioDrawer {
         for (int i = 0; i < baseDepots.size(); i++) {
             Depot depot = baseDepots.get(i);
 
-            Image resourceImage = getResourceImage(depot.getContainedResourceType(), ratio);
+            try {
+                Image resourceImage = getResourceImage(depot.getContainedResourceType(), ratio);
 
-            for (int j = 0; j < depot.getResources().size(); j++) {
+                for (int j = 0; j < depot.getResources().size(); j++) {
 
-                ImageView imageView = getImageView(resourceImage, (hOffsets[i] + j * 100) * ratio, (vOffsetFirstDepot + i * 180) * ratio);
-                addMouseOverAnimation(imageView, ratio);
+                    ImageView imageView = getImageView(resourceImage, (hOffsets[i] + j * 100) * ratio, (vOffsetFirstDepot + i * 180) * ratio);
+                    addMouseOverAnimation(imageView, ratio);
 
-                pane.getChildren().add(imageView);
+                    pane.getChildren().add(imageView);
 
+                }
+            } catch (NoImageException ignored) {
             }
         }
     }
@@ -124,17 +128,20 @@ public class PersonalBoardDrawer extends RatioDrawer {
             Resource resource = RESOURCES_SLOTS[i];
             int multiplicity = Collections.frequency(resources, resource);
 
-            Image resourceImage = getResourceImage(resource, ratio);
+            try {
+                Image resourceImage = getResourceImage(resource, ratio);
 
-            for (int j = 0; j < multiplicity; j++) {
+                for (int j = 0; j < multiplicity; j++) {
 
-                ImageView imageView = getImageView(
-                        resourceImage,
-                        (hOffsets[i] + (shift - random.nextInt(2 * shift))) * ratio,
-                        (vOffsets[i] + (shift - random.nextInt(2 * shift))) * ratio
-                );
-                addMouseOverAnimation(imageView, ratio);
-                pane.getChildren().add(imageView);
+                    ImageView imageView = getImageView(
+                            resourceImage,
+                            (hOffsets[i] + (shift - random.nextInt(2 * shift))) * ratio,
+                            (vOffsets[i] + (shift - random.nextInt(2 * shift))) * ratio
+                    );
+                    addMouseOverAnimation(imageView, ratio);
+                    pane.getChildren().add(imageView);
+                }
+            } catch (NoImageException ignored) {
             }
         }
     }

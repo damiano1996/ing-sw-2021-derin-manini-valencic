@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.switchdepots;
 
 import it.polimi.ingsw.psp26.exceptions.CanNotAddResourceToDepotException;
+import it.polimi.ingsw.psp26.exceptions.NoImageException;
 import it.polimi.ingsw.psp26.exceptions.SourceSwitchableDepotHasNotBeenSelectedException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.WarehousePlacerDrawer;
@@ -138,7 +139,7 @@ public class DepotsSwitchableGroup {
                 targetSelectedDepot.getResourcesContainer().add(
                         getImageView(getResourceImage(sourceDepotResource, warehousePlacerDrawer.getRatio()), 0, 0),
                         targetSelectedDepot.getResourcesContainer().getColumnCount() + 1, 1, 1, 1);
-            } catch (CanNotAddResourceToDepotException ignored) {
+            } catch (CanNotAddResourceToDepotException | NoImageException ignored) {
             }
         }
     }

@@ -5,6 +5,8 @@ import javafx.scene.media.Media;
 import java.util.HashMap;
 import java.util.Map;
 
+import static it.polimi.ingsw.psp26.view.ViewUtils.getCompletePath;
+
 /**
  * Singleton class to keep, as local variables, media loaded from file,
  * to speed up the loading process, to avoid reading from file.
@@ -44,7 +46,7 @@ public class MediaLoaderCache {
     public Media loadMediaFromFile(String fileName) {
         if (medias.containsKey(fileName)) return medias.get(fileName);
         System.out.println("MediaLoaderCache - Loading media file: " + fileName);
-        Media media = new Media(String.valueOf(getClass().getResource(fileName)));
+        Media media = new Media(getCompletePath(fileName));
         medias.put(fileName, media);
         return media;
     }

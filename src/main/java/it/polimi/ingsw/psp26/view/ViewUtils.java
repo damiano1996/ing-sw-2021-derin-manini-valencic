@@ -13,6 +13,18 @@ import java.util.stream.Collectors;
 public class ViewUtils {
 
     /**
+     * Method to get the absolute path of a file.
+     *
+     * @param fileName file name
+     * @return complete path
+     */
+    public static String getCompletePath(String fileName) {
+        String absolutePath = String.valueOf(ViewUtils.class.getResource(fileName));
+        System.out.println("ViewUtils - Absolute path: " + absolutePath);
+        return absolutePath;
+    }
+
+    /**
      * Used to change the appearance of the given MessageType replacing the underscore characters
      *
      * @param messageType The MessageType to beautify

@@ -4,8 +4,7 @@ public class Configurations {
 
     public static final String GAME_NAME = "Master of Renaissance";
 
-    public static final String RESOURCES_PATH = "src/main/resources/";
-    public static final String GAME_FILES = RESOURCES_PATH + "game_files/";
+    public static final String GAME_FILES = "game_files/";
 
     public static final int DEFAULT_SERVER_PORT = 2626;
 

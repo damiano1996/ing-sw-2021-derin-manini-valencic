@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.loading;
 
+import it.polimi.ingsw.psp26.exceptions.NoImageException;
 import it.polimi.ingsw.psp26.model.ResourceSupply;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
@@ -47,8 +48,12 @@ public class WaitingScreen {
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
 
         List<Image> images = new ArrayList<>();
-        for (Resource resource : ResourceSupply.RESOURCES_SLOTS)
-            images.add(getResourceImage(resource, getGeneralRatio()));
+        for (Resource resource : ResourceSupply.RESOURCES_SLOTS) {
+            try {
+                images.add(getResourceImage(resource, getGeneralRatio()));
+            } catch (NoImageException ignored) {
+            }
+        }
 
         final long startNanoTime = System.nanoTime();
         double phaseShift = 2 * Math.PI / images.size();

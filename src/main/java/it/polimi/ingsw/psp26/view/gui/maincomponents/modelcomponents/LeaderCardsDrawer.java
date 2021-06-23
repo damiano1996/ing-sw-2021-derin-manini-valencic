@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents;
 
+import it.polimi.ingsw.psp26.exceptions.NoImageException;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.RatioDrawer;
@@ -99,15 +100,18 @@ public class LeaderCardsDrawer extends RatioDrawer {
      * @param cardY      The Y position of the card
      */
     private void drawResourcesInLeaderDepot(LeaderCard leaderCard, int cardX, int cardY) {
-        Image resourceImage = getResourceImage(leaderCard.getAbilityResource(), ratio);
+        try {
+            Image resourceImage = getResourceImage(leaderCard.getAbilityResource(), ratio);
 
-        for (int i = 0; i < leaderDepots.get(getCorrectLeaderIndex(leaderCard)).getResources().size(); i++) {
+            for (int i = 0; i < leaderDepots.get(getCorrectLeaderIndex(leaderCard)).getResources().size(); i++) {
 
-            ImageView imageView = getImageView(resourceImage, cardX + 100 * ratio + i * 170 * ratio, cardY + 550 * ratio);
-            addMouseOverAnimation(imageView, ratio);
+                ImageView imageView = getImageView(resourceImage, cardX + 100 * ratio + i * 170 * ratio, cardY + 550 * ratio);
+                addMouseOverAnimation(imageView, ratio);
 
-            pane.getChildren().add(imageView);
+                pane.getChildren().add(imageView);
 
+            }
+        } catch (NoImageException ignored) {
         }
     }
 

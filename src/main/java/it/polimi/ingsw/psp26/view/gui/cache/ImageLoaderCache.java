@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getCompletePath;
+import static it.polimi.ingsw.psp26.view.ViewUtils.getCompletePath;
 
 /**
  * Singleton class to keep, as local variables, images and re-use them when necessary,
@@ -69,7 +69,7 @@ public class ImageLoaderCache {
         if (images.containsKey(imageIdentifier)) return images.get(imageIdentifier);
 
         System.out.println("ImageLoaderCache - Loading image: " + fileName);
-        Image image = new Image(getCompletePath(fileName), width, height, var1, var2);
+        Image image = new Image(getCompletePath("/gui/" + fileName), width, height, var1, var2);
         images.put(imageIdentifier, image);
         return image;
     }

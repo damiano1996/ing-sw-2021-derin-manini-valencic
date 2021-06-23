@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
-import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH;
+import static it.polimi.ingsw.psp26.view.ViewUtils.getCompletePath;
 
 /**
  * Class that contains utility methods for the cli package
@@ -144,7 +144,7 @@ public class CliUtils {
         Scanner in = null;
 
         try {
-            in = new Scanner(new File(RESOURCES_PATH + "cli/" + figureName));
+            in = new Scanner(new File(getCompletePath("/cli/" + figureName)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -17,14 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import static it.polimi.ingsw.psp26.configurations.Configurations.RESOURCES_PATH;
+import static it.polimi.ingsw.psp26.view.ViewUtils.getCompletePath;
 
 public class GUIUtils {
-
-
-    public static String getCompletePath(String fileName) {
-        return "file:" + RESOURCES_PATH + "gui/" + fileName;
-    }
 
     public static Image loadImage(String fileName, int width) {
         return ImageLoaderCache.getInstance().loadImageFromFile(fileName, width);
@@ -55,11 +50,11 @@ public class GUIUtils {
     }
 
     public static Font getFont(int size, float ratio) {
-        return Font.loadFont(getCompletePath("font/DancingScript-VariableFont_wght.ttf"), size * ratio);
+        return Font.loadFont(getCompletePath("/gui/font/DancingScript-VariableFont_wght.ttf"), size * ratio);
     }
 
     public static void addStylesheet(Scene scene) {
-        scene.getStylesheets().add(getCompletePath("stylesheets/stylesheet.css"));
+        scene.getStylesheets().add(getCompletePath("/gui/stylesheets/stylesheet.css"));
     }
 
     public static void closeParentStageOfActionEvent(Event actionEvent) {

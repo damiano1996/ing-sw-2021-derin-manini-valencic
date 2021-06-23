@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents;
 import it.polimi.ingsw.psp26.application.messages.Message;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
+import it.polimi.ingsw.psp26.exceptions.NoImageException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.model.personalboard.LeaderDepot;
@@ -174,10 +175,13 @@ public class WarehousePlacerDrawer extends RatioDrawer {
 
         Random random = new Random();
 
-        Image resourceImage = getResourceImage(resource, ratio);
-        ImageView imageView = getImageView(resourceImage, random.nextInt(componentWidth - 100) * ratio, random.nextInt(maxHeight) * ratio);
-        new DraggedObject<>(resource, resourcesToAddPane, imageView, targets);
-        resourcesToAddPane.getChildren().add(imageView);
+        try {
+            Image resourceImage = getResourceImage(resource, ratio);
+            ImageView imageView = getImageView(resourceImage, random.nextInt(componentWidth - 100) * ratio, random.nextInt(maxHeight) * ratio);
+            new DraggedObject<>(resource, resourcesToAddPane, imageView, targets);
+            resourcesToAddPane.getChildren().add(imageView);
+        } catch (NoImageException ignored) {
+        }
     }
 
     /**
@@ -251,8 +255,12 @@ public class WarehousePlacerDrawer extends RatioDrawer {
      * @param resourcesGridPane grid pane containing the resources
      */
     private void drawResources(VBox vBox, Depot baseDepot, StackPane imageStack, GridPane resourcesGridPane) {
-        for (int i = 0; i < baseDepot.getResources().size(); i++)
-            resourcesGridPane.add(getImageView(getResourceImage(baseDepot.getResources().get(i), ratio), 0, 0), i, 1, 1, 1);
+        for (int i = 0; i < baseDepot.getResources().size(); i++) {
+            try {
+                resourcesGridPane.add(getImageView(getResourceImage(baseDepot.getResources().get(i), ratio), 0, 0), i, 1, 1, 1);
+            } catch (NoImageException ignored) {
+            }
+        }
 
         resourcesGridPane.setAlignment(Pos.CENTER_LEFT);
         imageStack.getChildren().add(resourcesGridPane);

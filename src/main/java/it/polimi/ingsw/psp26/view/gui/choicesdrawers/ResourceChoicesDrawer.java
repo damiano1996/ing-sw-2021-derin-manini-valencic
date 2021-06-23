@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.choicesdrawers;
 
+import it.polimi.ingsw.psp26.exceptions.NoImageException;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.view.gui.ButtonContainer;
 import javafx.scene.image.ImageView;
@@ -13,17 +14,21 @@ public class ResourceChoicesDrawer implements ChoicesDrawer<Resource> {
 
     @Override
     public ButtonContainer<Resource> decorateButtonContainer(ButtonContainer<Resource> resourceButtonContainer) {
-        resourceButtonContainer.setGraphic(getResourceImageView(resourceButtonContainer.getContainedObject()));
-        addSelectionListener(
-                resourceButtonContainer,
-                getResourceImageView(resourceButtonContainer.getContainedObject()),
-                getResourceImage(resourceButtonContainer.getContainedObject(), getGeneralRatio())
-        );
+        try {
+            resourceButtonContainer.setGraphic(getResourceImageView(resourceButtonContainer.getContainedObject()));
+            addSelectionListener(
+                    resourceButtonContainer,
+                    getResourceImageView(resourceButtonContainer.getContainedObject()),
+                    getResourceImage(resourceButtonContainer.getContainedObject(), getGeneralRatio())
+            );
+        } catch (NoImageException ignored) {
+        }
+
         resourceButtonContainer.setStyle("-fx-background-color: transparent;");
         return resourceButtonContainer;
     }
 
-    private ImageView getResourceImageView(Resource resource) {
+    private ImageView getResourceImageView(Resource resource) throws NoImageException {
         return getImageView(getResourceImage(resource, getGeneralRatio()), 0, 0);
     }
 }

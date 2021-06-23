@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents;
 
+import it.polimi.ingsw.psp26.exceptions.NoImageException;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCard;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
@@ -70,7 +71,8 @@ public class ModelDrawUtils {
      * @param ratio    ratio for the image
      * @return image representing the resource
      */
-    public static Image getResourceImage(Resource resource, float ratio) {
+    public static Image getResourceImage(Resource resource, float ratio) throws NoImageException {
+        if (resource.equals(Resource.EMPTY)) throw new NoImageException();
         Image resourceImage = loadImage("resources/" + resource + ".png", (int) (100 * ratio));
         resourceImage = addLightEffects(resourceImage, ratio);
         return resourceImage;

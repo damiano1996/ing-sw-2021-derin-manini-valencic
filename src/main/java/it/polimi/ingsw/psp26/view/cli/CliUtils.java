@@ -3,13 +3,9 @@ package it.polimi.ingsw.psp26.view.cli;
 import it.polimi.ingsw.psp26.model.enums.Color;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.List;
-import java.util.Scanner;
-
-import static it.polimi.ingsw.psp26.view.ViewUtils.getCompletePath;
+import java.util.Objects;
 
 /**
  * Class that contains utility methods for the cli package
@@ -141,22 +137,23 @@ public class CliUtils {
      * @param col        the x coordinate
      */
     public void printFigure(String figureName, int row, int col) {
-        Scanner in = null;
-
         try {
-            in = new Scanner(new File(getCompletePath("/cli/" + figureName)));
-        } catch (FileNotFoundException e) {
+            String asciiPath = "/cli/" + figureName;
+
+            InputStream input = Objects.requireNonNull(getClass().getResource(asciiPath)).openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+
+            String[] ascii = new String[Integer.parseInt(reader.readLine())];
+
+            for (int i = 0; i < ascii.length; i++) ascii[i] = reader.readLine();
+
+            printASCII(ascii, row, col);
+
+            input.close();
+            reader.close();
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
-
-        assert in != null;
-        String[] ascii = new String[Integer.parseInt(in.nextLine())];
-
-        for (int i = 0; i < ascii.length; i++) ascii[i] = in.nextLine();
-
-        printASCII(ascii, row, col);
-
-        in.close();
     }
 
 

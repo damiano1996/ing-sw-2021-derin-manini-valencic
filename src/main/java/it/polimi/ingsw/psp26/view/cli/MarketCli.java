@@ -35,7 +35,7 @@ public class MarketCli {
      * @param marketTray the MarketTray to display
      */
     public void displayMarketScreen(MarketTray marketTray) {
-        cliUtils.printFigure("/titles/MarketTitle", 1, 59);
+        cliUtils.printFigure("titles/MarketTitle", 1, 59);
         displayMarketTray(marketTray, 13, 18);
     }
 

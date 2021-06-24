@@ -1,6 +1,5 @@
 package it.polimi.ingsw.psp26.controller.phases.phasestates;
 
-import it.polimi.ingsw.psp26.application.files.Files;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.controller.phases.Phase;
@@ -11,13 +10,11 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 import static org.junit.Assert.assertEquals;
 
 public class EndMatchPhaseStateTest {
@@ -37,11 +34,7 @@ public class EndMatchPhaseStateTest {
 
         phase.changeState(new EndMatchPhaseState(phase));
     }
-
-    @After
-    public void tearDown() {
-        Files.deleteFile(GAME_FILES + "nickname-points.json");
-    }
+    
 
     @Test
     public void testExecuteWinnerPlayer() throws InvalidPayloadException, CanNotAddResourceToStrongboxException, EmptyPayloadException, NoMoreDevelopmentCardsException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {

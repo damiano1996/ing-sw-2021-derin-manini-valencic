@@ -106,7 +106,7 @@ public class CLI implements ViewInterface {
         cliUtils.cls();
         pw.print(Color.GREEN.setColor());
         pw.flush();
-        cliUtils.printFigure("/titles/MainTitle", 1, 10);
+        cliUtils.printFigure("titles/MainTitle", 1, 10);
         pw.print(Color.RESET.setColor());
         pw.flush();
     }
@@ -118,7 +118,7 @@ public class CLI implements ViewInterface {
      */
     public void displayLogIn() {
         printTitle();
-        cliUtils.printFigure("/titles/PressEnterTitle", 20, 76);
+        cliUtils.printFigure("titles/PressEnterTitle", 20, 76);
         in.nextLine();
 
         String nickname = "";
@@ -471,7 +471,7 @@ public class CLI implements ViewInterface {
      */
     private void choicePositionExecute(List<Object> choices) {
         cliUtils.cls();
-        cliUtils.printFigure("/titles/DevelopmentCardSlotSelection", 1, 11);
+        cliUtils.printFigure("titles/DevelopmentCardSlotSelection", 1, 11);
         cliUtils.vSpace(10);
         cliUtils.pPCS("Slots numbering convention:", Color.WHITE, 12, 4);
         cliUtils.vSpace(1);
@@ -541,7 +541,7 @@ public class CLI implements ViewInterface {
      */
     private void choiceResourceFromWarehouseExecute(List<Object> choices) {
         cliUtils.clns();
-        cliUtils.printFigure("/titles/ChooseResourceFromWarehouse", 1, 8);
+        cliUtils.printFigure("titles/ChooseResourceFromWarehouse", 1, 8);
         cliUtils.vSpace(3);
         pw.println(cliUtils.hSpace(3) + "Please type the number of the corresponding Resource you want to give");
         cliUtils.vSpace(3);
@@ -671,15 +671,15 @@ public class CLI implements ViewInterface {
         if (client.getNickname().equals(winningPlayer)) {
             pw.print(Color.GREEN.setColor());
             pw.flush();
-            cliUtils.printFigure("/titles/YouWonTitle", 37, 89);
+            cliUtils.printFigure("titles/YouWonTitle", 37, 89);
         } else if (client.isMultiplayerMode() && !leaderboard.containsKey(winningPlayer)) {
             pw.print(Color.YELLOW.setColor());
             pw.flush();
-            cliUtils.printFigure("/titles/DisconnectionTitle", 37, 89);
+            cliUtils.printFigure("titles/DisconnectionTitle", 37, 89);
         } else {
             pw.print(Color.RED.setColor());
             pw.flush();
-            cliUtils.printFigure("/titles/YouLostTitle", 37, 85);
+            cliUtils.printFigure("titles/YouLostTitle", 37, 85);
         }
         pw.print(Color.RESET.setColor());
         pw.flush();

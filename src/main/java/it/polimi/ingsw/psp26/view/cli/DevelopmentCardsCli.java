@@ -49,7 +49,7 @@ public class DevelopmentCardsCli {
             printDevelopmentGridCard(developmentCardsGrid.getDevelopmentGridCell(i, 3), 2 + (19 * i), 98);
         }
 
-        cliUtils.printFigure("/titles/GridTitle", 10, 135);
+        cliUtils.printFigure("titles/GridTitle", 10, 135);
     }
 
 
@@ -92,7 +92,7 @@ public class DevelopmentCardsCli {
      */
     private void printDevelopmentCardBorder(int startingRow, int startingColumn, int cardStackSize) {
         if (cardStackSize > 1)
-            cliUtils.printFigure("/developmentcardborders/DevelopmentCardBorder" + (cardStackSize - 1), startingRow, startingColumn);
+            cliUtils.printFigure("developmentcardborders/DevelopmentCardBorder" + (cardStackSize - 1), startingRow, startingColumn);
     }
 
 

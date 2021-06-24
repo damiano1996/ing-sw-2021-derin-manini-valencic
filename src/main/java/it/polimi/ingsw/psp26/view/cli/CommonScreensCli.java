@@ -38,7 +38,7 @@ public class CommonScreensCli {
      */
     public void displayFinalScreen(Map<String, Integer> leaderboard, int numberOfPlayers) {
         cliUtils.cls();
-        cliUtils.printFigure("/titles/LeaderboardTitle", 1, 53);
+        cliUtils.printFigure("titles/LeaderboardTitle", 1, 53);
         cliUtils.printFigure("FinalLeaderboard", 15, 89);
         printLeaderboardContent(leaderboard, getOrderedPlayersList(leaderboard), numberOfPlayers);
     }

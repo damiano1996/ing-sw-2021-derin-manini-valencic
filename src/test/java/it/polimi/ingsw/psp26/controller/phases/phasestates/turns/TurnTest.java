@@ -11,9 +11,7 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
-import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,11 +50,6 @@ public class TurnTest {
         int turnNumber = 1;
 
         turn = new Turn(playingPhaseState, matchController, playerOne, turnNumber);
-    }
-
-    @After
-    public void tearDown() {
-        GameSaver.getInstance().deleteDirectoryByMatchId(turn.getMatchController().getMatch().getId());
     }
 
 

@@ -15,9 +15,7 @@ import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.leadercards.specialleaderabilities.SpecialDepotAbility;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
-import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,11 +68,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
 
         turn.changeState(new ResourcesWarehousePlacerTurnState(turn, resourcesToAdd));
     }
-
-    @After
-    public void tearDown() {
-        GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
-    }
+    
 
     @Test
     public void testSendWarehouseMessage() throws InvalidPayloadException {

@@ -141,7 +141,7 @@ public class DisplayWarehousePlacer {
      * @param resourceIndex      the index from where the resources are shown
      */
     private void printWarehouseAndResources(Warehouse warehouse, List<Resource> resourcesLeft, List<Resource> resourcesDiscarded, int resourceIndex) {
-        cliUtils.printFigure("/titles/WarehouseConfigurationTitle", 1, 21);
+        cliUtils.printFigure("titles/WarehouseConfigurationTitle", 1, 21);
         depotCli.printWarehouse(warehouse, 7, 74);
         personalBoardCli.printLeaderDepots(warehouse.getLeaderDepots(), 15, 132);
         printLeaderDepotNumber(warehouse.getLeaderDepots().size());

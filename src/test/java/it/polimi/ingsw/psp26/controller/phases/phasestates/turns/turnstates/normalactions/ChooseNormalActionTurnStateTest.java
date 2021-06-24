@@ -9,9 +9,7 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.Turn;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
-import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,11 +39,7 @@ public class ChooseNormalActionTurnStateTest {
 
         turn.changeState(new ChooseNormalActionTurnState(turn));
     }
-
-    @After
-    public void tearDown() {
-        GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
-    }
+    
 
     @Test
     public void playActivateProduction() throws InvalidPayloadException {

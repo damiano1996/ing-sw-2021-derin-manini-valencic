@@ -12,9 +12,7 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.leadercards.LeaderCard;
 import it.polimi.ingsw.psp26.model.personalboard.Depot;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
-import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.testutils.MitmObserver;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,11 +49,7 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         turn.changeState(new ActivateProductionNormalActionTurnState(turn));
     }
-
-    @After
-    public void tearDown() {
-        GameSaver.getInstance().deleteDirectoryByMatchId(phase.getMatchController().getMatch().getId());
-    }
+    
 
     @Test
     public void testSendActivateProductionMessage() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {

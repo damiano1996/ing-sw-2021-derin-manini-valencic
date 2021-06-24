@@ -243,7 +243,7 @@ public class ServerTest {
     }
 
     @Test
-    public void testCloseMatchIfNotRecovered() throws InterruptedException, IOException, EmptyPayloadException, ClassNotFoundException {
+    public void testCloseMatchIfNotRecovered() throws InterruptedException, IOException {
         Server.getInstance().closeConnection();
 
         String nickname = generateSessionToken(MIN_NICKNAME_LENGTH);
@@ -272,9 +272,24 @@ public class ServerTest {
         assertEquals(numberOfMatchWithThisPlayer, numberPlayerMatches);
 
         // Creating new match without recovery the olds
-        NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false, true, nickname, password);
-        assertStartMatch(networkNode);
-
+        Thread t = new Thread(() -> {
+            NetworkNode networkNode = null;
+            try {
+                networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false, true, nickname, password);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                assertStartMatch(networkNode);
+            } catch (IOException | ClassNotFoundException | EmptyPayloadException e) {
+                e.printStackTrace();
+            }
+        });
+        
+        t.start();
+        
+        t.join();
+        
         // Only the new match has to contain the session token of the current player
         assertEquals(1, getNumberOfMatchesWherePlayerIs(sessionToken));
     }

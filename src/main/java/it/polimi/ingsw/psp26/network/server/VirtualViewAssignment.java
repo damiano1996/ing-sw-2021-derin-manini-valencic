@@ -272,7 +272,7 @@ public class VirtualViewAssignment extends Thread {
         }
     }
 
-    
+
     /**
      * Method to close virtual views (matches) that the player left un-completed.
      * It handles the two cases:
@@ -287,7 +287,9 @@ public class VirtualViewAssignment extends Thread {
      */
     private synchronized void noRecoverySelected(String sessionToken) {
         List<VirtualView> virtualViewsToRemove = new ArrayList<>();
-        for (VirtualView virtualView : Server.getInstance().getVirtualViews()) {
+        List<VirtualView> serverVirtualViews = new ArrayList<>(Server.getInstance().getVirtualViews());
+
+        for (VirtualView virtualView : serverVirtualViews) {
             try {
                 virtualView.getMatchController().getMatch().getPlayerBySessionToken(sessionToken);
                 // if player was in this virtual view we have to close this match
@@ -308,7 +310,6 @@ public class VirtualViewAssignment extends Thread {
                     // (case of server and client closed: no network nodes are in the virtual view)
                     GameSaver.getInstance().deleteDirectoryByMatchId(virtualView.getMatchController().getMatch().getId());
                     virtualViewsToRemove.add(virtualView);
-
                 }
 
             } catch (PlayerDoesNotExistException | InvalidPayloadException ignored) {

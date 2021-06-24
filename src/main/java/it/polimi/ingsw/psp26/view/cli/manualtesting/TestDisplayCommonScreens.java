@@ -119,7 +119,7 @@ public class TestDisplayCommonScreens {
         }
         pw.print(Color.GREEN.setColor());
         pw.flush();
-        cliUtils.printFigure("/titles/YouWonTitle", 37, 89);
+        cliUtils.printFigure("titles/YouWonTitle", 37, 89);
         pw.print(Color.RESET.setColor());
         pw.flush();
 
@@ -132,7 +132,7 @@ public class TestDisplayCommonScreens {
         }
         pw.print(Color.RED.setColor());
         pw.flush();
-        cliUtils.printFigure("/titles/YouLostTitle", 37, 85);
+        cliUtils.printFigure("titles/YouLostTitle", 37, 85);
         pw.print(Color.RESET.setColor());
         pw.flush();
 

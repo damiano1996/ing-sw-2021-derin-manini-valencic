@@ -137,7 +137,7 @@ public class PersonalBoardCli {
      */
     public void displayPlayerLeaderCards(List<LeaderCard> leaderCards, int startingRow, int startingColumn) {
         cliUtils.clns();
-        cliUtils.printFigure("/titles/MyLeaderCardsTitle", startingRow, startingColumn + 20);
+        cliUtils.printFigure("titles/MyLeaderCardsTitle", startingRow, startingColumn + 20);
 
         leaderCardsCli.printMultipleLeaders(leaderCards, 15);
 
@@ -215,7 +215,7 @@ public class PersonalBoardCli {
     public void displayProductionActivation(List<Production> productions, List<Resource> playerResource) {
         cliUtils.clns();
 
-        cliUtils.printFigure("/titles/ActivateProductionTitle", 1, 18);
+        cliUtils.printFigure("titles/ActivateProductionTitle", 1, 18);
         cliUtils.printPlayerResources(playerResource, 29, 18);
         printProductionBooks(productions);
     }
@@ -246,7 +246,7 @@ public class PersonalBoardCli {
     public void displayResourceSupply(ResourceSupply resourceSupply, List<Resource> resourcesToPrint, int startingRow, int startingColumn) {
         cliUtils.clns();
 
-        cliUtils.printFigure("/titles/ResourceSupplyTitle", startingRow, startingColumn);
+        cliUtils.printFigure("titles/ResourceSupplyTitle", startingRow, startingColumn);
         cliUtils.printFigure("ResourceSupply", startingRow + 13, startingColumn + 37);
 
         try {
@@ -288,8 +288,8 @@ public class PersonalBoardCli {
     public void displayActionTokens(List<ActionToken> actionTokens) {
         cliUtils.clns();
 
-        cliUtils.printFigure("/titles/ActionTokensTitle", 1, 48);
-        cliUtils.printFigure("/actiontokens/" + actionTokens.get(0).toString(), 20, 141);
+        cliUtils.printFigure("titles/ActionTokensTitle", 1, 48);
+        cliUtils.printFigure("actiontokens/" + actionTokens.get(0).toString(), 20, 141);
         cliUtils.pPCS("ACTIVATED  TOKEN", Color.WHITE, 34, 148);
         printTokenStack(actionTokens.size());
         cliUtils.vSpace(5);
@@ -302,7 +302,7 @@ public class PersonalBoardCli {
      * @param stackSize the number of ActionTokens that are not used yet
      */
     private void printTokenStack(int stackSize) {
-        if (stackSize > 1) cliUtils.printFigure("/actiontokenborders/ActionTokenBorder" + (stackSize - 1), 20, 67);
+        if (stackSize > 1) cliUtils.printFigure("actiontokenborders/ActionTokenBorder" + (stackSize - 1), 20, 67);
     }
 
 }

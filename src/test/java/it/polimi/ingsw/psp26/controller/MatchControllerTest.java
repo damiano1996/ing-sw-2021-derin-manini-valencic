@@ -1,35 +1,23 @@
 package it.polimi.ingsw.psp26.controller;
 
-import it.polimi.ingsw.psp26.application.files.Files;
 import it.polimi.ingsw.psp26.application.messages.MessageType;
 import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
-import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import it.polimi.ingsw.psp26.network.server.memory.Users;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 import static org.junit.Assert.*;
 
 public class MatchControllerTest {
 
-    private VirtualView virtualView;
     private MatchController matchController;
 
     @Before
     public void setUp() {
-        virtualView = new VirtualView();
+        VirtualView virtualView = new VirtualView();
         matchController = new MatchController(virtualView, 0);
-    }
-
-    @After
-    public void tearDown() {
-        GameSaver.getInstance().deleteDirectoryByMatchId(matchController.getMatch().getId());
-        Files.deleteFile(GAME_FILES + "nickname-password.json");
-        Files.deleteFile(GAME_FILES + "nickname-sessionToken.json");
     }
 
     @Test

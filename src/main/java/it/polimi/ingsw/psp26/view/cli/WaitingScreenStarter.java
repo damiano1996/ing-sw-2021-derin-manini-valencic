@@ -65,7 +65,7 @@ public class WaitingScreenStarter {
 
                 while (isWaiting) {
 
-                    cliUtils.printFigure("/waitingscreenframes/WaitingScreenFrame" + frameCounter, 10, 101);
+                    cliUtils.printFigure("waitingscreenframes/WaitingScreenFrame" + frameCounter, 10, 101);
 
                     try {
                         //TimeUnit.MILLISECONDS.sleep() is used to give a better viewing experience

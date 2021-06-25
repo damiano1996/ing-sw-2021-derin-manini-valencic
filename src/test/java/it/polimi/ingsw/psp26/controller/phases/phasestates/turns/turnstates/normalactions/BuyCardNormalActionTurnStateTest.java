@@ -50,7 +50,7 @@ public class BuyCardNormalActionTurnStateTest {
 
         turn.changeState(new BuyCardNormalActionTurnState(turn));
     }
-    
+
 
     @Test
     public void testSendPlayBuyCardMessage() throws InvalidPayloadException {

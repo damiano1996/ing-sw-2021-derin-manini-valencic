@@ -19,11 +19,10 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
  */
 public class GameSaver {
 
-    private static GameSaver instance;
     private static final String MATCHES_PATH = GAME_FILES + "saved_matches/";
-
     // Used to get the correct numbering for directories and files
     private static final String FORMAT_ID = "%03d";
+    private static GameSaver instance;
 
     /**
      * Constructor of the class.

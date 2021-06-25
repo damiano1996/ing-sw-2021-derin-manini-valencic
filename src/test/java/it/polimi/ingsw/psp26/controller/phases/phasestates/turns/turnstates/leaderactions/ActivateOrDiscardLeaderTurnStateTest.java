@@ -63,7 +63,7 @@ public class ActivateOrDiscardLeaderTurnStateTest {
 
         turn.changeState(new ActivateOrDiscardLeaderTurnState(turn));
     }
-    
+
 
     private void choiceLeaders(MessageType action, MessageType expected) throws InvalidPayloadException {
         turn.play(

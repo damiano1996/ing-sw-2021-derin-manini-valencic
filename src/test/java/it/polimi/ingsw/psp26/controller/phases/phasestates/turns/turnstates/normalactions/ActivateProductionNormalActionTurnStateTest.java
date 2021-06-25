@@ -49,7 +49,7 @@ public class ActivateProductionNormalActionTurnStateTest {
 
         turn.changeState(new ActivateProductionNormalActionTurnState(turn));
     }
-    
+
 
     @Test
     public void testSendActivateProductionMessage() throws CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException, InvalidPayloadException {

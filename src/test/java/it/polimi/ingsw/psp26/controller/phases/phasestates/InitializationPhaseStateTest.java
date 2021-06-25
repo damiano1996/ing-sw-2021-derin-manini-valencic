@@ -22,7 +22,7 @@ public class InitializationPhaseStateTest {
         phase = new Phase(new MatchController(new VirtualView(), 0));
         phase.changeState(new InitializationPhaseState(phase));
     }
-    
+
 
     @Test
     public void testAddPlayer() throws InvalidPayloadException {

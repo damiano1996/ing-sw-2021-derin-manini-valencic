@@ -123,7 +123,7 @@ public class NetworkHandler implements Observer<Message> {
                 startListening();
                 startHeartbeat();
                 break;
-                
+
         }
     }
 

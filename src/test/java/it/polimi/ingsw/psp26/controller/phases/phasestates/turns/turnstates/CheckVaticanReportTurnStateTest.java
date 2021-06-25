@@ -41,7 +41,7 @@ public class CheckVaticanReportTurnStateTest {
 
         turn.changeState(new CheckVaticanReportTurnState(turn));
     }
-    
+
 
     @Test
     public void testPlaySinglePlayerActivateTile() throws InvalidPayloadException {

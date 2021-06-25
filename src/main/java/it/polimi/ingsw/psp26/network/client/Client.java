@@ -155,7 +155,7 @@ public class Client extends Observable<Message> {
                     break;
 
                 case EXIT:
-                    System.exit(0);
+                    close();
                     break;
 
 
@@ -306,6 +306,13 @@ public class Client extends Observable<Message> {
     public synchronized void reHandleLastMessage() {
         if (lastMessage != null) handleMessages(lastMessage);
         else viewNext();
+    }
+
+    /**
+     * Method to close the application.
+     */
+    public void close() {
+        System.exit(0);
     }
 
 }

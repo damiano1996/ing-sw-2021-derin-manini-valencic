@@ -6,7 +6,6 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
 
-
 import static org.junit.Assert.assertEquals;
 
 
@@ -28,7 +27,7 @@ public class GameSaverTest {
     @Test
     public void testRestoreMatch_EqualsPlayersNicknames() {
         Match match = virtualView.getMatchController().getMatch();
-        
+
         GameSaver.getInstance().backupMatch(match, 1, 1);
         Match restoredMatch = GameSaver.getInstance().loadMatch(match.getId());
 
@@ -39,7 +38,7 @@ public class GameSaverTest {
     @Test
     public void testRestoreMatch_EqualsActionTokens() {
         Match match = virtualView.getMatchController().getMatch();
-        
+
         GameSaver.getInstance().backupMatch(match, 1, 1);
         Match restoredMatch = GameSaver.getInstance().loadMatch(match.getId());
 

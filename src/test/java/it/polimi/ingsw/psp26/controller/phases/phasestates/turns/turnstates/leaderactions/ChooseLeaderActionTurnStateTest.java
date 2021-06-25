@@ -61,7 +61,7 @@ public class ChooseLeaderActionTurnStateTest {
             add(leaderCard);
         }});
     }
-    
+
 
     @Test
     public void testChoicesMessage() throws InvalidPayloadException {

@@ -285,11 +285,11 @@ public class ServerTest {
                 e.printStackTrace();
             }
         });
-        
+
         t.start();
-        
+
         t.join();
-        
+
         // Only the new match has to contain the session token of the current player
         assertEquals(1, getNumberOfMatchesWherePlayerIs(sessionToken));
     }

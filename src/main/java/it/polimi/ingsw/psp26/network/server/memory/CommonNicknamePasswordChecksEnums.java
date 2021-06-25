@@ -35,5 +35,5 @@ public enum CommonNicknamePasswordChecksEnums {
     public String getDescription() {
         return description;
     }
-    
+
 }

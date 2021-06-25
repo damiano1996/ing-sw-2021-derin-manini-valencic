@@ -130,13 +130,13 @@ public class LeaderboardController {
         if (winningPlayer.equals("")) {
             winningText.setText("");
         } else {
-         
+
             if (client.getNickname().equals(winningPlayer)) {
                 winningText.setText("YOU WON!");
             } else {
                 winningText.setText("YOU LOST!");
             }
-        
+
         }
     }
 

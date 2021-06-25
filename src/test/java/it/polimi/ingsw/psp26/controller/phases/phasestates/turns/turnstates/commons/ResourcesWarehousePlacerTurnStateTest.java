@@ -68,7 +68,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
 
         turn.changeState(new ResourcesWarehousePlacerTurnState(turn, resourcesToAdd));
     }
-    
+
 
     @Test
     public void testSendWarehouseMessage() throws InvalidPayloadException {
@@ -87,7 +87,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
         assertEquals(resourcesToAdd, castElements(Resource.class, mitm.getMessages().get(0).getListPayloads()));
     }
 
-    private void sendResources(Resource... resources) throws EmptyPayloadException, InvalidPayloadException {
+    private void sendResources(Resource... resources) throws InvalidPayloadException {
         testSendWarehouseMessage();
 
         turn.play(
@@ -100,7 +100,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testAskMeToReplace() throws EmptyPayloadException, InvalidPayloadException {
+    public void testAskMeToReplace() throws InvalidPayloadException {
         sendResources(COIN, SERVANT, COIN);
         assertEquals(ERROR_MESSAGE, mitm.getMessages().get(1).getMessageType());
     }
@@ -118,7 +118,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testCorrectlyAllocatedEmptyCase() throws EmptyPayloadException, InvalidPayloadException {
+    public void testCorrectlyAllocatedEmptyCase() throws InvalidPayloadException {
         turn.getTurnPlayer().getPersonalBoard().grabAllAvailableResources();
         assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(0).getResources().size());
         assertEquals(0, turn.getTurnPlayer().getPersonalBoard().getWarehouse().getBaseDepots().get(1).getResources().size());
@@ -134,7 +134,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
 
 
     @Test
-    public void testCorrectlyAllocated() throws EmptyPayloadException, InvalidPayloadException {
+    public void testCorrectlyAllocated() throws InvalidPayloadException {
         List<Resource> initialResources = turn.getTurnPlayer().getPersonalBoard().getWarehouse().getResources();
         List<Resource> expectedFinalResources = new ArrayList<>();
         expectedFinalResources.addAll(initialResources);
@@ -146,7 +146,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testDiscardResource() throws EmptyPayloadException, InvalidPayloadException {
+    public void testDiscardResource() throws InvalidPayloadException {
         turn.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname2", "sessionToken2"));
 
         resourcesToAdd.add(COIN);
@@ -158,7 +158,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testDiscardAvoidedByLeader() throws EmptyPayloadException, InvalidPayloadException {
+    public void testDiscardAvoidedByLeader() throws InvalidPayloadException {
         turn.getMatchController().getMatch().addPlayer(new Player(virtualView, "nickname2", "sessionToken2"));
 
         // Creating a new leader and activate it with coin depot as special ability.
@@ -184,7 +184,7 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testBadSwitch() throws CanNotAddResourceToDepotException, EmptyPayloadException, InvalidPayloadException {
+    public void testBadSwitch() throws CanNotAddResourceToDepotException, InvalidPayloadException {
         // adding one SHIELD to cause the error
         turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(1, SHIELD);
 
@@ -195,13 +195,13 @@ public class ResourcesWarehousePlacerTurnStateTest {
     }
 
     @Test
-    public void testGoodSwitch() throws EmptyPayloadException, InvalidPayloadException {
+    public void testGoodSwitch() throws InvalidPayloadException {
         sendResources(SHIELD, SERVANT, COIN);
         assertEquals(CHOICE_NORMAL_ACTION, mitm.getMessages().get(1).getMessageType());
     }
 
     @Test
-    public void testGoodSwitch_CaseEmpty() throws EmptyPayloadException, InvalidPayloadException, CanNotAddResourceToDepotException {
+    public void testGoodSwitch_CaseEmpty() throws InvalidPayloadException, CanNotAddResourceToDepotException {
         turn.getTurnPlayer().getPersonalBoard().grabAllAvailableResources();
         turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(0, SHIELD);
         turn.getTurnPlayer().getPersonalBoard().getWarehouse().addResourceToDepot(1, STONE);

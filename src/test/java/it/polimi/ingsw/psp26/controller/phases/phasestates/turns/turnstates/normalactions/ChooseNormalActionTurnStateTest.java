@@ -39,7 +39,7 @@ public class ChooseNormalActionTurnStateTest {
 
         turn.changeState(new ChooseNormalActionTurnState(turn));
     }
-    
+
 
     @Test
     public void playActivateProduction() throws InvalidPayloadException {

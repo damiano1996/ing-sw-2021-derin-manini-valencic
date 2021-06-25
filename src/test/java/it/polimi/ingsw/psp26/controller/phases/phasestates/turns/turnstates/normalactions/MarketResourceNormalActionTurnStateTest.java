@@ -47,7 +47,7 @@ public class MarketResourceNormalActionTurnStateTest {
 
         turn.changeState(new MarketResourceNormalActionTurnState(turn));
     }
-    
+
 
     @Test
     public void testSendMarketResourceMessage() throws InvalidPayloadException {

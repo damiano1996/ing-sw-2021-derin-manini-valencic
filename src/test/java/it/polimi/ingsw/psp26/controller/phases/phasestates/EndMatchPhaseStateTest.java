@@ -34,7 +34,7 @@ public class EndMatchPhaseStateTest {
 
         phase.changeState(new EndMatchPhaseState(phase));
     }
-    
+
 
     @Test
     public void testExecuteWinnerPlayer() throws InvalidPayloadException, CanNotAddResourceToStrongboxException, EmptyPayloadException, NoMoreDevelopmentCardsException, CanNotAddDevelopmentCardToSlotException, DevelopmentCardSlotOutOfBoundsException {

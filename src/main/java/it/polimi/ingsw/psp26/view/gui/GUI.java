@@ -69,8 +69,13 @@ public class GUI extends Application implements ViewInterface {
         // stage.sizeToScene();
     }
 
+    private void setOnCloseEvent(Stage stage) {
+        stage.setOnCloseRequest(windowEvent -> client.close());
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+        setOnCloseEvent(primaryStage);
 
         // System.out.println("GUI - MAIN THREAD ID: " + Thread.currentThread().getId());
 

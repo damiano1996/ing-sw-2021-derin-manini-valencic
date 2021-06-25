@@ -94,6 +94,7 @@ public class VirtualViewAssignment extends Thread {
                 new Thread(() -> noRecoverySelected(sessionToken)).start();
 
                 System.out.println("VirtualViewAssignment - New match selected.");
+
                 // asking for a new match
                 matchModeRequests(clientNode, sessionToken);
             } else {

@@ -53,6 +53,8 @@ public class EndMatchPhaseState extends PhaseState {
                                         "The match has been suspended indefinitely since one player decided to abandon." :
                                         "The match has been suspended indefinitely since one player has lost the connection for too long time.")
                 );
+                // Sending a reset message to clean the view
+                phase.getMatchController().notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), RESET));
             } catch (InvalidPayloadException ignored) {
             }
         }

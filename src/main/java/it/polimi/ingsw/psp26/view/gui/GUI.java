@@ -18,6 +18,7 @@ import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
 import it.polimi.ingsw.psp26.view.gui.choicesdrawers.*;
 import it.polimi.ingsw.psp26.view.gui.loading.WaitingScreen;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.LeaderboardDrawer;
+import it.polimi.ingsw.psp26.view.gui.maincomponents.PlayingPane;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.ActionTokenDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.DevelopmentCardsGridDialogDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.dialogcomponents.MarketDialogDrawer;
@@ -44,7 +45,6 @@ import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
-import static it.polimi.ingsw.psp26.view.gui.maincomponents.PlayingPane.getPlayingPane;
 import static java.lang.Thread.sleep;
 
 public class GUI extends Application implements ViewInterface {
@@ -435,15 +435,7 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void stopDisplayingWaitingScreen() {
         if (!displayingPlayingPane) {
-            Pane pane = addBackground(
-                    getPlayingPane(primaryStage, client, getWindowWidth() - 100),
-                    getWindowWidth(),
-                    getWindowHeight()
-            );
-            // primaryStage.hide();
-            primaryStage.getScene().setRoot(pane);
-            primaryStage.show();
-
+            drawPlayingPaneOnPrimaryStage();
             displayingPlayingPane = true;
         }
 
@@ -457,6 +449,30 @@ public class GUI extends Application implements ViewInterface {
                 () -> client.viewNext(),
                 false
         ).start();
+    }
+
+    @Override
+    public void reset() {
+        PlayingPane.getInstance().stopAsynchronousDrawers();
+
+        displayingPlayingPane = false;
+
+        Pane root = addBackground(new Pane(), getWindowWidth(), getWindowHeight());
+        primaryStage.getScene().setRoot(root);
+        primaryStage.show();
+    }
+
+    private void drawPlayingPaneOnPrimaryStage() {
+        Pane pane = addBackground(
+                PlayingPane.getInstance().getPlayingPane(primaryStage,
+                        client,
+                        getWindowWidth() - 100),
+                getWindowWidth(),
+                getWindowHeight()
+        );
+        // primaryStage.hide();
+        primaryStage.getScene().setRoot(pane);
+        primaryStage.show();
     }
 
 }

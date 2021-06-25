@@ -56,6 +56,10 @@ public class ServerTest {
         SessionMessage sessionMessage = (SessionMessage) networkNode.receiveData();
         assertEquals(MessageType.GENERAL_MESSAGE, sessionMessage.getMessageType());
 
+        // receiving reset general message
+        sessionMessage = (SessionMessage) networkNode.receiveData();
+        assertEquals(MessageType.RESET, sessionMessage.getMessageType());
+
         // receiving menu options
         sessionMessage = (SessionMessage) networkNode.receiveData();
         assertEquals(MessageType.MENU, sessionMessage.getMessageType());

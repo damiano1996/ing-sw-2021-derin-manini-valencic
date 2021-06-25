@@ -693,6 +693,15 @@ public class CLI implements ViewInterface {
     }
 
 
+    /**
+     * Method to reset the CLI to begin a new match.
+     */
+    @Override
+    public void reset() {
+
+    }
+
+
     //-------------------------------------------//
     //          GENERAL DISPLAY METHODS          //
     //-------------------------------------------//

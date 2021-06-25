@@ -54,4 +54,7 @@ public interface ViewInterface {
 
     void displayGlobalLeaderboard();
 
+
+    void reset();
+
 }

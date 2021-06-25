@@ -7,6 +7,7 @@ public enum MessageType {
     PLAY,
     GLOBAL_LEADERBOARD,
     HELP,
+    RESET,
     EXIT,
 
     NOTIFICATION_UPDATE,

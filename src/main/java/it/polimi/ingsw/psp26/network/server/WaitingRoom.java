@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp26.application.messages.SessionMessage;
 import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import java.awt.*;
 import java.io.File;
@@ -44,6 +45,12 @@ public class WaitingRoom {
      */
     public void addNodeClient(String sessionToken, NetworkNode nodeClient) {
         nodeClients.put(sessionToken, nodeClient);
+
+        try {
+            // Sending a reset message to clean the view
+            nodeClients.get(sessionToken).sendData(new SessionMessage(SpecialToken.BROADCAST.getToken(), RESET));
+        } catch (IOException | InvalidPayloadException ignored) {
+        }
 
         new Thread(() -> sendMenuMessage(sessionToken)).start();
     }

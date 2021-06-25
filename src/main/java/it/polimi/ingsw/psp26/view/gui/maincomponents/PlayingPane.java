@@ -15,6 +15,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_WIDTH;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
@@ -32,6 +35,17 @@ import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.Play
 public class PlayingPane {
 
     private static final int ZOOM_FACTOR = 5;
+    private static PlayingPane instance;
+    private final List<AsynchronousDrawer> asynchronousDrawers;
+
+    private PlayingPane() {
+        asynchronousDrawers = new ArrayList<>();
+    }
+
+    public static PlayingPane getInstance() {
+        if (instance == null) instance = new PlayingPane();
+        return instance;
+    }
 
     /**
      * Method to setup the boards of the opponents.
@@ -43,7 +57,7 @@ public class PlayingPane {
      * @param client        client object
      * @return vertical box containing the pane for the thumbnails
      */
-    private static VBox addOpponents(Stage primaryStage, int thumbnailSize, Client client) {
+    private VBox addOpponents(Stage primaryStage, int thumbnailSize, Client client) {
 
         float ratio = thumbnailSize / REFERENCE_WIDTH;
 
@@ -55,7 +69,7 @@ public class PlayingPane {
         for (int i = 0; i < 3; i++) {
             int finalI = i;
             vBox.getChildren().add(new Pane());
-            new AsynchronousDrawer(
+            AsynchronousDrawer asynchronousDrawer = new AsynchronousDrawer(
                     () -> {
                         System.out.println("PlayingPane - waiting opponent " + finalI);
                         client.getCachedModel().getOpponentCached(finalI).lookingForUpdate();
@@ -76,7 +90,9 @@ public class PlayingPane {
 
                     },
                     true
-            ).start();
+            );
+            asynchronousDrawer.start();
+            asynchronousDrawers.add(asynchronousDrawer);
         }
 
         return vBox;
@@ -92,7 +108,7 @@ public class PlayingPane {
      * @param client        client object
      * @return vertical box containing the thumbnails
      */
-    private static VBox addMatchComponents(Stage primaryStage, int thumbnailSize, Client client) {
+    private VBox addMatchComponents(Stage primaryStage, int thumbnailSize, Client client) {
 
         VBox vBox = new VBox(0);
         vBox.setCache(true);
@@ -100,7 +116,7 @@ public class PlayingPane {
 
         // adding market tray
         vBox.getChildren().add(new Pane());
-        new AsynchronousDrawer(
+        AsynchronousDrawer marketAsynchronousDrawer = new AsynchronousDrawer(
                 () -> client.getCachedModel().getMarketTrayCached().lookingForUpdate(),
                 () -> {
                     MarketTray marketTray = client.getCachedModel().getMarketTrayCached().getObject();
@@ -114,11 +130,13 @@ public class PlayingPane {
                     );
                 },
                 true
-        ).start();
+        );
+        marketAsynchronousDrawer.start();
+        asynchronousDrawers.add(marketAsynchronousDrawer);
 
         // adding development card grid
         vBox.getChildren().add(new Pane());
-        new AsynchronousDrawer(
+        AsynchronousDrawer developmentCardsAsynchronousDrawer = new AsynchronousDrawer(
                 () -> client.getCachedModel().getDevelopmentGridCached().lookingForUpdate(),
                 () -> {
                     DevelopmentCardsGrid developmentCardsGrid = client.getCachedModel().getDevelopmentGridCached().getObject();
@@ -132,7 +150,9 @@ public class PlayingPane {
                     );
                 },
                 true
-        ).start();
+        );
+        developmentCardsAsynchronousDrawer.start();
+        asynchronousDrawers.add(developmentCardsAsynchronousDrawer);
 
         return vBox;
     }
@@ -145,14 +165,16 @@ public class PlayingPane {
      * @param maxWidth max width for the stack
      * @return the pane containing the stack
      */
-    private static Pane addRightBar(int maxWidth) {
+    private Pane addRightBar(int maxWidth) {
         NotificationStackDrawer notificationStackDrawer = new NotificationStackDrawer(maxWidth);
 
-        new AsynchronousDrawer(
+        AsynchronousDrawer asynchronousDrawer = new AsynchronousDrawer(
                 () -> notificationStackDrawer.setReceivedNotifications(NotificationsFIFO.getInstance().getNotifications()),
                 notificationStackDrawer::displayNotifications,
                 true
-        ).start();
+        );
+        asynchronousDrawer.start();
+        asynchronousDrawers.add(asynchronousDrawer);
 
         return notificationStackDrawer.draw();
     }
@@ -166,7 +188,7 @@ public class PlayingPane {
      * @param maxWidth max width for the main box
      * @return the pane containing the personal board of the player
      */
-    private static Pane addMainBox(Client client, int maxWidth) {
+    private Pane addMainBox(Client client, int maxWidth) {
 
         StackPane root = new StackPane();
         root.setCache(true);
@@ -181,14 +203,16 @@ public class PlayingPane {
                         client.isMultiplayerMode()
                 ));
 
-        new AsynchronousDrawer(
+        AsynchronousDrawer asynchronousDrawer = new AsynchronousDrawer(
                 () -> client.getCachedModel().getMyPlayerCached().lookingForUpdate(),
                 () -> {
                     Player player = client.getCachedModel().getMyPlayerCached().getObject();
                     root.getChildren().set(0, drawPlayer(player, maxWidth, getGeneralRatio(), false, client.isMultiplayerMode()));
                 },
                 true
-        ).start();
+        );
+        asynchronousDrawer.start();
+        asynchronousDrawers.add(asynchronousDrawer);
 
         return root;
     }
@@ -205,7 +229,7 @@ public class PlayingPane {
      * @param maxWidth     width that can be used to draw the pane
      * @return a border pane containing the components
      */
-    public static BorderPane getPlayingPane(Stage primaryStage, Client client, int maxWidth) {
+    public BorderPane getPlayingPane(Stage primaryStage, Client client, int maxWidth) {
 
         BorderPane border = new BorderPane();
         border.setCache(true);
@@ -225,6 +249,17 @@ public class PlayingPane {
         border.setRight(addRightBar((int) (maxWidth * 0.1)));
 
         return border;
+    }
+
+    /**
+     * Method to stop loop of the asynchronous drawers and
+     * to clean the list containing them.
+     */
+    public void stopAsynchronousDrawers() {
+        for (AsynchronousDrawer asynchronousDrawer : asynchronousDrawers)
+            asynchronousDrawer.stopLoop();
+
+        asynchronousDrawers.clear();
     }
 
 }

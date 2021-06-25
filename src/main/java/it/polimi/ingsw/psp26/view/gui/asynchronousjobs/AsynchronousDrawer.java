@@ -14,7 +14,7 @@ public class AsynchronousDrawer {
 
     private final JobListener jobListener;
     private final DelayedJob delayedJob;
-    private final boolean loop;
+    private boolean loop;
     private boolean firstExecution;
 
     /**
@@ -48,7 +48,7 @@ public class AsynchronousDrawer {
                         System.out.println("AsynchronousDrawer - STARTING TASK!");
                         delayedJob.execute();
                         System.out.println("AsynchronousDrawer - TASK HAS BEEN EXECUTED!");
-                    } catch (InterruptedException ignored) {
+                    } catch (Exception ignored) {
                     }
                 });
                 return null;
@@ -75,5 +75,12 @@ public class AsynchronousDrawer {
                 }
             }
         }).start();
+    }
+
+    /**
+     * Method to stop the loop.
+     */
+    public void stopLoop() {
+        loop = false;
     }
 }

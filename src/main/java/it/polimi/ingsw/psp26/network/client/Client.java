@@ -144,14 +144,22 @@ public class Client extends Observable<Message> {
 
                 case ENDGAME_RESULT:
                     // message contains the nickname of the player that won
-                    NotificationsFIFO.getInstance().resetFIFO();
                     String winner = (String) message.getPayload();
                     viewInterface.displayEndGame(createLeaderboard(createPlayersList(cachedModel)), winner);
-                    // TODO: resetting CachedModel only at this point
+                    // self message for reset
+                    MessageSynchronizedFIFO.getInstance().update(
+                            new Message(RESET)
+                    );
                     break;
 
                 case GLOBAL_LEADERBOARD:
                     viewInterface.displayGlobalLeaderboard();
+                    break;
+
+                case RESET:
+                    // resetting
+                    reset();
+                    viewNext();
                     break;
 
                 case EXIT:
@@ -183,7 +191,7 @@ public class Client extends Observable<Message> {
                     break;
             }
 
-        } catch (EmptyPayloadException ignored) {
+        } catch (EmptyPayloadException | InvalidPayloadException ignored) {
         }
     }
 
@@ -308,11 +316,16 @@ public class Client extends Observable<Message> {
         else viewNext();
     }
 
+    public void reset() {
+        NotificationsFIFO.getInstance().resetFIFO();
+        cachedModel = new CachedModel(nickname);
+        viewInterface.reset();
+    }
+
     /**
      * Method to close the application.
      */
     public void close() {
         System.exit(0);
     }
-
 }

@@ -16,12 +16,15 @@ public class TurnUtils {
 
     public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
         System.out.println("goToNextStateAfterLeaderAction - current turn phase: " + turn.getTurnPhase());
-        if (turn.getPlayingPhaseState().isLastTurn() && turn.getTurnPlayer().hasInkwell()) {
+        if (turn.getPlayingPhaseState().isLastTurn() && // true if end game has been activated
+                getNextPlayer(turn).hasInkwell() && // true if current player is the last of the table
+                turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END // true if the last player has played the entire turn
+                )
+        ) {
             try {
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
                         new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
-            } catch (InvalidPayloadException e) {
-                e.printStackTrace();
+            } catch (InvalidPayloadException ignored) {
             }
 
         } else {
@@ -64,6 +67,11 @@ public class TurnUtils {
                     break;
             }
         }
+    }
+
+    public static Player getNextPlayer(Turn currentTurn) {
+        int currentPlayerIndex = currentTurn.getMatchController().getMatch().getPlayers().indexOf(currentTurn.getTurnPlayer());
+        return currentTurn.getMatchController().getMatch().getPlayers().get((currentPlayerIndex + 1) % currentTurn.getMatchController().getMatch().getPlayers().size());
     }
 
     public static void sendMessageToAllPlayerExceptOne(Turn turn, Player playerToAvoid, Message message) {

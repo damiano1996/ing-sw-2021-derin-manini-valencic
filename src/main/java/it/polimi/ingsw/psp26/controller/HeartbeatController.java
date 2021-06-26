@@ -9,6 +9,14 @@ import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * Class used to track the status of the connection of the clients.
+ * It expects periodic signals from the client nodes.
+ * If signals stop to arrive, this class changes the internal state allowing the client to re-establish
+ * the connection in a specified amount of time.
+ * If client establishes the connection again, the internal state will be reset.
+ * Otherwise, the HeartbeatController will send a special message to the observers to notify the death of the client.
+ */
 public class HeartbeatController extends Observable<SessionMessage> implements Observer<SessionMessage> {
 
     public static final int MAX_TIME_TO_DIE = 5000; // 5 ms
@@ -22,6 +30,12 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
     private boolean isDeath;
     private Thread thread;
 
+    /**
+     * Class constructor.
+     *
+     * @param sessionToken    token of the tracked player
+     * @param matchController in which the player is playing
+     */
     public HeartbeatController(String sessionToken, MatchController matchController) {
         this.sessionToken = sessionToken;
         this.virtualView = matchController.getVirtualView();
@@ -30,6 +44,12 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         reset(sessionToken);
     }
 
+    /**
+     * Method to start the background activity of the heartbeat controller.
+     * It decreases periodically a counter. The counter can be reset by the signal received by the client.
+     * If no signal will be received it will enter in the state of waiting for recovery.
+     * After a certain amount of time, it will declare the death.
+     */
     public synchronized void startMonitoringHeartbeat() {
         thread = new Thread(() -> {
             while (running) {
@@ -46,6 +66,11 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         thread.start();
     }
 
+    /**
+     * Method to reset the countdown.
+     *
+     * @param sessionToken session token of the observed player
+     */
     public synchronized void reset(String sessionToken) {
         if (this.sessionToken.equals(sessionToken)) {
             countdown = MAX_TIME_TO_DIE;
@@ -54,6 +79,11 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         }
     }
 
+    /**
+     * Method to check and update the countdown.
+     * It sends messages to the observers in case of death.
+     * A final HEARTBEAT_INDEFINITE_SUSPENSION will be sent in case of missed recovery
+     */
     private synchronized void checksForDeath() {
         countdown -= DELTA_TIME;
 

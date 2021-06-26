@@ -1,5 +1,8 @@
 package it.polimi.ingsw.psp26.configurations;
 
+/**
+ * General configurations that are used among several packages.
+ */
 public class Configurations {
 
     public static final String GAME_NAME = "Master of Renaissance";

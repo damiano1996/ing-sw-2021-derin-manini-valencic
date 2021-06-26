@@ -1,5 +1,8 @@
 package it.polimi.ingsw.psp26.application.messages;
 
+/**
+ * Enumeration of the messages type.
+ */
 public enum MessageType {
 
     // Menu messages:

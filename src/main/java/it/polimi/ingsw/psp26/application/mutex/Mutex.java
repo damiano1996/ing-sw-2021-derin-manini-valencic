@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.application.mutex;
 
 /**
- * Class that resemble a mutex to stop Threads
+ * Class that resemble a mutex to stop Threads.
  */
 public class Mutex {
 
@@ -13,7 +13,7 @@ public class Mutex {
 
 
     /**
-     * Locks the mutex
+     * Locks the mutex.
      */
     public synchronized void lock() {
         while (!semaphore) {
@@ -28,7 +28,7 @@ public class Mutex {
 
 
     /**
-     * Unlocks the mutex
+     * Unlocks the mutex.
      */
     public synchronized void unlock() {
         semaphore = true;

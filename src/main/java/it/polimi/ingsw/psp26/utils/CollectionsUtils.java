@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Class containing general methods related to Collections.
+ */
 public class CollectionsUtils {
 
     /**
@@ -47,6 +50,7 @@ public class CollectionsUtils {
      * @param <N>             source class type
      * @return casted list
      */
+    @SuppressWarnings("unchecked") // to suppress the cast to M
     public static <M, N> List<M> castElements(Class<M> targetClassType, List<N> list) {
         List<M> castedList = new ArrayList<>();
         for (N item : list) castedList.add((M) item);

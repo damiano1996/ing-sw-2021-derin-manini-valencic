@@ -22,14 +22,34 @@ import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.ad
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
 import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getCard;
 
+/**
+ * Class to decorate button container containing a production object.
+ */
 public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
 
     private final Client client;
 
+    /**
+     * Class constructor.
+     *
+     * @param client client object
+     */
     public ProductionChoicesDrawer(Client client) {
         this.client = client;
     }
 
+    /**
+     * Method to decorate the button container with the correct image associated to the production object.
+     * There are three cases:
+     * - loaded image is the development card containing the production;
+     * - loaded image is the base production; or
+     * - loaded image is the one associated to the leader card with production.
+     * <p>
+     * Moreover, it adds the selection properties.
+     *
+     * @param productionButtonContainer button container with production inside
+     * @return decorated button
+     */
     @Override
     public ButtonContainer<Production> decorateButtonContainer(ButtonContainer<Production> productionButtonContainer) {
         Image image;
@@ -73,6 +93,13 @@ public class ProductionChoicesDrawer implements ChoicesDrawer<Production> {
     }
 
 
+    /**
+     * Method to get the development card associated to the given production object.
+     *
+     * @param production production object
+     * @return development card with this production
+     * @throws PlayerHasNotDevelopmentCardProduction if no development card of the player match the given production
+     */
     private DevelopmentCard getDevelopmentCard(Production production) throws PlayerHasNotDevelopmentCardProduction {
         for (DevelopmentCard developmentCard : client.getCachedModel().getMyPlayerCached().getObject().getPersonalBoard().getDevelopmentCardsSlots()
                 .stream()

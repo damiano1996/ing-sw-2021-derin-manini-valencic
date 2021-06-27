@@ -68,6 +68,7 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
 
     /**
      * Method to reset the countdown.
+     * Reset is performed only if passed session token is the same of the tracked player.
      *
      * @param sessionToken session token of the observed player
      */
@@ -80,9 +81,9 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
     }
 
     /**
-     * Method to check and update the countdown.
-     * It sends messages to the observers in case of death.
-     * A final HEARTBEAT_INDEFINITE_SUSPENSION will be sent in case of missed recovery
+     * Method to check and to update the countdown.
+     * It sends messages (periodically) to the observers in case of death.
+     * A final HEARTBEAT_INDEFINITE_SUSPENSION will be sent in case of missed recovery.
      */
     private synchronized void checksForDeath() {
         countdown -= DELTA_TIME;
@@ -109,6 +110,12 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
         }
     }
 
+    /**
+     * Method to update the class.
+     * If called, and the session message is of type HEARTBEAT, it will reset this.
+     *
+     * @param message session message
+     */
     @Override
     public synchronized void update(SessionMessage message) {
         if (message.getMessageType().equals(MessageType.HEARTBEAT))
@@ -116,18 +123,30 @@ public class HeartbeatController extends Observable<SessionMessage> implements O
 
     }
 
+    /**
+     * Boolean method to get the death status.
+     *
+     * @return true if heartbeat not received for too long time
+     */
     public synchronized boolean isDeath() {
         return isDeath;
     }
 
+    /**
+     * Method to kill the thread, running in background, that is used to update the countdown.
+     * Only if session token is the same of the tracked client.
+     *
+     * @param sessionToken session token of a player
+     */
     public synchronized void kill(String sessionToken) {
-        if (this.sessionToken.equals(sessionToken))
+        if (this.sessionToken.equals(sessionToken)) {
             this.running = false;
 
-        try {
-            if (thread != null)
-                thread.join();
-        } catch (InterruptedException ignored) {
+            try {
+                if (thread != null)
+                    thread.join();
+            } catch (InterruptedException ignored) {
+            }
         }
     }
 }

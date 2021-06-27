@@ -39,6 +39,17 @@ public class DraggedObject<T> {
     /**
      * Constructor of the class.
      * It defines variables and adds the properties to the imageView to allow drag and drop operations.
+     * <p>
+     * It defines mouse events for the imageView associated to the object.
+     * Events defined are:
+     * - Mouse pressed: object becomes selected and image changes to represent selection;
+     * <p>
+     * - Mouse released: object becomes un-selected and image changes.
+     * The method checks if the object can be placed where it has been dropped
+     * and it calls the place() method from the target containers to place it.
+     * If it cannot be placed, it is positioned in the original position.
+     * <p>
+     * - Dragged event: it moves the imageview following the mouse cursor.
      *
      * @param object           object to drag
      * @param sourcePane       pane in which the object is in
@@ -58,31 +69,33 @@ public class DraggedObject<T> {
 
         selected = false;
 
-        addProperties();
+        addMousePressedProperty();
+        addMouseReleasedProperty();
+        addMouseDraggedProperty();
     }
 
     /**
-     * Method to add drag and drop properties to the imageView.
+     * Method to add a mouse pressed event listener to the image view.
      * <p>
-     * It defines mouse events for the imageView associated to the object.
-     * Events defined are:
      * - Mouse pressed: object becomes selected and image changes to represent selection;
-     * <p>
-     * - Mouse released: object becomes un-selected and image changes.
-     * The method checks if the object can be placed where it has been dropped
-     * and it calls the place() method from the target containers to place it.
-     * If it cannot be placed, it is positioned in the original position.
-     * <p>
-     * - Dragged event: it moves the imageview following the mouse cursor.
      */
-    private void addProperties() {
-
+    private void addMousePressedProperty() {
         imageView.setOnMousePressed(mouseEvent -> {
             imageView.setImage(selectedImage);
             selected = true;
             mouseEvent.consume();
         });
+    }
 
+    /**
+     * Method to add a mouse released event listener to the image view.
+     * <p>
+     * - Mouse released: object becomes un-selected and image changes.
+     * The method checks if the object can be placed where it has been dropped
+     * and it calls the place() method from the target containers to place it.
+     * If it cannot be placed, it is positioned in the original position.
+     */
+    private void addMouseReleasedProperty() {
         imageView.setOnMouseReleased(mouseEvent -> {
             imageView.setImage(originalImage);
             selected = false;
@@ -119,7 +132,14 @@ public class DraggedObject<T> {
 
             mouseEvent.consume();
         });
+    }
 
+    /**
+     * Method to add a mouse dragged event listener to the image view.
+     * <p>
+     * - Dragged event: it moves the imageview following the mouse cursor.
+     */
+    private void addMouseDraggedProperty() {
         imageView.addEventFilter(MouseDragEvent.MOUSE_DRAGGED, mouseEvent -> {
             int margin = (int) (110 * getGeneralRatio());
             if (mouseEvent.isPrimaryButtonDown() && selected &&

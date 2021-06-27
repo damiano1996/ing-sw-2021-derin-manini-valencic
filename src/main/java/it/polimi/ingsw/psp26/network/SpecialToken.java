@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp26.network;
 
 /**
- * Class that represent a special sessionToken.
+ * Class that represent special session tokens.
  */
 public enum SpecialToken {
 

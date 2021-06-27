@@ -11,8 +11,19 @@ import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getMinBetwe
 import static it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoiceDrawerUtils.addSelectionListener;
 import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getCard;
 
+/**
+ * Class to decorate button container containing leader cards.
+ */
 public class LeaderCardChoicesDrawer implements ChoicesDrawer<LeaderCard> {
 
+    /**
+     * Method to decorate the button container with the image of the leader card associated to
+     * the leader object contained into the button.
+     * It adds the selection properties.
+     *
+     * @param leaderCardButtonContainer button container with leader cards inside
+     * @return decorated button
+     */
     @Override
     public ButtonContainer<LeaderCard> decorateButtonContainer(ButtonContainer<LeaderCard> leaderCardButtonContainer) {
         float ratio = getMinBetweenWindowWidthAndHeight() / REFERENCE_WIDTH;

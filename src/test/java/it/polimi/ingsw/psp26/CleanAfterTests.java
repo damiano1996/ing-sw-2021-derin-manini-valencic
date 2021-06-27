@@ -28,7 +28,6 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ServerTest.class,
         ResourcesWarehousePlacerTurnStateTest.class,
         EndMatchCheckerTurnStateTest.class,
         ActivateOrDiscardLeaderTurnStateTest.class,
@@ -45,7 +44,8 @@ import static it.polimi.ingsw.psp26.configurations.Configurations.GAME_FILES;
         EndMatchPhaseStateTest.class,
         InitializationPhaseStateTest.class,
         MatchControllerTest.class,
-        GameSaverTest.class
+        GameSaverTest.class,
+        ServerTest.class
 })
 public class CleanAfterTests extends TestCase {
 

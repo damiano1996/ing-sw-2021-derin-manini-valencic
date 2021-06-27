@@ -217,6 +217,7 @@ public class VirtualViewAssignment extends Thread {
                 break;
             }
         }
+
         if (!assigned) throw new DesiredVirtualViewDoesNotExistException();
     }
 
@@ -288,9 +289,8 @@ public class VirtualViewAssignment extends Thread {
      */
     private synchronized void noRecoverySelected(String sessionToken) {
         List<VirtualView> virtualViewsToRemove = new ArrayList<>();
-        List<VirtualView> serverVirtualViews = new ArrayList<>(Server.getInstance().getVirtualViews());
 
-        for (VirtualView virtualView : serverVirtualViews) {
+        for (VirtualView virtualView : Server.getInstance().getVirtualViews()) {
             try {
                 virtualView.getMatchController().getMatch().getPlayerBySessionToken(sessionToken);
                 // if player was in this virtual view we have to close this match

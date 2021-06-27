@@ -134,7 +134,7 @@ public class Server {
      *
      * @return an unmodifiable virtualViews List
      */
-    public List<VirtualView> getVirtualViews() {
+    public synchronized List<VirtualView> getVirtualViews() {
         return Collections.unmodifiableList(virtualViews);
     }
 
@@ -143,7 +143,7 @@ public class Server {
      *
      * @param virtualView the VirtualView to add
      */
-    public void addVirtualView(VirtualView virtualView) {
+    public synchronized void addVirtualView(VirtualView virtualView) {
         virtualViews.add(virtualView);
     }
 
@@ -162,7 +162,7 @@ public class Server {
      *
      * @param virtualView the VirtualView to remove
      */
-    public void removeVirtualView(VirtualView virtualView) {
+    public synchronized void removeVirtualView(VirtualView virtualView) {
         virtualViews.remove(virtualView);
     }
 

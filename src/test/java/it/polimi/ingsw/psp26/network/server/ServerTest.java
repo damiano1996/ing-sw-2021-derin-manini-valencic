@@ -129,14 +129,14 @@ public class ServerTest {
         return networkNode.get();
     }
 
-    private synchronized SessionMessage ignoreMessages(NetworkNode networkNode) throws IOException, ClassNotFoundException {
+    private SessionMessage ignoreMessages(NetworkNode networkNode) throws IOException, ClassNotFoundException {
         SessionMessage message = (SessionMessage) networkNode.receiveData();
         while (message.getMessageType().equals(MessageType.NOTIFICATION_UPDATE) || message.getMessageType().equals(MessageType.MODEL_UPDATE))
             message = (SessionMessage) networkNode.receiveData();
         return message;
     }
 
-    private synchronized void assertStartMatch(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
+    private void assertStartMatch(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
         SessionMessage message = ignoreMessages(networkNode);
         assertEquals(MessageType.SET_NUMBER_OF_PLAYERS, message.getMessageType());
 
@@ -183,7 +183,7 @@ public class ServerTest {
     }
 
 
-    private synchronized void assertRecoveryMessage(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
+    private void assertRecoveryMessage(NetworkNode networkNode) throws IOException, ClassNotFoundException, EmptyPayloadException {
         SessionMessage message = ignoreMessages(networkNode);
         assertEquals(MessageType.SET_NUMBER_OF_PLAYERS, message.getMessageType());
 
@@ -291,7 +291,6 @@ public class ServerTest {
         });
 
         t.start();
-
         t.join();
 
         // Only the new match has to contain the session token of the current player
@@ -306,6 +305,7 @@ public class ServerTest {
                     .map(Player::getSessionToken)
                     .collect(Collectors.toList()).contains(sessionToken))
                 nMatches++;
+
         return nMatches;
     }
 

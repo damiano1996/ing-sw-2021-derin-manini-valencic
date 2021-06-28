@@ -63,7 +63,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
     private boolean firstPlayerInPopeSpace(Player player) {
         return player.getPersonalBoard().getFaithTrack().getFaithPoints() >=
-                player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[getFirstActiveSectionIndex()].getEndSection();
+                player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[getFirstActiveSectionIndex(player)].getEndSection();
 
     }
 
@@ -75,7 +75,7 @@ public class CheckVaticanReportTurnState extends TurnState {
      */
     private boolean isBlackCrossInPopeSpaceOrOver(Player player) {
         return player.getPersonalBoard().getFaithTrack().getBlackCrossPosition() >=
-                player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[getFirstActiveSectionIndex()].getEndSection();
+                player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[getFirstActiveSectionIndex(player)].getEndSection();
 
     }
 
@@ -84,14 +84,14 @@ public class CheckVaticanReportTurnState extends TurnState {
      * player if they are inside the vatican report section and consequently activate or discard the favor tile and
      * sends for each one of the a message in broadcast to containing this information.
      *
-     * @param currentPlayer the player is in this turn state.
+     * @param player the player is in this turn state.
      */
-    private void activateVaticanReport(Player currentPlayer) {
+    private void activateVaticanReport(Player player) {
         if (!lastVaticanReportCalled) {
-            if (firstPlayerInPopeSpace(currentPlayer) || isBlackCrossInPopeSpaceOrOver(currentPlayer)) {
-                System.out.println(getFirstActiveSectionIndex() == currentPlayer.getPersonalBoard().getFaithTrack().getVaticanReportSections().length);
-                System.out.println(getFirstActiveSectionIndex());
-                if (getFirstActiveSectionIndex() == (currentPlayer.getPersonalBoard().getFaithTrack().getVaticanReportSections().length - 1)) {
+            if (firstPlayerInPopeSpace(player) || isBlackCrossInPopeSpaceOrOver(player)) {
+                System.out.println(getFirstActiveSectionIndex(player) == player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length);
+                System.out.println(getFirstActiveSectionIndex(player));
+                if (getFirstActiveSectionIndex(player) == (player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length - 1)) {
                     lastVaticanReportCalled = true;
                     System.out.println("CheckVaticanReport - Last turn called");
                 }
@@ -104,14 +104,13 @@ public class CheckVaticanReportTurnState extends TurnState {
                     e.printStackTrace();
                 }
 
-                int sectionActivated = getFirstActiveSectionIndex();
+                int sectionActivated = getFirstActiveSectionIndex(player);
 
-                for (Player player : turn.getMatchController().getMatch().getPlayers()) {
+                for (Player player1 : turn.getMatchController().getMatch().getPlayers()) {
 
-                    VaticanReportSection[] playerSections = player.getPersonalBoard().getFaithTrack().getVaticanReportSections();
+                    VaticanReportSection[] playerSections = player1.getPersonalBoard().getFaithTrack().getVaticanReportSections();
 
-                    if (isPlayerInVaticanSectionOrOver(player, playerSections[sectionActivated])) {
-                        System.out.println("5");
+                    if (isPlayerInVaticanSectionOrOver(player1, playerSections[sectionActivated])) {
                         playerSections[sectionActivated].activatePopesFavorTile();
 
                     } else {
@@ -120,7 +119,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
                     }
 
-                    sendNotification(player);
+                    sendNotification(player1);
                 }
             }
         }
@@ -151,13 +150,13 @@ public class CheckVaticanReportTurnState extends TurnState {
      *
      * @return the index of the first tile that no one has passed.
      */
-    private int getFirstActiveSectionIndex() {
+    private int getFirstActiveSectionIndex(Player player) {
 
         int sectionNumber = 0;
 
-        for (int i = 0; i < turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections().length; i++) {
-            if (turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[i].isPopesFavorTileActive()
-                    || turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[i].isPopesFavorTileDiscarded()) {
+        for (int i = 0; i < player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length; i++) {
+            if (player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[i].isPopesFavorTileActive()
+                    || player.getPersonalBoard().getFaithTrack().getVaticanReportSections()[i].isPopesFavorTileDiscarded()) {
 
                 sectionNumber = i + 1;
 

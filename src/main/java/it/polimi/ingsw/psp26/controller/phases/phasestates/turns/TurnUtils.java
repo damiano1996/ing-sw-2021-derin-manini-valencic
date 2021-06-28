@@ -14,12 +14,21 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 public class TurnUtils {
 
+    /**
+     * Method used to change the turn state after a leader action.
+     * It handles all the cases:
+     * - from leader action to normal action;
+     * - from normal action to leader action;
+     * - from the second leader action to the next turn (single player or multi player cases).
+     *
+     * @param turn    turn object
+     * @param message received message
+     */
     public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
         System.out.println("goToNextStateAfterLeaderAction - current turn phase: " + turn.getTurnPhase());
         if (turn.getPlayingPhaseState().isLastTurn() && // true if end game has been activated
                 getNextPlayer(turn).hasInkwell() && // true if current player is the last of the table
-                turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END // true if the last player has played the entire turn
-                )
+                turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) // true if the last player has played the entire turn
         ) {
             try {
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
@@ -52,7 +61,7 @@ public class TurnUtils {
                     if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
                         // After the second leader action, go to next player turn
                         turn.getPlayingPhaseState().updateCurrentTurn();
-                        turn.notifyAllPlayers("The player " + turn.getTurnPlayer().getNickname() + " finished their turn");
+                        turn.notifyAllPlayers(turn.getTurnPlayer().getNickname() + " finished his turn.");
 
                     } else {
                         // After the second leader action, go to Lorenzo action
@@ -69,11 +78,24 @@ public class TurnUtils {
         }
     }
 
+    /**
+     * Method to get the next player that will play the turn.
+     *
+     * @param currentTurn turn object
+     * @return next player that will play
+     */
     public static Player getNextPlayer(Turn currentTurn) {
         int currentPlayerIndex = currentTurn.getMatchController().getMatch().getPlayers().indexOf(currentTurn.getTurnPlayer());
         return currentTurn.getMatchController().getMatch().getPlayers().get((currentPlayerIndex + 1) % currentTurn.getMatchController().getMatch().getPlayers().size());
     }
 
+    /**
+     * Method to send a message to all the players except one.
+     *
+     * @param turn          turn object
+     * @param playerToAvoid player that mustn't receive the message
+     * @param message       message to send
+     */
     public static void sendMessageToAllPlayerExceptOne(Turn turn, Player playerToAvoid, Message message) {
         for (Player player : turn.getMatchController().getMatch().getPlayers()) {
             if (!player.getSessionToken().equals(playerToAvoid.getSessionToken())) {
@@ -92,6 +114,11 @@ public class TurnUtils {
         }
     }
 
+    /**
+     * Method to send a choice normal action to the turn player.
+     *
+     * @param turn turn object
+     */
     public static void sendChoiceNormalActionMessage(Turn turn) {
         try {
 

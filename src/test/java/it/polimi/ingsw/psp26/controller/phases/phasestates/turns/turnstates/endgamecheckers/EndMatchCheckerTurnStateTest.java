@@ -57,7 +57,7 @@ public class EndMatchCheckerTurnStateTest {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SKIP_LEADER_ACTION));
 
         assertEquals(mitm.getMessages().get(0).getMessageType(), MessageType.NOTIFICATION_UPDATE);
-        assertTrue(mitm.getMessages().get(0).toString().contains(turn.getTurnPlayer().getNickname() + " activated the endgame by drawing the seventh card."));
+        assertTrue(mitm.getMessages().get(0).toString().contains(turn.getTurnPlayer().getNickname() + " has activated the endgame by drawing the seventh card."));
     }
 
 
@@ -68,7 +68,7 @@ public class EndMatchCheckerTurnStateTest {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SKIP_LEADER_ACTION));
 
         assertEquals(mitm.getMessages().get(0).getMessageType(), MessageType.NOTIFICATION_UPDATE);
-        assertTrue(mitm.getMessages().get(0).toString().contains(turn.getTurnPlayer().getNickname() + " activated the endgame by reaching the final tile in the faith track."));
+        assertTrue(mitm.getMessages().get(0).toString().contains(turn.getTurnPlayer().getNickname() + " has activated the endgame by reaching the final position in the faith track."));
     }
 
 

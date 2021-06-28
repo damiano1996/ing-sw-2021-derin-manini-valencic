@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp26.view.cli;
 import it.polimi.ingsw.psp26.model.enums.Color;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,8 +55,11 @@ public class CommonScreensCli {
      */
     private void printLeaderboardContent(Map<String, Integer> leaderboard, List<String> orderedPlayersList, int numberOfPlayers) {
         int verticalPadding = 0;
-        orderedPlayersList = orderedPlayersList.subList(0, Math.min(numberOfPlayers, orderedPlayersList.size()));
-        for (String playerNickname : orderedPlayersList) {
+        
+        List<String> maximumPlayersToDisplay = new ArrayList<>();
+        for (int i = 0; i < numberOfPlayers; i++) maximumPlayersToDisplay.add(orderedPlayersList.get(i));
+        
+        for (String playerNickname : maximumPlayersToDisplay) {
             cliUtils.pPCS(cliUtils.centerString(30, playerNickname), Color.WHITE, 19 + verticalPadding, 89);
             cliUtils.pPCS(cliUtils.centerString(30, Integer.toString(leaderboard.get(playerNickname))), Color.WHITE, 19 + verticalPadding, 120);
             verticalPadding += 3;

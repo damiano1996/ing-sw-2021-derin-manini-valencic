@@ -787,7 +787,7 @@ public class CLI implements ViewInterface {
             waitingForTurn.set(false);
             cliUtils.vSpace(2);
             pw.println(cliUtils.hSpace(4) + "OPPONENTS FINISHED THEIR TURN!");
-            pw.print(cliUtils.hSpace(4) + "Press Enter to play your turn.");
+            pw.print(cliUtils.hSpace(4) + "Press Enter to proceed.");
             pw.flush();
         }).start();
 

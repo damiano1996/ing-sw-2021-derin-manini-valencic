@@ -38,21 +38,21 @@
 }
 
 #EffectMute-button{
-    -fx-background-image: url('/gui/Unmute.png');
+    -fx-background-image: url('/gui/window_graphics/Unmute.png');
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
 #EffectUnmute-button{
-    -fx-background-image: url('/gui/Mute.png');
+    -fx-background-image: url('/gui/window_graphics/Mute.png');
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
 #MusicMute-button{
-    -fx-background-image: url('/gui/Music.png');
+    -fx-background-image: url('/gui/window_graphics/Music.png');
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -60,7 +60,7 @@
 }
 
 #MusicUnmute-button{
-    -fx-background-image: url('/gui/NoMusic1.png');
+    -fx-background-image: url('/gui/window_graphics/NoMusic1.png');
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;

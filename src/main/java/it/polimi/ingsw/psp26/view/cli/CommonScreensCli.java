@@ -50,14 +50,20 @@ public class CommonScreensCli {
      * A verticalPadding variable is used to set the correct space between the Leaderboard rows.
      *
      * @param leaderboard        the Map containing the Players nicknames and their points
-     * @param orderedPlayersList a List containing the Players in the order the have to be printed
+     * @param orderedPlayersList a List containing the Players in the order they have to be printed
      * @param numberOfPlayers    the number of players that are printed
      */
     private void printLeaderboardContent(Map<String, Integer> leaderboard, List<String> orderedPlayersList, int numberOfPlayers) {
         int verticalPadding = 0;
 
         List<String> maximumPlayersToDisplay = new ArrayList<>();
-        for (int i = 0; i < numberOfPlayers; i++) maximumPlayersToDisplay.add(orderedPlayersList.get(i));
+        if (orderedPlayersList.size() > 0) {
+            if (orderedPlayersList.size() >= numberOfPlayers) {
+                for (int i = 0; i < numberOfPlayers; i++) maximumPlayersToDisplay.add(orderedPlayersList.get(i));
+            } else {
+                maximumPlayersToDisplay.addAll(orderedPlayersList);
+            }
+        }
 
         for (String playerNickname : maximumPlayersToDisplay) {
             cliUtils.pPCS(cliUtils.centerString(30, playerNickname), Color.WHITE, 19 + verticalPadding, 89);

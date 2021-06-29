@@ -82,7 +82,7 @@ public class ActionTokenDialogDrawer extends RatioDrawer {
 
             SoundManager soundManager = SoundManager.getInstance();
 
-            soundManager.setSoundEffect("button_click_01.wav");
+            soundManager.setSoundEffect(SoundManager.DIALOGSOUND);
             closeParentStageOfActionEvent(actionEvent);
             client.viewNext();
         });

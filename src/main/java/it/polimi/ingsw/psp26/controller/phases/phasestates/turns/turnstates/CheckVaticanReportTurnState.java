@@ -36,7 +36,7 @@ public class CheckVaticanReportTurnState extends TurnState {
             activateVaticanReport(player);
 
         }
-        System.out.println("HO finito");
+
         turn.changeState(new EndMatchCheckerTurnState(turn));
         turn.play(message);
     }
@@ -89,8 +89,6 @@ public class CheckVaticanReportTurnState extends TurnState {
     private void activateVaticanReport(Player player) {
         if (!lastVaticanReportCalled) {
             if (firstPlayerInPopeSpace(player) || isBlackCrossInPopeSpaceOrOver(player)) {
-                System.out.println(getFirstActiveSectionIndex(player) == player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length);
-                System.out.println(getFirstActiveSectionIndex(player));
                 if (getFirstActiveSectionIndex(player) == (player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length - 1)) {
                     lastVaticanReportCalled = true;
                     System.out.println("CheckVaticanReport - Last turn called");

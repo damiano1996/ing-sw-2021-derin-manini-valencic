@@ -30,12 +30,12 @@ public class ChoiceDrawerUtils {
                 buttonContainer.setClicked(true);
                 Image imageSelected = addSelectionShadow(originalImage);
                 imageView.setImage(imageSelected);
-                SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+                SoundManager.getInstance().setSoundEffect(SoundManager.DIALOGSOUND);
 
             } else {
                 buttonContainer.setClicked(false);
                 imageView.setImage(originalImage);
-                SoundManager.getInstance().setSoundEffect("button_click_02.wav");
+                SoundManager.getInstance().setSoundEffect(SoundManager.RESOURCESOUND);
             }
             buttonContainer.setGraphic(imageView);
         });

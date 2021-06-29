@@ -108,11 +108,10 @@ public class WaitingRoom {
                         break;
 
                     case HELP:
-                        Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                        Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
-                        File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                        Desktop.getDesktop().open(rulesPdf);
-                        sendMenuMessage(message.getSessionToken());
+                        System.out.println("WaitingRoom - HELP has been selected.");
+                        sendToClient(new SessionMessage(message.getSessionToken(), HELP));
+                        System.out.println("WaitingRoom - Waiting response.");
+                        handleMessages(filterHeartbeatMessages(nodeClients.get(message.getSessionToken())));
                         break;
 
                     case EXIT:

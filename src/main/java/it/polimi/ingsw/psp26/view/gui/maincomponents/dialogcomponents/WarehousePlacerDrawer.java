@@ -120,7 +120,7 @@ public class WarehousePlacerDrawer extends RatioDrawer {
         confirmationButton.setId("confirm-button");
         confirmationButton.setOnAction(actionEvent -> {
             SoundManager soundManager = SoundManager.getInstance();
-            soundManager.setSoundEffect("button_click_01.wav");
+            soundManager.setSoundEffect(SoundManager.DIALOGSOUND);
             try {
                 client.notifyObservers(
                         new Message(

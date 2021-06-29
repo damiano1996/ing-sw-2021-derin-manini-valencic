@@ -5,22 +5,24 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.NotificationsFIFO;
+import it.polimi.ingsw.psp26.view.gui.ButtonContainer;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
+import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoicesDrawer;
+import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.DevelopmentCardsGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.MarketTrayDrawer;
+import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
 import javafx.scene.CacheHint;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
-import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.REFERENCE_WIDTH;
-import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
+import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
+import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
 import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.PlayerDrawer.drawPlayer;
 
 /**
@@ -179,6 +181,59 @@ public class PlayingPane {
         return notificationStackDrawer.draw();
     }
 
+    private static HBox addTopBar(int maxWidth) {
+
+        Button MuteMusicButton = new Button();
+        Button MuteEffectButton = new Button();
+
+        MuteMusicButton.setMaxWidth(0.08*getWindowHeight());
+        MuteMusicButton.setMaxHeight(0.08*getWindowHeight());
+
+        MuteEffectButton.setMaxWidth(0.08*getWindowHeight());
+        MuteEffectButton.setMaxHeight(0.08*getWindowHeight());
+
+        MuteMusicButton.setId("MusicMute-button");
+        MuteEffectButton.setId("EffectMute-button");
+
+
+        MuteMusicButton.setOnMouseClicked(mouseEvent -> {
+
+            SoundManager soundManager = SoundManager.getInstance();
+            if((int) soundManager.getVolumeMusic() != 0) {
+                soundManager.muteMusic();
+                MuteMusicButton.setId("MusicUnmute-button");
+            }else{
+                soundManager.unmuteMusic();
+                MuteMusicButton.setId("MusicMute-button");
+            }
+
+        });
+
+        MuteEffectButton.setOnMouseClicked(mouseEvent -> {
+
+            SoundManager soundManager = SoundManager.getInstance();
+            if((int) soundManager.getVolumeEffect() != 0) {
+                soundManager.muteEffect();
+                MuteEffectButton.setId("EffectUnmute-button");
+            }else{
+                soundManager.unmuteEffect();
+                MuteEffectButton.setId("EffectMute-button");
+            }
+
+        });
+
+        HBox hBox = new HBox(10);
+        hBox.getChildren().addAll(MuteEffectButton, MuteMusicButton);
+
+        hBox.setMaxHeight(0.1*getWindowHeight());
+        hBox.setMaxWidth(0.35*getScreenWidth());
+        hBox.setCache(true);
+        hBox.setCacheHint(CacheHint.SPEED);
+
+
+        return hBox;
+    }
+
     /**
      * Method to setup the personal board of the player.
      * It starts the AsynchronousDrawer that will update the board in background.
@@ -243,6 +298,8 @@ public class PlayingPane {
         if (client.isMultiplayerMode()) vBox.getChildren().add(addOpponents(primaryStage, thumbnailSize, client));
 
         border.setLeft(vBox);
+
+        border.setTop(addTopBar((int) (maxWidth * 0.4)));
 
         border.setCenter(addMainBox(client, (int) (maxWidth * 0.8)));
 

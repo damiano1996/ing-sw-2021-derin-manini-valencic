@@ -9,9 +9,20 @@ public class SoundManager {
 
     private static SoundManager instance;
 
+    //Songs
+    public static final String INTROSONG = "main_theme_03.wav";
+    public static final String MAINTHEMESONG = "main_theme_04.wav";
+
+    //Sound effects
+    public static final String DIALOGSOUND = "button_click_01.wav";
+    public static final String RESOURCESOUND = "button_click_02.wav";
+    public static final String DIALOGSOUND2 = "button_click_03.wav";
+
+
     private AudioClip musicAudio;
     private AudioClip effectAudio;
-    private double volume = 100;
+    private double volumeMusic = 100;
+    private double volumeEffect = 100;
 
     public static SoundManager getInstance() {
         if (instance == null)
@@ -28,7 +39,7 @@ public class SoundManager {
         );
         musicAudio.setCycleCount(10);
 
-        musicAudio.play(volume);
+        musicAudio.play(volumeMusic);
     }
 
     public void setSoundEffect(String soundEffect) {
@@ -37,17 +48,31 @@ public class SoundManager {
         );
         effectAudio.setCycleCount(1);
 
-        effectAudio.play(150);
+        effectAudio.play(volumeEffect);
     }
 
     public void muteMusic() {
         if (musicAudio != null)
             musicAudio.stop();
-        volume = 0;
+        volumeMusic = 0;
     }
 
     public void unmuteMusic() {
-        volume = 100;
-        musicAudio.play(volume);
+        volumeMusic = 100;
+        musicAudio.play(volumeMusic);
     }
+
+    public void muteEffect() {
+        if (effectAudio != null)
+            effectAudio.stop();
+        volumeEffect = 0;
+    }
+
+    public void unmuteEffect() {
+        volumeEffect = 100;
+        effectAudio.play(volumeEffect);
+    }
+
+    public double getVolumeMusic(){ return volumeMusic; }
+    public double getVolumeEffect(){return volumeEffect;}
 }

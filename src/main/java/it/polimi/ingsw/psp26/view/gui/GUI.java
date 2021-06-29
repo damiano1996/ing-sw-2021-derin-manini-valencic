@@ -116,7 +116,7 @@ public class GUI extends Application implements ViewInterface {
             loginController.addConnectionButtonEvent(dialog, client);
 
             SoundManager soundManager = SoundManager.getInstance();
-            soundManager.setMusic("main_theme_03.wav");
+            soundManager.setMusic(SoundManager.INTROSONG);
 
             dialog.show();
 
@@ -178,7 +178,7 @@ public class GUI extends Application implements ViewInterface {
                 break;
 
             case CHOICE_LEADERS:
-                SoundManager.getInstance().setMusic("main_theme_04.wav");
+                SoundManager.getInstance().setMusic(SoundManager.MAINTHEMESONG);
                 inScrollPane = true;
                 choicesDrawer = new LeaderCardChoicesDrawer();
                 break;
@@ -210,7 +210,7 @@ public class GUI extends Application implements ViewInterface {
                 !messageType.equals(MessageType.MULTI_OR_SINGLE_PLAYER_MODE)) {
             Button viewBoardButton = new Button("View Board");
             viewBoardButton.setOnAction(actionEvent -> {
-                SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+                SoundManager.getInstance().setSoundEffect(SoundManager.DIALOGSOUND);
                 dialog.close();
                 new AsynchronousDrawer(
                         () -> sleep(5000),
@@ -225,7 +225,7 @@ public class GUI extends Application implements ViewInterface {
             Button undoOptionButton = new Button("Undo");
             undoOptionButton.setId("undo-button");
             undoOptionButton.setOnAction(actionEvent -> {
-                SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+                SoundManager.getInstance().setSoundEffect(SoundManager.DIALOGSOUND);
                 dialog.close();
                 client.sendUndoMessage();
                 client.viewNext();
@@ -272,7 +272,7 @@ public class GUI extends Application implements ViewInterface {
             buttonContainer.setOnAction(event -> {
                 // disabling all buttons
                 for (Button button1 : buttonContainers) button1.setDisable(true);
-                SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+                SoundManager.getInstance().setSoundEffect(SoundManager.DIALOGSOUND);
                 try {
                     client.notifyObservers(new Message(messageType, buttonContainer.getContainedObject()));
                 } catch (InvalidPayloadException ignored) {
@@ -313,7 +313,7 @@ public class GUI extends Application implements ViewInterface {
             List<Object> selected = new ArrayList<>();
             for (ButtonContainer<?> buttonContainer : buttonContainers)
                 if (buttonContainer.isClicked()) {
-                    SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+                    SoundManager.getInstance().setSoundEffect(SoundManager.DIALOGSOUND);
                     selected.add(buttonContainer.getContainedObject());
                 }
 
@@ -387,7 +387,7 @@ public class GUI extends Application implements ViewInterface {
         Stage dialog = getDialog(primaryStage, vBox);
         confirmationButton.setOnAction(actionEvent -> {
             SoundManager soundManager = SoundManager.getInstance();
-            soundManager.setSoundEffect("button_click_03.wav");
+            soundManager.setSoundEffect(SoundManager.DIALOGSOUND2);
             dialog.close();
             client.viewNext();
         });

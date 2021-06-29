@@ -12,6 +12,7 @@ public enum MessageType {
     HELP,
     RESET,
     EXIT,
+    MUTE,
 
     NOTIFICATION_UPDATE,
     MODEL_UPDATE,

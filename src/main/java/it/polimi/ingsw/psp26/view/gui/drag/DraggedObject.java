@@ -110,7 +110,7 @@ public class DraggedObject<T> {
 
                     if (tTargetContainer.place(object)) {
                         SoundManager soundManager = SoundManager.getInstance();
-                        soundManager.setSoundEffect("button_click_02.wav");
+                        soundManager.setSoundEffect(SoundManager.RESOURCESOUND);
 
                         movedSuccessfully = true;
                         sourcePane.getChildren().remove(imageView);

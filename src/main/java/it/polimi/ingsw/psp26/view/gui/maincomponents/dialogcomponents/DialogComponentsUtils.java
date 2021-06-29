@@ -48,7 +48,7 @@ public class DialogComponentsUtils {
         confirmationButton.setId("undo-button");
         confirmationButton.setOnAction(actionEvent -> {
 
-            SoundManager.getInstance().setSoundEffect("button_click_01.wav");
+            SoundManager.getInstance().setSoundEffect(SoundManager.DIALOGSOUND);
 
             client.sendUndoMessage();
             closeParentStageOfActionEvent(actionEvent);

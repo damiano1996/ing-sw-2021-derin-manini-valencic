@@ -10,14 +10,20 @@ import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 import static it.polimi.ingsw.psp26.configurations.Configurations.PRINT_CLIENT_SIDE;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createLeaderboard;
 import static it.polimi.ingsw.psp26.view.ViewUtils.createPlayersList;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * Class representing the Client.
@@ -152,6 +158,17 @@ public class Client extends Observable<Message> {
                     );
                     break;
 
+                case HELP:
+
+                    Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
+                    Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
+                    File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
+                    Desktop.getDesktop().open(rulesPdf);
+
+                    sendMenuUndoMessage();
+                    viewNext();
+                    break;
+
                 case GLOBAL_LEADERBOARD:
                     viewInterface.displayGlobalLeaderboard();
                     break;
@@ -191,7 +208,7 @@ public class Client extends Observable<Message> {
                     break;
             }
 
-        } catch (EmptyPayloadException | InvalidPayloadException ignored) {
+        } catch (EmptyPayloadException | InvalidPayloadException | IOException ignored) {
         }
     }
 

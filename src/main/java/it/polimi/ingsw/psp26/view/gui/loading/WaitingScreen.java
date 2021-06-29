@@ -21,6 +21,10 @@ import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
 import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.ModelDrawUtils.getResourceImage;
 
+/**
+ * Class that creates an animation when a Client must wait an event to happen.
+ * The animation consists in the 4 Resources moving in a circle path.
+ */
 public class WaitingScreen {
 
     private final Stage primaryStage;
@@ -32,6 +36,15 @@ public class WaitingScreen {
     private boolean runningAnimation;
     private AnimationTimer animationTimer;
 
+    /**
+     * Constructor of the class.
+     * It initializes the final attributes of the class.
+     *
+     * @param primaryStage   the Stage where the WaitingScreen will appear
+     * @param jobListener    JobListener object to be executed on the java thread
+     * @param delayedJob     DelayedJob object to be executed on the javaFX main thread
+     * @param waitingMessage the message to display in the WaitingScreen
+     */
     public WaitingScreen(Stage primaryStage, JobListener jobListener, DelayedJob delayedJob, String waitingMessage) {
         this.primaryStage = primaryStage;
         this.jobListener = jobListener;
@@ -39,6 +52,12 @@ public class WaitingScreen {
         this.waitingMessage = waitingMessage;
     }
 
+
+    /**
+     * Method that initializes a new WaitingScreen.
+     * The Resource images and the waitingMessage are set.
+     * An AnimationTimer is used to create the animation of the moving Resources.
+     */
     private void initializeWaitingScreen() {
         VBox animationContainer = new VBox();
 
@@ -47,6 +66,7 @@ public class WaitingScreen {
 
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
 
+        // Adding Resources images
         List<Image> images = new ArrayList<>();
         for (Resource resource : ResourceSupply.RESOURCES_SLOTS) {
             try {
@@ -58,6 +78,7 @@ public class WaitingScreen {
         final long startNanoTime = System.nanoTime();
         double phaseShift = 2 * Math.PI / images.size();
 
+        // Setting the waitingMessage
         Text text = new Text(waitingMessage);
         text.setId("title");
         text.setStyle("-fx-font-size: " + 100 * getMinBetweenWindowWidthAndHeight() / REFERENCE_WIDTH + ";");
@@ -66,6 +87,7 @@ public class WaitingScreen {
 
         runningAnimation = true;
 
+        // Creating the animation
         animationTimer = new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 if (runningAnimation) {
@@ -91,6 +113,12 @@ public class WaitingScreen {
         dialog.show();
     }
 
+
+    /**
+     * Method used to start a new WaitingScreen.
+     * It calls the initializeWaitingScreen() method and then starts the animationTimer.
+     * An AsynchronousDrawer is used to display the WaitingScreen.
+     */
     public void start() {
         initializeWaitingScreen();
 

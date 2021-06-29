@@ -10,6 +10,9 @@ import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Utility class that contains utility methods for the view package.
+ */
 public class ViewUtils {
 
     /**

@@ -6,6 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * Class that controls the login.fxml file
+ */
 public class LoginController {
 
     @FXML
@@ -27,8 +30,8 @@ public class LoginController {
      * TextFields and uses it to call the initializeNetworkHandler() method.
      * Once this is finished, calls the viewNext() method.
      *
-     * @param stage  The Stage to close.
-     * @param client The client that will call the initializeNetworkHandler() and viewNext() methods.
+     * @param stage  the Stage to close
+     * @param client the client that will call the initializeNetworkHandler() and viewNext() methods
      */
     @FXML
     public void addConnectionButtonEvent(Stage stage, Client client) {

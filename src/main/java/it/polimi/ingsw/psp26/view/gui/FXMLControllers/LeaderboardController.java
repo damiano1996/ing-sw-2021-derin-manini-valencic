@@ -13,6 +13,9 @@ import java.util.Map;
 import static it.polimi.ingsw.psp26.view.ViewUtils.getOrderedPlayersList;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 
+/**
+ * Class that controls the leaderboard.fxml file
+ */
 public class LeaderboardController {
 
     @FXML
@@ -47,7 +50,7 @@ public class LeaderboardController {
      * @param client        the client that will display the Leaderboard
      * @param ratio         the ratio that will resize all the elements shown
      * @param leaderboard   the Leaderboard to display
-     * @param winningPlayer tThe nickname of the winning Player
+     * @param winningPlayer the nickname of the winning Player
      */
     @FXML
     public void initializeLeaderboard(Client client, float ratio, Map<String, Integer> leaderboard, String winningPlayer) {

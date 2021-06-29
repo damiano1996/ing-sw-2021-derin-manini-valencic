@@ -8,7 +8,9 @@ import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.EndMatchPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PlayingPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.RecoveringMatchPhaseState;
+import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Match;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 import it.polimi.ingsw.psp26.network.server.VirtualView;
 
 /**
@@ -96,6 +98,16 @@ public class MatchController extends Observable<SessionMessage> implements Obser
 
         if (message.getMessageType() == MessageType.INDEFINITE_SUSPENSION ||
                 message.getMessageType() == MessageType.HEARTBEAT_INDEFINITE_SUSPENSION) {
+
+            if (recoveryMode) {
+                try {
+                    // If in recovery mode, players that are waiting for opponents,
+                    // thus they need a stop message to exit from the waiting screen.
+                    notifyObservers(new SessionMessage(SpecialToken.BROADCAST.getToken(), MessageType.STOP_WAITING));
+                } catch (InvalidPayloadException ignored) {
+                }
+            }
+
             phase.changeState(new EndMatchPhaseState(phase));
         }
         phase.execute(message);

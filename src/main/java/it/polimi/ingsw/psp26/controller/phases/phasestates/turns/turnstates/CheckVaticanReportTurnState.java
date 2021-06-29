@@ -10,7 +10,7 @@ import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 
 public class CheckVaticanReportTurnState extends TurnState {
-    private boolean lastVaticanReportCalled = false;
+    private static boolean lastVaticanReportCalled = false;
 
     /**
      * Constructor of the class.
@@ -87,7 +87,7 @@ public class CheckVaticanReportTurnState extends TurnState {
      * @param player the player is in this turn state.
      */
     private void activateVaticanReport(Player player) {
-        if (!lastVaticanReportCalled) {
+        if(!lastVaticanReportCalled) {
             if (firstPlayerInPopeSpace(player) || isBlackCrossInPopeSpaceOrOver(player)) {
                 if (getFirstActiveSectionIndex(player) == (player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length - 1)) {
                     lastVaticanReportCalled = true;
@@ -109,10 +109,10 @@ public class CheckVaticanReportTurnState extends TurnState {
                     VaticanReportSection[] playerSections = player1.getPersonalBoard().getFaithTrack().getVaticanReportSections();
 
                     if (isPlayerInVaticanSectionOrOver(player1, playerSections[sectionActivated])) {
+
                         playerSections[sectionActivated].activatePopesFavorTile();
 
                     } else {
-
                         playerSections[sectionActivated].discardPopesFavorTile();
 
                     }
@@ -160,9 +160,7 @@ public class CheckVaticanReportTurnState extends TurnState {
 
             }
         }
-
         return sectionNumber;
-
     }
 
 }

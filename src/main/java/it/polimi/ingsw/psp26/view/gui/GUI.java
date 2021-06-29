@@ -169,10 +169,10 @@ public class GUI extends Application implements ViewInterface {
         switch (messageType) {
 
             case MULTI_OR_SINGLE_PLAYER_MODE:
+            case NEW_OR_OLD:
                 SoundManager.getInstance().setMusic(SoundManager.MAINTHEMESONG);
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
-            case NEW_OR_OLD:
             case MENU:
                 choicesDrawer = new MessageTypeChoicesDrawer();
                 break;

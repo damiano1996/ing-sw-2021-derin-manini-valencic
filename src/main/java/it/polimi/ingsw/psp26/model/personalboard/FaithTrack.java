@@ -148,7 +148,7 @@ public class FaithTrack extends Observable<SessionMessage> {
      * @return final position of the track
      */
     public int getVictoryPoints() {
-        return victoryPoints[faithPoints / 3];
+        return victoryPoints[Math.min((faithPoints / 3), 8)];
     }
 
 

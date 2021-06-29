@@ -170,6 +170,7 @@ public class GUI extends Application implements ViewInterface {
         switch (messageType) {
 
             case MULTI_OR_SINGLE_PLAYER_MODE:
+                SoundManager.getInstance().setMusic(SoundManager.MAINTHEMESONG);
             case CHOICE_NORMAL_ACTION:
             case CHOICE_LEADER_ACTION:
             case NEW_OR_OLD:
@@ -178,7 +179,6 @@ public class GUI extends Application implements ViewInterface {
                 break;
 
             case CHOICE_LEADERS:
-                SoundManager.getInstance().setMusic(SoundManager.MAINTHEMESONG);
                 inScrollPane = true;
                 choicesDrawer = new LeaderCardChoicesDrawer();
                 break;

@@ -37,31 +37,38 @@
 #choice-button {
 }
 
-#EffectMute-button{
-    -fx-background-image: url('/gui/window_graphics/Unmute.png');
-    -fx-background-size: contain;
+#sound-effect-on-button {
+    -fx-background-image: url('/gui/window_graphics/sound_on.png');
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 80% 80%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
-#EffectUnmute-button{
-    -fx-background-image: url('/gui/window_graphics/Mute.png');
-    -fx-background-size: contain;
+#sound-effect-off-button {
+    -fx-background-image: url('/gui/window_graphics/sound_off.png');
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 80% 80%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
-#MusicMute-button{
-    -fx-background-image: url('/gui/window_graphics/Music.png');
-    -fx-background-size: contain;
+#music-on-button {
+    -fx-background-image: url('/gui/window_graphics/music_on.png');
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 80% 80%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-
 }
 
-#MusicUnmute-button{
-    -fx-background-image: url('/gui/window_graphics/NoMusic1.png');
-    -fx-background-size: contain;
+#music-off-button {
+    -fx-background-image: url('/gui/window_graphics/music_off.png');
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 80% 80%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }

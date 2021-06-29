@@ -45,7 +45,6 @@ import static it.polimi.ingsw.psp26.view.gui.DialogStage.getDialog;
 import static it.polimi.ingsw.psp26.view.gui.FramePane.addBackground;
 import static it.polimi.ingsw.psp26.view.gui.GUIUtils.addStylesheet;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
-import static java.lang.Thread.sleep;
 
 public class GUI extends Application implements ViewInterface {
 
@@ -211,12 +210,8 @@ public class GUI extends Application implements ViewInterface {
             Button viewBoardButton = new Button("View Board");
             viewBoardButton.setOnAction(actionEvent -> {
                 SoundManager.getInstance().setSoundEffect(SoundManager.DIALOGSOUND);
+                PlayingPane.getInstance().showResumeButton();
                 dialog.close();
-                new AsynchronousDrawer(
-                        () -> sleep(5000),
-                        () -> client.reHandleLastMessage(),
-                        false
-                ).start();
             });
             mainContainer.getChildren().add(viewBoardButton);
         }

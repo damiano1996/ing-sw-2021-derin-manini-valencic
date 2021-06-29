@@ -5,20 +5,15 @@ import javafx.scene.media.AudioClip;
 
 public class SoundManager {
 
-    private static final String MUSIC_DIRECTORY = "/gui/music/";
-
-    private static SoundManager instance;
-
     //Songs
     public static final String INTROSONG = "main_theme_03.wav";
     public static final String MAINTHEMESONG = "main_theme_04.wav";
-
     //Sound effects
     public static final String DIALOGSOUND = "button_click_01.wav";
     public static final String RESOURCESOUND = "button_click_02.wav";
     public static final String DIALOGSOUND2 = "button_click_03.wav";
-
-
+    private static final String MUSIC_DIRECTORY = "/gui/music/";
+    private static SoundManager instance;
     private AudioClip musicAudio;
     private AudioClip effectAudio;
     private double volumeMusic = 100;
@@ -73,6 +68,11 @@ public class SoundManager {
         effectAudio.play(volumeEffect);
     }
 
-    public double getVolumeMusic(){ return volumeMusic; }
-    public double getVolumeEffect(){return volumeEffect;}
+    public double getVolumeMusic() {
+        return volumeMusic;
+    }
+
+    public double getVolumeEffect() {
+        return volumeEffect;
+    }
 }

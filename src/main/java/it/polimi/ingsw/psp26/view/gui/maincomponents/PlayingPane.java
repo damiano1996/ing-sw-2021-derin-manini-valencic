@@ -5,10 +5,7 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.network.client.Client;
 import it.polimi.ingsw.psp26.network.client.NotificationsFIFO;
-import it.polimi.ingsw.psp26.view.gui.ButtonContainer;
 import it.polimi.ingsw.psp26.view.gui.asynchronousjobs.AsynchronousDrawer;
-import it.polimi.ingsw.psp26.view.gui.choicesdrawers.ChoicesDrawer;
-import it.polimi.ingsw.psp26.view.gui.choicesdrawers.MessageTypeChoicesDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.DevelopmentCardsGridDrawer;
 import it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.MarketTrayDrawer;
 import it.polimi.ingsw.psp26.view.gui.sounds.SoundManager;
@@ -21,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.psp26.view.gui.FramePane.drawThumbNail;
-import static it.polimi.ingsw.psp26.view.gui.GUIUtils.closeParentStageOfActionEvent;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.*;
 import static it.polimi.ingsw.psp26.view.gui.maincomponents.modelcomponents.PlayerDrawer.drawPlayer;
 
@@ -40,13 +36,30 @@ public class PlayingPane {
     private static PlayingPane instance;
     private final List<AsynchronousDrawer> asynchronousDrawers;
 
+    private Button resumeButton;
+
+    /**
+     * Class constructor.
+     */
     private PlayingPane() {
         asynchronousDrawers = new ArrayList<>();
     }
 
+    /**
+     * Getter of the instance of the singleton.
+     *
+     * @return instance of this singleton
+     */
     public static PlayingPane getInstance() {
         if (instance == null) instance = new PlayingPane();
         return instance;
+    }
+
+    /**
+     * Method to show the resume button.
+     */
+    public void showResumeButton() {
+        resumeButton.setVisible(true);
     }
 
     /**
@@ -181,30 +194,59 @@ public class PlayingPane {
         return notificationStackDrawer.draw();
     }
 
-    private static HBox addTopBar(int maxWidth) {
+    /**
+     * Method to define and to add properties to the resume button.
+     * If pressed the last message will be re-handled.
+     * It will be initialized with visibility equals to false.
+     *
+     * @param client client object
+     * @return resume button
+     */
+    private Button getResumeButton(Client client) {
+        resumeButton = new Button("Resume");
+        resumeButton.setId("button");
+        resumeButton.setVisible(false);
+        resumeButton.setOnMouseClicked(mouseEvent -> {
+            resumeButton.setVisible(false);
+            client.reHandleLastMessage();
+        });
+        return resumeButton;
+    }
+
+
+    /**
+     * Method to create the top bar of the playing pane.
+     * It contains the buttons to mute and unmute the music and sound effects.
+     * it contains the resume button.
+     *
+     * @param client   client object
+     * @param maxWidth maximum width allowed
+     * @return horizontal box containing the components
+     */
+    private HBox addTopBar(Client client, int maxWidth) {
 
         Button MuteMusicButton = new Button();
         Button MuteEffectButton = new Button();
 
-        MuteMusicButton.setMaxWidth(0.08*getWindowHeight());
-        MuteMusicButton.setMaxHeight(0.08*getWindowHeight());
+        MuteMusicButton.setMaxWidth(0.08 * getWindowHeight());
+        MuteMusicButton.setMaxHeight(0.08 * getWindowHeight());
 
-        MuteEffectButton.setMaxWidth(0.08*getWindowHeight());
-        MuteEffectButton.setMaxHeight(0.08*getWindowHeight());
+        MuteEffectButton.setMaxWidth(0.08 * getWindowHeight());
+        MuteEffectButton.setMaxHeight(0.08 * getWindowHeight());
 
-        MuteMusicButton.setId("MusicMute-button");
-        MuteEffectButton.setId("EffectMute-button");
+        MuteMusicButton.setId("music-on-button");
+        MuteEffectButton.setId("sound-effect-on-button");
 
 
         MuteMusicButton.setOnMouseClicked(mouseEvent -> {
 
             SoundManager soundManager = SoundManager.getInstance();
-            if((int) soundManager.getVolumeMusic() != 0) {
+            if ((int) soundManager.getVolumeMusic() != 0) {
                 soundManager.muteMusic();
-                MuteMusicButton.setId("MusicUnmute-button");
-            }else{
+                MuteMusicButton.setId("music-off-button");
+            } else {
                 soundManager.unmuteMusic();
-                MuteMusicButton.setId("MusicMute-button");
+                MuteMusicButton.setId("music-on-button");
             }
 
         });
@@ -212,21 +254,22 @@ public class PlayingPane {
         MuteEffectButton.setOnMouseClicked(mouseEvent -> {
 
             SoundManager soundManager = SoundManager.getInstance();
-            if((int) soundManager.getVolumeEffect() != 0) {
+            if ((int) soundManager.getVolumeEffect() != 0) {
                 soundManager.muteEffect();
-                MuteEffectButton.setId("EffectUnmute-button");
-            }else{
+                MuteEffectButton.setId("sound-effect-off-button");
+            } else {
                 soundManager.unmuteEffect();
-                MuteEffectButton.setId("EffectMute-button");
+                MuteEffectButton.setId("sound-effect-on-button");
             }
 
         });
 
         HBox hBox = new HBox(10);
-        hBox.getChildren().addAll(MuteEffectButton, MuteMusicButton);
 
-        hBox.setMaxHeight(0.1*getWindowHeight());
-        hBox.setMaxWidth(0.35*getScreenWidth());
+        hBox.getChildren().addAll(MuteEffectButton, MuteMusicButton, getResumeButton(client));
+
+        hBox.setMaxHeight(0.1 * getWindowHeight());
+        hBox.setMaxWidth(0.35 * getScreenWidth());
         hBox.setCache(true);
         hBox.setCacheHint(CacheHint.SPEED);
 
@@ -285,6 +328,7 @@ public class PlayingPane {
      * @return a border pane containing the components
      */
     public BorderPane getPlayingPane(Stage primaryStage, Client client, int maxWidth) {
+        getResumeButton(client);
 
         BorderPane border = new BorderPane();
         border.setCache(true);
@@ -299,7 +343,7 @@ public class PlayingPane {
 
         border.setLeft(vBox);
 
-        border.setTop(addTopBar((int) (maxWidth * 0.4)));
+        border.setTop(addTopBar(client, (int) (maxWidth * 0.4)));
 
         border.setCenter(addMainBox(client, (int) (maxWidth * 0.8)));
 

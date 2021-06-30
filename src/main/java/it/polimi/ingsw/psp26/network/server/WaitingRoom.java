@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.NetworkNode;
 import it.polimi.ingsw.psp26.network.SpecialToken;
+import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -96,7 +97,8 @@ public class WaitingRoom {
 
                     case GLOBAL_LEADERBOARD:
                         System.out.println("WaitingRoom - GLOBAL_LEADERBOARD has been selected.");
-                        sendToClient(new SessionMessage(message.getSessionToken(), GLOBAL_LEADERBOARD));
+                        System.out.println("WaitingRoom - sending the GlobalLeaderboard.");
+                        sendToClient(new SessionMessage(message.getSessionToken(), GLOBAL_LEADERBOARD, LeaderBoard.getInstance()));
                         System.out.println("WaitingRoom - Waiting response.");
                         handleMessages(filterHeartbeatMessages(nodeClients.get(message.getSessionToken())));
                         break;

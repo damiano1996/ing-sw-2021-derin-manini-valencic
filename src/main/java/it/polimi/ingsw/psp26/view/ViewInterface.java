@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.model.personalboard.Warehouse;
+import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public interface ViewInterface {
     void waitForYourTurn();
 
 
-    void displayGlobalLeaderboard();
+    void displayGlobalLeaderboard(LeaderBoard leaderBoard);
 
 
     void reset();

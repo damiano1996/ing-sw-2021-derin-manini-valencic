@@ -174,9 +174,9 @@ public class CLI implements ViewInterface {
      * Prints the global Leaderboard.
      */
     @Override
-    public void displayGlobalLeaderboard() {
+    public void displayGlobalLeaderboard(LeaderBoard leaderBoard) {
         mutex.lock();
-        commonScreensCli.displayFinalScreen(LeaderBoard.getInstance().getLeaderboard(), 5);
+        commonScreensCli.displayFinalScreen(leaderBoard.getLeaderboard(), 5);
         cliUtils.pPCS("Press Enter to go back to the menu.", Color.WHITE, 50, 4);
         mutex.unlock();
 

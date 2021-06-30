@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp26.exceptions.*;
 import it.polimi.ingsw.psp26.model.actiontokens.ActionToken;
 import it.polimi.ingsw.psp26.model.enums.Resource;
 import it.polimi.ingsw.psp26.network.client.cache.CachedModel;
+import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 import it.polimi.ingsw.psp26.view.ViewInterface;
 
 import java.awt.*;
@@ -169,7 +170,7 @@ public class Client extends Observable<Message> {
                     break;
 
                 case GLOBAL_LEADERBOARD:
-                    viewInterface.displayGlobalLeaderboard();
+                    viewInterface.displayGlobalLeaderboard((LeaderBoard) message.getPayload());
                     break;
 
                 case RESET:
@@ -342,7 +343,7 @@ public class Client extends Observable<Message> {
         viewInterface.reset();
     }
 
-    
+
     /**
      * Method to close the application.
      */

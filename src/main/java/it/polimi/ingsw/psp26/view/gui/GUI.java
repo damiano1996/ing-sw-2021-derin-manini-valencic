@@ -360,9 +360,9 @@ public class GUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void displayGlobalLeaderboard() {
+    public void displayGlobalLeaderboard(LeaderBoard leaderBoard) {
         Stage dialog = getDialog(primaryStage, new LeaderboardDrawer(
-                client, LeaderBoard.getInstance().getLeaderboard(), "", getMinBetweenWindowWidthAndHeight()
+                client, leaderBoard.getLeaderboard(), "", getMinBetweenWindowWidthAndHeight()
         ).draw());
         dialog.show();
     }

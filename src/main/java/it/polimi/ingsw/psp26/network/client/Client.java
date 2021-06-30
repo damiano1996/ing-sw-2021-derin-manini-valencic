@@ -159,7 +159,6 @@ public class Client extends Observable<Message> {
                     break;
 
                 case HELP:
-
                     Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
                     Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
                     File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
@@ -333,12 +332,17 @@ public class Client extends Observable<Message> {
         else viewNext();
     }
 
+
+    /**
+     * Method used to reset the NotificationsFIFO, the CachedModel and the ViewInterface
+     */
     public void reset() {
         NotificationsFIFO.getInstance().resetFIFO();
         cachedModel = new CachedModel(nickname);
         viewInterface.reset();
     }
 
+    
     /**
      * Method to close the application.
      */

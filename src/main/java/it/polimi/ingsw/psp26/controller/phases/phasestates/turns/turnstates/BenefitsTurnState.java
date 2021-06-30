@@ -17,11 +17,24 @@ import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
 public class BenefitsTurnState extends TurnState {
 
-
+    /**
+     * Class constructor.
+     *
+     * @param turn the turn which state is in the benefits turn state
+     */
     public BenefitsTurnState(Turn turn) {
         super(turn);
     }
 
+    /**
+     * Method that checks the turn number and gives to the corresponding player an amount of resources and possibly a
+     * faith point.
+     * <p>
+     * Method that is activated only if the turn number is lower than the current size of players, in order to activate
+     * it only one time. It gives them a predefined number of resources and faith points accordingly to the rules.
+     *
+     * @param message the message that is played
+     */
     @Override
     public void play(SessionMessage message) {
         System.out.println("BenefitsTurnState - " + message.toString());
@@ -60,6 +73,15 @@ public class BenefitsTurnState extends TurnState {
 
     }
 
+    /**
+     * Method that the first time that is called ask the player the resources, the second time, by checking the message
+     * it allows them to place in the warehouse.
+     *
+     * @param message the message passed by play
+     * @param numOfResources the number of resources that are given to the player
+     * @param faithPoint if true it gives to the player one faith point, zero otherwise
+     * @throws EmptyPayloadException
+     */
     private void assignResources(SessionMessage message, int numOfResources, boolean faithPoint) throws EmptyPayloadException {
         System.out.println("BenefitsTurnState - assigning resources " + message.toString());
 
@@ -83,6 +105,11 @@ public class BenefitsTurnState extends TurnState {
         turn.play(message);
     }
 
+    /**
+     * Method that change the turn state of to the next one (ChooseLeaderAction).
+     *
+     * @param message the message that is played by then next turn state
+     */
     private void goToChooseLeaderAction(SessionMessage message) {
         turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
         turn.play(message);

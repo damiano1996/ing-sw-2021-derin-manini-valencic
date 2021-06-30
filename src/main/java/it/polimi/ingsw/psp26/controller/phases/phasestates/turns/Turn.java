@@ -21,6 +21,14 @@ public class Turn {
     private TurnState turnState;
     private TurnPhase turnPhase;
 
+    /**
+     * Class constructor.
+     *
+     * @param playingPhaseState The playing phase state in which this turn is created
+     * @param matchController The associated match controller
+     * @param turnPlayer the player which turn is it
+     * @param turnNumber the new turn number
+     */
     public Turn(PlayingPhaseState playingPhaseState, MatchController matchController, Player turnPlayer, int turnNumber) {
         this.playingPhaseState = playingPhaseState;
         this.matchController = matchController;
@@ -39,6 +47,15 @@ public class Turn {
         turnState = new LeaderCardsAssignmentTurnState(this);
     }
 
+    /**
+     * Method that checks if the turn is to be skipped, or to be played then it notifies the other players.
+     * <p>
+     * The method checks if the player is disconnected by looking if the message type is DEATH, if they are, it notifies
+     * all players about it and  if it is multiplayer mode, it updates the turn to the one of the following player. If
+     * the player is not disconnected it plays their turn.
+     *
+     * @param message the session message
+     */
     public void play(SessionMessage message) {
         if (message.getSessionToken().equals(turnPlayer.getSessionToken())) {
 
@@ -76,42 +93,92 @@ public class Turn {
         }
     }
 
+    /**
+     * Setter of the turn state.
+     *
+     * @param newTurnState the turn state in which this turn is going to be in
+     */
     public void changeState(TurnState newTurnState) {
         turnState = newTurnState;
     }
 
+    /**
+     * Getter of the turn state.
+     *
+     * @return the turn state in which this turn is in
+     */
     public TurnState getTurnState() {
         return turnState;
     }
 
+    /**
+     * Getter of the turn player.
+     *
+     * @return the player whose turn is it
+     */
     public Player getTurnPlayer() {
         return turnPlayer;
     }
 
+    /**
+     * Setter of the turn player.
+     *
+     * @param turnPlayer the player whose turn is going to be
+     */
     public void setTurnPlayer(Player turnPlayer) {
         this.turnPlayer = turnPlayer;
     }
 
+    /**
+     * Getter of the turn number.
+     *
+     * @return the number of the current turn
+     */
     public int getTurnNumber() {
         return turnNumber;
     }
 
+    /**
+     *  Getter of the turn phase.
+     *
+     * @return the turn phase in which this turn is in
+     */
     public TurnPhase getTurnPhase() {
         return turnPhase;
     }
 
+    /**
+     * Setter of the turn phase.
+     *
+     * @param turnPhase the turn phase in which this turn is going to be in
+     */
     public void setTurnPhase(TurnPhase turnPhase) {
         this.turnPhase = turnPhase;
     }
 
+    /**
+     * Getter of the current phase state.
+     *
+     * @return The current phase state that is playing phase state
+     */
     public PlayingPhaseState getPlayingPhaseState() {
         return playingPhaseState;
     }
 
+    /**
+     * Getter of the match controller.
+     *
+     * @return the associated match controller
+     */
     public MatchController getMatchController() {
         return matchController;
     }
 
+    /**
+     * Method to send a notification message, broadcast to all players.
+     *
+     * @param messageText the message that is sent to all players
+     */
     public void notifyAllPlayers(String messageText) {
         try {
             getMatchController().notifyObservers(

@@ -10,7 +10,6 @@ import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 
 public class CheckVaticanReportTurnState extends TurnState {
-    private static boolean lastVaticanReportCalled = false;
 
     /**
      * Constructor of the class.
@@ -81,18 +80,14 @@ public class CheckVaticanReportTurnState extends TurnState {
 
     /**
      * Method to check if a player during the current turn activated the vatican report. If yes it checks for each
-     * player if they are inside the vatican report section and consequently activate or discard the favor tile and
-     * sends for each one of the a message in broadcast to containing this information.
+     * player if they are inside the vatican report section and consequently activate or discard the favor tile. Then it
+     * sends for each one of the a message in broadcast containing this information.
      *
      * @param player the player is in this turn state.
      */
     private void activateVaticanReport(Player player) {
-        if(!lastVaticanReportCalled) {
+        if(getFirstActiveSectionIndex(player) < player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length) {
             if (firstPlayerInPopeSpace(player) || isBlackCrossInPopeSpaceOrOver(player)) {
-                if (getFirstActiveSectionIndex(player) == (player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length - 1)) {
-                    lastVaticanReportCalled = true;
-                    System.out.println("CheckVaticanReport - Last turn called");
-                }
 
                 try {
 

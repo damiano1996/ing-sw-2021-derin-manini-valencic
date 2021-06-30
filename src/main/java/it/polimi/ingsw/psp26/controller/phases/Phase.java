@@ -10,6 +10,12 @@ public class Phase {
     private final MatchController matchController;
     private PhaseState phaseState;
 
+    /**
+     * Class constructor.
+     *
+     * @param matchController the match controller that is set
+     */
+
     public Phase(MatchController matchController) {
         this.matchController = matchController;
 
@@ -20,17 +26,39 @@ public class Phase {
         phaseState = new InitializationPhaseState(this);
     }
 
+    /**
+     * Method that calls the phase state execution of message.
+     *
+     * @param message the message that is passed on
+     */
+
     public void execute(SessionMessage message) {
         phaseState.execute(message);
     }
 
+    /**
+     * Setter of the phase state.
+     *
+     * @param newPhaseState the phase state that is set
+     */
     public void changeState(PhaseState newPhaseState) {
         phaseState = newPhaseState;
     }
 
+    /**
+     * Getter of the phase state.
+     *
+     * @return the phase state
+     */
     public PhaseState getPhaseState() {
         return phaseState;
     }
+
+    /**
+     * Getter of the match controller.
+     *
+     * @return the match controller
+     */
 
     public MatchController getMatchController() {
         return matchController;

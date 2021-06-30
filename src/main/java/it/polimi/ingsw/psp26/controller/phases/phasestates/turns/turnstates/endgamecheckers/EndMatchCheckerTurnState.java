@@ -19,22 +19,32 @@ import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid.L
 
 public class EndMatchCheckerTurnState extends TurnState {
 
-
+    /**
+     * Class constructor.
+     *
+     * @param turn the turn which state is in the end match checker turn state
+     */
     public EndMatchCheckerTurnState(Turn turn) {
         super(turn);
     }
 
+    /**
+     * Method that checks if an end match flag is triggered then it goes to the next turn state.
+     *
+     * @param message the message that is played
+     */
     @Override
     public void play(SessionMessage message) {
         super.play(message);
 
         for (Player player : turn.getMatchController().getMatch().getPlayers()) {
             checkMultiPlayerEnd(player); // checks in any case
-
             if (!turn.getMatchController().getMatch().isMultiPlayerMode()) checkSinglePlayerEnd();
         }
-        if (!isBlackCrossFinalPosition() && !isNoMoreColumnOfDevelopmentCards())
+
+        if (!isBlackCrossFinalPosition() && !isNoMoreColumnOfDevelopmentCards()) {
             goToNextStateAfterLeaderAction(turn, message);
+        }
     }
 
     /**

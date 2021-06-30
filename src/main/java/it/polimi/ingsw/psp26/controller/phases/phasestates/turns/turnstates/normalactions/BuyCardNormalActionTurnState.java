@@ -22,6 +22,11 @@ public class BuyCardNormalActionTurnState extends TurnState {
     private DevelopmentCard boughtCard = null;
     private List<Resource> tempResources = new ArrayList<>();
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn current turn
+     */
     public BuyCardNormalActionTurnState(Turn turn) {
         super(turn);
     }

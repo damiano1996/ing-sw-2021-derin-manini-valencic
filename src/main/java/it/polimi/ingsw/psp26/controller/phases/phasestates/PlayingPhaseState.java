@@ -18,27 +18,55 @@ public class PlayingPhaseState extends PhaseState {
     private Turn currentTurn;
     private boolean lastTurn;
 
+    /**
+     * Constructor of the class.
+     *
+     * @param phase which this state is in
+     */
     public PlayingPhaseState(Phase phase) {
         super(phase);
 
         initializeFirstTurn(true, 0);
     }
 
+    /**
+     * Constructor of the class.
+     *
+     * @param phase which this state is in
+     * @param shuffle if true it shuffles the player in the match, otherwise it does not
+     * @param firstTurnNumber The turn number that is set for the first turn
+     */
     public PlayingPhaseState(Phase phase, boolean shuffle, int firstTurnNumber) {
         super(phase);
 
         initializeFirstTurn(shuffle, firstTurnNumber);
     }
 
+    /**
+     * Method that calls the play method of turn with message as input.
+     *
+     * @param message the message that is forwarded
+     */
     @Override
     public void execute(SessionMessage message) {
         currentTurn.play(message);
     }
 
+    /**
+     * Getter of turn
+     *
+     * @return the current turn
+     */
     public Turn getCurrentTurn() {
         return currentTurn;
     }
 
+    /**
+     * Method that shuffle the player, creates the first turn and saves the backup of the match.
+     *
+     * @param shuffle  if true it shuffles the player in the match, otherwise it does not
+     * @param firstTurnNumber The turn number that is set for the first turn
+     */
     private void initializeFirstTurn(boolean shuffle, int firstTurnNumber) {
         if (shuffle) phase.getMatchController().getMatch().shufflePlayers();
 
@@ -61,6 +89,10 @@ public class PlayingPhaseState extends PhaseState {
         lastTurn = false;
     }
 
+    /**
+     * Method that notify the first player that it is their turn, and starts it.
+     *
+     */
     public void playFirstTurn() {
         try {
             sendNotificationMessageNewTurn();
@@ -71,6 +103,11 @@ public class PlayingPhaseState extends PhaseState {
         }
     }
 
+    /**
+     * Method that update the turn number, saves the turn information in the backup and creates and starts the turn for
+     * the following player.
+     *
+     */
     public void updateCurrentTurn() {
         int nextTurnNumber = currentTurn.getTurnNumber() + 1;
 
@@ -91,20 +128,39 @@ public class PlayingPhaseState extends PhaseState {
         }
     }
 
+    /**
+     * Method to change state to the end match one.
+     *
+     * @param message that is forwarded to the end match phase state
+     */
     public void goToEndMatchPhaseState(SessionMessage message) {
         // next state is...
         phase.changeState(new EndMatchPhaseState(phase));
         phase.execute(message);
     }
 
+    /**
+     * Getter of the last turn.
+     *
+     * @return It returns true if it is the last turn, false otherwise
+     */
     public boolean isLastTurn() {
         return lastTurn;
     }
 
+    /**
+     * Setter of the last turn.
+     *
+     */
     public void setLastTurn() {
         lastTurn = true;
     }
 
+    /**
+     * Method that notify the player of the current turn that the turn started and also notify all other player the
+     * same information both as a message and in the notification stack.
+     *
+     */
     public void sendNotificationMessageNewTurn() {
         try {
             String messageToTurnPlayer = "It's your turn!";

@@ -16,10 +16,24 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_
 
 public class InitializationPhaseState extends PhaseState {
 
+    /**
+     * Constructor of the class.
+     *
+     * @param phase which this state is in
+     */
     public InitializationPhaseState(Phase phase) {
         super(phase);
     }
 
+    /**
+     * Methods that waits for all player in a match and when they are all present it starts the match
+     * <p>
+     * When the number of waiting player is equal to the maximum number of player of the match, it sends to each player
+     * the items components needed to play the game and notify them that the match is starting.In the end, it changes
+     * phase state and starts a new turn.
+     *
+     * @param message the message that is executed
+     */
     @Override
     public synchronized void execute(SessionMessage message) {
         super.execute(message);
@@ -55,6 +69,14 @@ public class InitializationPhaseState extends PhaseState {
         }
     }
 
+    /**
+     * Method that retrieve the user, creates the player and adds it to the match. It notifies them to wait and the
+     * other players that they joined the game.
+     *
+     * @param message that contains the session token of the player to add
+     * @throws EmptyPayloadException
+     * @throws SessionTokenDoesNotExistsException
+     */
     private synchronized void addPlayer(SessionMessage message) throws EmptyPayloadException, SessionTokenDoesNotExistsException {
         String sessionToken = message.getSessionToken();
         String nickname = Users.getInstance().getNickname(sessionToken);

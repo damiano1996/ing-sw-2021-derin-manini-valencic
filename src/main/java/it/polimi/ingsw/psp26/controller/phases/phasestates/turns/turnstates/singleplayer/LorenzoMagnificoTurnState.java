@@ -17,11 +17,22 @@ import java.util.List;
 
 public class LorenzoMagnificoTurnState extends TurnState {
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn the turn in which this turn state is in
+     * @param turnPhase the turn phase in which this turn state is in
+     */
     public LorenzoMagnificoTurnState(Turn turn, TurnPhase turnPhase) {
         super(turn);
         turn.setTurnPhase(turnPhase);
     }
 
+    /**
+     * Method that draws an action token, executes it, notify the player and then change to the next turn state.
+     *
+     * @param message the message that is played
+     */
     @Override
     public void play(SessionMessage message) {
         super.play(message);
@@ -49,7 +60,13 @@ public class LorenzoMagnificoTurnState extends TurnState {
         turn.play(message);
     }
 
-
+    /**
+     * Method that notifies the player about the token played and all other ones.
+     *
+     * @param allTokens all the lorenzo's tokens
+     * @param tokenPlayed the token played this turn
+     * @throws InvalidPayloadException
+     */
     private void afterExecute(List<ActionToken> allTokens, String tokenPlayed) throws InvalidPayloadException {
         turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "Lorenzo played " + tokenPlayed + "."));
 

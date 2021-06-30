@@ -10,12 +10,27 @@ public class RecoveringMatchPhaseState extends PhaseState {
 
     private final PlayingPhaseState nextPlayingPhaseState;
 
+    /**
+     * Class constructor.
+     *
+     * @param phase the phase of the game that has called it
+     * @param nextPlayingPhaseState the phase following the recover
+     */
     public RecoveringMatchPhaseState(Phase phase, PlayingPhaseState nextPlayingPhaseState) {
         super(phase);
 
         this.nextPlayingPhaseState = nextPlayingPhaseState;
     }
 
+    /**
+     * Methods that waits for all player in a match and when they are all present it recovers the match
+     * <p>
+     * It notifies each player that calls this method to wait. When the number of waiting player is equal to the number
+     * of player that was in the match, it recovers the match and sends to each player the items components needed to
+     * play the game. In the end, it changes phase state and starts a new turn.
+     *
+     * @param message the message that is executed
+     */
     @Override
     public void execute(SessionMessage message) {
 

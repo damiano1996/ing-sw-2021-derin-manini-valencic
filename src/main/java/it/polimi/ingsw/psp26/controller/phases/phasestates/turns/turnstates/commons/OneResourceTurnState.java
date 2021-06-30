@@ -23,6 +23,15 @@ public class OneResourceTurnState extends TurnState {
 
     private List<Resource> resourcesOptions;
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn the current turn
+     * @param nextState the following turn state
+     * @param numOfResources the number of resources
+     * @param toPay if true the resource are taken from the player, otherwise the resources are taken from the supply
+     * @param resourcesOptions the list of resources available
+     */
     public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, boolean toPay, List<Resource> resourcesOptions) {
         super(turn);
         this.nextState = nextState;
@@ -32,6 +41,14 @@ public class OneResourceTurnState extends TurnState {
         this.resourcesOptions = resourcesOptions;
     }
 
+    /**
+     * Constructor of the class.
+     *
+     * @param turn the current turn
+     * @param nextState the following turn state
+     * @param numOfResources the number of resources
+     * @param toPay if true the resource are taken from the player, otherwise the resources are taken from the supply
+     */
     public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, boolean toPay) {
         super(turn);
         this.nextState = nextState;
@@ -41,10 +58,27 @@ public class OneResourceTurnState extends TurnState {
         this.resourcesOptions = Arrays.asList(RESOURCES_SLOTS);
     }
 
+    /**
+     * Method to define the source of resources.
+     *
+     * @param toPay if true the resource are taken from the player, otherwise the resources are taken from the supply
+     * @return message type of the corresponding source
+     */
     private MessageType getResourceSource(boolean toPay) {
         return (toPay) ? MessageType.CHOICE_RESOURCE_FROM_WAREHOUSE : MessageType.CHOICE_RESOURCE_FROM_RESOURCE_SUPPLY;
     }
 
+    /**
+     * Method that ask recursively to the current player a resource to choose until the number of resources requested is
+     * reached. Then it passes the list of resources as a message to the next state.
+     * <p>
+     * The first time the method sends to the player a message to choose a resource and waits for the answer. When the
+     * answer arrives if the number of resources requested is equal at the number of chosen resources it stops and go to
+     * the next phase sending the list of resource as the payload. If not it sends again to the player a message to
+     * choose a resource.
+     *
+     * @param message the message that is played
+     */
     @Override
     public void play(SessionMessage message) {
         super.play(message);
@@ -82,6 +116,10 @@ public class OneResourceTurnState extends TurnState {
 
     }
 
+    /**
+     * Method that send a message to the current player the list of which resource to choose.
+     *
+     */
     private void sendChoiceResourceMessage() {
         System.out.println("OneResourceTurnState - sending message to " + turn.getTurnPlayer().getNickname());
 
@@ -104,6 +142,11 @@ public class OneResourceTurnState extends TurnState {
         }
     }
 
+    /**
+     * It creates a map with each type of resources as a key and one as the integer.
+     *
+     * @return a map of resources and integers
+     */
     private Map<Resource, Integer> getResourcesMultiplicity() {
 
         Map<Resource, Integer> multiplicity = new HashMap<>();
@@ -119,6 +162,11 @@ public class OneResourceTurnState extends TurnState {
         return multiplicity;
     }
 
+    /**
+     * Method that check which resource type of the player are available.
+     *
+     * @return list of resource type that are available
+     */
     private List<Resource> getAvailableResources() {
         Map<Resource, Integer> multiplicity = getResourcesMultiplicity();
         for (Resource resource : resources) {

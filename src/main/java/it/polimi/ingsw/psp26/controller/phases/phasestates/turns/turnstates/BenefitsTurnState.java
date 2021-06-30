@@ -75,7 +75,7 @@ public class BenefitsTurnState extends TurnState {
 
     /**
      * Method that the first time that is called ask the player the resources, the second time, by checking the message
-     * it allows them to place in the warehouse.
+     * it allows them to place them in the warehouse.
      *
      * @param message the message passed by play
      * @param numOfResources the number of resources that are given to the player

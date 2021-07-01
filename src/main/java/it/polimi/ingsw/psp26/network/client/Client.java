@@ -160,10 +160,19 @@ public class Client extends Observable<Message> {
                     break;
 
                 case HELP:
-                    Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                    Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
-                    File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                    Desktop.getDesktop().open(rulesPdf);
+                    try {
+                        
+                        Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
+                        Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
+                        File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
+                        Desktop.getDesktop().open(rulesPdf);
+
+                    } catch (IOException cantOpenPDF) {
+                        // self message for displaying error
+                        MessageSynchronizedFIFO.getInstance().update(
+                                new Message(ERROR_MESSAGE, "Unable to open the PDF rules!")
+                        );
+                    }
 
                     sendMenuUndoMessage();
                     viewNext();
@@ -208,7 +217,7 @@ public class Client extends Observable<Message> {
                     break;
             }
 
-        } catch (EmptyPayloadException | InvalidPayloadException | IOException ignored) {
+        } catch (EmptyPayloadException | InvalidPayloadException ignored) {
         }
     }
 

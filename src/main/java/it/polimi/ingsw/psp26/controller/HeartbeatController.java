@@ -19,9 +19,9 @@ import static java.lang.Thread.sleep;
  */
 public class HeartbeatController extends Observable<SessionMessage> implements Observer<SessionMessage> {
 
-    public static final int MAX_TIME_TO_DIE = 5000; // 5 ms
+    public static final int MAX_TIME_TO_DIE = 5000; // 5000 ms
     public static final int MAX_TIME_TO_END_MATCH = 1000 * 60 * 5; // 5 minutes
-    private static final int DELTA_TIME = 1000; // every 100 ms checks countdown
+    private static final int DELTA_TIME = 1000; // every 1000 ms checks countdown
 
     private final String sessionToken;
     private final VirtualView virtualView;

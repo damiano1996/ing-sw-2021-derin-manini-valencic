@@ -779,6 +779,11 @@ public class CLI implements ViewInterface {
      */
     @Override
     public void waitForYourTurn() {
+        mutex.lock();
+        // Must restore the notifications here since they can be hide if the player has no LeaderActions to perform
+        notificationStackPrinter.restoreStackView();
+        mutex.unlock();
+
         AtomicBoolean waitingForTurn = new AtomicBoolean(true);
 
         // Creating a Thread that automatically notify the Player that it's his Turn

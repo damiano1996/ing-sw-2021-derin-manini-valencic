@@ -32,8 +32,8 @@ public class PlayingPhaseState extends PhaseState {
     /**
      * Constructor of the class.
      *
-     * @param phase which this state is in
-     * @param shuffle if true it shuffles the player in the match, otherwise it does not
+     * @param phase           which this state is in
+     * @param shuffle         if true it shuffles the player in the match, otherwise it does not
      * @param firstTurnNumber The turn number that is set for the first turn
      */
     public PlayingPhaseState(Phase phase, boolean shuffle, int firstTurnNumber) {
@@ -64,7 +64,7 @@ public class PlayingPhaseState extends PhaseState {
     /**
      * Method that shuffle the player, creates the first turn and saves the backup of the match.
      *
-     * @param shuffle  if true it shuffles the player in the match, otherwise it does not
+     * @param shuffle         if true it shuffles the player in the match, otherwise it does not
      * @param firstTurnNumber The turn number that is set for the first turn
      */
     private void initializeFirstTurn(boolean shuffle, int firstTurnNumber) {
@@ -91,7 +91,6 @@ public class PlayingPhaseState extends PhaseState {
 
     /**
      * Method that notify the first player that it is their turn, and starts it.
-     *
      */
     public void playFirstTurn() {
         try {
@@ -106,7 +105,6 @@ public class PlayingPhaseState extends PhaseState {
     /**
      * Method that update the turn number, saves the turn information in the backup and creates and starts the turn for
      * the following player.
-     *
      */
     public void updateCurrentTurn() {
         int nextTurnNumber = currentTurn.getTurnNumber() + 1;
@@ -150,7 +148,6 @@ public class PlayingPhaseState extends PhaseState {
 
     /**
      * Setter of the last turn.
-     *
      */
     public void setLastTurn() {
         lastTurn = true;
@@ -159,7 +156,6 @@ public class PlayingPhaseState extends PhaseState {
     /**
      * Method that notify the player of the current turn that the turn started and also notify all other player the
      * same information both as a message and in the notification stack.
-     *
      */
     public void sendNotificationMessageNewTurn() {
         try {

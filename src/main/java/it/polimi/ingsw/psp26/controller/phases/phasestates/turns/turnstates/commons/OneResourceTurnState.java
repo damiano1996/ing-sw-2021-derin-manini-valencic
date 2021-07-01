@@ -26,10 +26,10 @@ public class OneResourceTurnState extends TurnState {
     /**
      * Constructor of the class.
      *
-     * @param turn the current turn
-     * @param nextState the following turn state
-     * @param numOfResources the number of resources
-     * @param toPay if true the resource are taken from the player, otherwise the resources are taken from the supply
+     * @param turn             the current turn
+     * @param nextState        the following turn state
+     * @param numOfResources   the number of resources
+     * @param toPay            if true the resource are taken from the player, otherwise the resources are taken from the supply
      * @param resourcesOptions the list of resources available
      */
     public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, boolean toPay, List<Resource> resourcesOptions) {
@@ -44,10 +44,10 @@ public class OneResourceTurnState extends TurnState {
     /**
      * Constructor of the class.
      *
-     * @param turn the current turn
-     * @param nextState the following turn state
+     * @param turn           the current turn
+     * @param nextState      the following turn state
      * @param numOfResources the number of resources
-     * @param toPay if true the resource are taken from the player, otherwise the resources are taken from the supply
+     * @param toPay          if true the resource are taken from the player, otherwise the resources are taken from the supply
      */
     public OneResourceTurnState(Turn turn, TurnState nextState, int numOfResources, boolean toPay) {
         super(turn);
@@ -118,7 +118,6 @@ public class OneResourceTurnState extends TurnState {
 
     /**
      * Method that send a message to the current player the list of which resource to choose.
-     *
      */
     private void sendChoiceResourceMessage() {
         System.out.println("OneResourceTurnState - sending message to " + turn.getTurnPlayer().getNickname());

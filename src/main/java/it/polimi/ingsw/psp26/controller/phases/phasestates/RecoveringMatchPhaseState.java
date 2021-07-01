@@ -13,7 +13,7 @@ public class RecoveringMatchPhaseState extends PhaseState {
     /**
      * Class constructor.
      *
-     * @param phase the phase of the game that has called it
+     * @param phase                 the phase of the game that has called it
      * @param nextPlayingPhaseState the phase following the recover
      */
     public RecoveringMatchPhaseState(Phase phase, PlayingPhaseState nextPlayingPhaseState) {

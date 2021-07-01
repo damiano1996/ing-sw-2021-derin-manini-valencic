@@ -29,7 +29,6 @@ public class LogIn extends Thread {
         this.clientNode = clientNode;
     }
 
-
     /**
      * Method that puts the clientNode in the WaitingRoom.
      * If the nickname and password entered by the Player do not satisfy the requirements, sends a message to the Client
@@ -38,8 +37,8 @@ public class LogIn extends Thread {
     @Override
     public void run() {
         try {
-
             try {
+
                 System.out.println("LogIn - New clientNode to log.");
                 String sessionToken = getSessionToken(clientNode);
                 System.out.println("LogIn - Adding nodeClient to waiting room.");

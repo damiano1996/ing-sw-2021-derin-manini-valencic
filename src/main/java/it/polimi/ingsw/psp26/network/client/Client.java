@@ -14,6 +14,8 @@ import it.polimi.ingsw.psp26.view.ViewInterface;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -160,20 +162,7 @@ public class Client extends Observable<Message> {
                     break;
 
                 case HELP:
-                    try {
-                        
-                        Path desktop = Path.of(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                        Files.copy(Objects.requireNonNull(getClass().getResource("/gui/rules_ITA.pdf")).openStream(), desktop, REPLACE_EXISTING);
-                        File rulesPdf = new File(System.getProperty("user.home") + "/Desktop/rules_ITA.pdf");
-                        Desktop.getDesktop().open(rulesPdf);
-
-                    } catch (IOException cantOpenPDF) {
-                        // self message for displaying error
-                        MessageSynchronizedFIFO.getInstance().update(
-                                new Message(ERROR_MESSAGE, "Unable to open the PDF rules!")
-                        );
-                    }
-
+                    openRules();
                     sendMenuUndoMessage();
                     viewNext();
                     break;
@@ -329,6 +318,48 @@ public class Client extends Observable<Message> {
         try {
             notifyObservers(new Message(MENU, UNDO_OPTION_SELECTED));
         } catch (InvalidPayloadException ignored) {
+        }
+    }
+
+    /**
+     * Method to show the rules of the game.
+     */
+    private void openRules() {
+        String errorMessage = "Unable to open the rules from your OS.";
+        try {
+
+            URL srcFileURL = getClass().getResource("/gui/rules_ITA.pdf");
+            String dstFilePath = System.getProperty("user.home") + "/Desktop/rules_ITA.pdf";
+            if (PRINT_CLIENT_SIDE) System.out.println(srcFileURL);
+            if (PRINT_CLIENT_SIDE) System.out.println(dstFilePath);
+            // Defining input stream
+            InputStream srcInputStream = Objects.requireNonNull(srcFileURL).openStream();
+            // copying file
+            Files.copy(srcInputStream, Path.of(dstFilePath), REPLACE_EXISTING);
+            // Opening file from desktop
+            String osType = System.getProperty("os.name");
+            if (PRINT_CLIENT_SIDE) System.out.println("Client - Detected OS: " + osType);
+
+            if (osType.contains("Linux")) {
+                Runtime.getRuntime().exec(new String[]{"xdg-open", dstFilePath});
+            } else if (osType.contains("Windows")) {
+                Desktop.getDesktop().open(new File(dstFilePath));
+            } else {
+
+                try {
+                    MessageSynchronizedFIFO.getInstance().update(new Message(ERROR_MESSAGE, errorMessage));
+                } catch (InvalidPayloadException ignored) {
+                }
+            }
+
+            if (PRINT_CLIENT_SIDE) System.out.println("Client - File has been opened and showed.");
+
+        } catch (Exception e) {
+            // self message for displaying error
+            try {
+                MessageSynchronizedFIFO.getInstance().update(new Message(ERROR_MESSAGE, errorMessage));
+            } catch (InvalidPayloadException ignored) {
+            }
         }
     }
 

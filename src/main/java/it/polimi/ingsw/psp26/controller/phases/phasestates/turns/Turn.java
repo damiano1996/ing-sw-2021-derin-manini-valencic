@@ -15,7 +15,7 @@ public class Turn {
 
     private final PlayingPhaseState playingPhaseState;
     private final MatchController matchController;
-    private int turnNumber;
+    private final int turnNumber;
     private Player turnPlayer;
 
     private TurnState turnState;
@@ -25,9 +25,9 @@ public class Turn {
      * Class constructor.
      *
      * @param playingPhaseState The playing phase state in which this turn is created
-     * @param matchController The associated match controller
-     * @param turnPlayer the player which turn is it
-     * @param turnNumber the new turn number
+     * @param matchController   The associated match controller
+     * @param turnPlayer        the player which turn is it
+     * @param turnNumber        the new turn number
      */
     public Turn(PlayingPhaseState playingPhaseState, MatchController matchController, Player turnPlayer, int turnNumber) {
         this.playingPhaseState = playingPhaseState;
@@ -139,7 +139,7 @@ public class Turn {
     }
 
     /**
-     *  Getter of the turn phase.
+     * Getter of the turn phase.
      *
      * @return the turn phase in which this turn is in
      */

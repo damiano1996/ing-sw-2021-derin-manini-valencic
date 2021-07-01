@@ -77,10 +77,10 @@ public class BenefitsTurnState extends TurnState {
      * Method that the first time that is called ask the player the resources, the second time, by checking the message
      * it allows them to place them in the warehouse.
      *
-     * @param message the message passed by play
+     * @param message        the message passed by play
      * @param numOfResources the number of resources that are given to the player
-     * @param faithPoint if true it gives to the player one faith point, zero otherwise
-     * @throws EmptyPayloadException
+     * @param faithPoint     if true it gives to the player one faith point, zero otherwise
+     * @throws EmptyPayloadException if the payload of the message is empty
      */
     private void assignResources(SessionMessage message, int numOfResources, boolean faithPoint) throws EmptyPayloadException {
         System.out.println("BenefitsTurnState - assigning resources " + message.toString());

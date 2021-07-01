@@ -86,7 +86,7 @@ public class CheckVaticanReportTurnState extends TurnState {
      * @param player the player is in this turn state.
      */
     private void activateVaticanReport(Player player) {
-        if(getFirstActiveSectionIndex(player) < player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length) {
+        if (getFirstActiveSectionIndex(player) < player.getPersonalBoard().getFaithTrack().getVaticanReportSections().length) {
             if (firstPlayerInPopeSpace(player) || isBlackCrossInPopeSpaceOrOver(player)) {
 
                 try {

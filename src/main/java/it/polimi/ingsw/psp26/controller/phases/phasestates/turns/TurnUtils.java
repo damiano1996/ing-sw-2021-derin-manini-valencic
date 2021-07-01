@@ -9,13 +9,62 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.norm
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
+import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
 public class TurnUtils {
 
     /**
-     * Method used to change the turn state after a leader action.
+     * Method used to define the next state after a leader action.
+     * It performs checks on the end of the match.
+     * The game can stop if the end match phase has been activated and all the players have played their last turn.
+     * Or it can stop if the end has been activated and one or more players lost the connection until the end.
+     * In the second case an indefinite suspension will be activated.
+     * <p>
+     * In other cases it change the state of the automaton according to the rules.
+     * From leader action goes to normal action.
+     * From normal action to the second leader action.
+     * To the second leader action to the next turn.
+     *
+     * @param turn    turn object
+     * @param message received message
+     */
+    public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
+        System.out.println("goToNextStateAfterLeaderAction - current turn phase: " + turn.getTurnPhase());
+
+        try {
+            if (turn.getPlayingPhaseState().isLastTurn() && // true if end game has been activated
+                    getNextPlayer(turn).hasInkwell() && // true if current player is the last of the table
+                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) // true if the last player has played the entire turn
+            ) {
+
+                turn.getPlayingPhaseState().goToEndMatchPhaseState(
+                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
+
+            } else if (turn.getPlayingPhaseState().isLastTurn() && // true if the end game has been activated
+                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) // true if the last player has played the entire turn
+                    && (turn.getMatchController().getVirtualView().getNumberOfNodeClients() !=
+                    turn.getMatchController().getMatch().getPlayers().size()) // true if one player lost the connection until the last turn
+            ) {
+
+                // Sending message to controller to go to the end and suspend the game
+                turn.getMatchController().update(new SessionMessage(
+                        SpecialToken.BROADCAST.getToken(),
+                        INDEFINITE_SUSPENSION));
+
+            } else {
+
+                playNextState(turn, message);
+
+            }
+
+        } catch (InvalidPayloadException ignored) {
+        }
+    }
+
+    /**
+     * Method used to change the turn state after a leader action and play it.
      * It handles all the cases:
      * - from leader action to normal action;
      * - from normal action to leader action;
@@ -24,57 +73,44 @@ public class TurnUtils {
      * @param turn    turn object
      * @param message received message
      */
-    public static void goToNextStateAfterLeaderAction(Turn turn, SessionMessage message) {
-        System.out.println("goToNextStateAfterLeaderAction - current turn phase: " + turn.getTurnPhase());
-        if (turn.getPlayingPhaseState().isLastTurn() && // true if end game has been activated
-                getNextPlayer(turn).hasInkwell() && // true if current player is the last of the table
-                turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) // true if the last player has played the entire turn
-        ) {
-            try {
-                turn.getPlayingPhaseState().goToEndMatchPhaseState(
-                        new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
-            } catch (InvalidPayloadException ignored) {
-            }
+    private static void playNextState(Turn turn, SessionMessage message) {
+        switch (turn.getTurnPhase()) {
 
-        } else {
+            case RESOURCE_PLACER_TO_LEADER_ACTION:
+                turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
+                turn.play(message);
+                break;
 
-            switch (turn.getTurnPhase()) {
+            case LEADER_TO_NORMAL_ACTION:
+                // If first leader action has been played, go to normal action
+                turn.changeState(new ChooseNormalActionTurnState(turn));
+                turn.play(message);
+                break;
 
-                case RESOURCE_PLACER_TO_LEADER_ACTION:
-                    turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_TO_NORMAL_ACTION));
-                    turn.play(message);
-                    break;
+            case NORMAL_TO_LEADER_ACTION:
+                // After normal action, go to leader action
+                turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_ACTION_TO_END));
+                turn.play(message);
+                break;
 
-                case LEADER_TO_NORMAL_ACTION:
-                    // If first leader action has been played, go to normal action
-                    turn.changeState(new ChooseNormalActionTurnState(turn));
-                    turn.play(message);
-                    break;
-
-                case NORMAL_TO_LEADER_ACTION:
-                    // After normal action, go to leader action
-                    turn.changeState(new ChooseLeaderActionTurnState(turn, TurnPhase.LEADER_ACTION_TO_END));
-                    turn.play(message);
-                    break;
-
-                case LEADER_ACTION_TO_END:
-                    if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
-                        // After the second leader action, go to next player turn
-                        turn.getPlayingPhaseState().updateCurrentTurn();
-                        turn.notifyAllPlayers(turn.getTurnPlayer().getNickname() + " finished his turn.");
-
-                    } else {
-                        // After the second leader action, go to Lorenzo action
-                        turn.changeState(new LorenzoMagnificoTurnState(turn, TurnPhase.LORENZO_TO_END));
-                        turn.play(message);
-
-                    }
-                    break;
-                case LORENZO_TO_END:
-                    //After Lorenzo action, go to next turn
+            case LEADER_ACTION_TO_END:
+                if (turn.getMatchController().getMatch().isMultiPlayerMode()) {
+                    // After the second leader action, go to next player turn
                     turn.getPlayingPhaseState().updateCurrentTurn();
-                    break;
-            }
+                    turn.notifyAllPlayers(turn.getTurnPlayer().getNickname() + " finished his turn.");
+
+                } else {
+                    // After the second leader action, go to Lorenzo action
+                    turn.changeState(new LorenzoMagnificoTurnState(turn, TurnPhase.LORENZO_TO_END));
+                    turn.play(message);
+
+                }
+                break;
+
+            case LORENZO_TO_END:
+                //After Lorenzo action, go to next turn
+                turn.getPlayingPhaseState().updateCurrentTurn();
+                break;
         }
     }
 

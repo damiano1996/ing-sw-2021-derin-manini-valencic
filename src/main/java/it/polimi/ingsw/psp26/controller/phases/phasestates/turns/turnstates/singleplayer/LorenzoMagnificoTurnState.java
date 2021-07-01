@@ -20,7 +20,7 @@ public class LorenzoMagnificoTurnState extends TurnState {
     /**
      * Constructor of the class.
      *
-     * @param turn the turn in which this turn state is in
+     * @param turn      the turn in which this turn state is in
      * @param turnPhase the turn phase in which this turn state is in
      */
     public LorenzoMagnificoTurnState(Turn turn, TurnPhase turnPhase) {
@@ -63,9 +63,9 @@ public class LorenzoMagnificoTurnState extends TurnState {
     /**
      * Method that notifies the player about the token played and all other ones.
      *
-     * @param allTokens all the lorenzo's tokens
+     * @param allTokens   all the lorenzo's tokens
      * @param tokenPlayed the token played this turn
-     * @throws InvalidPayloadException
+     * @throws InvalidPayloadException if payload of the message is not admissible
      */
     private void afterExecute(List<ActionToken> allTokens, String tokenPlayed) throws InvalidPayloadException {
         turn.getMatchController().notifyObservers(new NotificationUpdateMessage(SpecialToken.BROADCAST.getToken(), "Lorenzo played " + tokenPlayed + "."));

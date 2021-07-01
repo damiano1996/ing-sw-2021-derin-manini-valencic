@@ -69,19 +69,27 @@ public class MarketResourceNormalActionTurnStateTest {
 
     @Test
     public void playSendToWareHousePlacer() throws InvalidPayloadException {
+
+        int marblesToPlace = (int) Arrays.stream(turn.getMatchController().getMatch().getMarketTray().getMarblesOnColumn(2))
+                .filter(x -> x != Resource.EMPTY && x != Resource.FAITH_MARKER).count();
+
+
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.COIN));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.SHIELD));
 
-        assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(3).getMessageType());
+        if(marblesToPlace != 0) {
+            assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(3).getMessageType());
+        }else{
+            assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(3).getMessageType());
+        }
     }
 
     @Test
     public void playSendChoiceRowColumnLeaderActive() throws InvalidPayloadException {
         List<Resource> expectedResources = leaderCardSetter(1);
         if (expectedResources.size() > 0) {
-            List<Resource> resources = Arrays.asList(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2));
 
             turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
 

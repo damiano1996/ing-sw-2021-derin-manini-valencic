@@ -3,6 +3,9 @@ package it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.com
 import it.polimi.ingsw.psp26.model.Match;
 import it.polimi.ingsw.psp26.model.Player;
 
+/**
+ * Class that offers some generic method to the turn states.
+ */
 public class MatchUtils {
 
 

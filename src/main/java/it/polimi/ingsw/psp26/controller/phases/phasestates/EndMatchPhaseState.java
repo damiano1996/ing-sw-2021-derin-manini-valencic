@@ -15,6 +15,10 @@ import it.polimi.ingsw.psp26.network.server.memory.LeaderBoard;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
+/**
+ * Class that is used for the final phase of the game and so on ending and closing the match and to calculates
+ * the points and decree the winner if the game is not ended by a disconnection.
+ */
 public class EndMatchPhaseState extends PhaseState {
 
     private String winnerName = "";

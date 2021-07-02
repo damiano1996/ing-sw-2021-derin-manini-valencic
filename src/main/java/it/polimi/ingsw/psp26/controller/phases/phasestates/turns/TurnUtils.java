@@ -13,6 +13,9 @@ import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
+/**
+ * Class that works as crossroad of turn states. It changes the turn state that ended to the following one.
+ */
 public class TurnUtils {
 
     /**

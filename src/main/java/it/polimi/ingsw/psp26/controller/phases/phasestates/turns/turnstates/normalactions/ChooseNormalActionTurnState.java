@@ -10,6 +10,9 @@ import it.polimi.ingsw.psp26.exceptions.EmptyPayloadException;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_NORMAL_ACTION;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendChoiceNormalActionMessage;
 
+/**
+ * Class the models the choice of turn actions.
+ */
 public class ChooseNormalActionTurnState extends TurnState {
 
     /**

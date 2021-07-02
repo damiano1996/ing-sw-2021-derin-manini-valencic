@@ -11,6 +11,9 @@ import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 
+/**
+ * Class that models the turn.
+ */
 public class Turn {
 
     private final PlayingPhaseState playingPhaseState;

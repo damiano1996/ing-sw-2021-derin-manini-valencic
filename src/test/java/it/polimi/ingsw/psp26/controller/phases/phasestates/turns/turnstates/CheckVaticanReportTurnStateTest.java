@@ -92,8 +92,6 @@ public class CheckVaticanReportTurnStateTest {
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(4);
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().moveBlackCrossPosition(8);
 
-        boolean tileBeforeTurn = turn.getTurnPlayer().getPersonalBoard().getFaithTrack().getVaticanReportSections()[0].isPopesFavorTileActive();
-
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.CHOICE_NORMAL_ACTION, MessageType.ACTIVATE_PRODUCTION));
         turn.getTurnPlayer().getPersonalBoard().getFaithTrack().addFaithPoints(6);
 

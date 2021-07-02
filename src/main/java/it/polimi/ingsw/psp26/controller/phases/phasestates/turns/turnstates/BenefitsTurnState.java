@@ -15,6 +15,9 @@ import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_RESO
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
+/**
+ * Class used to give the starting resources to the players.
+ */
 public class BenefitsTurnState extends TurnState {
 
     /**

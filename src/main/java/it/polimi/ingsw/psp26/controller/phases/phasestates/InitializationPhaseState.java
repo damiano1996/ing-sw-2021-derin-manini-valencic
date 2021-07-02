@@ -13,7 +13,10 @@ import it.polimi.ingsw.psp26.network.server.memory.Users;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.SET_NUMBER_OF_PLAYERS;
 
-
+/**
+ * Class that is used for the first phase of the game. It works as lobby, it adds users to the match as player and when
+ * the lobby is full it starts the match.
+ */
 public class InitializationPhaseState extends PhaseState {
 
     /**

@@ -17,6 +17,9 @@ import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtil
 import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid.COLORS;
 import static it.polimi.ingsw.psp26.model.developmentgrid.DevelopmentCardsGrid.LEVELS;
 
+/**
+ * Class used to check if the players activated one of the triggers to the end game.
+ */
 public class EndMatchCheckerTurnState extends TurnState {
 
     /**

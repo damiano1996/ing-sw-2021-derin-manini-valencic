@@ -5,6 +5,9 @@ import it.polimi.ingsw.psp26.controller.MatchController;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.InitializationPhaseState;
 import it.polimi.ingsw.psp26.controller.phases.phasestates.PhaseState;
 
+/**
+ * Class that models the phase.
+ */
 public class Phase {
 
     private final MatchController matchController;

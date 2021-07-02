@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.utils.CollectionsUtils.castElements;
 
-
+/**
+ * Class the models the market turn action.
+ */
 public class MarketResourceNormalActionTurnState extends TurnState {
 
     private List<Resource> tempResources;

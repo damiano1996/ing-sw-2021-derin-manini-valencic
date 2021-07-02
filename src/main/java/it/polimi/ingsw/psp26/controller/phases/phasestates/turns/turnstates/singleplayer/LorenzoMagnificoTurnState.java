@@ -14,7 +14,9 @@ import it.polimi.ingsw.psp26.network.SpecialToken;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Class the models the possible lorenzo actions.
+ */
 public class LorenzoMagnificoTurnState extends TurnState {
 
     /**

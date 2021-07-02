@@ -14,6 +14,9 @@ import java.util.*;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 import static it.polimi.ingsw.psp26.model.ResourceSupply.RESOURCES_SLOTS;
 
+/**
+ * Class that is used to ask a player each resource type they want, one at time, for a list of resource spots.
+ */
 public class OneResourceTurnState extends TurnState {
 
     private final TurnState nextState;

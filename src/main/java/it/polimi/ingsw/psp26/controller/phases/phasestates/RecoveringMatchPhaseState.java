@@ -6,6 +6,10 @@ import it.polimi.ingsw.psp26.controller.phases.Phase;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 
+/**
+ * Class used to recover a match when all player inside it disconnected or exited.
+ * This phase state is set when a player connects back to the game, and choose the recovery option.
+ */
 public class RecoveringMatchPhaseState extends PhaseState {
 
     private final PlayingPhaseState nextPlayingPhaseState;

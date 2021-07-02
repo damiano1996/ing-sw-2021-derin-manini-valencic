@@ -9,6 +9,9 @@ import it.polimi.ingsw.psp26.model.Player;
 import it.polimi.ingsw.psp26.model.personalboard.VaticanReportSection;
 import it.polimi.ingsw.psp26.network.SpecialToken;
 
+/**
+ * Class that models the vatican report dynamic.
+ */
 public class CheckVaticanReportTurnState extends TurnState {
 
     /**

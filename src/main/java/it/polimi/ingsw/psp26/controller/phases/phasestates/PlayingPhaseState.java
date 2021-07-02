@@ -13,6 +13,10 @@ import it.polimi.ingsw.psp26.network.server.memory.GameSaver;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.getNextPlayer;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendMessageToAllPlayerExceptOne;
 
+/**
+ * Class used as the container and manager of all sub-phase related to the game. It contains methods to manage the turns.
+ * It is called after the initialization phase state and calls the end match phase state when the game ends.
+ */
 public class PlayingPhaseState extends PhaseState {
 
     private Turn currentTurn;

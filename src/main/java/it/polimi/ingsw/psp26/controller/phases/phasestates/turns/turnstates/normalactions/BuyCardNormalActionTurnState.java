@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.psp26.application.messages.MessageType.CHOICE_DEVELOPMENT_CARD_SLOT_POSITION;
 import static it.polimi.ingsw.psp26.controller.phases.phasestates.turns.TurnUtils.sendGeneralMessage;
 
+/**
+ * Class the models the buy card turn action.
+ */
 public class BuyCardNormalActionTurnState extends TurnState {
     private DevelopmentCard boughtCard = null;
     private List<Resource> tempResources = new ArrayList<>();

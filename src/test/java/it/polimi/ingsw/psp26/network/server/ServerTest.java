@@ -15,7 +15,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.psp26.configurations.Configurations.*;
 import static it.polimi.ingsw.psp26.controller.HeartbeatController.MAX_TIME_TO_DIE;
@@ -244,69 +243,6 @@ public class ServerTest {
 
         NetworkNode networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, true, true, nickname, password);
         assertRecoveryMessage(networkNode);
-    }
-
-    @Test
-    public void testCloseMatchIfNotRecovered() throws InterruptedException, IOException {
-        Server.getInstance().closeConnection();
-
-        String nickname = generateSessionToken(MIN_NICKNAME_LENGTH);
-        String password = generateSessionToken(MIN_PASSWORD_LENGTH);
-        String sessionToken = generateSessionToken(SESSION_TOKEN_LENGTH);
-        Users.getInstance().addUser(nickname, password, sessionToken);
-
-        int numberOfMatchWithThisPlayer = 3;
-
-        for (int i = 0; i < numberOfMatchWithThisPlayer; i++) {
-            VirtualView virtualView = new VirtualView();
-
-            Match match = new Match(virtualView, GameSaver.getInstance().getLastId() + 1);
-            match.addPlayer(new Player(virtualView, nickname, sessionToken));
-
-            GameSaver.getInstance().backupMatch(
-                    match,
-                    0,
-                    1
-            );
-        }
-
-        // Checking that the total number of matches is the sum of the initial plus the news.
-        int numberPlayerMatches = getNumberOfMatchesWherePlayerIs(sessionToken);
-        System.out.println("ServerTest - saved matches before deletion: " + numberPlayerMatches);
-        assertEquals(numberOfMatchWithThisPlayer, numberPlayerMatches);
-
-        // Creating new match without recovery the olds
-        Thread t = new Thread(() -> {
-            NetworkNode networkNode = null;
-            try {
-                networkNode = assignToVirtualView(MessageType.SINGLE_PLAYER_MODE, false, true, nickname, password);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            try {
-                assertStartMatch(networkNode);
-            } catch (IOException | ClassNotFoundException | EmptyPayloadException e) {
-                e.printStackTrace();
-            }
-        });
-
-        t.start();
-        t.join();
-
-        // Only the new match has to contain the session token of the current player
-        assertEquals(1, getNumberOfMatchesWherePlayerIs(sessionToken));
-    }
-
-    private int getNumberOfMatchesWherePlayerIs(String sessionToken) {
-        int nMatches = 0;
-        for (VirtualView virtualView : Server.getInstance().getVirtualViews())
-            if (virtualView.getMatchController().getMatch().getPlayers()
-                    .stream()
-                    .map(Player::getSessionToken)
-                    .collect(Collectors.toList()).contains(sessionToken))
-                nMatches++;
-
-        return nMatches;
     }
 
 }

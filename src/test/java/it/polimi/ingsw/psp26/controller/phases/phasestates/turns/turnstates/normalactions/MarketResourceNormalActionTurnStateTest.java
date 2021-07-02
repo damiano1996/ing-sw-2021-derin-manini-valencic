@@ -77,7 +77,7 @@ public class MarketResourceNormalActionTurnStateTest {
         int marblesToPlace = (int) Arrays.stream(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2))
                 .filter(x -> x != Resource.EMPTY && x != Resource.FAITH_MARKER).count();
 
-        if(marblesToPlace == 0) {
+        if (marblesToPlace == 0) {
             turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(2);
             turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(1);
             turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(2);

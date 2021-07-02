@@ -1,12 +1,16 @@
 # Software Engineering - Course Project
 
+---
+
 ## Table of Contents
 
 - [Team Members](#team-members)
 - [Implemented Functionalities](#implemented-functionalities)
 - [Requirements](#requirements)
 - [Usage](#usage)
-    - [Step 1: Download the JAR files](#usage-step-1)
+    - [Step 1: JAR files](#usage-step-1)
+        - [Generate JARs](#generate-jars)
+        - [Download JARs](#download-jars)
     - [Step 2: Running the Server](#usage-step-2)
     - [Step 3: Running the Client](#usage-step-3)
         - [CLI Version](#cli-version)
@@ -61,11 +65,36 @@ In alphabetic order:
 
 <a name="usage-step-1"></a>
 
-### Step 1: Download JAR files
+### Step 1: JAR files
 
-Since JARs weight more than 100 MB, they have been uploaded on Dropbox (as permitted by Tutors on Slack).  
-You can download them at the following link:  
-TODO: INSERIRE LINK DROPBOX FUNZIONANTE CON I JAR
+JAR files can be downloaded from our Dropbox directory or can be generated as explained in the next step.
+
+<a name="generate-jars"></a>
+
+#### Generate JARs
+
+- Clone and browse in the directory of the project:
+
+```bash
+  $ git clone https://github.com/damiano9669/ing-sw-2021-derin-manini-valencic.git
+  $ cd ing-sw-2021-derin-manini-valencic
+```
+
+- Execute the following command from terminal to build and to generate JAR files:
+
+```bash
+  $ mvn package -Dmaven.test.skip=true
+```
+
+- After termination of the build, files will be available in this [directory](deliverables/final/jar).
+
+<a name="download-jars"></a>
+
+#### Download JARs
+
+We built JARs, but since they weight more than 100 MB, we uploaded them on Dropbox. You can download
+the ```server.jar``` and the ```client.jar``` from the following
+[link](TODO: INSERIRE LINK DROPBOX FUNZIONANTE CON I JAR).
 
 Once downloaded, save them in your favourite directory.
 
@@ -87,6 +116,8 @@ Once downloaded, save them in your favourite directory.
   At this point the ```server.jar``` should be running.
 - To turn off the server, enter the CTRL+C key combination in the terminal.
 
+---
+
 <div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 10px">
 <h6 style="color: #eca400">WARNING!</h6>
 <p>
@@ -95,6 +126,8 @@ if you do this, the same socket port will be used by all the servers causing pro
 </p>
 </div>
 
+---
+
 <a name="usage-step-3"></a>
 
 ### Running the Client
@@ -102,6 +135,8 @@ if you do this, the same socket port will be used by all the servers causing pro
 <a name="cli-version"></a>
 
 #### CLI Version
+
+---
 
 <div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 10px">
 <h6 style="color: #eca400">WARNING!</h6>
@@ -116,6 +151,8 @@ Lastly, if you use a WSL terminal to run the client.jar (CLI), you won't be able
 please use the GUI version instead.  
 </p>
 </div>
+
+---
 
 In order to run the ```client.jar``` in CLI mode follow these steps:
 

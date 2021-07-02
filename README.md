@@ -1,6 +1,6 @@
 # Software Engineering - Course Project
 
-# Table of Contents
+## Table of Contents
 
 - [Team Members](#team-members)
 - [Implemented Functionalities](#implemented-functionalities)

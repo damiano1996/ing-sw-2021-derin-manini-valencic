@@ -77,8 +77,8 @@ public class InitializationPhaseState extends PhaseState {
      * other players that they joined the game.
      *
      * @param message that contains the session token of the player to add
-     * @throws EmptyPayloadException
-     * @throws SessionTokenDoesNotExistsException
+     * @throws EmptyPayloadException the message payload is empty
+     * @throws SessionTokenDoesNotExistsException if does not find the user relative to the session token.
      */
     private synchronized void addPlayer(SessionMessage message) throws EmptyPayloadException, SessionTokenDoesNotExistsException {
         String sessionToken = message.getSessionToken();

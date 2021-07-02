@@ -98,7 +98,7 @@ public class DevelopmentCardsGridDrawer extends RatioDrawer {
                         int finalCol = col;
                         imageView.setOnMouseClicked(mouseEvent -> {
                             try {
-                                SoundManager.getInstance().setSoundEffect(SoundManager.RESOURCESOUND);
+                                SoundManager.getInstance().setSoundEffect(SoundManager.RESOURCE_SOUND);
 
                                 client.notifyObservers(
                                         new Message(

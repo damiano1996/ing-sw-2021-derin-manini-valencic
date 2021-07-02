@@ -187,7 +187,7 @@ public class MarketTrayDrawer extends RatioDrawer {
         if (client != null) {
             arrowImageView.setOnMouseClicked(mouseEvent -> {
                 try {
-                    SoundManager.getInstance().setSoundEffect(SoundManager.RESOURCESOUND);
+                    SoundManager.getInstance().setSoundEffect(SoundManager.RESOURCE_SOUND);
 
                     client.notifyObservers(new Message(MessageType.CHOICE_ROW_COLUMN, numToSend));
                     closeParentStageOfActionEvent(mouseEvent);

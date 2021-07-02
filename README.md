@@ -37,6 +37,12 @@ In alphabetic order:
 | 1  | Multiple Matches              | The Server can handle more than one match simultaneously.                                                 |
 | 2  | Persistence                   | If the Server shuts down, you will be able to restore matches that have been interrupted this way.        |
 | 3  | Resilience to Disconnections  | If you lose the connection while playing, you'll be able to restore the match that have been interrupted. |
+| <center>**n°**</center> | <center>**Extra Functionality**</center> | <center>**Short Explanation**</center> |
+| 1  | Account Creation        | Players can create accounts.                                            |
+| 2  | Login                   | Players can login with their credentials.                               |
+| 3  | Music and Sound Effects | While playing on GUI, you can play background musics and sound effects. |
+| 4  | PDF Rules               | Players can read the PDF with rules of the game.                        |
+| 5  | Global Leaderboard      | Thanks to persistence, players can see the scores of all the others.    |
 
 <a name="requirements"></a>
 

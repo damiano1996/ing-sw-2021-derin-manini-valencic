@@ -241,7 +241,7 @@ public class PlayingPane {
         MuteMusicButton.setOnMouseClicked(mouseEvent -> {
 
             SoundManager soundManager = SoundManager.getInstance();
-            if ((int) soundManager.getVolumeMusic() != 0) {
+            if (soundManager.getVolumeMusic() != 0.0d) {
                 soundManager.muteMusic();
                 MuteMusicButton.setId("music-off-button");
             } else {
@@ -254,7 +254,7 @@ public class PlayingPane {
         MuteEffectButton.setOnMouseClicked(mouseEvent -> {
 
             SoundManager soundManager = SoundManager.getInstance();
-            if ((int) soundManager.getVolumeEffect() != 0) {
+            if (soundManager.getVolumeEffect() != 0.0d) {
                 soundManager.muteEffect();
                 MuteEffectButton.setId("sound-effect-off-button");
             } else {

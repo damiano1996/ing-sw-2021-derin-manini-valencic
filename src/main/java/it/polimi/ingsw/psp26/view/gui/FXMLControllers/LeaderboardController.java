@@ -97,7 +97,7 @@ public class LeaderboardController {
     private void setLeaderboardDoneButtonAction(Client client, boolean undoOption) {
         doneButton.setOnMouseClicked(mouseEvent -> {
             SoundManager soundManager = SoundManager.getInstance();
-            soundManager.setSoundEffect(SoundManager.DIALOGSOUND);
+            soundManager.setSoundEffect(SoundManager.DIALOG_SOUND);
 
             closeParentStageOfActionEvent(mouseEvent);
             if (undoOption) client.sendMenuUndoMessage();

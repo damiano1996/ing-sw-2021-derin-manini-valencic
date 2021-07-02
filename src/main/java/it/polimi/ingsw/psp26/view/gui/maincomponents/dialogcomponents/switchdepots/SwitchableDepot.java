@@ -104,11 +104,11 @@ public class SwitchableDepot {
         isSource = source;
         if (source) {
             depotImageView.setImage(sourceSwitchImage);
-            SoundManager.getInstance().setSoundEffect(SoundManager.DIALOGSOUND);
+            SoundManager.getInstance().setSoundEffect(SoundManager.DIALOG_SOUND);
 
         } else {
             depotImageView.setImage(originalImage);
-            SoundManager.getInstance().setSoundEffect(SoundManager.RESOURCESOUND);
+            SoundManager.getInstance().setSoundEffect(SoundManager.RESOURCE_SOUND);
 
         }
     }

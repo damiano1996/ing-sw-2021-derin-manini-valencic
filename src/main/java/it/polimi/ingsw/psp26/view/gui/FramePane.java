@@ -18,8 +18,24 @@ import static it.polimi.ingsw.psp26.view.gui.GUIUtils.getImageView;
 import static it.polimi.ingsw.psp26.view.gui.GUIWindowConfigurations.getGeneralRatio;
 import static it.polimi.ingsw.psp26.view.gui.effects.LightEffects.addLightEffects;
 
+/**
+ * Class that contains static methods to add a background to panes and to create thumbnails.
+ */
 public class FramePane {
 
+    /**
+     * Method that adds to the content pane a background and
+     * creates a dialog in which content enhanced will be placed.
+     * On mouse entered event on the content pane, the dialog will be shown.
+     * On mouse exited event the the dialog will be closed.
+     *
+     * @param primaryStage    stage in which content pane will be placed in
+     * @param content         pane that must be decorated as thumbnail
+     * @param contentEnhanced larger version of the content that will be shown in the dialog
+     * @param contentWidth    width of the content pane
+     * @param contentHeight   height of the content pane
+     * @return stack pane of the decorated content with above cited properties
+     */
     public static StackPane drawThumbNail(Stage primaryStage, Pane content, Pane contentEnhanced, int contentWidth, int contentHeight) {
         StackPane thumbNailStackPane = addCoolFrame(content, false, getGeneralRatio(), (int) (contentWidth * 1.2f), (int) (contentHeight * 1.2f));
 
@@ -32,27 +48,83 @@ public class FramePane {
         return thumbNailStackPane;
     }
 
-
+    /**
+     * Method to add a background with a frame to the content pane.
+     * With light effects and adaptive size.
+     *
+     * @param content pane to decorate with background
+     * @return stack pane of the decorated content pane
+     */
     public static StackPane addCoolFrame(Pane content) {
         return addBackground(content, "window_graphics/frame.png", true, false, 0, 0);
     }
 
+    /**
+     * Method to add a background with a frame to the content pane.
+     *
+     * @param content       pane to decorate with background
+     * @param lightEffects  boolean to add or not the light effects to the background
+     * @param lightRatio    ratio of the view
+     * @param contentWidth  width for the background
+     * @param contentHeight height for the background
+     * @return stack pane of the decorated content pane
+     */
     public static StackPane addCoolFrame(Pane content, boolean lightEffects, float lightRatio, int contentWidth, int contentHeight) {
         return addBackground(content, "window_graphics/frame.png", lightEffects, lightRatio, true, contentWidth, contentHeight);
     }
 
+    /**
+     * Method to add a blue background to the content pane.
+     * Without light effects.
+     *
+     * @param content pane to decorate with background
+     * @return stack pane of the decorated content pane
+     */
     public static StackPane addBackground(Pane content) {
         return addBackground(content, "window_graphics/background.png", false, false, 0, 0);
     }
 
+    /**
+     * Method to add a blue background to the content pane.
+     *
+     * @param content       pane to decorate with background
+     * @param contentWidth  width for the background
+     * @param contentHeight height for the background
+     * @return stack pane of the decorated content pane
+     */
     public static StackPane addBackground(Pane content, int contentWidth, int contentHeight) {
         return addBackground(content, "window_graphics/background.png", false, true, contentWidth, contentHeight);
     }
 
+    /**
+     * Method to add a background to a pane.
+     * With light ratio sets equal one.
+     *
+     * @param content            pane to decorate with background
+     * @param backgroundFileName file name of the image that must be used as background
+     * @param lightEffects       boolean to add or not the light effects to the background
+     * @param setSize            boolean used to customize width and height
+     * @param width              width for the background
+     * @param height             height for the background
+     * @return stack pane of the decorated content pane
+     */
     private static StackPane addBackground(Pane content, String backgroundFileName, boolean lightEffects, boolean setSize, int width, int height) {
         return addBackground(content, backgroundFileName, lightEffects, 1, setSize, width, height);
     }
 
+    /**
+     * Method that adds a background to a pane.
+     * Method is parametrized to manage different settings.
+     *
+     * @param content            pane to decorate with background
+     * @param backgroundFileName file name of the image that must be used as background
+     * @param lightEffects       boolean to add or not the light effects to the background
+     * @param lightRatio         ratio of the view
+     * @param setSize            boolean used to customize width and height
+     * @param width              width for the background
+     * @param height             height for the background
+     * @return stack pane of the decorated content pane
+     */
     private static StackPane addBackground(Pane content, String backgroundFileName, boolean lightEffects, float lightRatio, boolean setSize, int width, int height) {
         StackPane stackPane = new StackPane();
 

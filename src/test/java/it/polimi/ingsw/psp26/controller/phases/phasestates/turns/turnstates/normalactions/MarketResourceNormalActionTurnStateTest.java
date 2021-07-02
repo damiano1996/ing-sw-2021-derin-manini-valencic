@@ -79,9 +79,9 @@ public class MarketResourceNormalActionTurnStateTest {
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.COIN));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.SHIELD));
 
-        if(marblesToPlace != 0) {
+        if (marblesToPlace != 0) {
             assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(3).getMessageType());
-        }else{
+        } else {
             assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(3).getMessageType());
         }
     }

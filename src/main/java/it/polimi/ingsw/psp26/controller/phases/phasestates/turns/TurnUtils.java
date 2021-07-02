@@ -9,7 +9,6 @@ import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.norm
 import it.polimi.ingsw.psp26.controller.phases.phasestates.turns.turnstates.singleplayer.LorenzoMagnificoTurnState;
 import it.polimi.ingsw.psp26.exceptions.InvalidPayloadException;
 import it.polimi.ingsw.psp26.model.Player;
-import it.polimi.ingsw.psp26.network.SpecialToken;
 
 import static it.polimi.ingsw.psp26.application.messages.MessageType.*;
 
@@ -22,10 +21,8 @@ public class TurnUtils {
      * Method used to define the next state after a leader action.
      * It performs checks on the end of the match.
      * The game can stop if the end match phase has been activated and all the players have played their last turn.
-     * Or it can stop if the end has been activated and one or more players lost the connection until the end.
-     * In the second case an indefinite suspension will be activated.
      * <p>
-     * In other cases it change the state of the automaton according to the rules.
+     * In other cases it changes the state of the automaton according to the rules.
      * From leader action goes to normal action.
      * From normal action to the second leader action.
      * To the second leader action to the next turn.
@@ -39,24 +36,11 @@ public class TurnUtils {
         try {
             if (turn.getPlayingPhaseState().isLastTurn() && // true if end game has been activated
                     getNextPlayer(turn).hasInkwell() && // true if current player is the last of the table
-                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) && // true if the last player has played the entire turn
-                    (turn.getMatchController().getVirtualView().getNumberOfNodeClients() ==
-                            turn.getMatchController().getMatch().getPlayers().size())
+                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) // true if the last player has played the entire turn
             ) {
 
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
                         new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
-
-            } else if (turn.getPlayingPhaseState().isLastTurn() && // true if the end game has been activated
-                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) && // true if the last player has played the entire turn
-                    (turn.getMatchController().getVirtualView().getNumberOfNodeClients() !=
-                            turn.getMatchController().getMatch().getPlayers().size()) // true if one player lost the connection until the last turn
-            ) {
-
-                // Sending message to controller to go to the end and suspend the game
-                turn.getMatchController().update(new SessionMessage(
-                        SpecialToken.BROADCAST.getToken(),
-                        INDEFINITE_SUSPENSION));
 
             } else {
 

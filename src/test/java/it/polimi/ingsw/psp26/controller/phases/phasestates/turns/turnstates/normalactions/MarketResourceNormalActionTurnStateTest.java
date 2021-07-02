@@ -59,31 +59,37 @@ public class MarketResourceNormalActionTurnStateTest {
     public void playSendChoiceRowColumn() throws InvalidPayloadException {
         int marblesToPlace = (int) Arrays.stream(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2))
                 .filter(x -> x != Resource.EMPTY && x != Resource.FAITH_MARKER).count();
-        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
-        if (marblesToPlace != 0) {
-            assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
-        } else {
-            assertEquals(CHOICE_LEADER_ACTION, mitm.getMessages().get(0).getMessageType());
+
+        if (marblesToPlace == 0) {
+            turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(2);
+            turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(1);
+            turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(2);
         }
+
+        turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
+
+        assertEquals(PLACE_IN_WAREHOUSE, mitm.getMessages().get(0).getMessageType());
     }
 
     @Test
     public void playSendToWareHousePlacer() throws InvalidPayloadException {
 
-        int marblesToPlace = (int) Arrays.stream(turn.getMatchController().getMatch().getMarketTray().getMarblesOnColumn(2))
+        int marblesToPlace = (int) Arrays.stream(turn.getMatchController().getMatch().getMarketTray().getMarblesOnRow(2))
                 .filter(x -> x != Resource.EMPTY && x != Resource.FAITH_MARKER).count();
 
+        if(marblesToPlace == 0) {
+            turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(2);
+            turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(1);
+            turn.getMatchController().getMatch().getMarketTray().pushMarbleFromSlideToRow(2);
+        }
 
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_ROW_COLUMN, 2));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.STONE));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.COIN));
         turn.play(new SessionMessage(turn.getTurnPlayer().getSessionToken(), CHOICE_RESOURCE_FROM_WAREHOUSE, Resource.SHIELD));
 
-        if (marblesToPlace != 0) {
-            assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(3).getMessageType());
-        } else {
-            assertEquals(MessageType.GENERAL_MESSAGE, mitm.getMessages().get(3).getMessageType());
-        }
+
+        assertEquals(MessageType.PLACE_IN_WAREHOUSE, mitm.getMessages().get(3).getMessageType());
     }
 
     @Test

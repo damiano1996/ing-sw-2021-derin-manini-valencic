@@ -81,7 +81,7 @@ Once downloaded, save them in your favourite directory.
   At this point the ```server.jar``` should be running.
 - To turn off the server, enter the CTRL+C key combination in the terminal.
 
-<div style="background: rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 10px">
+<div style="background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 10px">
 <h6 style="color: #eca400">WARNING!</h6>
 <p>
 Do not run more than one server at a time on the same machine:
@@ -97,7 +97,7 @@ if you do this, the same socket port will be used by all the servers causing pro
 
 #### CLI Version
 
-<div style="background: rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 10px">
+<div style="background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 10px">
 <h6 style="color: #eca400">WARNING!</h6>
 <p>
 The CLI version of the game uses ANSI escape codes.<br>

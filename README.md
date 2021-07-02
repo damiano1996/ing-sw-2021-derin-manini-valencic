@@ -92,9 +92,9 @@ JAR files can be downloaded from our Dropbox directory or can be generated as ex
 
 #### Download JARs
 
-We built JARs, but since they weight more than 100 MB, we uploaded them on Dropbox. You can download
-the ```server.jar``` and the ```client.jar``` from the following
-[link](TODO: INSERIRE LINK DROPBOX FUNZIONANTE CON I JAR).
+We built JARs, but since they weight more than 100 MB, we uploaded them on Dropbox (as permitted by Tutors on Slack).
+You can download the ```server.jar``` and the ```client.jar``` from the following
+[link](https://www.dropbox.com/sh/qofu4fsx7vp0t1l/AACpjAQGw3r_JOZszP24abZia?dl=0).
 
 Once downloaded, save them in your favourite directory.
 

@@ -39,16 +39,18 @@ public class TurnUtils {
         try {
             if (turn.getPlayingPhaseState().isLastTurn() && // true if end game has been activated
                     getNextPlayer(turn).hasInkwell() && // true if current player is the last of the table
-                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) // true if the last player has played the entire turn
+                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) && // true if the last player has played the entire turn
+                    (turn.getMatchController().getVirtualView().getNumberOfNodeClients() ==
+                            turn.getMatchController().getMatch().getPlayers().size())
             ) {
 
                 turn.getPlayingPhaseState().goToEndMatchPhaseState(
                         new SessionMessage(turn.getTurnPlayer().getSessionToken(), MessageType.SEVENTH_CARD_DRAWN));
 
             } else if (turn.getPlayingPhaseState().isLastTurn() && // true if the end game has been activated
-                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) // true if the last player has played the entire turn
-                    && (turn.getMatchController().getVirtualView().getNumberOfNodeClients() !=
-                    turn.getMatchController().getMatch().getPlayers().size()) // true if one player lost the connection until the last turn
+                    turn.getTurnPhase().equals(TurnPhase.LEADER_ACTION_TO_END) && // true if the last player has played the entire turn
+                    (turn.getMatchController().getVirtualView().getNumberOfNodeClients() !=
+                            turn.getMatchController().getMatch().getPlayers().size()) // true if one player lost the connection until the last turn
             ) {
 
                 // Sending message to controller to go to the end and suspend the game

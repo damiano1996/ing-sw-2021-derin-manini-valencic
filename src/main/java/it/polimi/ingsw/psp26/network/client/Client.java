@@ -337,12 +337,12 @@ public class Client extends Observable<Message> {
             // copying file
             Files.copy(srcInputStream, Path.of(dstFilePath), REPLACE_EXISTING);
             // Opening file from desktop
-            String osType = System.getProperty("os.name");
+            String osType = System.getProperty("os.name").toLowerCase();
             if (PRINT_CLIENT_SIDE) System.out.println("Client - Detected OS: " + osType);
 
-            if (osType.contains("Linux")) {
-                Runtime.getRuntime().exec(new String[]{"xdg-open", dstFilePath});
-            } else if (osType.contains("Windows")) {
+            if (osType.contains("nux") || osType.contains("nix") || osType.contains("mac")) {
+                Runtime.getRuntime().exec(new String[]{"/usr/bin/open", dstFilePath});
+            } else if (osType.contains("win")) {
                 Desktop.getDesktop().open(new File(dstFilePath));
             } else {
 

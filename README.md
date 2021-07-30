@@ -130,7 +130,7 @@ if you do this, the same socket port will be used by all the servers causing pro
 
 <a name="usage-step-3"></a>
 
-### Running the Client
+### Step 3: Running the Client
 
 <a name="cli-version"></a>
 

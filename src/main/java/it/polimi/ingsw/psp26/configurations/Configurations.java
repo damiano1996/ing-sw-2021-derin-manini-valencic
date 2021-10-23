@@ -5,7 +5,7 @@ package it.polimi.ingsw.psp26.configurations;
  */
 public class Configurations {
 
-    public static final String GAME_NAME = "Master of Renaissance";
+    public static final String GAME_NAME = "Masters of Renaissance";
 
     public static final String GAME_FILES = "game_files/";
 

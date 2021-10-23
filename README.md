@@ -2,7 +2,12 @@
 
 ---
 
-Implementation of the board game: <a href="https://www.craniocreations.it/prodotto/masters-of-renaissance/">Masters of Reinassence</a>.
+Implementation of the board game: <a href="https://www.craniocreations.it/prodotto/masters-of-renaissance/">Masters of
+Renaissance</a>.
+
+<p>
+  <img src="others/Masters-of-Renaissance_box3D.png"  alt="" class="center"/>
+</p>
 
 ---
 

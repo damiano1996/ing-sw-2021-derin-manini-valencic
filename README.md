@@ -138,8 +138,6 @@ if you do this, the same socket port will be used by all the servers causing pro
 
 #### CLI Version
 
----
-
 <div>
 <table>
     <caption>Screenshots from CLI</caption>
@@ -155,6 +153,8 @@ if you do this, the same socket port will be used by all the servers causing pro
     </tbody>
 </table>
 </div>
+
+---
 
 <div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 10px">
 <h6 style="color: #eca400">WARNING!</h6>

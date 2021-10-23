@@ -88,7 +88,7 @@ Following the next steps you will be able to generate the JARs to play the game.
 - Clone and browse in the directory of the project:
 
 ```bash
-  $ git clone https://github.com/damiano9669/ing-sw-2021-derin-manini-valencic.git
+  $ git clone https://github.com/damiano1996/ing-sw-2021-derin-manini-valencic.git
   $ cd ing-sw-2021-derin-manini-valencic
 ```
 

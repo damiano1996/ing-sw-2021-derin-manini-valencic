@@ -2,6 +2,23 @@
 
 ---
 
+<div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 10px">
+<h6 style="color: #eca400">WARNING!</h6>
+<p>
+Due to copyright reasons we are not allowed to release assets that are necessary to execute the GUI version of the game.
+<br>
+Below you can find a short demonstrative gameplay.
+<br>
+The CLI version is still working.
+</p>
+</div>
+
+---
+
+![GUI demonstration](others/GUI_example.mp4)
+
+---
+
 ## Table of Contents
 
 - [Team Members](#team-members)
@@ -10,7 +27,6 @@
 - [Usage](#usage)
     - [Step 1: JAR files](#usage-step-1)
         - [Generate JARs](#generate-jars)
-        - [Download JARs](#download-jars)
     - [Step 2: Running the Server](#usage-step-2)
     - [Step 3: Running the Client](#usage-step-3)
         - [CLI Version](#cli-version)
@@ -67,7 +83,7 @@ In alphabetic order:
 
 ### Step 1: JAR files
 
-JAR files can be downloaded from our Dropbox directory or can be generated as explained in the next step.
+Following the next steps you will be able to generate the JARs to play the game.
 
 <a name="generate-jars"></a>
 
@@ -87,16 +103,6 @@ JAR files can be downloaded from our Dropbox directory or can be generated as ex
 ```
 
 - After termination of the build, files will be available in this [directory](deliverables/final/jar).
-
-<a name="download-jars"></a>
-
-#### Download JARs
-
-We built JARs, but since they weight more than 100 MB, we uploaded them on Dropbox (as permitted by Tutors on Slack).
-You can download the ```server.jar``` and the ```client.jar``` from the following
-[link](https://www.dropbox.com/sh/qofu4fsx7vp0t1l/AACpjAQGw3r_JOZszP24abZia?dl=0).
-
-Once downloaded, save them in your favourite directory.
 
 <a name="usage-step-2"></a>
 
@@ -138,6 +144,21 @@ if you do this, the same socket port will be used by all the servers causing pro
 
 ---
 
+<div>
+<table>
+    <tbody>
+        <tr>
+            <td><img src="others/CLI_personalboard.png" alt=""></td>
+            <td><img src="others/CLI_buy_development_card.png" alt=""></td>
+        </tr>
+        <tr>
+            <td><img src="others/CLI_market_action.png" alt=""></td>
+            <td><img src="others/CLI_production_selection.png" alt=""></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
 <div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 10px">
 <h6 style="color: #eca400">WARNING!</h6>
 <p>
@@ -170,7 +191,7 @@ In order to run the ```client.jar``` in CLI mode follow these steps:
 
 <a name="gui-version"></a>
 
-#### GUI Version
+#### GUI Version (No assets, no party)
 
 In order to run the GUI version of the ```client.jar```, simply double-click on the icon of the ```client.jar```.  
 At this point the GUI version of the Client JAR should be running.

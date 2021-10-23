@@ -2,7 +2,7 @@
 
 ---
 
-Implementation of the board game: ![Masters of Reinassence](https://www.craniocreations.it/prodotto/masters-of-renaissance/)
+Implementation of the board game: <a href="https://www.craniocreations.it/prodotto/masters-of-renaissance/">Masters of Reinassence</a>.
 
 ---
 

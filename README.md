@@ -7,15 +7,11 @@
 <p>
 Due to copyright reasons we are not allowed to release assets that are necessary to execute the GUI version of the game.
 <br>
-Below you can find a short demonstrative gameplay.
+<a href="others/GUI_video_example.mp4">Here</a> you can find a short demonstrative gameplay.
 <br>
 The CLI version is still working.
 </p>
 </div>
-
----
-
-![GUI demonstration](others/GUI_video_example.mp4)
 
 ---
 
@@ -146,6 +142,7 @@ if you do this, the same socket port will be used by all the servers causing pro
 
 <div>
 <table>
+    <caption>Screenshots from CLI</caption>
     <tbody>
         <tr>
             <td><img src="others/CLI_personalboard.png" alt=""></td>

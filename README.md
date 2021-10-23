@@ -15,7 +15,7 @@ The CLI version is still working.
 
 ---
 
-![GUI demonstration](others/GUI_example.mp4)
+![GUI demonstration](others/GUI_video_example.mp4)
 
 ---
 

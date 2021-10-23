@@ -2,6 +2,10 @@
 
 ---
 
+Implementation of the board game: ![Masters of Reinassence](https://www.craniocreations.it/prodotto/masters-of-renaissance/)
+
+---
+
 <div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 10px">
 <h6 style="color: #eca400">WARNING!</h6>
 <p>

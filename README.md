@@ -74,11 +74,11 @@ In alphabetic order:
 ## Requirements
 
 - java >= 11
-- junit == 4.11
-- com.google.code.gson == 2.8.5
-- org.openjfx (javafx-controls) == 15.0.1
-- org.openjfx (javafx-fxml) == 11.0.2
-- org.openjfx (javafx-media) == 11
+- junit >= 4.11
+- com.google.code.gson >= 2.8.5
+- org.openjfx (javafx-controls) >= 15.0.1
+- org.openjfx (javafx-fxml) >= 11.0.2
+- org.openjfx (javafx-media) >= 11
 
 <a name="usage"></a>
 
